@@ -1,7 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
+  async redirects() {
+    return [
+      {
+        source: "/leads",
+        destination: "/examples/layered-panel/lead",
+        permanent: false,
+      },
+    ]
+  },
+}
 
 export default nextConfig;

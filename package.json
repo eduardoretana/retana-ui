@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "registry:build": "shadcn build"
+    "registry:build": "node --experimental-strip-types scripts/build-registry.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

@@ -501,16 +501,17 @@ function SortHeader({
 function IconRail() {
   const pathname = usePathname()
   const items = [
-    { href: "/", label: "Team", icon: Users },
-    { href: "/leads", label: "Pipeline", icon: Kanban },
-    { href: "/docs", label: "Registry docs", icon: BookOpen },
+    { href: "/examples/layered-panel/team", label: "Team", icon: Users },
+    { href: "/examples/layered-panel/lead", label: "Pipeline", icon: Kanban },
+    { href: "/docs", label: "Registry docs", icon: BookOpen, top: true },
   ]
   return (
     <div className="flex w-14 shrink-0 flex-col items-center border-r border-border py-3">
       <Link
         href="/"
+        target="_top"
         className="mb-4 grid size-8 place-items-center rounded-lg bg-foreground text-xs font-semibold text-background"
-        aria-label="Retana UI home"
+        aria-label="Retana UI catalog"
       >
         R
       </Link>
@@ -522,6 +523,7 @@ function IconRail() {
             <Link
               key={item.href}
               href={item.href}
+              target={"top" in item && item.top ? "_top" : undefined}
               aria-label={item.label}
               title={item.label}
               aria-current={active ? "page" : undefined}

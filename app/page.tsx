@@ -1,25 +1,34 @@
-import { Suspense } from "react";
-import type { Metadata } from "next";
+import type { Metadata } from "next"
 
-import { TeamDashboard } from "@/components/demo/team-dashboard";
+import { CatalogBrowser } from "@/app/catalog/catalog-browser"
+import { SiteHeader } from "@/app/catalog/site-header"
+import { catalogCategories, getCatalog } from "@/lib/catalog"
 
 export const metadata: Metadata = {
-  title: "Team",
-  description: "Layered panel demo: peek a team member, then expand the profile without leaving the table.",
-};
-
-export default function HomePage() {
-  return (
-    <Suspense fallback={<ScreenFallback label="Loading team…" />}>
-      <TeamDashboard />
-    </Suspense>
-  );
+  title: "Catalog",
+  description: "Browsable catalog of Retana UI registry items.",
 }
 
-function ScreenFallback({ label }: { label: string }) {
+type HomeProps = {
+  searchParams: Promise<{ q?: string; type?: string; category?: string }>
+}
+
+export default async function HomePage({ searchParams }: HomeProps) {
+  const params = await searchParams
+  const items = getCatalog()
+
   return (
-    <div className="grid h-dvh place-items-center text-sm text-muted-foreground">
-      {label}
-    </div>
-  );
+    <>
+      <SiteHeader />
+      <main>
+        <CatalogBrowser
+          items={items}
+          categories={catalogCategories(items)}
+          initialQuery={params.q ?? ""}
+          initialKind={params.type ?? "all"}
+          initialCategory={params.category ?? "all"}
+        />
+      </main>
+    </>
+  )
 }

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     template: "%s · Retana UI",
   },
   description:
-    "Shared shadcn registry. Layered panel opens as a peek and expands in place, without leaving the page.",
+    "Catalog of shared shadcn components, blocks, and hooks. Items inherit the host project's theme.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

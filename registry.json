@@ -12,6 +12,92 @@
       "dependencies": ["radix-ui", "lucide-react"],
       "registryDependencies": ["button", "scroll-area", "separator"],
       "categories": ["dashboard", "overlay", "panel"],
+      "meta": {
+        "titleEs": "Panel en capas",
+        "descriptionEs": "Panel de detalle que se abre a la derecha y crece en el mismo lugar hasta dos columnas. La ruta no cambia, así que la tabla conserva el scroll.",
+        "preview": "app/examples/layered-panel/preview.tsx",
+        "previewHref": "/examples/layered-panel/team",
+        "examples": [
+          {
+            "title": "Directorio del equipo",
+            "href": "/examples/layered-panel/team",
+            "description": "Tabla densa. Un clic abre el peek y otro expande el perfil."
+          },
+          {
+            "title": "Lead de CRM",
+            "href": "/examples/layered-panel/lead",
+            "description": "La misma pieza con etiquetas en español."
+          }
+        ],
+        "usage": "<LayeredPanel\n  open={panel.open}\n  onOpenChange={panel.onOpenChange}\n  mode={panel.mode}\n  onModeChange={panel.onModeChange}\n  title=\"Details\"\n>\n  <LayeredPanel.Header>\n    <h2>Record</h2>\n  </LayeredPanel.Header>\n  <LayeredPanel.ExpandToggle\n    expandLabel=\"View full profile\"\n    collapseLabel=\"Close profile\"\n  />\n  <LayeredPanel.Peek>Summary</LayeredPanel.Peek>\n  <LayeredPanel.Full>Full record</LayeredPanel.Full>\n</LayeredPanel>",
+        "api": [
+          {
+            "name": "open",
+            "type": "boolean",
+            "description": "Controlled open state."
+          },
+          {
+            "name": "onOpenChange",
+            "type": "(open: boolean) => void",
+            "description": "Called when the dialog asks to open or close."
+          },
+          {
+            "name": "mode",
+            "type": "\"peek\" | \"full\"",
+            "description": "Controlled disclosure mode."
+          },
+          {
+            "name": "onModeChange",
+            "type": "(mode) => void",
+            "description": "Called when the panel switches between peek and full."
+          },
+          {
+            "name": "peekWidth",
+            "type": "string",
+            "description": "Desktop peek width. Any single CSS length. Default 26.25rem."
+          },
+          {
+            "name": "fullWidth",
+            "type": "string",
+            "description": "Desktop expanded width. Default 70vw."
+          },
+          {
+            "name": "closeLabel",
+            "type": "string",
+            "description": "Accessible name of the close button. Default Close."
+          },
+          {
+            "name": "mobilePeekLabel / mobileFullLabel",
+            "type": "string",
+            "description": "Tab labels below 1024px. Defaults Overview and Profile."
+          },
+          {
+            "name": "className and slot classes",
+            "type": "string",
+            "description": "overlayClassName, closeClassName, tabsClassName, tabClassName, gridClassName, plus className on every compound part."
+          },
+          {
+            "name": "LayeredPanel.Peek / Full",
+            "type": "slot",
+            "description": "Peek stays on the right. Full is the left column and stays hidden until mode is full."
+          },
+          {
+            "name": "LayeredPanel.ExpandToggle",
+            "type": "slot",
+            "description": "expandLabel and collapseLabel. Defaults View full profile and Close profile."
+          },
+          {
+            "name": "DetailSection / DetailField",
+            "type": "slot",
+            "description": "Uppercase section label and a field row with optional icon, value, and href."
+          },
+          {
+            "name": "useLayeredPanelUrlState",
+            "type": "{ param, viewParam, fullValue }",
+            "description": "Optional Next.js hook. ?member=id opens peek. &view=full expands. Back collapses, then closes."
+          }
+        ]
+      },
       "docs": "Import LayeredPanel from the installed UI file. URL sync is a separate hook (use-layered-panel-url-state) and is the only file that imports next/navigation. Below 1024px the panel is a full-screen sheet with tabs. The item declares button, scroll-area, and separator as registryDependencies and does not vendor copies. Answer no if the CLI asks to overwrite those files. No cssVars.",
       "files": [
         {

@@ -4,11 +4,15 @@ Shared [shadcn/ui](https://ui.shadcn.com) registry for Eduardo's projects. The f
 
 Every item inherits the host project's existing shadcn theme and ships no theme of its own. That rule is in [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Demos in this app:
+The site is a catalog. `registry.json` is the source of truth for `/` and for `/items/[name]`.
 
-- `/` — team directory (the reference pattern)
-- `/leads` — the same panel on a CRM lead, with Spanish labels
-- `/docs` — short install notes
+- `/` — catalog index (search, type, category)
+- `/items/layered-panel` — preview, install command, API, and source
+- `/examples/layered-panel/team` — team directory example
+- `/examples/layered-panel/lead` — CRM lead example, Spanish labels
+- `/docs` — how to install the registry, the `@retana` namespace, and `REGISTRY_TOKEN`
+
+`/leads` redirects to the lead example.
 
 ## Install
 
@@ -233,7 +237,7 @@ pnpm test
 pnpm build
 ```
 
-`pnpm build` runs `shadcn build` first and refreshes `public/r/layered-panel.json`.
+`pnpm registry:build` validates the registry, runs `shadcn build`, and regenerates `lib/generated/preview-map.tsx`. `pnpm build` runs that first. Adding an item is the checklist in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Inicio rápido (español)
 
@@ -272,6 +276,6 @@ const panel = useLayeredPanelUrlState({ param: "lead", viewParam: "view" })
 </LayeredPanel>
 ```
 
-`?lead=<id>` abre el resumen. `&view=full` abre la ficha. Atrás del navegador primero contrae y después cierra. El ejemplo vivo está en `/leads`.
+`?lead=<id>` abre el resumen. `&view=full` abre la ficha. Atrás del navegador primero contrae y después cierra. El ejemplo vivo está en `/examples/layered-panel/lead`. El catálogo está en `/`.
 
 El componente no trae tema: usa los tokens y los primitivos shadcn del proyecto anfitrión. Si el CLI pregunta si debe sobrescribir `button`, `scroll-area` o `separator`, responde que no.
