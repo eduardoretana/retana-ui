@@ -126,7 +126,7 @@ export function LeadsDemo() {
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-background text-foreground">
       <header className="flex h-14 shrink-0 items-center gap-3 border-b border-border px-4">
-        <Link href="/" className="text-sm font-semibold">
+        <Link href="/" target="_top" className="text-sm font-semibold">
           Retana UI
         </Link>
         <span className="text-sm text-muted-foreground">Pipeline</span>
@@ -134,10 +134,10 @@ export function LeadsDemo() {
           {leads.length}
         </span>
         <div className="ml-auto flex items-center gap-2">
-          <Link href="/" className="text-sm text-muted-foreground hover:text-foreground">
+          <Link href="/examples/layered-panel/team" className="text-sm text-muted-foreground hover:text-foreground">
             Team demo
           </Link>
-          <Link href="/docs" className="text-sm text-muted-foreground hover:text-foreground">
+          <Link href="/docs" target="_top" className="text-sm text-muted-foreground hover:text-foreground">
             Docs
           </Link>
           <ThemeToggle />
