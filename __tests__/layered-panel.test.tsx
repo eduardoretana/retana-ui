@@ -95,6 +95,30 @@ describe("LayeredPanel", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
   })
 
+  it("inherits host tokens and applies width props without theme variables", () => {
+    render(
+      <LayeredPanel open peekWidth="30rem" fullWidth="80vw" title="Width">
+        <LayeredPanel.Peek>Peek</LayeredPanel.Peek>
+      </LayeredPanel>,
+    )
+
+    const panel = document.querySelector("[data-slot='layered-panel']")
+    expect(panel?.className).toContain("bg-background")
+    expect(panel?.className).toContain("border-border")
+    expect(panel?.className).toContain("shadow-lg")
+    expect(panel?.className).not.toMatch(/shadow-\[/)
+
+    const overlay = document.querySelector("[data-slot='layered-panel-overlay']")
+    expect(overlay?.className).toContain("bg-foreground/40")
+    expect(overlay?.className).not.toContain("bg-black")
+
+    const style = panel?.querySelector("style")?.textContent ?? ""
+    expect(style).toContain("min(100%, 30rem)")
+    expect(style).toContain("min(100%, 80vw)")
+    expect(style).not.toContain("--lp-col")
+    expect(style).not.toContain("var(--")
+  })
+
   it("closes when the backdrop is clicked", async () => {
     const user = userEvent.setup()
     render(<Harness />)

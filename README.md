@@ -2,6 +2,8 @@
 
 Shared [shadcn/ui](https://ui.shadcn.com) registry for Eduardo's projects. The first item is **Layered Panel**: a detail surface that opens as a peek sheet and expands in place. The page behind it never changes route, so scroll position and table context stay put.
 
+Every item inherits the host project's existing shadcn theme and ships no theme of its own. That rule is in [CONTRIBUTING.md](CONTRIBUTING.md).
+
 Demos in this app:
 
 - `/` — team directory (the reference pattern)
@@ -66,13 +68,15 @@ Copy these two files and fix the imports only if your aliases differ:
 | `registry/ui/layered-panel.tsx` | `components/ui/layered-panel.tsx` |
 | `registry/hooks/use-layered-panel-url-state.ts` | `hooks/use-layered-panel-url-state.ts` |
 
-The panel imports `button`, `scroll-area`, and `separator` from `@/components/ui`, plus `cn` from `@/lib/utils`. npm packages: `radix-ui`, `lucide-react`. The URL hook is the only file that imports `next/navigation`. Skip it if you do not want the query string.
+The panel imports `button`, `scroll-area`, and `separator` from `@/components/ui`, plus `cn` from `@/lib/utils`. It does not ship copies of those primitives. npm packages: `radix-ui`, `lucide-react`. The URL hook is the only file that imports `next/navigation`. Skip it if you do not want the query string.
+
+`npx shadcn add` prompts before overwriting a file that is already in the target app. When it asks about `button`, `scroll-area`, or `separator`, answer **no**. That keeps the host's versions, variants, and radius. Only the new `layered-panel` files should be written.
 
 The panel talks to Radix through `import { Dialog } from "radix-ui"` (current shadcn). If a project still uses the old package, switch that one import to `import * as Dialog from "@radix-ui/react-dialog"`. The `Dialog.Root` / `Dialog.Content` API is the same.
 
 ## Three steps
 
-1. Install the item (command above). shadcn adds the two files and the registry dependencies.
+1. Install the item (command above). shadcn adds the two files and asks for any registry dependency that already exists (`button`, `scroll-area`, `separator`). Answer **no** so the host project keeps its own primitives.
 2. Render the panel **on the same page** as the table. Summary goes in `Peek`, the long record goes in `Full`.
 3. On row click, open that id. Wire the optional URL hook if the link should be shareable.
 
@@ -134,13 +138,13 @@ Without the URL hook, use `useState` for `open` and `mode`. Both controlled and 
 
 | Piece | Role |
 | --- | --- |
-| `LayeredPanel` | Dialog shell. Props: `open`, `defaultOpen`, `onOpenChange`, `mode` (`"peek"` \| `"full"`), `defaultMode`, `onModeChange`, `title`, `description`, `closeLabel`, `mobilePeekLabel`, `mobileFullLabel`, `peekWidth`, `fullWidth`, `showClose`, `className`. |
-| `LayeredPanel.Peek` | Always the right column. The only column in peek mode. |
-| `LayeredPanel.Full` | Left column. Mounted, but hidden and inert until `mode="full"`. |
+| `LayeredPanel` | Dialog shell. Props: `open`, `defaultOpen`, `onOpenChange`, `mode` (`"peek"` \| `"full"`), `defaultMode`, `onModeChange`, `title`, `description`, `closeLabel`, `mobilePeekLabel`, `mobileFullLabel`, `peekWidth` (default `26.25rem`), `fullWidth` (default `70vw`), `showClose`, `className`, `overlayClassName`, `closeClassName`, `tabsClassName`, `tabClassName`, `gridClassName`. |
+| `LayeredPanel.Peek` | Always the right column. The only column in peek mode. `className` on the column, `contentClassName` on the inner stack. |
+| `LayeredPanel.Full` | Left column. Mounted, but hidden and inert until `mode="full"`. `className` and `contentClassName`, same as Peek. |
 | `LayeredPanel.Header` | Grid slot at the top of the primary column. A child component can return it inside a fragment; a wrapping element needs `className="contents"`. |
-| `LayeredPanel.ExpandToggle` | `expandLabel` (default `View full profile`), `collapseLabel` (default `Close profile`). Sets `aria-expanded`. Same grid placement as `Header`. |
-| `LayeredPanel.Section` / `DetailSection` | Uppercase section label, optional icon, top separator. |
-| `LayeredPanel.Field` / `DetailField` | Label, optional icon, `value` or children, optional `href`. |
+| `LayeredPanel.ExpandToggle` | `expandLabel` (default `View full profile`), `collapseLabel` (default `Close profile`). Sets `aria-expanded`. Same grid placement as `Header`. `className` is the wrapper; `buttonClassName` merges onto the host `Button` without changing its variant. |
+| `LayeredPanel.Section` / `DetailSection` | Uppercase section label, optional icon, top separator. `className`, `contentClassName`, `titleClassName`. |
+| `LayeredPanel.Field` / `DetailField` | Label, optional icon, `value` or children, optional `href`. `className`, `labelClassName`, `valueClassName`. |
 | `useLayeredPanel()` | Mode and setters from inside the panel. Throws outside of it. |
 | `useLayeredPanelUrlState({ param, viewParam, fullValue })` | Returns `id`, `open`, `mode`, `openItem(id)`, `close()`, `setMode`, `onOpenChange`, `onModeChange`. |
 
@@ -205,7 +209,11 @@ From 1024px up, full mode is two columns: profile on the left, peek pinned on th
 
 ## Theming
 
-The shell uses shadcn tokens only: `bg-background`, `text-foreground`, `text-muted-foreground`, `border-border`, `bg-muted`, and the secondary button. Drop it into a project that already has light and dark CSS variables and it follows `.dark` on an ancestor. There is no brand color on the component. The demos use Tailwind palette classes for status chips and capacity bars; those classes are sample UI, not part of the registry item.
+Registry items inherit the host project. They bring no theme of their own. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+`layered-panel` has no `cssVars`, no global CSS, and no color, font, radius, or shadow tokens. It only uses shadcn semantic classes (`bg-background`, `bg-foreground`, `bg-muted`, `text-foreground`, `text-muted-foreground`, `border-border`, `shadow-lg`, `rounded-lg` / `rounded-l-xl`) and the host's `Button`, `ScrollArea`, and `Separator`. Light and dark mode follow whatever `.dark` and CSS variables the host already defines. `peekWidth` and `fullWidth` default to `26.25rem` and `70vw`; every slot accepts a `className` override.
+
+The demo's theme lives in `app/globals.css` and `app/layout.tsx` only, so this site can be previewed. Status chips and capacity bars in `components/demo` are sample UI. They are not part of the registry item.
 
 ## Accessibility
 
@@ -265,3 +273,5 @@ const panel = useLayeredPanelUrlState({ param: "lead", viewParam: "view" })
 ```
 
 `?lead=<id>` abre el resumen. `&view=full` abre la ficha. Atrás del navegador primero contrae y después cierra. El ejemplo vivo está en `/leads`.
+
+El componente no trae tema: usa los tokens y los primitivos shadcn del proyecto anfitrión. Si el CLI pregunta si debe sobrescribir `button`, `scroll-area` o `separator`, responde que no.

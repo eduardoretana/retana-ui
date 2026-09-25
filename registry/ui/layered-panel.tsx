@@ -99,7 +99,18 @@ type LayeredPanelProps = {
   fullWidth?: string
   /** Hide the built-in close button when you render your own. */
   showClose?: boolean
+  /** Panel surface. Merged onto the dialog content. */
   className?: string
+  /** Backdrop. Default uses `bg-foreground` / `bg-background`, not a custom color. */
+  overlayClassName?: string
+  /** Built-in close button. */
+  closeClassName?: string
+  /** Mobile tab track, below 1024px. */
+  tabsClassName?: string
+  /** Each mobile tab button. */
+  tabClassName?: string
+  /** Grid that holds Header, ExpandToggle, Peek, and Full. */
+  gridClassName?: string
 }
 
 function LayeredPanelRoot({
@@ -119,6 +130,11 @@ function LayeredPanelRoot({
   fullWidth,
   showClose = true,
   className,
+  overlayClassName,
+  closeClassName,
+  tabsClassName,
+  tabClassName,
+  gridClassName,
 }: LayeredPanelProps) {
   const [open, setOpenState] = useControllable({
     value: openProp,
@@ -181,7 +197,10 @@ function LayeredPanelRoot({
         <Dialog.Portal>
           <Dialog.Overlay
             data-slot="layered-panel-overlay"
-            className="fixed inset-0 z-50 bg-black/40 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0 motion-reduce:animate-none"
+            className={cn(
+              "fixed inset-0 z-50 bg-foreground/40 dark:bg-background/80 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0 motion-reduce:animate-none",
+              overlayClassName,
+            )}
           />
           <Dialog.Content
             ref={contentRef}
@@ -196,19 +215,18 @@ function LayeredPanelRoot({
               }
             }}
             className={cn(
-              "fixed inset-y-0 right-0 z-50 flex h-dvh max-h-dvh max-w-full flex-col overflow-hidden bg-background text-foreground outline-none",
-              "shadow-[0_0_0_1px_var(--border),0_24px_80px_-28px_rgb(0_0_0/0.45)] lg:rounded-l-2xl",
+              "fixed inset-y-0 right-0 z-50 flex h-dvh max-h-dvh max-w-full flex-col overflow-hidden border-l border-border bg-background text-foreground shadow-lg outline-none lg:rounded-l-xl",
               "pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]",
               "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-right data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-right data-[state=open]:duration-300 data-[state=closed]:duration-300 motion-reduce:animate-none",
               className,
             )}
           >
             <style>{`
-              [data-panel-id="${panelId}"] { width: min(100%, ${peek}); transition: width 280ms cubic-bezier(0.32, 0.72, 0, 1); --lp-col: ${peek}; }
+              [data-panel-id="${panelId}"] { width: min(100%, ${peek}); transition: width 280ms cubic-bezier(0.32, 0.72, 0, 1); }
               [data-panel-id="${panelId}"][data-mode="full"] { width: min(100%, ${full}); }
               [data-panel-id="${panelId}"] .lp-grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr); }
               @media (min-width: 1024px) {
-                [data-panel-id="${panelId}"][data-mode="full"] .lp-grid { grid-template-columns: minmax(0, 1fr) var(--lp-col); }
+                [data-panel-id="${panelId}"][data-mode="full"] .lp-grid { grid-template-columns: minmax(0, 1fr) min(100%, ${peek}); }
               }
               @media (max-width: 1023px) {
                 [data-panel-id="${panelId}"],
@@ -229,14 +247,17 @@ function LayeredPanelRoot({
                   variant="ghost"
                   size="icon"
                   aria-label={closeLabel}
-                  className="absolute top-[max(0.75rem,env(safe-area-inset-top))] right-3 z-10 active:translate-y-0 active:scale-[0.96] motion-reduce:active:scale-100"
+                  className={cn(
+                    "absolute top-[max(0.75rem,env(safe-area-inset-top))] right-3 z-10 active:scale-[0.96] motion-reduce:active:scale-100",
+                    closeClassName,
+                  )}
                 >
                   <X />
                 </Button>
               </Dialog.Close>
             ) : null}
             {hasFull ? (
-              <div className="shrink-0 px-3 pt-3 pr-14 lg:hidden">
+              <div className={cn("shrink-0 px-3 pt-3 pr-14 lg:hidden", tabsClassName)}>
                 <div
                   className="flex rounded-lg bg-muted p-0.5"
                   role="group"
@@ -245,19 +266,23 @@ function LayeredPanelRoot({
                   <ModeButton
                     pressed={mode === "peek"}
                     onClick={() => setMode("peek")}
+                    className={tabClassName}
                   >
                     {mobilePeekLabel}
                   </ModeButton>
                   <ModeButton
                     pressed={mode === "full"}
                     onClick={() => setMode("full")}
+                    className={tabClassName}
                   >
                     {mobileFullLabel}
                   </ModeButton>
                 </div>
               </div>
             ) : null}
-            <div className="lp-grid grid min-h-0 flex-1">{children}</div>
+            <div className={cn("lp-grid grid min-h-0 flex-1", gridClassName)}>
+              {children}
+            </div>
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
@@ -268,10 +293,12 @@ function LayeredPanelRoot({
 function ModeButton({
   pressed,
   onClick,
+  className,
   children,
 }: {
   pressed: boolean
   onClick: () => void
+  className?: string
   children: React.ReactNode
 }) {
   return (
@@ -284,6 +311,7 @@ function ModeButton({
         pressed
           ? "bg-background text-foreground shadow-sm"
           : "text-muted-foreground",
+        className,
       )}
     >
       {children}
@@ -291,12 +319,13 @@ function ModeButton({
   )
 }
 
-type StackProps = {
+type ColumnProps = {
   children?: React.ReactNode
   className?: string
+  contentClassName?: string
 }
 
-function Peek({ children, className }: StackProps) {
+function Peek({ children, className, contentClassName }: ColumnProps) {
   const { mode } = useLayeredPanel()
   return (
     <div
@@ -304,12 +333,18 @@ function Peek({ children, className }: StackProps) {
       className={cn(
         "col-start-1 row-start-3 min-h-0",
         mode === "full" &&
-          "max-lg:hidden lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:border-l lg:border-border/70",
+          "max-lg:hidden lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:border-l lg:border-border",
         className,
       )}
     >
       <ScrollArea className="h-full">
-        <div className={cn("flex min-h-full flex-col", mode === "full" && "lg:pt-12")}>
+        <div
+          className={cn(
+            "flex min-h-full flex-col",
+            mode === "full" && "lg:pt-12",
+            contentClassName,
+          )}
+        >
           {children}
         </div>
       </ScrollArea>
@@ -319,7 +354,7 @@ function Peek({ children, className }: StackProps) {
 Peek.displayName = "LayeredPanel.Peek"
 ;(Peek as typeof Peek & { slot: string }).slot = "peek"
 
-function Full({ children, className }: StackProps) {
+function Full({ children, className, contentClassName }: ColumnProps) {
   const { mode, registerFull } = useLayeredPanel()
   React.useLayoutEffect(() => {
     registerFull(true)
@@ -337,7 +372,9 @@ function Full({ children, className }: StackProps) {
       )}
     >
       <ScrollArea className="h-full">
-        <div className="flex min-h-full flex-col">{children}</div>
+        <div className={cn("flex min-h-full flex-col", contentClassName)}>
+          {children}
+        </div>
       </ScrollArea>
     </div>
   )
@@ -345,7 +382,13 @@ function Full({ children, className }: StackProps) {
 Full.displayName = "LayeredPanel.Full"
 ;(Full as typeof Full & { slot: string }).slot = "full"
 
-function Header({ children, className }: StackProps) {
+function Header({
+  children,
+  className,
+}: {
+  children?: React.ReactNode
+  className?: string
+}) {
   return (
     <div
       data-slot="layered-panel-header"
@@ -366,13 +409,17 @@ type ExpandToggleProps = {
   expandLabel?: string
   /** Label while the panel is expanded. Default: "Close profile". */
   collapseLabel?: string
+  /** Wrapper that places the control on the grid. */
   className?: string
+  /** Passed to the host `Button`. Does not replace its variant. */
+  buttonClassName?: string
 }
 
 function ExpandToggle({
   expandLabel = "View full profile",
   collapseLabel = "Close profile",
   className,
+  buttonClassName,
 }: ExpandToggleProps) {
   const { mode, setMode } = useLayeredPanel()
   const expanded = mode === "full"
@@ -384,7 +431,10 @@ function ExpandToggle({
         variant="secondary"
         aria-expanded={expanded}
         onClick={() => setMode(expanded ? "peek" : "full")}
-        className="h-10 w-full bg-muted active:translate-y-0 active:scale-[0.96] motion-reduce:active:scale-100"
+        className={cn(
+          "w-full active:scale-[0.96] motion-reduce:active:scale-100",
+          buttonClassName,
+        )}
       >
         {expanded ? collapseLabel : expandLabel}
       </Button>
@@ -399,6 +449,8 @@ type DetailSectionProps = {
   icon?: React.ReactNode
   children?: React.ReactNode
   className?: string
+  contentClassName?: string
+  titleClassName?: string
 }
 
 function DetailSection({
@@ -406,12 +458,19 @@ function DetailSection({
   icon,
   children,
   className,
+  contentClassName,
+  titleClassName,
 }: DetailSectionProps) {
   return (
     <section className={cn("flex flex-col", className)}>
       <Separator />
-      <div className="flex flex-col gap-3.5 px-5 py-4">
-        <h3 className="flex items-center gap-2 text-[11px] font-medium tracking-wide text-muted-foreground uppercase">
+      <div className={cn("flex flex-col gap-3.5 px-5 py-4", contentClassName)}>
+        <h3
+          className={cn(
+            "flex items-center gap-2 text-xs font-medium tracking-wide text-muted-foreground uppercase",
+            titleClassName,
+          )}
+        >
           {icon ? (
             <span className="text-muted-foreground [&_svg]:size-3.5">{icon}</span>
           ) : null}
@@ -431,6 +490,8 @@ type DetailFieldProps = {
   children?: React.ReactNode
   href?: string
   className?: string
+  labelClassName?: string
+  valueClassName?: string
 }
 
 function DetailField({
@@ -440,18 +501,25 @@ function DetailField({
   children,
   href,
   className,
+  labelClassName,
+  valueClassName,
 }: DetailFieldProps) {
   const content = children ?? value
   return (
-    <div className={cn("grid grid-cols-[16px_minmax(0,1fr)] gap-x-3", className)}>
+    <div className={cn("grid grid-cols-[1rem_minmax(0,1fr)] gap-x-3", className)}>
       <span className="mt-0.5 text-muted-foreground [&_svg]:size-3.5">
         {icon}
       </span>
       <div className="min-w-0">
-        <div className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
+        <div
+          className={cn(
+            "text-xs font-medium tracking-wide text-muted-foreground uppercase",
+            labelClassName,
+          )}
+        >
           {label}
         </div>
-        <div className="text-sm wrap-break-word text-foreground">
+        <div className={cn("text-sm wrap-break-word text-foreground", valueClassName)}>
           {href ? (
             <a
               href={href}

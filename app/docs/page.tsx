@@ -39,7 +39,11 @@ export default function DocsPage() {
       <section className="flex flex-col gap-3 text-sm leading-6">
         <h2 className="text-lg font-semibold">Three steps</h2>
         <ol className="list-decimal space-y-2 pl-5">
-          <li>Add the registry item. It pulls in button, scroll-area, and separator.</li>
+          <li>
+            Add the registry item. It pulls in button, scroll-area, and separator.
+            If the CLI asks to overwrite those files, answer no and keep the
+            host versions.
+          </li>
           <li>
             Render <code>LayeredPanel</code> on the same page as your table. Put the
             summary in <code>Peek</code> and the record fields in <code>Full</code>.
@@ -58,6 +62,12 @@ export default function DocsPage() {
           immediately. Below 1024px the panel is a full-screen sheet with Overview /
           Profile tabs. Columns scroll independently. Motion is a 280ms width
           transition and respects reduced motion.
+        </p>
+        <p>
+          The component ships no theme. It uses the host project&apos;s shadcn
+          tokens and primitives. <code>peekWidth</code> defaults to 26.25rem and{" "}
+          <code>fullWidth</code> to 70vw. The rule for future items is in
+          CONTRIBUTING.md.
         </p>
       </section>
     </main>
