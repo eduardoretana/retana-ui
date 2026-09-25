@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "retana",
+  "homepage": "https://github.com/eduardoretana/retana-ui",
+  "items": [
+    {
+      "name": "layered-panel",
+      "type": "registry:block",
+      "title": "Layered Panel",
+      "description": "Right-hand peek panel that expands in place to a two-column detail view. No route change. Optional Next.js URL sync keeps Back working: full collapses to peek, then closes. Ships no theme, cssVars, or global CSS — it uses the host project's shadcn tokens and primitives.",
+      "author": "Eduardo Retana",
+      "dependencies": ["radix-ui", "lucide-react"],
+      "registryDependencies": ["button", "scroll-area", "separator"],
+      "categories": ["dashboard", "overlay", "panel"],
+      "docs": "Import LayeredPanel from the installed UI file. URL sync is a separate hook (use-layered-panel-url-state) and is the only file that imports next/navigation. Below 1024px the panel is a full-screen sheet with tabs. The item declares button, scroll-area, and separator as registryDependencies and does not vendor copies. Answer no if the CLI asks to overwrite those files. No cssVars.",
+      "files": [
+        {
+          "path": "registry/ui/layered-panel.tsx",
+          "type": "registry:component",
+          "target": "@ui/layered-panel.tsx"
+        },
+        {
+          "path": "registry/hooks/use-layered-panel-url-state.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-layered-panel-url-state.ts"
+        }
+      ]
+    }
+  ]
+}
