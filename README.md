@@ -126,7 +126,7 @@ export function Members({ rows }: { rows: { id: string; name: string; email: str
 }
 ```
 
-`Header` and `ExpandToggle` as **direct children** sit at the top of the peek column and move into the left column when the panel expands. Put them inside `Peek` or `Full` if they should stay in that column.
+`Header` and `ExpandToggle` sit at the top of the peek column and move into the left column when the panel expands. They can be rendered from a child component that returns a fragment. A wrapping element needs `className="contents"` so the slots stay on the panel grid. Put a header inside `Peek` or `Full` only when it should stay in that column.
 
 Without the URL hook, use `useState` for `open` and `mode`. Both controlled and uncontrolled usage work (`defaultOpen`, `defaultMode`).
 
@@ -136,9 +136,9 @@ Without the URL hook, use `useState` for `open` and `mode`. Both controlled and 
 | --- | --- |
 | `LayeredPanel` | Dialog shell. Props: `open`, `defaultOpen`, `onOpenChange`, `mode` (`"peek"` \| `"full"`), `defaultMode`, `onModeChange`, `title`, `description`, `closeLabel`, `mobilePeekLabel`, `mobileFullLabel`, `peekWidth`, `fullWidth`, `showClose`, `className`. |
 | `LayeredPanel.Peek` | Always the right column. The only column in peek mode. |
-| `LayeredPanel.Full` | Left column. Mounted, but inert and zero-width until `mode="full"`. |
-| `LayeredPanel.Header` | Direct child: anchors to the active primary column. |
-| `LayeredPanel.ExpandToggle` | `expandLabel` (default `View full profile`), `collapseLabel` (default `Close profile`). Sets `aria-expanded`. |
+| `LayeredPanel.Full` | Left column. Mounted, but hidden and inert until `mode="full"`. |
+| `LayeredPanel.Header` | Grid slot at the top of the primary column. A child component can return it inside a fragment; a wrapping element needs `className="contents"`. |
+| `LayeredPanel.ExpandToggle` | `expandLabel` (default `View full profile`), `collapseLabel` (default `Close profile`). Sets `aria-expanded`. Same grid placement as `Header`. |
 | `LayeredPanel.Section` / `DetailSection` | Uppercase section label, optional icon, top separator. |
 | `LayeredPanel.Field` / `DetailField` | Label, optional icon, `value` or children, optional `href`. |
 | `useLayeredPanel()` | Mode and setters from inside the panel. Throws outside of it. |

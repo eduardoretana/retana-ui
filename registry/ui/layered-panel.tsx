@@ -17,28 +17,21 @@ import { Separator } from "@/components/ui/separator"
  * lock, Esc / click-outside). Does not import Next.js — pair with
  * `useLayeredPanelUrlState` when you want shareable URLs.
  *
- * Place `Header` and `ExpandToggle` as direct children to anchor them to the
- * top of the peek column; they move into the full column when expanded.
- * Nest them inside `Peek` or `Full` to pin them to that column instead.
+ * `Header` and `ExpandToggle` sit at the top of the primary column and move
+ * into the left column when the panel expands. Render them from a child
+ * component that returns a fragment, or give a wrapping element `className="contents"`.
  */
 
 export type LayeredPanelMode = "peek" | "full"
 
 const CSS_LENGTH = /^(?:\d*\.?\d+)(?:px|rem|em|vw|vh|%)$/
 
-type SlotElements = {
-  header: React.ReactElement | null
-  toggle: React.ReactElement | null
-  peek: React.ReactElement | null
-  full: React.ReactElement | null
-  rest: React.ReactNode[]
-}
-
 type LayeredPanelContextValue = {
   open: boolean
   mode: LayeredPanelMode
   setOpen: (open: boolean) => void
   setMode: (mode: LayeredPanelMode) => void
+  registerFull: (present: boolean) => void
 }
 
 const LayeredPanelContext =
@@ -74,51 +67,6 @@ function useControllable<T>({
   )
 
   return [current, setValue] as const
-}
-
-function slotOf(element: React.ReactElement) {
-  const type = element.type as { displayName?: string; slot?: string }
-  return type.slot ?? type.displayName ?? ""
-}
-
-function partition(children: React.ReactNode): SlotElements {
-  const slots: SlotElements = {
-    header: null,
-    toggle: null,
-    peek: null,
-    full: null,
-    rest: [],
-  }
-
-  React.Children.forEach(children, (child) => {
-    if (!React.isValidElement(child)) {
-      if (child != null && child !== false) slots.rest.push(child)
-      return
-    }
-
-    switch (slotOf(child)) {
-      case "header":
-      case "LayeredPanel.Header":
-        slots.header = child
-        break
-      case "toggle":
-      case "LayeredPanel.ExpandToggle":
-        slots.toggle = child
-        break
-      case "peek":
-      case "LayeredPanel.Peek":
-        slots.peek = child
-        break
-      case "full":
-      case "LayeredPanel.Full":
-        slots.full = child
-        break
-      default:
-        slots.rest.push(child)
-    }
-  })
-
-  return slots
 }
 
 function cssLength(value: string | undefined, fallback: string) {
@@ -197,8 +145,11 @@ function LayeredPanelRoot({
     },
     [setModeState],
   )
+  const [hasFull, setHasFull] = React.useState(false)
+  const registerFull = React.useCallback((present: boolean) => {
+    setHasFull(present)
+  }, [])
 
-  const slots = partition(children)
   const panelId = React.useId().replace(/:/g, "")
   const peek = cssLength(peekWidth, "26.25rem")
   const full = cssLength(fullWidth, "70vw")
@@ -220,8 +171,8 @@ function LayeredPanelRoot({
   }, [mode])
 
   const context = React.useMemo<LayeredPanelContextValue>(
-    () => ({ open, mode, setOpen, setMode }),
-    [mode, open, setMode, setOpen],
+    () => ({ open, mode, setOpen, setMode, registerFull }),
+    [mode, open, registerFull, setMode, setOpen],
   )
 
   return (
@@ -253,8 +204,12 @@ function LayeredPanelRoot({
             )}
           >
             <style>{`
-              [data-panel-id="${panelId}"] { width: min(100%, ${peek}); transition: width 280ms cubic-bezier(0.32, 0.72, 0, 1); }
+              [data-panel-id="${panelId}"] { width: min(100%, ${peek}); transition: width 280ms cubic-bezier(0.32, 0.72, 0, 1); --lp-col: ${peek}; }
               [data-panel-id="${panelId}"][data-mode="full"] { width: min(100%, ${full}); }
+              [data-panel-id="${panelId}"] .lp-grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr); }
+              @media (min-width: 1024px) {
+                [data-panel-id="${panelId}"][data-mode="full"] .lp-grid { grid-template-columns: minmax(0, 1fr) var(--lp-col); }
+              }
               @media (max-width: 1023px) {
                 [data-panel-id="${panelId}"],
                 [data-panel-id="${panelId}"][data-mode="full"] { width: 100%; transition: none; }
@@ -280,81 +235,33 @@ function LayeredPanelRoot({
                 </Button>
               </Dialog.Close>
             ) : null}
-            {slots.full ? (
+            {hasFull ? (
               <div className="shrink-0 px-3 pt-3 pr-14 lg:hidden">
-              <div
-                className="flex rounded-lg bg-muted p-0.5"
-                role="group"
-                aria-label="Panel sections"
-              >
-                <ModeButton
-                  pressed={mode === "peek"}
-                  onClick={() => setMode("peek")}
+                <div
+                  className="flex rounded-lg bg-muted p-0.5"
+                  role="group"
+                  aria-label="Panel sections"
                 >
-                  {mobilePeekLabel}
-                </ModeButton>
-                <ModeButton
-                  pressed={mode === "full"}
-                  onClick={() => setMode("full")}
-                >
-                  {mobileFullLabel}
-                </ModeButton>
-              </div>
+                  <ModeButton
+                    pressed={mode === "peek"}
+                    onClick={() => setMode("peek")}
+                  >
+                    {mobilePeekLabel}
+                  </ModeButton>
+                  <ModeButton
+                    pressed={mode === "full"}
+                    onClick={() => setMode("full")}
+                  >
+                    {mobileFullLabel}
+                  </ModeButton>
+                </div>
               </div>
             ) : null}
-            <div className="flex min-h-0 flex-1">
-              <div
-                data-slot="layered-panel-full"
-                inert={mode === "full" ? undefined : true}
-                className={cn(
-                  "flex min-h-0 min-w-0 flex-col overflow-hidden transition-opacity duration-200 motion-reduce:transition-none",
-                  mode === "full"
-                    ? "h-full w-full flex-1 opacity-100 lg:w-auto"
-                    : "h-full w-0 flex-none opacity-0 max-lg:hidden",
-                )}
-              >
-                <Column>
-                  {mode === "full" ? slots.header : null}
-                  {mode === "full" ? slots.toggle : null}
-                  {slots.full}
-                </Column>
-              </div>
-              <div
-                data-slot="layered-panel-peek"
-                className={cn(
-                  "h-full min-h-0 min-w-0 flex-col",
-                  mode === "full"
-                    ? "hidden shrink-0 border-border/70 lg:flex lg:border-l"
-                    : "flex w-full flex-1",
-                )}
-                style={mode === "full" ? { width: peek } : undefined}
-              >
-                <Column className={mode === "full" ? "pt-2" : undefined}>
-                  {mode === "peek" ? slots.header : null}
-                  {mode === "peek" ? slots.toggle : null}
-                  {slots.peek}
-                  {slots.rest}
-                </Column>
-              </div>
-            </div>
+            <div className="lp-grid grid min-h-0 flex-1">{children}</div>
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
     </LayeredPanelContext.Provider>
-  )
-}
-
-function Column({
-  children,
-  className,
-}: {
-  children: React.ReactNode
-  className?: string
-}) {
-  return (
-    <ScrollArea className={cn("h-full min-h-0 flex-1", className)}>
-      <div className="flex min-h-full flex-col">{children}</div>
-    </ScrollArea>
   )
 }
 
@@ -390,9 +297,22 @@ type StackProps = {
 }
 
 function Peek({ children, className }: StackProps) {
+  const { mode } = useLayeredPanel()
   return (
-    <div data-slot="layered-panel-peek-body" className={cn("flex flex-col", className)}>
-      {children}
+    <div
+      data-slot="layered-panel-peek"
+      className={cn(
+        "col-start-1 row-start-3 min-h-0",
+        mode === "full" &&
+          "max-lg:hidden lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:border-l lg:border-border/70",
+        className,
+      )}
+    >
+      <ScrollArea className="h-full">
+        <div className={cn("flex min-h-full flex-col", mode === "full" && "lg:pt-12")}>
+          {children}
+        </div>
+      </ScrollArea>
     </div>
   )
 }
@@ -400,9 +320,25 @@ Peek.displayName = "LayeredPanel.Peek"
 ;(Peek as typeof Peek & { slot: string }).slot = "peek"
 
 function Full({ children, className }: StackProps) {
+  const { mode, registerFull } = useLayeredPanel()
+  React.useLayoutEffect(() => {
+    registerFull(true)
+    return () => registerFull(false)
+  }, [registerFull])
+
   return (
-    <div data-slot="layered-panel-full-body" className={cn("flex flex-col", className)}>
-      {children}
+    <div
+      data-slot="layered-panel-full"
+      inert={mode === "full" ? undefined : true}
+      className={cn(
+        "col-start-1 row-start-3 min-h-0",
+        mode === "full" ? "block" : "hidden",
+        className,
+      )}
+    >
+      <ScrollArea className="h-full">
+        <div className="flex min-h-full flex-col">{children}</div>
+      </ScrollArea>
     </div>
   )
 }
@@ -413,7 +349,10 @@ function Header({ children, className }: StackProps) {
   return (
     <div
       data-slot="layered-panel-header"
-      className={cn("flex flex-col gap-3 px-5 pt-5 pr-14 pb-1", className)}
+      className={cn(
+        "col-start-1 row-start-1 flex flex-col gap-3 px-5 pt-5 pr-14 pb-1",
+        className,
+      )}
     >
       {children}
     </div>
@@ -439,7 +378,7 @@ function ExpandToggle({
   const expanded = mode === "full"
 
   return (
-    <div className={cn("px-5 py-3", className)}>
+    <div className={cn("col-start-1 row-start-2 px-5 py-3", className)}>
       <Button
         type="button"
         variant="secondary"
