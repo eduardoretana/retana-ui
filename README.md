@@ -1,6 +1,6 @@
 # Retana UI
 
-Shared [shadcn/ui](https://ui.shadcn.com) registry for Eduardo's projects. The first item is **Layered Panel**: a detail surface that opens as a peek sheet and expands in place. The page behind it never changes route, so scroll position and table context stay put.
+Shared [shadcn/ui](https://ui.shadcn.com) registry for Eduardo's projects, licensed under [MIT](LICENSE). The first item is **Layered Panel**: a detail surface that opens as a peek sheet and expands in place. The page behind it never changes route, so scroll position and table context stay put.
 
 Every item inherits the host project's existing shadcn theme and ships no theme of its own. That rule is in [CONTRIBUTING.md](CONTRIBUTING.md).
 
@@ -13,8 +13,6 @@ The site is a catalog. `registry.json` is the source of truth for `/` and for `/
 - `/docs` — how to install the registry, the `@retana` namespace, and optional `REGISTRY_TOKEN`
 
 `/leads` redirects to the lead example.
-
-Licensed under [MIT](LICENSE).
 
 ## Install
 
