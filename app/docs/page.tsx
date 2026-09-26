@@ -5,7 +5,7 @@ import { SiteHeader } from "@/app/catalog/site-header"
 
 export const metadata: Metadata = {
   title: "Install",
-  description: "Install items from the private Retana UI shadcn registry.",
+  description: "Install items from the Retana UI shadcn registry.",
 }
 
 export default function DocsPage() {
@@ -27,9 +27,12 @@ export default function DocsPage() {
         <section className="flex flex-col gap-3 text-sm leading-6">
           <h2 className="text-lg font-semibold">URL</h2>
           <p className="text-muted-foreground">
-            Deploy this app so <code>public/r/&lt;name&gt;.json</code> is reachable. Leave{" "}
-            <code>REGISTRY_TOKEN</code> unset and the files are public. Set it and{" "}
-            <code>proxy.ts</code> requires <code>Authorization: Bearer &lt;token&gt;</code>.
+            Deploy this app so <code>public/r/&lt;name&gt;.json</code> is reachable. The registry
+            is public when production sets <code>REGISTRY_PUBLIC=true</code>.{" "}
+            <code>REGISTRY_TOKEN</code> is optional and only applies if that deployment gates{" "}
+            <code>/r/*</code>: <code>proxy.ts</code> then requires{" "}
+            <code>Authorization: Bearer &lt;token&gt;</code>. With neither variable in production,
+            those routes return 401. Development serves them with no token.
           </p>
           <pre className="overflow-x-auto rounded-xl bg-muted p-4">
             <code>npx shadcn@latest add https://&lt;your-deployment&gt;/r/&lt;name&gt;.json</code>
@@ -51,8 +54,9 @@ export default function DocsPage() {
   }
 }`}</pre>
           <p className="text-muted-foreground">
-            Put the token in <code>.env.local</code>. The shadcn CLI substitutes{" "}
-            <code>{"${REGISTRY_TOKEN}"}</code>. Drop the headers block when the deployment is public.
+            Put the token in <code>.env.local</code> only when the deployment gates{" "}
+            <code>/r/*</code>. The shadcn CLI substitutes <code>{"${REGISTRY_TOKEN}"}</code>. Drop
+            the headers block when <code>REGISTRY_PUBLIC=true</code> and no token is set.
           </p>
           <pre className="overflow-x-auto rounded-xl bg-muted p-4">
             <code>npx shadcn@latest add @retana/&lt;name&gt;</code>

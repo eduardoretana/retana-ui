@@ -1,6 +1,6 @@
 # Contributing
 
-Registry items in this repo are installed into existing apps (CRMs, ops portals, the clinic app). Each of those apps already has a shadcn theme. A new item must inherit that theme.
+Registry items in this repo are installed across my projects. Each of those apps already has a shadcn theme. A new item must inherit that theme.
 
 ## Inherit the host, bring no theme
 

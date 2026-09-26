@@ -10,13 +10,17 @@ The site is a catalog. `registry.json` is the source of truth for `/` and for `/
 - `/items/layered-panel` — preview, install command, API, and source
 - `/examples/layered-panel/team` — team directory example
 - `/examples/layered-panel/lead` — CRM lead example, Spanish labels
-- `/docs` — how to install the registry, the `@retana` namespace, and `REGISTRY_TOKEN`
+- `/docs` — how to install the registry, the `@retana` namespace, and optional `REGISTRY_TOKEN`
 
 `/leads` redirects to the lead example.
 
+Licensed under [MIT](LICENSE).
+
 ## Install
 
-This repository is private. Pick one of the three paths below. All of them assume the target app is Next.js (App Router), Tailwind v4, and shadcn/ui (Radix preset).
+Pick one of the three paths below. All of them assume the target app is Next.js (App Router), Tailwind v4, and shadcn/ui (Radix preset). The registry files under `/r` are meant to be public.
+
+In production, `proxy.ts` fails closed. `/r/*` returns 401 unless you set `REGISTRY_PUBLIC=true`, or you set `REGISTRY_TOKEN` and the client sends `Authorization: Bearer <token>`. `REGISTRY_TOKEN` is optional: use it only when a deployment should gate `/r/*`. `REGISTRY_PUBLIC=true` is the explicit opt-in that serves the registry with no token. In development, `/r/*` is served with no token. If `REGISTRY_TOKEN` is set, a matching bearer is still required.
 
 ### 1. Deploy, then install from the URL
 
@@ -32,7 +36,7 @@ Local check while this app is running:
 npx shadcn@latest add http://localhost:3000/r/layered-panel.json
 ```
 
-Leave `REGISTRY_TOKEN` unset and `/r/*.json` is public. Set it on the deployment to require a bearer token (`proxy.ts` returns 401 without `Authorization: Bearer <token>`). Pair that with the namespaced config below.
+To publish the files with no token, set `REGISTRY_PUBLIC=true` on the production deployment. To gate them instead, set `REGISTRY_TOKEN` and pair it with the namespaced config below.
 
 ### 2. Namespaced registry (recommended for several apps)
 
@@ -51,7 +55,7 @@ In the target project's `components.json`:
 }
 ```
 
-Put the token in `.env.local` (the shadcn CLI substitutes `${REGISTRY_TOKEN}`). If the deployment is public, drop the `headers` block.
+Put the token in `.env.local` only when the deployment gates `/r/*` (the shadcn CLI substitutes `${REGISTRY_TOKEN}`). When `REGISTRY_PUBLIC=true` and no token is set, drop the `headers` block.
 
 ```bash
 npx shadcn@latest add @retana/layered-panel

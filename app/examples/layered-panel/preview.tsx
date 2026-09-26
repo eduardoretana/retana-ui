@@ -83,7 +83,7 @@ export default function LayeredPanelPreview() {
             {mode === "full" ? (
               <div className="min-w-0 flex-1 border-r border-border px-2.5 py-2 text-[10px] text-muted-foreground">
                 <p className="font-medium tracking-wide uppercase">Personal</p>
-                <p className="mt-1 text-foreground">emma.johnson@artasaka.com</p>
+                <p className="mt-1 text-foreground">emma.johnson@acme.example</p>
               </div>
             ) : null}
             <div className={cn("px-2.5 py-2", mode === "full" ? "w-[42%]" : "w-full")}>
