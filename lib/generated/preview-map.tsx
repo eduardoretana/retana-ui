@@ -10,6 +10,7 @@ import Preview5 from "@/app/examples/reasoning-steps/preview"
 import Preview6 from "@/app/examples/task-list/preview"
 import Preview7 from "@/app/examples/plan-card/preview"
 import Preview8 from "@/app/examples/question-card/preview"
+import Preview9 from "@/app/examples/inline-citation/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -21,4 +22,5 @@ export const previewMap = {
   "task-list": Preview6,
   "plan-card": Preview7,
   "question-card": Preview8,
+  "inline-citation": Preview9,
 }

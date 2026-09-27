@@ -587,6 +587,58 @@
           "target": "@ui/question-card.tsx"
         }
       ]
+    },
+    {
+      "name": "inline-citation",
+      "type": "registry:ui",
+      "title": "Inline Citation",
+      "description": "Numeric marker that reveals a source title, domain, and excerpt on hover or focus.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "chat",
+        "ai"
+      ],
+      "meta": {
+        "titleEs": "Cita en línea",
+        "descriptionEs": "Marcador numérico que, al pasar el cursor o enfocar, muestra título, dominio y extracto de la fuente.",
+        "preview": "app/examples/inline-citation/preview.tsx",
+        "previewHref": "/examples/inline-citation",
+        "examples": [
+          {
+            "title": "Cita en línea",
+            "href": "/examples/inline-citation",
+            "description": "Marcador numérico que, al pasar el cursor o enfocar, muestra título, dominio y extracto de la fuente."
+          }
+        ],
+        "usage": "<InlineCitation index={1} source={{ title, domain, excerpt, href }} />",
+        "api": [
+          {
+            "name": "index",
+            "type": "number",
+            "description": "Visible marker."
+          },
+          {
+            "name": "source",
+            "type": "CitationSource",
+            "description": "title, domain, excerpt, and optional href."
+          },
+          {
+            "name": "className / cardClassName",
+            "type": "string",
+            "description": "Classes for the marker and the card."
+          }
+        ]
+      },
+      "docs": "Links are limited to http, https, and mailto. Keyboard focus opens the card and Escape closes it. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/inline-citation.tsx",
+          "type": "registry:component",
+          "target": "@ui/inline-citation.tsx"
+        }
+      ]
     }
   ]
 }

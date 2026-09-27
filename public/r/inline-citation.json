@@ -1,0 +1,54 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "inline-citation",
+  "title": "Inline Citation",
+  "author": "Eduardo Retana",
+  "description": "Numeric marker that reveals a source title, domain, and excerpt on hover or focus.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/inline-citation.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type CitationSource = {\n  title: string\n  domain: string\n  excerpt: string\n  href?: string\n}\n\nexport type InlineCitationProps = {\n  index: number\n  source: CitationSource\n  className?: string\n  cardClassName?: string\n}\n\nfunction safeHref(href: string | undefined) {\n  if (!href) return null\n  return /^(https?:|mailto:)/i.test(href.trim()) ? href.trim() : null\n}\n\nexport function InlineCitation({ index, source, className, cardClassName }: InlineCitationProps) {\n  const [open, setOpen] = React.useState(false)\n  const closeTimer = React.useRef<number>(0)\n  const tooltipId = React.useId()\n  const href = safeHref(source.href)\n\n  function show() {\n    window.clearTimeout(closeTimer.current)\n    setOpen(true)\n  }\n\n  function hide() {\n    window.clearTimeout(closeTimer.current)\n    closeTimer.current = window.setTimeout(() => setOpen(false), 120)\n  }\n\n  React.useEffect(() => () => window.clearTimeout(closeTimer.current), [])\n\n  return (\n    <span\n      data-slot=\"inline-citation\"\n      className={cn(\"relative inline-flex\", className)}\n      onMouseEnter={show}\n      onMouseLeave={hide}\n      onFocus={show}\n      onBlur={hide}\n    >\n      {href ? (\n        <a\n          href={href}\n          aria-describedby={open ? tooltipId : undefined}\n          className=\"mx-0.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-muted px-1 align-super text-[10px] font-medium text-foreground tabular-nums no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\"\n          onKeyDown={(event) => {\n            if (event.key === \"Escape\") setOpen(false)\n          }}\n        >\n          {index}\n        </a>\n      ) : (\n        <button\n          type=\"button\"\n          aria-describedby={open ? tooltipId : undefined}\n          className=\"mx-0.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-muted px-1 align-super text-[10px] font-medium text-foreground tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\"\n          onKeyDown={(event) => {\n            if (event.key === \"Escape\") setOpen(false)\n          }}\n        >\n          {index}\n        </button>\n      )}\n      {open ? (\n        <span\n          role=\"tooltip\"\n          id={tooltipId}\n          className={cn(\n            \"absolute bottom-[calc(100%+0.4rem)] left-1/2 z-30 w-64 -translate-x-1/2 rounded-lg border border-border bg-popover p-3 text-left text-popover-foreground shadow-lg\",\n            cardClassName,\n          )}\n        >\n          <span className=\"block text-sm font-medium leading-snug\">{source.title}</span>\n          <span className=\"mt-0.5 block text-[11px] text-muted-foreground\">{source.domain}</span>\n          <span className=\"mt-2 block text-xs leading-relaxed text-muted-foreground\">{source.excerpt}</span>\n        </span>\n      ) : null}\n    </span>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/inline-citation.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Cita en línea",
+    "descriptionEs": "Marcador numérico que, al pasar el cursor o enfocar, muestra título, dominio y extracto de la fuente.",
+    "preview": "app/examples/inline-citation/preview.tsx",
+    "previewHref": "/examples/inline-citation",
+    "examples": [
+      {
+        "title": "Cita en línea",
+        "href": "/examples/inline-citation",
+        "description": "Marcador numérico que, al pasar el cursor o enfocar, muestra título, dominio y extracto de la fuente."
+      }
+    ],
+    "usage": "<InlineCitation index={1} source={{ title, domain, excerpt, href }} />",
+    "api": [
+      {
+        "name": "index",
+        "type": "number",
+        "description": "Visible marker."
+      },
+      {
+        "name": "source",
+        "type": "CitationSource",
+        "description": "title, domain, excerpt, and optional href."
+      },
+      {
+        "name": "className / cardClassName",
+        "type": "string",
+        "description": "Classes for the marker and the card."
+      }
+    ]
+  },
+  "docs": "Links are limited to http, https, and mailto. Keyboard focus opens the card and Escape closes it. No theme is shipped.",
+  "categories": [
+    "chat",
+    "ai"
+  ],
+  "type": "registry:ui"
+}
