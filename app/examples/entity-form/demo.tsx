@@ -72,6 +72,7 @@ export function EntityFormDemo() {
         description="Los datos se quedan en memoria."
         submitLabel="Guardar"
         pendingLabel="Guardando…"
+        errorLabel="No se pudo guardar"
         cancelLabel="Cancelar"
         deleteLabel="Eliminar"
         onDelete={
@@ -87,7 +88,7 @@ export function EntityFormDemo() {
           if (!title) return
           setRows((current) => {
             if (!editing) {
-              return [...current, { id: `p-${current.length + 1}`, title, position: current.length }]
+              return [...current, { id: crypto.randomUUID(), title, position: current.length }]
             }
             return current.map((row) =>
               row.id === editing.id ? keepPosition(row, { ...row, title, position: 0 }) : row,

@@ -78,6 +78,8 @@ describe("csv", () => {
   it("quotes cells that contain commas, quotes, or newlines", () => {
     expect(escapeCsvCell(null)).toBe("")
     expect(escapeCsvCell('dice "hola",\nfin')).toBe('"dice ""hola"",\nfin"')
+    expect(escapeCsvCell("=1+1")).toBe(`"'=1+1"`)
+    expect(escapeCsvCell(-12)).toBe("-12")
     expect(
       toCsv(
         [{ name: "Lucía", note: "a, b" }],
@@ -106,6 +108,34 @@ describe("date range", () => {
       Date.UTC(2026, 8, 28),
     ])
     expect(presetBounds("any", NOW)).toBeNull()
+  })
+
+  it("keeps Madrid day bounds across DST", () => {
+    const zone = "Europe/Madrid"
+    const format = (ts: number) =>
+      new Intl.DateTimeFormat("en-CA", {
+        timeZone: zone,
+        hourCycle: "h23",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      }).format(new Date(ts))
+
+    for (const noon of ["2026-10-25T10:00:00.000Z", "2026-03-29T10:00:00.000Z"]) {
+      const now = Date.parse(noon)
+      const bounds = presetBounds("today", now, zone)
+      expect(bounds).not.toBeNull()
+      const [from, to] = bounds ?? [0, 0]
+      expect(format(from)).toMatch(/00:00:00$/)
+      expect(format(to)).toMatch(/00:00:00$/)
+      expect(format(to - 1).slice(0, 10)).toBe(format(from).slice(0, 10))
+      expect(format(to).slice(0, 10)).not.toBe(format(from).slice(0, 10))
+      const week = resolveRange("7d", now, zone)
+      expect(format(week.from)).toMatch(/00:00:00$/)
+    }
   })
 })
 

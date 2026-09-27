@@ -1,0 +1,56 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "reasoning-steps",
+  "title": "Reasoning Steps",
+  "author": "Eduardo Retana",
+  "description": "Collapsible list of reasoning or tool steps with pending, active, done, and error states plus a duration.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/reasoning-steps.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { AlertCircle, Check, ChevronDown, Circle, LoaderCircle } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type ReasoningStatus = \"pending\" | \"active\" | \"done\" | \"error\"\n\nexport type ReasoningStep = {\n  id: string\n  title: string\n  detail?: string\n  status: ReasoningStatus\n  /** Elapsed time in milliseconds. */\n  durationMs?: number\n}\n\nexport type ReasoningStepsProps = {\n  steps: readonly ReasoningStep[]\n  title?: string\n  defaultOpen?: boolean\n  open?: boolean\n  onOpenChange?: (open: boolean) => void\n  pendingLabel?: string\n  activeLabel?: string\n  doneLabel?: string\n  errorLabel?: string\n  className?: string\n}\n\nconst STATUS_ICON = {\n  pending: Circle,\n  active: LoaderCircle,\n  done: Check,\n  error: AlertCircle,\n} as const\n\nfunction formatDuration(ms: number) {\n  if (ms < 1000) return `${Math.max(0, Math.round(ms))} ms`\n  return `${(ms / 1000).toFixed(1)} s`\n}\n\nexport function ReasoningSteps({\n  steps,\n  title = \"Reasoning\",\n  defaultOpen = true,\n  open,\n  onOpenChange,\n  pendingLabel = \"Pending\",\n  activeLabel = \"In progress\",\n  doneLabel = \"Done\",\n  errorLabel = \"Error\",\n  className,\n}: ReasoningStepsProps) {\n  const [uncontrolled, setUncontrolled] = React.useState(defaultOpen)\n  const isOpen = open ?? uncontrolled\n  const labels: Record<ReasoningStatus, string> = {\n    pending: pendingLabel,\n    active: activeLabel,\n    done: doneLabel,\n    error: errorLabel,\n  }\n  const done = steps.filter((step) => step.status === \"done\").length\n\n  function toggle() {\n    const next = !isOpen\n    if (open === undefined) setUncontrolled(next)\n    onOpenChange?.(next)\n  }\n\n  return (\n    <section\n      data-slot=\"reasoning-steps\"\n      data-open={isOpen ? \"true\" : \"false\"}\n      className={cn(\"rounded-xl border border-border bg-card\", className)}\n    >\n      <button\n        type=\"button\"\n        className=\"flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\"\n        aria-expanded={isOpen}\n        onClick={toggle}\n      >\n        <ChevronDown className={cn(\"size-4 text-muted-foreground transition-transform motion-reduce:transition-none\", !isOpen && \"-rotate-90\")} />\n        <span className=\"font-medium\">{title}</span>\n        <span className=\"ml-auto text-xs text-muted-foreground tabular-nums\">\n          {done}/{steps.length}\n        </span>\n      </button>\n      {isOpen ? (\n        <ol className=\"flex flex-col gap-1 border-t border-border px-2 py-2\">\n          {steps.map((step) => {\n            const Icon = STATUS_ICON[step.status]\n            return (\n              <li\n                key={step.id}\n                data-status={step.status}\n                className=\"flex gap-2 rounded-lg px-1.5 py-1.5\"\n              >\n                <Icon\n                  aria-hidden\n                  className={cn(\n                    \"mt-0.5 size-4 shrink-0\",\n                    step.status === \"active\" && \"motion-safe:animate-spin text-foreground\",\n                    step.status === \"done\" && \"text-primary\",\n                    step.status === \"error\" && \"text-destructive\",\n                    step.status === \"pending\" && \"text-muted-foreground\",\n                  )}\n                />\n                <div className=\"min-w-0 flex-1\">\n                  <div className=\"flex items-baseline gap-2\">\n                    <p className=\"text-sm\">{step.title}</p>\n                    <span className=\"sr-only\">{labels[step.status]}</span>\n                    {typeof step.durationMs === \"number\" ? (\n                      <span className=\"ml-auto shrink-0 text-[11px] text-muted-foreground tabular-nums\">\n                        {formatDuration(step.durationMs)}\n                      </span>\n                    ) : null}\n                  </div>\n                  {step.detail ? <p className=\"mt-0.5 text-xs text-muted-foreground\">{step.detail}</p> : null}\n                </div>\n              </li>\n            )\n          })}\n        </ol>\n      ) : null}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/reasoning-steps.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Pasos de razonamiento",
+    "descriptionEs": "Lista colapsable de pasos de razonamiento o herramientas, con estado pendiente, en curso, hecho o error, y duración.",
+    "preview": "app/examples/reasoning-steps/preview.tsx",
+    "previewHref": "/examples/reasoning-steps",
+    "examples": [
+      {
+        "title": "Pasos de razonamiento",
+        "href": "/examples/reasoning-steps",
+        "description": "Lista colapsable de pasos de razonamiento o herramientas, con estado pendiente, en curso, hecho o error, y duración."
+      }
+    ],
+    "usage": "<ReasoningSteps steps={[{ id: \"1\", title: \"Read\", status: \"done\", durationMs: 400 }]} />",
+    "api": [
+      {
+        "name": "steps",
+        "type": "ReasoningStep[]",
+        "description": "id, title, optional detail, status, and durationMs."
+      },
+      {
+        "name": "open / onOpenChange",
+        "type": "boolean / callback",
+        "description": "Controlled disclosure. defaultOpen defaults to true."
+      },
+      {
+        "name": "labels",
+        "type": "string",
+        "description": "title and the four status labels default to English."
+      }
+    ]
+  },
+  "docs": "Import ReasoningSteps from the installed UI file. Durations are formatted from milliseconds. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "ai",
+    "chat"
+  ],
+  "type": "registry:ui"
+}

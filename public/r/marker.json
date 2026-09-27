@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "marker",
+  "title": "Marker",
+  "author": "Eduardo Retana",
+  "description": "Animated highlighter mark behind a span of text.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/marker.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type MarkerProps = {\n  children: React.ReactNode\n  className?: string\n  highlightClassName?: string\n}\n\nexport function Marker({ children, className, highlightClassName }: MarkerProps) {\n  return (\n    <span data-slot=\"marker\" className={cn(\"relative inline\", className)}>\n      <style>{\"@keyframes retana-marker{from{transform:scaleX(0)}to{transform:scaleX(1)}}\"}</style>\n      <span\n        aria-hidden\n        className={cn(\n          \"absolute inset-x-0 bottom-[0.08em] h-[0.45em] origin-left rounded-sm bg-primary/25 motion-safe:animate-[retana-marker_700ms_ease-out_both]\",\n          highlightClassName,\n        )}\n      />\n      <span className=\"relative\">{children}</span>\n    </span>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/marker.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Marcador",
+    "descriptionEs": "Resaltado animado detrás de un tramo de texto, al estilo de un marcador.",
+    "preview": "app/examples/marker/preview.tsx",
+    "previewHref": "/examples/marker",
+    "examples": [
+      {
+        "title": "Marcador",
+        "href": "/examples/marker",
+        "description": "Resaltado animado detrás de un tramo de texto, al estilo de un marcador."
+      }
+    ],
+    "usage": "<Marker>forty-five days</Marker>",
+    "api": [
+      {
+        "name": "children",
+        "type": "ReactNode",
+        "description": "Text that stays readable above the mark."
+      },
+      {
+        "name": "highlightClassName",
+        "type": "string",
+        "description": "Override the mark. Default uses primary at low emphasis."
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "description": "Classes on the wrapper."
+      }
+    ]
+  },
+  "docs": "The mark scales in from the left. Reduced motion shows it immediately. No theme is shipped.",
+  "categories": [
+    "content"
+  ],
+  "type": "registry:ui"
+}

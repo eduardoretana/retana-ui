@@ -21,26 +21,13 @@ insert into public.admins (user_id) values ('<auth.users id>');
 
 ## Next.js
 
-```tsx
-// lib/supabase/client.ts
-import { createClient } from "@supabase/supabase-js"
-import { createSupabaseAdmin } from "@/lib/supabase-admin"
-
-export function adminPorts() {
-  const client = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  )
-  return createSupabaseAdmin(client)
-}
-```
-
-Guard the route in a server layout. The registry pieces do not import `next`.
+Guard the route in a server layout, and build the ports from that same client. A fresh `createClient(url, anonKey)` has no session, so `is_admin()` fails and writes are rejected. The registry pieces do not import `next`.
 
 ```tsx
 // app/admin/layout.tsx
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
+import { createSupabaseAdmin } from "@/lib/supabase-admin"
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -50,12 +37,17 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (!admin) redirect("/")
   return children
 }
+
+export async function adminPorts() {
+  const supabase = await createClient()
+  return createSupabaseAdmin(supabase)
+}
 ```
 
-Wire a screen with the same callbacks the demo uses:
+`createClient` from `@/lib/supabase/server` must read the request cookies so the session is present. Wire a screen with the same callbacks the demo uses:
 
 ```tsx
-const ports = adminPorts()
+const ports = await adminPorts()
 const projects = await ports.projects.list()
 
 <SortableBoard
@@ -71,13 +63,15 @@ const projects = await ports.projects.list()
 
 ## Vite + React 18
 
-Same client, no server layout. Guard in the router:
+Use the app's single browser client. It already holds the signed-in session. Do not construct a second client for the ports.
 
 ```tsx
 const { data: { session } } = await supabase.auth.getSession()
 if (!session) return <Navigate to="/login" replace />
 const { data: admin } = await supabase.from("admins").select("user_id").eq("user_id", session.user.id).maybeSingle()
 if (!admin) return <Navigate to="/" replace />
+
+const ports = createSupabaseAdmin(supabase)
 ```
 
 Pass `themeController` from your theme hook if you have one. Otherwise the shell toggles the `dark` class itself.

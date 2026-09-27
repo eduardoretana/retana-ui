@@ -5,8 +5,10 @@ export type CsvColumn = {
 
 export function escapeCsvCell(value: unknown): string {
   if (value == null) return ""
-  const text = String(value)
-  if (/[",\n\r]/.test(text)) return `"${text.replace(/"/g, '""')}"`
+  let text = String(value)
+  // Spreadsheets treat a leading = + - @ tab or line break as a formula.
+  if (typeof value === "string" && /^[=+\-@\t\r\n]/.test(text)) text = `'${text}`
+  if (/[",\n\r']/.test(text)) return `"${text.replace(/"/g, '""')}"`
   return text
 }
 

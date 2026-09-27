@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -36,6 +37,7 @@ export type SettingsFormProps = {
   cleanLabel?: string
   leaveMessage?: string
   pendingLabel?: string
+  errorLabel?: string
 }
 
 function sameValues(a: Record<string, string>, b: Record<string, string>) {
@@ -57,6 +59,7 @@ export function SettingsForm({
   cleanLabel = "All changes saved",
   leaveMessage = "You have unsaved changes.",
   pendingLabel = "Saving…",
+  errorLabel = "Could not save",
 }: SettingsFormProps) {
   const [draft, setDraft] = React.useState(values)
   const [baseline, setBaseline] = React.useState(values)
@@ -80,6 +83,8 @@ export function SettingsForm({
     try {
       await onSave(draft)
       setBaseline(draft)
+    } catch (error) {
+      toast.error(error instanceof Error && error.message ? error.message : errorLabel)
     } finally {
       setPending(false)
     }

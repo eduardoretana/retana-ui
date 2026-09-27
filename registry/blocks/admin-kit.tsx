@@ -135,6 +135,7 @@ const FIELD_ES = {
   uploadFailed: "No se pudo subir",
   pickLabel: "Biblioteca",
   clearLabel: "Quitar",
+  typeError: "Ese tipo de archivo no está permitido.",
 }
 
 const LIBRARY_ES = {
@@ -143,6 +144,7 @@ const LIBRARY_ES = {
   dropLabel: FIELD_ES.dropLabel,
   uploadedMessage: FIELD_ES.uploadedMessage,
   uploadFailed: FIELD_ES.uploadFailed,
+  typeError: FIELD_ES.typeError,
   emptyTitle: "Todavía no hay archivos",
   emptyDescription: "Sube una imagen o un vídeo.",
   nameLabel: "Nombre",
@@ -250,6 +252,7 @@ export function AdminKit({ themeController, className, seed: seedProp, showToast
           dirtyLabel="Cambios sin guardar"
           cleanLabel="Todo guardado"
           pendingLabel="Guardando…"
+          errorLabel="No se pudo guardar"
           leaveMessage="Hay textos sin guardar."
           onSave={async (values) => {
             await admin.settings.save(values)
@@ -516,6 +519,7 @@ export function AdminKit({ themeController, className, seed: seedProp, showToast
             dirtyLabel="Cambios sin guardar"
             cleanLabel="Todo guardado"
             pendingLabel="Guardando…"
+            errorLabel="No se pudo guardar"
             leaveMessage="Hay textos sin guardar."
             onSave={async (values) => {
               await admin.settings.save({ ...data.settings, ...values })
@@ -623,7 +627,7 @@ function OverviewScreen({ data, onOpen }: { data: AdminSeed; onOpen: (href: stri
 }
 
 function AnalyticsScreen({ data }: { data: AdminSeed }) {
-  const range = useDateRange("7d", "UTC")
+  const range = useDateRange("7d", "UTC", data.asOf)
   const snap = summarizeAnalytics(data.views, data.clicks, range.range.from, range.range.to)
   const prev = summarizeAnalytics(data.views, data.clicks, range.range.prevFrom, range.range.prevTo)
   const sum = sumDaily(snap.daily)
@@ -758,6 +762,7 @@ function BookingsScreen({
       detailFallback="Detalle"
       detailDescription="Detalle de la reserva"
       viewsLabel="Vistas"
+      actionErrorLabel="No se pudo completar la acción"
       selectAllLabel="Seleccionar todas"
       selectRowLabel="Seleccionar fila"
     />
@@ -848,6 +853,7 @@ function ProjectsScreen({
         busy={busy}
         submitLabel="Guardar"
         pendingLabel="Guardando…"
+        errorLabel="No se pudo guardar"
         cancelLabel="Cancelar"
         deleteLabel="Eliminar"
         onDelete={current ? () => onDelete(current.id) : undefined}
@@ -948,6 +954,7 @@ function PlansScreen({
         title={current ? "Editar plan" : "Nuevo plan"}
         submitLabel="Guardar"
         pendingLabel="Guardando…"
+        errorLabel="No se pudo guardar"
         cancelLabel="Cancelar"
         deleteLabel="Eliminar"
         onDelete={current ? () => adminRemove(current.id) : undefined}
@@ -958,10 +965,10 @@ function PlansScreen({
             id: current?.id ?? createId(),
             name,
             blurb: String(form.get("blurb") ?? ""),
-            monthlyPrice: price ? Number(price) : null,
+            monthlyPrice: price !== "" && Number.isFinite(Number(price)) ? Number(price) : null,
             badge: String(form.get("badge") ?? ""),
             ctaLabel: String(form.get("ctaLabel") ?? "Reservar"),
-            ctaHref: String(form.get("ctaHref") ?? ""),
+            ctaHref: String(form.get("ctaHref") ?? current?.ctaHref ?? ""),
             features: String(form.get("features") ?? "").split("\n").map((line) => line.trim()).filter(Boolean),
             published: form.get("published") === "on",
             position: current?.position ?? data.plans.length,
@@ -976,6 +983,7 @@ function PlansScreen({
         <TextField name="monthlyPrice" label="Precio mensual (vacío si no aplica)" defaultValue={current?.monthlyPrice == null ? "" : String(current.monthlyPrice)} />
         <TextField name="badge" label="Etiqueta" defaultValue={current?.badge} />
         <TextField name="ctaLabel" label="Botón" defaultValue={current?.ctaLabel} />
+        <TextField name="ctaHref" label="Enlace del botón" defaultValue={current?.ctaHref} />
         <TextField name="features" label="Incluye (una línea por punto)" defaultValue={current?.features.join("\n")} multiline />
         <CheckField name="published" label="Publicado" defaultChecked={current?.published ?? true} />
       </EntityForm>
@@ -1029,6 +1037,7 @@ function SimpleList<T extends Category | Faq>({
         title={current ? `Editar` : addLabel}
         submitLabel="Guardar"
         pendingLabel="Guardando…"
+        errorLabel="No se pudo guardar"
         cancelLabel="Cancelar"
         deleteLabel="Eliminar"
         onDelete={current ? async () => { await onDelete(current.id); setEditing(null) } : undefined}
@@ -1094,6 +1103,7 @@ function NamedList<T extends { id: string; position: number }>({
         description="Al guardar se conserva la posición."
         submitLabel="Guardar"
         pendingLabel="Guardando…"
+        errorLabel="No se pudo guardar"
         cancelLabel="Cancelar"
         deleteLabel="Eliminar"
         onDelete={current ? async () => { await onDelete(current.id) } : undefined}

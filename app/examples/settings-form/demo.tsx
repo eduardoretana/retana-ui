@@ -40,6 +40,7 @@ export function SettingsFormDemo() {
         values={values}
         saveLabel="Guardar textos"
         pendingLabel="Guardando…"
+        errorLabel="No se pudo guardar"
         discardLabel="Descartar"
         dirtyLabel="Hay cambios sin guardar"
         cleanLabel="Todo guardado"

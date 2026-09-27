@@ -14,7 +14,7 @@ import type {
   Project,
   SettingsPort,
   Testimonial,
-} from "@/registry/retana/lib/admin-types"
+} from "./admin-types"
 
 /**
  * Host-owned Supabase client. This module never constructs one.
@@ -61,6 +61,22 @@ async function throwIf(error: { message: string } | null) {
   if (error) throw new Error(error.message)
 }
 
+const PAGE = 1000
+
+/** PostgREST stops at 1,000 rows unless the caller pages. */
+async function selectPages(
+  fetchPage: (from: number, to: number) => PromiseLike<{ data: unknown; error: { message: string } | null }>,
+): Promise<Row[]> {
+  const rows: Row[] = []
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await fetchPage(from, from + PAGE - 1)
+    await throwIf(error)
+    const page = asRows(data)
+    rows.push(...page)
+    if (page.length < PAGE) return rows
+  }
+}
+
 function contentPort<T extends { id: string; position: number }>(
   client: AdminSupabase,
   table: string,
@@ -69,9 +85,10 @@ function contentPort<T extends { id: string; position: number }>(
 ): ContentPort<T> {
   return {
     async list() {
-      const { data, error } = await client.from(table).select("*").order("position", { ascending: true })
-      await throwIf(error)
-      return asRows(data).map(fromRow)
+      const rows = await selectPages((from, to) =>
+        client.from(table).select("*").order("position", { ascending: true }).range(from, to),
+      )
+      return rows.map(fromRow)
     },
     async save(row) {
       const { data, error } = await client.from(table).upsert(toRow(row)).select("*").single()
@@ -83,10 +100,8 @@ function contentPort<T extends { id: string; position: number }>(
       await throwIf(error)
     },
     async reorder(ids) {
-      const results = await Promise.all(
-        ids.map((id, position) => client.from(table).update({ position }).eq("id", id)),
-      )
-      for (const result of results) await throwIf(result.error)
+      const { error } = await client.rpc("admin_reorder", { target: table, ids: [...ids] })
+      await throwIf(error)
     },
   }
 }
@@ -138,10 +153,11 @@ function projectTo(row: Project): Row {
 export function createSupabaseSettings(client: AdminSupabase): SettingsPort {
   return {
     async getAll() {
-      const { data, error } = await client.from("settings").select("key,value")
-      await throwIf(error)
+      const rows = await selectPages((from, to) =>
+        client.from("settings").select("key,value").order("key", { ascending: true }).range(from, to),
+      )
       const values: Record<string, string> = {}
-      for (const row of asRows(data)) values[str(row, "key")] = str(row, "value")
+      for (const row of rows) values[str(row, "key")] = str(row, "value")
       return values
     },
     async save(values) {
@@ -159,9 +175,10 @@ export function createSupabaseSettings(client: AdminSupabase): SettingsPort {
 export function createSupabaseMedia(client: AdminSupabase, bucket = "media"): MediaPort {
   return {
     async list() {
-      const { data, error } = await client.from("media").select("*").order("created_at", { ascending: false })
-      await throwIf(error)
-      return asRows(data).map(mediaFrom)
+      const rows = await selectPages((from, to) =>
+        client.from("media").select("*").order("created_at", { ascending: false }).range(from, to),
+      )
+      return rows.map(mediaFrom)
     },
     async upload(file) {
       const id = crypto.randomUUID()
@@ -181,16 +198,29 @@ export function createSupabaseMedia(client: AdminSupabase, bucket = "media"): Me
         storage_path: path,
         created_at: new Date().toISOString(),
       }
-      const inserted = await client.from("media").insert(row).select("*").single()
-      await throwIf(inserted.error)
-      return mediaFrom(asRow(inserted.data))
+      try {
+        const inserted = await client.from("media").insert(row).select("*").single()
+        await throwIf(inserted.error)
+        return mediaFrom(asRow(inserted.data))
+      } catch (error) {
+        await client.storage.from(bucket).remove([path])
+        throw error
+      }
     },
     async remove(id) {
-      const { data, error } = await client.from("media").select("storage_path").eq("id", id).maybeSingle()
+      const { data, error } = await client.from("media").select("*").eq("id", id).maybeSingle()
       await throwIf(error)
-      const path = data ? str(asRow(data), "storage_path") : ""
-      if (path) await throwIf((await client.storage.from(bucket).remove([path])).error)
+      if (!data) return
+      const existing = asRow(data)
+      const path = str(existing, "storage_path")
       await throwIf((await client.from("media").delete().eq("id", id)).error)
+      if (!path) return
+      const removed = await client.storage.from(bucket).remove([path])
+      if (removed.error) {
+        const { id: rowId, ...rest } = existing
+        await client.from("media").insert({ id: rowId, ...rest })
+        throw new Error(removed.error.message)
+      }
     },
   }
 }
@@ -244,10 +274,11 @@ function planFrom(row: Row): Plan {
 }
 
 async function loadPlanFeatures(client: AdminSupabase, plans: Plan[]): Promise<Plan[]> {
-  const { data, error } = await client.from("plan_features").select("*").order("position", { ascending: true })
-  await throwIf(error)
+  const rows = await selectPages((from, to) =>
+    client.from("plan_features").select("*").order("position", { ascending: true }).range(from, to),
+  )
   const grouped = new Map<string, string[]>()
-  for (const row of asRows(data)) {
+  for (const row of rows) {
     const planId = str(row, "plan_id")
     const list = grouped.get(planId) ?? []
     list.push(str(row, "text"))
@@ -256,43 +287,39 @@ async function loadPlanFeatures(client: AdminSupabase, plans: Plan[]): Promise<P
   return plans.map((plan) => ({ ...plan, features: grouped.get(plan.id) ?? plan.features }))
 }
 
-async function replacePlanFeatures(client: AdminSupabase, planId: string, features: readonly string[]) {
-  await throwIf((await client.from("plan_features").delete().eq("plan_id", planId)).error)
-  if (features.length === 0) return
-  const payload = features.map((text, position) => ({
-    id: `${planId}:${position}`,
-    plan_id: planId,
-    text,
-    position,
-  }))
-  await throwIf((await client.from("plan_features").insert(payload)).error)
-}
-
 function plansPort(client: AdminSupabase): ContentPort<Plan> {
-  const base = contentPort<Plan>(
-    client,
-    "plans",
-    planFrom,
-    (row) => ({
-      id: row.id,
-      name: row.name,
-      blurb: row.blurb,
-      monthly_price: row.monthlyPrice,
-      badge: row.badge,
-      cta_label: row.ctaLabel,
-      cta_href: row.ctaHref,
-      position: row.position,
-      published: row.published,
-    }),
-  )
+  const base = contentPort<Plan>(client, "plans", planFrom, (row) => ({
+    id: row.id,
+    name: row.name,
+    blurb: row.blurb,
+    monthly_price: row.monthlyPrice,
+    badge: row.badge,
+    cta_label: row.ctaLabel,
+    cta_href: row.ctaHref,
+    position: row.position,
+    published: row.published,
+  }))
   return {
     async list() {
       return loadPlanFeatures(client, await base.list())
     },
     async save(row) {
-      const saved = await base.save(row)
-      await replacePlanFeatures(client, saved.id, row.features)
-      return { ...saved, features: [...row.features] }
+      const { data, error } = await client.rpc("admin_save_plan", {
+        plan: {
+          id: row.id,
+          name: row.name,
+          blurb: row.blurb,
+          monthly_price: row.monthlyPrice,
+          badge: row.badge,
+          cta_label: row.ctaLabel,
+          cta_href: row.ctaHref,
+          position: row.position,
+          published: row.published,
+        },
+        features: [...row.features],
+      })
+      await throwIf(error)
+      return { ...planFrom(asRow(data)), features: [...row.features] }
     },
     remove: (id) => base.remove(id),
     reorder: (ids) => base.reorder(ids),
@@ -417,9 +444,10 @@ export function createSupabaseAdmin(client: AdminSupabase, bucket = "media") {
     media: createSupabaseMedia(client, bucket),
     bookings: {
       async list() {
-        const { data, error } = await client.from("bookings").select("*").order("created_at", { ascending: false })
-        await throwIf(error)
-        return asRows(data).map(bookingFrom)
+        const rows = await selectPages((from, to) =>
+          client.from("bookings").select("*").order("created_at", { ascending: false }).range(from, to),
+        )
+        return rows.map(bookingFrom)
       },
       async save(row: Booking) {
         const payload = {

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "crm-table",
+  "title": "CRM Table",
+  "author": "Eduardo Retana",
+  "description": "CRM-shaped table with avatar and name, a status badge, stage, owner, and last activity. Column helpers match a TanStack column definition so they can be passed to AdminDataTable when that item is installed.",
+  "dependencies": [],
+  "registryDependencies": [
+    "table",
+    "badge",
+    "avatar"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/crm-table.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Avatar, AvatarFallback, AvatarImage } from \"@/components/ui/avatar\"\nimport { Badge } from \"@/components/ui/badge\"\nimport {\n  Table,\n  TableBody,\n  TableCell,\n  TableHead,\n  TableHeader,\n  TableRow,\n} from \"@/components/ui/table\"\n\nexport type CrmTone = \"neutral\" | \"emphasis\" | \"muted\" | \"danger\"\n\nexport type CrmRow = {\n  id: string\n  name: string\n  email?: string\n  company?: string\n  avatarUrl?: string\n  status: string\n  statusTone?: CrmTone\n  stage: string\n  owner: string\n  ownerAvatarUrl?: string\n  /** Preformatted by the host so locale stays outside this component. */\n  lastActivity: string\n}\n\nexport type CrmColumnLabels = {\n  person?: string\n  status?: string\n  stage?: string\n  owner?: string\n  activity?: string\n}\n\nconst TONE_VARIANT = {\n  neutral: \"secondary\",\n  emphasis: \"default\",\n  muted: \"outline\",\n  danger: \"destructive\",\n} as const\n\nfunction initials(name: string) {\n  return name\n    .split(/\\s+/)\n    .filter(Boolean)\n    .slice(0, 2)\n    .map((part) => part[0]?.toUpperCase() ?? \"\")\n    .join(\"\")\n}\n\nexport function CrmPersonCell({\n  name,\n  email,\n  avatarUrl,\n}: {\n  name: string\n  email?: string\n  avatarUrl?: string\n}) {\n  return (\n    <span className=\"flex items-center gap-2\">\n      <Avatar size=\"sm\">\n        {avatarUrl ? <AvatarImage src={avatarUrl} alt=\"\" /> : null}\n        <AvatarFallback>{initials(name)}</AvatarFallback>\n      </Avatar>\n      <span className=\"min-w-0\">\n        <span className=\"block truncate text-sm font-medium\">{name}</span>\n        {email ? <span className=\"block truncate text-xs text-muted-foreground\">{email}</span> : null}\n      </span>\n    </span>\n  )\n}\n\nexport function CrmStatusBadge({ label, tone = \"neutral\" }: { label: string; tone?: CrmTone }) {\n  return <Badge variant={TONE_VARIANT[tone]}>{label}</Badge>\n}\n\nexport function CrmOwnerCell({ name, avatarUrl }: { name: string; avatarUrl?: string }) {\n  return (\n    <span className=\"flex items-center gap-2\">\n      <Avatar size=\"sm\">\n        {avatarUrl ? <AvatarImage src={avatarUrl} alt=\"\" /> : null}\n        <AvatarFallback>{initials(name)}</AvatarFallback>\n      </Avatar>\n      <span className=\"truncate text-sm\">{name}</span>\n    </span>\n  )\n}\n\n/**\n * Column objects shaped like TanStack column definitions.\n * Pass them to `AdminDataTable` from the data-table item when that item is\n * installed. This module does not import data-table, so it also stands alone.\n */\nexport function crmColumnDefs(labels: CrmColumnLabels = {}) {\n  return [\n    {\n      id: \"person\",\n      accessorFn: (row: CrmRow) => `${row.name} ${row.email ?? \"\"}`,\n      header: labels.person ?? \"Contact\",\n      cell: ({ row }: { row: { original: CrmRow } }) => (\n        <CrmPersonCell name={row.original.name} email={row.original.email} avatarUrl={row.original.avatarUrl} />\n      ),\n    },\n    {\n      id: \"status\",\n      accessorFn: (row: CrmRow) => row.status,\n      header: labels.status ?? \"Status\",\n      cell: ({ row }: { row: { original: CrmRow } }) => (\n        <CrmStatusBadge label={row.original.status} tone={row.original.statusTone} />\n      ),\n    },\n    {\n      id: \"stage\",\n      accessorFn: (row: CrmRow) => row.stage,\n      header: labels.stage ?? \"Stage\",\n      cell: ({ row }: { row: { original: CrmRow } }) => row.original.stage,\n    },\n    {\n      id: \"owner\",\n      accessorFn: (row: CrmRow) => row.owner,\n      header: labels.owner ?? \"Owner\",\n      cell: ({ row }: { row: { original: CrmRow } }) => (\n        <CrmOwnerCell name={row.original.owner} avatarUrl={row.original.ownerAvatarUrl} />\n      ),\n    },\n    {\n      id: \"activity\",\n      accessorFn: (row: CrmRow) => row.lastActivity,\n      header: labels.activity ?? \"Last activity\",\n      cell: ({ row }: { row: { original: CrmRow } }) => (\n        <span className=\"text-sm text-muted-foreground tabular-nums\">{row.original.lastActivity}</span>\n      ),\n    },\n  ]\n}\n\nexport type CrmTableProps = {\n  rows: readonly CrmRow[]\n  labels?: CrmColumnLabels\n  emptyLabel?: string\n  onRowClick?: (row: CrmRow) => void\n  className?: string\n}\n\nexport function CrmTable({\n  rows,\n  labels,\n  emptyLabel = \"No records\",\n  onRowClick,\n  className,\n}: CrmTableProps) {\n  const columns = crmColumnDefs(labels)\n\n  return (\n    <div data-slot=\"crm-table\" className={cn(\"overflow-hidden rounded-xl border border-border\", className)}>\n      <Table>\n        <TableHeader>\n          <TableRow>\n            {columns.map((column) => (\n              <TableHead key={column.id}>{column.header}</TableHead>\n            ))}\n          </TableRow>\n        </TableHeader>\n        <TableBody>\n          {rows.length === 0 ? (\n            <TableRow>\n              <TableCell colSpan={columns.length} className=\"h-24 text-center text-muted-foreground\">\n                {emptyLabel}\n              </TableCell>\n            </TableRow>\n          ) : (\n            rows.map((row) => (\n              <TableRow\n                key={row.id}\n                data-state={onRowClick ? \"clickable\" : undefined}\n                className={cn(onRowClick && \"cursor-pointer\")}\n                onClick={onRowClick ? () => onRowClick(row) : undefined}\n                onKeyDown={\n                  onRowClick\n                    ? (event) => {\n                        if (event.key === \"Enter\" || event.key === \" \") {\n                          event.preventDefault()\n                          onRowClick(row)\n                        }\n                      }\n                    : undefined\n                }\n                tabIndex={onRowClick ? 0 : undefined}\n              >\n                <TableCell>\n                  <CrmPersonCell name={row.name} email={row.email ?? row.company} avatarUrl={row.avatarUrl} />\n                </TableCell>\n                <TableCell>\n                  <CrmStatusBadge label={row.status} tone={row.statusTone} />\n                </TableCell>\n                <TableCell>{row.stage}</TableCell>\n                <TableCell>\n                  <CrmOwnerCell name={row.owner} avatarUrl={row.ownerAvatarUrl} />\n                </TableCell>\n                <TableCell className=\"text-muted-foreground tabular-nums\">{row.lastActivity}</TableCell>\n              </TableRow>\n            ))\n          )}\n        </TableBody>\n      </Table>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/crm-table.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Tabla CRM",
+    "descriptionEs": "Tabla de CRM con avatar y nombre, estado en una insignia, etapa, dueño y última actividad. Las columnas encajan en AdminDataTable cuando esa pieza está instalada, y también se renderizan solas.",
+    "preview": "app/examples/crm-table/preview.tsx",
+    "previewHref": "/examples/crm-table",
+    "examples": [
+      {
+        "title": "Tabla CRM",
+        "href": "/examples/crm-table",
+        "description": "Tabla de CRM con avatar y nombre, estado en una insignia, etapa, dueño y última actividad. Las columnas encajan en AdminDataTable cuando esa pieza está instalada, y también se renderizan solas."
+      }
+    ],
+    "usage": "<CrmTable rows={rows} onRowClick={open} />",
+    "api": [
+      {
+        "name": "rows",
+        "type": "CrmRow[]",
+        "description": "Contact, status, stage, owner, and a preformatted lastActivity string."
+      },
+      {
+        "name": "statusTone",
+        "type": "\"neutral\" | \"emphasis\" | \"muted\" | \"danger\"",
+        "description": "Maps to badge variants."
+      },
+      {
+        "name": "crmColumnDefs",
+        "type": "function",
+        "description": "Returns column objects compatible with AdminDataTable. This file does not import data-table."
+      },
+      {
+        "name": "labels",
+        "type": "CrmColumnLabels",
+        "description": "Header labels. Defaults are English."
+      }
+    ]
+  },
+  "docs": "Standalone table using the host table, badge, and avatar primitives. crmColumnDefs() can be passed to AdminDataTable from the data-table item without coupling this file to it. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "dashboard",
+    "table"
+  ],
+  "type": "registry:ui"
+}

@@ -1273,6 +1273,1605 @@
         ]
       },
       "docs": "Public read is limited to published rows. settings and media are public reads. bookings are admin-only. Writes require a row in public.admins. See admin-kit.md for Next.js and Vite wiring."
+    },
+    {
+      "name": "chat-message",
+      "type": "registry:ui",
+      "title": "Chat Message",
+      "description": "Message bubble for a person or an assistant, with avatar, time, sending and error states, and copy, retry, and regenerate actions.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "chat",
+        "ai"
+      ],
+      "meta": {
+        "titleEs": "Mensaje de chat",
+        "descriptionEs": "Burbuja de mensaje para la persona o el asistente, con avatar, hora, estados de envío y error, y acciones de copiar, reintentar y regenerar.",
+        "preview": "app/examples/chat-message/preview.tsx",
+        "previewHref": "/examples/chat-message",
+        "examples": [
+          {
+            "title": "Mensaje de chat",
+            "href": "/examples/chat-message",
+            "description": "Burbuja de mensaje para la persona o el asistente, con avatar, hora, estados de envío y error, y acciones de copiar, reintentar y regenerar."
+          }
+        ],
+        "usage": "<ChatMessage role=\"assistant\" name=\"Assistant\" time=\"09:41\" onRegenerate={regenerate}>\n  Hello\n</ChatMessage>",
+        "api": [
+          {
+            "name": "role",
+            "type": "\"user\" | \"assistant\" | \"system\"",
+            "description": "Which side and tone to use."
+          },
+          {
+            "name": "status",
+            "type": "\"sending\" | \"sent\" | \"error\"",
+            "description": "Delivery state. Default sent."
+          },
+          {
+            "name": "onRetry / onRegenerate / onCopy",
+            "type": "callback",
+            "description": "Optional actions. Copy uses copyText or the text content."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "sendingLabel, errorLabel, retryLabel, copyLabel, copiedLabel, and regenerateLabel default to English."
+          }
+        ]
+      },
+      "docs": "Import ChatMessage from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/chat-message.tsx",
+          "type": "registry:component",
+          "target": "@ui/chat-message.tsx"
+        }
+      ]
+    },
+    {
+      "name": "message-list",
+      "type": "registry:ui",
+      "title": "Message List",
+      "description": "Scroll container that follows new messages until the reader moves up, then offers a control to jump back to the latest one.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "chat",
+        "ai"
+      ],
+      "meta": {
+        "titleEs": "Lista de mensajes",
+        "descriptionEs": "Contenedor que sigue los mensajes nuevos hasta que el lector sube, y entonces muestra un control para volver al final.",
+        "preview": "app/examples/message-list/preview.tsx",
+        "previewHref": "/examples/message-list",
+        "examples": [
+          {
+            "title": "Lista de mensajes",
+            "href": "/examples/message-list",
+            "description": "Contenedor que sigue los mensajes nuevos hasta que el lector sube, y entonces muestra un control para volver al final."
+          }
+        ],
+        "usage": "<MessageList jumpLabel=\"Jump to latest\">{messages}</MessageList>",
+        "api": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "description": "Messages, in order."
+          },
+          {
+            "name": "jumpLabel",
+            "type": "string",
+            "description": "Label for the control shown after scrolling away. Default Jump to latest."
+          },
+          {
+            "name": "stickThreshold",
+            "type": "number",
+            "description": "Pixels from the bottom that still count as following. Default 72."
+          }
+        ]
+      },
+      "docs": "Import MessageList from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/message-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/message-list.tsx"
+        }
+      ]
+    },
+    {
+      "name": "chat-composer",
+      "type": "registry:ui",
+      "title": "Chat Composer",
+      "description": "Growing textarea that sends on Enter, inserts a newline on Shift+Enter, accepts attachments, swaps in a stop button while generating, and leaves a slot for a model picker.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "textarea"
+      ],
+      "categories": [
+        "chat",
+        "form"
+      ],
+      "meta": {
+        "titleEs": "Compositor de chat",
+        "descriptionEs": "Área de texto que crece, envía con Enter, inserta un salto con Mayús+Enter, admite adjuntos, muestra detener mientras se genera y reserva un hueco para el modelo.",
+        "preview": "app/examples/chat-composer/preview.tsx",
+        "previewHref": "/examples/chat-composer",
+        "examples": [
+          {
+            "title": "Compositor de chat",
+            "href": "/examples/chat-composer",
+            "description": "Área de texto que crece, envía con Enter, inserta un salto con Mayús+Enter, admite adjuntos, muestra detener mientras se genera y reserva un hueco para el modelo."
+          }
+        ],
+        "usage": "<ChatComposer\n  modelSlot={<ModelSelect />}\n  generating={busy}\n  onSubmit={send}\n  onStop={stop}\n/>",
+        "api": [
+          {
+            "name": "onSubmit",
+            "type": "(value, files) => void",
+            "description": "Called with trimmed text and attached files."
+          },
+          {
+            "name": "generating / onStop",
+            "type": "boolean / callback",
+            "description": "Replaces send with a stop button."
+          },
+          {
+            "name": "modelSlot",
+            "type": "ReactNode",
+            "description": "Rendered at the start of the toolbar."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "placeholder, sendLabel, stopLabel, attachLabel, and removeAttachmentLabel default to English."
+          }
+        ]
+      },
+      "docs": "Import ChatComposer from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/chat-composer.tsx",
+          "type": "registry:component",
+          "target": "@ui/chat-composer.tsx"
+        }
+      ]
+    },
+    {
+      "name": "streaming-text",
+      "type": "registry:ui",
+      "title": "Streaming Text",
+      "description": "Renders text as it arrives, with a caret and a short fade-in, and supports basic markdown.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "chat",
+        "ai"
+      ],
+      "meta": {
+        "titleEs": "Texto en streaming",
+        "descriptionEs": "Pinta el texto a medida que llega, con cursor y una aparición breve, y entiende markdown básico.",
+        "preview": "app/examples/streaming-text/preview.tsx",
+        "previewHref": "/examples/streaming-text",
+        "examples": [
+          {
+            "title": "Texto en streaming",
+            "href": "/examples/streaming-text",
+            "description": "Pinta el texto a medida que llega, con cursor y una aparición breve, y entiende markdown básico."
+          }
+        ],
+        "usage": "<StreamingText text={text} streaming />",
+        "api": [
+          {
+            "name": "text",
+            "type": "string",
+            "description": "Full text received so far."
+          },
+          {
+            "name": "streaming",
+            "type": "boolean",
+            "description": "Keeps the caret visible."
+          },
+          {
+            "name": "animate",
+            "type": "boolean",
+            "description": "Reveal gradually. Default true. Set false to paint the whole string."
+          },
+          {
+            "name": "cursorLabel",
+            "type": "string",
+            "description": "Screen-reader label while generating. Default Generating."
+          }
+        ]
+      },
+      "docs": "Headings, lists, bold, italic, inline code, and http(s) or mailto links are rendered as elements. Other URLs stay text. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/streaming-text.tsx",
+          "type": "registry:component",
+          "target": "@ui/streaming-text.tsx"
+        }
+      ]
+    },
+    {
+      "name": "reasoning-steps",
+      "type": "registry:ui",
+      "title": "Reasoning Steps",
+      "description": "Collapsible list of reasoning or tool steps with pending, active, done, and error states plus a duration.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "ai",
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Pasos de razonamiento",
+        "descriptionEs": "Lista colapsable de pasos de razonamiento o herramientas, con estado pendiente, en curso, hecho o error, y duración.",
+        "preview": "app/examples/reasoning-steps/preview.tsx",
+        "previewHref": "/examples/reasoning-steps",
+        "examples": [
+          {
+            "title": "Pasos de razonamiento",
+            "href": "/examples/reasoning-steps",
+            "description": "Lista colapsable de pasos de razonamiento o herramientas, con estado pendiente, en curso, hecho o error, y duración."
+          }
+        ],
+        "usage": "<ReasoningSteps steps={[{ id: \"1\", title: \"Read\", status: \"done\", durationMs: 400 }]} />",
+        "api": [
+          {
+            "name": "steps",
+            "type": "ReasoningStep[]",
+            "description": "id, title, optional detail, status, and durationMs."
+          },
+          {
+            "name": "open / onOpenChange",
+            "type": "boolean / callback",
+            "description": "Controlled disclosure. defaultOpen defaults to true."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "title and the four status labels default to English."
+          }
+        ]
+      },
+      "docs": "Import ReasoningSteps from the installed UI file. Durations are formatted from milliseconds. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/reasoning-steps.tsx",
+          "type": "registry:component",
+          "target": "@ui/reasoning-steps.tsx"
+        }
+      ]
+    },
+    {
+      "name": "task-list",
+      "type": "registry:ui",
+      "title": "Task List",
+      "description": "Agent checklist with a progress bar and optional toggling.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "ai",
+        "form"
+      ],
+      "meta": {
+        "titleEs": "Lista de tareas",
+        "descriptionEs": "Checklist de tareas de un agente, con barra de progreso y marcado opcional.",
+        "preview": "app/examples/task-list/preview.tsx",
+        "previewHref": "/examples/task-list",
+        "examples": [
+          {
+            "title": "Lista de tareas",
+            "href": "/examples/task-list",
+            "description": "Checklist de tareas de un agente, con barra de progreso y marcado opcional."
+          }
+        ],
+        "usage": "<TaskList tasks={tasks} onToggle={toggle} />",
+        "api": [
+          {
+            "name": "tasks",
+            "type": "AgentTask[]",
+            "description": "id, title, optional detail, and done."
+          },
+          {
+            "name": "onToggle",
+            "type": "(id, done) => void",
+            "description": "When omitted, the checks are read-only."
+          },
+          {
+            "name": "title / progressLabel",
+            "type": "string",
+            "description": "Defaults Tasks and Progress."
+          }
+        ]
+      },
+      "docs": "Import TaskList from the installed UI file. The progress bar uses the host primary token. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/task-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/task-list.tsx"
+        }
+      ]
+    },
+    {
+      "name": "plan-card",
+      "type": "registry:ui",
+      "title": "Plan Card",
+      "description": "Card for a proposed plan, with steps and approve, edit, and reject actions.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "ai",
+        "form"
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de plan",
+        "descriptionEs": "Tarjeta con un plan propuesto, sus pasos y acciones para aprobar, editar o rechazar.",
+        "preview": "app/examples/plan-card/preview.tsx",
+        "previewHref": "/examples/plan-card",
+        "examples": [
+          {
+            "title": "Tarjeta de plan",
+            "href": "/examples/plan-card",
+            "description": "Tarjeta con un plan propuesto, sus pasos y acciones para aprobar, editar o rechazar."
+          }
+        ],
+        "usage": "<PlanCard steps={steps} onApprove={approve} onEdit={save} onReject={reject} />",
+        "api": [
+          {
+            "name": "steps",
+            "type": "PlanStep[]",
+            "description": "id, title, and optional detail."
+          },
+          {
+            "name": "status",
+            "type": "\"proposed\" | \"approved\" | \"rejected\"",
+            "description": "Locks the actions after a decision."
+          },
+          {
+            "name": "onEdit",
+            "type": "(steps) => void",
+            "description": "Receives the edited steps when save is pressed."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "Action and status labels default to English."
+          }
+        ]
+      },
+      "docs": "Import PlanCard from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/plan-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/plan-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "question-card",
+      "type": "registry:ui",
+      "title": "Question Card",
+      "description": "Agent question with single or multiple choices and an optional free-text answer.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "textarea"
+      ],
+      "categories": [
+        "ai",
+        "form"
+      ],
+      "meta": {
+        "titleEs": "Pregunta del agente",
+        "descriptionEs": "Pregunta del agente con opciones de una o varias respuestas, y un campo libre opcional.",
+        "preview": "app/examples/question-card/preview.tsx",
+        "previewHref": "/examples/question-card",
+        "examples": [
+          {
+            "title": "Pregunta del agente",
+            "href": "/examples/question-card",
+            "description": "Pregunta del agente con opciones de una o varias respuestas, y un campo libre opcional."
+          }
+        ],
+        "usage": "<QuestionCard prompt=\"Which file?\" mode=\"single\" options={options} onSubmit={answer} />",
+        "api": [
+          {
+            "name": "mode",
+            "type": "\"single\" | \"multiple\"",
+            "description": "Radio group or checkboxes. Default single."
+          },
+          {
+            "name": "allowFreeText",
+            "type": "boolean",
+            "description": "Shows a textarea. Default true."
+          },
+          {
+            "name": "onSubmit",
+            "type": "(answer) => void",
+            "description": "Receives optionIds and trimmed text."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "placeholder, submitLabel, submittedLabel, and freeTextLabel default to English."
+          }
+        ]
+      },
+      "docs": "Import QuestionCard from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/question-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/question-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "inline-citation",
+      "type": "registry:ui",
+      "title": "Inline Citation",
+      "description": "Numeric marker that reveals a source title, domain, and excerpt on hover or focus.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "chat",
+        "ai"
+      ],
+      "meta": {
+        "titleEs": "Cita en línea",
+        "descriptionEs": "Marcador numérico que, al pasar el cursor o enfocar, muestra título, dominio y extracto de la fuente.",
+        "preview": "app/examples/inline-citation/preview.tsx",
+        "previewHref": "/examples/inline-citation",
+        "examples": [
+          {
+            "title": "Cita en línea",
+            "href": "/examples/inline-citation",
+            "description": "Marcador numérico que, al pasar el cursor o enfocar, muestra título, dominio y extracto de la fuente."
+          }
+        ],
+        "usage": "<InlineCitation index={1} source={{ title, domain, excerpt, href }} />",
+        "api": [
+          {
+            "name": "index",
+            "type": "number",
+            "description": "Visible marker."
+          },
+          {
+            "name": "source",
+            "type": "CitationSource",
+            "description": "title, domain, excerpt, and optional href."
+          },
+          {
+            "name": "className / cardClassName",
+            "type": "string",
+            "description": "Classes for the marker and the card."
+          }
+        ]
+      },
+      "docs": "Links are limited to http, https, and mailto. Keyboard focus opens the card and Escape closes it. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/inline-citation.tsx",
+          "type": "registry:component",
+          "target": "@ui/inline-citation.tsx"
+        }
+      ]
+    },
+    {
+      "name": "code-block",
+      "type": "registry:ui",
+      "title": "Code Block",
+      "description": "Code block with token highlighting, a filename, copy, and line numbers.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "ai",
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Bloque de código",
+        "descriptionEs": "Bloque de código con resaltado, nombre de archivo, copiar y números de línea.",
+        "preview": "app/examples/code-block/preview.tsx",
+        "previewHref": "/examples/code-block",
+        "examples": [
+          {
+            "title": "Bloque de código",
+            "href": "/examples/code-block",
+            "description": "Bloque de código con resaltado, nombre de archivo, copiar y números de línea."
+          }
+        ],
+        "usage": "<CodeBlock code={source} filename=\"note.ts\" language=\"ts\" />",
+        "api": [
+          {
+            "name": "code",
+            "type": "string",
+            "description": "Source to show and copy."
+          },
+          {
+            "name": "filename / language",
+            "type": "string",
+            "description": "Caption. language defaults to text."
+          },
+          {
+            "name": "showLineNumbers",
+            "type": "boolean",
+            "description": "Default true."
+          },
+          {
+            "name": "copyLabel / copiedLabel",
+            "type": "string",
+            "description": "Default Copy and Copied."
+          }
+        ]
+      },
+      "docs": "Highlighting uses the host primary and muted tokens, not a color theme. highlightLine is exported for tests and custom renderers. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/code-block.tsx",
+          "type": "registry:component",
+          "target": "@ui/code-block.tsx"
+        }
+      ]
+    },
+    {
+      "name": "file-diff",
+      "type": "registry:ui",
+      "title": "File Diff",
+      "description": "Unified diff with added and removed lines, and collapsible runs of unchanged lines.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "ai",
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Vista de diff",
+        "descriptionEs": "Diff unificado con líneas agregadas y eliminadas, y bloques sin cambios que se pueden colapsar.",
+        "preview": "app/examples/file-diff/preview.tsx",
+        "previewHref": "/examples/file-diff",
+        "examples": [
+          {
+            "title": "Vista de diff",
+            "href": "/examples/file-diff",
+            "description": "Diff unificado con líneas agregadas y eliminadas, y bloques sin cambios que se pueden colapsar."
+          }
+        ],
+        "usage": "<FileDiff patch={patch} filename=\"note.md\" />",
+        "api": [
+          {
+            "name": "patch",
+            "type": "string",
+            "description": "Unified diff text. Ignored when lines is set."
+          },
+          {
+            "name": "lines",
+            "type": "DiffLine[]",
+            "description": "Pre-parsed rows."
+          },
+          {
+            "name": "collapseAfter",
+            "type": "number",
+            "description": "Collapse unchanged runs longer than this. Default 5."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "expand, collapse, additions, and deletions labels default to English."
+          }
+        ]
+      },
+      "docs": "Additions use the primary token and deletions use destructive. parseUnifiedDiff is exported. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/file-diff.tsx",
+          "type": "registry:component",
+          "target": "@ui/file-diff.tsx"
+        }
+      ]
+    },
+    {
+      "name": "image-generation",
+      "type": "registry:ui",
+      "title": "Image Generation",
+      "description": "Image frame that shows progress and a shimmer while generating, then reveals the result.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "ai",
+        "media"
+      ],
+      "meta": {
+        "titleEs": "Generación de imagen",
+        "descriptionEs": "Marco de imagen que muestra progreso y un velo mientras se genera, y luego revela el resultado.",
+        "preview": "app/examples/image-generation/preview.tsx",
+        "previewHref": "/examples/image-generation",
+        "examples": [
+          {
+            "title": "Generación de imagen",
+            "href": "/examples/image-generation",
+            "description": "Marco de imagen que muestra progreso y un velo mientras se genera, y luego revela el resultado."
+          }
+        ],
+        "usage": "<ImageGeneration status=\"generating\" progress={40} src={src} alt=\"\" />",
+        "api": [
+          {
+            "name": "status",
+            "type": "\"idle\" | \"generating\" | \"done\" | \"error\"",
+            "description": "What the frame shows."
+          },
+          {
+            "name": "progress",
+            "type": "number",
+            "description": "0 to 100 while generating."
+          },
+          {
+            "name": "src / alt",
+            "type": "string",
+            "description": "Result image. The host supplies the bitmap."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "generating, error, retry, and idle labels default to English."
+          }
+        ]
+      },
+      "docs": "The shimmer uses the host foreground token. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/image-generation.tsx",
+          "type": "registry:component",
+          "target": "@ui/image-generation.tsx"
+        }
+      ]
+    },
+    {
+      "name": "ai-document",
+      "type": "registry:ui",
+      "title": "AI Document",
+      "description": "Document where an agent proposes highlighted edits the reader can accept or reject.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "ai",
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Documento del agente",
+        "descriptionEs": "Documento donde un agente propone ediciones resaltadas que la persona acepta o rechaza.",
+        "preview": "app/examples/ai-document/preview.tsx",
+        "previewHref": "/examples/ai-document",
+        "examples": [
+          {
+            "title": "Documento del agente",
+            "href": "/examples/ai-document",
+            "description": "Documento donde un agente propone ediciones resaltadas que la persona acepta o rechaza."
+          }
+        ],
+        "usage": "<AiDocument segments={segments} onResolve={resolve} />",
+        "api": [
+          {
+            "name": "segments",
+            "type": "AiDocumentSegment[]",
+            "description": "Paragraphs or insert, delete, and replace edits."
+          },
+          {
+            "name": "onResolve",
+            "type": "(id, decision) => void",
+            "description": "decision is accepted or rejected."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "accept, reject, insert, delete, and replace labels default to English."
+          }
+        ]
+      },
+      "docs": "Pending inserts and replacements use the primary token. Deletions use destructive. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/ai-document.tsx",
+          "type": "registry:component",
+          "target": "@ui/ai-document.tsx"
+        }
+      ]
+    },
+    {
+      "name": "otp-field",
+      "type": "registry:ui",
+      "title": "OTP Field",
+      "description": "One-time code field on the input-otp primitive, with animated success and error states and a resend countdown.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "input-otp",
+        "button"
+      ],
+      "categories": [
+        "form",
+        "input"
+      ],
+      "meta": {
+        "titleEs": "Campo OTP",
+        "descriptionEs": "Código de un solo uso sobre la primitiva input-otp, con éxito y error animados y reenvío con cuenta regresiva.",
+        "preview": "app/examples/otp-field/preview.tsx",
+        "previewHref": "/examples/otp-field",
+        "examples": [
+          {
+            "title": "Campo OTP",
+            "href": "/examples/otp-field",
+            "description": "Código de un solo uso sobre la primitiva input-otp, con éxito y error animados y reenvío con cuenta regresiva."
+          }
+        ],
+        "usage": "<OtpField length={6} state={state} onComplete={check} onResend={resend} />",
+        "api": [
+          {
+            "name": "length",
+            "type": "number",
+            "description": "Digits. Default 6."
+          },
+          {
+            "name": "state",
+            "type": "\"idle\" | \"success\" | \"error\"",
+            "description": "Drives the message and the motion."
+          },
+          {
+            "name": "onResend / cooldownSeconds",
+            "type": "callback / number",
+            "description": "Resend stays disabled for the countdown. Default 30 seconds."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "label, hint, error, success, and resend labels default to English."
+          }
+        ]
+      },
+      "docs": "Built on the input-otp primitive. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/otp-field.tsx",
+          "type": "registry:component",
+          "target": "@ui/otp-field.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dissolve-input",
+      "type": "registry:ui",
+      "title": "Dissolve Input",
+      "description": "Input whose text breaks into fading particles when it is submitted or cleared.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "input"
+      ],
+      "categories": [
+        "form",
+        "input"
+      ],
+      "meta": {
+        "titleEs": "Campo que se desvanece",
+        "descriptionEs": "Campo cuyo texto se deshace en partículas al enviarlo o limpiarlo.",
+        "preview": "app/examples/dissolve-input/preview.tsx",
+        "previewHref": "/examples/dissolve-input",
+        "examples": [
+          {
+            "title": "Campo que se desvanece",
+            "href": "/examples/dissolve-input",
+            "description": "Campo cuyo texto se deshace en partículas al enviarlo o limpiarlo."
+          }
+        ],
+        "usage": "<DissolveInput aria-label=\"Note\" onDissolve={save} clearLabel=\"Clear\" />",
+        "api": [
+          {
+            "name": "onDissolve",
+            "type": "(value) => void",
+            "description": "Called with the text before it is cleared."
+          },
+          {
+            "name": "clearLabel",
+            "type": "string",
+            "description": "Clear button. Default Clear."
+          },
+          {
+            "name": "...input",
+            "type": "Input props",
+            "description": "Other props go to the input primitive, except onSubmit."
+          }
+        ]
+      },
+      "docs": "Particles sample the input's computed text color, so they follow the host theme. Reduced motion clears the field without particles. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/dissolve-input.tsx",
+          "type": "registry:component",
+          "target": "@ui/dissolve-input.tsx"
+        }
+      ]
+    },
+    {
+      "name": "multi-select",
+      "type": "registry:ui",
+      "title": "Multi Select",
+      "description": "Multi-select with search, removable chips, and the option to create a new value.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "form",
+        "input"
+      ],
+      "meta": {
+        "titleEs": "Selección múltiple",
+        "descriptionEs": "Selector múltiple con búsqueda, chips que se quitan y creación de una opción nueva.",
+        "preview": "app/examples/multi-select/preview.tsx",
+        "previewHref": "/examples/multi-select",
+        "examples": [
+          {
+            "title": "Selección múltiple",
+            "href": "/examples/multi-select",
+            "description": "Selector múltiple con búsqueda, chips que se quitan y creación de una opción nueva."
+          }
+        ],
+        "usage": "<MultiSelect options={options} value={value} onValueChange={setValue} creatable />",
+        "api": [
+          {
+            "name": "options",
+            "type": "MultiSelectOption[]",
+            "description": "value, label, and optional disabled."
+          },
+          {
+            "name": "creatable / onCreate",
+            "type": "boolean / callback",
+            "description": "Enter on an unknown query creates a chip."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "placeholder, search, empty, create, and remove labels default to English."
+          }
+        ]
+      },
+      "docs": "The control is a combobox with a multi-select listbox. Backspace removes the last chip when the query is empty. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/multi-select.tsx",
+          "type": "registry:component",
+          "target": "@ui/multi-select.tsx"
+        }
+      ]
+    },
+    {
+      "name": "color-picker",
+      "type": "registry:ui",
+      "title": "Color Picker",
+      "description": "Accessible color picker with a saturation and brightness field, hue, alpha, and a hex input.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "input",
+        "label"
+      ],
+      "categories": [
+        "form",
+        "input"
+      ],
+      "meta": {
+        "titleEs": "Selector de color",
+        "descriptionEs": "Selector de color accesible con área de saturación y brillo, tono, alfa y un campo hexadecimal.",
+        "preview": "app/examples/color-picker/preview.tsx",
+        "previewHref": "/examples/color-picker",
+        "examples": [
+          {
+            "title": "Selector de color",
+            "href": "/examples/color-picker",
+            "description": "Selector de color accesible con área de saturación y brillo, tono, alfa y un campo hexadecimal."
+          }
+        ],
+        "usage": "<ColorPicker value={color} onValueChange={setColor} />",
+        "api": [
+          {
+            "name": "value",
+            "type": "HsvaColor",
+            "description": "h in degrees, s and v and a from 0 to 1."
+          },
+          {
+            "name": "onValueChange",
+            "type": "(color) => void",
+            "description": "Fires for the field, sliders, and hex commit."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "hue, alpha, hex, and saturation labels default to English."
+          }
+        ]
+      },
+      "docs": "hsvaToCss, hsvaToHex, and hexToHsva are exported. Arrow keys move saturation and brightness. The component does not ship a palette. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/color-picker.tsx",
+          "type": "registry:component",
+          "target": "@ui/color-picker.tsx"
+        }
+      ]
+    },
+    {
+      "name": "color-palette",
+      "type": "registry:ui",
+      "title": "Color Palette",
+      "description": "Grid of color swatches that copy their value on click and confirm it.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "form",
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Paleta de color",
+        "descriptionEs": "Grilla de muestras de color que se copian al hacer clic y confirman la copia.",
+        "preview": "app/examples/color-palette/preview.tsx",
+        "previewHref": "/examples/color-palette",
+        "examples": [
+          {
+            "title": "Paleta de color",
+            "href": "/examples/color-palette",
+            "description": "Grilla de muestras de color que se copian al hacer clic y confirman la copia."
+          }
+        ],
+        "usage": "<ColorPalette swatches={[{ id: \"ink\", label: \"Ink\", value: \"var(--foreground)\" }]} />",
+        "api": [
+          {
+            "name": "swatches",
+            "type": "PaletteSwatch[]",
+            "description": "id, label, and a CSS color value supplied by the host."
+          },
+          {
+            "name": "onCopy",
+            "type": "(swatch) => void",
+            "description": "Called after the value is written to the clipboard."
+          },
+          {
+            "name": "copyLabel / copiedLabel",
+            "type": "string",
+            "description": "Default Copy and Copied."
+          }
+        ]
+      },
+      "docs": "The palette does not define colors. Pass host tokens or any CSS color the app already uses. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/color-palette.tsx",
+          "type": "registry:component",
+          "target": "@ui/color-palette.tsx"
+        }
+      ]
+    },
+    {
+      "name": "magnetic-dropzone",
+      "type": "registry:ui",
+      "title": "Magnetic Dropzone",
+      "description": "Drop zone that leans toward the pointer, with a file list, progress, and type and size checks.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "form",
+        "media"
+      ],
+      "meta": {
+        "titleEs": "Zona magnética",
+        "descriptionEs": "Zona para soltar archivos que se inclina hacia el cursor, con lista, progreso y validación de tipo y tamaño.",
+        "preview": "app/examples/magnetic-dropzone/preview.tsx",
+        "previewHref": "/examples/magnetic-dropzone",
+        "examples": [
+          {
+            "title": "Zona magnética",
+            "href": "/examples/magnetic-dropzone",
+            "description": "Zona para soltar archivos que se inclina hacia el cursor, con lista, progreso y validación de tipo y tamaño."
+          }
+        ],
+        "usage": "<MagneticDropzone accept=\"image/*,.pdf\" maxSize={2_000_000} onFiles={upload} />",
+        "api": [
+          {
+            "name": "accept / maxSize / maxFiles",
+            "type": "string / number",
+            "description": "Validation. maxSize defaults to 8 MB and maxFiles to 8."
+          },
+          {
+            "name": "items / onItemsChange",
+            "type": "DropzoneItem[] / callback",
+            "description": "Controlled list. Omit items for internal state."
+          },
+          {
+            "name": "simulateProgress",
+            "type": "boolean",
+            "description": "Animates progress for demos. Default false."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "label, hint, remove, too large, and type labels default to English."
+          }
+        ]
+      },
+      "docs": "The lean is disabled when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/magnetic-dropzone.tsx",
+          "type": "registry:component",
+          "target": "@ui/magnetic-dropzone.tsx"
+        }
+      ]
+    },
+    {
+      "name": "gooey-slider",
+      "type": "registry:ui",
+      "title": "Gooey Slider",
+      "description": "Slider with an organic trail while dragging, built on the slider primitive.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "slider"
+      ],
+      "categories": [
+        "form",
+        "input"
+      ],
+      "meta": {
+        "titleEs": "Control viscoso",
+        "descriptionEs": "Control deslizante con un rastro orgánico al arrastrar, construido sobre la primitiva slider.",
+        "preview": "app/examples/gooey-slider/preview.tsx",
+        "previewHref": "/examples/gooey-slider",
+        "examples": [
+          {
+            "title": "Control viscoso",
+            "href": "/examples/gooey-slider",
+            "description": "Control deslizante con un rastro orgánico al arrastrar, construido sobre la primitiva slider."
+          }
+        ],
+        "usage": "<GooeySlider value={value} onValueChange={setValue} label=\"Intensity\" />",
+        "api": [
+          {
+            "name": "value / defaultValue",
+            "type": "number",
+            "description": "Single value. Default 40."
+          },
+          {
+            "name": "min / max / step",
+            "type": "number",
+            "description": "Defaults 0, 100, and 1."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Accessible name. Default Value."
+          }
+        ]
+      },
+      "docs": "The visible trail is decorative. The Radix slider underneath keeps the keyboard behavior. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/gooey-slider.tsx",
+          "type": "registry:component",
+          "target": "@ui/gooey-slider.tsx"
+        }
+      ]
+    },
+    {
+      "name": "video-player",
+      "type": "registry:ui",
+      "title": "Video Player",
+      "description": "Video player with custom controls for play, seek, volume, speed, and fullscreen, plus keyboard shortcuts.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "media"
+      ],
+      "meta": {
+        "titleEs": "Reproductor de video",
+        "descriptionEs": "Reproductor con controles propios de reproducción, barra, volumen, velocidad y pantalla completa, y atajos de teclado.",
+        "preview": "app/examples/video-player/preview.tsx",
+        "previewHref": "/examples/video-player",
+        "examples": [
+          {
+            "title": "Reproductor de video",
+            "href": "/examples/video-player",
+            "description": "Reproductor con controles propios de reproducción, barra, volumen, velocidad y pantalla completa, y atajos de teclado."
+          }
+        ],
+        "usage": "<VideoPlayer src={src} label=\"Clip\" />",
+        "api": [
+          {
+            "name": "src / poster",
+            "type": "string",
+            "description": "Media URL and optional poster."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Accessible name of the region. Default Video."
+          },
+          {
+            "name": "shortcuts",
+            "type": "keyboard",
+            "description": "Space or K play, arrows seek and change volume, M mutes, F toggles fullscreen."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "Play, pause, seek, volume, speed, and fullscreen labels default to English."
+          }
+        ]
+      },
+      "docs": "Import VideoPlayer from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/video-player.tsx",
+          "type": "registry:component",
+          "target": "@ui/video-player.tsx"
+        }
+      ]
+    },
+    {
+      "name": "lightbox",
+      "type": "registry:ui",
+      "title": "Lightbox",
+      "description": "Fullscreen image viewer with next and previous controls, zoom, and keyboard support.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "radix-ui",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "media",
+        "overlay"
+      ],
+      "meta": {
+        "titleEs": "Visor de imágenes",
+        "descriptionEs": "Visor de imágenes a pantalla completa con navegación, zoom y teclado.",
+        "preview": "app/examples/lightbox/preview.tsx",
+        "previewHref": "/examples/lightbox",
+        "examples": [
+          {
+            "title": "Visor de imágenes",
+            "href": "/examples/lightbox",
+            "description": "Visor de imágenes a pantalla completa con navegación, zoom y teclado."
+          }
+        ],
+        "usage": "<Lightbox items={items} open={open} onOpenChange={setOpen} index={index} onIndexChange={setIndex} />",
+        "api": [
+          {
+            "name": "items",
+            "type": "LightboxItem[]",
+            "description": "src, alt, and optional caption."
+          },
+          {
+            "name": "open / index",
+            "type": "boolean / number",
+            "description": "Controlled or uncontrolled."
+          },
+          {
+            "name": "zoom",
+            "type": "keyboard",
+            "description": "Plus and minus zoom from 1 to 4. Arrows change the image. Escape closes."
+          },
+          {
+            "name": "LightboxGallery",
+            "type": "component",
+            "description": "Thumbnail grid that opens the viewer."
+          }
+        ]
+      },
+      "docs": "Built on Radix Dialog for focus trap and Escape. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/lightbox.tsx",
+          "type": "registry:component",
+          "target": "@ui/lightbox.tsx"
+        }
+      ]
+    },
+    {
+      "name": "logo-marquee",
+      "type": "registry:ui",
+      "title": "Logo Marquee",
+      "description": "Infinite logo row that pauses on hover and fades at the edges.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "media",
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Carrusel de logos",
+        "descriptionEs": "Carrusel infinito de logos que se pausa al pasar el cursor y se desvanece en los bordes.",
+        "preview": "app/examples/logo-marquee/preview.tsx",
+        "previewHref": "/examples/logo-marquee",
+        "examples": [
+          {
+            "title": "Carrusel de logos",
+            "href": "/examples/logo-marquee",
+            "description": "Carrusel infinito de logos que se pausa al pasar el cursor y se desvanece en los bordes."
+          }
+        ],
+        "usage": "<LogoMarquee label=\"Logos\">{logos}</LogoMarquee>",
+        "api": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "description": "Logos. They are duplicated for the loop."
+          },
+          {
+            "name": "duration",
+            "type": "number",
+            "description": "Seconds per loop. Default 28."
+          },
+          {
+            "name": "pauseOnHover / fade",
+            "type": "boolean",
+            "description": "Both default to true."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Accessible name. Default Logo carousel."
+          }
+        ]
+      },
+      "docs": "The edge fade uses the host foreground token as a mask. The animation stops when the reader prefers reduced motion. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/logo-marquee.tsx",
+          "type": "registry:component",
+          "target": "@ui/logo-marquee.tsx"
+        }
+      ]
+    },
+    {
+      "name": "halftone-image",
+      "type": "registry:ui",
+      "title": "Halftone Image",
+      "description": "Image drawn as dots on a canvas that grow toward the pointer.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "media"
+      ],
+      "meta": {
+        "titleEs": "Imagen en puntos",
+        "descriptionEs": "Imagen dibujada como puntos en un lienzo que crecen hacia el cursor.",
+        "preview": "app/examples/halftone-image/preview.tsx",
+        "previewHref": "/examples/halftone-image",
+        "examples": [
+          {
+            "title": "Imagen en puntos",
+            "href": "/examples/halftone-image",
+            "description": "Imagen dibujada como puntos en un lienzo que crecen hacia el cursor."
+          }
+        ],
+        "usage": "<HalftoneImage src={src} alt=\"Portrait\" />",
+        "api": [
+          {
+            "name": "src / alt",
+            "type": "string",
+            "description": "Image URL and accessible name."
+          },
+          {
+            "name": "columns",
+            "type": "number",
+            "description": "Dots across. Default 42."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Frame classes. Default is a square."
+          }
+        ]
+      },
+      "docs": "Dots use the computed text color, so they follow the host theme. Pointer reaction is skipped when reduced motion is requested. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/halftone-image.tsx",
+          "type": "registry:component",
+          "target": "@ui/halftone-image.tsx"
+        }
+      ]
+    },
+    {
+      "name": "attachment-chip",
+      "type": "registry:ui",
+      "title": "Attachment Chip",
+      "description": "File chip with a type icon, size, optional image preview, and remove.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "media",
+        "form"
+      ],
+      "meta": {
+        "titleEs": "Chip de adjunto",
+        "descriptionEs": "Chip de archivo adjunto con icono según el tipo, tamaño, vista previa y quitar.",
+        "preview": "app/examples/attachment-chip/preview.tsx",
+        "previewHref": "/examples/attachment-chip",
+        "examples": [
+          {
+            "title": "Chip de adjunto",
+            "href": "/examples/attachment-chip",
+            "description": "Chip de archivo adjunto con icono según el tipo, tamaño, vista previa y quitar."
+          }
+        ],
+        "usage": "<AttachmentChip name=\"notes.pdf\" size={24000} type=\"application/pdf\" onRemove={remove} />",
+        "api": [
+          {
+            "name": "name / size / type",
+            "type": "string / number / string",
+            "description": "File facts. size is bytes."
+          },
+          {
+            "name": "previewUrl",
+            "type": "string",
+            "description": "Shown for image types."
+          },
+          {
+            "name": "onRemove / removeLabel",
+            "type": "callback / string",
+            "description": "Remove control. Label defaults to Remove."
+          }
+        ]
+      },
+      "docs": "Import AttachmentChip from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/attachment-chip.tsx",
+          "type": "registry:component",
+          "target": "@ui/attachment-chip.tsx"
+        }
+      ]
+    },
+    {
+      "name": "marker",
+      "type": "registry:ui",
+      "title": "Marker",
+      "description": "Animated highlighter mark behind a span of text.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Marcador",
+        "descriptionEs": "Resaltado animado detrás de un tramo de texto, al estilo de un marcador.",
+        "preview": "app/examples/marker/preview.tsx",
+        "previewHref": "/examples/marker",
+        "examples": [
+          {
+            "title": "Marcador",
+            "href": "/examples/marker",
+            "description": "Resaltado animado detrás de un tramo de texto, al estilo de un marcador."
+          }
+        ],
+        "usage": "<Marker>forty-five days</Marker>",
+        "api": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "description": "Text that stays readable above the mark."
+          },
+          {
+            "name": "highlightClassName",
+            "type": "string",
+            "description": "Override the mark. Default uses primary at low emphasis."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Classes on the wrapper."
+          }
+        ]
+      },
+      "docs": "The mark scales in from the left. Reduced motion shows it immediately. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/marker.tsx",
+          "type": "registry:component",
+          "target": "@ui/marker.tsx"
+        }
+      ]
+    },
+    {
+      "name": "press-sound",
+      "type": "registry:ui",
+      "title": "Press Sound",
+      "description": "Hook and wrapper that play a short synthesized click on press, with a shared mute.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "media",
+        "hook"
+      ],
+      "meta": {
+        "titleEs": "Sonido al presionar",
+        "descriptionEs": "Hook y envoltura que reproducen un clic corto sintetizado al presionar, con un silencio compartido.",
+        "preview": "app/examples/press-sound/preview.tsx",
+        "previewHref": "/examples/press-sound",
+        "examples": [
+          {
+            "title": "Sonido al presionar",
+            "href": "/examples/press-sound",
+            "description": "Hook y envoltura que reproducen un clic corto sintetizado al presionar, con un silencio compartido."
+          }
+        ],
+        "usage": "<PressSound sound=\"tap\"><button type=\"button\">Save</button></PressSound>",
+        "api": [
+          {
+            "name": "sound",
+            "type": "\"tap\" | \"tick\" | \"pop\"",
+            "description": "Synthesized timbre. Default tap."
+          },
+          {
+            "name": "usePressSound",
+            "type": "hook",
+            "description": "Returns play, muted, setMuted, and toggle."
+          },
+          {
+            "name": "PressSoundToggle",
+            "type": "component",
+            "description": "Button for the shared mute. Labels default to English."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "description": "Wrapper still renders the child, without a sound."
+          }
+        ]
+      },
+      "docs": "Audio is generated with the Web Audio API on the press gesture. There is no audio file. Mute is shared in the tab and stored locally. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/press-sound.tsx",
+          "type": "registry:component",
+          "target": "@ui/press-sound.tsx"
+        }
+      ]
+    },
+    {
+      "name": "crm-table",
+      "type": "registry:ui",
+      "title": "CRM Table",
+      "description": "CRM-shaped table with avatar and name, a status badge, stage, owner, and last activity. Column helpers match a TanStack column definition so they can be passed to AdminDataTable when that item is installed.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "table",
+        "badge",
+        "avatar"
+      ],
+      "categories": [
+        "dashboard",
+        "table"
+      ],
+      "meta": {
+        "titleEs": "Tabla CRM",
+        "descriptionEs": "Tabla de CRM con avatar y nombre, estado en una insignia, etapa, dueño y última actividad. Las columnas encajan en AdminDataTable cuando esa pieza está instalada, y también se renderizan solas.",
+        "preview": "app/examples/crm-table/preview.tsx",
+        "previewHref": "/examples/crm-table",
+        "examples": [
+          {
+            "title": "Tabla CRM",
+            "href": "/examples/crm-table",
+            "description": "Tabla de CRM con avatar y nombre, estado en una insignia, etapa, dueño y última actividad. Las columnas encajan en AdminDataTable cuando esa pieza está instalada, y también se renderizan solas."
+          }
+        ],
+        "usage": "<CrmTable rows={rows} onRowClick={open} />",
+        "api": [
+          {
+            "name": "rows",
+            "type": "CrmRow[]",
+            "description": "Contact, status, stage, owner, and a preformatted lastActivity string."
+          },
+          {
+            "name": "statusTone",
+            "type": "\"neutral\" | \"emphasis\" | \"muted\" | \"danger\"",
+            "description": "Maps to badge variants."
+          },
+          {
+            "name": "crmColumnDefs",
+            "type": "function",
+            "description": "Returns column objects compatible with AdminDataTable. This file does not import data-table."
+          },
+          {
+            "name": "labels",
+            "type": "CrmColumnLabels",
+            "description": "Header labels. Defaults are English."
+          }
+        ]
+      },
+      "docs": "Standalone table using the host table, badge, and avatar primitives. crmColumnDefs() can be passed to AdminDataTable from the data-table item without coupling this file to it. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/crm-table.tsx",
+          "type": "registry:component",
+          "target": "@ui/crm-table.tsx"
+        }
+      ]
     }
   ]
 }

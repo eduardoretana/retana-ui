@@ -3,12 +3,9 @@ admin panel by Maniruzzaman Jubayer:
 
   https://github.com/jubayer910/Admin-panel
 
-Copyright (c) 2026 Maniruzzaman Jubayer
-
-Those portions are licensed under the MIT License. The original work is a
-Next.js admin with its own CSS modules. This registry reimplements the
-behavior on shadcn primitives. It does not include the original stylesheet,
-the Roobert font, Hugeicons, or the author's brand assets.
+The original work is a Next.js admin with its own CSS modules. This registry
+reimplements the behavior on shadcn primitives. It does not include the
+original stylesheet, the Roobert font, Hugeicons, or the author's brand assets.
 
 Adapted behavior:
 
@@ -18,6 +15,35 @@ Adapted behavior:
 - A per-row "show on homepage" switch on a project board.
 - A sticky save bar that warns with `beforeunload` while the form is dirty.
 - Content tables shaped around position, show_on_homepage, and published.
+
+The adapted portions are licensed under the MIT License below. The year and
+copyright holder match the original repository's LICENSE file.
+
+---
+
+MIT License
+
+Copyright (c) 2026 Maniruzzaman Jubayer
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
 
 The rest of this repository is Copyright (c) Eduardo Retana and is licensed
 under the MIT License. See LICENSE.

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "file-diff",
+  "title": "File Diff",
+  "author": "Eduardo Retana",
+  "description": "Unified diff with added and removed lines, and collapsible runs of unchanged lines.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/file-diff.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { ChevronDown } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type DiffLineKind = \"add\" | \"delete\" | \"context\" | \"meta\"\n\nexport type DiffLine = {\n  kind: DiffLineKind\n  text: string\n  oldNumber?: number\n  newNumber?: number\n}\n\nexport type FileDiffProps = {\n  /** Unified diff text, or pre-parsed lines. */\n  patch?: string\n  lines?: readonly DiffLine[]\n  filename?: string\n  /** Collapse context runs longer than this many lines. */\n  collapseAfter?: number\n  expandLabel?: string\n  collapseLabel?: string\n  additionsLabel?: string\n  deletionsLabel?: string\n  className?: string\n}\n\nexport function parseUnifiedDiff(patch: string): DiffLine[] {\n  const rows: DiffLine[] = []\n  let oldLine = 0\n  let newLine = 0\n  for (const raw of patch.replace(/\\n$/, \"\").split(\"\\n\")) {\n    if (raw.startsWith(\"@@\")) {\n      const match = /@@ -(\\d+)(?:,\\d+)? \\+(\\d+)/.exec(raw)\n      oldLine = match ? Number(match[1]) : oldLine\n      newLine = match ? Number(match[2]) : newLine\n      rows.push({ kind: \"meta\", text: raw })\n      continue\n    }\n    if (raw.startsWith(\"---\") || raw.startsWith(\"+++\") || raw.startsWith(\"diff \") || raw.startsWith(\"index \")) {\n      rows.push({ kind: \"meta\", text: raw })\n      continue\n    }\n    if (raw.startsWith(\"+\")) {\n      rows.push({ kind: \"add\", text: raw.slice(1), newNumber: newLine })\n      newLine += 1\n      continue\n    }\n    if (raw.startsWith(\"-\")) {\n      rows.push({ kind: \"delete\", text: raw.slice(1), oldNumber: oldLine })\n      oldLine += 1\n      continue\n    }\n    const text = raw.startsWith(\" \") ? raw.slice(1) : raw\n    rows.push({ kind: \"context\", text, oldNumber: oldLine, newNumber: newLine })\n    oldLine += 1\n    newLine += 1\n  }\n  return rows\n}\n\ntype Block =\n  | { type: \"lines\"; lines: DiffLine[] }\n  | { type: \"collapse\"; lines: DiffLine[] }\n\nfunction groupLines(lines: readonly DiffLine[], collapseAfter: number): Block[] {\n  const blocks: Block[] = []\n  let context: DiffLine[] = []\n\n  function flush(forceLines = false) {\n    if (!context.length) return\n    if (!forceLines && context.length > collapseAfter) blocks.push({ type: \"collapse\", lines: context })\n    else blocks.push({ type: \"lines\", lines: context })\n    context = []\n  }\n\n  for (const line of lines) {\n    if (line.kind === \"context\") {\n      context.push(line)\n      continue\n    }\n    flush()\n    const last = blocks[blocks.length - 1]\n    if (last && last.type === \"lines\") last.lines.push(line)\n    else blocks.push({ type: \"lines\", lines: [line] })\n  }\n  flush()\n  return blocks\n}\n\nexport function FileDiff({\n  patch = \"\",\n  lines,\n  filename,\n  collapseAfter = 5,\n  expandLabel = \"Show unchanged lines\",\n  collapseLabel = \"Hide unchanged lines\",\n  additionsLabel = \"additions\",\n  deletionsLabel = \"deletions\",\n  className,\n}: FileDiffProps) {\n  const parsed = React.useMemo(() => lines ?? parseUnifiedDiff(patch), [lines, patch])\n  const blocks = React.useMemo(() => groupLines(parsed, collapseAfter), [parsed, collapseAfter])\n  const [open, setOpen] = React.useState<Record<number, boolean>>({})\n  const additions = parsed.filter((line) => line.kind === \"add\").length\n  const deletions = parsed.filter((line) => line.kind === \"delete\").length\n\n  return (\n    <figure data-slot=\"file-diff\" className={cn(\"overflow-hidden rounded-xl border border-border bg-card\", className)}>\n      <figcaption className=\"flex items-center gap-3 border-b border-border px-3 py-2 text-xs\">\n        <span className=\"min-w-0 flex-1 truncate font-mono\">{filename ?? \"diff\"}</span>\n        <span className=\"text-primary tabular-nums\">+{additions} {additionsLabel}</span>\n        <span className=\"text-destructive tabular-nums\">−{deletions} {deletionsLabel}</span>\n      </figcaption>\n      <div className=\"overflow-x-auto font-mono text-[12.5px] leading-6\">\n        {blocks.map((block, index) => {\n          if (block.type === \"collapse\" && !open[index]) {\n            return (\n              <button\n                key={index}\n                type=\"button\"\n                className=\"flex w-full items-center gap-2 bg-muted/50 px-3 py-1 text-left text-xs text-muted-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\"\n                aria-expanded={false}\n                onClick={() => setOpen((current) => ({ ...current, [index]: true }))}\n              >\n                <ChevronDown className=\"size-3 -rotate-90\" />\n                {expandLabel} ({block.lines.length})\n              </button>\n            )\n          }\n          const rows = block.type === \"collapse\" ? block.lines : block.lines\n          return (\n            <div key={index}>\n              {block.type === \"collapse\" ? (\n                <button\n                  type=\"button\"\n                  className=\"flex w-full items-center gap-2 bg-muted/50 px-3 py-1 text-left text-xs text-muted-foreground hover:bg-muted\"\n                  aria-expanded\n                  onClick={() => setOpen((current) => ({ ...current, [index]: false }))}\n                >\n                  <ChevronDown className=\"size-3\" />\n                  {collapseLabel}\n                </button>\n              ) : null}\n              {rows.map((line, lineIndex) => (\n                <div\n                  key={lineIndex}\n                  data-kind={line.kind}\n                  className={cn(\n                    \"grid grid-cols-[2.5rem_2.5rem_1fr] gap-2 px-2\",\n                    line.kind === \"add\" && \"bg-primary/10\",\n                    line.kind === \"delete\" && \"bg-destructive/10\",\n                    line.kind === \"meta\" && \"bg-muted/40 text-muted-foreground\",\n                  )}\n                >\n                  <span className=\"text-right text-muted-foreground tabular-nums select-none\" aria-hidden>\n                    {line.oldNumber ?? \"\"}\n                  </span>\n                  <span className=\"text-right text-muted-foreground tabular-nums select-none\" aria-hidden>\n                    {line.newNumber ?? \"\"}\n                  </span>\n                  <span className=\"whitespace-pre\">\n                    <span className=\"select-none text-muted-foreground\" aria-hidden>\n                      {line.kind === \"add\" ? \"+\" : line.kind === \"delete\" ? \"−\" : line.kind === \"meta\" ? \"\" : \" \"}\n                    </span>\n                    {line.text || \" \"}\n                  </span>\n                </div>\n              ))}\n            </div>\n          )\n        })}\n      </div>\n    </figure>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/file-diff.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Vista de diff",
+    "descriptionEs": "Diff unificado con líneas agregadas y eliminadas, y bloques sin cambios que se pueden colapsar.",
+    "preview": "app/examples/file-diff/preview.tsx",
+    "previewHref": "/examples/file-diff",
+    "examples": [
+      {
+        "title": "Vista de diff",
+        "href": "/examples/file-diff",
+        "description": "Diff unificado con líneas agregadas y eliminadas, y bloques sin cambios que se pueden colapsar."
+      }
+    ],
+    "usage": "<FileDiff patch={patch} filename=\"note.md\" />",
+    "api": [
+      {
+        "name": "patch",
+        "type": "string",
+        "description": "Unified diff text. Ignored when lines is set."
+      },
+      {
+        "name": "lines",
+        "type": "DiffLine[]",
+        "description": "Pre-parsed rows."
+      },
+      {
+        "name": "collapseAfter",
+        "type": "number",
+        "description": "Collapse unchanged runs longer than this. Default 5."
+      },
+      {
+        "name": "labels",
+        "type": "string",
+        "description": "expand, collapse, additions, and deletions labels default to English."
+      }
+    ]
+  },
+  "docs": "Additions use the primary token and deletions use destructive. parseUnifiedDiff is exported. No theme is shipped.",
+  "categories": [
+    "ai",
+    "content"
+  ],
+  "type": "registry:ui"
+}

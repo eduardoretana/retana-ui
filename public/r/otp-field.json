@@ -1,0 +1,64 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "otp-field",
+  "title": "OTP Field",
+  "author": "Eduardo Retana",
+  "description": "One-time code field on the input-otp primitive, with animated success and error states and a resend countdown.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "input-otp",
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/otp-field.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { Check, RotateCcw } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Button } from \"@/components/ui/button\"\nimport { InputOTP, InputOTPGroup, InputOTPSlot } from \"@/components/ui/input-otp\"\n\nexport type OtpFieldState = \"idle\" | \"success\" | \"error\"\n\nexport type OtpFieldProps = {\n  length?: number\n  value?: string\n  defaultValue?: string\n  onValueChange?: (value: string) => void\n  onComplete?: (value: string) => void\n  state?: OtpFieldState\n  label?: string\n  hint?: string\n  errorLabel?: string\n  successLabel?: string\n  resendLabel?: string\n  resendWaitLabel?: string\n  /** Seconds the resend control stays disabled after each send. */\n  cooldownSeconds?: number\n  onResend?: () => void\n  disabled?: boolean\n  className?: string\n}\n\nfunction formatClock(total: number) {\n  const minutes = Math.floor(total / 60)\n  const seconds = total % 60\n  return `${minutes}:${seconds.toString().padStart(2, \"0\")}`\n}\n\nexport function OtpField({\n  length = 6,\n  value,\n  defaultValue = \"\",\n  onValueChange,\n  onComplete,\n  state = \"idle\",\n  label = \"Verification code\",\n  hint,\n  errorLabel = \"That code is not valid\",\n  successLabel = \"Code confirmed\",\n  resendLabel = \"Resend code\",\n  resendWaitLabel = \"Resend in\",\n  cooldownSeconds = 30,\n  onResend,\n  disabled = false,\n  className,\n}: OtpFieldProps) {\n  const [uncontrolled, setUncontrolled] = React.useState(defaultValue)\n  const [remaining, setRemaining] = React.useState(0)\n  const groupRef = React.useRef<HTMLDivElement>(null)\n  const code = value ?? uncontrolled\n  const describedBy = React.useId()\n\n  React.useEffect(() => {\n    if (remaining <= 0) return\n    const id = window.setTimeout(() => setRemaining((current) => current - 1), 1000)\n    return () => window.clearTimeout(id)\n  }, [remaining])\n\n  React.useEffect(() => {\n    const node = groupRef.current\n    if (!node || state === \"idle\") return\n    if (window.matchMedia(\"(prefers-reduced-motion: reduce)\").matches) return\n    if (typeof node.animate !== \"function\") return\n    if (state === \"error\") {\n      node.animate(\n        [\n          { transform: \"translateX(0)\" },\n          { transform: \"translateX(-5px)\" },\n          { transform: \"translateX(5px)\" },\n          { transform: \"translateX(-3px)\" },\n          { transform: \"translateX(0)\" },\n        ],\n        { duration: 420, easing: \"ease-in-out\" },\n      )\n    } else {\n      node.animate(\n        [{ transform: \"scale(1)\" }, { transform: \"scale(1.03)\" }, { transform: \"scale(1)\" }],\n        { duration: 320, easing: \"ease-out\" },\n      )\n    }\n  }, [state])\n\n  function change(next: string) {\n    if (value === undefined) setUncontrolled(next)\n    onValueChange?.(next)\n  }\n\n  return (\n    <div data-slot=\"otp-field\" data-state={state} className={cn(\"flex flex-col gap-2\", className)}>\n      <span className=\"text-sm font-medium\" id={`${describedBy}-label`}>\n        {label}\n      </span>\n      <div ref={groupRef} className=\"w-fit\">\n        <InputOTP\n          maxLength={length}\n          value={code}\n          onChange={change}\n          onComplete={onComplete}\n          disabled={disabled || state === \"success\"}\n          aria-labelledby={`${describedBy}-label`}\n          aria-describedby={describedBy}\n          aria-invalid={state === \"error\" || undefined}\n          containerClassName={cn(state === \"success\" && \"rounded-lg ring-2 ring-primary\")}\n        >\n          <InputOTPGroup>\n            {Array.from({ length }, (_, index) => (\n              <InputOTPSlot key={index} index={index} aria-invalid={state === \"error\" || undefined} />\n            ))}\n          </InputOTPGroup>\n        </InputOTP>\n      </div>\n      <div className=\"flex items-center justify-between gap-3\">\n        <p\n          id={describedBy}\n          role={state === \"error\" ? \"alert\" : \"status\"}\n          className={cn(\n            \"text-xs text-muted-foreground\",\n            state === \"error\" && \"text-destructive\",\n            state === \"success\" && \"text-primary\",\n          )}\n        >\n          {state === \"error\" ? errorLabel : state === \"success\" ? (\n            <span className=\"inline-flex items-center gap-1\">\n              <Check className=\"size-3\" aria-hidden />\n              {successLabel}\n            </span>\n          ) : (\n            hint\n          )}\n        </p>\n        {onResend ? (\n          <Button\n            type=\"button\"\n            variant=\"ghost\"\n            size=\"xs\"\n            disabled={disabled || remaining > 0 || state === \"success\"}\n            onClick={() => {\n              onResend()\n              setRemaining(cooldownSeconds)\n            }}\n          >\n            <RotateCcw />\n            {remaining > 0 ? `${resendWaitLabel} ${formatClock(remaining)}` : resendLabel}\n          </Button>\n        ) : null}\n      </div>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/otp-field.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Campo OTP",
+    "descriptionEs": "Código de un solo uso sobre la primitiva input-otp, con éxito y error animados y reenvío con cuenta regresiva.",
+    "preview": "app/examples/otp-field/preview.tsx",
+    "previewHref": "/examples/otp-field",
+    "examples": [
+      {
+        "title": "Campo OTP",
+        "href": "/examples/otp-field",
+        "description": "Código de un solo uso sobre la primitiva input-otp, con éxito y error animados y reenvío con cuenta regresiva."
+      }
+    ],
+    "usage": "<OtpField length={6} state={state} onComplete={check} onResend={resend} />",
+    "api": [
+      {
+        "name": "length",
+        "type": "number",
+        "description": "Digits. Default 6."
+      },
+      {
+        "name": "state",
+        "type": "\"idle\" | \"success\" | \"error\"",
+        "description": "Drives the message and the motion."
+      },
+      {
+        "name": "onResend / cooldownSeconds",
+        "type": "callback / number",
+        "description": "Resend stays disabled for the countdown. Default 30 seconds."
+      },
+      {
+        "name": "labels",
+        "type": "string",
+        "description": "label, hint, error, success, and resend labels default to English."
+      }
+    ]
+  },
+  "docs": "Built on the input-otp primitive. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "form",
+    "input"
+  ],
+  "type": "registry:ui"
+}

@@ -93,6 +93,7 @@ export function DataTableDemo() {
         viewsLabel="Vistas"
         selectAllLabel="Seleccionar todas"
         selectRowLabel="Seleccionar fila"
+        actionErrorLabel="No se pudo completar la acción"
         csvFilename="reservas.csv"
         csvColumns={[
           { key: "name", header: "Nombre" },

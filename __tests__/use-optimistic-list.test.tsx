@@ -61,6 +61,24 @@ describe("useOptimisticList", () => {
     expect(notify.error).toHaveBeenCalledWith("sin red")
   })
 
+  it("ignores a second reorder while the first save is in flight", async () => {
+    const user = userEvent.setup()
+    const notify = { success: vi.fn(), error: vi.fn() }
+    let release: (() => void) | undefined
+    const gate = new Promise<void>((resolve) => {
+      release = resolve
+    })
+    const onReorder = vi.fn(() => gate)
+    render(<ListHarness onReorder={onReorder} notify={notify} />)
+
+    await user.click(screen.getByRole("button", { name: "Reordenar" }))
+    await user.click(screen.getByRole("button", { name: "Mover visible" }))
+    release?.()
+
+    expect(onReorder).toHaveBeenCalledTimes(1)
+    expect(screen.getByText("c,a,b")).toBeInTheDocument()
+  })
+
   it("swaps only the visible ids", async () => {
     const user = userEvent.setup()
     const notify = { success: vi.fn(), error: vi.fn() }

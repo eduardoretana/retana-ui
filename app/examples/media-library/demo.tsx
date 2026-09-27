@@ -65,6 +65,7 @@ export function MediaLibraryDemo() {
         deleteDescription="El archivo sale de la biblioteca."
         deleteLabel="Eliminar"
         viewLabel="Vista"
+        typeError="Ese tipo de archivo no está permitido."
       />
       <EntityForm
         open={open}
@@ -91,6 +92,7 @@ export function MediaLibraryDemo() {
           emptyLibrary="La biblioteca está vacía"
           uploadedMessage="Archivo subido"
           uploadFailed="No se pudo subir"
+          typeError="Ese tipo de archivo no está permitido."
           hint="PNG, JPG o un vídeo corto."
         />
       </EntityForm>

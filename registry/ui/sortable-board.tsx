@@ -153,16 +153,22 @@ export function SortableBoard({
   })
   const visibleIds = visible.map((item) => item.id)
 
+  const searched = list.items.filter(
+    (item) =>
+      !q ||
+      item.title.toLowerCase().includes(q) ||
+      (item.categoryTitle ?? "").toLowerCase().includes(q),
+  )
   const chips = [
-    { key: "all", label: allLabel, n: items.length },
-    { key: "home", label: homepageLabel, n: list.items.filter(isHome).length },
+    { key: "all", label: allLabel, n: searched.length },
+    { key: "home", label: homepageLabel, n: searched.filter(isHome).length },
     ...categories.map((category) => ({
       key: `cat:${category.id}`,
       label: category.title,
-      n: items.filter((item) => item.categoryId === category.id).length,
+      n: searched.filter((item) => item.categoryId === category.id).length,
     })),
   ]
-  const uncategorized = items.filter((item) => !item.categoryId).length
+  const uncategorized = searched.filter((item) => !item.categoryId).length
   if (uncategorized) chips.push({ key: "none", label: uncategorizedLabel, n: uncategorized })
 
   const sensors = useSensors(

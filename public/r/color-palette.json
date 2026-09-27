@@ -1,0 +1,56 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "color-palette",
+  "title": "Color Palette",
+  "author": "Eduardo Retana",
+  "description": "Grid of color swatches that copy their value on click and confirm it.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/color-palette.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { Check } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type PaletteSwatch = {\n  id: string\n  label: string\n  /** Any CSS color the host already uses. The palette does not invent a theme. */\n  value: string\n}\n\nexport type ColorPaletteProps = {\n  swatches: readonly PaletteSwatch[]\n  onCopy?: (swatch: PaletteSwatch) => void\n  copyLabel?: string\n  copiedLabel?: string\n  className?: string\n}\n\nexport function ColorPalette({\n  swatches,\n  onCopy,\n  copyLabel = \"Copy\",\n  copiedLabel = \"Copied\",\n  className,\n}: ColorPaletteProps) {\n  const [copied, setCopied] = React.useState<string | null>(null)\n  const timer = React.useRef<number>(0)\n\n  React.useEffect(() => () => window.clearTimeout(timer.current), [])\n\n  async function copy(swatch: PaletteSwatch) {\n    try {\n      await navigator.clipboard.writeText(swatch.value)\n    } catch {\n      return\n    }\n    onCopy?.(swatch)\n    setCopied(swatch.id)\n    window.clearTimeout(timer.current)\n    timer.current = window.setTimeout(() => setCopied(null), 1400)\n  }\n\n  return (\n    <ul data-slot=\"color-palette\" className={cn(\"grid grid-cols-4 gap-2\", className)}>\n      {swatches.map((swatch) => {\n        const isCopied = copied === swatch.id\n        return (\n          <li key={swatch.id}>\n            <button\n              type=\"button\"\n              onClick={() => void copy(swatch)}\n              aria-label={`${copyLabel} ${swatch.label}`}\n              className=\"flex w-full flex-col gap-1 rounded-lg p-1 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\"\n            >\n              <span\n                className=\"relative grid aspect-square place-items-center rounded-md border border-border\"\n                style={{ background: swatch.value }}\n              >\n                {isCopied ? (\n                  <Check className=\"size-4 rounded-full bg-background p-0.5 text-foreground\" aria-hidden />\n                ) : null}\n              </span>\n              <span className=\"truncate text-[11px] text-muted-foreground\">\n                {isCopied ? copiedLabel : swatch.label}\n              </span>\n            </button>\n          </li>\n        )\n      })}\n      <span className=\"sr-only\" role=\"status\">\n        {copied ? copiedLabel : \"\"}\n      </span>\n    </ul>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/color-palette.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Paleta de color",
+    "descriptionEs": "Grilla de muestras de color que se copian al hacer clic y confirman la copia.",
+    "preview": "app/examples/color-palette/preview.tsx",
+    "previewHref": "/examples/color-palette",
+    "examples": [
+      {
+        "title": "Paleta de color",
+        "href": "/examples/color-palette",
+        "description": "Grilla de muestras de color que se copian al hacer clic y confirman la copia."
+      }
+    ],
+    "usage": "<ColorPalette swatches={[{ id: \"ink\", label: \"Ink\", value: \"var(--foreground)\" }]} />",
+    "api": [
+      {
+        "name": "swatches",
+        "type": "PaletteSwatch[]",
+        "description": "id, label, and a CSS color value supplied by the host."
+      },
+      {
+        "name": "onCopy",
+        "type": "(swatch) => void",
+        "description": "Called after the value is written to the clipboard."
+      },
+      {
+        "name": "copyLabel / copiedLabel",
+        "type": "string",
+        "description": "Default Copy and Copied."
+      }
+    ]
+  },
+  "docs": "The palette does not define colors. Pass host tokens or any CSS color the app already uses. No theme is shipped.",
+  "categories": [
+    "form",
+    "content"
+  ],
+  "type": "registry:ui"
+}

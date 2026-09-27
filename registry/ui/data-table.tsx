@@ -17,6 +17,7 @@ import {
   Download,
   Search,
 } from "lucide-react"
+import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
@@ -100,6 +101,7 @@ export type AdminDataTableProps<T extends { id: string }> = {
   viewsLabel?: string
   selectAllLabel?: string
   selectRowLabel?: string
+  actionErrorLabel?: string
 }
 
 export function AdminDataTable<T extends { id: string }>({
@@ -127,6 +129,7 @@ export function AdminDataTable<T extends { id: string }>({
   viewsLabel = "Views",
   selectAllLabel = "Select all",
   selectRowLabel = "Select row",
+  actionErrorLabel = "That action failed",
 }: AdminDataTableProps<T>) {
   const [tab, setTab] = React.useState(tabs?.[0]?.id ?? "all")
   const [query, setQuery] = React.useState("")
@@ -135,6 +138,7 @@ export function AdminDataTable<T extends { id: string }>({
   const [columnVisibility, setColumnVisibility] = React.useState<Record<string, boolean>>({})
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({})
   const [openId, setOpenId] = React.useState<string | null>(null)
+  const [acting, setActing] = React.useState<string | null>(null)
 
   const searched = React.useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -206,8 +210,9 @@ export function AdminDataTable<T extends { id: string }>({
   })
 
   const selected = table.getSelectedRowModel().rows.map((row) => row.original)
-  const openIndex = rows.findIndex((row) => row.id === openId)
-  const openRow = openIndex >= 0 ? rows[openIndex] : undefined
+  const visibleRows = table.getRowModel().rows.map((row) => row.original)
+  const openIndex = visibleRows.findIndex((row) => row.id === openId)
+  const openRow = openIndex >= 0 ? visibleRows[openIndex] : undefined
 
   function exportCsv(source: readonly T[]) {
     if (!csvColumns || !toCsvRow) return
@@ -300,7 +305,7 @@ export function AdminDataTable<T extends { id: string }>({
               type="button"
               variant="outline"
               size="sm"
-              onClick={() => exportCsv(selected.length ? selected : rows)}
+              onClick={() => exportCsv(selected.length ? selected : visibleRows)}
             >
               <Download />
               {csvLabel}
@@ -318,7 +323,20 @@ export function AdminDataTable<T extends { id: string }>({
                 type="button"
                 size="sm"
                 variant={action.destructive ? "destructive" : "secondary"}
-                onClick={() => void action.onAction(selected)}
+                disabled={acting != null}
+                onClick={() => {
+                  setActing(action.id)
+                  void (async () => {
+                    try {
+                      await action.onAction(selected)
+                      setRowSelection({})
+                    } catch (error) {
+                      toast.error(error instanceof Error && error.message ? error.message : actionErrorLabel)
+                    } finally {
+                      setActing(null)
+                    }
+                  })()
+                }}
               >
                 {action.label}
               </Button>
@@ -411,7 +429,7 @@ export function AdminDataTable<T extends { id: string }>({
                 variant="outline"
                 disabled={openIndex <= 0}
                 onClick={() => {
-                  const prev = rows[openIndex - 1]
+                  const prev = visibleRows[openIndex - 1]
                   if (prev) setOpenId(prev.id)
                 }}
               >
@@ -421,9 +439,9 @@ export function AdminDataTable<T extends { id: string }>({
                 type="button"
                 size="sm"
                 variant="outline"
-                disabled={openIndex < 0 || openIndex >= rows.length - 1}
+                disabled={openIndex < 0 || openIndex >= visibleRows.length - 1}
                 onClick={() => {
-                  const next = rows[openIndex + 1]
+                  const next = visibleRows[openIndex + 1]
                   if (next) setOpenId(next.id)
                 }}
               >

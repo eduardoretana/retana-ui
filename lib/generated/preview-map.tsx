@@ -14,6 +14,34 @@ import Preview9 from "@/app/examples/admin-charts/preview"
 import Preview10 from "@/app/examples/overview-dashboard/preview"
 import Preview11 from "@/app/examples/admin-kit/preview"
 import Preview12 from "@/app/examples/supabase-admin/preview"
+import Preview13 from "@/app/examples/chat-message/preview"
+import Preview14 from "@/app/examples/message-list/preview"
+import Preview15 from "@/app/examples/chat-composer/preview"
+import Preview16 from "@/app/examples/streaming-text/preview"
+import Preview17 from "@/app/examples/reasoning-steps/preview"
+import Preview18 from "@/app/examples/task-list/preview"
+import Preview19 from "@/app/examples/plan-card/preview"
+import Preview20 from "@/app/examples/question-card/preview"
+import Preview21 from "@/app/examples/inline-citation/preview"
+import Preview22 from "@/app/examples/code-block/preview"
+import Preview23 from "@/app/examples/file-diff/preview"
+import Preview24 from "@/app/examples/image-generation/preview"
+import Preview25 from "@/app/examples/ai-document/preview"
+import Preview26 from "@/app/examples/otp-field/preview"
+import Preview27 from "@/app/examples/dissolve-input/preview"
+import Preview28 from "@/app/examples/multi-select/preview"
+import Preview29 from "@/app/examples/color-picker/preview"
+import Preview30 from "@/app/examples/color-palette/preview"
+import Preview31 from "@/app/examples/magnetic-dropzone/preview"
+import Preview32 from "@/app/examples/gooey-slider/preview"
+import Preview33 from "@/app/examples/video-player/preview"
+import Preview34 from "@/app/examples/lightbox/preview"
+import Preview35 from "@/app/examples/logo-marquee/preview"
+import Preview36 from "@/app/examples/halftone-image/preview"
+import Preview37 from "@/app/examples/attachment-chip/preview"
+import Preview38 from "@/app/examples/marker/preview"
+import Preview39 from "@/app/examples/press-sound/preview"
+import Preview40 from "@/app/examples/crm-table/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -29,4 +57,32 @@ export const previewMap = {
   "overview-dashboard": Preview10,
   "admin-kit": Preview11,
   "supabase-admin": Preview12,
+  "chat-message": Preview13,
+  "message-list": Preview14,
+  "chat-composer": Preview15,
+  "streaming-text": Preview16,
+  "reasoning-steps": Preview17,
+  "task-list": Preview18,
+  "plan-card": Preview19,
+  "question-card": Preview20,
+  "inline-citation": Preview21,
+  "code-block": Preview22,
+  "file-diff": Preview23,
+  "image-generation": Preview24,
+  "ai-document": Preview25,
+  "otp-field": Preview26,
+  "dissolve-input": Preview27,
+  "multi-select": Preview28,
+  "color-picker": Preview29,
+  "color-palette": Preview30,
+  "magnetic-dropzone": Preview31,
+  "gooey-slider": Preview32,
+  "video-player": Preview33,
+  "lightbox": Preview34,
+  "logo-marquee": Preview35,
+  "halftone-image": Preview36,
+  "attachment-chip": Preview37,
+  "marker": Preview38,
+  "press-sound": Preview39,
+  "crm-table": Preview40,
 }

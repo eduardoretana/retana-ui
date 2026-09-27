@@ -48,6 +48,11 @@ export function timeZoneOffsetMs(timeZone: string, ts: number): number {
   return asUtc - ts
 }
 
+/** Move a zoned midnight by whole calendar days, including 23h and 25h DST days. */
+export function addZonedDays(dayStart: number, days: number, timeZone = "UTC"): number {
+  return startOfZonedDay(dayStart + days * DAY + 12 * 3_600_000, timeZone)
+}
+
 export function startOfZonedDay(ts: number, timeZone = "UTC"): number {
   const offset = timeZoneOffsetMs(timeZone, ts)
   const local = ts + offset
@@ -71,7 +76,7 @@ export function resolveRange(
   if (key === "today") {
     from = today
     bucket = "hour"
-    span = DAY
+    span = addZonedDays(today, 1, timeZone) - today
   } else if (key === "12m") {
     const offset = timeZoneOffsetMs(timeZone, today)
     const local = new Date(today + offset)
@@ -81,8 +86,8 @@ export function resolveRange(
     span = now - from
   } else {
     const days = key === "7d" ? 7 : key === "30d" ? 30 : 90
-    from = today - (days - 1) * DAY
-    span = days * DAY
+    from = addZonedDays(today, -(days - 1), timeZone)
+    span = addZonedDays(today, 1, timeZone) - from
     bucket = "day"
   }
 
@@ -138,9 +143,9 @@ export function presetBounds(
   const today = startOfZonedDay(now, timeZone)
   switch (preset) {
     case "today":
-      return [today, today + DAY]
+      return [today, addZonedDays(today, 1, timeZone)]
     case "tomorrow":
-      return [today + DAY, today + 2 * DAY]
+      return [addZonedDays(today, 1, timeZone), addZonedDays(today, 2, timeZone)]
     case "next7":
       return [now, now + 7 * DAY]
     case "next30":

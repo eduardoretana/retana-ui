@@ -1,0 +1,56 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "ai-document",
+  "title": "AI Document",
+  "author": "Eduardo Retana",
+  "description": "Document where an agent proposes highlighted edits the reader can accept or reject.",
+  "dependencies": [],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/ai-document.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Button } from \"@/components/ui/button\"\n\nexport type AiDocumentSegment =\n  | { id: string; type: \"text\"; text: string }\n  | {\n      id: string\n      type: \"edit\"\n      kind: \"insert\" | \"delete\" | \"replace\"\n      text: string\n      replacement?: string\n      status?: \"pending\" | \"accepted\" | \"rejected\"\n    }\n\nexport type AiDocumentDecision = \"accepted\" | \"rejected\"\n\nexport type AiDocumentProps = {\n  title?: string\n  segments: readonly AiDocumentSegment[]\n  onResolve?: (id: string, decision: AiDocumentDecision) => void\n  acceptLabel?: string\n  rejectLabel?: string\n  insertLabel?: string\n  deleteLabel?: string\n  replaceLabel?: string\n  className?: string\n}\n\nfunction resultingText(segment: Extract<AiDocumentSegment, { type: \"edit\" }>, decision: AiDocumentDecision | \"pending\") {\n  if (decision === \"rejected\") {\n    if (segment.kind === \"insert\") return \"\"\n    return segment.text\n  }\n  if (decision === \"accepted\") {\n    if (segment.kind === \"delete\") return \"\"\n    if (segment.kind === \"replace\") return segment.replacement ?? \"\"\n    return segment.text\n  }\n  return null\n}\n\nexport function AiDocument({\n  title = \"Document\",\n  segments,\n  onResolve,\n  acceptLabel = \"Accept\",\n  rejectLabel = \"Reject\",\n  insertLabel = \"Insert\",\n  deleteLabel = \"Delete\",\n  replaceLabel = \"Replace\",\n  className,\n}: AiDocumentProps) {\n  const [local, setLocal] = React.useState<Record<string, AiDocumentDecision>>({})\n  const kindLabel = { insert: insertLabel, delete: deleteLabel, replace: replaceLabel }\n\n  function resolve(id: string, decision: AiDocumentDecision) {\n    setLocal((current) => ({ ...current, [id]: decision }))\n    onResolve?.(id, decision)\n  }\n\n  return (\n    <article data-slot=\"ai-document\" className={cn(\"rounded-xl border border-border bg-card shadow-sm\", className)}>\n      <header className=\"border-b border-border px-5 py-3\">\n        <h2 className=\"text-sm font-semibold\">{title}</h2>\n      </header>\n      <div className=\"flex flex-col gap-3 px-5 py-4 text-sm leading-7\">\n        {segments.map((segment) => {\n          if (segment.type === \"text\") {\n            return (\n              <p key={segment.id} className=\"whitespace-pre-wrap\">\n                {segment.text}\n              </p>\n            )\n          }\n          const decision = local[segment.id] ?? segment.status ?? \"pending\"\n          const settled = resultingText(segment, decision)\n          if (settled !== null) {\n            if (!settled) return null\n            return (\n              <p key={segment.id} className=\"whitespace-pre-wrap\">\n                {settled}\n              </p>\n            )\n          }\n          return (\n            <div\n              key={segment.id}\n              data-edit={segment.kind}\n              data-status=\"pending\"\n              className=\"rounded-lg border border-border bg-muted/30 p-3\"\n            >\n              <p className=\"mb-2 text-[11px] font-medium tracking-wide text-muted-foreground uppercase\">\n                {kindLabel[segment.kind]}\n              </p>\n              {segment.kind !== \"insert\" ? (\n                <p className=\"whitespace-pre-wrap rounded-md bg-destructive/10 px-2 py-1 line-through decoration-destructive/70\">\n                  {segment.text}\n                </p>\n              ) : null}\n              {segment.kind !== \"delete\" ? (\n                <p className={cn(\"whitespace-pre-wrap rounded-md bg-primary/10 px-2 py-1\", segment.kind === \"replace\" && \"mt-1\")}>\n                  {segment.kind === \"replace\" ? segment.replacement : segment.text}\n                </p>\n              ) : null}\n              <div className=\"mt-2 flex justify-end gap-2\">\n                <Button type=\"button\" variant=\"ghost\" size=\"xs\" onClick={() => resolve(segment.id, \"rejected\")}>\n                  {rejectLabel}\n                </Button>\n                <Button type=\"button\" size=\"xs\" onClick={() => resolve(segment.id, \"accepted\")}>\n                  {acceptLabel}\n                </Button>\n              </div>\n            </div>\n          )\n        })}\n      </div>\n    </article>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/ai-document.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Documento del agente",
+    "descriptionEs": "Documento donde un agente propone ediciones resaltadas que la persona acepta o rechaza.",
+    "preview": "app/examples/ai-document/preview.tsx",
+    "previewHref": "/examples/ai-document",
+    "examples": [
+      {
+        "title": "Documento del agente",
+        "href": "/examples/ai-document",
+        "description": "Documento donde un agente propone ediciones resaltadas que la persona acepta o rechaza."
+      }
+    ],
+    "usage": "<AiDocument segments={segments} onResolve={resolve} />",
+    "api": [
+      {
+        "name": "segments",
+        "type": "AiDocumentSegment[]",
+        "description": "Paragraphs or insert, delete, and replace edits."
+      },
+      {
+        "name": "onResolve",
+        "type": "(id, decision) => void",
+        "description": "decision is accepted or rejected."
+      },
+      {
+        "name": "labels",
+        "type": "string",
+        "description": "accept, reject, insert, delete, and replace labels default to English."
+      }
+    ]
+  },
+  "docs": "Pending inserts and replacements use the primary token. Deletions use destructive. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "ai",
+    "content"
+  ],
+  "type": "registry:ui"
+}

@@ -28,6 +28,17 @@ function isVideo(mime: string, url: string) {
   return mime.startsWith("video/") || /\.(mp4|webm|mov)($|\?)/i.test(url)
 }
 
+function matchesAccept(file: File, accept: string) {
+  const rules = accept.split(",").map((rule) => rule.trim()).filter(Boolean)
+  if (rules.length === 0) return true
+  const name = file.name.toLowerCase()
+  return rules.some((rule) => {
+    if (rule.startsWith(".")) return name.endsWith(rule.toLowerCase())
+    if (rule.endsWith("/*")) return file.type.startsWith(rule.slice(0, -1))
+    return file.type === rule
+  })
+}
+
 export type MediaFieldProps = {
   label: string
   value: string
@@ -46,6 +57,7 @@ export type MediaFieldProps = {
   emptyLibrary?: string
   uploadedMessage?: string
   uploadFailed?: string
+  typeError?: string
 }
 
 export function MediaField({
@@ -66,9 +78,11 @@ export function MediaField({
   emptyLibrary = "Library is empty",
   uploadedMessage = "Uploaded",
   uploadFailed = "Upload failed",
+  typeError = "That file type is not allowed.",
 }: MediaFieldProps) {
   const inputId = React.useId()
   const [busy, setBusy] = React.useState(false)
+  const activeUploads = React.useRef(0)
   const [dragging, setDragging] = React.useState(false)
   const [libraryOpen, setLibraryOpen] = React.useState(false)
   const inputRef = React.useRef<HTMLInputElement>(null)
@@ -92,6 +106,11 @@ export function MediaField({
 
   async function take(file: File | undefined) {
     if (!file) return
+    if (!matchesAccept(file, accept)) {
+      toast.error(typeError)
+      return
+    }
+    activeUploads.current += 1
     setBusy(true)
     try {
       const asset = await onUpload(file)
@@ -100,7 +119,8 @@ export function MediaField({
     } catch (error) {
       toast.error(error instanceof Error ? error.message : uploadFailed)
     } finally {
-      setBusy(false)
+      activeUploads.current = Math.max(0, activeUploads.current - 1)
+      if (activeUploads.current === 0) setBusy(false)
     }
   }
 
@@ -219,6 +239,8 @@ export type MediaLibraryProps = {
   deleteDescription?: string
   deleteLabel?: string
   viewLabel?: string
+  accept?: string
+  typeError?: string
 }
 
 type SortKey = "createdAt" | "filename" | "size"
@@ -243,8 +265,11 @@ export function MediaLibrary({
   deleteDescription = "The file is removed from the library.",
   deleteLabel = "Delete",
   viewLabel = "View",
+  accept = "image/*,video/mp4,video/webm",
+  typeError = "That file type is not allowed.",
 }: MediaLibraryProps) {
   const [view, setView] = React.useState<"grid" | "table">("grid")
+  const activeUploads = React.useRef(0)
   const [sort, setSort] = React.useState<SortKey>("createdAt")
   const [dir, setDir] = React.useState<"asc" | "desc">("desc")
   const [busy, setBusy] = React.useState(false)
@@ -264,6 +289,11 @@ export function MediaLibrary({
 
   async function take(file: File | undefined) {
     if (!file) return
+    if (!matchesAccept(file, accept)) {
+      toast.error(typeError)
+      return
+    }
+    activeUploads.current += 1
     setBusy(true)
     try {
       await onUpload(file)
@@ -271,7 +301,8 @@ export function MediaLibrary({
     } catch (error) {
       toast.error(error instanceof Error ? error.message : uploadFailed)
     } finally {
-      setBusy(false)
+      activeUploads.current = Math.max(0, activeUploads.current - 1)
+      if (activeUploads.current === 0) setBusy(false)
     }
   }
 
@@ -293,7 +324,7 @@ export function MediaLibrary({
         <input
           ref={inputRef}
           type="file"
-          accept="image/*,video/mp4,video/webm"
+          accept={accept}
           className="sr-only"
           onChange={(event) => {
             void take(event.target.files?.[0])

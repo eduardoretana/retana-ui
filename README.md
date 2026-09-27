@@ -6,22 +6,7 @@ Every item inherits the host project's existing shadcn theme and ships no theme 
 
 The site is a catalog. `registry.json` is the source of truth for `/` and for `/items/[name]`.
 
-## Admin kit
-
-Pieces for an admin that inherits the host shadcn theme and does not import Next. The working demo is [admin-kit](/examples/admin-kit). Data in the catalog is fictitious and in Spanish. Wiring for Supabase, including SQL, is a recipe in `registry/lib/supabase/` — this repo does not connect to a database.
-
-| Piece | Install |
-| --- | --- |
-| Whole demo (UI, memory adapter, SQL recipe) | `npx shadcn@latest add @retana/admin-kit` |
-| Shell | `npx shadcn@latest add @retana/admin-shell` |
-| Sortable list / project board | `@retana/sortable-list`, `@retana/sortable-board` |
-| Entity form / settings | `@retana/entity-form`, `@retana/settings-form` |
-| Media / bookings table | `@retana/media-library`, `@retana/data-table` |
-| Charts / overview | `@retana/admin-charts`, `@retana/overview-dashboard` |
-| Helpers | `@retana/admin-utils` |
-| Supabase adapter + SQL | `@retana/supabase-admin` |
-
-Answer **no** if the CLI asks to overwrite a primitive the host already has (`button`, `sidebar`, `dialog`, and the rest). Pass `themeController` from `next-themes` (or your own hook) into `AdminShell` / `AdminKit`. Some list behavior is adapted from Maniruzzaman Jubayer's MIT admin panel; see [NOTICE](NOTICE).
+Besides Layered Panel, the registry includes original chat, form, and media pieces (`chat-message`, `message-list`, `chat-composer`, `streaming-text`, `reasoning-steps`, `task-list`, `plan-card`, `question-card`, `inline-citation`, `code-block`, `file-diff`, `image-generation`, `ai-document`, `otp-field`, `dissolve-input`, `multi-select`, `color-picker`, `color-palette`, `magnetic-dropzone`, `gooey-slider`, `video-player`, `lightbox`, `logo-marquee`, `halftone-image`, `attachment-chip`, `marker`, `press-sound`, `crm-table`). They are clean-room implementations: common behaviors, new code, and the host theme. `crm-table` can stand alone or pass `crmColumnDefs()` into `AdminDataTable` when that item is installed.
 
 - `/` — catalog index (search, type, category)
 - `/items/layered-panel` — preview, install command, API, and source

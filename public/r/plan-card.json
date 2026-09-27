@@ -1,0 +1,63 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "plan-card",
+  "title": "Plan Card",
+  "author": "Eduardo Retana",
+  "description": "Card for a proposed plan, with steps and approve, edit, and reject actions.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/plan-card.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { Check, Pencil, X } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Button } from \"@/components/ui/button\"\n\nexport type PlanStep = {\n  id: string\n  title: string\n  detail?: string\n}\n\nexport type PlanStatus = \"proposed\" | \"approved\" | \"rejected\"\n\nexport type PlanCardProps = {\n  title?: string\n  summary?: string\n  steps: readonly PlanStep[]\n  status?: PlanStatus\n  onApprove?: () => void\n  onReject?: () => void\n  onEdit?: (steps: PlanStep[]) => void\n  approveLabel?: string\n  rejectLabel?: string\n  editLabel?: string\n  saveLabel?: string\n  cancelLabel?: string\n  approvedLabel?: string\n  rejectedLabel?: string\n  className?: string\n}\n\nexport function PlanCard({\n  title = \"Proposed plan\",\n  summary,\n  steps,\n  status = \"proposed\",\n  onApprove,\n  onReject,\n  onEdit,\n  approveLabel = \"Approve\",\n  rejectLabel = \"Reject\",\n  editLabel = \"Edit\",\n  saveLabel = \"Save\",\n  cancelLabel = \"Cancel\",\n  approvedLabel = \"Approved\",\n  rejectedLabel = \"Rejected\",\n  className,\n}: PlanCardProps) {\n  const [editing, setEditing] = React.useState(false)\n  const [draft, setDraft] = React.useState(() => steps.map((step) => ({ ...step })))\n  const locked = status !== \"proposed\"\n\n  return (\n    <section\n      data-slot=\"plan-card\"\n      data-status={status}\n      className={cn(\"rounded-xl border border-border bg-card p-4 shadow-sm\", className)}\n    >\n      <header className=\"mb-3 flex items-start justify-between gap-3\">\n        <div>\n          <h2 className=\"text-sm font-semibold\">{title}</h2>\n          {summary ? <p className=\"mt-1 text-sm text-muted-foreground\">{summary}</p> : null}\n        </div>\n        {status === \"approved\" ? (\n          <span className=\"rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary\">{approvedLabel}</span>\n        ) : null}\n        {status === \"rejected\" ? (\n          <span className=\"rounded-full bg-destructive/10 px-2 py-0.5 text-xs font-medium text-destructive\">{rejectedLabel}</span>\n        ) : null}\n      </header>\n      <ol className=\"flex flex-col gap-3\">\n        {(editing ? draft : steps).map((step, index) => (\n          <li key={step.id} className=\"flex gap-3\">\n            <span className=\"grid size-6 shrink-0 place-items-center rounded-full bg-muted text-xs font-medium tabular-nums\">\n              {index + 1}\n            </span>\n            <div className=\"min-w-0 flex-1\">\n              {editing ? (\n                <input\n                  value={draft[index]?.title ?? \"\"}\n                  aria-label={`${editLabel} ${index + 1}`}\n                  onChange={(event) => {\n                    const next = draft.slice()\n                    next[index] = { ...next[index], title: event.target.value }\n                    setDraft(next)\n                  }}\n                  className=\"h-8 w-full rounded-md border border-input bg-transparent px-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring\"\n                />\n              ) : (\n                <p className=\"text-sm\">{step.title}</p>\n              )}\n              {step.detail && !editing ? <p className=\"mt-0.5 text-xs text-muted-foreground\">{step.detail}</p> : null}\n            </div>\n          </li>\n        ))}\n      </ol>\n      {locked ? null : editing ? (\n        <div className=\"mt-4 flex justify-end gap-2\">\n          <Button type=\"button\" variant=\"ghost\" size=\"sm\" onClick={() => setEditing(false)}>\n            {cancelLabel}\n          </Button>\n          <Button\n            type=\"button\"\n            size=\"sm\"\n            onClick={() => {\n              onEdit?.(draft)\n              setEditing(false)\n            }}\n          >\n            {saveLabel}\n          </Button>\n        </div>\n      ) : (\n        <div className=\"mt-4 flex flex-wrap justify-end gap-2\">\n          <Button type=\"button\" variant=\"ghost\" size=\"sm\" onClick={onReject}>\n            <X />\n            {rejectLabel}\n          </Button>\n          <Button\n            type=\"button\"\n            variant=\"outline\"\n            size=\"sm\"\n            onClick={() => {\n              setDraft(steps.map((step) => ({ ...step })))\n              setEditing(true)\n            }}\n          >\n            <Pencil />\n            {editLabel}\n          </Button>\n          <Button type=\"button\" size=\"sm\" onClick={onApprove}>\n            <Check />\n            {approveLabel}\n          </Button>\n        </div>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/plan-card.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Tarjeta de plan",
+    "descriptionEs": "Tarjeta con un plan propuesto, sus pasos y acciones para aprobar, editar o rechazar.",
+    "preview": "app/examples/plan-card/preview.tsx",
+    "previewHref": "/examples/plan-card",
+    "examples": [
+      {
+        "title": "Tarjeta de plan",
+        "href": "/examples/plan-card",
+        "description": "Tarjeta con un plan propuesto, sus pasos y acciones para aprobar, editar o rechazar."
+      }
+    ],
+    "usage": "<PlanCard steps={steps} onApprove={approve} onEdit={save} onReject={reject} />",
+    "api": [
+      {
+        "name": "steps",
+        "type": "PlanStep[]",
+        "description": "id, title, and optional detail."
+      },
+      {
+        "name": "status",
+        "type": "\"proposed\" | \"approved\" | \"rejected\"",
+        "description": "Locks the actions after a decision."
+      },
+      {
+        "name": "onEdit",
+        "type": "(steps) => void",
+        "description": "Receives the edited steps when save is pressed."
+      },
+      {
+        "name": "labels",
+        "type": "string",
+        "description": "Action and status labels default to English."
+      }
+    ]
+  },
+  "docs": "Import PlanCard from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "ai",
+    "form"
+  ],
+  "type": "registry:ui"
+}

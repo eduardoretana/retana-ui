@@ -272,3 +272,88 @@ create policy media_bucket_write on storage.objects
   for all to authenticated
   using (bucket_id = 'media' and public.is_admin())
   with check (bucket_id = 'media' and public.is_admin());
+
+-- One statement, so a failed reorder does not leave a partial order.
+create or replace function public.admin_reorder(target text, ids text[])
+returns void
+language plpgsql
+security invoker
+set search_path = public
+as $$
+begin
+  if target not in (
+    'categories', 'projects', 'clients', 'photos', 'testimonials',
+    'faqs', 'plans', 'experience', 'awards', 'about_stats'
+  ) then
+    raise exception 'unknown table %', target;
+  end if;
+
+  execute format(
+    'update public.%I as item
+        set position = ranked.pos
+       from (
+         select id, (ordinality - 1)::integer as pos
+         from unnest($1::text[]) with ordinality as listed(id, ordinality)
+       ) as ranked
+      where item.id = ranked.id',
+    target
+  ) using ids;
+end;
+$$;
+
+revoke all on function public.admin_reorder(text, text[]) from public;
+grant execute on function public.admin_reorder(text, text[]) to authenticated;
+
+-- Plan row and its feature lines commit together.
+create or replace function public.admin_save_plan(plan jsonb, features jsonb)
+returns jsonb
+language plpgsql
+security invoker
+set search_path = public
+as $$
+declare
+  saved public.plans;
+begin
+  insert into public.plans (
+    id, name, blurb, monthly_price, badge, cta_label, cta_href, position, published
+  ) values (
+    plan->>'id',
+    coalesce(plan->>'name', ''),
+    coalesce(plan->>'blurb', ''),
+    case
+      when plan->'monthly_price' is null or jsonb_typeof(plan->'monthly_price') = 'null' then null
+      else (plan->>'monthly_price')::integer
+    end,
+    coalesce(plan->>'badge', ''),
+    coalesce(plan->>'cta_label', ''),
+    coalesce(plan->>'cta_href', ''),
+    coalesce((plan->>'position')::integer, 0),
+    coalesce((plan->>'published')::boolean, false)
+  )
+  on conflict (id) do update set
+    name = excluded.name,
+    blurb = excluded.blurb,
+    monthly_price = excluded.monthly_price,
+    badge = excluded.badge,
+    cta_label = excluded.cta_label,
+    cta_href = excluded.cta_href,
+    position = excluded.position,
+    published = excluded.published
+  returning * into saved;
+
+  delete from public.plan_features where plan_id = saved.id;
+
+  insert into public.plan_features (id, plan_id, text, position)
+  select
+    saved.id || ':' || (item.ord - 1)::text,
+    saved.id,
+    item.feature,
+    (item.ord - 1)::integer
+  from jsonb_array_elements_text(coalesce(features, '[]'::jsonb)) with ordinality as item(feature, ord);
+
+  return to_jsonb(saved);
+end;
+$$;
+
+revoke all on function public.admin_save_plan(jsonb, jsonb) from public;
+grant execute on function public.admin_save_plan(jsonb, jsonb) to authenticated;

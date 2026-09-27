@@ -32,6 +32,7 @@ export function useOptimisticList<T extends { id: string }>({
   const [order, setOrder] = React.useState(() => items.map((item) => item.id))
   const [seen, setSeen] = React.useState(idsKey)
   const [pending, setPending] = React.useState(false)
+  const inFlight = React.useRef(false)
 
   if (seen !== idsKey) {
     setSeen(idsKey)
@@ -43,8 +44,10 @@ export function useOptimisticList<T extends { id: string }>({
 
   const commit = React.useCallback(
     async (next: readonly string[]) => {
+      if (inFlight.current) return
       const before = order
       if (before.join("\0") === next.join("\0")) return
+      inFlight.current = true
       setOrder([...next])
       setPending(true)
       try {
@@ -55,6 +58,7 @@ export function useOptimisticList<T extends { id: string }>({
         const message = error instanceof Error && error.message ? error.message : errorMessage
         notify?.error(message)
       } finally {
+        inFlight.current = false
         setPending(false)
       }
     },

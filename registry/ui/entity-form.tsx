@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { ChevronDown, Inbox } from "lucide-react"
+import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
 import {
@@ -45,6 +46,9 @@ export type EntityFormProps = {
   cancelLabel?: string
   deleteLabel?: string
   pendingLabel?: string
+  /** Shown when onSubmit or onDelete rejects and onError is omitted. */
+  errorLabel?: string
+  onError?: (error: unknown) => void
   busy?: boolean
   children?: React.ReactNode
   className?: string
@@ -69,6 +73,8 @@ export function EntityForm({
   cancelLabel = "Cancel",
   deleteLabel = "Delete",
   pendingLabel = "Saving…",
+  errorLabel = "Could not save",
+  onError,
   busy = false,
   children,
   className,
@@ -85,6 +91,9 @@ export function EntityForm({
     try {
       await onSubmit(formData)
       onOpenChange(false)
+    } catch (error) {
+      if (onError) onError(error)
+      else toast.error(error instanceof Error && error.message ? error.message : errorLabel)
     } finally {
       setPending(false)
     }
@@ -144,6 +153,8 @@ export function EntityForm({
           description={description ?? title}
           confirmLabel={deleteLabel}
           cancelLabel={cancelLabel}
+          errorLabel={errorLabel}
+          onError={onError}
           onConfirm={async () => {
             await onDelete()
             setConfirmOpen(false)
@@ -162,6 +173,8 @@ export type ConfirmDeleteProps = {
   description?: string
   confirmLabel?: string
   cancelLabel?: string
+  errorLabel?: string
+  onError?: (error: unknown) => void
   onConfirm: () => Promise<void> | void
 }
 
@@ -172,6 +185,8 @@ export function ConfirmDelete({
   description = "This cannot be undone.",
   confirmLabel = "Delete",
   cancelLabel = "Cancel",
+  errorLabel = "Could not delete",
+  onError,
   onConfirm,
 }: ConfirmDeleteProps) {
   const [pending, setPending] = React.useState(false)
@@ -190,7 +205,16 @@ export function ConfirmDelete({
             onClick={(event) => {
               event.preventDefault()
               setPending(true)
-              Promise.resolve(onConfirm()).finally(() => setPending(false))
+              void (async () => {
+                try {
+                  await onConfirm()
+                } catch (error) {
+                  if (onError) onError(error)
+                  else toast.error(error instanceof Error && error.message ? error.message : errorLabel)
+                } finally {
+                  setPending(false)
+                }
+              })()
             }}
           >
             {confirmLabel}

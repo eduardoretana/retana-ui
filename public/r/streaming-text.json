@@ -1,0 +1,59 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "streaming-text",
+  "title": "Streaming Text",
+  "author": "Eduardo Retana",
+  "description": "Renders text as it arrives, with a caret and a short fade-in, and supports basic markdown.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/streaming-text.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type StreamingTextProps = {\n  text: string\n  /** When true, a caret stays visible after the revealed text. */\n  streaming?: boolean\n  /** Reveal the full string immediately. */\n  animate?: boolean\n  cursorLabel?: string\n  className?: string\n}\n\ntype Inline =\n  | { type: \"text\"; value: string }\n  | { type: \"bold\"; value: string }\n  | { type: \"italic\"; value: string }\n  | { type: \"code\"; value: string }\n  | { type: \"link\"; label: string; href: string }\n\nfunction safeHref(href: string) {\n  const trimmed = href.trim()\n  if (/^(https?:|mailto:)/i.test(trimmed)) return trimmed\n  return null\n}\n\nfunction parseInline(source: string): Inline[] {\n  const pattern = /(\\*\\*([^*]+)\\*\\*|\\*([^*]+)\\*|`([^`]+)`|\\[([^\\]]+)\\]\\(([^)\\s]+)\\))/g\n  const nodes: Inline[] = []\n  let cursor = 0\n  for (const match of source.matchAll(pattern)) {\n    const index = match.index ?? 0\n    if (index > cursor) nodes.push({ type: \"text\", value: source.slice(cursor, index) })\n    if (match[2]) nodes.push({ type: \"bold\", value: match[2] })\n    else if (match[3]) nodes.push({ type: \"italic\", value: match[3] })\n    else if (match[4]) nodes.push({ type: \"code\", value: match[4] })\n    else if (match[5] && match[6]) nodes.push({ type: \"link\", label: match[5], href: match[6] })\n    cursor = index + match[0].length\n  }\n  if (cursor < source.length) nodes.push({ type: \"text\", value: source.slice(cursor) })\n  return nodes\n}\n\nfunction InlineRun({ parts }: { parts: Inline[] }) {\n  return (\n    <>\n      {parts.map((part, index) => {\n        const key = `${part.type}-${index}`\n        if (part.type === \"bold\") return <strong key={key}>{part.value}</strong>\n        if (part.type === \"italic\") return <em key={key}>{part.value}</em>\n        if (part.type === \"code\") {\n          return (\n            <code key={key} className=\"rounded bg-muted px-1 py-0.5 font-mono text-[0.9em]\">\n              {part.value}\n            </code>\n          )\n        }\n        if (part.type === \"link\") {\n          const href = safeHref(part.href)\n          if (!href) return <span key={key}>{part.label}</span>\n          return (\n            <a key={key} href={href} className=\"underline underline-offset-2\" rel=\"noreferrer\" target=\"_blank\">\n              {part.label}\n            </a>\n          )\n        }\n        return <React.Fragment key={key}>{part.value}</React.Fragment>\n      })}\n    </>\n  )\n}\n\nfunction Markdown({ source }: { source: string }) {\n  const lines = source.split(\"\\n\")\n  const blocks: React.ReactNode[] = []\n  let list: string[] = []\n  let paragraph: string[] = []\n\n  function flushParagraph() {\n    if (!paragraph.length) return\n    const text = paragraph.join(\" \")\n    blocks.push(\n      <p key={`p-${blocks.length}`} className=\"whitespace-pre-wrap\">\n        <InlineRun parts={parseInline(text)} />\n      </p>,\n    )\n    paragraph = []\n  }\n\n  function flushList() {\n    if (!list.length) return\n    blocks.push(\n      <ul key={`ul-${blocks.length}`} className=\"list-disc space-y-1 pl-5\">\n        {list.map((item, index) => (\n          <li key={index}>\n            <InlineRun parts={parseInline(item)} />\n          </li>\n        ))}\n      </ul>,\n    )\n    list = []\n  }\n\n  for (const line of lines) {\n    const heading = /^(#{1,3})\\s+(.+)$/.exec(line)\n    const item = /^[-*]\\s+(.+)$/.exec(line)\n    if (heading) {\n      flushParagraph()\n      flushList()\n      const level = heading[1].length\n      const Tag = level === 1 ? \"h2\" : level === 2 ? \"h3\" : \"h4\"\n      blocks.push(\n        <Tag key={`h-${blocks.length}`} className=\"font-semibold tracking-tight\">\n          <InlineRun parts={parseInline(heading[2])} />\n        </Tag>,\n      )\n      continue\n    }\n    if (item) {\n      flushParagraph()\n      list.push(item[1])\n      continue\n    }\n    if (!line.trim()) {\n      flushParagraph()\n      flushList()\n      continue\n    }\n    flushList()\n    paragraph.push(line)\n  }\n  flushParagraph()\n  flushList()\n  return <div className=\"flex flex-col gap-2\">{blocks}</div>\n}\n\nexport function StreamingText({\n  text,\n  streaming = false,\n  animate = true,\n  cursorLabel = \"Generating\",\n  className,\n}: StreamingTextProps) {\n  const [shown, setShown] = React.useState(animate ? \"\" : text)\n  const shownRef = React.useRef(shown)\n\n  React.useEffect(() => {\n    if (!animate) return\n    let frame = 0\n    const step = () => {\n      const current = shownRef.current\n      if (current === text) return\n      if (!text.startsWith(current)) {\n        shownRef.current = text\n        setShown(text)\n        return\n      }\n      const gap = text.length - current.length\n      const take = Math.max(1, Math.ceil(gap / 30))\n      const next = text.slice(0, current.length + take)\n      shownRef.current = next\n      setShown(next)\n      if (next !== text) frame = window.requestAnimationFrame(step)\n    }\n    frame = window.requestAnimationFrame(step)\n    return () => window.cancelAnimationFrame(frame)\n  }, [animate, text])\n\n  const visible = animate ? shown : text\n  const caret = streaming || (animate && visible.length < text.length)\n\n  return (\n    <div data-slot=\"streaming-text\" data-streaming={caret ? \"true\" : \"false\"} className={cn(\"text-sm leading-relaxed\", className)}>\n      <Markdown source={visible} />\n      {caret ? (\n        <span className=\"ml-0.5 inline-flex translate-y-0.5 items-center\" aria-hidden>\n          <span className=\"inline-block h-4 w-px bg-foreground motion-safe:animate-pulse\" />\n        </span>\n      ) : null}\n      {caret ? <span className=\"sr-only\">{cursorLabel}</span> : null}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/streaming-text.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Texto en streaming",
+    "descriptionEs": "Pinta el texto a medida que llega, con cursor y una aparición breve, y entiende markdown básico.",
+    "preview": "app/examples/streaming-text/preview.tsx",
+    "previewHref": "/examples/streaming-text",
+    "examples": [
+      {
+        "title": "Texto en streaming",
+        "href": "/examples/streaming-text",
+        "description": "Pinta el texto a medida que llega, con cursor y una aparición breve, y entiende markdown básico."
+      }
+    ],
+    "usage": "<StreamingText text={text} streaming />",
+    "api": [
+      {
+        "name": "text",
+        "type": "string",
+        "description": "Full text received so far."
+      },
+      {
+        "name": "streaming",
+        "type": "boolean",
+        "description": "Keeps the caret visible."
+      },
+      {
+        "name": "animate",
+        "type": "boolean",
+        "description": "Reveal gradually. Default true. Set false to paint the whole string."
+      },
+      {
+        "name": "cursorLabel",
+        "type": "string",
+        "description": "Screen-reader label while generating. Default Generating."
+      }
+    ]
+  },
+  "docs": "Headings, lists, bold, italic, inline code, and http(s) or mailto links are rendered as elements. Other URLs stay text. No theme is shipped.",
+  "categories": [
+    "chat",
+    "ai"
+  ],
+  "type": "registry:ui"
+}
