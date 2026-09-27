@@ -1445,6 +1445,57 @@
           "target": "@ui/logo-marquee.tsx"
         }
       ]
+    },
+    {
+      "name": "halftone-image",
+      "type": "registry:ui",
+      "title": "Halftone Image",
+      "description": "Image drawn as dots on a canvas that grow toward the pointer.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "media"
+      ],
+      "meta": {
+        "titleEs": "Imagen en puntos",
+        "descriptionEs": "Imagen dibujada como puntos en un lienzo que crecen hacia el cursor.",
+        "preview": "app/examples/halftone-image/preview.tsx",
+        "previewHref": "/examples/halftone-image",
+        "examples": [
+          {
+            "title": "Imagen en puntos",
+            "href": "/examples/halftone-image",
+            "description": "Imagen dibujada como puntos en un lienzo que crecen hacia el cursor."
+          }
+        ],
+        "usage": "<HalftoneImage src={src} alt=\"Portrait\" />",
+        "api": [
+          {
+            "name": "src / alt",
+            "type": "string",
+            "description": "Image URL and accessible name."
+          },
+          {
+            "name": "columns",
+            "type": "number",
+            "description": "Dots across. Default 42."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Frame classes. Default is a square."
+          }
+        ]
+      },
+      "docs": "Dots use the computed text color, so they follow the host theme. Pointer reaction is skipped when reduced motion is requested. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/halftone-image.tsx",
+          "type": "registry:component",
+          "target": "@ui/halftone-image.tsx"
+        }
+      ]
     }
   ]
 }
