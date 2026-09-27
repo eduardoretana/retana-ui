@@ -412,6 +412,60 @@
           "target": "@ui/reasoning-steps.tsx"
         }
       ]
+    },
+    {
+      "name": "task-list",
+      "type": "registry:ui",
+      "title": "Task List",
+      "description": "Agent checklist with a progress bar and optional toggling.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "ai",
+        "form"
+      ],
+      "meta": {
+        "titleEs": "Lista de tareas",
+        "descriptionEs": "Checklist de tareas de un agente, con barra de progreso y marcado opcional.",
+        "preview": "app/examples/task-list/preview.tsx",
+        "previewHref": "/examples/task-list",
+        "examples": [
+          {
+            "title": "Lista de tareas",
+            "href": "/examples/task-list",
+            "description": "Checklist de tareas de un agente, con barra de progreso y marcado opcional."
+          }
+        ],
+        "usage": "<TaskList tasks={tasks} onToggle={toggle} />",
+        "api": [
+          {
+            "name": "tasks",
+            "type": "AgentTask[]",
+            "description": "id, title, optional detail, and done."
+          },
+          {
+            "name": "onToggle",
+            "type": "(id, done) => void",
+            "description": "When omitted, the checks are read-only."
+          },
+          {
+            "name": "title / progressLabel",
+            "type": "string",
+            "description": "Defaults Tasks and Progress."
+          }
+        ]
+      },
+      "docs": "Import TaskList from the installed UI file. The progress bar uses the host primary token. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/task-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/task-list.tsx"
+        }
+      ]
     }
   ]
 }
