@@ -759,6 +759,65 @@
           "target": "@ui/file-diff.tsx"
         }
       ]
+    },
+    {
+      "name": "image-generation",
+      "type": "registry:ui",
+      "title": "Image Generation",
+      "description": "Image frame that shows progress and a shimmer while generating, then reveals the result.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "ai",
+        "media"
+      ],
+      "meta": {
+        "titleEs": "Generación de imagen",
+        "descriptionEs": "Marco de imagen que muestra progreso y un velo mientras se genera, y luego revela el resultado.",
+        "preview": "app/examples/image-generation/preview.tsx",
+        "previewHref": "/examples/image-generation",
+        "examples": [
+          {
+            "title": "Generación de imagen",
+            "href": "/examples/image-generation",
+            "description": "Marco de imagen que muestra progreso y un velo mientras se genera, y luego revela el resultado."
+          }
+        ],
+        "usage": "<ImageGeneration status=\"generating\" progress={40} src={src} alt=\"\" />",
+        "api": [
+          {
+            "name": "status",
+            "type": "\"idle\" | \"generating\" | \"done\" | \"error\"",
+            "description": "What the frame shows."
+          },
+          {
+            "name": "progress",
+            "type": "number",
+            "description": "0 to 100 while generating."
+          },
+          {
+            "name": "src / alt",
+            "type": "string",
+            "description": "Result image. The host supplies the bitmap."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "generating, error, retry, and idle labels default to English."
+          }
+        ]
+      },
+      "docs": "The shimmer uses the host foreground token. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/image-generation.tsx",
+          "type": "registry:component",
+          "target": "@ui/image-generation.tsx"
+        }
+      ]
     }
   ]
 }
