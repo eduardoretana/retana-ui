@@ -76,7 +76,8 @@ This catalog is a Next.js app (App Router) on Tailwind v4 and shadcn's Radix Nov
 `29` items are in `registry.json` on this branch. A name links to its source file.
 12 more are listed from [pull request #4](https://github.com/eduardoretana/retana-ui/pull/4) and are not linked, because those files are not on this branch yet. After that pull request merges, run `pnpm readme:catalog` and this sentence drops away.
 
-Install any of them with `npx shadcn@latest add @retana/<name>`.
+Install any registered item with `npx shadcn@latest add @retana/<name>`.
+That command does not cover the unregistered names below.
 
 ### Detail
 

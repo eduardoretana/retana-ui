@@ -40,6 +40,11 @@ const GROUP_OVERRIDE = {
   "attachment-chip": "Media and content",
 }
 
+/**
+ * Catalog group for one item. Pending entries and `admin` categories go in Admin.
+ * @param {{ name: string, categories?: string[], pending?: boolean }} item
+ * @returns {string}
+ */
 function groupOf(item) {
   if (GROUP_OVERRIDE[item.name]) return GROUP_OVERRIDE[item.name]
   const cats = new Set(item.categories ?? [])
@@ -53,6 +58,11 @@ function groupOf(item) {
   return "Other"
 }
 
+/**
+ * Flatten text and escape characters that would break a Markdown line.
+ * @param {unknown} text
+ * @returns {string}
+ */
 function escapeCell(text) {
   return String(text ?? "")
     .replace(/\s+/g, " ")
@@ -62,6 +72,11 @@ function escapeCell(text) {
     .trim()
 }
 
+/**
+ * One catalog bullet. The name is a link only when its source file exists.
+ * @param {{ name: string, type?: string, description?: string, files?: { path: string }[] }} item
+ * @returns {string}
+ */
 function itemLine(item) {
   const kind = KIND[item.type] ?? item.type ?? "item"
   const description = escapeCell(item.description)
@@ -71,11 +86,20 @@ function itemLine(item) {
   return `- ${name} · ${kind} — ${description}`
 }
 
+/**
+ * Items declared in registry.json.
+ * @returns {Array<{ name: string }>}
+ */
 function loadRegistry() {
   const data = JSON.parse(fs.readFileSync(registryPath, "utf8"))
   return data.items ?? []
 }
 
+/**
+ * Pending entries whose names are not already in registry.json.
+ * @param {Set<string>} known Names already registered.
+ * @returns {Array<{ name: string, pending: true }>}
+ */
 function loadPending(known) {
   if (!fs.existsSync(pendingPath)) return []
   const data = JSON.parse(fs.readFileSync(pendingPath, "utf8"))
@@ -84,6 +108,12 @@ function loadPending(known) {
     .map((item) => ({ ...item, pending: true }))
 }
 
+/**
+ * Catalog Markdown. The install command covers registered items only.
+ * @param {Array<object>} registryItems Items from registry.json.
+ * @param {Array<object>} pendingItems Unregistered names listed for context.
+ * @returns {string}
+ */
 function render(registryItems, pendingItems) {
   const groups = new Map(GROUP_ORDER.map((name) => [name, []]))
   for (const item of [...registryItems, ...pendingItems]) {
@@ -105,7 +135,14 @@ function render(registryItems, pendingItems) {
     lines.push("Run `pnpm readme:catalog` to refresh this list.")
   }
   lines.push("")
-  lines.push("Install any of them with `npx shadcn@latest add @retana/<name>`.")
+  lines.push(
+    "Install any registered item with `npx shadcn@latest add @retana/<name>`.",
+  )
+  if (pendingItems.length) {
+    lines.push(
+      "That command does not cover the unregistered names below.",
+    )
+  }
 
   for (const [name, items] of groups) {
     if (!items.length) continue
