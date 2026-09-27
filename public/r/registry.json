@@ -639,6 +639,67 @@
           "target": "@ui/inline-citation.tsx"
         }
       ]
+    },
+    {
+      "name": "code-block",
+      "type": "registry:ui",
+      "title": "Code Block",
+      "description": "Code block with token highlighting, a filename, copy, and line numbers.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "ai",
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Bloque de código",
+        "descriptionEs": "Bloque de código con resaltado, nombre de archivo, copiar y números de línea.",
+        "preview": "app/examples/code-block/preview.tsx",
+        "previewHref": "/examples/code-block",
+        "examples": [
+          {
+            "title": "Bloque de código",
+            "href": "/examples/code-block",
+            "description": "Bloque de código con resaltado, nombre de archivo, copiar y números de línea."
+          }
+        ],
+        "usage": "<CodeBlock code={source} filename=\"note.ts\" language=\"ts\" />",
+        "api": [
+          {
+            "name": "code",
+            "type": "string",
+            "description": "Source to show and copy."
+          },
+          {
+            "name": "filename / language",
+            "type": "string",
+            "description": "Caption. language defaults to text."
+          },
+          {
+            "name": "showLineNumbers",
+            "type": "boolean",
+            "description": "Default true."
+          },
+          {
+            "name": "copyLabel / copiedLabel",
+            "type": "string",
+            "description": "Default Copy and Copied."
+          }
+        ]
+      },
+      "docs": "Highlighting uses the host primary and muted tokens, not a color theme. highlightLine is exported for tests and custom renderers. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/code-block.tsx",
+          "type": "registry:component",
+          "target": "@ui/code-block.tsx"
+        }
+      ]
     }
   ]
 }

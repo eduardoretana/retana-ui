@@ -11,6 +11,7 @@ import Preview6 from "@/app/examples/task-list/preview"
 import Preview7 from "@/app/examples/plan-card/preview"
 import Preview8 from "@/app/examples/question-card/preview"
 import Preview9 from "@/app/examples/inline-citation/preview"
+import Preview10 from "@/app/examples/code-block/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -23,4 +24,5 @@ export const previewMap = {
   "plan-card": Preview7,
   "question-card": Preview8,
   "inline-citation": Preview9,
+  "code-block": Preview10,
 }
