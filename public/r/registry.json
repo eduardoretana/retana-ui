@@ -183,6 +183,62 @@
           "target": "@ui/chat-message.tsx"
         }
       ]
+    },
+    {
+      "name": "message-list",
+      "type": "registry:ui",
+      "title": "Message List",
+      "description": "Scroll container that follows new messages until the reader moves up, then offers a control to jump back to the latest one.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "chat",
+        "ai"
+      ],
+      "meta": {
+        "titleEs": "Lista de mensajes",
+        "descriptionEs": "Contenedor que sigue los mensajes nuevos hasta que el lector sube, y entonces muestra un control para volver al final.",
+        "preview": "app/examples/message-list/preview.tsx",
+        "previewHref": "/examples/message-list",
+        "examples": [
+          {
+            "title": "Lista de mensajes",
+            "href": "/examples/message-list",
+            "description": "Contenedor que sigue los mensajes nuevos hasta que el lector sube, y entonces muestra un control para volver al final."
+          }
+        ],
+        "usage": "<MessageList jumpLabel=\"Jump to latest\">{messages}</MessageList>",
+        "api": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "description": "Messages, in order."
+          },
+          {
+            "name": "jumpLabel",
+            "type": "string",
+            "description": "Label for the control shown after scrolling away. Default Jump to latest."
+          },
+          {
+            "name": "stickThreshold",
+            "type": "number",
+            "description": "Pixels from the bottom that still count as following. Default 72."
+          }
+        ]
+      },
+      "docs": "Import MessageList from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/message-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/message-list.tsx"
+        }
+      ]
     }
   ]
 }
