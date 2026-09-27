@@ -1097,6 +1097,60 @@
           "target": "@ui/color-picker.tsx"
         }
       ]
+    },
+    {
+      "name": "color-palette",
+      "type": "registry:ui",
+      "title": "Color Palette",
+      "description": "Grid of color swatches that copy their value on click and confirm it.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "form",
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Paleta de color",
+        "descriptionEs": "Grilla de muestras de color que se copian al hacer clic y confirman la copia.",
+        "preview": "app/examples/color-palette/preview.tsx",
+        "previewHref": "/examples/color-palette",
+        "examples": [
+          {
+            "title": "Paleta de color",
+            "href": "/examples/color-palette",
+            "description": "Grilla de muestras de color que se copian al hacer clic y confirman la copia."
+          }
+        ],
+        "usage": "<ColorPalette swatches={[{ id: \"ink\", label: \"Ink\", value: \"var(--foreground)\" }]} />",
+        "api": [
+          {
+            "name": "swatches",
+            "type": "PaletteSwatch[]",
+            "description": "id, label, and a CSS color value supplied by the host."
+          },
+          {
+            "name": "onCopy",
+            "type": "(swatch) => void",
+            "description": "Called after the value is written to the clipboard."
+          },
+          {
+            "name": "copyLabel / copiedLabel",
+            "type": "string",
+            "description": "Default Copy and Copied."
+          }
+        ]
+      },
+      "docs": "The palette does not define colors. Pass host tokens or any CSS color the app already uses. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/color-palette.tsx",
+          "type": "registry:component",
+          "target": "@ui/color-palette.tsx"
+        }
+      ]
     }
   ]
 }

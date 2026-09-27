@@ -19,6 +19,7 @@ import Preview14 from "@/app/examples/otp-field/preview"
 import Preview15 from "@/app/examples/dissolve-input/preview"
 import Preview16 from "@/app/examples/multi-select/preview"
 import Preview17 from "@/app/examples/color-picker/preview"
+import Preview18 from "@/app/examples/color-palette/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -39,4 +40,5 @@ export const previewMap = {
   "dissolve-input": Preview15,
   "multi-select": Preview16,
   "color-picker": Preview17,
+  "color-palette": Preview18,
 }
