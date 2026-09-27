@@ -1042,6 +1042,61 @@
           "target": "@ui/multi-select.tsx"
         }
       ]
+    },
+    {
+      "name": "color-picker",
+      "type": "registry:ui",
+      "title": "Color Picker",
+      "description": "Accessible color picker with a saturation and brightness field, hue, alpha, and a hex input.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "input",
+        "label"
+      ],
+      "categories": [
+        "form",
+        "input"
+      ],
+      "meta": {
+        "titleEs": "Selector de color",
+        "descriptionEs": "Selector de color accesible con área de saturación y brillo, tono, alfa y un campo hexadecimal.",
+        "preview": "app/examples/color-picker/preview.tsx",
+        "previewHref": "/examples/color-picker",
+        "examples": [
+          {
+            "title": "Selector de color",
+            "href": "/examples/color-picker",
+            "description": "Selector de color accesible con área de saturación y brillo, tono, alfa y un campo hexadecimal."
+          }
+        ],
+        "usage": "<ColorPicker value={color} onValueChange={setColor} />",
+        "api": [
+          {
+            "name": "value",
+            "type": "HsvaColor",
+            "description": "h in degrees, s and v and a from 0 to 1."
+          },
+          {
+            "name": "onValueChange",
+            "type": "(color) => void",
+            "description": "Fires for the field, sliders, and hex commit."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "hue, alpha, hex, and saturation labels default to English."
+          }
+        ]
+      },
+      "docs": "hsvaToCss, hsvaToHex, and hexToHsva are exported. Arrow keys move saturation and brightness. The component does not ship a palette. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/color-picker.tsx",
+          "type": "registry:component",
+          "target": "@ui/color-picker.tsx"
+        }
+      ]
     }
   ]
 }
