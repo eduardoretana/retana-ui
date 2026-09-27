@@ -32,9 +32,9 @@ When the CLI asks to overwrite a primitive the host already has (`button`, `scro
 
 The public catalog host is not set. `https://<your-deployment>` below is a placeholder, not a live URL. Deploy this app and use that origin.
 
-In production, `proxy.ts` fails closed. `/r/*` returns 401 unless `REGISTRY_PUBLIC=true`, or `REGISTRY_TOKEN` is set and the client sends `Authorization: Bearer <token>`. Development serves `/r/*` with no token. If `REGISTRY_TOKEN` is set, a matching bearer is still required.
+`proxy.ts` checks `REGISTRY_TOKEN` first. If it is set, `/r/*` always requires `Authorization: Bearer <token>`, in production and in development, and `REGISTRY_PUBLIC` is ignored. If no token is set, production serves `/r/*` only when `REGISTRY_PUBLIC=true` and otherwise returns 401. Development serves `/r/*` with no token.
 
-To publish the files with no token, set `REGISTRY_PUBLIC=true` on the deployment. To gate them, set `REGISTRY_TOKEN` and add the header shown below.
+To publish the files with no token, unset `REGISTRY_TOKEN` and set `REGISTRY_PUBLIC=true` on the deployment. To gate them, set `REGISTRY_TOKEN` and add the header shown below.
 
 ```bash
 npx shadcn@latest add https://<your-deployment>/r/<name>.json
