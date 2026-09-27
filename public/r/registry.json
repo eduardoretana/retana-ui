@@ -1212,6 +1212,60 @@
           "target": "@ui/magnetic-dropzone.tsx"
         }
       ]
+    },
+    {
+      "name": "gooey-slider",
+      "type": "registry:ui",
+      "title": "Gooey Slider",
+      "description": "Slider with an organic trail while dragging, built on the slider primitive.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "slider"
+      ],
+      "categories": [
+        "form",
+        "input"
+      ],
+      "meta": {
+        "titleEs": "Control viscoso",
+        "descriptionEs": "Control deslizante con un rastro orgánico al arrastrar, construido sobre la primitiva slider.",
+        "preview": "app/examples/gooey-slider/preview.tsx",
+        "previewHref": "/examples/gooey-slider",
+        "examples": [
+          {
+            "title": "Control viscoso",
+            "href": "/examples/gooey-slider",
+            "description": "Control deslizante con un rastro orgánico al arrastrar, construido sobre la primitiva slider."
+          }
+        ],
+        "usage": "<GooeySlider value={value} onValueChange={setValue} label=\"Intensity\" />",
+        "api": [
+          {
+            "name": "value / defaultValue",
+            "type": "number",
+            "description": "Single value. Default 40."
+          },
+          {
+            "name": "min / max / step",
+            "type": "number",
+            "description": "Defaults 0, 100, and 1."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Accessible name. Default Value."
+          }
+        ]
+      },
+      "docs": "The visible trail is decorative. The Radix slider underneath keeps the keyboard behavior. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/gooey-slider.tsx",
+          "type": "registry:component",
+          "target": "@ui/gooey-slider.tsx"
+        }
+      ]
     }
   ]
 }
