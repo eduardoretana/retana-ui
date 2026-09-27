@@ -988,6 +988,60 @@
           "target": "@ui/dissolve-input.tsx"
         }
       ]
+    },
+    {
+      "name": "multi-select",
+      "type": "registry:ui",
+      "title": "Multi Select",
+      "description": "Multi-select with search, removable chips, and the option to create a new value.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "form",
+        "input"
+      ],
+      "meta": {
+        "titleEs": "Selección múltiple",
+        "descriptionEs": "Selector múltiple con búsqueda, chips que se quitan y creación de una opción nueva.",
+        "preview": "app/examples/multi-select/preview.tsx",
+        "previewHref": "/examples/multi-select",
+        "examples": [
+          {
+            "title": "Selección múltiple",
+            "href": "/examples/multi-select",
+            "description": "Selector múltiple con búsqueda, chips que se quitan y creación de una opción nueva."
+          }
+        ],
+        "usage": "<MultiSelect options={options} value={value} onValueChange={setValue} creatable />",
+        "api": [
+          {
+            "name": "options",
+            "type": "MultiSelectOption[]",
+            "description": "value, label, and optional disabled."
+          },
+          {
+            "name": "creatable / onCreate",
+            "type": "boolean / callback",
+            "description": "Enter on an unknown query creates a chip."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "placeholder, search, empty, create, and remove labels default to English."
+          }
+        ]
+      },
+      "docs": "The control is a combobox with a multi-select listbox. Backspace removes the last chip when the query is empty. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/multi-select.tsx",
+          "type": "registry:component",
+          "target": "@ui/multi-select.tsx"
+        }
+      ]
     }
   ]
 }

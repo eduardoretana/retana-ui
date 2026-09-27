@@ -17,6 +17,7 @@ import Preview12 from "@/app/examples/image-generation/preview"
 import Preview13 from "@/app/examples/ai-document/preview"
 import Preview14 from "@/app/examples/otp-field/preview"
 import Preview15 from "@/app/examples/dissolve-input/preview"
+import Preview16 from "@/app/examples/multi-select/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -35,4 +36,5 @@ export const previewMap = {
   "ai-document": Preview13,
   "otp-field": Preview14,
   "dissolve-input": Preview15,
+  "multi-select": Preview16,
 }
