@@ -1,0 +1,59 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "press-sound",
+  "title": "Press Sound",
+  "author": "Eduardo Retana",
+  "description": "Hook and wrapper that play a short synthesized click on press, with a shared mute.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/press-sound.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nexport type PressSoundName = \"tap\" | \"tick\" | \"pop\"\n\nconst STORAGE_KEY = \"retana-press-muted\"\n\nlet muted = false\nconst listeners = new Set<() => void>()\n\nfunction emit() {\n  listeners.forEach((listener) => listener())\n}\n\nexport function subscribePressSound(listener: () => void) {\n  listeners.add(listener)\n  return () => listeners.delete(listener)\n}\n\nexport function getPressSoundMuted() {\n  return muted\n}\n\nexport function setPressSoundMuted(next: boolean) {\n  muted = next\n  try {\n    localStorage.setItem(STORAGE_KEY, next ? \"1\" : \"0\")\n  } catch {\n    /* storage may be blocked */\n  }\n  emit()\n}\n\nexport function hydratePressSound() {\n  try {\n    muted = localStorage.getItem(STORAGE_KEY) === \"1\"\n  } catch {\n    muted = false\n  }\n  emit()\n}\n\nlet audio: AudioContext | null = null\n\nfunction context() {\n  if (typeof window === \"undefined\") return null\n  const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext\n  if (!Ctor) return null\n  audio ??= new Ctor()\n  if (audio.state === \"suspended\") void audio.resume()\n  return audio\n}\n\nfunction blip(ctx: AudioContext, frequency: number, duration: number, type: OscillatorType, amount: number) {\n  const oscillator = ctx.createOscillator()\n  const gain = ctx.createGain()\n  oscillator.type = type\n  oscillator.frequency.setValueAtTime(frequency, ctx.currentTime)\n  gain.gain.setValueAtTime(amount, ctx.currentTime)\n  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration)\n  oscillator.connect(gain)\n  gain.connect(ctx.destination)\n  oscillator.start()\n  oscillator.stop(ctx.currentTime + duration)\n  return oscillator\n}\n\nexport function playPressSound(name: PressSoundName = \"tap\") {\n  if (muted) return\n  const ctx = context()\n  if (!ctx) return\n  if (name === \"tick\") {\n    blip(ctx, 880, 0.04, \"square\", 0.04)\n    return\n  }\n  if (name === \"pop\") {\n    const oscillator = blip(ctx, 240, 0.12, \"sine\", 0.08)\n    oscillator.frequency.exponentialRampToValueAtTime(90, ctx.currentTime + 0.12)\n    return\n  }\n  blip(ctx, 620, 0.07, \"triangle\", 0.06)\n}\n\nexport function usePressSound() {\n  const silent = React.useSyncExternalStore(subscribePressSound, getPressSoundMuted, () => false)\n\n  React.useEffect(() => {\n    hydratePressSound()\n  }, [])\n\n  return {\n    muted: silent,\n    setMuted: setPressSoundMuted,\n    play: playPressSound,\n    toggle() {\n      setPressSoundMuted(!getPressSoundMuted())\n    },\n  }\n}\n\nexport function PressSound({\n  children,\n  sound = \"tap\",\n  disabled = false,\n}: {\n  children: React.ReactElement<{ onPointerDown?: (event: React.PointerEvent) => void }>\n  sound?: PressSoundName\n  disabled?: boolean\n}) {\n  return React.cloneElement(children, {\n    onPointerDown: (event: React.PointerEvent) => {\n      children.props.onPointerDown?.(event)\n      if (!disabled && event.button === 0) playPressSound(sound)\n    },\n  })\n}\n\nexport function PressSoundToggle({\n  mutedLabel = \"Unmute clicks\",\n  unmutedLabel = \"Mute clicks\",\n  className,\n}: {\n  mutedLabel?: string\n  unmutedLabel?: string\n  className?: string\n}) {\n  const sound = usePressSound()\n  return (\n    <button\n      type=\"button\"\n      className={className}\n      aria-pressed={sound.muted}\n      onClick={() => sound.toggle()}\n    >\n      {sound.muted ? mutedLabel : unmutedLabel}\n    </button>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/press-sound.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Sonido al presionar",
+    "descriptionEs": "Hook y envoltura que reproducen un clic corto sintetizado al presionar, con un silencio compartido.",
+    "preview": "app/examples/press-sound/preview.tsx",
+    "previewHref": "/examples/press-sound",
+    "examples": [
+      {
+        "title": "Sonido al presionar",
+        "href": "/examples/press-sound",
+        "description": "Hook y envoltura que reproducen un clic corto sintetizado al presionar, con un silencio compartido."
+      }
+    ],
+    "usage": "<PressSound sound=\"tap\"><button type=\"button\">Save</button></PressSound>",
+    "api": [
+      {
+        "name": "sound",
+        "type": "\"tap\" | \"tick\" | \"pop\"",
+        "description": "Synthesized timbre. Default tap."
+      },
+      {
+        "name": "usePressSound",
+        "type": "hook",
+        "description": "Returns play, muted, setMuted, and toggle."
+      },
+      {
+        "name": "PressSoundToggle",
+        "type": "component",
+        "description": "Button for the shared mute. Labels default to English."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Wrapper still renders the child, without a sound."
+      }
+    ]
+  },
+  "docs": "Audio is generated with the Web Audio API on the press gesture. There is no audio file. Mute is shared in the tab and stored locally. No theme is shipped.",
+  "categories": [
+    "media",
+    "hook"
+  ],
+  "type": "registry:ui"
+}

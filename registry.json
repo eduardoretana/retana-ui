@@ -1603,6 +1603,63 @@
           "target": "@ui/marker.tsx"
         }
       ]
+    },
+    {
+      "name": "press-sound",
+      "type": "registry:ui",
+      "title": "Press Sound",
+      "description": "Hook and wrapper that play a short synthesized click on press, with a shared mute.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "media",
+        "hook"
+      ],
+      "meta": {
+        "titleEs": "Sonido al presionar",
+        "descriptionEs": "Hook y envoltura que reproducen un clic corto sintetizado al presionar, con un silencio compartido.",
+        "preview": "app/examples/press-sound/preview.tsx",
+        "previewHref": "/examples/press-sound",
+        "examples": [
+          {
+            "title": "Sonido al presionar",
+            "href": "/examples/press-sound",
+            "description": "Hook y envoltura que reproducen un clic corto sintetizado al presionar, con un silencio compartido."
+          }
+        ],
+        "usage": "<PressSound sound=\"tap\"><button type=\"button\">Save</button></PressSound>",
+        "api": [
+          {
+            "name": "sound",
+            "type": "\"tap\" | \"tick\" | \"pop\"",
+            "description": "Synthesized timbre. Default tap."
+          },
+          {
+            "name": "usePressSound",
+            "type": "hook",
+            "description": "Returns play, muted, setMuted, and toggle."
+          },
+          {
+            "name": "PressSoundToggle",
+            "type": "component",
+            "description": "Button for the shared mute. Labels default to English."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "description": "Wrapper still renders the child, without a sound."
+          }
+        ]
+      },
+      "docs": "Audio is generated with the Web Audio API on the press gesture. There is no audio file. Mute is shared in the tab and stored locally. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/press-sound.tsx",
+          "type": "registry:component",
+          "target": "@ui/press-sound.tsx"
+        }
+      ]
     }
   ]
 }
