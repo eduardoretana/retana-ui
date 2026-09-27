@@ -1,0 +1,56 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dissolve-input",
+  "title": "Dissolve Input",
+  "author": "Eduardo Retana",
+  "description": "Input whose text breaks into fading particles when it is submitted or cleared.",
+  "dependencies": [],
+  "registryDependencies": [
+    "input"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/dissolve-input.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Input } from \"@/components/ui/input\"\n\ntype Particle = {\n  x: number\n  y: number\n  vx: number\n  vy: number\n  life: number\n}\n\nexport type DissolveInputProps = Omit<React.ComponentProps<typeof Input>, \"onSubmit\"> & {\n  onDissolve?: (value: string) => void\n  clearLabel?: string\n}\n\nfunction spawn(canvas: HTMLCanvasElement, text: string, input: HTMLInputElement) {\n  const context = canvas.getContext(\"2d\", { willReadFrequently: true })\n  if (!context) return []\n  const rect = input.getBoundingClientRect()\n  const ratio = Math.min(window.devicePixelRatio || 1, 2)\n  canvas.width = Math.max(1, Math.floor(rect.width * ratio))\n  canvas.height = Math.max(1, Math.floor(rect.height * ratio))\n  canvas.style.width = `${rect.width}px`\n  canvas.style.height = `${rect.height}px`\n  context.scale(ratio, ratio)\n  const style = getComputedStyle(input)\n  context.clearRect(0, 0, rect.width, rect.height)\n  context.font = style.font\n  context.fillStyle = style.color\n  const padding = Number.parseFloat(style.paddingLeft) || 10\n  context.textBaseline = \"middle\"\n  context.fillText(text, padding, rect.height / 2)\n  const image = context.getImageData(0, 0, canvas.width, canvas.height)\n  const particles: Particle[] = []\n  const step = Math.max(2, Math.floor(3 * ratio))\n  for (let y = 0; y < canvas.height; y += step) {\n    for (let x = 0; x < canvas.width; x += step) {\n      const alpha = image.data[(y * canvas.width + x) * 4 + 3]\n      if (alpha < 40) continue\n      particles.push({\n        x: x / ratio,\n        y: y / ratio,\n        vx: (Math.random() - 0.5) * 0.8,\n        vy: -0.4 - Math.random() * 1.2,\n        life: 1,\n      })\n    }\n  }\n  context.setTransform(1, 0, 0, 1, 0, 0)\n  return particles\n}\n\nexport function DissolveInput({\n  onDissolve,\n  clearLabel = \"Clear\",\n  className,\n  onKeyDown,\n  ...props\n}: DissolveInputProps) {\n  const inputRef = React.useRef<HTMLInputElement>(null)\n  const canvasRef = React.useRef<HTMLCanvasElement>(null)\n  const [busy, setBusy] = React.useState(false)\n\n  function dissolve() {\n    const input = inputRef.current\n    const canvas = canvasRef.current\n    if (!input || !canvas || busy) return\n    const value = input.value\n    if (!value) return\n    onDissolve?.(value)\n    const reduced = window.matchMedia(\"(prefers-reduced-motion: reduce)\").matches\n    if (reduced) {\n      input.value = \"\"\n      input.dispatchEvent(new Event(\"input\", { bubbles: true }))\n      return\n    }\n    const particles = spawn(canvas, value, input)\n    input.value = \"\"\n    input.dispatchEvent(new Event(\"input\", { bubbles: true }))\n    setBusy(true)\n    const context = canvas.getContext(\"2d\")\n    if (!context) {\n      setBusy(false)\n      return\n    }\n    const color = getComputedStyle(input).color\n    let frame = 0\n    const tick = () => {\n      const width = canvas.clientWidth\n      const height = canvas.clientHeight\n      const ratio = Math.min(window.devicePixelRatio || 1, 2)\n      context.setTransform(ratio, 0, 0, ratio, 0, 0)\n      context.clearRect(0, 0, width, height)\n      let alive = false\n      context.fillStyle = color\n      for (const particle of particles) {\n        particle.life -= 0.02\n        if (particle.life <= 0) continue\n        alive = true\n        particle.x += particle.vx\n        particle.y += particle.vy\n        particle.vy -= 0.02\n        context.globalAlpha = Math.max(0, particle.life)\n        context.fillRect(particle.x, particle.y, 1.6, 1.6)\n      }\n      context.globalAlpha = 1\n      if (alive) frame = window.requestAnimationFrame(tick)\n      else setBusy(false)\n    }\n    frame = window.requestAnimationFrame(tick)\n    return () => window.cancelAnimationFrame(frame)\n  }\n\n  return (\n    <div data-slot=\"dissolve-input\" className={cn(\"relative\", className)}>\n      <Input\n        ref={inputRef}\n        aria-keyshortcuts=\"Enter\"\n        className=\"pr-16\"\n        onKeyDown={(event) => {\n          onKeyDown?.(event)\n          if (event.defaultPrevented) return\n          if (event.key === \"Enter\") {\n            event.preventDefault()\n            dissolve()\n          }\n        }}\n        {...props}\n      />\n      <button\n        type=\"button\"\n        className=\"absolute top-1/2 right-1.5 -translate-y-1/2 rounded-md px-1.5 py-0.5 text-[11px] text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring\"\n        onClick={dissolve}\n      >\n        {clearLabel}\n      </button>\n      <canvas\n        ref={canvasRef}\n        aria-hidden\n        className={cn(\"pointer-events-none absolute inset-0\", busy ? \"opacity-100\" : \"opacity-0\")}\n      />\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/dissolve-input.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Campo que se desvanece",
+    "descriptionEs": "Campo cuyo texto se deshace en partículas al enviarlo o limpiarlo.",
+    "preview": "app/examples/dissolve-input/preview.tsx",
+    "previewHref": "/examples/dissolve-input",
+    "examples": [
+      {
+        "title": "Campo que se desvanece",
+        "href": "/examples/dissolve-input",
+        "description": "Campo cuyo texto se deshace en partículas al enviarlo o limpiarlo."
+      }
+    ],
+    "usage": "<DissolveInput aria-label=\"Note\" onDissolve={save} clearLabel=\"Clear\" />",
+    "api": [
+      {
+        "name": "onDissolve",
+        "type": "(value) => void",
+        "description": "Called with the text before it is cleared."
+      },
+      {
+        "name": "clearLabel",
+        "type": "string",
+        "description": "Clear button. Default Clear."
+      },
+      {
+        "name": "...input",
+        "type": "Input props",
+        "description": "Other props go to the input primitive, except onSubmit."
+      }
+    ]
+  },
+  "docs": "Particles sample the input's computed text color, so they follow the host theme. Reduced motion clears the field without particles. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "form",
+    "input"
+  ],
+  "type": "registry:ui"
+}

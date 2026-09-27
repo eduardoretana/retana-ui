@@ -934,6 +934,60 @@
           "target": "@ui/otp-field.tsx"
         }
       ]
+    },
+    {
+      "name": "dissolve-input",
+      "type": "registry:ui",
+      "title": "Dissolve Input",
+      "description": "Input whose text breaks into fading particles when it is submitted or cleared.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "input"
+      ],
+      "categories": [
+        "form",
+        "input"
+      ],
+      "meta": {
+        "titleEs": "Campo que se desvanece",
+        "descriptionEs": "Campo cuyo texto se deshace en partículas al enviarlo o limpiarlo.",
+        "preview": "app/examples/dissolve-input/preview.tsx",
+        "previewHref": "/examples/dissolve-input",
+        "examples": [
+          {
+            "title": "Campo que se desvanece",
+            "href": "/examples/dissolve-input",
+            "description": "Campo cuyo texto se deshace en partículas al enviarlo o limpiarlo."
+          }
+        ],
+        "usage": "<DissolveInput aria-label=\"Note\" onDissolve={save} clearLabel=\"Clear\" />",
+        "api": [
+          {
+            "name": "onDissolve",
+            "type": "(value) => void",
+            "description": "Called with the text before it is cleared."
+          },
+          {
+            "name": "clearLabel",
+            "type": "string",
+            "description": "Clear button. Default Clear."
+          },
+          {
+            "name": "...input",
+            "type": "Input props",
+            "description": "Other props go to the input primitive, except onSubmit."
+          }
+        ]
+      },
+      "docs": "Particles sample the input's computed text color, so they follow the host theme. Reduced motion clears the field without particles. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/dissolve-input.tsx",
+          "type": "registry:component",
+          "target": "@ui/dissolve-input.tsx"
+        }
+      ]
     }
   ]
 }

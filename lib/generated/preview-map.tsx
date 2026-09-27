@@ -16,6 +16,7 @@ import Preview11 from "@/app/examples/file-diff/preview"
 import Preview12 from "@/app/examples/image-generation/preview"
 import Preview13 from "@/app/examples/ai-document/preview"
 import Preview14 from "@/app/examples/otp-field/preview"
+import Preview15 from "@/app/examples/dissolve-input/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -33,4 +34,5 @@ export const previewMap = {
   "image-generation": Preview12,
   "ai-document": Preview13,
   "otp-field": Preview14,
+  "dissolve-input": Preview15,
 }
