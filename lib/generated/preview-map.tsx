@@ -4,9 +4,11 @@
 import Preview0 from "@/app/examples/layered-panel/preview"
 import Preview1 from "@/app/examples/chat-message/preview"
 import Preview2 from "@/app/examples/message-list/preview"
+import Preview3 from "@/app/examples/chat-composer/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
   "chat-message": Preview1,
   "message-list": Preview2,
+  "chat-composer": Preview3,
 }
