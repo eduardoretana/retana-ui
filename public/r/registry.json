@@ -9,9 +9,20 @@
       "title": "Layered Panel",
       "description": "Right-hand peek panel that expands in place to a two-column detail view. No route change. Optional Next.js URL sync keeps Back working: full collapses to peek, then closes. Ships no theme, cssVars, or global CSS — it uses the host project's shadcn tokens and primitives.",
       "author": "Eduardo Retana",
-      "dependencies": ["radix-ui", "lucide-react"],
-      "registryDependencies": ["button", "scroll-area", "separator"],
-      "categories": ["dashboard", "overlay", "panel"],
+      "dependencies": [
+        "radix-ui",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "scroll-area",
+        "separator"
+      ],
+      "categories": [
+        "dashboard",
+        "overlay",
+        "panel"
+      ],
       "meta": {
         "titleEs": "Panel en capas",
         "descriptionEs": "Panel de detalle que se abre a la derecha y crece en el mismo lugar hasta dos columnas. La ruta no cambia, así que la tabla conserva el scroll.",
@@ -109,6 +120,67 @@
           "path": "registry/hooks/use-layered-panel-url-state.ts",
           "type": "registry:hook",
           "target": "@hooks/use-layered-panel-url-state.ts"
+        }
+      ]
+    },
+    {
+      "name": "chat-message",
+      "type": "registry:ui",
+      "title": "Chat Message",
+      "description": "Message bubble for a person or an assistant, with avatar, time, sending and error states, and copy, retry, and regenerate actions.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "chat",
+        "ai"
+      ],
+      "meta": {
+        "titleEs": "Mensaje de chat",
+        "descriptionEs": "Burbuja de mensaje para la persona o el asistente, con avatar, hora, estados de envío y error, y acciones de copiar, reintentar y regenerar.",
+        "preview": "app/examples/chat-message/preview.tsx",
+        "previewHref": "/examples/chat-message",
+        "examples": [
+          {
+            "title": "Mensaje de chat",
+            "href": "/examples/chat-message",
+            "description": "Burbuja de mensaje para la persona o el asistente, con avatar, hora, estados de envío y error, y acciones de copiar, reintentar y regenerar."
+          }
+        ],
+        "usage": "<ChatMessage role=\"assistant\" name=\"Assistant\" time=\"09:41\" onRegenerate={regenerate}>\n  Hello\n</ChatMessage>",
+        "api": [
+          {
+            "name": "role",
+            "type": "\"user\" | \"assistant\" | \"system\"",
+            "description": "Which side and tone to use."
+          },
+          {
+            "name": "status",
+            "type": "\"sending\" | \"sent\" | \"error\"",
+            "description": "Delivery state. Default sent."
+          },
+          {
+            "name": "onRetry / onRegenerate / onCopy",
+            "type": "callback",
+            "description": "Optional actions. Copy uses copyText or the text content."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "sendingLabel, errorLabel, retryLabel, copyLabel, copiedLabel, and regenerateLabel default to English."
+          }
+        ]
+      },
+      "docs": "Import ChatMessage from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/chat-message.tsx",
+          "type": "registry:component",
+          "target": "@ui/chat-message.tsx"
         }
       ]
     }
