@@ -1266,6 +1266,66 @@
           "target": "@ui/gooey-slider.tsx"
         }
       ]
+    },
+    {
+      "name": "video-player",
+      "type": "registry:ui",
+      "title": "Video Player",
+      "description": "Video player with custom controls for play, seek, volume, speed, and fullscreen, plus keyboard shortcuts.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "media"
+      ],
+      "meta": {
+        "titleEs": "Reproductor de video",
+        "descriptionEs": "Reproductor con controles propios de reproducción, barra, volumen, velocidad y pantalla completa, y atajos de teclado.",
+        "preview": "app/examples/video-player/preview.tsx",
+        "previewHref": "/examples/video-player",
+        "examples": [
+          {
+            "title": "Reproductor de video",
+            "href": "/examples/video-player",
+            "description": "Reproductor con controles propios de reproducción, barra, volumen, velocidad y pantalla completa, y atajos de teclado."
+          }
+        ],
+        "usage": "<VideoPlayer src={src} label=\"Clip\" />",
+        "api": [
+          {
+            "name": "src / poster",
+            "type": "string",
+            "description": "Media URL and optional poster."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Accessible name of the region. Default Video."
+          },
+          {
+            "name": "shortcuts",
+            "type": "keyboard",
+            "description": "Space or K play, arrows seek and change volume, M mutes, F toggles fullscreen."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "Play, pause, seek, volume, speed, and fullscreen labels default to English."
+          }
+        ]
+      },
+      "docs": "Import VideoPlayer from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/video-player.tsx",
+          "type": "registry:component",
+          "target": "@ui/video-player.tsx"
+        }
+      ]
     }
   ]
 }

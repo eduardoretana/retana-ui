@@ -1,0 +1,62 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "video-player",
+  "title": "Video Player",
+  "author": "Eduardo Retana",
+  "description": "Video player with custom controls for play, seek, volume, speed, and fullscreen, plus keyboard shortcuts.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/video-player.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { Maximize, Minimize2, Pause, Play, Volume2, VolumeX } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Button } from \"@/components/ui/button\"\n\nexport type VideoPlayerProps = {\n  src: string\n  poster?: string\n  label?: string\n  playLabel?: string\n  pauseLabel?: string\n  seekLabel?: string\n  muteLabel?: string\n  unmuteLabel?: string\n  volumeLabel?: string\n  speedLabel?: string\n  fullscreenLabel?: string\n  exitFullscreenLabel?: string\n  className?: string\n}\n\nconst RATES = [0.5, 1, 1.25, 1.5, 2]\n\nfunction clock(seconds: number) {\n  if (!Number.isFinite(seconds)) return \"0:00\"\n  const total = Math.max(0, Math.floor(seconds))\n  const minutes = Math.floor(total / 60)\n  const rest = total % 60\n  return `${minutes}:${rest.toString().padStart(2, \"0\")}`\n}\n\nexport function VideoPlayer({\n  src,\n  poster,\n  label = \"Video\",\n  playLabel = \"Play\",\n  pauseLabel = \"Pause\",\n  seekLabel = \"Seek\",\n  muteLabel = \"Mute\",\n  unmuteLabel = \"Unmute\",\n  volumeLabel = \"Volume\",\n  speedLabel = \"Playback speed\",\n  fullscreenLabel = \"Fullscreen\",\n  exitFullscreenLabel = \"Exit fullscreen\",\n  className,\n}: VideoPlayerProps) {\n  const videoRef = React.useRef<HTMLVideoElement>(null)\n  const rootRef = React.useRef<HTMLDivElement>(null)\n  const [playing, setPlaying] = React.useState(false)\n  const [time, setTime] = React.useState(0)\n  const [duration, setDuration] = React.useState(0)\n  const [volume, setVolume] = React.useState(1)\n  const [muted, setMuted] = React.useState(false)\n  const [rate, setRate] = React.useState(1)\n  const [fullscreen, setFullscreen] = React.useState(false)\n\n  React.useEffect(() => {\n    const onChange = () => setFullscreen(document.fullscreenElement === rootRef.current)\n    document.addEventListener(\"fullscreenchange\", onChange)\n    return () => document.removeEventListener(\"fullscreenchange\", onChange)\n  }, [])\n\n  function toggle() {\n    const video = videoRef.current\n    if (!video) return\n    if (video.paused) void video.play()\n    else video.pause()\n  }\n\n  async function toggleFullscreen() {\n    const node = rootRef.current\n    if (!node) return\n    if (document.fullscreenElement === node) await document.exitFullscreen()\n    else await node.requestFullscreen()\n  }\n\n  function onKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {\n    const target = event.target as HTMLElement\n    if (target.closest(\"input, select, textarea\")) return\n    const video = videoRef.current\n    if (!video) return\n    if (event.key === \" \" || event.key === \"k\") {\n      event.preventDefault()\n      toggle()\n    } else if (event.key === \"ArrowRight\") {\n      event.preventDefault()\n      video.currentTime = Math.min(video.duration || 0, video.currentTime + 5)\n    } else if (event.key === \"ArrowLeft\") {\n      event.preventDefault()\n      video.currentTime = Math.max(0, video.currentTime - 5)\n    } else if (event.key === \"ArrowUp\") {\n      event.preventDefault()\n      const next = Math.min(1, (video.muted ? 0 : video.volume) + 0.05)\n      video.muted = false\n      video.volume = next\n      setMuted(false)\n      setVolume(next)\n    } else if (event.key === \"ArrowDown\") {\n      event.preventDefault()\n      const next = Math.max(0, video.volume - 0.05)\n      video.volume = next\n      setVolume(next)\n    } else if (event.key === \"m\") {\n      event.preventDefault()\n      video.muted = !video.muted\n      setMuted(video.muted)\n    } else if (event.key === \"f\") {\n      event.preventDefault()\n      void toggleFullscreen()\n    }\n  }\n\n  return (\n    <div\n      ref={rootRef}\n      data-slot=\"video-player\"\n      role=\"region\"\n      aria-label={label}\n      tabIndex={0}\n      onKeyDown={onKeyDown}\n      className={cn(\n        \"overflow-hidden rounded-xl border border-border bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\",\n        className,\n      )}\n    >\n      <video\n        ref={videoRef}\n        src={src}\n        poster={poster}\n        playsInline\n        className=\"aspect-video w-full bg-muted\"\n        onPlay={() => setPlaying(true)}\n        onPause={() => setPlaying(false)}\n        onTimeUpdate={(event) => setTime(event.currentTarget.currentTime)}\n        onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}\n        onVolumeChange={(event) => {\n          setVolume(event.currentTarget.volume)\n          setMuted(event.currentTarget.muted)\n        }}\n      />\n      <div className=\"flex flex-wrap items-center gap-2 px-2 py-2\">\n        <Button type=\"button\" size=\"icon-sm\" variant=\"ghost\" onClick={toggle} aria-label={playing ? pauseLabel : playLabel}>\n          {playing ? <Pause /> : <Play />}\n        </Button>\n        <span className=\"text-xs text-muted-foreground tabular-nums\">\n          {clock(time)} / {clock(duration)}\n        </span>\n        <input\n          type=\"range\"\n          className=\"h-1 min-w-24 flex-1 cursor-pointer appearance-none rounded-full bg-muted accent-foreground\"\n          min={0}\n          max={duration || 0}\n          step={0.1}\n          value={time}\n          aria-label={seekLabel}\n          onChange={(event) => {\n            const next = Number(event.target.value)\n            if (videoRef.current) videoRef.current.currentTime = next\n            setTime(next)\n          }}\n        />\n        <Button\n          type=\"button\"\n          size=\"icon-sm\"\n          variant=\"ghost\"\n          aria-label={muted || volume === 0 ? unmuteLabel : muteLabel}\n          onClick={() => {\n            const video = videoRef.current\n            if (!video) return\n            video.muted = !video.muted\n            setMuted(video.muted)\n          }}\n        >\n          {muted || volume === 0 ? <VolumeX /> : <Volume2 />}\n        </Button>\n        <input\n          type=\"range\"\n          className=\"h-1 w-16 cursor-pointer appearance-none rounded-full bg-muted accent-foreground\"\n          min={0}\n          max={1}\n          step={0.05}\n          value={muted ? 0 : volume}\n          aria-label={volumeLabel}\n          onChange={(event) => {\n            const next = Number(event.target.value)\n            if (videoRef.current) {\n              videoRef.current.volume = next\n              videoRef.current.muted = next === 0\n            }\n            setVolume(next)\n            setMuted(next === 0)\n          }}\n        />\n        <Button\n          type=\"button\"\n          size=\"xs\"\n          variant=\"ghost\"\n          aria-label={speedLabel}\n          onClick={() => {\n            const index = RATES.indexOf(rate)\n            const next = RATES[(index + 1) % RATES.length] ?? 1\n            if (videoRef.current) videoRef.current.playbackRate = next\n            setRate(next)\n          }}\n        >\n          {rate}×\n        </Button>\n        <Button type=\"button\" size=\"icon-sm\" variant=\"ghost\" aria-label={fullscreen ? exitFullscreenLabel : fullscreenLabel} onClick={() => void toggleFullscreen()}>\n          {fullscreen ? <Minimize2 /> : <Maximize />}\n        </Button>\n      </div>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/video-player.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Reproductor de video",
+    "descriptionEs": "Reproductor con controles propios de reproducción, barra, volumen, velocidad y pantalla completa, y atajos de teclado.",
+    "preview": "app/examples/video-player/preview.tsx",
+    "previewHref": "/examples/video-player",
+    "examples": [
+      {
+        "title": "Reproductor de video",
+        "href": "/examples/video-player",
+        "description": "Reproductor con controles propios de reproducción, barra, volumen, velocidad y pantalla completa, y atajos de teclado."
+      }
+    ],
+    "usage": "<VideoPlayer src={src} label=\"Clip\" />",
+    "api": [
+      {
+        "name": "src / poster",
+        "type": "string",
+        "description": "Media URL and optional poster."
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Accessible name of the region. Default Video."
+      },
+      {
+        "name": "shortcuts",
+        "type": "keyboard",
+        "description": "Space or K play, arrows seek and change volume, M mutes, F toggles fullscreen."
+      },
+      {
+        "name": "labels",
+        "type": "string",
+        "description": "Play, pause, seek, volume, speed, and fullscreen labels default to English."
+      }
+    ]
+  },
+  "docs": "Import VideoPlayer from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "media"
+  ],
+  "type": "registry:ui"
+}
