@@ -27,6 +27,16 @@ if (!Element.prototype.scrollIntoView) {
   Element.prototype.scrollIntoView = () => {}
 }
 
+if (!navigator.clipboard) {
+  Object.defineProperty(navigator, "clipboard", {
+    configurable: true,
+    value: {
+      writeText: async () => {},
+      readText: async () => "",
+    },
+  })
+}
+
 if (!window.matchMedia) {
   window.matchMedia = (query: string) =>
     ({
