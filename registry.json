@@ -700,6 +700,65 @@
           "target": "@ui/code-block.tsx"
         }
       ]
+    },
+    {
+      "name": "file-diff",
+      "type": "registry:ui",
+      "title": "File Diff",
+      "description": "Unified diff with added and removed lines, and collapsible runs of unchanged lines.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "ai",
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Vista de diff",
+        "descriptionEs": "Diff unificado con líneas agregadas y eliminadas, y bloques sin cambios que se pueden colapsar.",
+        "preview": "app/examples/file-diff/preview.tsx",
+        "previewHref": "/examples/file-diff",
+        "examples": [
+          {
+            "title": "Vista de diff",
+            "href": "/examples/file-diff",
+            "description": "Diff unificado con líneas agregadas y eliminadas, y bloques sin cambios que se pueden colapsar."
+          }
+        ],
+        "usage": "<FileDiff patch={patch} filename=\"note.md\" />",
+        "api": [
+          {
+            "name": "patch",
+            "type": "string",
+            "description": "Unified diff text. Ignored when lines is set."
+          },
+          {
+            "name": "lines",
+            "type": "DiffLine[]",
+            "description": "Pre-parsed rows."
+          },
+          {
+            "name": "collapseAfter",
+            "type": "number",
+            "description": "Collapse unchanged runs longer than this. Default 5."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "expand, collapse, additions, and deletions labels default to English."
+          }
+        ]
+      },
+      "docs": "Additions use the primary token and deletions use destructive. parseUnifiedDiff is exported. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/file-diff.tsx",
+          "type": "registry:component",
+          "target": "@ui/file-diff.tsx"
+        }
+      ]
     }
   ]
 }
