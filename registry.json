@@ -1660,6 +1660,67 @@
           "target": "@ui/press-sound.tsx"
         }
       ]
+    },
+    {
+      "name": "crm-table",
+      "type": "registry:ui",
+      "title": "CRM Table",
+      "description": "CRM-shaped table with avatar and name, a status badge, stage, owner, and last activity. Column helpers match a TanStack column definition so they can be passed to AdminDataTable when that item is installed.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "table",
+        "badge",
+        "avatar"
+      ],
+      "categories": [
+        "dashboard",
+        "table"
+      ],
+      "meta": {
+        "titleEs": "Tabla CRM",
+        "descriptionEs": "Tabla de CRM con avatar y nombre, estado en una insignia, etapa, dueño y última actividad. Las columnas encajan en AdminDataTable cuando esa pieza está instalada, y también se renderizan solas.",
+        "preview": "app/examples/crm-table/preview.tsx",
+        "previewHref": "/examples/crm-table",
+        "examples": [
+          {
+            "title": "Tabla CRM",
+            "href": "/examples/crm-table",
+            "description": "Tabla de CRM con avatar y nombre, estado en una insignia, etapa, dueño y última actividad. Las columnas encajan en AdminDataTable cuando esa pieza está instalada, y también se renderizan solas."
+          }
+        ],
+        "usage": "<CrmTable rows={rows} onRowClick={open} />",
+        "api": [
+          {
+            "name": "rows",
+            "type": "CrmRow[]",
+            "description": "Contact, status, stage, owner, and a preformatted lastActivity string."
+          },
+          {
+            "name": "statusTone",
+            "type": "\"neutral\" | \"emphasis\" | \"muted\" | \"danger\"",
+            "description": "Maps to badge variants."
+          },
+          {
+            "name": "crmColumnDefs",
+            "type": "function",
+            "description": "Returns column objects compatible with AdminDataTable. This file does not import data-table."
+          },
+          {
+            "name": "labels",
+            "type": "CrmColumnLabels",
+            "description": "Header labels. Defaults are English."
+          }
+        ]
+      },
+      "docs": "Standalone table using the host table, badge, and avatar primitives. crmColumnDefs() can be passed to AdminDataTable from the data-table item without coupling this file to it. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/crm-table.tsx",
+          "type": "registry:component",
+          "target": "@ui/crm-table.tsx"
+        }
+      ]
     }
   ]
 }
