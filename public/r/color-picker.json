@@ -1,0 +1,57 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "color-picker",
+  "title": "Color Picker",
+  "author": "Eduardo Retana",
+  "description": "Accessible color picker with a saturation and brightness field, hue, alpha, and a hex input.",
+  "dependencies": [],
+  "registryDependencies": [
+    "input",
+    "label"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/color-picker.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Input } from \"@/components/ui/input\"\nimport { Label } from \"@/components/ui/label\"\n\nexport type HsvaColor = {\n  h: number\n  s: number\n  v: number\n  a: number\n}\n\nconst HASH = \"#\"\nconst HUE_SPACE = \"hsl\"\nconst RGB_SPACE = \"rgb\"\n\nfunction clamp(value: number, min: number, max: number) {\n  return Math.min(max, Math.max(min, value))\n}\n\nexport function hsvaToRgb(color: HsvaColor) {\n  const h = ((color.h % 360) + 360) % 360\n  const s = clamp(color.s, 0, 1)\n  const v = clamp(color.v, 0, 1)\n  const c = v * s\n  const x = c * (1 - Math.abs(((h / 60) % 2) - 1))\n  const m = v - c\n  let r = 0\n  let g = 0\n  let b = 0\n  if (h < 60) {\n    r = c\n    g = x\n  } else if (h < 120) {\n    r = x\n    g = c\n  } else if (h < 180) {\n    g = c\n    b = x\n  } else if (h < 240) {\n    g = x\n    b = c\n  } else if (h < 300) {\n    r = x\n    b = c\n  } else {\n    r = c\n    b = x\n  }\n  return {\n    r: Math.round((r + m) * 255),\n    g: Math.round((g + m) * 255),\n    b: Math.round((b + m) * 255),\n  }\n}\n\nfunction channel(value: number) {\n  return value.toString(16).padStart(2, \"0\")\n}\n\nexport function hsvaToHex(color: HsvaColor) {\n  const { r, g, b } = hsvaToRgb(color)\n  return `${channel(r)}${channel(g)}${channel(b)}`\n}\n\nexport function hsvaToCss(color: HsvaColor) {\n  const { r, g, b } = hsvaToRgb(color)\n  return `${RGB_SPACE}(${r} ${g} ${b} / ${clamp(color.a, 0, 1)})`\n}\n\nfunction hueCss(hue: number) {\n  return `${HUE_SPACE}(${hue} 100% 50%)`\n}\n\nfunction grayCss(lightness: number) {\n  return `${HUE_SPACE}(0 0% ${lightness}%)`\n}\n\nexport function hexToHsva(input: string): HsvaColor | null {\n  const raw = input.trim().replace(/^#/, \"\")\n  const full = raw.length === 3 ? raw.split(\"\").map((char) => char + char).join(\"\") : raw\n  if (!/^[\\da-fA-F]{6}$/.test(full)) return null\n  const r = Number.parseInt(full.slice(0, 2), 16) / 255\n  const g = Number.parseInt(full.slice(2, 4), 16) / 255\n  const b = Number.parseInt(full.slice(4, 6), 16) / 255\n  const max = Math.max(r, g, b)\n  const min = Math.min(r, g, b)\n  const delta = max - min\n  let h = 0\n  if (delta !== 0) {\n    if (max === r) h = ((g - b) / delta) % 6\n    else if (max === g) h = (b - r) / delta + 2\n    else h = (r - g) / delta + 4\n    h *= 60\n    if (h < 0) h += 360\n  }\n  return { h, s: max === 0 ? 0 : delta / max, v: max, a: 1 }\n}\n\nexport type ColorPickerProps = {\n  value?: HsvaColor\n  defaultValue?: HsvaColor\n  onValueChange?: (value: HsvaColor) => void\n  hueLabel?: string\n  alphaLabel?: string\n  hexLabel?: string\n  saturationLabel?: string\n  className?: string\n}\n\nconst DEFAULT_COLOR: HsvaColor = { h: 222, s: 0.72, v: 0.78, a: 1 }\n\nexport function ColorPicker({\n  value,\n  defaultValue = DEFAULT_COLOR,\n  onValueChange,\n  hueLabel = \"Hue\",\n  alphaLabel = \"Alpha\",\n  hexLabel = \"Hex\",\n  saturationLabel = \"Saturation and brightness\",\n  className,\n}: ColorPickerProps) {\n  const [uncontrolled, setUncontrolled] = React.useState(defaultValue)\n  const [hexDraft, setHexDraft] = React.useState<string | null>(null)\n  const hexId = React.useId()\n  const color = value ?? uncontrolled\n  const hex = hsvaToHex(color)\n\n  function commit(next: HsvaColor) {\n    if (value === undefined) setUncontrolled(next)\n    onValueChange?.(next)\n  }\n\n  function moveSurface(event: React.PointerEvent<HTMLDivElement>) {\n    const rect = event.currentTarget.getBoundingClientRect()\n    const s = clamp((event.clientX - rect.left) / rect.width, 0, 1)\n    const v = clamp(1 - (event.clientY - rect.top) / rect.height, 0, 1)\n    commit({ ...color, s, v })\n  }\n\n  function onSurfaceKey(event: React.KeyboardEvent<HTMLDivElement>) {\n    const step = event.shiftKey ? 0.1 : 0.02\n    if (event.key === \"ArrowLeft\") commit({ ...color, s: clamp(color.s - step, 0, 1) })\n    else if (event.key === \"ArrowRight\") commit({ ...color, s: clamp(color.s + step, 0, 1) })\n    else if (event.key === \"ArrowDown\") commit({ ...color, v: clamp(color.v - step, 0, 1) })\n    else if (event.key === \"ArrowUp\") commit({ ...color, v: clamp(color.v + step, 0, 1) })\n    else return\n    event.preventDefault()\n  }\n\n  const white = grayCss(100)\n  const black = grayCss(0)\n\n  return (\n    <div data-slot=\"color-picker\" className={cn(\"flex w-64 flex-col gap-3\", className)}>\n      <div\n        role=\"slider\"\n        tabIndex={0}\n        aria-label={saturationLabel}\n        aria-valuemin={0}\n        aria-valuemax={100}\n        aria-valuenow={Math.round(color.s * 100)}\n        aria-valuetext={`${Math.round(color.s * 100)}% saturation, ${Math.round(color.v * 100)}% brightness`}\n        onPointerDown={(event) => {\n          event.currentTarget.setPointerCapture(event.pointerId)\n          moveSurface(event)\n        }}\n        onPointerMove={(event) => {\n          if (event.currentTarget.hasPointerCapture(event.pointerId)) moveSurface(event)\n        }}\n        onKeyDown={onSurfaceKey}\n        className=\"relative h-36 cursor-crosshair rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\"\n        style={{\n          backgroundColor: hueCss(color.h),\n          backgroundImage: `linear-gradient(to top, ${black}, transparent), linear-gradient(to right, ${white}, transparent)`,\n        }}\n      >\n        <span\n          aria-hidden\n          className=\"absolute size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-background shadow-sm\"\n          style={{ left: `${color.s * 100}%`, top: `${(1 - color.v) * 100}%`, background: hsvaToCss({ ...color, a: 1 }) }}\n        />\n      </div>\n      <label className=\"flex flex-col gap-1 text-xs text-muted-foreground\">\n        {hueLabel}\n        <input\n          type=\"range\"\n          min={0}\n          max={360}\n          value={Math.round(color.h)}\n          aria-label={hueLabel}\n          onChange={(event) => commit({ ...color, h: Number(event.target.value) })}\n          className=\"h-3 w-full cursor-pointer appearance-none rounded-full\"\n          style={{\n            backgroundImage: `linear-gradient(to right, ${hueCss(0)}, ${hueCss(60)}, ${hueCss(120)}, ${hueCss(180)}, ${hueCss(240)}, ${hueCss(300)}, ${hueCss(360)})`,\n          }}\n        />\n      </label>\n      <label className=\"flex flex-col gap-1 text-xs text-muted-foreground\">\n        {alphaLabel}\n        <input\n          type=\"range\"\n          min={0}\n          max={100}\n          value={Math.round(color.a * 100)}\n          aria-label={alphaLabel}\n          onChange={(event) => commit({ ...color, a: Number(event.target.value) / 100 })}\n          className=\"h-3 w-full cursor-pointer appearance-none rounded-full\"\n          style={{\n            backgroundColor: grayCss(80),\n            backgroundImage: `linear-gradient(to right, ${hsvaToCss({ ...color, a: 0 })}, ${hsvaToCss({ ...color, a: 1 })})`,\n          }}\n        />\n      </label>\n      <div className=\"flex items-end gap-2\">\n        <span\n          aria-hidden\n          className=\"size-9 shrink-0 rounded-md border border-border\"\n          style={{ background: hsvaToCss(color) }}\n        />\n        <div className=\"flex min-w-0 flex-1 flex-col gap-1\">\n          <Label htmlFor={hexId} className=\"text-xs text-muted-foreground\">\n            {hexLabel}\n          </Label>\n          <Input\n            id={hexId}\n            value={hexDraft ?? `${HASH}${hex}`}\n            spellCheck={false}\n            autoCapitalize=\"off\"\n            onFocus={() => setHexDraft(`${HASH}${hex}`)}\n            onChange={(event) => setHexDraft(event.target.value)}\n            onBlur={() => {\n              const next = hexDraft ? hexToHsva(hexDraft) : null\n              if (next) commit({ ...next, a: color.a })\n              setHexDraft(null)\n            }}\n            onKeyDown={(event) => {\n              if (event.key === \"Enter\") {\n                const next = hexDraft ? hexToHsva(hexDraft) : null\n                if (next) commit({ ...next, a: color.a })\n                setHexDraft(null)\n              }\n            }}\n            className=\"font-mono uppercase\"\n          />\n        </div>\n      </div>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/color-picker.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Selector de color",
+    "descriptionEs": "Selector de color accesible con área de saturación y brillo, tono, alfa y un campo hexadecimal.",
+    "preview": "app/examples/color-picker/preview.tsx",
+    "previewHref": "/examples/color-picker",
+    "examples": [
+      {
+        "title": "Selector de color",
+        "href": "/examples/color-picker",
+        "description": "Selector de color accesible con área de saturación y brillo, tono, alfa y un campo hexadecimal."
+      }
+    ],
+    "usage": "<ColorPicker value={color} onValueChange={setColor} />",
+    "api": [
+      {
+        "name": "value",
+        "type": "HsvaColor",
+        "description": "h in degrees, s and v and a from 0 to 1."
+      },
+      {
+        "name": "onValueChange",
+        "type": "(color) => void",
+        "description": "Fires for the field, sliders, and hex commit."
+      },
+      {
+        "name": "labels",
+        "type": "string",
+        "description": "hue, alpha, hex, and saturation labels default to English."
+      }
+    ]
+  },
+  "docs": "hsvaToCss, hsvaToHex, and hexToHsva are exported. Arrow keys move saturation and brightness. The component does not ship a palette. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "form",
+    "input"
+  ],
+  "type": "registry:ui"
+}

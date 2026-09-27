@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "halftone-image",
+  "title": "Halftone Image",
+  "author": "Eduardo Retana",
+  "description": "Image drawn as dots on a canvas that grow toward the pointer.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/halftone-image.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type HalftoneImageProps = {\n  src: string\n  alt: string\n  /** Approximate number of dots across. */\n  columns?: number\n  className?: string\n}\n\nexport function HalftoneImage({ src, alt, columns = 42, className }: HalftoneImageProps) {\n  const canvasRef = React.useRef<HTMLCanvasElement>(null)\n  const wrapRef = React.useRef<HTMLDivElement>(null)\n  const pointer = React.useRef({ x: -1, y: -1, active: false })\n  const drawRef = React.useRef<() => void>(() => {})\n  const [failed, setFailed] = React.useState(false)\n\n  React.useEffect(() => {\n    const canvas = canvasRef.current\n    const wrap = wrapRef.current\n    if (!canvas || !wrap) return\n    const context = canvas.getContext(\"2d\")\n    if (!context) return\n    let alive = true\n    const image = new Image()\n    image.decoding = \"async\"\n\n    const draw = () => {\n      if (!alive) return\n      const width = wrap.clientWidth\n      const height = wrap.clientHeight\n      if (width === 0 || height === 0) return\n      const ratio = Math.min(window.devicePixelRatio || 1, 2)\n      canvas.width = Math.floor(width * ratio)\n      canvas.height = Math.floor(height * ratio)\n      context.setTransform(ratio, 0, 0, ratio, 0, 0)\n      context.clearRect(0, 0, width, height)\n      const sample = document.createElement(\"canvas\")\n      sample.width = columns\n      sample.height = Math.max(1, Math.round(columns * (height / width)))\n      const sampler = sample.getContext(\"2d\", { willReadFrequently: true })\n      if (!sampler) return\n      sampler.drawImage(image, 0, 0, sample.width, sample.height)\n      const pixels = sampler.getImageData(0, 0, sample.width, sample.height).data\n      const color = getComputedStyle(wrap).color\n      const gapX = width / sample.width\n      const gapY = height / sample.height\n      const reduced = window.matchMedia(\"(prefers-reduced-motion: reduce)\").matches\n      context.fillStyle = color\n      for (let y = 0; y < sample.height; y += 1) {\n        for (let x = 0; x < sample.width; x += 1) {\n          const offset = (y * sample.width + x) * 4\n          const luminance = (pixels[offset] + pixels[offset + 1] + pixels[offset + 2]) / (3 * 255)\n          const cx = (x + 0.5) * gapX\n          const cy = (y + 0.5) * gapY\n          let influence = 1\n          if (!reduced && pointer.current.active) {\n            const dx = cx - pointer.current.x\n            const dy = cy - pointer.current.y\n            const distance = Math.hypot(dx, dy)\n            influence = 1 + Math.max(0, 1 - distance / 90) * 1.4\n          }\n          const radius = Math.max(0.4, (1 - luminance) * Math.min(gapX, gapY) * 0.48 * influence)\n          context.beginPath()\n          context.arc(cx, cy, radius, 0, Math.PI * 2)\n          context.fill()\n        }\n      }\n    }\n\n    drawRef.current = draw\n    image.onload = () => {\n      setFailed(false)\n      draw()\n    }\n    image.onerror = () => setFailed(true)\n    image.src = src\n    const resize = new ResizeObserver(() => draw())\n    resize.observe(wrap)\n\n    return () => {\n      alive = false\n      resize.disconnect()\n      drawRef.current = () => {}\n    }\n  }, [columns, src])\n\n  return (\n    <div\n      ref={wrapRef}\n      data-slot=\"halftone-image\"\n      className={cn(\"relative aspect-square overflow-hidden rounded-xl border border-border bg-card text-foreground\", className)}\n      onPointerMove={(event) => {\n        const rect = event.currentTarget.getBoundingClientRect()\n        pointer.current = { x: event.clientX - rect.left, y: event.clientY - rect.top, active: true }\n        drawRef.current()\n      }}\n      onPointerLeave={() => {\n        pointer.current = { x: -1, y: -1, active: false }\n        drawRef.current()\n      }}\n    >\n      <canvas ref={canvasRef} className=\"size-full\" role=\"img\" aria-label={alt} />\n      {failed ? <p className=\"absolute inset-0 grid place-items-center text-sm text-muted-foreground\">{alt}</p> : null}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/halftone-image.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Imagen en puntos",
+    "descriptionEs": "Imagen dibujada como puntos en un lienzo que crecen hacia el cursor.",
+    "preview": "app/examples/halftone-image/preview.tsx",
+    "previewHref": "/examples/halftone-image",
+    "examples": [
+      {
+        "title": "Imagen en puntos",
+        "href": "/examples/halftone-image",
+        "description": "Imagen dibujada como puntos en un lienzo que crecen hacia el cursor."
+      }
+    ],
+    "usage": "<HalftoneImage src={src} alt=\"Portrait\" />",
+    "api": [
+      {
+        "name": "src / alt",
+        "type": "string",
+        "description": "Image URL and accessible name."
+      },
+      {
+        "name": "columns",
+        "type": "number",
+        "description": "Dots across. Default 42."
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "description": "Frame classes. Default is a square."
+      }
+    ]
+  },
+  "docs": "Dots use the computed text color, so they follow the host theme. Pointer reaction is skipped when reduced motion is requested. No theme is shipped.",
+  "categories": [
+    "media"
+  ],
+  "type": "registry:ui"
+}

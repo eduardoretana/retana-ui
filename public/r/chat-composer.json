@@ -1,0 +1,64 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "chat-composer",
+  "title": "Chat Composer",
+  "author": "Eduardo Retana",
+  "description": "Growing textarea that sends on Enter, inserts a newline on Shift+Enter, accepts attachments, swaps in a stop button while generating, and leaves a slot for a model picker.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/chat-composer.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { Paperclip, Send, Square, X } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Button } from \"@/components/ui/button\"\nimport { Textarea } from \"@/components/ui/textarea\"\n\nexport type ChatComposerAttachment = {\n  id: string\n  name: string\n  size?: number\n}\n\nexport type ChatComposerProps = {\n  value?: string\n  defaultValue?: string\n  onValueChange?: (value: string) => void\n  onSubmit?: (value: string, attachments: File[]) => void\n  onStop?: () => void\n  generating?: boolean\n  placeholder?: string\n  sendLabel?: string\n  stopLabel?: string\n  attachLabel?: string\n  removeAttachmentLabel?: string\n  /** Rendered at the start of the toolbar. Typically a model select. */\n  modelSlot?: React.ReactNode\n  disabled?: boolean\n  accept?: string\n  attachments?: ChatComposerAttachment[]\n  onAttachmentsChange?: (files: File[]) => void\n  className?: string\n  textareaClassName?: string\n}\n\nfunction formatBytes(size: number) {\n  if (size < 1024) return `${size} B`\n  if (size < 1024 * 1024) return `${Math.round(size / 1024)} KB`\n  return `${(size / (1024 * 1024)).toFixed(1)} MB`\n}\n\nexport function ChatComposer({\n  value,\n  defaultValue = \"\",\n  onValueChange,\n  onSubmit,\n  onStop,\n  generating = false,\n  placeholder = \"Write a message\",\n  sendLabel = \"Send\",\n  stopLabel = \"Stop\",\n  attachLabel = \"Attach files\",\n  removeAttachmentLabel = \"Remove\",\n  modelSlot,\n  disabled = false,\n  accept,\n  attachments,\n  onAttachmentsChange,\n  className,\n  textareaClassName,\n}: ChatComposerProps) {\n  const [uncontrolled, setUncontrolled] = React.useState(defaultValue)\n  const [files, setFiles] = React.useState<File[]>([])\n  const inputRef = React.useRef<HTMLInputElement>(null)\n  const text = value !== undefined ? value : uncontrolled\n  const locked = disabled || generating\n\n  function setText(next: string) {\n    if (value === undefined) setUncontrolled(next)\n    onValueChange?.(next)\n  }\n\n  function updateFiles(next: File[]) {\n    setFiles(next)\n    onAttachmentsChange?.(next)\n  }\n\n  function submit() {\n    const trimmed = text.trim()\n    if (locked) return\n    if (!trimmed && files.length === 0) return\n    onSubmit?.(trimmed, files)\n    if (value === undefined) setUncontrolled(\"\")\n    updateFiles([])\n    if (inputRef.current) inputRef.current.value = \"\"\n  }\n\n  function onKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {\n    if (event.key !== \"Enter\" || event.shiftKey) return\n    if (event.nativeEvent.isComposing) return\n    event.preventDefault()\n    submit()\n  }\n\n  const shown: ChatComposerAttachment[] =\n    attachments ??\n    files.map((file) => ({ id: `${file.name}-${file.size}-${file.lastModified}`, name: file.name, size: file.size }))\n\n  return (\n    <form\n      data-slot=\"chat-composer\"\n      data-generating={generating ? \"true\" : \"false\"}\n      className={cn(\n        \"rounded-xl border border-border bg-card p-2 shadow-sm focus-within:ring-2 focus-within:ring-ring/40\",\n        className,\n      )}\n      onSubmit={(event) => {\n        event.preventDefault()\n        submit()\n      }}\n    >\n      {shown.length > 0 ? (\n        <ul className=\"mb-2 flex flex-wrap gap-1.5\" aria-label={attachLabel}>\n          {shown.map((item) => (\n            <li\n              key={item.id}\n              className=\"flex max-w-full items-center gap-1 rounded-md bg-muted py-0.5 pr-0.5 pl-2 text-xs\"\n            >\n              <span className=\"truncate\">{item.name}</span>\n              {typeof item.size === \"number\" ? (\n                <span className=\"shrink-0 text-muted-foreground tabular-nums\">{formatBytes(item.size)}</span>\n              ) : null}\n              <Button\n                type=\"button\"\n                variant=\"ghost\"\n                size=\"icon-xs\"\n                aria-label={`${removeAttachmentLabel} ${item.name}`}\n                onClick={() => updateFiles(files.filter((file) => file.name !== item.name || file.size !== item.size))}\n              >\n                <X />\n              </Button>\n            </li>\n          ))}\n        </ul>\n      ) : null}\n      <Textarea\n        value={text}\n        onChange={(event) => setText(event.target.value)}\n        onKeyDown={onKeyDown}\n        placeholder={placeholder}\n        disabled={disabled}\n        rows={1}\n        aria-label={placeholder}\n        className={cn(\n          \"max-h-40 min-h-10 resize-none border-0 bg-transparent px-1.5 shadow-none focus-visible:ring-0 dark:bg-transparent\",\n          textareaClassName,\n        )}\n      />\n      <div className=\"mt-1 flex items-center gap-1\">\n        {modelSlot ? <div className=\"min-w-0\">{modelSlot}</div> : null}\n        <input\n          ref={inputRef}\n          type=\"file\"\n          accept={accept}\n          multiple\n          className=\"sr-only\"\n          tabIndex={-1}\n          aria-hidden\n          onChange={(event) => {\n            const picked = Array.from(event.target.files ?? [])\n            if (picked.length) updateFiles([...files, ...picked])\n          }}\n        />\n        <Button\n          type=\"button\"\n          variant=\"ghost\"\n          size=\"icon-sm\"\n          className=\"ml-auto\"\n          aria-label={attachLabel}\n          disabled={disabled}\n          onClick={() => inputRef.current?.click()}\n        >\n          <Paperclip />\n        </Button>\n        {generating ? (\n          <Button type=\"button\" size=\"sm\" variant=\"secondary\" onClick={onStop} aria-label={stopLabel}>\n            <Square />\n            {stopLabel}\n          </Button>\n        ) : (\n          <Button type=\"submit\" size=\"sm\" disabled={disabled || (!text.trim() && files.length === 0)} aria-label={sendLabel}>\n            <Send />\n            {sendLabel}\n          </Button>\n        )}\n      </div>\n    </form>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/chat-composer.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Compositor de chat",
+    "descriptionEs": "Área de texto que crece, envía con Enter, inserta un salto con Mayús+Enter, admite adjuntos, muestra detener mientras se genera y reserva un hueco para el modelo.",
+    "preview": "app/examples/chat-composer/preview.tsx",
+    "previewHref": "/examples/chat-composer",
+    "examples": [
+      {
+        "title": "Compositor de chat",
+        "href": "/examples/chat-composer",
+        "description": "Área de texto que crece, envía con Enter, inserta un salto con Mayús+Enter, admite adjuntos, muestra detener mientras se genera y reserva un hueco para el modelo."
+      }
+    ],
+    "usage": "<ChatComposer\n  modelSlot={<ModelSelect />}\n  generating={busy}\n  onSubmit={send}\n  onStop={stop}\n/>",
+    "api": [
+      {
+        "name": "onSubmit",
+        "type": "(value, files) => void",
+        "description": "Called with trimmed text and attached files."
+      },
+      {
+        "name": "generating / onStop",
+        "type": "boolean / callback",
+        "description": "Replaces send with a stop button."
+      },
+      {
+        "name": "modelSlot",
+        "type": "ReactNode",
+        "description": "Rendered at the start of the toolbar."
+      },
+      {
+        "name": "labels",
+        "type": "string",
+        "description": "placeholder, sendLabel, stopLabel, attachLabel, and removeAttachmentLabel default to English."
+      }
+    ]
+  },
+  "docs": "Import ChatComposer from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "chat",
+    "form"
+  ],
+  "type": "registry:ui"
+}

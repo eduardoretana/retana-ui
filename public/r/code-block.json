@@ -1,0 +1,63 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "code-block",
+  "title": "Code Block",
+  "author": "Eduardo Retana",
+  "description": "Code block with token highlighting, a filename, copy, and line numbers.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/code-block.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { Check, Copy } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Button } from \"@/components/ui/button\"\n\nexport type CodeTokenType = \"plain\" | \"keyword\" | \"string\" | \"comment\" | \"number\" | \"function\"\n\nexport type CodeToken = {\n  type: CodeTokenType\n  value: string\n}\n\nconst KEYWORDS = new Set([\n  \"const\", \"let\", \"var\", \"function\", \"return\", \"if\", \"else\", \"for\", \"while\", \"switch\",\n  \"case\", \"break\", \"continue\", \"import\", \"export\", \"from\", \"as\", \"async\", \"await\",\n  \"class\", \"extends\", \"new\", \"try\", \"catch\", \"throw\", \"typeof\", \"interface\", \"type\",\n  \"public\", \"private\", \"true\", \"false\", \"null\", \"undefined\", \"void\", \"of\", \"in\",\n  \"default\", \"yield\", \"this\",\n])\n\nfunction isIdent(char: string) {\n  return /[A-Za-z0-9_$]/.test(char)\n}\n\nexport function highlightLine(line: string): CodeToken[] {\n  const tokens: CodeToken[] = []\n  let index = 0\n\n  function push(type: CodeTokenType, value: string) {\n    if (value) tokens.push({ type, value })\n  }\n\n  while (index < line.length) {\n    const rest = line.slice(index)\n    if (rest.startsWith(\"//\")) {\n      push(\"comment\", rest)\n      break\n    }\n    const char = line[index]\n    if (char === '\"' || char === \"'\" || char === \"`\") {\n      let end = index + 1\n      while (end < line.length && line[end] !== char) {\n        if (line[end] === \"\\\\\") end += 1\n        end += 1\n      }\n      end = Math.min(line.length, end + 1)\n      push(\"string\", line.slice(index, end))\n      index = end\n      continue\n    }\n    if (/\\d/.test(char) && (index === 0 || !isIdent(line[index - 1]))) {\n      let end = index + 1\n      while (end < line.length && /[\\d.]/.test(line[end])) end += 1\n      push(\"number\", line.slice(index, end))\n      index = end\n      continue\n    }\n    if (/[A-Za-z_$]/.test(char)) {\n      let end = index + 1\n      while (end < line.length && isIdent(line[end])) end += 1\n      const word = line.slice(index, end)\n      const next = line.slice(end).match(/^\\s*\\(/)\n      if (KEYWORDS.has(word)) push(\"keyword\", word)\n      else if (next) push(\"function\", word)\n      else push(\"plain\", word)\n      index = end\n      continue\n    }\n    push(\"plain\", char)\n    index += 1\n  }\n  return tokens\n}\n\nconst TOKEN_CLASS: Record<CodeTokenType, string> = {\n  plain: \"\",\n  keyword: \"font-medium text-primary\",\n  string: \"text-foreground/80 underline decoration-primary/40 underline-offset-2\",\n  comment: \"text-muted-foreground italic\",\n  number: \"tabular-nums\",\n  function: \"font-medium\",\n}\n\nexport type CodeBlockProps = {\n  code: string\n  filename?: string\n  language?: string\n  showLineNumbers?: boolean\n  copyLabel?: string\n  copiedLabel?: string\n  className?: string\n}\n\nexport function CodeBlock({\n  code,\n  filename,\n  language = \"text\",\n  showLineNumbers = true,\n  copyLabel = \"Copy\",\n  copiedLabel = \"Copied\",\n  className,\n}: CodeBlockProps) {\n  const [copied, setCopied] = React.useState(false)\n  const timer = React.useRef<number>(0)\n  const lines = code.replace(/\\n$/, \"\").split(\"\\n\")\n\n  React.useEffect(() => () => window.clearTimeout(timer.current), [])\n\n  async function copy() {\n    try {\n      await navigator.clipboard.writeText(code)\n      setCopied(true)\n      window.clearTimeout(timer.current)\n      timer.current = window.setTimeout(() => setCopied(false), 1600)\n    } catch {\n      setCopied(false)\n    }\n  }\n\n  return (\n    <figure\n      data-slot=\"code-block\"\n      data-language={language}\n      className={cn(\"overflow-hidden rounded-xl border border-border bg-card\", className)}\n    >\n      <figcaption className=\"flex items-center gap-2 border-b border-border px-3 py-1.5\">\n        <span className=\"min-w-0 flex-1 truncate font-mono text-xs\">{filename ?? language}</span>\n        <span className=\"text-[11px] text-muted-foreground uppercase\">{language}</span>\n        <Button type=\"button\" variant=\"ghost\" size=\"xs\" onClick={() => void copy()} aria-label={copied ? copiedLabel : copyLabel}>\n          {copied ? <Check /> : <Copy />}\n          {copied ? copiedLabel : copyLabel}\n        </Button>\n      </figcaption>\n      <pre className=\"overflow-x-auto p-3 font-mono text-[13px] leading-6\">\n        <code>\n          {lines.map((line, index) => (\n            <span key={index} className=\"flex\">\n              {showLineNumbers ? (\n                <span className=\"mr-4 w-6 shrink-0 select-none text-right text-muted-foreground tabular-nums\" aria-hidden>\n                  {index + 1}\n                </span>\n              ) : null}\n              <span className=\"min-w-0 flex-1 whitespace-pre\">\n                {line.length === 0\n                  ? \" \"\n                  : highlightLine(line).map((token, tokenIndex) => (\n                      <span key={tokenIndex} className={TOKEN_CLASS[token.type]}>\n                        {token.value}\n                      </span>\n                    ))}\n              </span>\n            </span>\n          ))}\n        </code>\n      </pre>\n    </figure>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/code-block.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Bloque de código",
+    "descriptionEs": "Bloque de código con resaltado, nombre de archivo, copiar y números de línea.",
+    "preview": "app/examples/code-block/preview.tsx",
+    "previewHref": "/examples/code-block",
+    "examples": [
+      {
+        "title": "Bloque de código",
+        "href": "/examples/code-block",
+        "description": "Bloque de código con resaltado, nombre de archivo, copiar y números de línea."
+      }
+    ],
+    "usage": "<CodeBlock code={source} filename=\"note.ts\" language=\"ts\" />",
+    "api": [
+      {
+        "name": "code",
+        "type": "string",
+        "description": "Source to show and copy."
+      },
+      {
+        "name": "filename / language",
+        "type": "string",
+        "description": "Caption. language defaults to text."
+      },
+      {
+        "name": "showLineNumbers",
+        "type": "boolean",
+        "description": "Default true."
+      },
+      {
+        "name": "copyLabel / copiedLabel",
+        "type": "string",
+        "description": "Default Copy and Copied."
+      }
+    ]
+  },
+  "docs": "Highlighting uses the host primary and muted tokens, not a color theme. highlightLine is exported for tests and custom renderers. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "ai",
+    "content"
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "image-generation",
+  "title": "Image Generation",
+  "author": "Eduardo Retana",
+  "description": "Image frame that shows progress and a shimmer while generating, then reveals the result.",
+  "dependencies": [],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/image-generation.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Button } from \"@/components/ui/button\"\n\nexport type ImageGenerationStatus = \"idle\" | \"generating\" | \"done\" | \"error\"\n\nexport type ImageGenerationProps = {\n  status?: ImageGenerationStatus\n  /** 0 to 100. */\n  progress?: number\n  src?: string\n  alt?: string\n  prompt?: string\n  generatingLabel?: string\n  errorLabel?: string\n  retryLabel?: string\n  idleLabel?: string\n  onRetry?: () => void\n  className?: string\n  frameClassName?: string\n}\n\nexport function ImageGeneration({\n  status = \"idle\",\n  progress = 0,\n  src,\n  alt = \"\",\n  prompt,\n  generatingLabel = \"Generating\",\n  errorLabel = \"Could not generate the image\",\n  retryLabel = \"Try again\",\n  idleLabel = \"Waiting for a prompt\",\n  onRetry,\n  className,\n  frameClassName,\n}: ImageGenerationProps) {\n  const [loadedSrc, setLoadedSrc] = React.useState<string | null>(null)\n  const revealed = status === \"done\" && Boolean(src) && loadedSrc === src\n  const bounded = Math.min(100, Math.max(0, progress))\n\n  return (\n    <figure data-slot=\"image-generation\" data-status={status} className={cn(\"flex flex-col gap-2\", className)}>\n      <div\n        className={cn(\n          \"relative aspect-square overflow-hidden rounded-xl border border-border bg-muted\",\n          frameClassName,\n        )}\n      >\n        {status === \"generating\" ? (\n          <div className=\"absolute inset-0 overflow-hidden\" aria-hidden>\n            <div className=\"absolute inset-0 bg-muted motion-safe:animate-pulse\" />\n            <div className=\"absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-foreground/10 to-transparent motion-safe:animate-[retana-shimmer_1.6s_ease-in-out_infinite]\" />\n            <style>{\"@keyframes retana-shimmer{from{transform:translateX(-120%)}to{transform:translateX(280%)}}\"}</style>\n          </div>\n        ) : null}\n        {status === \"done\" && src ? (\n          // The host supplies the generated bitmap. Decorative frames pass alt=\"\".\n          // eslint-disable-next-line @next/next/no-img-element\n          <img\n            src={src}\n            alt={alt}\n            onLoad={() => setLoadedSrc(src ?? null)}\n            className={cn(\n              \"size-full object-cover transition-opacity duration-500 motion-reduce:transition-none\",\n              revealed ? \"opacity-100\" : \"opacity-0\",\n            )}\n          />\n        ) : null}\n        {status === \"idle\" ? (\n          <div className=\"grid size-full place-items-center px-6 text-center text-sm text-muted-foreground\">{idleLabel}</div>\n        ) : null}\n        {status === \"error\" ? (\n          <div className=\"grid size-full place-items-center gap-3 px-6 text-center\">\n            <p className=\"text-sm text-destructive\">{errorLabel}</p>\n            {onRetry ? (\n              <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={onRetry}>\n                {retryLabel}\n              </Button>\n            ) : null}\n          </div>\n        ) : null}\n        {status === \"generating\" ? (\n          <div className=\"absolute inset-x-3 bottom-3\">\n            <div\n              role=\"progressbar\"\n              aria-label={generatingLabel}\n              aria-valuemin={0}\n              aria-valuemax={100}\n              aria-valuenow={Math.round(bounded)}\n              className=\"h-1 overflow-hidden rounded-full bg-background/70\"\n            >\n              <div className=\"h-full rounded-full bg-foreground/80\" style={{ width: `${bounded}%` }} />\n            </div>\n            <p className=\"mt-1 text-center text-[11px] text-foreground/80\">\n              {generatingLabel} {Math.round(bounded)}%\n            </p>\n          </div>\n        ) : null}\n      </div>\n      {prompt ? <figcaption className=\"text-xs text-muted-foreground\">{prompt}</figcaption> : null}\n    </figure>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/image-generation.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Generación de imagen",
+    "descriptionEs": "Marco de imagen que muestra progreso y un velo mientras se genera, y luego revela el resultado.",
+    "preview": "app/examples/image-generation/preview.tsx",
+    "previewHref": "/examples/image-generation",
+    "examples": [
+      {
+        "title": "Generación de imagen",
+        "href": "/examples/image-generation",
+        "description": "Marco de imagen que muestra progreso y un velo mientras se genera, y luego revela el resultado."
+      }
+    ],
+    "usage": "<ImageGeneration status=\"generating\" progress={40} src={src} alt=\"\" />",
+    "api": [
+      {
+        "name": "status",
+        "type": "\"idle\" | \"generating\" | \"done\" | \"error\"",
+        "description": "What the frame shows."
+      },
+      {
+        "name": "progress",
+        "type": "number",
+        "description": "0 to 100 while generating."
+      },
+      {
+        "name": "src / alt",
+        "type": "string",
+        "description": "Result image. The host supplies the bitmap."
+      },
+      {
+        "name": "labels",
+        "type": "string",
+        "description": "generating, error, retry, and idle labels default to English."
+      }
+    ]
+  },
+  "docs": "The shimmer uses the host foreground token. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "ai",
+    "media"
+  ],
+  "type": "registry:ui"
+}

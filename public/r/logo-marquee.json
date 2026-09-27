@@ -1,0 +1,59 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "logo-marquee",
+  "title": "Logo Marquee",
+  "author": "Eduardo Retana",
+  "description": "Infinite logo row that pauses on hover and fades at the edges.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/logo-marquee.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type LogoMarqueeProps = {\n  children: React.ReactNode\n  /** Seconds for one full loop. */\n  duration?: number\n  pauseOnHover?: boolean\n  fade?: boolean\n  label?: string\n  className?: string\n}\n\nexport function LogoMarquee({\n  children,\n  duration = 28,\n  pauseOnHover = true,\n  fade = true,\n  label = \"Logo carousel\",\n  className,\n}: LogoMarqueeProps) {\n  const trackId = React.useId().replace(/:/g, \"\")\n  const mask = fade\n    ? \"linear-gradient(to right, transparent, var(--foreground) 12%, var(--foreground) 88%, transparent)\"\n    : undefined\n\n  return (\n    <div\n      data-slot=\"logo-marquee\"\n      role=\"region\"\n      aria-label={label}\n      className={cn(\"group relative overflow-hidden\", className)}\n      style={mask ? { maskImage: mask, WebkitMaskImage: mask } : undefined}\n    >\n      <style>\n        {`@keyframes retana-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}\n.m${trackId}{animation:retana-marquee ${duration}s linear infinite}\n${pauseOnHover ? `.group:hover .m${trackId}{animation-play-state:paused}` : \"\"}\n@media (prefers-reduced-motion: reduce){.m${trackId}{animation:none}}`}\n      </style>\n      <div className={cn(`m${trackId}`, \"flex w-max\")}>\n        <div className=\"flex items-center gap-10 px-5\">{children}</div>\n        <div className=\"flex items-center gap-10 px-5\" aria-hidden>\n          {children}\n        </div>\n      </div>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/logo-marquee.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Carrusel de logos",
+    "descriptionEs": "Carrusel infinito de logos que se pausa al pasar el cursor y se desvanece en los bordes.",
+    "preview": "app/examples/logo-marquee/preview.tsx",
+    "previewHref": "/examples/logo-marquee",
+    "examples": [
+      {
+        "title": "Carrusel de logos",
+        "href": "/examples/logo-marquee",
+        "description": "Carrusel infinito de logos que se pausa al pasar el cursor y se desvanece en los bordes."
+      }
+    ],
+    "usage": "<LogoMarquee label=\"Logos\">{logos}</LogoMarquee>",
+    "api": [
+      {
+        "name": "children",
+        "type": "ReactNode",
+        "description": "Logos. They are duplicated for the loop."
+      },
+      {
+        "name": "duration",
+        "type": "number",
+        "description": "Seconds per loop. Default 28."
+      },
+      {
+        "name": "pauseOnHover / fade",
+        "type": "boolean",
+        "description": "Both default to true."
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Accessible name. Default Logo carousel."
+      }
+    ]
+  },
+  "docs": "The edge fade uses the host foreground token as a mask. The animation stops when the reader prefers reduced motion. No theme is shipped.",
+  "categories": [
+    "media",
+    "content"
+  ],
+  "type": "registry:ui"
+}

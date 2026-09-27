@@ -1,0 +1,56 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "gooey-slider",
+  "title": "Gooey Slider",
+  "author": "Eduardo Retana",
+  "description": "Slider with an organic trail while dragging, built on the slider primitive.",
+  "dependencies": [],
+  "registryDependencies": [
+    "slider"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/gooey-slider.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Slider } from \"@/components/ui/slider\"\n\nexport type GooeySliderProps = {\n  value?: number\n  defaultValue?: number\n  min?: number\n  max?: number\n  step?: number\n  onValueChange?: (value: number) => void\n  label?: string\n  className?: string\n  disabled?: boolean\n}\n\nexport function GooeySlider({\n  value,\n  defaultValue = 40,\n  min = 0,\n  max = 100,\n  step = 1,\n  onValueChange,\n  label = \"Value\",\n  className,\n  disabled = false,\n}: GooeySliderProps) {\n  const [uncontrolled, setUncontrolled] = React.useState(defaultValue)\n  const current = value ?? uncontrolled\n  const filterId = React.useId().replace(/:/g, \"\")\n  const leadRef = React.useRef<SVGCircleElement>(null)\n  const trailRef = React.useRef<SVGCircleElement>(null)\n  const valueRef = React.useRef(current)\n  const trailRefValue = React.useRef(current)\n  const dragging = React.useRef(false)\n\n  React.useEffect(() => {\n    valueRef.current = current\n    let frame = 0\n    const tick = () => {\n      const reduced = window.matchMedia(\"(prefers-reduced-motion: reduce)\").matches\n      const target = valueRef.current\n      const previous = trailRefValue.current\n      const trail = reduced ? target : previous + (target - previous) * (dragging.current ? 0.16 : 0.28)\n      const settled = reduced || (!dragging.current && Math.abs(trail - target) < 0.2)\n      trailRefValue.current = settled ? target : trail\n      const span = max - min || 1\n      leadRef.current?.setAttribute(\"cx\", `${((target - min) / span) * 100}%`)\n      trailRef.current?.setAttribute(\"cx\", `${((trailRefValue.current - min) / span) * 100}%`)\n      if (!settled) frame = window.requestAnimationFrame(tick)\n    }\n    frame = window.requestAnimationFrame(tick)\n    return () => window.cancelAnimationFrame(frame)\n  }, [current, max, min])\n\n  function commit(next: number) {\n    if (value === undefined) setUncontrolled(next)\n    onValueChange?.(next)\n  }\n\n  return (\n    <div\n      data-slot=\"gooey-slider\"\n      className={cn(\"relative h-12\", className)}\n      onPointerDown={() => {\n        dragging.current = true\n      }}\n      onPointerUp={() => {\n        dragging.current = false\n      }}\n      onPointerCancel={() => {\n        dragging.current = false\n      }}\n    >\n      <svg aria-hidden className=\"pointer-events-none absolute inset-x-0 top-1/2 h-12 w-full -translate-y-1/2 overflow-visible text-primary\">\n        <defs>\n          <filter id={filterId} x=\"-20%\" y=\"-80%\" width=\"140%\" height=\"260%\">\n            <feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"7\" result=\"blur\" />\n            <feColorMatrix in=\"blur\" mode=\"matrix\" values=\"1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9\" />\n          </filter>\n        </defs>\n        <g filter={`url(#${filterId})`}>\n          <rect x=\"0\" y=\"22\" width=\"100%\" height=\"6\" rx=\"3\" fill=\"currentColor\" opacity=\"0.28\" />\n          <circle ref={trailRef} cy=\"25\" r=\"10\" fill=\"currentColor\" />\n          <circle ref={leadRef} cy=\"25\" r=\"13\" fill=\"currentColor\" />\n        </g>\n      </svg>\n      <span id={`${filterId}-label`} className=\"sr-only\">\n        {label}\n      </span>\n      <Slider\n        className=\"absolute inset-x-0 top-1/2 -translate-y-1/2 **:data-[slot=slider-range]:bg-transparent **:data-[slot=slider-thumb]:size-8 **:data-[slot=slider-thumb]:border-0 **:data-[slot=slider-thumb]:bg-transparent **:data-[slot=slider-thumb]:shadow-none **:data-[slot=slider-track]:bg-transparent focus-visible:outline-none\"\n        min={min}\n        max={max}\n        step={step}\n        disabled={disabled}\n        value={[current]}\n        aria-labelledby={`${filterId}-label`}\n        aria-label={label}\n        onValueChange={(next) => commit(next[0] ?? min)}\n      />\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/gooey-slider.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Control viscoso",
+    "descriptionEs": "Control deslizante con un rastro orgánico al arrastrar, construido sobre la primitiva slider.",
+    "preview": "app/examples/gooey-slider/preview.tsx",
+    "previewHref": "/examples/gooey-slider",
+    "examples": [
+      {
+        "title": "Control viscoso",
+        "href": "/examples/gooey-slider",
+        "description": "Control deslizante con un rastro orgánico al arrastrar, construido sobre la primitiva slider."
+      }
+    ],
+    "usage": "<GooeySlider value={value} onValueChange={setValue} label=\"Intensity\" />",
+    "api": [
+      {
+        "name": "value / defaultValue",
+        "type": "number",
+        "description": "Single value. Default 40."
+      },
+      {
+        "name": "min / max / step",
+        "type": "number",
+        "description": "Defaults 0, 100, and 1."
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Accessible name. Default Value."
+      }
+    ]
+  },
+  "docs": "The visible trail is decorative. The Radix slider underneath keeps the keyboard behavior. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "form",
+    "input"
+  ],
+  "type": "registry:ui"
+}

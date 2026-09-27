@@ -1,0 +1,56 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "task-list",
+  "title": "Task List",
+  "author": "Eduardo Retana",
+  "description": "Agent checklist with a progress bar and optional toggling.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/task-list.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { Check } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type AgentTask = {\n  id: string\n  title: string\n  detail?: string\n  done?: boolean\n}\n\nexport type TaskListProps = {\n  tasks: readonly AgentTask[]\n  title?: string\n  onToggle?: (id: string, done: boolean) => void\n  progressLabel?: string\n  className?: string\n}\n\nexport function TaskList({\n  tasks,\n  title = \"Tasks\",\n  onToggle,\n  progressLabel = \"Progress\",\n  className,\n}: TaskListProps) {\n  const done = tasks.filter((task) => task.done).length\n  const total = tasks.length\n  const percent = total === 0 ? 0 : Math.round((done / total) * 100)\n\n  return (\n    <section data-slot=\"task-list\" className={cn(\"rounded-xl border border-border bg-card p-3\", className)}>\n      <div className=\"mb-2 flex items-baseline justify-between gap-3\">\n        <h2 className=\"text-sm font-medium\">{title}</h2>\n        <p className=\"text-xs text-muted-foreground tabular-nums\">\n          {done}/{total}\n        </p>\n      </div>\n      <div\n        role=\"progressbar\"\n        aria-label={progressLabel}\n        aria-valuemin={0}\n        aria-valuemax={100}\n        aria-valuenow={percent}\n        className=\"mb-3 h-1.5 overflow-hidden rounded-full bg-muted\"\n      >\n        <div className=\"h-full rounded-full bg-primary transition-[width] duration-300 motion-reduce:transition-none\" style={{ width: `${percent}%` }} />\n      </div>\n      <ul className=\"flex flex-col gap-1\">\n        {tasks.map((task) => {\n          const checked = Boolean(task.done)\n          return (\n            <li key={task.id}>\n              <button\n                type=\"button\"\n                role=\"checkbox\"\n                aria-checked={checked}\n                disabled={!onToggle}\n                onClick={() => onToggle?.(task.id, !checked)}\n                className=\"flex w-full items-start gap-2 rounded-lg px-1.5 py-1.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-default\"\n              >\n                <span\n                  aria-hidden\n                  className={cn(\n                    \"mt-0.5 grid size-4 shrink-0 place-items-center rounded border border-border\",\n                    checked && \"border-primary bg-primary text-primary-foreground\",\n                  )}\n                >\n                  {checked ? <Check className=\"size-3\" /> : null}\n                </span>\n                <span className=\"min-w-0\">\n                  <span className={cn(\"block text-sm\", checked && \"text-muted-foreground line-through\")}>{task.title}</span>\n                  {task.detail ? <span className=\"block text-xs text-muted-foreground\">{task.detail}</span> : null}\n                </span>\n              </button>\n            </li>\n          )\n        })}\n      </ul>\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/task-list.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Lista de tareas",
+    "descriptionEs": "Checklist de tareas de un agente, con barra de progreso y marcado opcional.",
+    "preview": "app/examples/task-list/preview.tsx",
+    "previewHref": "/examples/task-list",
+    "examples": [
+      {
+        "title": "Lista de tareas",
+        "href": "/examples/task-list",
+        "description": "Checklist de tareas de un agente, con barra de progreso y marcado opcional."
+      }
+    ],
+    "usage": "<TaskList tasks={tasks} onToggle={toggle} />",
+    "api": [
+      {
+        "name": "tasks",
+        "type": "AgentTask[]",
+        "description": "id, title, optional detail, and done."
+      },
+      {
+        "name": "onToggle",
+        "type": "(id, done) => void",
+        "description": "When omitted, the checks are read-only."
+      },
+      {
+        "name": "title / progressLabel",
+        "type": "string",
+        "description": "Defaults Tasks and Progress."
+      }
+    ]
+  },
+  "docs": "Import TaskList from the installed UI file. The progress bar uses the host primary token. No theme is shipped.",
+  "categories": [
+    "ai",
+    "form"
+  ],
+  "type": "registry:ui"
+}
