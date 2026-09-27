@@ -1,0 +1,23 @@
+Retana UI includes interaction patterns adapted from the MIT-licensed
+admin panel by Maniruzzaman Jubayer:
+
+  https://github.com/jubayer910/Admin-panel
+
+Copyright (c) 2026 Maniruzzaman Jubayer
+
+Those portions are licensed under the MIT License. The original work is a
+Next.js admin with its own CSS modules. This registry reimplements the
+behavior on shadcn primitives. It does not include the original stylesheet,
+the Roobert font, Hugeicons, or the author's brand assets.
+
+Adapted behavior:
+
+- Reordering a filtered list only permutes the visible rows. Hidden rows
+  keep their slots (`reorderVisible` in registry/lib/reorder.ts).
+- Keyboard drag announcements, move up/down/top/bottom, and a position number.
+- A per-row "show on homepage" switch on a project board.
+- A sticky save bar that warns with `beforeunload` while the form is dirty.
+- Content tables shaped around position, show_on_homepage, and published.
+
+The rest of this repository is Copyright (c) Eduardo Retana and is licensed
+under the MIT License. See LICENSE.

@@ -7,17 +7,19 @@ const envKeys = ["NODE_ENV", "VERCEL_ENV", "REGISTRY_TOKEN", "REGISTRY_PUBLIC"] 
 
 const previous = Object.fromEntries(envKeys.map((key) => [key, process.env[key]]))
 
+const env = process.env as Record<string, string | undefined>
+
 afterEach(() => {
   for (const key of envKeys) {
-    if (previous[key] === undefined) delete process.env[key]
-    else process.env[key] = previous[key]
+    if (previous[key] === undefined) delete env[key]
+    else env[key] = previous[key]
   }
 })
 
 function setEnv(values: Partial<Record<(typeof envKeys)[number], string | undefined>>) {
   for (const key of envKeys) {
-    if (!(key in values) || values[key] === undefined) delete process.env[key]
-    else process.env[key] = values[key]
+    if (!(key in values) || values[key] === undefined) delete env[key]
+    else env[key] = values[key]
   }
 }
 

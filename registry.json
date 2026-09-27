@@ -9,9 +9,20 @@
       "title": "Layered Panel",
       "description": "Right-hand peek panel that expands in place to a two-column detail view. No route change. Optional Next.js URL sync keeps Back working: full collapses to peek, then closes. Ships no theme, cssVars, or global CSS — it uses the host project's shadcn tokens and primitives.",
       "author": "Eduardo Retana",
-      "dependencies": ["radix-ui", "lucide-react"],
-      "registryDependencies": ["button", "scroll-area", "separator"],
-      "categories": ["dashboard", "overlay", "panel"],
+      "dependencies": [
+        "radix-ui",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "scroll-area",
+        "separator"
+      ],
+      "categories": [
+        "dashboard",
+        "overlay",
+        "panel"
+      ],
       "meta": {
         "titleEs": "Panel en capas",
         "descriptionEs": "Panel de detalle que se abre a la derecha y crece en el mismo lugar hasta dos columnas. La ruta no cambia, así que la tabla conserva el scroll.",
@@ -111,6 +122,1142 @@
           "target": "@hooks/use-layered-panel-url-state.ts"
         }
       ]
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "admin-utils",
+      "type": "registry:lib",
+      "title": "Admin utilities",
+      "description": "Slug, reorder, CSV, date range, and analytics helpers for an admin that does not care which router or database the host uses.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "admin",
+        "utility"
+      ],
+      "files": [
+        {
+          "path": "registry/lib/admin-types.ts",
+          "type": "registry:lib",
+          "target": "@lib/admin-types.ts"
+        },
+        {
+          "path": "registry/lib/reorder.ts",
+          "type": "registry:lib",
+          "target": "@lib/reorder.ts"
+        },
+        {
+          "path": "registry/lib/slug.ts",
+          "type": "registry:lib",
+          "target": "@lib/slug.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        },
+        {
+          "path": "registry/lib/format.ts",
+          "type": "registry:lib",
+          "target": "@lib/format.ts"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/lib/date-range.ts",
+          "type": "registry:lib",
+          "target": "@lib/date-range.ts"
+        },
+        {
+          "path": "registry/lib/analytics-summary.ts",
+          "type": "registry:lib",
+          "target": "@lib/analytics-summary.ts"
+        },
+        {
+          "path": "registry/hooks/use-optimistic-list.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-optimistic-list.ts"
+        },
+        {
+          "path": "registry/hooks/use-unsaved-changes.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-unsaved-changes.ts"
+        },
+        {
+          "path": "registry/hooks/use-date-range.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-date-range.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Utilidades de admin",
+        "descriptionEs": "Slug único, reordenación, CSV, rango de fechas y resumen de analítica. Sin router ni base de datos.",
+        "preview": "app/examples/admin-utils/preview.tsx",
+        "previewHref": "/examples/admin-utils",
+        "examples": [
+          {
+            "title": "Slug y orden",
+            "href": "/examples/admin-utils",
+            "description": "Un título en español se vuelve slug, y tres filas suben o bajan."
+          }
+        ],
+        "usage": "import { slugify, uniqueSlug } from \"@/lib/slug\"\nimport { reorderVisible, keepPosition } from \"@/lib/reorder\"\n\nconst slug = uniqueSlug(\"Diseño de producto\", existing)\nconst next = reorderVisible(order, visibleIds, activeId, overId)",
+        "api": [
+          {
+            "name": "slugify / uniqueSlug",
+            "type": "function",
+            "description": "ASCII slug. uniqueSlug appends -2, -3 until free."
+          },
+          {
+            "name": "moveItem / reorderRows",
+            "type": "function",
+            "description": "Move one index, or rewrite position from an id list."
+          },
+          {
+            "name": "reorderVisible",
+            "type": "function",
+            "description": "Permute only the visible ids. Hidden ids keep their slots."
+          },
+          {
+            "name": "keepPosition",
+            "type": "function",
+            "description": "On save, keep the stored position of an existing row."
+          },
+          {
+            "name": "toCsv / downloadCsv",
+            "type": "function",
+            "description": "RFC-style CSV and a browser download."
+          },
+          {
+            "name": "resolveRange / presetBounds",
+            "type": "function",
+            "description": "Timezone-aware windows. Default UTC."
+          },
+          {
+            "name": "summarizeAnalytics",
+            "type": "function",
+            "description": "Views and clicks into daily, sources, funnel, scroll, and a Monday-first heatmap."
+          },
+          {
+            "name": "useOptimisticList",
+            "type": "hook",
+            "description": "Show the next order immediately and roll back if onReorder rejects."
+          },
+          {
+            "name": "useUnsavedChanges",
+            "type": "hook",
+            "description": "beforeunload guard while dirty is true."
+          },
+          {
+            "name": "useDateRange",
+            "type": "hook",
+            "description": "Holds a range key and its resolved bounds."
+          }
+        ]
+      },
+      "docs": "Copy the lib and hook files. Nothing here imports Next or Supabase. See NOTICE for the filtered-reorder attribution."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "admin-shell",
+      "type": "registry:ui",
+      "title": "Admin shell",
+      "description": "Collapsible shadcn sidebar, breadcrumbs from one nav config, a command palette, and a theme toggle that uses the host controller when you pass one.",
+      "dependencies": [
+        "lucide-react",
+        "sonner"
+      ],
+      "registryDependencies": [
+        "button",
+        "breadcrumb",
+        "command",
+        "sidebar"
+      ],
+      "categories": [
+        "admin",
+        "navigation"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/admin-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/admin-shell.tsx"
+        },
+        {
+          "path": "registry/hooks/use-admin-theme.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-admin-theme.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Cascarón de admin",
+        "descriptionEs": "Barra lateral que se pliega a iconos, migas de pan, paleta de comandos y tema. Los enlaces los pone el anfitrión.",
+        "preview": "app/examples/admin-shell/preview.tsx",
+        "previewHref": "/examples/admin-shell",
+        "examples": [
+          {
+            "title": "Estudio Acme",
+            "href": "/examples/admin-shell",
+            "description": "Tres pantallas en memoria. Cmd+K busca. El tema cicla claro, oscuro y sistema."
+          }
+        ],
+        "usage": "<AdminShell\n  groups={groups}\n  pathname={pathname}\n  onNavigate={setPathname}\n  themeController={theme}\n>\n  {children}\n</AdminShell>",
+        "api": [
+          {
+            "name": "groups",
+            "type": "AdminNavGroup[]",
+            "description": "Sidebar groups. Each item has href, label, and a lucide icon."
+          },
+          {
+            "name": "pathname / onNavigate",
+            "type": "string / (href) => void",
+            "description": "The host owns the route. No next/link import."
+          },
+          {
+            "name": "linkComponent",
+            "type": "component",
+            "description": "Optional anchor replacement. Defaults to <a>."
+          },
+          {
+            "name": "themeController",
+            "type": "{ theme, setTheme, resolvedTheme }",
+            "description": "Pass next-themes useTheme(). Without it, the shell toggles the dark class."
+          },
+          {
+            "name": "actions",
+            "type": "ReactNode",
+            "description": "Slot in the top bar, before the theme button."
+          },
+          {
+            "name": "breadcrumbsFor",
+            "type": "function",
+            "description": "Crumbs derived from the same nav config."
+          }
+        ]
+      },
+      "docs": "Answer no if the CLI asks to overwrite button, breadcrumb, command, or sidebar. Pass themeController from next-themes so the shell does not fight the host provider."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "sortable-list",
+      "type": "registry:ui",
+      "title": "Sortable list",
+      "description": "Mouse and keyboard drag list with screen-reader announcements, move buttons, a position number, and optimistic reorder that rolls back.",
+      "dependencies": [
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "lucide-react",
+        "sonner"
+      ],
+      "registryDependencies": [
+        "button",
+        "button",
+        "dialog",
+        "sheet",
+        "alert-dialog",
+        "collapsible"
+      ],
+      "categories": [
+        "admin",
+        "list"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/sortable-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/sortable-list.tsx"
+        },
+        {
+          "path": "registry/ui/entity-form.tsx",
+          "type": "registry:component",
+          "target": "@ui/entity-form.tsx"
+        },
+        {
+          "path": "registry/lib/reorder.ts",
+          "type": "registry:lib",
+          "target": "@lib/reorder.ts"
+        },
+        {
+          "path": "registry/hooks/use-optimistic-list.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-optimistic-list.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Lista ordenable",
+        "descriptionEs": "Arrastre con ratón y teclado, anuncios para lector de pantalla, botones de mover y reordenación optimista con deshacer.",
+        "preview": "app/examples/sortable-list/preview.tsx",
+        "previewHref": "/examples/sortable-list",
+        "examples": [
+          {
+            "title": "Cuatro proyectos",
+            "href": "/examples/sortable-list",
+            "description": "Marca la casilla para ver cómo el orden vuelve atrás si el guardado falla."
+          }
+        ],
+        "usage": "<SortableList\n  items={items}\n  visibleIds={visibleIds}\n  onReorder={(ids) => saveOrder(ids)}\n  onEdit={openEditor}\n/>",
+        "api": [
+          {
+            "name": "items",
+            "type": "SortableListItem[]",
+            "description": "id, title, optional meta and thumbnail."
+          },
+          {
+            "name": "visibleIds",
+            "type": "string[]",
+            "description": "Reorder only these ids. Hidden rows keep their slots."
+          },
+          {
+            "name": "onReorder",
+            "type": "(ids) => Promise<void>",
+            "description": "Reject to roll the list back. A toast reports the error."
+          },
+          {
+            "name": "onEdit",
+            "type": "(id) => void",
+            "description": "Edit button. The list does not open a form itself."
+          }
+        ]
+      },
+      "docs": "dnd-kit PointerSensor and KeyboardSensor. Announcements are in English by default; labels are props. Filtered reorder is attributed in NOTICE."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "sortable-board",
+      "type": "registry:ui",
+      "title": "Sortable board",
+      "description": "Project board with category tabs and counts, search, list or grid, a homepage switch per row, and edit.",
+      "dependencies": [
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "lucide-react",
+        "sonner"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "input",
+        "switch",
+        "tabs",
+        "button",
+        "dialog",
+        "sheet",
+        "alert-dialog",
+        "collapsible"
+      ],
+      "categories": [
+        "admin",
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/sortable-board.tsx",
+          "type": "registry:component",
+          "target": "@ui/sortable-board.tsx"
+        },
+        {
+          "path": "registry/ui/sortable-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/sortable-list.tsx"
+        },
+        {
+          "path": "registry/ui/entity-form.tsx",
+          "type": "registry:component",
+          "target": "@ui/entity-form.tsx"
+        },
+        {
+          "path": "registry/hooks/use-optimistic-list.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-optimistic-list.ts"
+        },
+        {
+          "path": "registry/lib/reorder.ts",
+          "type": "registry:lib",
+          "target": "@lib/reorder.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tablero ordenable",
+        "descriptionEs": "Proyectos con pestañas de categoría, búsqueda, lista o cuadrícula, interruptor de portada y editar.",
+        "preview": "app/examples/sortable-board/preview.tsx",
+        "previewHref": "/examples/sortable-board",
+        "examples": [
+          {
+            "title": "Proyectos de Acme",
+            "href": "/examples/sortable-board",
+            "description": "Cinco trabajos ficticios. La portada y el orden viven en el estado de la página."
+          }
+        ],
+        "usage": "<SortableBoard\n  items={projects}\n  categories={categories}\n  onReorder={reorder}\n  onToggleHomepage={toggle}\n  onEdit={edit}\n  homepageLabel=\"Portada\"\n/>",
+        "api": [
+          {
+            "name": "items / categories",
+            "type": "BoardItem[] / BoardCategory[]",
+            "description": "Rows and the tabs. Counts include the current search."
+          },
+          {
+            "name": "onReorder",
+            "type": "(ids) => Promise<void>",
+            "description": "Full id order, including rows hidden by the filter."
+          },
+          {
+            "name": "onToggleHomepage",
+            "type": "(id, show) => Promise<void>",
+            "description": "Optimistic switch. Rejects roll the switch back."
+          },
+          {
+            "name": "view / query / filter",
+            "type": "controlled props",
+            "description": "Optional. Uncontrolled state is the default."
+          }
+        ]
+      },
+      "docs": "The board does not know about a database. Pass the callbacks from your adapter."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "entity-form",
+      "type": "registry:ui",
+      "title": "Entity form",
+      "description": "Dialog or sheet form for one record, plus confirm-delete, an empty state, and a collapsible section. Submit stays disabled while busy.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "dialog",
+        "sheet",
+        "alert-dialog",
+        "collapsible"
+      ],
+      "categories": [
+        "admin",
+        "form"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/entity-form.tsx",
+          "type": "registry:component",
+          "target": "@ui/entity-form.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Ficha de entidad",
+        "descriptionEs": "Diálogo o panel para crear y editar, con confirmación al borrar, estado vacío y sección plegable.",
+        "preview": "app/examples/entity-form/preview.tsx",
+        "previewHref": "/examples/entity-form",
+        "examples": [
+          {
+            "title": "Alta y edición",
+            "href": "/examples/entity-form",
+            "description": "Guardar conserva la posición. Borrar pide confirmación."
+          }
+        ],
+        "usage": "<EntityForm open={open} onOpenChange={setOpen} title=\"Editar\" onSubmit={save} onDelete={remove}>\n  <input name=\"title\" />\n</EntityForm>",
+        "api": [
+          {
+            "name": "presentation",
+            "type": "\"dialog\" | \"sheet\"",
+            "description": "Default dialog."
+          },
+          {
+            "name": "onSubmit",
+            "type": "(formData) => Promise<void>",
+            "description": "Called with the form data. The parent keeps position via keepPosition."
+          },
+          {
+            "name": "busy",
+            "type": "boolean",
+            "description": "Disables submit. Use it while an upload is in flight."
+          },
+          {
+            "name": "ConfirmDelete / EmptyState / AdminSection",
+            "type": "components",
+            "description": "Shared confirm, empty, and collapsible section."
+          }
+        ]
+      },
+      "docs": "Position is not a field. The parent copies the current position onto the draft before save."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "settings-form",
+      "type": "registry:ui",
+      "title": "Settings form",
+      "description": "Grouped cards over a string key-value map, with a sticky save bar, discard, and a beforeunload guard.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "card",
+        "input",
+        "label",
+        "textarea"
+      ],
+      "categories": [
+        "admin",
+        "form"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/settings-form.tsx",
+          "type": "registry:component",
+          "target": "@ui/settings-form.tsx"
+        },
+        {
+          "path": "registry/hooks/use-unsaved-changes.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-unsaved-changes.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Formulario de textos",
+        "descriptionEs": "Tarjetas agrupadas sobre un mapa clave-valor, barra fija, descartar y aviso al cerrar la pestaña.",
+        "preview": "app/examples/settings-form/preview.tsx",
+        "previewHref": "/examples/settings-form",
+        "examples": [
+          {
+            "title": "Textos de portada",
+            "href": "/examples/settings-form",
+            "description": "Edita el titular. La barra aparece al ensuciar el formulario."
+          }
+        ],
+        "usage": "<SettingsForm groups={groups} values={values} onSave={saveSettings} />",
+        "api": [
+          {
+            "name": "groups",
+            "type": "SettingsGroup[]",
+            "description": "Cards. Each field is text, textarea, or url."
+          },
+          {
+            "name": "values",
+            "type": "Record<string, string>",
+            "description": "Current stored copy."
+          },
+          {
+            "name": "onSave",
+            "type": "(values) => Promise<void>",
+            "description": "Persist the whole map. Discard restores the last values prop."
+          },
+          {
+            "name": "StickySaveBar",
+            "type": "component",
+            "description": "Exported for a custom form that wants the same bar."
+          }
+        ]
+      },
+      "docs": "Labels are props, so the same form can be Spanish or English. The leave message is the beforeunload string."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "media-library",
+      "type": "registry:ui",
+      "title": "Media library",
+      "description": "Dropzone field with image and video preview, a library picker, and a grid or table browser. Upload goes through an injected function and blocks submit while it runs.",
+      "dependencies": [
+        "lucide-react",
+        "sonner"
+      ],
+      "registryDependencies": [
+        "button",
+        "dialog",
+        "input",
+        "table",
+        "button",
+        "dialog",
+        "sheet",
+        "alert-dialog",
+        "collapsible"
+      ],
+      "categories": [
+        "admin",
+        "media"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/media-library.tsx",
+          "type": "registry:component",
+          "target": "@ui/media-library.tsx"
+        },
+        {
+          "path": "registry/ui/entity-form.tsx",
+          "type": "registry:component",
+          "target": "@ui/entity-form.tsx"
+        },
+        {
+          "path": "registry/lib/admin-types.ts",
+          "type": "registry:lib",
+          "target": "@lib/admin-types.ts"
+        },
+        {
+          "path": "registry/lib/format.ts",
+          "type": "registry:lib",
+          "target": "@lib/format.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Biblioteca de medios",
+        "descriptionEs": "Arrastrar un archivo, vista previa, elegir de la biblioteca y ordenar la cuadrícula o la tabla. La subida la hace el anfitrión.",
+        "preview": "app/examples/media-library/preview.tsx",
+        "previewHref": "/examples/media-library",
+        "examples": [
+          {
+            "title": "Subida local",
+            "href": "/examples/media-library",
+            "description": "Los archivos se quedan en el navegador. El botón guardar espera a que termine la subida."
+          }
+        ],
+        "usage": "<MediaField\n  label=\"Portada\"\n  value={url}\n  onChange={setUrl}\n  assets={assets}\n  onUpload={upload}\n  onBusyChange={setBusy}\n/>",
+        "api": [
+          {
+            "name": "onUpload",
+            "type": "(file) => Promise<MediaAsset>",
+            "description": "Host adapter. The field does not talk to storage."
+          },
+          {
+            "name": "onBusyChange",
+            "type": "(busy) => void",
+            "description": "Feed EntityForm busy so submit stays disabled."
+          },
+          {
+            "name": "MediaLibrary",
+            "type": "component",
+            "description": "Grid or table, sort by name, size, or date, confirm before delete."
+          }
+        ]
+      },
+      "docs": "Object URLs in the demo are local only. The Supabase adapter uploads to the media bucket."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "data-table",
+      "type": "registry:ui",
+      "title": "Admin data table",
+      "description": "TanStack table for a bookings-style list: tabs, search, filters, sorting, column visibility, multi-select bulk actions, CSV export, and a detail side panel.",
+      "dependencies": [
+        "@tanstack/react-table",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "checkbox",
+        "dropdown-menu",
+        "input",
+        "select",
+        "sheet",
+        "table",
+        "button",
+        "dialog",
+        "sheet",
+        "alert-dialog",
+        "collapsible"
+      ],
+      "categories": [
+        "admin",
+        "table"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/data-table.tsx",
+          "type": "registry:component",
+          "target": "@ui/data-table.tsx"
+        },
+        {
+          "path": "registry/ui/entity-form.tsx",
+          "type": "registry:component",
+          "target": "@ui/entity-form.tsx"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tabla de datos",
+        "descriptionEs": "Pestañas, búsqueda, filtros, orden, columnas, selección múltiple, CSV y ficha lateral.",
+        "preview": "app/examples/data-table/preview.tsx",
+        "previewHref": "/examples/data-table",
+        "examples": [
+          {
+            "title": "Reservas",
+            "href": "/examples/data-table",
+            "description": "Cuatro reservas ficticias de Estudio Acme."
+          }
+        ],
+        "usage": "<AdminDataTable\n  data={rows}\n  columns={columns}\n  tabs={tabs}\n  filters={filters}\n  searchText={(row) => row.name}\n  csvColumns={csvColumns}\n  toCsvRow={(row) => row}\n  renderDetail={(row) => <p>{row.email}</p>}\n/>",
+        "api": [
+          {
+            "name": "columns",
+            "type": "LegacyColumnDef<T>[]",
+            "description": "TanStack Table v9 legacy column defs. The selection column is added for you."
+          },
+          {
+            "name": "tabs / filters",
+            "type": "predicates",
+            "description": "Client-side. Tab counts ignore the active tab and respect search and filters."
+          },
+          {
+            "name": "bulkActions",
+            "type": "DataTableBulkAction[]",
+            "description": "Run against the selected rows."
+          },
+          {
+            "name": "renderDetail",
+            "type": "(row) => ReactNode",
+            "description": "Opens a sheet. Previous and next walk the filtered rows."
+          }
+        ]
+      },
+      "docs": "Uses useLegacyTable and flexRender from @tanstack/react-table v9. Pass searchText or the search box will not filter."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "admin-charts",
+      "type": "registry:ui",
+      "title": "Admin charts",
+      "description": "KPI card with delta and sparkline, area trend with a range control, funnel, ranked bars, a day-by-hour heatmap, and a scroll-depth chart. Accent colors come from a tone mapped to chart-1…5.",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "chart"
+      ],
+      "categories": [
+        "admin",
+        "chart"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/admin-charts.tsx",
+          "type": "registry:component",
+          "target": "@ui/admin-charts.tsx"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/lib/format.ts",
+          "type": "registry:lib",
+          "target": "@lib/format.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Gráficos de admin",
+        "descriptionEs": "Tarjeta con tendencia, área, embudo, barras, mapa de calor y profundidad de scroll. El acento es un tono chart-N.",
+        "preview": "app/examples/admin-charts/preview.tsx",
+        "previewHref": "/examples/admin-charts",
+        "examples": [
+          {
+            "title": "Semana de Acme",
+            "href": "/examples/admin-charts",
+            "description": "Cifras ficticias. El selector cambia el rango activo."
+          }
+        ],
+        "usage": "<StatCard label=\"Visitantes\" value={1284} previous={1100} sparkline={[12, 18, 22]} tone={1} />\n<TrendChart points={points} range={range} onRangeChange={setRange} ranges={ranges} />",
+        "api": [
+          {
+            "name": "tone",
+            "type": "1 | 2 | 3 | 4 | 5",
+            "description": "Maps to bg-chart-N and var(--chart-N). The host theme defines the color."
+          },
+          {
+            "name": "StatCard",
+            "type": "component",
+            "description": "Value, percent delta, optional sparkline."
+          },
+          {
+            "name": "TrendChart",
+            "type": "component",
+            "description": "Area chart. Range buttons are optional."
+          },
+          {
+            "name": "FunnelChart / RankedBars",
+            "type": "components",
+            "description": "Proportional bars. No extra chart theme."
+          },
+          {
+            "name": "Heatmap",
+            "type": "component",
+            "description": "7×24 grid, Monday first. dayLabels overrides Mon–Sun."
+          },
+          {
+            "name": "ScrollDepthChart",
+            "type": "component",
+            "description": "Ratios from 0 to 1 render as percents."
+          }
+        ]
+      },
+      "docs": "Charts read the host --chart-1 through --chart-5 tokens. No hex colors ship with the item."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "overview-dashboard",
+      "type": "registry:ui",
+      "title": "Overview dashboard",
+      "description": "Composes KPI cards, a trend chart, an upcoming list, and content counts into one overview.",
+      "dependencies": [
+        "recharts"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "chart"
+      ],
+      "categories": [
+        "admin",
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/overview-dashboard.tsx",
+          "type": "registry:component",
+          "target": "@ui/overview-dashboard.tsx"
+        },
+        {
+          "path": "registry/ui/admin-charts.tsx",
+          "type": "registry:component",
+          "target": "@ui/admin-charts.tsx"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/lib/format.ts",
+          "type": "registry:lib",
+          "target": "@lib/format.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Panel de resumen",
+        "descriptionEs": "Compone tarjetas, la tendencia, las próximas llamadas y los conteos del sitio.",
+        "preview": "app/examples/overview-dashboard/preview.tsx",
+        "previewHref": "/examples/overview-dashboard",
+        "examples": [
+          {
+            "title": "Resumen",
+            "href": "/examples/overview-dashboard",
+            "description": "Datos ficticios. Los conteos avisan con un toast."
+          }
+        ],
+        "usage": "<OverviewDashboard stats={stats} trend={trend} upcoming={calls} counts={counts} onOpen={go} />",
+        "api": [
+          {
+            "name": "stats",
+            "type": "OverviewStat[]",
+            "description": "Passed through to StatCard, including tone and sparkline."
+          },
+          {
+            "name": "trend",
+            "type": "TrendPoint[]",
+            "description": "Visitors and views per label."
+          },
+          {
+            "name": "upcoming / counts",
+            "type": "lists",
+            "description": "Calls and site totals. counts may include an href for onOpen."
+          }
+        ]
+      },
+      "docs": "Presentational. The admin-kit block is what fills it from the in-memory adapter."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "admin-kit",
+      "type": "registry:block",
+      "title": "Admin kit",
+      "description": "Working admin demo: shell, projects, content lists, settings, media, bookings, and analytics, backed by an in-memory adapter and Spanish sample data.",
+      "dependencies": [
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "@tanstack/react-table",
+        "lucide-react",
+        "recharts",
+        "sonner",
+        "@supabase/supabase-js"
+      ],
+      "registryDependencies": [
+        "alert-dialog",
+        "badge",
+        "breadcrumb",
+        "button",
+        "card",
+        "chart",
+        "checkbox",
+        "collapsible",
+        "command",
+        "dialog",
+        "dropdown-menu",
+        "input",
+        "label",
+        "select",
+        "sheet",
+        "sidebar",
+        "switch",
+        "table",
+        "tabs",
+        "textarea"
+      ],
+      "categories": [
+        "admin",
+        "dashboard",
+        "block"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/admin-kit.tsx",
+          "type": "registry:component",
+          "target": "@ui/admin-kit.tsx"
+        },
+        {
+          "path": "registry/lib/admin-demo-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/admin-demo-data.ts"
+        },
+        {
+          "path": "registry/lib/memory-admin.ts",
+          "type": "registry:lib",
+          "target": "@lib/memory-admin.ts"
+        },
+        {
+          "path": "registry/ui/admin-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/admin-shell.tsx"
+        },
+        {
+          "path": "registry/ui/sortable-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/sortable-list.tsx"
+        },
+        {
+          "path": "registry/ui/sortable-board.tsx",
+          "type": "registry:component",
+          "target": "@ui/sortable-board.tsx"
+        },
+        {
+          "path": "registry/ui/entity-form.tsx",
+          "type": "registry:component",
+          "target": "@ui/entity-form.tsx"
+        },
+        {
+          "path": "registry/ui/settings-form.tsx",
+          "type": "registry:component",
+          "target": "@ui/settings-form.tsx"
+        },
+        {
+          "path": "registry/ui/media-library.tsx",
+          "type": "registry:component",
+          "target": "@ui/media-library.tsx"
+        },
+        {
+          "path": "registry/ui/data-table.tsx",
+          "type": "registry:component",
+          "target": "@ui/data-table.tsx"
+        },
+        {
+          "path": "registry/ui/admin-charts.tsx",
+          "type": "registry:component",
+          "target": "@ui/admin-charts.tsx"
+        },
+        {
+          "path": "registry/ui/overview-dashboard.tsx",
+          "type": "registry:component",
+          "target": "@ui/overview-dashboard.tsx"
+        },
+        {
+          "path": "registry/hooks/use-admin-theme.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-admin-theme.ts"
+        },
+        {
+          "path": "registry/lib/admin-types.ts",
+          "type": "registry:lib",
+          "target": "@lib/admin-types.ts"
+        },
+        {
+          "path": "registry/lib/reorder.ts",
+          "type": "registry:lib",
+          "target": "@lib/reorder.ts"
+        },
+        {
+          "path": "registry/lib/slug.ts",
+          "type": "registry:lib",
+          "target": "@lib/slug.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        },
+        {
+          "path": "registry/lib/format.ts",
+          "type": "registry:lib",
+          "target": "@lib/format.ts"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/lib/date-range.ts",
+          "type": "registry:lib",
+          "target": "@lib/date-range.ts"
+        },
+        {
+          "path": "registry/lib/analytics-summary.ts",
+          "type": "registry:lib",
+          "target": "@lib/analytics-summary.ts"
+        },
+        {
+          "path": "registry/hooks/use-optimistic-list.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-optimistic-list.ts"
+        },
+        {
+          "path": "registry/hooks/use-unsaved-changes.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-unsaved-changes.ts"
+        },
+        {
+          "path": "registry/hooks/use-date-range.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-date-range.ts"
+        },
+        {
+          "path": "registry/lib/supabase-admin.ts",
+          "type": "registry:lib",
+          "target": "@lib/supabase-admin.ts"
+        },
+        {
+          "path": "registry/lib/supabase/001_admin_content.sql",
+          "type": "registry:file",
+          "target": "lib/supabase/001_admin_content.sql"
+        },
+        {
+          "path": "registry/lib/supabase/admin-kit.md",
+          "type": "registry:file",
+          "target": "lib/supabase/admin-kit.md"
+        }
+      ],
+      "meta": {
+        "titleEs": "Kit de admin",
+        "descriptionEs": "Administración completa de demostración: proyectos, textos, medios, reservas y analítica, con datos ficticios en español.",
+        "preview": "app/examples/admin-kit/preview.tsx",
+        "previewHref": "/examples/admin-kit",
+        "examples": [
+          {
+            "title": "Estudio Acme",
+            "href": "/examples/admin-kit",
+            "description": "Todo el panel en memoria. Reiniciar recarga la semilla."
+          }
+        ],
+        "usage": "<AdminKit themeController={theme} showToaster={false} />",
+        "api": [
+          {
+            "name": "themeController",
+            "type": "ThemeController",
+            "description": "Optional host theme. The example passes next-themes."
+          },
+          {
+            "name": "seed",
+            "type": "AdminSeed",
+            "description": "Replace the Spanish demo seed."
+          },
+          {
+            "name": "showToaster",
+            "type": "boolean",
+            "description": "Default true. Set false when the host already mounts sonner."
+          },
+          {
+            "name": "createMemoryAdmin",
+            "type": "function",
+            "description": "Same ports as the Supabase adapter: list, save, reorder, toggle, upload, settings."
+          }
+        ]
+      },
+      "docs": "One install copies the UI, the in-memory adapter, and the Supabase recipe. Answer no if the CLI offers to overwrite primitives you already have. The demo never calls a real database. Attribution for adapted behavior is in NOTICE."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "supabase-admin",
+      "type": "registry:lib",
+      "title": "Supabase admin adapter",
+      "description": "Typed adapter for the admin ports. The host passes in @supabase/supabase-js. Includes SQL for content tables, RLS, and a media bucket. This item does not connect to a database.",
+      "dependencies": [
+        "@supabase/supabase-js"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "admin",
+        "backend"
+      ],
+      "files": [
+        {
+          "path": "registry/lib/supabase-admin.ts",
+          "type": "registry:lib",
+          "target": "@lib/supabase-admin.ts"
+        },
+        {
+          "path": "registry/lib/admin-types.ts",
+          "type": "registry:lib",
+          "target": "@lib/admin-types.ts"
+        },
+        {
+          "path": "registry/lib/supabase/001_admin_content.sql",
+          "type": "registry:file",
+          "target": "lib/supabase/001_admin_content.sql"
+        },
+        {
+          "path": "registry/lib/supabase/admin-kit.md",
+          "type": "registry:file",
+          "target": "lib/supabase/admin-kit.md"
+        }
+      ],
+      "meta": {
+        "titleEs": "Adaptador Supabase",
+        "descriptionEs": "Listar, reordenar, guardar, borrar, subir a Storage y leer textos. El cliente lo crea el anfitrión. Incluye la migración SQL.",
+        "preview": "app/examples/supabase-admin/preview.tsx",
+        "previewHref": "/examples/supabase-admin",
+        "examples": [
+          {
+            "title": "Cómo conectarlo",
+            "href": "/examples/supabase-admin",
+            "description": "Instalación, Next.js, Vite y las políticas. Sin base de datos en este repo."
+          }
+        ],
+        "usage": "import { createClient } from \"@supabase/supabase-js\"\nimport { createSupabaseAdmin } from \"@/lib/supabase-admin\"\n\nconst admin = createSupabaseAdmin(createClient(url, anonKey))",
+        "api": [
+          {
+            "name": "createSupabaseAdmin",
+            "type": "(client, bucket?) => ports",
+            "description": "Content, settings, media, and bookings. plans.list attaches plan_features."
+          },
+          {
+            "name": "createSupabaseSettings / createSupabaseMedia",
+            "type": "functions",
+            "description": "Use one port on its own."
+          },
+          {
+            "name": "001_admin_content.sql",
+            "type": "file",
+            "description": "Tables, is_admin(), RLS, and the media bucket. Apply it in the host project."
+          }
+        ]
+      },
+      "docs": "Public read is limited to published rows. settings and media are public reads. bookings are admin-only. Writes require a row in public.admins. See admin-kit.md for Next.js and Vite wiring."
     }
   ]
 }

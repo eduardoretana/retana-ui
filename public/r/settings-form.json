@@ -1,0 +1,71 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "settings-form",
+  "title": "Settings form",
+  "author": "Eduardo Retana",
+  "description": "Grouped cards over a string key-value map, with a sticky save bar, discard, and a beforeunload guard.",
+  "dependencies": [],
+  "registryDependencies": [
+    "button",
+    "card",
+    "input",
+    "label",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/settings-form.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Button } from \"@/components/ui/button\"\nimport { Card, CardContent, CardDescription, CardHeader, CardTitle } from \"@/components/ui/card\"\nimport { Input } from \"@/components/ui/input\"\nimport { Label } from \"@/components/ui/label\"\nimport { Textarea } from \"@/components/ui/textarea\"\nimport { useUnsavedChanges } from \"@/registry/retana/hooks/use-unsaved-changes\"\n\nexport type SettingsField = {\n  key: string\n  label: string\n  hint?: string\n  kind?: \"text\" | \"textarea\" | \"url\"\n  rows?: number\n}\n\nexport type SettingsGroup = {\n  id: string\n  title: string\n  description?: string\n  fields: SettingsField[]\n}\n\nexport type SettingsFormProps = {\n  groups: readonly SettingsGroup[]\n  values: Record<string, string>\n  onSave: (values: Record<string, string>) => Promise<void> | void\n  className?: string\n  saveLabel?: string\n  discardLabel?: string\n  dirtyLabel?: string\n  cleanLabel?: string\n  leaveMessage?: string\n}\n\nfunction sameValues(a: Record<string, string>, b: Record<string, string>) {\n  const keys = new Set([...Object.keys(a), ...Object.keys(b)])\n  for (const key of keys) {\n    if ((a[key] ?? \"\") !== (b[key] ?? \"\")) return false\n  }\n  return true\n}\n\nexport function SettingsForm({\n  groups,\n  values,\n  onSave,\n  className,\n  saveLabel = \"Save changes\",\n  discardLabel = \"Discard\",\n  dirtyLabel = \"Unsaved changes\",\n  cleanLabel = \"All changes saved\",\n  leaveMessage = \"You have unsaved changes.\",\n}: SettingsFormProps) {\n  const [draft, setDraft] = React.useState(values)\n  const [baseline, setBaseline] = React.useState(values)\n  const [pending, setPending] = React.useState(false)\n  const key = JSON.stringify(values)\n  const [seen, setSeen] = React.useState(key)\n  if (seen !== key) {\n    setSeen(key)\n    setDraft(values)\n    setBaseline(values)\n  }\n  const dirty = !sameValues(draft, baseline)\n  useUnsavedChanges(dirty, leaveMessage)\n\n  function setField(field: string, value: string) {\n    setDraft((current) => ({ ...current, [field]: value }))\n  }\n\n  async function save() {\n    setPending(true)\n    try {\n      await onSave(draft)\n      setBaseline(draft)\n    } finally {\n      setPending(false)\n    }\n  }\n\n  return (\n    <form\n      className={cn(\"flex flex-col gap-4 pb-20\", className)}\n      onSubmit={(event) => {\n        event.preventDefault()\n        void save()\n      }}\n    >\n      {groups.map((group) => (\n        <Card key={group.id}>\n          <CardHeader>\n            <CardTitle>{group.title}</CardTitle>\n            {group.description ? <CardDescription>{group.description}</CardDescription> : null}\n          </CardHeader>\n          <CardContent className=\"flex flex-col gap-4\">\n            {group.fields.map((field) => (\n              <div key={field.key} className=\"flex flex-col gap-1.5\">\n                <Label htmlFor={field.key}>{field.label}</Label>\n                {field.kind === \"textarea\" ? (\n                  <Textarea\n                    id={field.key}\n                    name={field.key}\n                    rows={field.rows ?? 4}\n                    value={draft[field.key] ?? \"\"}\n                    onChange={(event) => setField(field.key, event.target.value)}\n                  />\n                ) : (\n                  <Input\n                    id={field.key}\n                    name={field.key}\n                    type={field.kind === \"url\" ? \"url\" : \"text\"}\n                    value={draft[field.key] ?? \"\"}\n                    onChange={(event) => setField(field.key, event.target.value)}\n                  />\n                )}\n                {field.hint ? <p className=\"text-xs text-muted-foreground\">{field.hint}</p> : null}\n              </div>\n            ))}\n          </CardContent>\n        </Card>\n      ))}\n      <StickySaveBar\n        dirty={dirty}\n        pending={pending}\n        onDiscard={() => setDraft(baseline)}\n        saveLabel={saveLabel}\n        discardLabel={discardLabel}\n        dirtyLabel={dirtyLabel}\n        cleanLabel={cleanLabel}\n      />\n    </form>\n  )\n}\n\nexport function StickySaveBar({\n  dirty,\n  pending = false,\n  onDiscard,\n  onSave,\n  saveLabel = \"Save changes\",\n  discardLabel = \"Discard\",\n  dirtyLabel = \"Unsaved changes\",\n  cleanLabel = \"All changes saved\",\n  className,\n}: {\n  dirty: boolean\n  pending?: boolean\n  onDiscard?: () => void\n  onSave?: () => void\n  saveLabel?: string\n  discardLabel?: string\n  dirtyLabel?: string\n  cleanLabel?: string\n  className?: string\n}) {\n  return (\n    <div\n      className={cn(\n        \"sticky bottom-3 z-20 flex flex-wrap items-center gap-3 rounded-xl border border-border bg-popover px-3 py-2 shadow-lg\",\n        className,\n      )}\n      role=\"status\"\n    >\n      <span className=\"mr-auto flex items-center gap-2 text-sm\">\n        <span\n          aria-hidden\n          className={cn(\"size-2 rounded-full\", dirty ? \"bg-foreground\" : \"bg-muted-foreground/40\")}\n        />\n        <span className={dirty ? \"text-foreground\" : \"text-muted-foreground\"}>\n          {dirty ? dirtyLabel : cleanLabel}\n        </span>\n      </span>\n      <Button type=\"button\" variant=\"outline\" size=\"sm\" disabled={!dirty || pending} onClick={onDiscard}>\n        {discardLabel}\n      </Button>\n      <Button type={onSave ? \"button\" : \"submit\"} size=\"sm\" disabled={!dirty || pending} onClick={onSave}>\n        {pending ? \"Saving…\" : saveLabel}\n      </Button>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/settings-form.tsx"
+    },
+    {
+      "path": "registry/hooks/use-unsaved-changes.ts",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\n/**\n * Warn before the tab closes while `dirty` is true.\n * Returns the same flag so a sticky bar can read it.\n */\nexport function useUnsavedChanges(dirty: boolean, message = \"You have unsaved changes.\") {\n  React.useEffect(() => {\n    if (!dirty || typeof window === \"undefined\") return\n    const onLeave = (event: BeforeUnloadEvent) => {\n      event.preventDefault()\n      event.returnValue = message\n    }\n    window.addEventListener(\"beforeunload\", onLeave)\n    return () => window.removeEventListener(\"beforeunload\", onLeave)\n  }, [dirty, message])\n\n  return dirty\n}\n",
+      "type": "registry:hook",
+      "target": "@hooks/use-unsaved-changes.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Formulario de textos",
+    "descriptionEs": "Tarjetas agrupadas sobre un mapa clave-valor, barra fija, descartar y aviso al cerrar la pestaña.",
+    "preview": "app/examples/settings-form/preview.tsx",
+    "previewHref": "/examples/settings-form",
+    "examples": [
+      {
+        "title": "Textos de portada",
+        "href": "/examples/settings-form",
+        "description": "Edita el titular. La barra aparece al ensuciar el formulario."
+      }
+    ],
+    "usage": "<SettingsForm groups={groups} values={values} onSave={saveSettings} />",
+    "api": [
+      {
+        "name": "groups",
+        "type": "SettingsGroup[]",
+        "description": "Cards. Each field is text, textarea, or url."
+      },
+      {
+        "name": "values",
+        "type": "Record<string, string>",
+        "description": "Current stored copy."
+      },
+      {
+        "name": "onSave",
+        "type": "(values) => Promise<void>",
+        "description": "Persist the whole map. Discard restores the last values prop."
+      },
+      {
+        "name": "StickySaveBar",
+        "type": "component",
+        "description": "Exported for a custom form that wants the same bar."
+      }
+    ]
+  },
+  "docs": "Labels are props, so the same form can be Spanish or English. The leave message is the beforeunload string.",
+  "categories": [
+    "admin",
+    "form"
+  ],
+  "type": "registry:ui"
+}

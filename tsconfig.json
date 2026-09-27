@@ -19,7 +19,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@/registry/retana/ui/*": ["./registry/ui/*"],
+      "@/registry/retana/blocks/*": ["./registry/blocks/*"],
+      "@/registry/retana/hooks/*": ["./registry/hooks/*"],
+      "@/registry/retana/lib/*": ["./registry/lib/*"]
     }
   },
   "include": [
