@@ -1552,6 +1552,57 @@
           "target": "@ui/attachment-chip.tsx"
         }
       ]
+    },
+    {
+      "name": "marker",
+      "type": "registry:ui",
+      "title": "Marker",
+      "description": "Animated highlighter mark behind a span of text.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Marcador",
+        "descriptionEs": "Resaltado animado detrás de un tramo de texto, al estilo de un marcador.",
+        "preview": "app/examples/marker/preview.tsx",
+        "previewHref": "/examples/marker",
+        "examples": [
+          {
+            "title": "Marcador",
+            "href": "/examples/marker",
+            "description": "Resaltado animado detrás de un tramo de texto, al estilo de un marcador."
+          }
+        ],
+        "usage": "<Marker>forty-five days</Marker>",
+        "api": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "description": "Text that stays readable above the mark."
+          },
+          {
+            "name": "highlightClassName",
+            "type": "string",
+            "description": "Override the mark. Default uses primary at low emphasis."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Classes on the wrapper."
+          }
+        ]
+      },
+      "docs": "The mark scales in from the left. Reduced motion shows it immediately. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/marker.tsx",
+          "type": "registry:component",
+          "target": "@ui/marker.tsx"
+        }
+      ]
     }
   ]
 }

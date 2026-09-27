@@ -27,6 +27,7 @@ import Preview22 from "@/app/examples/lightbox/preview"
 import Preview23 from "@/app/examples/logo-marquee/preview"
 import Preview24 from "@/app/examples/halftone-image/preview"
 import Preview25 from "@/app/examples/attachment-chip/preview"
+import Preview26 from "@/app/examples/marker/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -55,4 +56,5 @@ export const previewMap = {
   "logo-marquee": Preview23,
   "halftone-image": Preview24,
   "attachment-chip": Preview25,
+  "marker": Preview26,
 }
