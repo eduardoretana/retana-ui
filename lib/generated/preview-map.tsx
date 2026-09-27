@@ -8,6 +8,7 @@ import Preview3 from "@/app/examples/chat-composer/preview"
 import Preview4 from "@/app/examples/streaming-text/preview"
 import Preview5 from "@/app/examples/reasoning-steps/preview"
 import Preview6 from "@/app/examples/task-list/preview"
+import Preview7 from "@/app/examples/plan-card/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -17,4 +18,5 @@ export const previewMap = {
   "streaming-text": Preview4,
   "reasoning-steps": Preview5,
   "task-list": Preview6,
+  "plan-card": Preview7,
 }

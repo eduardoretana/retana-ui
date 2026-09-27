@@ -466,6 +466,67 @@
           "target": "@ui/task-list.tsx"
         }
       ]
+    },
+    {
+      "name": "plan-card",
+      "type": "registry:ui",
+      "title": "Plan Card",
+      "description": "Card for a proposed plan, with steps and approve, edit, and reject actions.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "ai",
+        "form"
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de plan",
+        "descriptionEs": "Tarjeta con un plan propuesto, sus pasos y acciones para aprobar, editar o rechazar.",
+        "preview": "app/examples/plan-card/preview.tsx",
+        "previewHref": "/examples/plan-card",
+        "examples": [
+          {
+            "title": "Tarjeta de plan",
+            "href": "/examples/plan-card",
+            "description": "Tarjeta con un plan propuesto, sus pasos y acciones para aprobar, editar o rechazar."
+          }
+        ],
+        "usage": "<PlanCard steps={steps} onApprove={approve} onEdit={save} onReject={reject} />",
+        "api": [
+          {
+            "name": "steps",
+            "type": "PlanStep[]",
+            "description": "id, title, and optional detail."
+          },
+          {
+            "name": "status",
+            "type": "\"proposed\" | \"approved\" | \"rejected\"",
+            "description": "Locks the actions after a decision."
+          },
+          {
+            "name": "onEdit",
+            "type": "(steps) => void",
+            "description": "Receives the edited steps when save is pressed."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "Action and status labels default to English."
+          }
+        ]
+      },
+      "docs": "Import PlanCard from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/plan-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/plan-card.tsx"
+        }
+      ]
     }
   ]
 }
