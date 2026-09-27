@@ -301,6 +301,63 @@
           "target": "@ui/chat-composer.tsx"
         }
       ]
+    },
+    {
+      "name": "streaming-text",
+      "type": "registry:ui",
+      "title": "Streaming Text",
+      "description": "Renders text as it arrives, with a caret and a short fade-in, and supports basic markdown.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "chat",
+        "ai"
+      ],
+      "meta": {
+        "titleEs": "Texto en streaming",
+        "descriptionEs": "Pinta el texto a medida que llega, con cursor y una aparición breve, y entiende markdown básico.",
+        "preview": "app/examples/streaming-text/preview.tsx",
+        "previewHref": "/examples/streaming-text",
+        "examples": [
+          {
+            "title": "Texto en streaming",
+            "href": "/examples/streaming-text",
+            "description": "Pinta el texto a medida que llega, con cursor y una aparición breve, y entiende markdown básico."
+          }
+        ],
+        "usage": "<StreamingText text={text} streaming />",
+        "api": [
+          {
+            "name": "text",
+            "type": "string",
+            "description": "Full text received so far."
+          },
+          {
+            "name": "streaming",
+            "type": "boolean",
+            "description": "Keeps the caret visible."
+          },
+          {
+            "name": "animate",
+            "type": "boolean",
+            "description": "Reveal gradually. Default true. Set false to paint the whole string."
+          },
+          {
+            "name": "cursorLabel",
+            "type": "string",
+            "description": "Screen-reader label while generating. Default Generating."
+          }
+        ]
+      },
+      "docs": "Headings, lists, bold, italic, inline code, and http(s) or mailto links are rendered as elements. Other URLs stay text. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/streaming-text.tsx",
+          "type": "registry:component",
+          "target": "@ui/streaming-text.tsx"
+        }
+      ]
     }
   ]
 }
