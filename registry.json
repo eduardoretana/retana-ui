@@ -872,6 +872,68 @@
           "target": "@ui/ai-document.tsx"
         }
       ]
+    },
+    {
+      "name": "otp-field",
+      "type": "registry:ui",
+      "title": "OTP Field",
+      "description": "One-time code field on the input-otp primitive, with animated success and error states and a resend countdown.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "input-otp",
+        "button"
+      ],
+      "categories": [
+        "form",
+        "input"
+      ],
+      "meta": {
+        "titleEs": "Campo OTP",
+        "descriptionEs": "Código de un solo uso sobre la primitiva input-otp, con éxito y error animados y reenvío con cuenta regresiva.",
+        "preview": "app/examples/otp-field/preview.tsx",
+        "previewHref": "/examples/otp-field",
+        "examples": [
+          {
+            "title": "Campo OTP",
+            "href": "/examples/otp-field",
+            "description": "Código de un solo uso sobre la primitiva input-otp, con éxito y error animados y reenvío con cuenta regresiva."
+          }
+        ],
+        "usage": "<OtpField length={6} state={state} onComplete={check} onResend={resend} />",
+        "api": [
+          {
+            "name": "length",
+            "type": "number",
+            "description": "Digits. Default 6."
+          },
+          {
+            "name": "state",
+            "type": "\"idle\" | \"success\" | \"error\"",
+            "description": "Drives the message and the motion."
+          },
+          {
+            "name": "onResend / cooldownSeconds",
+            "type": "callback / number",
+            "description": "Resend stays disabled for the countdown. Default 30 seconds."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "label, hint, error, success, and resend labels default to English."
+          }
+        ]
+      },
+      "docs": "Built on the input-otp primitive. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/otp-field.tsx",
+          "type": "registry:component",
+          "target": "@ui/otp-field.tsx"
+        }
+      ]
     }
   ]
 }
