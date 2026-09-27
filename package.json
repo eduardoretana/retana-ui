@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "registry:build": "node --experimental-strip-types scripts/build-registry.ts"
+    "registry:build": "node --experimental-strip-types scripts/build-registry.ts",
+    "readme:catalog": "node scripts/sync-readme-catalog.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

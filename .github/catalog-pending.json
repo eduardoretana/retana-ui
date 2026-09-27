@@ -1,0 +1,126 @@
+{
+  "source": "https://github.com/eduardoretana/retana-ui/pull/4",
+  "items": [
+    {
+      "name": "admin-utils",
+      "type": "registry:lib",
+      "title": "Admin utilities",
+      "description": "Slug, reorder, CSV, date range, and analytics helpers for an admin that does not care which router or database the host uses.",
+      "categories": [
+        "admin",
+        "utility"
+      ]
+    },
+    {
+      "name": "admin-shell",
+      "type": "registry:ui",
+      "title": "Admin shell",
+      "description": "Collapsible shadcn sidebar, breadcrumbs from one nav config, a command palette, and a theme toggle that uses the host controller when you pass one.",
+      "categories": [
+        "admin",
+        "navigation"
+      ]
+    },
+    {
+      "name": "sortable-list",
+      "type": "registry:ui",
+      "title": "Sortable list",
+      "description": "Mouse and keyboard drag list with screen-reader announcements, move buttons, a position number, and optimistic reorder that rolls back.",
+      "categories": [
+        "admin",
+        "list"
+      ]
+    },
+    {
+      "name": "sortable-board",
+      "type": "registry:ui",
+      "title": "Sortable board",
+      "description": "Project board with category tabs and counts, search, list or grid, a homepage switch per row, and edit.",
+      "categories": [
+        "admin",
+        "dashboard"
+      ]
+    },
+    {
+      "name": "entity-form",
+      "type": "registry:ui",
+      "title": "Entity form",
+      "description": "Dialog or sheet form for one record, plus confirm-delete, an empty state, and a collapsible section. Submit stays disabled while busy.",
+      "categories": [
+        "admin",
+        "form"
+      ]
+    },
+    {
+      "name": "settings-form",
+      "type": "registry:ui",
+      "title": "Settings form",
+      "description": "Grouped cards over a string key-value map, with a sticky save bar, discard, and a beforeunload guard.",
+      "categories": [
+        "admin",
+        "form"
+      ]
+    },
+    {
+      "name": "media-library",
+      "type": "registry:ui",
+      "title": "Media library",
+      "description": "Dropzone field with image and video preview, a library picker, and a grid or table browser. Upload goes through an injected function and blocks submit while it runs.",
+      "categories": [
+        "admin",
+        "media"
+      ]
+    },
+    {
+      "name": "data-table",
+      "type": "registry:ui",
+      "title": "Admin data table",
+      "description": "TanStack table for a bookings-style list: tabs, search, filters, sorting, column visibility, multi-select bulk actions, CSV export, and a detail side panel.",
+      "categories": [
+        "admin",
+        "table"
+      ]
+    },
+    {
+      "name": "admin-charts",
+      "type": "registry:ui",
+      "title": "Admin charts",
+      "description": "KPI card with delta and sparkline, area trend with a range control, funnel, ranked bars, a day-by-hour heatmap, and a scroll-depth chart. Accent colors come from a tone mapped to chart-1…5.",
+      "categories": [
+        "admin",
+        "chart"
+      ]
+    },
+    {
+      "name": "overview-dashboard",
+      "type": "registry:ui",
+      "title": "Overview dashboard",
+      "description": "Composes KPI cards, a trend chart, an upcoming list, and content counts into one overview.",
+      "categories": [
+        "admin",
+        "dashboard"
+      ]
+    },
+    {
+      "name": "admin-kit",
+      "type": "registry:block",
+      "title": "Admin kit",
+      "description": "Working admin demo: shell, projects, content lists, settings, media, bookings, and analytics, backed by an in-memory adapter and Spanish sample data.",
+      "categories": [
+        "admin",
+        "dashboard",
+        "block"
+      ]
+    },
+    {
+      "name": "supabase-admin",
+      "type": "registry:lib",
+      "title": "Supabase admin adapter",
+      "description": "Typed adapter for the admin ports. The host passes in @supabase/supabase-js. Includes SQL for content tables, RLS, and a media bucket. This item does not connect to a database.",
+      "categories": [
+        "admin",
+        "backend"
+      ]
+    }
+  ]
+}

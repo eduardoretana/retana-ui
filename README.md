@@ -1,46 +1,46 @@
 # Retana UI
 
-Shared [shadcn/ui](https://ui.shadcn.com) registry for Eduardo's projects, licensed under [MIT](LICENSE). The first item is **Layered Panel**: a detail surface that opens as a peek sheet and expands in place. The page behind it never changes route, so scroll position and table context stay put.
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/hero-dark.svg">
+    <img src="./.github/assets/hero-light.svg" width="100%" alt="Retana UI is a shadcn registry. Its pieces inherit the host theme and ship none of their own. The specimen shows the layered panel peeking beside a team directory on the same page.">
+  </picture>
+</p>
 
-Every item inherits the host project's existing shadcn theme and ships no theme of its own. That rule is in [CONTRIBUTING.md](CONTRIBUTING.md).
+A [shadcn/ui](https://ui.shadcn.com) registry by [Eduardo Retana](https://eduardoretana.com). Each piece installs into a host that already has shadcn, uses that host's semantic classes and primitives, and ships no theme of its own.
 
-The site is a catalog. `registry.json` is the source of truth for `/` and for `/items/[name]`.
+```bash
+npx shadcn@latest add @retana/<name>
+```
 
-Besides Layered Panel, the registry includes original chat, form, and media pieces (`chat-message`, `message-list`, `chat-composer`, `streaming-text`, `reasoning-steps`, `task-list`, `plan-card`, `question-card`, `inline-citation`, `code-block`, `file-diff`, `image-generation`, `ai-document`, `otp-field`, `dissolve-input`, `multi-select`, `color-picker`, `color-palette`, `magnetic-dropzone`, `gooey-slider`, `video-player`, `lightbox`, `logo-marquee`, `halftone-image`, `attachment-chip`, `marker`, `press-sound`, `crm-table`). They are clean-room implementations: common behaviors, new code, and the host theme. `crm-table` can stand alone or pass `crmColumnDefs()` into `AdminDataTable` when that item is installed.
+Catalog demos are written in Spanish. Labels on the pieces are props.
 
-- `/` — catalog index (search, type, category)
-- `/items/layered-panel` — preview, install command, API, and source
-- `/examples/layered-panel/team` — team directory example
-- `/examples/layered-panel/lead` — CRM lead example, Spanish labels
-- `/docs` — how to install the registry, the `@retana` namespace, and optional `REGISTRY_TOKEN`
+## How a piece stays on the host theme
 
-`/leads` redirects to the lead example.
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./.github/assets/mechanism-dark.svg">
+    <img src="./.github/assets/mechanism-light.svg" width="100%" alt="Three steps: the host already has light and dark tokens, install with npx shadcn add @retana/name and keep the host primitives, then the piece reads semantic classes and ships no palette.">
+  </picture>
+</p>
+
+The catalog can preview items because its own theme lives in `app/globals.css` and `app/layout.tsx`. Nothing under `registry/` imports that theme. `pnpm registry:build` rejects hex colors, `rgb` / `oklch`, Tailwind palette classes, and `cssVars` inside `registry/`.
+
+When the CLI asks to overwrite a primitive the host already has (`button`, `scroll-area`, `sidebar`, and the rest), answer **no**. Only the new item's files should be written.
 
 ## Install
 
-Pick one of the three paths below. All of them assume the target app is Next.js (App Router), Tailwind v4, and shadcn/ui (Radix preset). The registry files under `/r` are meant to be public.
+The public catalog host is not set. `https://<your-deployment>` below is a placeholder, not a live URL. Deploy this app and use that origin.
 
-In production, `proxy.ts` fails closed. `/r/*` returns 401 unless you set `REGISTRY_PUBLIC=true`, or you set `REGISTRY_TOKEN` and the client sends `Authorization: Bearer <token>`. `REGISTRY_TOKEN` is optional: use it only when a deployment should gate `/r/*`. `REGISTRY_PUBLIC=true` is the explicit opt-in that serves the registry with no token. In development, `/r/*` is served with no token. If `REGISTRY_TOKEN` is set, a matching bearer is still required.
+In production, `proxy.ts` fails closed. `/r/*` returns 401 unless `REGISTRY_PUBLIC=true`, or `REGISTRY_TOKEN` is set and the client sends `Authorization: Bearer <token>`. Development serves `/r/*` with no token. If `REGISTRY_TOKEN` is set, a matching bearer is still required.
 
-### 1. Deploy, then install from the URL
-
-Deploy this app (Vercel or anywhere that serves `public/`). The build writes the registry item to `public/r/layered-panel.json`.
+To publish the files with no token, set `REGISTRY_PUBLIC=true` on the deployment. To gate them, set `REGISTRY_TOKEN` and add the header shown below.
 
 ```bash
-npx shadcn@latest add https://<your-deployment>/r/layered-panel.json
+npx shadcn@latest add https://<your-deployment>/r/<name>.json
 ```
 
-Local check while this app is running:
-
-```bash
-npx shadcn@latest add http://localhost:3000/r/layered-panel.json
-```
-
-To publish the files with no token, set `REGISTRY_PUBLIC=true` on the production deployment. To gate them instead, set `REGISTRY_TOKEN` and pair it with the namespaced config below.
-
-### 2. Namespaced registry (recommended for several apps)
-
-In the target project's `components.json`:
+Register the namespace once in the host `components.json`. Omit `headers` when the deployment is public and no token is set. The shadcn CLI substitutes `${REGISTRY_TOKEN}` from the host's `.env.local`.
 
 ```json
 {
@@ -55,182 +55,130 @@ In the target project's `components.json`:
 }
 ```
 
-Put the token in `.env.local` only when the deployment gates `/r/*` (the shadcn CLI substitutes `${REGISTRY_TOKEN}`). When `REGISTRY_PUBLIC=true` and no token is set, drop the `headers` block.
-
 ```bash
 npx shadcn@latest add @retana/layered-panel
 ```
 
-You can also register the namespace from the CLI:
+The same namespace can be registered from the CLI:
 
 ```bash
 npx shadcn@latest registry add @retana=https://<your-deployment>/r/{name}.json
 ```
 
-### 3. Copy the source
+You can also copy the files listed for an item under `registry/`. Fix imports only if your aliases differ. `registry.json` is the source of truth for the catalog index (`/`) and for `/items/[name]`. Install notes for the running catalog are on `/docs`.
 
-Copy these two files and fix the imports only if your aliases differ:
+This catalog is a Next.js app (App Router) on Tailwind v4 and shadcn's Radix Nova style. The optional URL hook in `layered-panel` is the registry file that imports `next/navigation`. Skip that file if you do not want the query string.
 
-| Source | Installs to |
-| --- | --- |
-| `registry/ui/layered-panel.tsx` | `components/ui/layered-panel.tsx` |
-| `registry/hooks/use-layered-panel-url-state.ts` | `hooks/use-layered-panel-url-state.ts` |
+## Catalog
 
-The panel imports `button`, `scroll-area`, and `separator` from `@/components/ui`, plus `cn` from `@/lib/utils`. It does not ship copies of those primitives. npm packages: `radix-ui`, `lucide-react`. The URL hook is the only file that imports `next/navigation`. Skip it if you do not want the query string.
+<!-- CATALOG:START -->
 
-`npx shadcn add` prompts before overwriting a file that is already in the target app. When it asks about `button`, `scroll-area`, or `separator`, answer **no**. That keeps the host's versions, variants, and radius. Only the new `layered-panel` files should be written.
+`29` items are in `registry.json` on this branch. A name links to its source file.
+12 more are listed from [pull request #4](https://github.com/eduardoretana/retana-ui/pull/4) and are not linked, because those files are not on this branch yet. After that pull request merges, run `pnpm readme:catalog` and this sentence drops away.
 
-The panel talks to Radix through `import { Dialog } from "radix-ui"` (current shadcn). If a project still uses the old package, switch that one import to `import * as Dialog from "@radix-ui/react-dialog"`. The `Dialog.Root` / `Dialog.Content` API is the same.
+Install any of them with `npx shadcn@latest add @retana/<name>`.
 
-## Three steps
+### Detail
 
-1. Install the item (command above). shadcn adds the two files and asks for any registry dependency that already exists (`button`, `scroll-area`, `separator`). Answer **no** so the host project keeps its own primitives.
-2. Render the panel **on the same page** as the table. Summary goes in `Peek`, the long record goes in `Full`.
-3. On row click, open that id. Wire the optional URL hook if the link should be shareable.
+- [`layered-panel`](registry/ui/layered-panel.tsx) · block — Right-hand peek panel that expands in place to a two-column detail view. No route change. Optional Next.js URL sync keeps Back working: full collapses to peek, then closes. Ships no theme, cssVars, or global CSS — it uses the host project's shadcn tokens and primitives.
+
+### Chat and agents
+
+- [`chat-message`](registry/ui/chat-message.tsx) · ui — Message bubble for a person or an assistant, with avatar, time, sending and error states, and copy, retry, and regenerate actions.
+- [`message-list`](registry/ui/message-list.tsx) · ui — Scroll container that follows new messages until the reader moves up, then offers a control to jump back to the latest one.
+- [`chat-composer`](registry/ui/chat-composer.tsx) · ui — Growing textarea that sends on Enter, inserts a newline on Shift+Enter, accepts attachments, swaps in a stop button while generating, and leaves a slot for a model picker.
+- [`streaming-text`](registry/ui/streaming-text.tsx) · ui — Renders text as it arrives, with a caret and a short fade-in, and supports basic markdown.
+- [`reasoning-steps`](registry/ui/reasoning-steps.tsx) · ui — Collapsible list of reasoning or tool steps with pending, active, done, and error states plus a duration.
+- [`task-list`](registry/ui/task-list.tsx) · ui — Agent checklist with a progress bar and optional toggling.
+- [`plan-card`](registry/ui/plan-card.tsx) · ui — Card for a proposed plan, with steps and approve, edit, and reject actions.
+- [`question-card`](registry/ui/question-card.tsx) · ui — Agent question with single or multiple choices and an optional free-text answer.
+- [`inline-citation`](registry/ui/inline-citation.tsx) · ui — Numeric marker that reveals a source title, domain, and excerpt on hover or focus.
+- [`code-block`](registry/ui/code-block.tsx) · ui — Code block with token highlighting, a filename, copy, and line numbers.
+- [`file-diff`](registry/ui/file-diff.tsx) · ui — Unified diff with added and removed lines, and collapsible runs of unchanged lines.
+- [`image-generation`](registry/ui/image-generation.tsx) · ui — Image frame that shows progress and a shimmer while generating, then reveals the result.
+- [`ai-document`](registry/ui/ai-document.tsx) · ui — Document where an agent proposes highlighted edits the reader can accept or reject.
+
+### Forms
+
+- [`otp-field`](registry/ui/otp-field.tsx) · ui — One-time code field on the input-otp primitive, with animated success and error states and a resend countdown.
+- [`dissolve-input`](registry/ui/dissolve-input.tsx) · ui — Input whose text breaks into fading particles when it is submitted or cleared.
+- [`multi-select`](registry/ui/multi-select.tsx) · ui — Multi-select with search, removable chips, and the option to create a new value.
+- [`color-picker`](registry/ui/color-picker.tsx) · ui — Accessible color picker with a saturation and brightness field, hue, alpha, and a hex input.
+- [`color-palette`](registry/ui/color-palette.tsx) · ui — Grid of color swatches that copy their value on click and confirm it.
+- [`magnetic-dropzone`](registry/ui/magnetic-dropzone.tsx) · ui — Drop zone that leans toward the pointer, with a file list, progress, and type and size checks.
+- [`gooey-slider`](registry/ui/gooey-slider.tsx) · ui — Slider with an organic trail while dragging, built on the slider primitive.
+
+### Media and content
+
+- [`video-player`](registry/ui/video-player.tsx) · ui — Video player with custom controls for play, seek, volume, speed, and fullscreen, plus keyboard shortcuts.
+- [`lightbox`](registry/ui/lightbox.tsx) · ui — Fullscreen image viewer with next and previous controls, zoom, and keyboard support.
+- [`logo-marquee`](registry/ui/logo-marquee.tsx) · ui — Infinite logo row that pauses on hover and fades at the edges.
+- [`halftone-image`](registry/ui/halftone-image.tsx) · ui — Image drawn as dots on a canvas that grow toward the pointer.
+- [`attachment-chip`](registry/ui/attachment-chip.tsx) · ui — File chip with a type icon, size, optional image preview, and remove.
+- [`marker`](registry/ui/marker.tsx) · ui — Animated highlighter mark behind a span of text.
+- [`press-sound`](registry/ui/press-sound.tsx) · ui — Hook and wrapper that play a short synthesized click on press, with a shared mute.
+
+### Tables
+
+- [`crm-table`](registry/ui/crm-table.tsx) · ui — CRM-shaped table with avatar and name, a status badge, stage, owner, and last activity. Column helpers match a TanStack column definition so they can be passed to AdminDataTable when that item is installed.
+
+### Admin
+
+Unlinked names in this group are not in `registry.json` yet.
+
+- `admin-utils` · lib — Slug, reorder, CSV, date range, and analytics helpers for an admin that does not care which router or database the host uses.
+- `admin-shell` · ui — Collapsible shadcn sidebar, breadcrumbs from one nav config, a command palette, and a theme toggle that uses the host controller when you pass one.
+- `sortable-list` · ui — Mouse and keyboard drag list with screen-reader announcements, move buttons, a position number, and optimistic reorder that rolls back.
+- `sortable-board` · ui — Project board with category tabs and counts, search, list or grid, a homepage switch per row, and edit.
+- `entity-form` · ui — Dialog or sheet form for one record, plus confirm-delete, an empty state, and a collapsible section. Submit stays disabled while busy.
+- `settings-form` · ui — Grouped cards over a string key-value map, with a sticky save bar, discard, and a beforeunload guard.
+- `media-library` · ui — Dropzone field with image and video preview, a library picker, and a grid or table browser. Upload goes through an injected function and blocks submit while it runs.
+- `data-table` · ui — TanStack table for a bookings-style list: tabs, search, filters, sorting, column visibility, multi-select bulk actions, CSV export, and a detail side panel.
+- `admin-charts` · ui — KPI card with delta and sparkline, area trend with a range control, funnel, ranked bars, a day-by-hour heatmap, and a scroll-depth chart. Accent colors come from a tone mapped to chart-1…5.
+- `overview-dashboard` · ui — Composes KPI cards, a trend chart, an upcoming list, and content counts into one overview.
+- `admin-kit` · block — Working admin demo: shell, projects, content lists, settings, media, bookings, and analytics, backed by an in-memory adapter and Spanish sample data.
+- `supabase-admin` · lib — Typed adapter for the admin ports. The host passes in @supabase/supabase-js. Includes SQL for content tables, RLS, and a media bucket. This item does not connect to a database.
+
+<!-- CATALOG:END -->
+
+## One piece, end to end
+
+**Layered panel** opens a peek sheet on the right and can expand in place. The page behind it does not change route, so the table keeps its scroll position.
 
 ```tsx
 "use client"
 
-import { LayeredPanel, DetailSection, DetailField } from "@/components/ui/layered-panel"
-import { useLayeredPanelUrlState } from "@/hooks/use-layered-panel-url-state"
+import { LayeredPanel } from "@/components/ui/layered-panel"
 
-export function Members({ rows }: { rows: { id: string; name: string; email: string }[] }) {
-  const panel = useLayeredPanelUrlState({ param: "member", viewParam: "view" })
-  const member = rows.find((row) => row.id === panel.id)
-
+export function Members({
+  open,
+  setOpen,
+  mode,
+  setMode,
+}: {
+  open: boolean
+  setOpen: (open: boolean) => void
+  mode: "peek" | "full"
+  setMode: (mode: "peek" | "full") => void
+}) {
   return (
-    <>
-      <table>
-        <tbody>
-          {rows.map((row) => (
-            <tr key={row.id} onClick={() => panel.openItem(row.id)}>
-              <td>{row.name}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <LayeredPanel
-        open={panel.open}
-        onOpenChange={panel.onOpenChange}
-        mode={panel.mode}
-        onModeChange={panel.onModeChange}
-        title={member?.name ?? "Details"}
-      >
-        <LayeredPanel.Header>
-          <h2 className="text-base font-semibold">{member?.name}</h2>
-        </LayeredPanel.Header>
-        <LayeredPanel.ExpandToggle
-          expandLabel="View full profile"
-          collapseLabel="Close profile"
-        />
-        <LayeredPanel.Peek>
-          <p className="px-5 pb-6 text-sm">Short summary for {member?.name}.</p>
-        </LayeredPanel.Peek>
-        <LayeredPanel.Full>
-          <DetailSection title="Personal information">
-            <DetailField label="Email" value={member?.email} />
-          </DetailSection>
-        </LayeredPanel.Full>
-      </LayeredPanel>
-    </>
+    <LayeredPanel
+      open={open}
+      onOpenChange={setOpen}
+      mode={mode}
+      onModeChange={setMode}
+      title="James Carter"
+    >
+      <LayeredPanel.Peek>Short summary.</LayeredPanel.Peek>
+      <LayeredPanel.Full>The long record. The route stays the same.</LayeredPanel.Full>
+    </LayeredPanel>
   )
 }
 ```
 
-`Header` and `ExpandToggle` sit at the top of the peek column and move into the left column when the panel expands. They can be rendered from a child component that returns a fragment. A wrapping element needs `className="contents"` so the slots stay on the panel grid. Put a header inside `Peek` or `Full` only when it should stay in that column.
+Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry/ui/layered-panel.tsx). `crm-table` can stand alone, or pass `crmColumnDefs()` into `AdminDataTable` when that table is installed.
 
-Without the URL hook, use `useState` for `open` and `mode`. Both controlled and uncontrolled usage work (`defaultOpen`, `defaultMode`).
-
-## API
-
-| Piece | Role |
-| --- | --- |
-| `LayeredPanel` | Dialog shell. Props: `open`, `defaultOpen`, `onOpenChange`, `mode` (`"peek"` \| `"full"`), `defaultMode`, `onModeChange`, `title`, `description`, `closeLabel`, `mobilePeekLabel`, `mobileFullLabel`, `peekWidth` (default `26.25rem`), `fullWidth` (default `70vw`), `showClose`, `className`, `overlayClassName`, `closeClassName`, `tabsClassName`, `tabClassName`, `gridClassName`. |
-| `LayeredPanel.Peek` | Always the right column. The only column in peek mode. `className` on the column, `contentClassName` on the inner stack. |
-| `LayeredPanel.Full` | Left column. Mounted, but hidden and inert until `mode="full"`. `className` and `contentClassName`, same as Peek. |
-| `LayeredPanel.Header` | Grid slot at the top of the primary column. A child component can return it inside a fragment; a wrapping element needs `className="contents"`. |
-| `LayeredPanel.ExpandToggle` | `expandLabel` (default `View full profile`), `collapseLabel` (default `Close profile`). Sets `aria-expanded`. Same grid placement as `Header`. `className` is the wrapper; `buttonClassName` merges onto the host `Button` without changing its variant. |
-| `LayeredPanel.Section` / `DetailSection` | Uppercase section label, optional icon, top separator. `className`, `contentClassName`, `titleClassName`. |
-| `LayeredPanel.Field` / `DetailField` | Label, optional icon, `value` or children, optional `href`. `className`, `labelClassName`, `valueClassName`. |
-| `useLayeredPanel()` | Mode and setters from inside the panel. Throws outside of it. |
-| `useLayeredPanelUrlState({ param, viewParam, fullValue })` | Returns `id`, `open`, `mode`, `openItem(id)`, `close()`, `setMode`, `onOpenChange`, `onModeChange`. |
-
-Widths accept a single CSS length (`26.25rem`, `70vw`, `640px`). Anything else is ignored and the default is used. Default peek width is `26.25rem` (420px). Default expanded width is `70vw`.
-
-## URL sync
-
-```tsx
-const panel = useLayeredPanelUrlState({ param: "member", viewParam: "view" })
-```
-
-| Action | URL | History |
-| --- | --- | --- |
-| Click a row | `?member=emma` | push |
-| View full profile | `?member=emma&view=full` | push |
-| Browser Back | `?member=emma` | peek |
-| Browser Back again | no panel params | closed |
-| Close (X), click-outside, or Esc from peek | previous page URL | `history.go` back across the entries this hook pushed |
-| Land directly on `?member=emma&view=full` | Esc replaces to peek (does not leave the site) | replace |
-
-Other query params on the page are preserved. Pass `scroll: false` is unnecessary: the hook uses `history.pushState`, which Next.js App Router syncs with `useSearchParams` and does not reset scroll.
-
-Wrap the client component in `<Suspense>` because `useSearchParams` opts the route out of static prerendering up to that boundary.
-
-Spanish labels are props, not a locale file:
-
-```tsx
-<LayeredPanel closeLabel="Cerrar" mobilePeekLabel="Resumen" mobileFullLabel="Ficha">
-  <LayeredPanel.ExpandToggle expandLabel="Ver ficha completa" collapseLabel="Cerrar ficha" />
-</LayeredPanel>
-```
-
-The `/leads` demo is that setup.
-
-## Wire it to a data table
-
-The panel does not know about rows. Give it an id from the click handler.
-
-shadcn Data Table (TanStack Table): the row renderer already receives the row. Add the click there and do not navigate.
-
-```tsx
-<TableRow
-  data-state={row.getIsSelected() && "selected"}
-  className="cursor-pointer"
-  onClick={() => panel.openItem(row.original.id)}
->
-  {row.getVisibleCells().map((cell) => (
-    <TableCell key={cell.id}>
-      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-    </TableCell>
-  ))}
-</TableRow>
-```
-
-Keep links inside the row from bubbling (`onClick={(event) => event.stopPropagation()}`) if a cell has its own action. Keyboard: the demos use `tabIndex={0}` and Enter / Space on the row. A button in the name cell works too.
-
-## Mobile
-
-Below **1024px** the panel is a full-screen sheet. Peek and full become tabs (`mobilePeekLabel` / `mobileFullLabel`, defaults Overview / Profile) instead of two narrow columns. The expand button still switches mode. Esc still collapses, then closes. Each column scrolls on its own, and the sheet respects the safe-area inset.
-
-From 1024px up, full mode is two columns: profile on the left, peek pinned on the right at the peek width. The panel width animates between the two sizes (280ms, `cubic-bezier(0.32, 0.72, 0, 1)`). Open and close slide in from the right. `prefers-reduced-motion: reduce` disables both. Buttons scale to `0.96` while pressed.
-
-## Theming
-
-Registry items inherit the host project. They bring no theme of their own. See [CONTRIBUTING.md](CONTRIBUTING.md).
-
-`layered-panel` has no `cssVars`, no global CSS, and no color, font, radius, or shadow tokens. It only uses shadcn semantic classes (`bg-background`, `bg-foreground`, `bg-muted`, `text-foreground`, `text-muted-foreground`, `border-border`, `shadow-lg`, `rounded-lg` / `rounded-l-xl`) and the host's `Button`, `ScrollArea`, and `Separator`. Light and dark mode follow whatever `.dark` and CSS variables the host already defines. `peekWidth` and `fullWidth` default to `26.25rem` and `70vw`; every slot accepts a `className` override.
-
-The demo's theme lives in `app/globals.css` and `app/layout.tsx` only, so this site can be previewed. Status chips and capacity bars in `components/demo` are sample UI. They are not part of the registry item.
-
-## Accessibility
-
-- Radix Dialog: focus trap, scroll lock, `role="dialog"`, visually hidden title and description.
-- Esc in full mode collapses to peek and keeps focus in the dialog. The next Esc closes and returns focus to the row that opened it.
-- Click-outside and the close button dismiss the whole panel. `closeLabel` sets the button's accessible name (default `Close`).
-- The idle full column is `inert`, so it stays out of the tab order and the accessibility tree.
-- `ExpandToggle` exposes `aria-expanded`. Mobile tabs use `aria-pressed`.
-- Columns use ScrollArea, so each side scrolls without moving the page underneath.
+Some admin-kit list behavior is adapted from [Maniruzzaman Jubayer's MIT admin panel](https://github.com/jubayer910/Admin-panel) and reimplemented on shadcn primitives. Those pieces are specified in [pull request #4](https://github.com/eduardoretana/retana-ui/pull/4). The Supabase adapter in that pull request includes SQL and does not connect this repo to a database.
 
 ## Develop
 
@@ -241,45 +189,8 @@ pnpm test
 pnpm build
 ```
 
-`pnpm registry:build` validates the registry, runs `shadcn build`, and regenerates `lib/generated/preview-map.tsx`. `pnpm build` runs that first. Adding an item is the checklist in [CONTRIBUTING.md](CONTRIBUTING.md).
+`pnpm registry:build` validates the registry and writes `public/r/*.json`. `pnpm readme:catalog` refreshes the catalog list in this file. New items follow [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## Inicio rápido (español)
+## License
 
-1. En el proyecto destino, registra el namespace en `components.json` (sección 2, arriba) o despliega este repo y usa la URL de `/r/layered-panel.json`.
-2. Instala:
-
-```bash
-npx shadcn@latest add @retana/layered-panel
-```
-
-3. En la misma página de la tabla, abre el panel al hacer clic en la fila. El contenido largo va en `Full`; el resumen se queda en `Peek`. Para español, pasa las etiquetas:
-
-```tsx
-const panel = useLayeredPanelUrlState({ param: "lead", viewParam: "view" })
-
-<LayeredPanel
-  open={panel.open}
-  onOpenChange={panel.onOpenChange}
-  mode={panel.mode}
-  onModeChange={panel.onModeChange}
-  closeLabel="Cerrar"
-  mobilePeekLabel="Resumen"
-  mobileFullLabel="Ficha"
-  title={lead.nombre}
->
-  <LayeredPanel.ExpandToggle
-    expandLabel="Ver ficha completa"
-    collapseLabel="Cerrar ficha"
-  />
-  <LayeredPanel.Peek>{/* resumen */}</LayeredPanel.Peek>
-  <LayeredPanel.Full>
-    <DetailSection title="Información personal">
-      <DetailField label="Correo" value={lead.correo} />
-    </DetailSection>
-  </LayeredPanel.Full>
-</LayeredPanel>
-```
-
-`?lead=<id>` abre el resumen. `&view=full` abre la ficha. Atrás del navegador primero contrae y después cierra. El ejemplo vivo está en `/examples/layered-panel/lead`. El catálogo está en `/`.
-
-El componente no trae tema: usa los tokens y los primitivos shadcn del proyecto anfitrión. Si el CLI pregunta si debe sobrescribir `button`, `scroll-area` o `separator`, responde que no.
+[MIT](LICENSE). Copyright (c) 2026 [Eduardo Retana](https://eduardoretana.com).
