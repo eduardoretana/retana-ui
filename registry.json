@@ -358,6 +358,60 @@
           "target": "@ui/streaming-text.tsx"
         }
       ]
+    },
+    {
+      "name": "reasoning-steps",
+      "type": "registry:ui",
+      "title": "Reasoning Steps",
+      "description": "Collapsible list of reasoning or tool steps with pending, active, done, and error states plus a duration.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "ai",
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Pasos de razonamiento",
+        "descriptionEs": "Lista colapsable de pasos de razonamiento o herramientas, con estado pendiente, en curso, hecho o error, y duración.",
+        "preview": "app/examples/reasoning-steps/preview.tsx",
+        "previewHref": "/examples/reasoning-steps",
+        "examples": [
+          {
+            "title": "Pasos de razonamiento",
+            "href": "/examples/reasoning-steps",
+            "description": "Lista colapsable de pasos de razonamiento o herramientas, con estado pendiente, en curso, hecho o error, y duración."
+          }
+        ],
+        "usage": "<ReasoningSteps steps={[{ id: \"1\", title: \"Read\", status: \"done\", durationMs: 400 }]} />",
+        "api": [
+          {
+            "name": "steps",
+            "type": "ReasoningStep[]",
+            "description": "id, title, optional detail, status, and durationMs."
+          },
+          {
+            "name": "open / onOpenChange",
+            "type": "boolean / callback",
+            "description": "Controlled disclosure. defaultOpen defaults to true."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "title and the four status labels default to English."
+          }
+        ]
+      },
+      "docs": "Import ReasoningSteps from the installed UI file. Durations are formatted from milliseconds. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/reasoning-steps.tsx",
+          "type": "registry:component",
+          "target": "@ui/reasoning-steps.tsx"
+        }
+      ]
     }
   ]
 }
