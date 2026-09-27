@@ -1496,6 +1496,62 @@
           "target": "@ui/halftone-image.tsx"
         }
       ]
+    },
+    {
+      "name": "attachment-chip",
+      "type": "registry:ui",
+      "title": "Attachment Chip",
+      "description": "File chip with a type icon, size, optional image preview, and remove.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "media",
+        "form"
+      ],
+      "meta": {
+        "titleEs": "Chip de adjunto",
+        "descriptionEs": "Chip de archivo adjunto con icono según el tipo, tamaño, vista previa y quitar.",
+        "preview": "app/examples/attachment-chip/preview.tsx",
+        "previewHref": "/examples/attachment-chip",
+        "examples": [
+          {
+            "title": "Chip de adjunto",
+            "href": "/examples/attachment-chip",
+            "description": "Chip de archivo adjunto con icono según el tipo, tamaño, vista previa y quitar."
+          }
+        ],
+        "usage": "<AttachmentChip name=\"notes.pdf\" size={24000} type=\"application/pdf\" onRemove={remove} />",
+        "api": [
+          {
+            "name": "name / size / type",
+            "type": "string / number / string",
+            "description": "File facts. size is bytes."
+          },
+          {
+            "name": "previewUrl",
+            "type": "string",
+            "description": "Shown for image types."
+          },
+          {
+            "name": "onRemove / removeLabel",
+            "type": "callback / string",
+            "description": "Remove control. Label defaults to Remove."
+          }
+        ]
+      },
+      "docs": "Import AttachmentChip from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/attachment-chip.tsx",
+          "type": "registry:component",
+          "target": "@ui/attachment-chip.tsx"
+        }
+      ]
     }
   ]
 }

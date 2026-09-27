@@ -1,0 +1,58 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "attachment-chip",
+  "title": "Attachment Chip",
+  "author": "Eduardo Retana",
+  "description": "File chip with a type icon, size, optional image preview, and remove.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/attachment-chip.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { File, FileArchive, FileAudio, FileImage, FileText, FileVideo, X } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Button } from \"@/components/ui/button\"\n\nexport type AttachmentChipProps = {\n  name: string\n  size?: number\n  type?: string\n  previewUrl?: string\n  href?: string\n  onRemove?: () => void\n  removeLabel?: string\n  className?: string\n}\n\nfunction formatBytes(size: number) {\n  if (size < 1024) return `${size} B`\n  if (size < 1024 * 1024) return `${Math.round(size / 1024)} KB`\n  return `${(size / (1024 * 1024)).toFixed(1)} MB`\n}\n\nfunction fileKind(type: string | undefined, name: string) {\n  const mime = (type ?? \"\").toLowerCase()\n  const extension = name.split(\".\").pop()?.toLowerCase() ?? \"\"\n  if (mime.startsWith(\"image/\") || [\"png\", \"jpg\", \"jpeg\", \"gif\", \"webp\", \"svg\"].includes(extension)) return \"image\" as const\n  if (mime.startsWith(\"video/\") || [\"mp4\", \"webm\", \"mov\"].includes(extension)) return \"video\" as const\n  if (mime.startsWith(\"audio/\") || [\"mp3\", \"wav\", \"ogg\"].includes(extension)) return \"audio\" as const\n  if (mime.includes(\"zip\") || [\"zip\", \"rar\", \"7z\"].includes(extension)) return \"archive\" as const\n  if (mime.includes(\"text\") || mime.includes(\"pdf\") || [\"pdf\", \"txt\", \"md\", \"doc\", \"docx\"].includes(extension)) return \"text\" as const\n  return \"file\" as const\n}\n\nfunction FileGlyph({ type, name }: { type?: string; name: string }) {\n  const kind = fileKind(type, name)\n  const className = \"size-4\"\n  if (kind === \"image\") return <FileImage className={className} aria-hidden />\n  if (kind === \"video\") return <FileVideo className={className} aria-hidden />\n  if (kind === \"audio\") return <FileAudio className={className} aria-hidden />\n  if (kind === \"archive\") return <FileArchive className={className} aria-hidden />\n  if (kind === \"text\") return <FileText className={className} aria-hidden />\n  return <File className={className} aria-hidden />\n}\n\nexport function AttachmentChip({\n  name,\n  size,\n  type,\n  previewUrl,\n  href,\n  onRemove,\n  removeLabel = \"Remove\",\n  className,\n}: AttachmentChipProps) {\n  const showPreview = Boolean(previewUrl) && (type ?? \"\").startsWith(\"image/\")\n  const body = (\n    <>\n      {showPreview && previewUrl ? (\n        // eslint-disable-next-line @next/next/no-img-element\n        <img src={previewUrl} alt=\"\" className=\"size-8 rounded-md object-cover\" />\n      ) : (\n        <span className=\"grid size-8 place-items-center rounded-md bg-muted text-muted-foreground\">\n          <FileGlyph type={type} name={name} />\n        </span>\n      )}\n      <span className=\"min-w-0\">\n        <span className=\"block truncate text-sm\">{name}</span>\n        {typeof size === \"number\" ? (\n          <span className=\"block text-[11px] text-muted-foreground tabular-nums\">{formatBytes(size)}</span>\n        ) : null}\n      </span>\n    </>\n  )\n\n  return (\n    <span\n      data-slot=\"attachment-chip\"\n      className={cn(\n        \"inline-flex max-w-full items-center gap-2 rounded-lg border border-border bg-card py-1 pr-1 pl-1.5\",\n        className,\n      )}\n    >\n      {href ? (\n        <a href={href} className=\"flex min-w-0 items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\">\n          {body}\n        </a>\n      ) : (\n        <span className=\"flex min-w-0 items-center gap-2\">{body}</span>\n      )}\n      {onRemove ? (\n        <Button type=\"button\" variant=\"ghost\" size=\"icon-xs\" aria-label={`${removeLabel} ${name}`} onClick={onRemove}>\n          <X />\n        </Button>\n      ) : null}\n    </span>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/attachment-chip.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Chip de adjunto",
+    "descriptionEs": "Chip de archivo adjunto con icono según el tipo, tamaño, vista previa y quitar.",
+    "preview": "app/examples/attachment-chip/preview.tsx",
+    "previewHref": "/examples/attachment-chip",
+    "examples": [
+      {
+        "title": "Chip de adjunto",
+        "href": "/examples/attachment-chip",
+        "description": "Chip de archivo adjunto con icono según el tipo, tamaño, vista previa y quitar."
+      }
+    ],
+    "usage": "<AttachmentChip name=\"notes.pdf\" size={24000} type=\"application/pdf\" onRemove={remove} />",
+    "api": [
+      {
+        "name": "name / size / type",
+        "type": "string / number / string",
+        "description": "File facts. size is bytes."
+      },
+      {
+        "name": "previewUrl",
+        "type": "string",
+        "description": "Shown for image types."
+      },
+      {
+        "name": "onRemove / removeLabel",
+        "type": "callback / string",
+        "description": "Remove control. Label defaults to Remove."
+      }
+    ]
+  },
+  "docs": "Import AttachmentChip from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "media",
+    "form"
+  ],
+  "type": "registry:ui"
+}
