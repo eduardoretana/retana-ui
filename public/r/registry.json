@@ -818,6 +818,60 @@
           "target": "@ui/image-generation.tsx"
         }
       ]
+    },
+    {
+      "name": "ai-document",
+      "type": "registry:ui",
+      "title": "AI Document",
+      "description": "Document where an agent proposes highlighted edits the reader can accept or reject.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "ai",
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Documento del agente",
+        "descriptionEs": "Documento donde un agente propone ediciones resaltadas que la persona acepta o rechaza.",
+        "preview": "app/examples/ai-document/preview.tsx",
+        "previewHref": "/examples/ai-document",
+        "examples": [
+          {
+            "title": "Documento del agente",
+            "href": "/examples/ai-document",
+            "description": "Documento donde un agente propone ediciones resaltadas que la persona acepta o rechaza."
+          }
+        ],
+        "usage": "<AiDocument segments={segments} onResolve={resolve} />",
+        "api": [
+          {
+            "name": "segments",
+            "type": "AiDocumentSegment[]",
+            "description": "Paragraphs or insert, delete, and replace edits."
+          },
+          {
+            "name": "onResolve",
+            "type": "(id, decision) => void",
+            "description": "decision is accepted or rejected."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "accept, reject, insert, delete, and replace labels default to English."
+          }
+        ]
+      },
+      "docs": "Pending inserts and replacements use the primary token. Deletions use destructive. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/ai-document.tsx",
+          "type": "registry:component",
+          "target": "@ui/ai-document.tsx"
+        }
+      ]
     }
   ]
 }

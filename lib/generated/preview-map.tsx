@@ -14,6 +14,7 @@ import Preview9 from "@/app/examples/inline-citation/preview"
 import Preview10 from "@/app/examples/code-block/preview"
 import Preview11 from "@/app/examples/file-diff/preview"
 import Preview12 from "@/app/examples/image-generation/preview"
+import Preview13 from "@/app/examples/ai-document/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -29,4 +30,5 @@ export const previewMap = {
   "code-block": Preview10,
   "file-diff": Preview11,
   "image-generation": Preview12,
+  "ai-document": Preview13,
 }
