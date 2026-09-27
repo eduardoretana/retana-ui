@@ -1326,6 +1326,68 @@
           "target": "@ui/video-player.tsx"
         }
       ]
+    },
+    {
+      "name": "lightbox",
+      "type": "registry:ui",
+      "title": "Lightbox",
+      "description": "Fullscreen image viewer with next and previous controls, zoom, and keyboard support.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "radix-ui",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "media",
+        "overlay"
+      ],
+      "meta": {
+        "titleEs": "Visor de imágenes",
+        "descriptionEs": "Visor de imágenes a pantalla completa con navegación, zoom y teclado.",
+        "preview": "app/examples/lightbox/preview.tsx",
+        "previewHref": "/examples/lightbox",
+        "examples": [
+          {
+            "title": "Visor de imágenes",
+            "href": "/examples/lightbox",
+            "description": "Visor de imágenes a pantalla completa con navegación, zoom y teclado."
+          }
+        ],
+        "usage": "<Lightbox items={items} open={open} onOpenChange={setOpen} index={index} onIndexChange={setIndex} />",
+        "api": [
+          {
+            "name": "items",
+            "type": "LightboxItem[]",
+            "description": "src, alt, and optional caption."
+          },
+          {
+            "name": "open / index",
+            "type": "boolean / number",
+            "description": "Controlled or uncontrolled."
+          },
+          {
+            "name": "zoom",
+            "type": "keyboard",
+            "description": "Plus and minus zoom from 1 to 4. Arrows change the image. Escape closes."
+          },
+          {
+            "name": "LightboxGallery",
+            "type": "component",
+            "description": "Thumbnail grid that opens the viewer."
+          }
+        ]
+      },
+      "docs": "Built on Radix Dialog for focus trap and Escape. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/lightbox.tsx",
+          "type": "registry:component",
+          "target": "@ui/lightbox.tsx"
+        }
+      ]
     }
   ]
 }

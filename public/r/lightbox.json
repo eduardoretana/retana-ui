@@ -1,0 +1,64 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "lightbox",
+  "title": "Lightbox",
+  "author": "Eduardo Retana",
+  "description": "Fullscreen image viewer with next and previous controls, zoom, and keyboard support.",
+  "dependencies": [
+    "radix-ui",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/lightbox.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { Dialog } from \"radix-ui\"\nimport { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Button } from \"@/components/ui/button\"\n\nexport type LightboxItem = {\n  src: string\n  alt: string\n  caption?: string\n}\n\nexport type LightboxProps = {\n  items: readonly LightboxItem[]\n  open?: boolean\n  defaultOpen?: boolean\n  onOpenChange?: (open: boolean) => void\n  index?: number\n  defaultIndex?: number\n  onIndexChange?: (index: number) => void\n  closeLabel?: string\n  previousLabel?: string\n  nextLabel?: string\n  zoomInLabel?: string\n  zoomOutLabel?: string\n  className?: string\n}\n\nexport function Lightbox({\n  items,\n  open,\n  defaultOpen = false,\n  onOpenChange,\n  index,\n  defaultIndex = 0,\n  onIndexChange,\n  closeLabel = \"Close\",\n  previousLabel = \"Previous\",\n  nextLabel = \"Next\",\n  zoomInLabel = \"Zoom in\",\n  zoomOutLabel = \"Zoom out\",\n  className,\n}: LightboxProps) {\n  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen)\n  const [uncontrolledIndex, setUncontrolledIndex] = React.useState(defaultIndex)\n  const [zoom, setZoom] = React.useState(1)\n  const isOpen = open ?? uncontrolledOpen\n  const current = index ?? uncontrolledIndex\n  const item = items[current]\n\n  function setOpen(next: boolean) {\n    if (open === undefined) setUncontrolledOpen(next)\n    onOpenChange?.(next)\n    if (!next) setZoom(1)\n  }\n\n  function setIndex(next: number) {\n    const bounded = (next + items.length) % Math.max(items.length, 1)\n    if (index === undefined) setUncontrolledIndex(bounded)\n    onIndexChange?.(bounded)\n    setZoom(1)\n  }\n\n  function onKeyDown(event: React.KeyboardEvent) {\n    if (event.key === \"ArrowRight\") {\n      event.preventDefault()\n      setIndex(current + 1)\n    } else if (event.key === \"ArrowLeft\") {\n      event.preventDefault()\n      setIndex(current - 1)\n    } else if (event.key === \"+\" || event.key === \"=\") {\n      event.preventDefault()\n      setZoom((value) => Math.min(4, value + 0.25))\n    } else if (event.key === \"-\" || event.key === \"_\") {\n      event.preventDefault()\n      setZoom((value) => Math.max(1, value - 0.25))\n    }\n  }\n\n  return (\n    <Dialog.Root open={isOpen} onOpenChange={setOpen}>\n      <Dialog.Portal>\n        <Dialog.Overlay className=\"fixed inset-0 z-50 bg-background/80 backdrop-blur-sm\" />\n        <Dialog.Content\n          data-slot=\"lightbox\"\n          aria-describedby={undefined}\n          onKeyDown={onKeyDown}\n          className={cn(\n            \"fixed inset-0 z-50 flex flex-col outline-none\",\n            className,\n          )}\n        >\n          <Dialog.Title className=\"sr-only\">{item?.alt ?? closeLabel}</Dialog.Title>\n          <div className=\"flex items-center justify-end gap-1 p-3\">\n            <Button type=\"button\" size=\"icon-sm\" variant=\"secondary\" aria-label={zoomOutLabel} onClick={() => setZoom((value) => Math.max(1, value - 0.25))}>\n              <ZoomOut />\n            </Button>\n            <Button type=\"button\" size=\"icon-sm\" variant=\"secondary\" aria-label={zoomInLabel} onClick={() => setZoom((value) => Math.min(4, value + 0.25))}>\n              <ZoomIn />\n            </Button>\n            <Dialog.Close asChild>\n              <Button type=\"button\" size=\"icon-sm\" variant=\"secondary\" aria-label={closeLabel}>\n                <X />\n              </Button>\n            </Dialog.Close>\n          </div>\n          <div className=\"relative flex min-h-0 flex-1 items-center justify-center px-14\">\n            {items.length > 1 ? (\n              <Button\n                type=\"button\"\n                size=\"icon\"\n                variant=\"secondary\"\n                className=\"absolute left-3\"\n                aria-label={previousLabel}\n                onClick={() => setIndex(current - 1)}\n              >\n                <ChevronLeft />\n              </Button>\n            ) : null}\n            {item ? (\n              <figure className=\"flex max-h-full max-w-full flex-col items-center gap-3\">\n                {/* Host-provided gallery bitmap. */}\n                {/* eslint-disable-next-line @next/next/no-img-element */}\n                <img\n                  src={item.src}\n                  alt={item.alt}\n                  className=\"max-h-[70vh] max-w-full rounded-lg object-contain transition-transform duration-200 motion-reduce:transition-none\"\n                  style={{ transform: `scale(${zoom})` }}\n                  draggable={false}\n                />\n                {item.caption ? <figcaption className=\"text-sm text-muted-foreground\">{item.caption}</figcaption> : null}\n              </figure>\n            ) : null}\n            {items.length > 1 ? (\n              <Button\n                type=\"button\"\n                size=\"icon\"\n                variant=\"secondary\"\n                className=\"absolute right-3\"\n                aria-label={nextLabel}\n                onClick={() => setIndex(current + 1)}\n              >\n                <ChevronRight />\n              </Button>\n            ) : null}\n          </div>\n        </Dialog.Content>\n      </Dialog.Portal>\n    </Dialog.Root>\n  )\n}\n\nexport function LightboxGallery({\n  items,\n  className,\n}: {\n  items: readonly LightboxItem[]\n  className?: string\n}) {\n  const [open, setOpen] = React.useState(false)\n  const [index, setIndex] = React.useState(0)\n\n  return (\n    <div className={className}>\n      <ul className=\"grid grid-cols-3 gap-2\">\n        {items.map((item, itemIndex) => (\n          <li key={item.src}>\n            <button\n              type=\"button\"\n              className=\"block w-full overflow-hidden rounded-lg border border-border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\"\n              onClick={() => {\n                setIndex(itemIndex)\n                setOpen(true)\n              }}\n            >\n              {/* eslint-disable-next-line @next/next/no-img-element */}\n              <img src={item.src} alt={item.alt} className=\"aspect-square w-full object-cover\" />\n            </button>\n          </li>\n        ))}\n      </ul>\n      <Lightbox items={items} open={open} onOpenChange={setOpen} index={index} onIndexChange={setIndex} />\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/lightbox.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Visor de imágenes",
+    "descriptionEs": "Visor de imágenes a pantalla completa con navegación, zoom y teclado.",
+    "preview": "app/examples/lightbox/preview.tsx",
+    "previewHref": "/examples/lightbox",
+    "examples": [
+      {
+        "title": "Visor de imágenes",
+        "href": "/examples/lightbox",
+        "description": "Visor de imágenes a pantalla completa con navegación, zoom y teclado."
+      }
+    ],
+    "usage": "<Lightbox items={items} open={open} onOpenChange={setOpen} index={index} onIndexChange={setIndex} />",
+    "api": [
+      {
+        "name": "items",
+        "type": "LightboxItem[]",
+        "description": "src, alt, and optional caption."
+      },
+      {
+        "name": "open / index",
+        "type": "boolean / number",
+        "description": "Controlled or uncontrolled."
+      },
+      {
+        "name": "zoom",
+        "type": "keyboard",
+        "description": "Plus and minus zoom from 1 to 4. Arrows change the image. Escape closes."
+      },
+      {
+        "name": "LightboxGallery",
+        "type": "component",
+        "description": "Thumbnail grid that opens the viewer."
+      }
+    ]
+  },
+  "docs": "Built on Radix Dialog for focus trap and Escape. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "media",
+    "overlay"
+  ],
+  "type": "registry:ui"
+}
