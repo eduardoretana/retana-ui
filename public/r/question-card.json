@@ -1,0 +1,62 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "question-card",
+  "title": "Question Card",
+  "author": "Eduardo Retana",
+  "description": "Agent question with single or multiple choices and an optional free-text answer.",
+  "dependencies": [],
+  "registryDependencies": [
+    "button",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/question-card.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Button } from \"@/components/ui/button\"\nimport { Textarea } from \"@/components/ui/textarea\"\n\nexport type QuestionOption = {\n  id: string\n  label: string\n  description?: string\n}\n\nexport type QuestionAnswer = {\n  optionIds: string[]\n  text: string\n}\n\nexport type QuestionCardProps = {\n  prompt: string\n  options?: readonly QuestionOption[]\n  mode?: \"single\" | \"multiple\"\n  allowFreeText?: boolean\n  onSubmit?: (answer: QuestionAnswer) => void\n  placeholder?: string\n  submitLabel?: string\n  submittedLabel?: string\n  freeTextLabel?: string\n  className?: string\n}\n\nexport function QuestionCard({\n  prompt,\n  options = [],\n  mode = \"single\",\n  allowFreeText = true,\n  onSubmit,\n  placeholder = \"Add your own answer\",\n  submitLabel = \"Send answer\",\n  submittedLabel = \"Answer sent\",\n  freeTextLabel = \"Your answer\",\n  className,\n}: QuestionCardProps) {\n  const [selected, setSelected] = React.useState<string[]>([])\n  const [text, setText] = React.useState(\"\")\n  const [sent, setSent] = React.useState(false)\n  const groupId = React.useId()\n\n  function toggle(id: string) {\n    setSelected((current) => {\n      if (mode === \"single\") return current[0] === id ? [] : [id]\n      return current.includes(id) ? current.filter((item) => item !== id) : [...current, id]\n    })\n  }\n\n  const canSend = selected.length > 0 || text.trim().length > 0\n\n  return (\n    <form\n      data-slot=\"question-card\"\n      data-mode={mode}\n      data-submitted={sent ? \"true\" : \"false\"}\n      className={cn(\"rounded-xl border border-border bg-card p-4 shadow-sm\", className)}\n      onSubmit={(event) => {\n        event.preventDefault()\n        if (!canSend || sent) return\n        onSubmit?.({ optionIds: selected, text: text.trim() })\n        setSent(true)\n      }}\n    >\n      <fieldset disabled={sent} className=\"min-w-0 border-0 p-0\">\n        <legend className=\"mb-3 text-sm font-medium\">{prompt}</legend>\n        <div\n          role={mode === \"single\" ? \"radiogroup\" : \"group\"}\n          aria-labelledby={groupId}\n          className=\"flex flex-col gap-1.5\"\n        >\n          <span id={groupId} className=\"sr-only\">\n            {prompt}\n          </span>\n          {options.map((option) => {\n            const active = selected.includes(option.id)\n            return (\n              <button\n                key={option.id}\n                type=\"button\"\n                role={mode === \"single\" ? \"radio\" : \"checkbox\"}\n                aria-checked={active}\n                onClick={() => toggle(option.id)}\n                className={cn(\n                  \"rounded-lg border px-3 py-2 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\",\n                  active ? \"border-primary bg-primary/10\" : \"border-border hover:bg-muted/70\",\n                )}\n              >\n                <span className=\"block text-sm\">{option.label}</span>\n                {option.description ? (\n                  <span className=\"mt-0.5 block text-xs text-muted-foreground\">{option.description}</span>\n                ) : null}\n              </button>\n            )\n          })}\n        </div>\n        {allowFreeText ? (\n          <label className=\"mt-3 flex flex-col gap-1.5 text-xs font-medium text-muted-foreground\">\n            {freeTextLabel}\n            <Textarea\n              value={text}\n              onChange={(event) => setText(event.target.value)}\n              placeholder={placeholder}\n              rows={2}\n              className=\"min-h-16 font-normal text-foreground\"\n            />\n          </label>\n        ) : null}\n      </fieldset>\n      <div className=\"mt-3 flex justify-end\">\n        {sent ? (\n          <p className=\"text-sm text-muted-foreground\" role=\"status\">\n            {submittedLabel}\n          </p>\n        ) : (\n          <Button type=\"submit\" size=\"sm\" disabled={!canSend}>\n            {submitLabel}\n          </Button>\n        )}\n      </div>\n    </form>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/question-card.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Pregunta del agente",
+    "descriptionEs": "Pregunta del agente con opciones de una o varias respuestas, y un campo libre opcional.",
+    "preview": "app/examples/question-card/preview.tsx",
+    "previewHref": "/examples/question-card",
+    "examples": [
+      {
+        "title": "Pregunta del agente",
+        "href": "/examples/question-card",
+        "description": "Pregunta del agente con opciones de una o varias respuestas, y un campo libre opcional."
+      }
+    ],
+    "usage": "<QuestionCard prompt=\"Which file?\" mode=\"single\" options={options} onSubmit={answer} />",
+    "api": [
+      {
+        "name": "mode",
+        "type": "\"single\" | \"multiple\"",
+        "description": "Radio group or checkboxes. Default single."
+      },
+      {
+        "name": "allowFreeText",
+        "type": "boolean",
+        "description": "Shows a textarea. Default true."
+      },
+      {
+        "name": "onSubmit",
+        "type": "(answer) => void",
+        "description": "Receives optionIds and trimmed text."
+      },
+      {
+        "name": "labels",
+        "type": "string",
+        "description": "placeholder, submitLabel, submittedLabel, and freeTextLabel default to English."
+      }
+    ]
+  },
+  "docs": "Import QuestionCard from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "ai",
+    "form"
+  ],
+  "type": "registry:ui"
+}

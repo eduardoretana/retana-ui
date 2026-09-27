@@ -527,6 +527,66 @@
           "target": "@ui/plan-card.tsx"
         }
       ]
+    },
+    {
+      "name": "question-card",
+      "type": "registry:ui",
+      "title": "Question Card",
+      "description": "Agent question with single or multiple choices and an optional free-text answer.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "textarea"
+      ],
+      "categories": [
+        "ai",
+        "form"
+      ],
+      "meta": {
+        "titleEs": "Pregunta del agente",
+        "descriptionEs": "Pregunta del agente con opciones de una o varias respuestas, y un campo libre opcional.",
+        "preview": "app/examples/question-card/preview.tsx",
+        "previewHref": "/examples/question-card",
+        "examples": [
+          {
+            "title": "Pregunta del agente",
+            "href": "/examples/question-card",
+            "description": "Pregunta del agente con opciones de una o varias respuestas, y un campo libre opcional."
+          }
+        ],
+        "usage": "<QuestionCard prompt=\"Which file?\" mode=\"single\" options={options} onSubmit={answer} />",
+        "api": [
+          {
+            "name": "mode",
+            "type": "\"single\" | \"multiple\"",
+            "description": "Radio group or checkboxes. Default single."
+          },
+          {
+            "name": "allowFreeText",
+            "type": "boolean",
+            "description": "Shows a textarea. Default true."
+          },
+          {
+            "name": "onSubmit",
+            "type": "(answer) => void",
+            "description": "Receives optionIds and trimmed text."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "placeholder, submitLabel, submittedLabel, and freeTextLabel default to English."
+          }
+        ]
+      },
+      "docs": "Import QuestionCard from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/question-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/question-card.tsx"
+        }
+      ]
     }
   ]
 }
