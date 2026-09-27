@@ -34,8 +34,12 @@ export type OverviewDashboardProps = {
   counts: readonly OverviewCount[]
   onOpen?: (href: string) => void
   title?: string
+  trendTitle?: string
   upcomingTitle?: string
   countsTitle?: string
+  emptyUpcoming?: string
+  visitorsLabel?: string
+  viewsLabel?: string
   className?: string
 }
 
@@ -46,8 +50,12 @@ export function OverviewDashboard({
   counts,
   onOpen,
   title = "Overview",
+  trendTitle = "This week",
   upcomingTitle = "Next calls",
   countsTitle = "On the site",
+  emptyUpcoming = "Nothing scheduled.",
+  visitorsLabel = "Visitors",
+  viewsLabel = "Page views",
   className,
 }: OverviewDashboardProps) {
   return (
@@ -67,14 +75,19 @@ export function OverviewDashboard({
         ))}
       </div>
       <div className="grid gap-3 xl:grid-cols-[minmax(0,2fr)_minmax(16rem,1fr)]">
-        <TrendChart points={trend} title="This week" />
+        <TrendChart
+          points={trend}
+          title={trendTitle}
+          visitorsLabel={visitorsLabel}
+          viewsLabel={viewsLabel}
+        />
         <Card>
           <CardHeader>
             <CardTitle>{upcomingTitle}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             {upcoming.length === 0 ? (
-              <p className="text-sm text-muted-foreground">Nothing scheduled.</p>
+              <p className="text-sm text-muted-foreground">{emptyUpcoming}</p>
             ) : (
               upcoming.map((item) => (
                 <div key={item.id} className="flex flex-col">

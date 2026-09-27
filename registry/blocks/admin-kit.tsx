@@ -101,6 +101,60 @@ const NAV: AdminNavGroup[] = [
   },
 ]
 
+const DRAG_ES = {
+  reorderLabel: "Reordenar",
+  moveTopLabel: "Al inicio",
+  moveUpLabel: "Subir",
+  moveDownLabel: "Bajar",
+  moveBottomLabel: "Al final",
+  dragInstructions:
+    "Para reordenar, pulsa Espacio. Flechas para mover, Espacio para soltar, Escape para cancelar.",
+  pickedUp: "Recogido, posición",
+  ofWord: "de",
+  overPlace: "Sobre la posición",
+  notOver: "No está sobre una posición.",
+  droppedAt: "Soltado en la posición",
+  dropped: "Soltado.",
+  cancelled: "Cancelado.",
+  savedMessage: "Orden guardado",
+  errorMessage: "No se pudo guardar el orden",
+}
+
+const CHART_ES = {
+  visitorsLabel: "Visitantes",
+  viewsLabel: "Páginas vistas",
+  rangeLabel: "Periodo",
+}
+
+const FIELD_ES = {
+  uploadLabel: "Subir",
+  uploadingLabel: "Subiendo…",
+  dropLabel: "Suelta un archivo",
+  emptyLibrary: "La biblioteca está vacía",
+  uploadedMessage: "Archivo subido",
+  uploadFailed: "No se pudo subir",
+  pickLabel: "Biblioteca",
+  clearLabel: "Quitar",
+}
+
+const LIBRARY_ES = {
+  uploadLabel: FIELD_ES.uploadLabel,
+  uploadingLabel: FIELD_ES.uploadingLabel,
+  dropLabel: FIELD_ES.dropLabel,
+  uploadedMessage: FIELD_ES.uploadedMessage,
+  uploadFailed: FIELD_ES.uploadFailed,
+  emptyTitle: "Todavía no hay archivos",
+  emptyDescription: "Sube una imagen o un vídeo.",
+  nameLabel: "Nombre",
+  typeLabel: "Tipo",
+  sizeLabel: "Tamaño",
+  addedLabel: "Añadido",
+  deleteTitle: "Eliminar archivo",
+  deleteDescription: "El archivo sale de la biblioteca.",
+  deleteLabel: "Eliminar",
+  viewLabel: "Vista",
+}
+
 const SETTING_GROUPS: SettingsGroup[] = [
   {
     id: "home",
@@ -150,9 +204,14 @@ export function AdminKit({ themeController, className, seed: seedProp, showToast
       themeController={themeController}
       showToaster={showToaster}
       commandLabel="Buscar páginas"
+      emptyCommand="Ninguna página"
+      themeLabel="Tema"
+      themeNames={{ light: "claro", dark: "oscuro", system: "sistema" }}
+      rootLabel="Estudio"
+      sidebarLabel="Alternar el menú"
       brand={
         <div className="px-2 py-1 group-data-[collapsible=icon]:hidden">
-          <p className="text-sm font-semibold">{data.settings["site.name"] || "Admin"}</p>
+          <p className="text-sm font-semibold">{data.settings["site.name"] || "Estudio"}</p>
           <p className="text-xs text-muted-foreground">Datos de demostración</p>
         </div>
       }
@@ -190,6 +249,8 @@ export function AdminKit({ themeController, className, seed: seedProp, showToast
           discardLabel="Descartar"
           dirtyLabel="Cambios sin guardar"
           cleanLabel="Todo guardado"
+          pendingLabel="Guardando…"
+          leaveMessage="Hay textos sin guardar."
           onSave={async (values) => {
             await admin.settings.save(values)
             refresh()
@@ -454,6 +515,8 @@ export function AdminKit({ themeController, className, seed: seedProp, showToast
             discardLabel="Descartar"
             dirtyLabel="Cambios sin guardar"
             cleanLabel="Todo guardado"
+            pendingLabel="Guardando…"
+            leaveMessage="Hay textos sin guardar."
             onSave={async (values) => {
               await admin.settings.save({ ...data.settings, ...values })
               refresh()
@@ -462,6 +525,7 @@ export function AdminKit({ themeController, className, seed: seedProp, showToast
           />
           <AdminSection title="Cifras" description="Las tres cifras bajo la historia.">
             <SortableList
+              {...DRAG_ES}
               label="cifras"
               editLabel="Editar"
               items={data.stats.map((row) => ({ id: row.id, title: row.value, meta: row.label }))}
@@ -473,6 +537,7 @@ export function AdminKit({ themeController, className, seed: seedProp, showToast
           </AdminSection>
           <AdminSection title="Experiencia">
             <SortableList
+              {...DRAG_ES}
               label="puestos"
               items={data.experience.map((row) => ({ id: row.id, title: row.role, meta: `${row.company} · ${row.period}` }))}
               onReorder={async (ids) => {
@@ -483,6 +548,7 @@ export function AdminKit({ themeController, className, seed: seedProp, showToast
           </AdminSection>
           <AdminSection title="Premios">
             <SortableList
+              {...DRAG_ES}
               label="premios"
               items={data.awards.map((row) => ({ id: row.id, title: row.name, meta: row.count }))}
               onReorder={async (ids) => {
@@ -495,6 +561,7 @@ export function AdminKit({ themeController, className, seed: seedProp, showToast
       ) : null}
       {screen === "media" ? (
         <MediaLibrary
+          {...LIBRARY_ES}
           assets={data.media}
           onUpload={async (file) => {
             const asset = await admin.media.upload(file)
@@ -525,8 +592,11 @@ function OverviewScreen({ data, onOpen }: { data: AdminSeed; onOpen: (href: stri
   return (
     <OverviewDashboard
       title="Resumen"
+      trendTitle="Esta semana"
       upcomingTitle="Próximas llamadas"
       countsTitle="En el sitio"
+      emptyUpcoming="Nada programado."
+      {...CHART_ES}
       onOpen={onOpen}
       stats={[
         { id: "visitors", label: "Visitantes", value: nowSum.visitors, previous: prevSum.visitors, sparkline: current.daily.map((d) => d.visitors), tone: 1, caption: "vs. la semana anterior" },
@@ -567,6 +637,7 @@ function AnalyticsScreen({ data }: { data: AdminSeed }) {
       </div>
       <TrendChart
         title="Tendencia"
+        {...CHART_ES}
         points={snap.daily.map((day) => ({ label: day.date.slice(5), visitors: day.visitors, views: day.views }))}
         ranges={[
           { key: "today", label: "Hoy" },
@@ -579,15 +650,21 @@ function AnalyticsScreen({ data }: { data: AdminSeed }) {
       />
       <div className="grid gap-3 lg:grid-cols-2">
         <FunnelChart title="Embudo" steps={snap.funnel.map((step, index) => ({ ...step, tone: ((index % 5) + 1) as 1 | 2 | 3 | 4 | 5 }))} />
-        <RankedBars title="Fuentes" items={snap.sources} tone={2} />
+        <RankedBars title="Fuentes" items={snap.sources} tone={2} emptyLabel="Sin datos" />
       </div>
       <Heatmap
         grid={snap.heat}
         title="Día y hora"
         tone={1}
+        description="Las celdas más oscuras tuvieron más visitas."
         dayLabels={["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]}
       />
-      <ScrollDepthChart marks={snap.scroll} title="Profundidad de scroll" />
+      <ScrollDepthChart
+        marks={snap.scroll}
+        title="Profundidad de scroll"
+        description="Parte de las visitas que llegó a cada marca."
+        valueLabel="Alcanzaron"
+      />
     </div>
   )
 }
@@ -673,6 +750,16 @@ function BookingsScreen({
         </div>
       )}
       emptyTitle="No hay reservas"
+      columnsLabel="Columnas"
+      csvLabel="CSV"
+      selectedLabel="seleccionadas"
+      previousLabel="Anterior"
+      nextLabel="Siguiente"
+      detailFallback="Detalle"
+      detailDescription="Detalle de la reserva"
+      viewsLabel="Vistas"
+      selectAllLabel="Seleccionar todas"
+      selectRowLabel="Seleccionar fila"
     />
   )
 }
@@ -713,6 +800,23 @@ function ProjectsScreen({
         searchLabel="Buscar proyectos"
         editLabel="Editar"
         emptyTitle="Ningún proyecto coincide"
+        allLabel="Todos"
+        uncategorizedLabel="Sin categoría"
+        listLabel="Lista"
+        gridLabel="Cuadrícula"
+        viewLabel="Vista"
+        orderHint="Arrastra el asa. Este orden es el del sitio."
+        filteredHint="Al reordenar solo cambian los proyectos en pantalla. El resto se queda."
+        savedMessage="Orden guardado"
+        updateError="No se pudo actualizar"
+        reorderLabel="Reordenar"
+        dragInstructions={DRAG_ES.dragInstructions}
+        pickedUp={DRAG_ES.pickedUp}
+        ofWord={DRAG_ES.ofWord}
+        overPlace={DRAG_ES.overPlace}
+        droppedAt={DRAG_ES.droppedAt}
+        dropped={DRAG_ES.dropped}
+        cancelled={DRAG_ES.cancelled}
         items={data.projects.map((row) => ({
           id: row.id,
           title: row.title,
@@ -743,6 +847,7 @@ function ProjectsScreen({
         description="La posición no cambia al guardar."
         busy={busy}
         submitLabel="Guardar"
+        pendingLabel="Guardando…"
         cancelLabel="Cancelar"
         deleteLabel="Eliminar"
         onDelete={current ? () => onDelete(current.id) : undefined}
@@ -790,6 +895,7 @@ function ProjectsScreen({
         <TextField name="year" label="Año" defaultValue={current?.year} />
         <TextField name="liveUrl" label="Enlace" defaultValue={current?.liveUrl} />
         <MediaField
+          {...FIELD_ES}
           label="Portada"
           value={cover}
           onChange={(url) => setCover(url)}
@@ -822,6 +928,7 @@ function PlansScreen({
         <Button type="button" onClick={() => setEditing("new")}>Añadir plan</Button>
       </div>
       <SortableList
+              {...DRAG_ES}
         label="planes"
         editLabel="Editar"
         items={data.plans.map((row) => ({
@@ -840,6 +947,7 @@ function PlansScreen({
         onOpenChange={(open) => !open && setEditing(null)}
         title={current ? "Editar plan" : "Nuevo plan"}
         submitLabel="Guardar"
+        pendingLabel="Guardando…"
         cancelLabel="Cancelar"
         deleteLabel="Eliminar"
         onDelete={current ? () => adminRemove(current.id) : undefined}
@@ -905,6 +1013,7 @@ function SimpleList<T extends Category | Faq>({
         <Button type="button" onClick={() => setEditing("new")}>{addLabel}</Button>
       </div>
       <SortableList
+              {...DRAG_ES}
         label={title.toLowerCase()}
         editLabel="Editar"
         items={items}
@@ -919,6 +1028,7 @@ function SimpleList<T extends Category | Faq>({
         onOpenChange={(open) => !open && setEditing(null)}
         title={current ? `Editar` : addLabel}
         submitLabel="Guardar"
+        pendingLabel="Guardando…"
         cancelLabel="Cancelar"
         deleteLabel="Eliminar"
         onDelete={current ? async () => { await onDelete(current.id); setEditing(null) } : undefined}
@@ -966,6 +1076,7 @@ function NamedList<T extends { id: string; position: number }>({
         <Button type="button" onClick={() => setEditing("new")}>Añadir</Button>
       </div>
       <SortableList
+              {...DRAG_ES}
         label={title.toLowerCase()}
         editLabel="Editar"
         emptyTitle="Nada todavía"
@@ -982,6 +1093,7 @@ function NamedList<T extends { id: string; position: number }>({
         title={current ? "Editar" : "Nuevo"}
         description="Al guardar se conserva la posición."
         submitLabel="Guardar"
+        pendingLabel="Guardando…"
         cancelLabel="Cancelar"
         deleteLabel="Eliminar"
         onDelete={current ? async () => { await onDelete(current.id) } : undefined}

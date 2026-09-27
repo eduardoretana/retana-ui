@@ -9,8 +9,12 @@ export function OverviewDashboardDemo() {
     <main className="mx-auto min-h-dvh max-w-6xl bg-background p-6">
       <OverviewDashboard
         title="Resumen"
+        trendTitle="Esta semana"
         upcomingTitle="Próximas llamadas"
         countsTitle="En el sitio"
+        emptyUpcoming="Nada programado."
+        visitorsLabel="Visitantes"
+        viewsLabel="Páginas vistas"
         stats={[
           { id: "visitors", label: "Visitantes", value: 1284, previous: 1100, sparkline: [12, 18, 16, 22, 20, 28], tone: 1, caption: "semana anterior" },
           { id: "views", label: "Páginas", value: 2408, previous: 2300, sparkline: [30, 28, 34, 32, 40, 36], tone: 2, caption: "semana anterior" },

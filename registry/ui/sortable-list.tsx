@@ -54,6 +54,19 @@ export type SortableListProps = {
   className?: string
   savedMessage?: string
   errorMessage?: string
+  reorderLabel?: string
+  moveTopLabel?: string
+  moveUpLabel?: string
+  moveDownLabel?: string
+  moveBottomLabel?: string
+  dragInstructions?: string
+  pickedUp?: string
+  ofWord?: string
+  overPlace?: string
+  notOver?: string
+  droppedAt?: string
+  dropped?: string
+  cancelled?: string
 }
 
 function isVideo(url: string) {
@@ -72,6 +85,19 @@ export function SortableList({
   className,
   savedMessage = "Order saved",
   errorMessage = "Could not save the order",
+  reorderLabel = "Reorder",
+  moveTopLabel = "Move to the top",
+  moveUpLabel = "Move up",
+  moveDownLabel = "Move down",
+  moveBottomLabel = "Move to the bottom",
+  dragInstructions = "To reorder, press Space. Use the arrow keys to move, Space to drop, Escape to cancel.",
+  pickedUp = "Picked up, place",
+  ofWord = "of",
+  overPlace = "Over place",
+  notOver = "Not over a place.",
+  droppedAt = "Dropped at place",
+  dropped = "Dropped.",
+  cancelled = "Cancelled.",
 }: SortableListProps) {
   const notify = React.useMemo(
     () => ({
@@ -126,15 +152,14 @@ export function SortableList({
       onDragEnd={onDragEnd}
       accessibility={{
         screenReaderInstructions: {
-          draggable:
-            "To reorder, press Space. Use the arrow keys to move, Space to drop, Escape to cancel.",
+          draggable: dragInstructions,
         },
         announcements: {
           onDragStart: ({ active }) =>
-            `Picked up, place ${place(active.id)} of ${shownIds.length} ${label}.`,
-          onDragOver: ({ over }) => (over ? `Over place ${place(over.id)}.` : "Not over a place."),
-          onDragEnd: ({ over }) => (over ? `Dropped at place ${place(over.id)}.` : "Dropped."),
-          onDragCancel: () => "Cancelled.",
+            `${pickedUp} ${place(active.id)} ${ofWord} ${shownIds.length} ${label}.`,
+          onDragOver: ({ over }) => (over ? `${overPlace} ${place(over.id)}.` : notOver),
+          onDragEnd: ({ over }) => (over ? `${droppedAt} ${place(over.id)}.` : dropped),
+          onDragCancel: () => cancelled,
         },
       }}
     >
@@ -147,6 +172,11 @@ export function SortableList({
               index={shownIds.indexOf(item.id)}
               count={shownIds.length}
               editLabel={editLabel}
+              reorderLabel={reorderLabel}
+              moveTopLabel={moveTopLabel}
+              moveUpLabel={moveUpLabel}
+              moveDownLabel={moveDownLabel}
+              moveBottomLabel={moveBottomLabel}
               onEdit={onEdit}
               onMove={move}
             />
@@ -162,6 +192,11 @@ function SortableRow({
   index,
   count,
   editLabel,
+  reorderLabel,
+  moveTopLabel,
+  moveUpLabel,
+  moveDownLabel,
+  moveBottomLabel,
   onEdit,
   onMove,
 }: {
@@ -169,6 +204,11 @@ function SortableRow({
   index: number
   count: number
   editLabel: string
+  reorderLabel: string
+  moveTopLabel: string
+  moveUpLabel: string
+  moveDownLabel: string
+  moveBottomLabel: string
   onEdit?: (id: string) => void
   onMove: (id: string, target: "up" | "down" | "top" | "bottom") => void
 }) {
@@ -194,7 +234,7 @@ function SortableRow({
         variant="ghost"
         size="icon-sm"
         className="cursor-grab touch-none active:cursor-grabbing motion-reduce:transition-none"
-        aria-label={`Reorder ${item.title}`}
+        aria-label={`${reorderLabel} ${item.title}`}
         {...attributes}
         {...listeners}
       >
@@ -207,16 +247,16 @@ function SortableRow({
         {item.meta ? <p className="truncate text-xs text-muted-foreground">{item.meta}</p> : null}
       </div>
       <div className="hidden items-center gap-0.5 sm:flex">
-        <MoveButton label={`Move ${item.title} to the top`} disabled={index <= 0} onClick={() => onMove(item.id, "top")}>
+        <MoveButton label={`${moveTopLabel} ${item.title}`} disabled={index <= 0} onClick={() => onMove(item.id, "top")}>
           <ArrowUpToLine />
         </MoveButton>
-        <MoveButton label={`Move ${item.title} up`} disabled={index <= 0} onClick={() => onMove(item.id, "up")}>
+        <MoveButton label={`${moveUpLabel} ${item.title}`} disabled={index <= 0} onClick={() => onMove(item.id, "up")}>
           <ArrowUp />
         </MoveButton>
-        <MoveButton label={`Move ${item.title} down`} disabled={index >= count - 1} onClick={() => onMove(item.id, "down")}>
+        <MoveButton label={`${moveDownLabel} ${item.title}`} disabled={index >= count - 1} onClick={() => onMove(item.id, "down")}>
           <ArrowDown />
         </MoveButton>
-        <MoveButton label={`Move ${item.title} to the bottom`} disabled={index >= count - 1} onClick={() => onMove(item.id, "bottom")}>
+        <MoveButton label={`${moveBottomLabel} ${item.title}`} disabled={index >= count - 1} onClick={() => onMove(item.id, "bottom")}>
           <ArrowDownToLine />
         </MoveButton>
       </div>

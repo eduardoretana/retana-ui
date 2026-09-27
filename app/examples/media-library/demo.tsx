@@ -50,12 +50,28 @@ export function MediaLibraryDemo() {
         assets={assets}
         onUpload={upload}
         onDelete={async (id) => setAssets((current) => current.filter((asset) => asset.id !== id))}
+        uploadLabel="Subir"
+        uploadingLabel="Subiendo…"
+        dropLabel="Suelta un archivo"
+        emptyTitle="Todavía no hay archivos"
+        emptyDescription="Sube una imagen o un vídeo."
+        uploadedMessage="Archivo subido"
+        uploadFailed="No se pudo subir"
+        nameLabel="Nombre"
+        typeLabel="Tipo"
+        sizeLabel="Tamaño"
+        addedLabel="Añadido"
+        deleteTitle="Eliminar archivo"
+        deleteDescription="El archivo sale de la biblioteca."
+        deleteLabel="Eliminar"
+        viewLabel="Vista"
       />
       <EntityForm
         open={open}
         onOpenChange={setOpen}
         title="Portada del proyecto"
         submitLabel="Guardar"
+        pendingLabel="Guardando…"
         cancelLabel="Cancelar"
         busy={busy}
         onSubmit={async () => undefined}
@@ -69,6 +85,12 @@ export function MediaLibraryDemo() {
           onBusyChange={setBusy}
           pickLabel="Biblioteca"
           clearLabel="Quitar"
+          uploadLabel="Subir"
+          uploadingLabel="Subiendo…"
+          dropLabel="Suelta un archivo"
+          emptyLibrary="La biblioteca está vacía"
+          uploadedMessage="Archivo subido"
+          uploadFailed="No se pudo subir"
           hint="PNG, JPG o un vídeo corto."
         />
       </EntityForm>

@@ -15,7 +15,7 @@ export default function AdminShellPreview() {
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex h-8 items-center gap-2 border-b border-border px-2 text-muted-foreground">
-          <span>Admin</span>
+          <span>Estudio</span>
           <span>/</span>
           <span className="text-foreground">Proyectos</span>
         </div>

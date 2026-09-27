@@ -34,6 +34,19 @@ export function SortableListDemo() {
         editLabel="Editar"
         savedMessage="Orden guardado"
         errorMessage="No se pudo guardar el orden"
+        reorderLabel="Reordenar"
+        moveTopLabel="Al inicio"
+        moveUpLabel="Subir"
+        moveDownLabel="Bajar"
+        moveBottomLabel="Al final"
+        dragInstructions="Para reordenar, pulsa Espacio. Flechas para mover, Espacio para soltar, Escape para cancelar."
+        pickedUp="Recogido, posición"
+        ofWord="de"
+        overPlace="Sobre la posición"
+        notOver="No está sobre una posición."
+        droppedAt="Soltado en la posición"
+        dropped="Soltado."
+        cancelled="Cancelado."
         onEdit={() => undefined}
         onReorder={async (ids) => {
           if (fail) throw new Error("El servidor rechazó el orden")

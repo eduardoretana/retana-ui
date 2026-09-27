@@ -39,6 +39,7 @@ export function SettingsFormDemo() {
         groups={groups}
         values={values}
         saveLabel="Guardar textos"
+        pendingLabel="Guardando…"
         discardLabel="Descartar"
         dirtyLabel="Hay cambios sin guardar"
         cleanLabel="Todo guardado"

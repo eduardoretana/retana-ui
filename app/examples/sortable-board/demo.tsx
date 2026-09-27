@@ -36,6 +36,23 @@ export function SortableBoardDemo() {
         searchLabel="Buscar proyectos"
         editLabel="Editar"
         emptyTitle="Ningún proyecto coincide"
+        allLabel="Todos"
+        uncategorizedLabel="Sin categoría"
+        listLabel="Lista"
+        gridLabel="Cuadrícula"
+        viewLabel="Vista"
+        orderHint="Arrastra el asa. Este orden es el del sitio."
+        filteredHint="Al reordenar solo cambian los proyectos en pantalla. El resto se queda."
+        savedMessage="Orden guardado"
+        updateError="No se pudo actualizar"
+        reorderLabel="Reordenar"
+        dragInstructions="Pulsa Espacio, luego las flechas, y Espacio para soltar. Escape cancela."
+        pickedUp="Recogido, posición"
+        ofWord="de"
+        overPlace="Sobre la posición"
+        droppedAt="Soltado en la posición"
+        dropped="Soltado."
+        cancelled="Cancelado."
         onEdit={(id) => toast.message(`Editar ${items.find((item) => item.id === id)?.title ?? id}`)}
         onReorder={async (ids) => {
           const byId = new Map(items.map((item) => [item.id, item]))

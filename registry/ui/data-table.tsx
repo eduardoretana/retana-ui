@@ -90,6 +90,16 @@ export type AdminDataTableProps<T extends { id: string }> = {
   detailTitle?: (row: T) => string
   className?: string
   emptyTitle?: string
+  columnsLabel?: string
+  csvLabel?: string
+  selectedLabel?: string
+  previousLabel?: string
+  nextLabel?: string
+  detailFallback?: string
+  detailDescription?: string
+  viewsLabel?: string
+  selectAllLabel?: string
+  selectRowLabel?: string
 }
 
 export function AdminDataTable<T extends { id: string }>({
@@ -107,6 +117,16 @@ export function AdminDataTable<T extends { id: string }>({
   detailTitle,
   className,
   emptyTitle = "No rows",
+  columnsLabel = "Columns",
+  csvLabel = "CSV",
+  selectedLabel = "selected",
+  previousLabel = "Previous",
+  nextLabel = "Next",
+  detailFallback = "Details",
+  detailDescription = "Row details",
+  viewsLabel = "Views",
+  selectAllLabel = "Select all",
+  selectRowLabel = "Select row",
 }: AdminDataTableProps<T>) {
   const [tab, setTab] = React.useState(tabs?.[0]?.id ?? "all")
   const [query, setQuery] = React.useState("")
@@ -159,14 +179,14 @@ export function AdminDataTable<T extends { id: string }>({
               : false
         }
         onCheckedChange={(value) => table.toggleAllRowsSelected(value === true)}
-        aria-label="Select all"
+        aria-label={selectAllLabel}
       />
     ),
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(value === true)}
-        aria-label="Select row"
+        aria-label={selectRowLabel}
         onClick={(event) => event.stopPropagation()}
       />
     ),
@@ -198,7 +218,7 @@ export function AdminDataTable<T extends { id: string }>({
     <div className={cn("flex flex-col gap-3", className)}>
       <div className="flex flex-col gap-3">
         {tabs && tabs.length > 0 ? (
-          <div className="flex flex-wrap gap-1" role="tablist" aria-label="Views">
+          <div className="flex flex-wrap gap-1" role="tablist" aria-label={viewsLabel}>
             {tabs.map((item) => (
               <Button
                 key={item.id}
@@ -256,11 +276,11 @@ export function AdminDataTable<T extends { id: string }>({
             <DropdownMenuTrigger asChild>
               <Button type="button" variant="outline" size="sm">
                 <Columns3 />
-                Columns
+                {columnsLabel}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Columns</DropdownMenuLabel>
+              <DropdownMenuLabel>{columnsLabel}</DropdownMenuLabel>
               {table
                 .getAllLeafColumns()
                 .filter((column) => column.getCanHide())
@@ -270,7 +290,7 @@ export function AdminDataTable<T extends { id: string }>({
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) => column.toggleVisibility(value === true)}
                   >
-                    {column.id}
+                    {typeof column.columnDef.header === "string" ? column.columnDef.header : column.id}
                   </DropdownMenuCheckboxItem>
                 ))}
             </DropdownMenuContent>
@@ -283,13 +303,15 @@ export function AdminDataTable<T extends { id: string }>({
               onClick={() => exportCsv(selected.length ? selected : rows)}
             >
               <Download />
-              CSV
+              {csvLabel}
             </Button>
           ) : null}
         </div>
         {selected.length > 0 && bulkActions && bulkActions.length > 0 ? (
           <div className="flex flex-wrap items-center gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
-            <span className="tabular-nums">{selected.length} selected</span>
+            <span className="tabular-nums">
+              {selected.length} {selectedLabel}
+            </span>
             {bulkActions.map((action) => (
               <Button
                 key={action.id}
@@ -379,8 +401,8 @@ export function AdminDataTable<T extends { id: string }>({
         <Sheet open={openRow != null} onOpenChange={(open) => !open && setOpenId(null)}>
           <SheetContent className="w-full overflow-y-auto sm:max-w-md">
             <SheetHeader>
-              <SheetTitle>{openRow ? (detailTitle?.(openRow) ?? "Details") : "Details"}</SheetTitle>
-              <SheetDescription className="sr-only">Row details</SheetDescription>
+              <SheetTitle>{openRow ? (detailTitle?.(openRow) ?? detailFallback) : detailFallback}</SheetTitle>
+              <SheetDescription className="sr-only">{detailDescription}</SheetDescription>
             </SheetHeader>
             <div className="flex items-center gap-2 px-4">
               <Button
@@ -393,7 +415,7 @@ export function AdminDataTable<T extends { id: string }>({
                   if (prev) setOpenId(prev.id)
                 }}
               >
-                Previous
+                {previousLabel}
               </Button>
               <Button
                 type="button"
@@ -405,7 +427,7 @@ export function AdminDataTable<T extends { id: string }>({
                   if (next) setOpenId(next.id)
                 }}
               >
-                Next
+                {nextLabel}
               </Button>
             </div>
             <div className="px-4 pb-6">{openRow ? renderDetail(openRow) : null}</div>

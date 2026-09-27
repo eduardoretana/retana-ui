@@ -39,6 +39,9 @@ export function AdminChartsDemo() {
       <TrendChart
         title="Tráfico"
         description="Visitantes y páginas vistas."
+        visitorsLabel="Visitantes"
+        viewsLabel="Páginas vistas"
+        rangeLabel="Periodo"
         points={points}
         range={range}
         onRangeChange={setRange}
@@ -59,6 +62,7 @@ export function AdminChartsDemo() {
         <RankedBars
           title="Fuentes"
           tone={2}
+          emptyLabel="Sin datos"
           items={[
             { label: "Directo", value: 180 },
             { label: "example.test", value: 90 },
@@ -66,9 +70,16 @@ export function AdminChartsDemo() {
           ]}
         />
       </div>
-      <Heatmap grid={heat} title="Día y hora" dayLabels={["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]} />
+      <Heatmap
+        grid={heat}
+        title="Día y hora"
+        description="Las celdas más oscuras tuvieron más visitas."
+        dayLabels={["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]}
+      />
       <ScrollDepthChart
         title="Profundidad de scroll"
+        description="Parte de las visitas que llegó a cada marca."
+        valueLabel="Alcanzaron"
         marks={[
           { label: "25%", value: 0.9 },
           { label: "50%", value: 0.7 },

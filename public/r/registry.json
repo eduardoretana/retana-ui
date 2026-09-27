@@ -878,7 +878,7 @@
           {
             "name": "TrendChart",
             "type": "component",
-            "description": "Area chart. Range buttons are optional."
+            "description": "Area chart. visitorsLabel, viewsLabel, and rangeLabel override the series and range-group names. Range buttons are optional."
           },
           {
             "name": "FunnelChart / RankedBars",
@@ -967,6 +967,21 @@
             "name": "upcoming / counts",
             "type": "lists",
             "description": "Calls and site totals. counts may include an href for onOpen."
+          },
+          {
+            "name": "trendTitle",
+            "type": "string",
+            "description": "Heading on the trend chart. Default This week."
+          },
+          {
+            "name": "visitorsLabel / viewsLabel",
+            "type": "string",
+            "description": "Series names forwarded to TrendChart. Defaults Visitors and Page views."
+          },
+          {
+            "name": "emptyUpcoming",
+            "type": "string",
+            "description": "Copy when the upcoming list is empty. Default Nothing scheduled."
           }
         ]
       },

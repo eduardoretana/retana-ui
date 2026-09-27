@@ -64,6 +64,23 @@ export type SortableBoardProps = {
   searchLabel?: string
   editLabel?: string
   emptyTitle?: string
+  allLabel?: string
+  uncategorizedLabel?: string
+  listLabel?: string
+  gridLabel?: string
+  viewLabel?: string
+  orderHint?: string
+  filteredHint?: string
+  savedMessage?: string
+  updateError?: string
+  reorderLabel?: string
+  dragInstructions?: string
+  pickedUp?: string
+  ofWord?: string
+  overPlace?: string
+  droppedAt?: string
+  dropped?: string
+  cancelled?: string
 }
 
 export function SortableBoard({
@@ -84,6 +101,23 @@ export function SortableBoard({
   searchLabel = "Search",
   editLabel = "Edit",
   emptyTitle = "No matches",
+  allLabel = "All",
+  uncategorizedLabel = "No category",
+  listLabel = "List",
+  gridLabel = "Grid",
+  viewLabel = "View",
+  orderHint = "Drag the handle. This order is the order on the site.",
+  filteredHint = "Reordering swaps the projects on screen. The rest stay put.",
+  savedMessage = "Order saved",
+  updateError = "Could not update",
+  reorderLabel = "Reorder",
+  dragInstructions = "Press Space, then arrow keys, then Space to drop. Escape cancels.",
+  pickedUp = "Picked up, place",
+  ofWord = "of",
+  overPlace = "Over place",
+  droppedAt = "Dropped at place",
+  dropped = "Dropped.",
+  cancelled = "Cancelled.",
 }: SortableBoardProps) {
   const [viewState, setViewState] = React.useState<"list" | "grid">("list")
   const [queryState, setQueryState] = React.useState("")
@@ -100,7 +134,7 @@ export function SortableBoard({
     }),
     [],
   )
-  const list = useOptimisticList({ items, onReorder, notify, savedMessage: "Order saved" })
+  const list = useOptimisticList({ items, onReorder, notify, savedMessage })
 
   function isHome(item: BoardItem) {
     return home[item.id] ?? item.showOnHomepage
@@ -120,7 +154,7 @@ export function SortableBoard({
   const visibleIds = visible.map((item) => item.id)
 
   const chips = [
-    { key: "all", label: "All", n: items.length },
+    { key: "all", label: allLabel, n: items.length },
     { key: "home", label: homepageLabel, n: list.items.filter(isHome).length },
     ...categories.map((category) => ({
       key: `cat:${category.id}`,
@@ -129,7 +163,7 @@ export function SortableBoard({
     })),
   ]
   const uncategorized = items.filter((item) => !item.categoryId).length
-  if (uncategorized) chips.push({ key: "none", label: "No category", n: uncategorized })
+  if (uncategorized) chips.push({ key: "none", label: uncategorizedLabel, n: uncategorized })
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -152,7 +186,7 @@ export function SortableBoard({
       await onToggleHomepage(item.id, next)
     } catch (error) {
       setHome((current) => ({ ...current, [item.id]: !next }))
-      toast.error(error instanceof Error && error.message ? error.message : "Could not update")
+      toast.error(error instanceof Error && error.message ? error.message : updateError)
     }
   }
 
@@ -195,7 +229,7 @@ export function SortableBoard({
               className="pl-8"
             />
           </div>
-          <div className="flex rounded-lg bg-muted p-0.5" role="group" aria-label="View">
+          <div className="flex rounded-lg bg-muted p-0.5" role="group" aria-label={viewLabel}>
             <Button
               type="button"
               size="sm"
@@ -204,7 +238,7 @@ export function SortableBoard({
               onClick={() => setView("list")}
             >
               <List />
-              List
+              {listLabel}
             </Button>
             <Button
               type="button"
@@ -214,16 +248,14 @@ export function SortableBoard({
               onClick={() => setView("grid")}
             >
               <LayoutGrid />
-              Grid
+              {gridLabel}
             </Button>
           </div>
           {addButton}
         </div>
       </div>
       <p className="text-xs text-muted-foreground">
-        {filter !== "all" || q
-          ? "Reordering swaps the projects on screen. The rest stay put."
-          : "Drag the handle. This order is the order on the site."}
+        {filter !== "all" || q ? filteredHint : orderHint}
       </p>
       {visible.length === 0 ? (
         <EmptyState title={emptyTitle} />
@@ -234,13 +266,13 @@ export function SortableBoard({
           onDragEnd={onDragEnd}
           accessibility={{
             screenReaderInstructions: {
-              draggable: "Press Space, then arrow keys, then Space to drop. Escape cancels.",
+              draggable: dragInstructions,
             },
             announcements: {
-              onDragStart: ({ active }) => `Picked up, place ${place(active.id)} of ${visibleIds.length}.`,
-              onDragOver: ({ over }) => (over ? `Over place ${place(over.id)}.` : ""),
-              onDragEnd: ({ over }) => (over ? `Dropped at place ${place(over.id)}.` : "Dropped."),
-              onDragCancel: () => "Cancelled.",
+              onDragStart: ({ active }) => `${pickedUp} ${place(active.id)} ${ofWord} ${visibleIds.length}.`,
+              onDragOver: ({ over }) => (over ? `${overPlace} ${place(over.id)}.` : ""),
+              onDragEnd: ({ over }) => (over ? `${droppedAt} ${place(over.id)}.` : dropped),
+              onDragCancel: () => cancelled,
             },
           }}
         >
@@ -263,6 +295,8 @@ export function SortableBoard({
                   view={view}
                   home={isHome(item)}
                   homepageLabel={homepageLabel}
+                  uncategorizedLabel={uncategorizedLabel}
+                  reorderLabel={reorderLabel}
                   editLabel={editLabel}
                   onEdit={onEdit}
                   onToggle={() => void toggle(item)}
@@ -282,6 +316,8 @@ function BoardCard({
   view,
   home,
   homepageLabel,
+  uncategorizedLabel,
+  reorderLabel,
   editLabel,
   onEdit,
   onToggle,
@@ -291,6 +327,8 @@ function BoardCard({
   view: "list" | "grid"
   home: boolean
   homepageLabel: string
+  uncategorizedLabel: string
+  reorderLabel: string
   editLabel: string
   onEdit?: (id: string) => void
   onToggle: () => void
@@ -317,7 +355,7 @@ function BoardCard({
           variant="ghost"
           size="icon-sm"
           className="cursor-grab touch-none"
-          aria-label={`Reorder ${item.title}`}
+          aria-label={`${reorderLabel} ${item.title}`}
           {...attributes}
           {...listeners}
         >
@@ -328,7 +366,7 @@ function BoardCard({
         {view === "list" ? (
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium">{item.title}</p>
-            <p className="truncate text-xs text-muted-foreground">{item.categoryTitle || "No category"}</p>
+            <p className="truncate text-xs text-muted-foreground">{item.categoryTitle || uncategorizedLabel}</p>
           </div>
         ) : null}
       </div>
@@ -347,7 +385,7 @@ function BoardCard({
       {view === "grid" ? (
         <div>
           <p className="truncate text-sm font-medium">{item.title}</p>
-          <p className="truncate text-xs text-muted-foreground">{item.categoryTitle || "No category"}</p>
+          <p className="truncate text-xs text-muted-foreground">{item.categoryTitle || uncategorizedLabel}</p>
         </div>
       ) : null}
       <div className={cn("flex items-center gap-2", view === "list" && "ml-auto")}>

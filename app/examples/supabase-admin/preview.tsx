@@ -9,7 +9,7 @@ export default function SupabaseAdminPreview() {
           public.{table}
         </p>
       ))}
-      <p className="mt-1 font-sans text-[10px] text-muted-foreground">Lectura pública solo si published.</p>
+      <p className="mt-1 font-sans text-[10px] text-muted-foreground">Lectura pública solo si está publicado.</p>
     </div>
   )
 }

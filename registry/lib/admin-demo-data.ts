@@ -17,7 +17,7 @@ export function buildDemoSeed(now = Date.now()): AdminSeed {
     { id: "cat-web", title: "Sitios web", slug: "sitios-web", position: 1, published: true },
     { id: "cat-mobile", title: "Apps móviles", slug: "apps-moviles", position: 2, published: true },
     { id: "cat-brand", title: "Marca", slug: "marca", position: 3, published: true },
-    { id: "cat-motion", title: "Motion", slug: "motion", position: 4, published: true },
+    { id: "cat-motion", title: "Animación", slug: "animacion", position: 4, published: true },
   ]
 
   const projects = [
@@ -33,10 +33,10 @@ export function buildDemoSeed(now = Date.now()): AdminSeed {
 
   const bookings: Booking[] = [
     booking("b1", "Lucía Navarro", "lucia.navarro@acme.example", "+34 600 010 101", "Sitio web, Marca", "Estudio", "Quiere rehacer la página de precios.", "Sitio", "google.example", "booked", now + 2 * DAY, now - 3 * DAY),
-    booking("b2", "Andrés Molina", "andres.molina@acme.example", "+34 600 010 102", "App móvil", "Retainer", "Equipo de cuatro, arranque en octubre.", "Sitio", "news.example", "booked", now + 5 * DAY, now - DAY),
-    booking("b3", "Marta Quintero", "marta.quintero@acme.example", "+34 600 010 103", "Motion", "Llamada", "Solo una pieza de lanzamiento.", "Sitio", "Directo", "booked", now - 4 * DAY, now - 10 * DAY),
-    booking("b4", "Hugo Beltrán", "hugo.beltran@acme.example", "+34 600 010 104", "Marca", "Estudio", "Canceló por calendario.", "Cal.com", "social.example", "cancelled", now + DAY, now - 6 * DAY),
-    booking("b5", "Elena Ruiz", "elena.ruiz@acme.example", "+34 600 010 105", "Sitio web", "Retainer", "Tienda con dos idiomas.", "Sitio", "google.example", "booked", now + 9 * DAY, now - 2 * DAY),
+    booking("b2", "Andrés Molina", "andres.molina@acme.example", "+34 600 010 102", "App móvil", "Mensual", "Equipo de cuatro, arranque en octubre.", "Sitio", "news.example", "booked", now + 5 * DAY, now - DAY),
+    booking("b3", "Marta Quintero", "marta.quintero@acme.example", "+34 600 010 103", "Animación", "Llamada", "Solo una pieza de lanzamiento.", "Sitio", "Directo", "booked", now - 4 * DAY, now - 10 * DAY),
+    booking("b4", "Hugo Beltrán", "hugo.beltran@acme.example", "+34 600 010 104", "Marca", "Estudio", "Canceló por calendario.", "Agenda", "social.example", "cancelled", now + DAY, now - 6 * DAY),
+    booking("b5", "Elena Ruiz", "elena.ruiz@acme.example", "+34 600 010 105", "Sitio web", "Mensual", "Tienda con dos idiomas.", "Sitio", "google.example", "booked", now + 9 * DAY, now - 2 * DAY),
     booking("b6", "Pablo Serra", "pablo.serra@acme.example", "+34 600 010 106", "Producto", "Llamada", "Aún no eligió hora.", "Sitio", "Directo", "booked", null, now - 12 * 3_600_000),
   ]
 
@@ -69,18 +69,18 @@ export function buildDemoSeed(now = Date.now()): AdminSeed {
     testimonials: [
       { id: "t1", quote: "Ordenaron el producto sin perder la voz de la marca.", name: "Lucía Navarro", role: "Directora, Lumen", avatarUrl: null, position: 0, published: true },
       { id: "t2", quote: "La primera versión salió en seis semanas y se podía enseñar.", name: "Andrés Molina", role: "Fundador, Orión", avatarUrl: null, position: 1, published: true },
-      { id: "t3", quote: "Por fin el equipo entiende qué va en la página de inicio.", name: "Elena Ruiz", role: "Marketing, Feria", avatarUrl: null, position: 2, published: true },
+      { id: "t3", quote: "Por fin el equipo entiende qué va en la página de inicio.", name: "Elena Ruiz", role: "Comunicación, Feria", avatarUrl: null, position: 2, published: true },
     ],
     faqs: [
       { id: "f1", question: "¿Cuánto dura un proyecto?", answer: "Un sitio suele llevar de seis a diez semanas. Una app, un trimestre.", position: 0, published: true },
       { id: "f2", question: "¿Trabajáis con equipos internos?", answer: "Sí. Nos sentamos con diseño, producto y la persona que publica.", position: 1, published: true },
       { id: "f3", question: "¿Qué incluye la llamada?", answer: "Treinta minutos para ver si el encargo encaja. Sin presentación.", position: 2, published: true },
-      { id: "f4", question: "¿Hay contrato mensual?", answer: "El plan Retainer es un mes a mes, cancelable al cierre del ciclo.", position: 3, published: true },
+      { id: "f4", question: "¿Hay contrato mensual?", answer: "El plan Mensual es un mes a mes, cancelable al cierre del ciclo.", position: 3, published: true },
     ],
     plans: [
       { id: "pl1", name: "Llamada", blurb: "Para ver si tiene sentido seguir.", monthlyPrice: null, badge: "", ctaLabel: "Elegir hora", ctaHref: "", features: ["30 minutos", "Sin compromiso"], position: 0, published: true },
-      { id: "pl2", name: "Estudio", blurb: "Un encargo cerrado, con alcance escrito.", monthlyPrice: 4800, badge: "Habitual", ctaLabel: "Pedir propuesta", ctaHref: "", features: ["Investigación corta", "Diseño y prototipo", "Entrega en Figma"], position: 1, published: true },
-      { id: "pl3", name: "Retainer", blurb: "Un día a la semana con el equipo.", monthlyPrice: 3200, badge: "", ctaLabel: "Hablar del mes", ctaHref: "", features: ["Un día por semana", "Canal compartido", "Informe al cierre"], position: 2, published: true },
+      { id: "pl2", name: "Estudio", blurb: "Un encargo cerrado, con alcance escrito.", monthlyPrice: 4800, badge: "Habitual", ctaLabel: "Pedir propuesta", ctaHref: "", features: ["Investigación corta", "Diseño y prototipo", "Entrega del archivo"], position: 1, published: true },
+      { id: "pl3", name: "Mensual", blurb: "Un día a la semana con el equipo.", monthlyPrice: 3200, badge: "", ctaLabel: "Hablar del mes", ctaHref: "", features: ["Un día por semana", "Canal compartido", "Informe al cierre"], position: 2, published: true },
     ],
     experience: [
       { id: "e1", role: "Diseño de producto", company: "Estudio Acme", period: "2022 — ahora", position: 0, published: true },

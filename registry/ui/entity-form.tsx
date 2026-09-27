@@ -44,6 +44,7 @@ export type EntityFormProps = {
   submitLabel?: string
   cancelLabel?: string
   deleteLabel?: string
+  pendingLabel?: string
   busy?: boolean
   children?: React.ReactNode
   className?: string
@@ -67,6 +68,7 @@ export function EntityForm({
   submitLabel = "Save",
   cancelLabel = "Cancel",
   deleteLabel = "Delete",
+  pendingLabel = "Saving…",
   busy = false,
   children,
   className,
@@ -102,7 +104,7 @@ export function EntityForm({
             {cancelLabel}
           </Button>
           <Button type="submit" disabled={locked}>
-            {pending ? "Saving…" : submitLabel}
+            {pending ? pendingLabel : submitLabel}
           </Button>
         </div>
       </div>
@@ -141,6 +143,7 @@ export function EntityForm({
           title={deleteLabel}
           description={description ?? title}
           confirmLabel={deleteLabel}
+          cancelLabel={cancelLabel}
           onConfirm={async () => {
             await onDelete()
             setConfirmOpen(false)

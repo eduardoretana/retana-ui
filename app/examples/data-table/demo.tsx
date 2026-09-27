@@ -83,6 +83,16 @@ export function DataTableDemo() {
         searchPlaceholder="Buscar reservas"
         searchText={(row) => `${row.name} ${row.email} ${row.plan} ${row.needs}`}
         emptyTitle="Ninguna reserva"
+        columnsLabel="Columnas"
+        csvLabel="CSV"
+        selectedLabel="seleccionadas"
+        previousLabel="Anterior"
+        nextLabel="Siguiente"
+        detailFallback="Detalle"
+        detailDescription="Detalle de la reserva"
+        viewsLabel="Vistas"
+        selectAllLabel="Seleccionar todas"
+        selectRowLabel="Seleccionar fila"
         csvFilename="reservas.csv"
         csvColumns={[
           { key: "name", header: "Nombre" },

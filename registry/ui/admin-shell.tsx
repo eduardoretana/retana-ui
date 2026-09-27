@@ -4,6 +4,7 @@ import * as React from "react"
 import {
   ChevronRight,
   Moon,
+  PanelLeftIcon,
   Search,
   Sun,
   SunMoon,
@@ -42,7 +43,7 @@ import {
   SidebarMenuItem,
   SidebarProvider,
   SidebarRail,
-  SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import {
   useAdminTheme,
@@ -91,6 +92,14 @@ export type AdminShellProps = {
   /** next-themes (or any host) controller. Wins over theme/onThemeChange. */
   themeController?: ThemeController
   commandLabel?: string
+  emptyCommand?: string
+  themeLabel?: string
+  /** Names for light, dark, and system in the theme button. */
+  themeNames?: Partial<Record<ThemeChoice, string>>
+  /** First breadcrumb and the brand fallback. */
+  rootLabel?: string
+  /** Accessible name of the sidebar toggle. */
+  sidebarLabel?: string
   className?: string
   contentClassName?: string
   showToaster?: boolean
@@ -116,6 +125,24 @@ export function breadcrumbsFor(
   return crumbs
 }
 
+function SidebarToggle({ label }: { label: string }) {
+  const { toggleSidebar } = useSidebar()
+  return (
+    <Button
+      type="button"
+      data-sidebar="trigger"
+      data-slot="sidebar-trigger"
+      variant="ghost"
+      size="icon-sm"
+      className="motion-reduce:transition-none"
+      onClick={toggleSidebar}
+    >
+      <PanelLeftIcon />
+      <span className="sr-only">{label}</span>
+    </Button>
+  )
+}
+
 function ThemeIcon({ theme }: { theme: ThemeChoice }) {
   if (theme === "dark") return <Moon />
   if (theme === "light") return <Sun />
@@ -134,6 +161,11 @@ export function AdminShell({
   onThemeChange,
   themeController,
   commandLabel = "Search pages",
+  emptyCommand = "No pages",
+  themeLabel = "Theme",
+  themeNames,
+  rootLabel = "Admin",
+  sidebarLabel = "Toggle sidebar",
   className,
   contentClassName,
   showToaster = true,
@@ -150,7 +182,8 @@ export function AdminShell({
   )
   const themeState = useAdminTheme(controller)
   const [commandOpen, setCommandOpen] = React.useState(false)
-  const crumbs = breadcrumbsFor(groups, pathname)
+  const crumbs = breadcrumbsFor(groups, pathname, rootLabel)
+  const themeName = themeNames?.[themeState.theme] ?? themeState.theme
   const LinkComponent = linkComponent ?? "a"
 
   React.useEffect(() => {
@@ -175,7 +208,7 @@ export function AdminShell({
         <SidebarHeader className="border-b border-sidebar-border">
           {brand ?? (
             <div className="px-2 py-1 text-sm font-semibold group-data-[collapsible=icon]:hidden">
-              Admin
+              {rootLabel}
             </div>
           )}
         </SidebarHeader>
@@ -213,11 +246,11 @@ export function AdminShell({
             </SidebarGroup>
           ))}
         </SidebarContent>
-        <SidebarRail />
+        <SidebarRail aria-label={sidebarLabel} title={sidebarLabel} />
       </Sidebar>
       <SidebarInset className="min-w-0 bg-background">
         <header className="sticky top-0 z-20 flex h-14 items-center gap-2 border-b border-border bg-background/95 px-3 backdrop-blur-sm motion-reduce:backdrop-blur-none">
-          <SidebarTrigger className="motion-reduce:transition-none" />
+          <SidebarToggle label={sidebarLabel} />
           <Breadcrumb>
             <BreadcrumbList>
               {crumbs.map((crumb, index) => {
@@ -279,7 +312,7 @@ export function AdminShell({
               type="button"
               variant="ghost"
               size="icon"
-              aria-label={`Theme: ${themeState.theme}`}
+              aria-label={`${themeLabel}: ${themeName}`}
               onClick={themeState.cycle}
             >
               <ThemeIcon theme={themeState.theme} />
@@ -298,7 +331,7 @@ export function AdminShell({
       >
         <CommandInput placeholder={commandLabel} />
         <CommandList>
-          <CommandEmpty>No pages</CommandEmpty>
+          <CommandEmpty>{emptyCommand}</CommandEmpty>
           {groups.map((group) => (
             <CommandGroup key={group.label} heading={group.label}>
               {group.items.map((item) => {

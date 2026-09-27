@@ -40,6 +40,12 @@ export type MediaFieldProps = {
   className?: string
   pickLabel?: string
   clearLabel?: string
+  uploadLabel?: string
+  uploadingLabel?: string
+  dropLabel?: string
+  emptyLibrary?: string
+  uploadedMessage?: string
+  uploadFailed?: string
 }
 
 export function MediaField({
@@ -54,6 +60,12 @@ export function MediaField({
   className,
   pickLabel = "Library",
   clearLabel = "Remove",
+  uploadLabel = "Upload",
+  uploadingLabel = "Uploading…",
+  dropLabel = "Drop a file",
+  emptyLibrary = "Library is empty",
+  uploadedMessage = "Uploaded",
+  uploadFailed = "Upload failed",
 }: MediaFieldProps) {
   const inputId = React.useId()
   const [busy, setBusy] = React.useState(false)
@@ -84,9 +96,9 @@ export function MediaField({
     try {
       const asset = await onUpload(file)
       onChange(asset.url, asset)
-      toast.success("Uploaded")
+      toast.success(uploadedMessage)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Upload failed")
+      toast.error(error instanceof Error ? error.message : uploadFailed)
     } finally {
       setBusy(false)
     }
@@ -125,7 +137,7 @@ export function MediaField({
         ) : (
           <div className="grid h-24 place-items-center text-sm text-muted-foreground">
             <ImagePlus className="mb-1 size-5" />
-            {busy ? "Uploading…" : "Drop a file"}
+            {busy ? uploadingLabel : dropLabel}
           </div>
         )}
         <div className="flex flex-wrap gap-2">
@@ -142,7 +154,7 @@ export function MediaField({
           />
           <Button type="button" variant="outline" size="sm" disabled={busy} onClick={() => inputRef.current?.click()}>
             <Upload />
-            Upload
+            {uploadLabel}
           </Button>
           <Button type="button" variant="outline" size="sm" disabled={busy} onClick={() => setLibraryOpen(true)}>
             {pickLabel}
@@ -161,7 +173,7 @@ export function MediaField({
             <DialogTitle>{pickLabel}</DialogTitle>
           </DialogHeader>
           {assets.length === 0 ? (
-            <EmptyState title="Library is empty" />
+            <EmptyState title={emptyLibrary} />
           ) : (
             <ul className="grid max-h-80 grid-cols-3 gap-2 overflow-y-auto sm:grid-cols-4">
               {assets.map((asset) => (
@@ -192,11 +204,46 @@ export type MediaLibraryProps = {
   onUpload: (file: File) => Promise<MediaAsset>
   onDelete: (id: string) => Promise<void> | void
   className?: string
+  uploadLabel?: string
+  uploadingLabel?: string
+  dropLabel?: string
+  emptyTitle?: string
+  emptyDescription?: string
+  uploadedMessage?: string
+  uploadFailed?: string
+  nameLabel?: string
+  typeLabel?: string
+  sizeLabel?: string
+  addedLabel?: string
+  deleteTitle?: string
+  deleteDescription?: string
+  deleteLabel?: string
+  viewLabel?: string
 }
 
 type SortKey = "createdAt" | "filename" | "size"
 
-export function MediaLibrary({ assets, onUpload, onDelete, className }: MediaLibraryProps) {
+export function MediaLibrary({
+  assets,
+  onUpload,
+  onDelete,
+  className,
+  uploadLabel = "Upload",
+  uploadingLabel = "Uploading…",
+  dropLabel = "Drop a file",
+  emptyTitle = "No files yet",
+  emptyDescription = "Upload an image or a video.",
+  uploadedMessage = "Uploaded",
+  uploadFailed = "Upload failed",
+  nameLabel = "Name",
+  typeLabel = "Type",
+  sizeLabel = "Size",
+  addedLabel = "Added",
+  deleteTitle = "Delete file",
+  deleteDescription = "The file is removed from the library.",
+  deleteLabel = "Delete",
+  viewLabel = "View",
+}: MediaLibraryProps) {
   const [view, setView] = React.useState<"grid" | "table">("grid")
   const [sort, setSort] = React.useState<SortKey>("createdAt")
   const [dir, setDir] = React.useState<"asc" | "desc">("desc")
@@ -220,9 +267,9 @@ export function MediaLibrary({ assets, onUpload, onDelete, className }: MediaLib
     setBusy(true)
     try {
       await onUpload(file)
-      toast.success("Uploaded")
+      toast.success(uploadedMessage)
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Upload failed")
+      toast.error(error instanceof Error ? error.message : uploadFailed)
     } finally {
       setBusy(false)
     }
@@ -241,7 +288,7 @@ export function MediaLibrary({ assets, onUpload, onDelete, className }: MediaLib
       <div className="flex flex-wrap items-center gap-2">
         <Button type="button" disabled={busy} onClick={() => inputRef.current?.click()}>
           <Upload />
-          {busy ? "Uploading…" : "Upload"}
+          {busy ? uploadingLabel : uploadLabel}
         </Button>
         <input
           ref={inputRef}
@@ -261,9 +308,9 @@ export function MediaLibrary({ assets, onUpload, onDelete, className }: MediaLib
             void take(event.dataTransfer.files[0])
           }}
         >
-          Drop a file
+          {dropLabel}
         </div>
-        <div className="flex rounded-lg bg-muted p-0.5" role="group" aria-label="View">
+        <div className="flex rounded-lg bg-muted p-0.5" role="group" aria-label={viewLabel}>
           <Button type="button" size="icon-sm" variant={view === "grid" ? "secondary" : "ghost"} aria-pressed={view === "grid"} onClick={() => setView("grid")}>
             <LayoutGrid />
           </Button>
@@ -273,7 +320,7 @@ export function MediaLibrary({ assets, onUpload, onDelete, className }: MediaLib
         </div>
       </div>
       {sorted.length === 0 ? (
-        <EmptyState title="No files yet" description="Upload an image or a video." />
+        <EmptyState title={emptyTitle} description={emptyDescription} />
       ) : view === "grid" ? (
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {sorted.map((asset) => (
@@ -284,7 +331,7 @@ export function MediaLibrary({ assets, onUpload, onDelete, className }: MediaLib
                   <p className="truncate text-xs font-medium">{asset.filename}</p>
                   <p className="text-xs text-muted-foreground">{formatBytes(asset.size)}</p>
                 </div>
-                <Button type="button" variant="ghost" size="icon-sm" aria-label={`Delete ${asset.filename}`} onClick={() => setPendingId(asset.id)}>
+                <Button type="button" variant="ghost" size="icon-sm" aria-label={`${deleteLabel} ${asset.filename}`} onClick={() => setPendingId(asset.id)}>
                   <Trash2 />
                 </Button>
               </div>
@@ -297,14 +344,14 @@ export function MediaLibrary({ assets, onUpload, onDelete, className }: MediaLib
             <TableHeader>
               <TableRow>
                 <TableHead>
-                  <button type="button" onClick={() => toggleSort("filename")}>Name</button>
+                  <button type="button" onClick={() => toggleSort("filename")}>{nameLabel}</button>
                 </TableHead>
-                <TableHead>Type</TableHead>
+                <TableHead>{typeLabel}</TableHead>
                 <TableHead>
-                  <button type="button" onClick={() => toggleSort("size")}>Size</button>
+                  <button type="button" onClick={() => toggleSort("size")}>{sizeLabel}</button>
                 </TableHead>
                 <TableHead>
-                  <button type="button" onClick={() => toggleSort("createdAt")}>Added</button>
+                  <button type="button" onClick={() => toggleSort("createdAt")}>{addedLabel}</button>
                 </TableHead>
                 <TableHead />
               </TableRow>
@@ -317,7 +364,7 @@ export function MediaLibrary({ assets, onUpload, onDelete, className }: MediaLib
                   <TableCell>{formatBytes(asset.size)}</TableCell>
                   <TableCell>{formatWhen(Date.parse(asset.createdAt))}</TableCell>
                   <TableCell>
-                    <Button type="button" variant="ghost" size="icon-sm" aria-label={`Delete ${asset.filename}`} onClick={() => setPendingId(asset.id)}>
+                    <Button type="button" variant="ghost" size="icon-sm" aria-label={`${deleteLabel} ${asset.filename}`} onClick={() => setPendingId(asset.id)}>
                       <Trash2 />
                     </Button>
                   </TableCell>
@@ -332,8 +379,8 @@ export function MediaLibrary({ assets, onUpload, onDelete, className }: MediaLib
         onOpenChange={(open) => {
           if (!open) setPendingId(null)
         }}
-        title="Delete file"
-        description="The file is removed from the library."
+        title={deleteTitle}
+        description={deleteDescription}
         onConfirm={async () => {
           if (pendingId) await onDelete(pendingId)
           setPendingId(null)

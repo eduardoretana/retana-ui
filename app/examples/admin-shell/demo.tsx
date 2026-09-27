@@ -26,8 +26,14 @@ export function AdminShellDemo() {
       pathname={pathname}
       onNavigate={setPathname}
       showToaster={false}
+      commandLabel="Buscar páginas"
+      emptyCommand="Ninguna página"
+      themeLabel="Tema"
+      themeNames={{ light: "claro", dark: "oscuro", system: "sistema" }}
+      rootLabel="Estudio"
+      sidebarLabel="Alternar el menú"
       brand={<p className="px-2 py-1 text-sm font-semibold">Estudio Acme</p>}
-      actions={<span className="text-xs text-muted-foreground">Demo</span>}
+      actions={<span className="text-xs text-muted-foreground">Demostración</span>}
     >
       <div className="flex flex-col gap-2 p-6">
         <h1 className="text-xl font-semibold">{current?.label}</h1>

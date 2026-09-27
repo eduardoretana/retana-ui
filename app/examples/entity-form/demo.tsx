@@ -71,6 +71,7 @@ export function EntityFormDemo() {
         title={editing ? "Editar proyecto" : "Nuevo proyecto"}
         description="Los datos se quedan en memoria."
         submitLabel="Guardar"
+        pendingLabel="Guardando…"
         cancelLabel="Cancelar"
         deleteLabel="Eliminar"
         onDelete={

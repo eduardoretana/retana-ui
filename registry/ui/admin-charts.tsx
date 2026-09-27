@@ -92,12 +92,10 @@ export type TrendChartProps = {
   className?: string
   title?: string
   description?: string
+  visitorsLabel?: string
+  viewsLabel?: string
+  rangeLabel?: string
 }
-
-const trendConfig = {
-  visitors: { label: "Visitors", color: "var(--chart-1)" },
-  views: { label: "Page views", color: "var(--chart-2)" },
-} satisfies ChartConfig
 
 export function TrendChart({
   points,
@@ -107,7 +105,14 @@ export function TrendChart({
   className,
   title = "Traffic",
   description,
+  visitorsLabel = "Visitors",
+  viewsLabel = "Page views",
+  rangeLabel = "Range",
 }: TrendChartProps) {
+  const trendConfig = {
+    visitors: { label: visitorsLabel, color: "var(--chart-1)" },
+    views: { label: viewsLabel, color: "var(--chart-2)" },
+  } satisfies ChartConfig
   return (
     <Card className={className}>
       <CardHeader>
@@ -117,7 +122,7 @@ export function TrendChart({
             {description ? <CardDescription>{description}</CardDescription> : null}
           </div>
           {ranges && ranges.length > 0 ? (
-            <div className="flex flex-wrap gap-1" role="group" aria-label="Range">
+            <div className="flex flex-wrap gap-1" role="group" aria-label={rangeLabel}>
               {ranges.map((item) => (
                 <Button
                   key={item.key}
@@ -209,11 +214,13 @@ export function RankedBars({
   items,
   title = "Sources",
   tone = 2,
+  emptyLabel = "No data",
   className,
 }: {
   items: readonly { label: string; value: number }[]
   title?: string
   tone?: ChartTone
+  emptyLabel?: string
   className?: string
 }) {
   const max = Math.max(...items.map((item) => item.value), 1)
@@ -224,7 +231,7 @@ export function RankedBars({
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         {items.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No data</p>
+          <p className="text-sm text-muted-foreground">{emptyLabel}</p>
         ) : (
           items.map((item) => (
             <div key={item.label} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 text-sm">
@@ -253,6 +260,7 @@ const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 export function Heatmap({
   grid,
   title = "Day and hour",
+  description = "Darker cells had more views.",
   tone = 1,
   dayLabels = DAYS,
   className,
@@ -260,6 +268,7 @@ export function Heatmap({
   /** 7 rows (Monday first) of 24 hours. */
   grid: readonly (readonly number[])[]
   title?: string
+  description?: string
   tone?: ChartTone
   dayLabels?: readonly string[]
   className?: string
@@ -269,7 +278,7 @@ export function Heatmap({
     <Card className={className}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        <CardDescription>Darker cells had more views.</CardDescription>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent className="overflow-x-auto">
         <div className="min-w-[36rem]">
@@ -311,19 +320,22 @@ export function Heatmap({
   )
 }
 
-const scrollConfig = {
-  value: { label: "Reached", color: "var(--chart-3)" },
-} satisfies ChartConfig
-
 export function ScrollDepthChart({
   marks,
   title = "Scroll depth",
+  description = "Share of views that reached each mark.",
+  valueLabel = "Reached",
   className,
 }: {
   marks: readonly { label: string; value: number }[]
   title?: string
+  description?: string
+  valueLabel?: string
   className?: string
 }) {
+  const scrollConfig = {
+    value: { label: valueLabel, color: "var(--chart-3)" },
+  } satisfies ChartConfig
   const data = marks.map((mark) => ({
     label: mark.label,
     value: Math.round(mark.value * (mark.value <= 1 ? 100 : 1)),
@@ -332,7 +344,7 @@ export function ScrollDepthChart({
     <Card className={className}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        <CardDescription>Share of views that reached each mark.</CardDescription>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={scrollConfig} className="aspect-auto h-48 w-full">

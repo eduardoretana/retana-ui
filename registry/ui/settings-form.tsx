@@ -35,6 +35,7 @@ export type SettingsFormProps = {
   dirtyLabel?: string
   cleanLabel?: string
   leaveMessage?: string
+  pendingLabel?: string
 }
 
 function sameValues(a: Record<string, string>, b: Record<string, string>) {
@@ -55,6 +56,7 @@ export function SettingsForm({
   dirtyLabel = "Unsaved changes",
   cleanLabel = "All changes saved",
   leaveMessage = "You have unsaved changes.",
+  pendingLabel = "Saving…",
 }: SettingsFormProps) {
   const [draft, setDraft] = React.useState(values)
   const [baseline, setBaseline] = React.useState(values)
@@ -132,6 +134,7 @@ export function SettingsForm({
         discardLabel={discardLabel}
         dirtyLabel={dirtyLabel}
         cleanLabel={cleanLabel}
+        pendingLabel={pendingLabel}
       />
     </form>
   )
@@ -146,6 +149,7 @@ export function StickySaveBar({
   discardLabel = "Discard",
   dirtyLabel = "Unsaved changes",
   cleanLabel = "All changes saved",
+  pendingLabel = "Saving…",
   className,
 }: {
   dirty: boolean
@@ -156,6 +160,7 @@ export function StickySaveBar({
   discardLabel?: string
   dirtyLabel?: string
   cleanLabel?: string
+  pendingLabel?: string
   className?: string
 }) {
   return (
@@ -179,7 +184,7 @@ export function StickySaveBar({
         {discardLabel}
       </Button>
       <Button type={onSave ? "button" : "submit"} size="sm" disabled={!dirty || pending} onClick={onSave}>
-        {pending ? "Saving…" : saveLabel}
+        {pending ? pendingLabel : saveLabel}
       </Button>
     </div>
   )
