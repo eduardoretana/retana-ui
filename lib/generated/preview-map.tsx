@@ -20,6 +20,7 @@ import Preview15 from "@/app/examples/dissolve-input/preview"
 import Preview16 from "@/app/examples/multi-select/preview"
 import Preview17 from "@/app/examples/color-picker/preview"
 import Preview18 from "@/app/examples/color-palette/preview"
+import Preview19 from "@/app/examples/magnetic-dropzone/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -41,4 +42,5 @@ export const previewMap = {
   "multi-select": Preview16,
   "color-picker": Preview17,
   "color-palette": Preview18,
+  "magnetic-dropzone": Preview19,
 }

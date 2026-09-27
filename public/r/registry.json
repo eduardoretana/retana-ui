@@ -1151,6 +1151,67 @@
           "target": "@ui/color-palette.tsx"
         }
       ]
+    },
+    {
+      "name": "magnetic-dropzone",
+      "type": "registry:ui",
+      "title": "Magnetic Dropzone",
+      "description": "Drop zone that leans toward the pointer, with a file list, progress, and type and size checks.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "form",
+        "media"
+      ],
+      "meta": {
+        "titleEs": "Zona magnética",
+        "descriptionEs": "Zona para soltar archivos que se inclina hacia el cursor, con lista, progreso y validación de tipo y tamaño.",
+        "preview": "app/examples/magnetic-dropzone/preview.tsx",
+        "previewHref": "/examples/magnetic-dropzone",
+        "examples": [
+          {
+            "title": "Zona magnética",
+            "href": "/examples/magnetic-dropzone",
+            "description": "Zona para soltar archivos que se inclina hacia el cursor, con lista, progreso y validación de tipo y tamaño."
+          }
+        ],
+        "usage": "<MagneticDropzone accept=\"image/*,.pdf\" maxSize={2_000_000} onFiles={upload} />",
+        "api": [
+          {
+            "name": "accept / maxSize / maxFiles",
+            "type": "string / number",
+            "description": "Validation. maxSize defaults to 8 MB and maxFiles to 8."
+          },
+          {
+            "name": "items / onItemsChange",
+            "type": "DropzoneItem[] / callback",
+            "description": "Controlled list. Omit items for internal state."
+          },
+          {
+            "name": "simulateProgress",
+            "type": "boolean",
+            "description": "Animates progress for demos. Default false."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "label, hint, remove, too large, and type labels default to English."
+          }
+        ]
+      },
+      "docs": "The lean is disabled when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/magnetic-dropzone.tsx",
+          "type": "registry:component",
+          "target": "@ui/magnetic-dropzone.tsx"
+        }
+      ]
     }
   ]
 }
