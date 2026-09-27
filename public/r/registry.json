@@ -526,7 +526,8 @@
       "title": "Entity form",
       "description": "Dialog or sheet form for one record, plus confirm-delete, an empty state, and a collapsible section. Submit stays disabled while busy.",
       "dependencies": [
-        "lucide-react"
+        "lucide-react",
+        "sonner"
       ],
       "registryDependencies": [
         "button",
@@ -590,7 +591,9 @@
       "type": "registry:ui",
       "title": "Settings form",
       "description": "Grouped cards over a string key-value map, with a sticky save bar, discard, and a beforeunload guard.",
-      "dependencies": [],
+      "dependencies": [
+        "sonner"
+      ],
       "registryDependencies": [
         "button",
         "card",
@@ -740,7 +743,8 @@
       "description": "TanStack table for a bookings-style list: tabs, search, filters, sorting, column visibility, multi-select bulk actions, CSV export, and a detail side panel.",
       "dependencies": [
         "@tanstack/react-table",
-        "lucide-react"
+        "lucide-react",
+        "sonner"
       ],
       "registryDependencies": [
         "badge",
@@ -1253,7 +1257,7 @@
             "description": "Instalación, Next.js, Vite y las políticas. Sin base de datos en este repo."
           }
         ],
-        "usage": "import { createClient } from \"@supabase/supabase-js\"\nimport { createSupabaseAdmin } from \"@/lib/supabase-admin\"\n\nconst admin = createSupabaseAdmin(createClient(url, anonKey))",
+        "usage": "import { createSupabaseAdmin } from \"@/lib/supabase-admin\"\n\n// Pass the host client that already holds the signed-in session.\nconst admin = createSupabaseAdmin(supabase)",
         "api": [
           {
             "name": "createSupabaseAdmin",

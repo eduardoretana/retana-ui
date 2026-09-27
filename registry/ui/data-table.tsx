@@ -397,6 +397,7 @@ export function AdminDataTable<T extends { id: string }>({
                   }}
                   onKeyDown={(event) => {
                     if (!renderDetail) return
+                    if (event.target !== event.currentTarget) return
                     if (event.key === "Enter" || event.key === " ") {
                       event.preventDefault()
                       setOpenId(row.original.id)

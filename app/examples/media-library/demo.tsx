@@ -49,7 +49,13 @@ export function MediaLibraryDemo() {
       <MediaLibrary
         assets={assets}
         onUpload={upload}
-        onDelete={async (id) => setAssets((current) => current.filter((asset) => asset.id !== id))}
+        onDelete={async (id) => {
+          setAssets((current) => {
+            const gone = current.find((asset) => asset.id === id)
+            if (gone?.url.startsWith("blob:")) URL.revokeObjectURL(gone.url)
+            return current.filter((asset) => asset.id !== id)
+          })
+        }}
         uploadLabel="Subir"
         uploadingLabel="Subiendo…"
         dropLabel="Suelta un archivo"

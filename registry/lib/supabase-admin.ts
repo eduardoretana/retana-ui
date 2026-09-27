@@ -218,7 +218,10 @@ export function createSupabaseMedia(client: AdminSupabase, bucket = "media"): Me
       const removed = await client.storage.from(bucket).remove([path])
       if (removed.error) {
         const { id: rowId, ...rest } = existing
-        await client.from("media").insert({ id: rowId, ...rest })
+        const restored = await client.from("media").insert({ id: rowId, ...rest })
+        if (restored.error) {
+          throw new Error(`${removed.error.message}; restore failed: ${restored.error.message}`)
+        }
         throw new Error(removed.error.message)
       }
     },

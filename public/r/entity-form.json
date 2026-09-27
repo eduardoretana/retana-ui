@@ -5,7 +5,8 @@
   "author": "Eduardo Retana",
   "description": "Dialog or sheet form for one record, plus confirm-delete, an empty state, and a collapsible section. Submit stays disabled while busy.",
   "dependencies": [
-    "lucide-react"
+    "lucide-react",
+    "sonner"
   ],
   "registryDependencies": [
     "button",

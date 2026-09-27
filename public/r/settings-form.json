@@ -4,7 +4,9 @@
   "title": "Settings form",
   "author": "Eduardo Retana",
   "description": "Grouped cards over a string key-value map, with a sticky save bar, discard, and a beforeunload guard.",
-  "dependencies": [],
+  "dependencies": [
+    "sonner"
+  ],
   "registryDependencies": [
     "button",
     "card",

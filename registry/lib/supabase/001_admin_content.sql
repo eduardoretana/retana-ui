@@ -188,36 +188,43 @@ alter table public.bookings enable row level security;
 
 -- A signed-in user can see their own admin row. Other reads and all writes
 -- go through is_admin(), which is security definer so it does not recurse.
+drop policy if exists admins_select_self on public.admins;
 create policy admins_select_self on public.admins
   for select to authenticated
   using (user_id = auth.uid() or public.is_admin());
 
+drop policy if exists admins_write on public.admins;
 create policy admins_write on public.admins
   for all to authenticated
   using (public.is_admin())
   with check (public.is_admin());
 
 -- Settings are site copy. The public site needs them; only admins write.
+drop policy if exists settings_read on public.settings;
 create policy settings_read on public.settings
   for select to anon, authenticated
   using (true);
 
+drop policy if exists settings_write on public.settings;
 create policy settings_write on public.settings
   for all to authenticated
   using (public.is_admin())
   with check (public.is_admin());
 
 -- Media rows are addresses of public files. Only admins change them.
+drop policy if exists media_read on public.media;
 create policy media_read on public.media
   for select to anon, authenticated
   using (true);
 
+drop policy if exists media_write on public.media;
 create policy media_write on public.media
   for all to authenticated
   using (public.is_admin())
   with check (public.is_admin());
 
 -- Bookings hold personal data. No anon read or write.
+drop policy if exists bookings_admin on public.bookings;
 create policy bookings_admin on public.bookings
   for all to authenticated
   using (public.is_admin())
@@ -234,17 +241,18 @@ begin
   ]
   loop
     execute format(
-      'create policy %I on public.%I for select to anon, authenticated using (published = true or public.is_admin())',
-      t || '_read', t
+      'drop policy if exists %I on public.%I; create policy %I on public.%I for select to anon, authenticated using (published = true or public.is_admin())',
+      t || '_read', t, t || '_read', t
     );
     execute format(
-      'create policy %I on public.%I for all to authenticated using (public.is_admin()) with check (public.is_admin())',
-      t || '_write', t
+      'drop policy if exists %I on public.%I; create policy %I on public.%I for all to authenticated using (public.is_admin()) with check (public.is_admin())',
+      t || '_write', t, t || '_write', t
     );
   end loop;
 end $$;
 
 -- Features follow their plan: public when the plan is published.
+drop policy if exists plan_features_read on public.plan_features;
 create policy plan_features_read on public.plan_features
   for select to anon, authenticated
   using (
@@ -255,6 +263,7 @@ create policy plan_features_read on public.plan_features
     )
   );
 
+drop policy if exists plan_features_write on public.plan_features;
 create policy plan_features_write on public.plan_features
   for all to authenticated
   using (public.is_admin())
@@ -264,10 +273,12 @@ insert into storage.buckets (id, name, public)
 values ('media', 'media', true)
 on conflict (id) do nothing;
 
+drop policy if exists media_bucket_read on storage.objects;
 create policy media_bucket_read on storage.objects
   for select to anon, authenticated
   using (bucket_id = 'media');
 
+drop policy if exists media_bucket_write on storage.objects;
 create policy media_bucket_write on storage.objects
   for all to authenticated
   using (bucket_id = 'media' and public.is_admin())
