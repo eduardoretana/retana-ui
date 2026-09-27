@@ -1388,6 +1388,63 @@
           "target": "@ui/lightbox.tsx"
         }
       ]
+    },
+    {
+      "name": "logo-marquee",
+      "type": "registry:ui",
+      "title": "Logo Marquee",
+      "description": "Infinite logo row that pauses on hover and fades at the edges.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "media",
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Carrusel de logos",
+        "descriptionEs": "Carrusel infinito de logos que se pausa al pasar el cursor y se desvanece en los bordes.",
+        "preview": "app/examples/logo-marquee/preview.tsx",
+        "previewHref": "/examples/logo-marquee",
+        "examples": [
+          {
+            "title": "Carrusel de logos",
+            "href": "/examples/logo-marquee",
+            "description": "Carrusel infinito de logos que se pausa al pasar el cursor y se desvanece en los bordes."
+          }
+        ],
+        "usage": "<LogoMarquee label=\"Logos\">{logos}</LogoMarquee>",
+        "api": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "description": "Logos. They are duplicated for the loop."
+          },
+          {
+            "name": "duration",
+            "type": "number",
+            "description": "Seconds per loop. Default 28."
+          },
+          {
+            "name": "pauseOnHover / fade",
+            "type": "boolean",
+            "description": "Both default to true."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Accessible name. Default Logo carousel."
+          }
+        ]
+      },
+      "docs": "The edge fade uses the host foreground token as a mask. The animation stops when the reader prefers reduced motion. No theme is shipped.",
+      "files": [
+        {
+          "path": "registry/ui/logo-marquee.tsx",
+          "type": "registry:component",
+          "target": "@ui/logo-marquee.tsx"
+        }
+      ]
     }
   ]
 }

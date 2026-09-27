@@ -24,6 +24,7 @@ import Preview19 from "@/app/examples/magnetic-dropzone/preview"
 import Preview20 from "@/app/examples/gooey-slider/preview"
 import Preview21 from "@/app/examples/video-player/preview"
 import Preview22 from "@/app/examples/lightbox/preview"
+import Preview23 from "@/app/examples/logo-marquee/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -49,4 +50,5 @@ export const previewMap = {
   "gooey-slider": Preview20,
   "video-player": Preview21,
   "lightbox": Preview22,
+  "logo-marquee": Preview23,
 }
