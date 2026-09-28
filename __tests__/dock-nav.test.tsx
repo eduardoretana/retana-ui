@@ -200,7 +200,7 @@ describe("DockNav", () => {
     const originalMatch = window.matchMedia
     const originalRect = HTMLElement.prototype.getBoundingClientRect
     const originalObserver = globalThis.ResizeObserver
-    let callback: ResizeObserverCallback | null = null
+    const observed: { current: ResizeObserverCallback | null } = { current: null }
     let width = 100
     window.matchMedia = (query: string) =>
       ({
@@ -228,7 +228,7 @@ describe("DockNav", () => {
     }
     globalThis.ResizeObserver = class {
       constructor(next: ResizeObserverCallback) {
-        callback = next
+        observed.current = next
       }
       observe() {}
       unobserve() {}
@@ -242,7 +242,7 @@ describe("DockNav", () => {
       const panel = container.querySelector("form")
       expect(panel).toHaveStyle({ width: "280px" })
       width = 600
-      callback?.([], {} as ResizeObserver)
+      observed.current?.([], {} as ResizeObserver)
       expect(panel).toHaveStyle({ width: "512px" })
     } finally {
       window.matchMedia = originalMatch
