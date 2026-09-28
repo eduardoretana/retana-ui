@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="456" viewBox="0 0 1200 456" role="img" aria-labelledby="title desc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title id="title">Retana UI</title>
+  <desc id="desc">Retana UI is a shadcn registry. Pieces inherit the host theme and ship none of their own. The specimen is the layered panel peeking beside the team directory on the same page.</desc>
+  <rect x="1" y="1" width="1198" height="454" rx="28" fill="#0C0C0E" stroke="#27272A"/>
+  <g id="motif" fill="none" stroke="#FAFAFA" stroke-width="1.5">
+    <path d="M44 36 H64 M44 36 V56"/>
+    <path d="M1156 36 H1136 M1156 36 V56"/>
+    <path d="M44 420 H64 M44 420 V400"/>
+    <path d="M1156 420 H1136 M1156 420 V400"/>
+  </g>
+  <g id="title-block">
+    <text x="72" y="92" fill="#A1A1AA" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="20" letter-spacing="1.4">SHADCN REGISTRY</text>
+    <text x="72" y="168" fill="#FAFAFA" font-size="72" font-weight="650">Retana UI</text>
+    <text x="72" y="220" fill="#E4E4E7" font-size="26">Pieces inherit the host theme.</text>
+    <text x="72" y="254" fill="#E4E4E7" font-size="26">They bring none of their own.</text>
+    <g id="token-chips" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="18">
+      <rect x="72" y="286" width="176" height="36" rx="8" fill="#18181B" stroke="#3F3F46"/>
+      <text x="88" y="310" fill="#FAFAFA">bg-background</text>
+      <rect x="258" y="286" width="196" height="36" rx="8" fill="#18181B" stroke="#3F3F46"/>
+      <text x="274" y="310" fill="#FAFAFA">text-foreground</text>
+      <rect x="464" y="286" width="168" height="36" rx="8" fill="#18181B" stroke="#3F3F46"/>
+      <text x="480" y="310" fill="#FAFAFA">border-border</text>
+    </g>
+    <text x="72" y="364" fill="#A1A1AA" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="20">@retana/name  ·  MIT</text>
+  </g>
+  <g id="project-proof" transform="translate(712 48)">
+    <rect width="424" height="360" rx="16" fill="#18181B" stroke="#3F3F46"/>
+    <text x="24" y="40" fill="#FAFAFA" font-size="22" font-weight="650">Team</text>
+    <text x="24" y="66" fill="#A1A1AA" font-size="18">Same page</text>
+    <g id="row-james">
+      <rect x="16" y="88" width="206" height="72" rx="10" fill="#27272A"/>
+      <rect x="16" y="96" width="3" height="56" fill="#FAFAFA"/>
+      <circle cx="44" cy="124" r="12" fill="#3F3F46"/>
+      <text x="64" y="118" fill="#FAFAFA" font-size="18" font-weight="650">James Carter</text>
+      <text x="64" y="142" fill="#A1A1AA" font-size="18">Designer</text>
+    </g>
+    <g id="row-sophia">
+      <circle cx="44" cy="204" r="12" fill="#3F3F46"/>
+      <text x="64" y="198" fill="#FAFAFA" font-size="18" font-weight="650">Sophia Williams</text>
+      <text x="64" y="222" fill="#A1A1AA" font-size="18">Developer</text>
+    </g>
+    <g id="row-arthur">
+      <circle cx="44" cy="284" r="12" fill="#3F3F46"/>
+      <text x="64" y="278" fill="#FAFAFA" font-size="18" font-weight="650">Arthur Davis</text>
+      <text x="64" y="302" fill="#A1A1AA" font-size="18">Developer</text>
+    </g>
+    <g id="peek">
+      <rect x="234" y="88" width="174" height="248" rx="12" fill="#222226" stroke="#3F3F46"/>
+      <g id="peek-crop" fill="none" stroke="#FAFAFA" stroke-width="1.5">
+        <path d="M242 96 H254 M242 96 V108"/>
+        <path d="M400 96 H388 M400 96 V108"/>
+        <path d="M242 328 H254 M242 328 V316"/>
+        <path d="M400 328 H388 M400 328 V316"/>
+      </g>
+      <text x="248" y="132" fill="#A1A1AA" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="18">Peek</text>
+      <text x="248" y="164" fill="#FAFAFA" font-size="20" font-weight="650">James Carter</text>
+      <text x="248" y="190" fill="#A1A1AA" font-size="18">Designer</text>
+      <rect x="248" y="286" width="146" height="34" rx="8" fill="#FAFAFA"/>
+      <text x="321" y="308" fill="#18181B" font-size="18" text-anchor="middle">View full</text>
+    </g>
+  </g>
+</svg>
