@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
@@ -99,9 +100,41 @@ describe("DockNav", () => {
     await user.click(screen.getByRole("button", { name: "Search" }))
     await user.click(screen.getByRole("button", { name: "Close search" }))
     expect(screen.queryByRole("searchbox")).not.toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Search" })).toHaveFocus()
     await user.click(screen.getByRole("button", { name: "Search" }))
     await user.click(screen.getByRole("button", { name: "Outside" }))
     expect(screen.queryByRole("searchbox")).not.toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Outside" })).toHaveFocus()
+  })
+
+  it("leaves focus on another control and ignores Escape that starts outside the dock", async () => {
+    const user = userEvent.setup()
+    function Harness() {
+      const [open, setOpen] = useState(true)
+      return (
+        <div>
+          <DockNav
+            label="Primary"
+            items={items}
+            search={{ open, onOpenChange: setOpen, placeholder: "Search services" }}
+          />
+          <input aria-label="Notes" />
+          <div role="dialog" aria-label="Confirm">
+            <button type="button">Stay</button>
+          </div>
+        </div>
+      )
+    }
+    render(<Harness />)
+    const notes = screen.getByRole("textbox", { name: "Notes" })
+    notes.focus()
+    await user.keyboard("{Escape}")
+    expect(screen.getByRole("searchbox", { name: "Search" })).toBeInTheDocument()
+    expect(notes).toHaveFocus()
+
+    await user.click(screen.getByRole("button", { name: "Stay" }))
+    expect(screen.queryByRole("searchbox", { name: "Search" })).not.toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Stay" })).toHaveFocus()
   })
 
   it("renders href and asChild targets", async () => {

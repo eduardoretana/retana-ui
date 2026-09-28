@@ -61,6 +61,12 @@ export function Demo() {
           {query ? <span> · Búsqueda: {query}</span> : null}
         </p>
       </div>
+      <section id="perfil" className="rounded-xl border border-border px-4 py-3">
+        <h2 className="text-sm font-medium">Perfil</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Ficha de ejemplo. El enlace del dock baja hasta esta sección.
+        </p>
+      </section>
     </div>
   )
 }

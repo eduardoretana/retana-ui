@@ -2,6 +2,7 @@ import { spawnSync } from "node:child_process"
 import fs from "node:fs"
 import path from "node:path"
 
+import { rewriteRegistryImports, scanPayloadDocument } from "./installed-imports.ts"
 import { validateRegistryTree, type RegistryInput } from "./validate-registry.ts"
 
 const root = path.resolve(import.meta.dirname, "..")
@@ -23,9 +24,17 @@ if (build.status !== 0) process.exit(build.status ?? 1)
 
 const builtDir = path.join(root, "public", "r")
 const builtErrors: string[] = []
+let rewritten = 0
 for (const name of fs.readdirSync(builtDir)) {
   if (!name.endsWith(".json")) continue
-  const json = JSON.parse(fs.readFileSync(path.join(builtDir, name), "utf8")) as unknown
+  const filePath = path.join(builtDir, name)
+  const original = fs.readFileSync(filePath, "utf8")
+  const text = rewriteRegistryImports(original)
+  if (text !== original) {
+    fs.writeFileSync(filePath, text)
+    rewritten += 1
+  }
+  const json = JSON.parse(text) as unknown
   if (json && typeof json === "object" && "cssVars" in json) {
     builtErrors.push(`public/r/${name} contains cssVars.`)
   }
@@ -37,7 +46,14 @@ for (const name of fs.readdirSync(builtDir)) {
       }
     }
   }
+  if (text.includes("registry/retana")) {
+    builtErrors.push(`public/r/${name} still contains registry/retana.`)
+  }
+  for (const error of scanPayloadDocument(json)) {
+    builtErrors.push(`public/r/${name}: ${error}`)
+  }
 }
+if (rewritten) console.log(`Rewrote install imports in ${rewritten} registry payloads.`)
 if (builtErrors.length) fail(builtErrors)
 
 const registry = JSON.parse(

@@ -226,6 +226,8 @@ export function DockNav({
   const slotRef = React.useRef<HTMLElement | null>(null)
   const animRef = React.useRef(0)
   const wasOpen = React.useRef(false)
+  /** true restores the search trigger, false leaves focus alone, null decides from where focus is. */
+  const restoreFocusRef = React.useRef<boolean | null>(null)
   const startRef = React.useRef<() => void>(() => {})
   const motionRef = React.useRef({
     scales: items.map(() => 1),
@@ -274,15 +276,21 @@ export function DockNav({
       const dt = Math.min(0.032, motion.last ? (now - motion.last) / 1000 : 0.016)
       motion.last = now
       const magnify = motion.hovering && fineRef.current && !reducedRef.current && motion.pointerX != null
+      const pointerX = motion.pointerX ?? 0
+      const centers: Array<number | null> = []
+      for (let index = 0; index < motion.scales.length; index += 1) {
+        const node = itemRefs.current[index]
+        if (!magnify || !node || disabledRef.current[index]) {
+          centers.push(null)
+          continue
+        }
+        const rect = node.getBoundingClientRect()
+        centers.push(rect.left + rect.width / 2)
+      }
       let resting = !magnify
       for (let index = 0; index < motion.scales.length; index += 1) {
-        let target = 1
-        const node = itemRefs.current[index]
-        if (magnify && node && !disabledRef.current[index]) {
-          const rect = node.getBoundingClientRect()
-          const distance = Math.abs((motion.pointerX ?? 0) - (rect.left + rect.width / 2))
-          target = dockScaleForDistance(distance, baseRef.current)
-        }
+        const center = centers[index]
+        const target = center == null ? 1 : dockScaleForDistance(Math.abs(pointerX - center), baseRef.current)
         const [next, velocity] = stepSpring(motion.scales[index] ?? 1, motion.velocities[index] ?? 0, target, dt)
         motion.scales[index] = next
         motion.velocities[index] = velocity
@@ -330,7 +338,8 @@ export function DockNav({
     onValueChange?.(next)
   }
 
-  function commitOpen(next: boolean) {
+  function commitOpen(next: boolean, restoreFocus: boolean | null = null) {
+    if (!next) restoreFocusRef.current = restoreFocus
     if (next) setPresent(true)
     if (!searchControlled) setUncontrolledOpen(next)
     search?.onOpenChange?.(next)
@@ -340,7 +349,7 @@ export function DockNav({
     if (item.disabled) return
     setCursor(index)
     if (item.kind === "search") {
-      commitOpen(!open)
+      commitOpen(!open, true)
       return
     }
     commitValue(item.value)
@@ -470,35 +479,31 @@ export function DockNav({
     runMorph(open ? "open" : "close")
     if (open) {
       wasOpen.current = true
+      restoreFocusRef.current = null
       inputRef.current?.focus()
       return
     }
-    if (wasOpen.current) slotRef.current?.focus()
+    if (!wasOpen.current) return
+    const choice = restoreFocusRef.current
+    restoreFocusRef.current = null
+    const active = document.activeElement
+    const inside = active instanceof Node && Boolean(rootRef.current?.contains(active))
+    const shouldRestore = choice === true || (choice == null && (inside || active == null || active === document.body))
+    if (shouldRestore) slotRef.current?.focus()
   }, [open, present, runMorph])
 
   const onSearchOpenChange = search?.onOpenChange
   React.useEffect(() => {
     if (!open) return
-    function close() {
-      if (!searchControlled) setUncontrolledOpen(false)
-      onSearchOpenChange?.(false)
-    }
     function onPointerDown(event: PointerEvent) {
       if (!(event.target instanceof Node)) return
       if (rootRef.current?.contains(event.target)) return
-      close()
-    }
-    function onKey(event: KeyboardEvent) {
-      if (event.key !== "Escape") return
-      event.preventDefault()
-      close()
+      restoreFocusRef.current = false
+      if (!searchControlled) setUncontrolledOpen(false)
+      onSearchOpenChange?.(false)
     }
     document.addEventListener("pointerdown", onPointerDown)
-    document.addEventListener("keydown", onKey)
-    return () => {
-      document.removeEventListener("pointerdown", onPointerDown)
-      document.removeEventListener("keydown", onKey)
-    }
+    return () => document.removeEventListener("pointerdown", onPointerDown)
   }, [onSearchOpenChange, open, searchControlled])
 
   React.useEffect(() => {
@@ -556,6 +561,12 @@ export function DockNav({
         data-position={position}
         data-magnify={finePointer && !reducedMotion ? "true" : "false"}
         data-motion={reducedMotion ? "reduce" : "ok"}
+        onKeyDown={(event) => {
+          if (event.key !== "Escape" || !open) return
+          event.preventDefault()
+          event.stopPropagation()
+          commitOpen(false, true)
+        }}
         className={cn(
           "flex justify-center",
           position === "inline" && "relative w-full",
@@ -734,7 +745,7 @@ export function DockNav({
                   size="icon"
                   className="absolute top-1/2 right-1 -translate-y-1/2"
                   aria-label={closeLabel}
-                  onClick={() => commitOpen(false)}
+                  onClick={() => commitOpen(false, true)}
                 >
                   <X />
                 </Button>
