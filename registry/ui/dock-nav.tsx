@@ -226,6 +226,8 @@ export function DockNav({
   const slotRef = React.useRef<HTMLElement | null>(null)
   const animRef = React.useRef(0)
   const wasOpen = React.useRef(false)
+  /** Search that is already open on the first paint must not move focus. */
+  const focusWhenOpened = React.useRef(!open)
   /** true restores the search trigger, false leaves focus alone, null decides from where focus is. */
   const restoreFocusRef = React.useRef<boolean | null>(null)
   const startRef = React.useRef<() => void>(() => {})
@@ -480,9 +482,11 @@ export function DockNav({
     if (open) {
       wasOpen.current = true
       restoreFocusRef.current = null
-      inputRef.current?.focus()
+      if (focusWhenOpened.current) inputRef.current?.focus()
+      focusWhenOpened.current = false
       return
     }
+    focusWhenOpened.current = true
     if (!wasOpen.current) return
     const choice = restoreFocusRef.current
     restoreFocusRef.current = null
@@ -511,7 +515,6 @@ export function DockNav({
     const column = columnRef.current
     if (!column) return
     const observer = new ResizeObserver(() => {
-      if (reducedRef.current) return
       const to = measure("panel")
       if (to) applyBox(to)
     })

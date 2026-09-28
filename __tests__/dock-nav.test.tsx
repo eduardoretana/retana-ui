@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { render, screen } from "@testing-library/react"
+import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
 
@@ -107,6 +107,30 @@ describe("DockNav", () => {
     expect(screen.getByRole("button", { name: "Outside" })).toHaveFocus()
   })
 
+  it("does not take focus when search is already open, then focuses on a later open", async () => {
+    const user = userEvent.setup()
+    const { rerender } = render(
+      <DockNav label="Primary" items={items} search={{ defaultOpen: true, placeholder: "Search services" }} />,
+    )
+    expect(screen.getByRole("searchbox", { name: "Search" })).not.toHaveFocus()
+
+    function Controlled({ open }: { open: boolean }) {
+      const [current, setCurrent] = useState(open)
+      return (
+        <DockNav
+          label="Primary"
+          items={items}
+          search={{ open: current, onOpenChange: setCurrent, placeholder: "Search services" }}
+        />
+      )
+    }
+    rerender(<Controlled open />)
+    expect(screen.getByRole("searchbox", { name: "Search" })).not.toHaveFocus()
+    await user.click(screen.getByRole("button", { name: "Close search" }))
+    await user.click(screen.getByRole("button", { name: "Search" }))
+    expect(screen.getByRole("searchbox", { name: "Search" })).toHaveFocus()
+  })
+
   it("leaves focus on another control and ignores Escape that starts outside the dock", async () => {
     const user = userEvent.setup()
     function Harness() {
@@ -170,6 +194,61 @@ describe("DockNav", () => {
     expect(screen.getByRole("button", { name: "Pathways" })).toHaveFocus()
     expect(await screen.findByRole("tooltip")).toHaveTextContent("Pathways")
     expect(screen.getByRole("tooltip")).toHaveTextContent("NEW")
+  })
+
+  it("remeasures the open search panel on resize when motion is reduced", async () => {
+    const originalMatch = window.matchMedia
+    const originalRect = HTMLElement.prototype.getBoundingClientRect
+    const originalObserver = globalThis.ResizeObserver
+    let callback: ResizeObserverCallback | null = null
+    let width = 100
+    window.matchMedia = (query: string) =>
+      ({
+        matches: query.includes("prefers-reduced-motion"),
+        media: query,
+        onchange: null,
+        addListener: () => {},
+        removeListener: () => {},
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        dispatchEvent: () => false,
+      }) as MediaQueryList
+    HTMLElement.prototype.getBoundingClientRect = function () {
+      return {
+        x: 0,
+        y: 0,
+        left: 0,
+        top: 0,
+        right: width,
+        bottom: 44,
+        width,
+        height: 44,
+        toJSON() {},
+      } as DOMRect
+    }
+    globalThis.ResizeObserver = class {
+      constructor(next: ResizeObserverCallback) {
+        callback = next
+      }
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    } as unknown as typeof ResizeObserver
+
+    try {
+      const { container } = render(<DockNav label="Primary" items={items} search={{ placeholder: "Search services" }} />)
+      await waitFor(() => expect(container.querySelector("[data-motion=reduce]")).toBeInTheDocument())
+      await userEvent.setup().click(screen.getByRole("button", { name: "Search" }))
+      const panel = container.querySelector("form")
+      expect(panel).toHaveStyle({ width: "280px" })
+      width = 600
+      callback?.([], {} as ResizeObserver)
+      expect(panel).toHaveStyle({ width: "512px" })
+    } finally {
+      window.matchMedia = originalMatch
+      HTMLElement.prototype.getBoundingClientRect = originalRect
+      globalThis.ResizeObserver = originalObserver
+    }
   })
 
   it("marks reduced motion when the reader requests it", () => {
