@@ -84,6 +84,7 @@ describe("unresolvableImports", () => {
           content: [
             'import { downloadCsv } from "@/registry/retana/lib/csv"',
             'import { gone } from "@/lib/missing"',
+            'import { nested } from "@/lib/utils/missing"',
             'import { x } from "./nope"',
           ].join("\n"),
         },
@@ -91,6 +92,7 @@ describe("unresolvableImports", () => {
     })
     expect(errors.join("\n")).toMatch(/registry\/retana/)
     expect(errors.join("\n")).toMatch(/@\/lib\/missing/)
+    expect(errors.join("\n")).toMatch(/@\/lib\/utils\/missing/)
     expect(errors.join("\n")).toMatch(/\.\/nope/)
   })
 })

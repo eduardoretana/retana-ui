@@ -17,6 +17,17 @@ type UseOptimisticListOptions<T extends { id: string }> = {
   errorMessage?: string
 }
 
+/** Prior order, plus any ids that arrived while the save was in flight. */
+export function restoreOrder(before: readonly string[], currentIds: readonly string[]) {
+  const live = new Set(currentIds)
+  const kept = before.filter((id) => live.has(id))
+  const seen = new Set(kept)
+  for (const id of currentIds) {
+    if (!seen.has(id)) kept.push(id)
+  }
+  return kept
+}
+
 /**
  * Shows the next order immediately. If `onReorder` rejects, the previous
  * order is restored and `notify.error` runs.
@@ -33,6 +44,10 @@ export function useOptimisticList<T extends { id: string }>({
   const [seen, setSeen] = React.useState(idsKey)
   const [pending, setPending] = React.useState(false)
   const inFlight = React.useRef(false)
+  const itemsRef = React.useRef(items)
+  React.useEffect(() => {
+    itemsRef.current = items
+  }, [items])
 
   if (seen !== idsKey) {
     setSeen(idsKey)
@@ -54,7 +69,7 @@ export function useOptimisticList<T extends { id: string }>({
         await onReorder(next)
         notify?.success(savedMessage)
       } catch (error) {
-        setOrder(before)
+        setOrder(restoreOrder(before, itemsRef.current.map((item) => item.id)))
         const message = error instanceof Error && error.message ? error.message : errorMessage
         notify?.error(message)
       } finally {

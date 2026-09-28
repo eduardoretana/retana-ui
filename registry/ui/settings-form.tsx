@@ -64,10 +64,9 @@ export function SettingsForm({
   const [draft, setDraft] = React.useState(values)
   const [baseline, setBaseline] = React.useState(values)
   const [pending, setPending] = React.useState(false)
-  const key = JSON.stringify(values)
-  const [seen, setSeen] = React.useState(key)
-  if (seen !== key) {
-    setSeen(key)
+  const [seen, setSeen] = React.useState(values)
+  if (!sameValues(seen, values)) {
+    setSeen(values)
     setDraft(values)
     setBaseline(values)
   }

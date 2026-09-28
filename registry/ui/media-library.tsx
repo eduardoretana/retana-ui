@@ -28,15 +28,19 @@ function isVideo(mime: string, url: string) {
   return mime.startsWith("video/") || /\.(mp4|webm|mov)($|\?)/i.test(url)
 }
 
-function matchesAccept(file: File, accept: string) {
+function matchesAcceptName(name: string, type: string, accept: string) {
   const rules = accept.split(",").map((rule) => rule.trim()).filter(Boolean)
   if (rules.length === 0) return true
-  const name = file.name.toLowerCase()
+  const lower = name.toLowerCase()
   return rules.some((rule) => {
-    if (rule.startsWith(".")) return name.endsWith(rule.toLowerCase())
-    if (rule.endsWith("/*")) return file.type.startsWith(rule.slice(0, -1))
-    return file.type === rule
+    if (rule.startsWith(".")) return lower.endsWith(rule.toLowerCase())
+    if (rule.endsWith("/*")) return type.startsWith(rule.slice(0, -1))
+    return type === rule
   })
+}
+
+function matchesAccept(file: File, accept: string) {
+  return matchesAcceptName(file.name, file.type, accept)
 }
 
 export type MediaFieldProps = {
@@ -126,6 +130,7 @@ export function MediaField({
 
   const preview = value
   const video = preview ? isVideo("", preview) : false
+  const library = assets.filter((asset) => matchesAcceptName(asset.filename, asset.mime, accept))
 
   return (
     <div ref={rootRef} className={cn("flex flex-col gap-2", className)} data-uploading={busy || undefined}>
@@ -192,11 +197,11 @@ export function MediaField({
           <DialogHeader>
             <DialogTitle>{pickLabel}</DialogTitle>
           </DialogHeader>
-          {assets.length === 0 ? (
+          {library.length === 0 ? (
             <EmptyState title={emptyLibrary} />
           ) : (
             <ul className="grid max-h-80 grid-cols-3 gap-2 overflow-y-auto sm:grid-cols-4">
-              {assets.map((asset) => (
+              {library.map((asset) => (
                 <li key={asset.id}>
                   <button
                     type="button"

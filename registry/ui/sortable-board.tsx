@@ -46,6 +46,43 @@ export type BoardCategory = {
   title: string
 }
 
+function homepageKey(items: readonly { id: string; showOnHomepage: boolean }[]) {
+  return items
+    .map((item) => `${item.id}\0${item.showOnHomepage ? "1" : "0"}`)
+    .sort()
+    .join("\n")
+}
+
+function parseHomepageKey(key: string) {
+  const map = new Map<string, boolean>()
+  if (!key) return map
+  for (const row of key.split("\n")) {
+    const splitAt = row.indexOf("\0")
+    if (splitAt < 0) continue
+    map.set(row.slice(0, splitAt), row.slice(splitAt + 1) === "1")
+  }
+  return map
+}
+
+/** Drop overrides that no longer differ from the latest `showOnHomepage`. */
+export function reconcileHomepageOverrides(
+  overrides: Record<string, boolean>,
+  previousKey: string,
+  items: readonly { id: string; showOnHomepage: boolean }[],
+) {
+  const prior = parseHomepageKey(previousKey)
+  const next: Record<string, boolean> = {}
+  for (const item of items) {
+    const override = overrides[item.id]
+    if (override === undefined) continue
+    const seen = prior.get(item.id)
+    if (seen === undefined || seen !== item.showOnHomepage) continue
+    if (override === item.showOnHomepage) continue
+    next[item.id] = override
+  }
+  return next
+}
+
 export type SortableBoardProps = {
   items: readonly BoardItem[]
   categories: readonly BoardCategory[]
@@ -123,6 +160,12 @@ export function SortableBoard({
   const [queryState, setQueryState] = React.useState("")
   const [filterState, setFilterState] = React.useState("all")
   const [home, setHome] = React.useState<Record<string, boolean>>({})
+  const incomingHome = homepageKey(items)
+  const [seenHome, setSeenHome] = React.useState(incomingHome)
+  if (seenHome !== incomingHome) {
+    setSeenHome(incomingHome)
+    setHome((current) => reconcileHomepageOverrides(current, seenHome, items))
+  }
   const view = viewProp ?? viewState
   const query = queryProp ?? queryState
   const filter = filterProp ?? filterState

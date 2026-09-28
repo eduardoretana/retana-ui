@@ -198,8 +198,17 @@ export function AdminShell({
   }, [])
 
   function go(href: string) {
-    onNavigate?.(href)
     setCommandOpen(false)
+    if (onNavigate) {
+      onNavigate(href)
+      return
+    }
+    const link = document.createElement("a")
+    link.href = href
+    link.hidden = true
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
   }
 
   return (

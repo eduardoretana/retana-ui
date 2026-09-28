@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
 
-import { useOptimisticList } from "@/registry/hooks/use-optimistic-list"
+import { restoreOrder, useOptimisticList } from "@/registry/hooks/use-optimistic-list"
 import { useUnsavedChanges } from "@/registry/hooks/use-unsaved-changes"
 
 const rows = [{ id: "a" }, { id: "b" }, { id: "c" }]
@@ -10,11 +10,13 @@ const rows = [{ id: "a" }, { id: "b" }, { id: "c" }]
 function ListHarness({
   onReorder,
   notify,
+  items = rows,
 }: {
   onReorder: (ids: readonly string[]) => Promise<void> | void
   notify: { success: (message: string) => void; error: (message: string) => void }
+  items?: readonly { id: string }[]
 }) {
-  const list = useOptimisticList({ items: rows, onReorder, notify })
+  const list = useOptimisticList({ items, onReorder, notify })
   return (
     <>
       <output>{list.order.join(",")}</output>
@@ -77,6 +79,35 @@ describe("useOptimisticList", () => {
 
     expect(onReorder).toHaveBeenCalledTimes(1)
     expect(screen.getByText("c,a,b")).toBeInTheDocument()
+  })
+
+  it("keeps ids that arrived while a failed reorder was in flight", async () => {
+    const user = userEvent.setup()
+    const notify = { success: vi.fn(), error: vi.fn() }
+    let release: (() => void) | undefined
+    const gate = new Promise<void>((_resolve, reject) => {
+      release = () => reject(new Error("sin red"))
+    })
+    const { rerender } = render(
+      <ListHarness onReorder={() => gate} notify={notify} items={rows} />,
+    )
+
+    await user.click(screen.getByRole("button", { name: "Reordenar" }))
+    rerender(
+      <ListHarness
+        onReorder={() => gate}
+        notify={notify}
+        items={[{ id: "d" }, ...rows]}
+      />,
+    )
+    release?.()
+
+    expect(await screen.findByText("a,b,c,d")).toBeInTheDocument()
+    expect(notify.error).toHaveBeenCalledWith("sin red")
+  })
+
+  it("restoreOrder drops ids that left and appends ids that arrived", () => {
+    expect(restoreOrder(["a", "b", "c"], ["b", "d", "c"])).toEqual(["b", "c", "d"])
   })
 
   it("swaps only the visible ids", async () => {
