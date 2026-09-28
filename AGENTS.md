@@ -16,7 +16,7 @@ This repo is Eduardo's catalog of reusable shadcn pieces (components, blocks, ho
 
 Registry items do not ship a theme. No CSS variables, no `cssVars`, no colors, fonts, radii, or shadow tokens, no Tailwind theme edits, and no global CSS under `registry/`. Use shadcn semantic classes only. Reuse host primitives via `registryDependencies`. Do not copy `components/ui` primitives into `registry/`. The demo theme stays in `app/globals.css` and `app/layout.tsx`.
 
-`pnpm registry:build` fails if an item is missing `meta.descriptionEs` or a preview, or if `registry/` contains hex, `rgb`/`oklch`, Tailwind palette classes, or `cssVars`.
+`pnpm registry:build` fails if an item is missing `meta.descriptionEs` or a preview, if `registry/` contains hex, `rgb`/`oklch`, Tailwind palette classes, or `cssVars`, or if a built `public/r/*.json` payload still imports `@/registry/retana` (those specifiers are rewritten to `@/lib`, `@/components/ui`, and `@/hooks`).
 
 ## Agregar una pieza nueva
 

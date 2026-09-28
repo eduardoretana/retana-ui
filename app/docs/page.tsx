@@ -62,6 +62,27 @@ export default function DocsPage() {
             <code>npx shadcn@latest add @retana/&lt;name&gt;</code>
           </pre>
         </section>
+        <section className="flex flex-col gap-3 text-sm leading-6">
+          <h2 className="text-lg font-semibold">Admin kit</h2>
+          <p className="text-muted-foreground">
+            The admin pieces are router-agnostic. They take data and callbacks as props, so the
+            same files work in Next.js and in a Vite + React 18 app. The catalog demo at{" "}
+            <Link href="/examples/admin-kit" className="underline-offset-2 hover:underline">
+              /examples/admin-kit
+            </Link>{" "}
+            keeps everything in memory.
+          </p>
+          <pre className="overflow-x-auto rounded-xl bg-muted p-4">
+            <code>npx shadcn@latest add @retana/admin-kit</code>
+          </pre>
+          <p className="text-muted-foreground">
+            That install also copies <code>lib/supabase/001_admin_content.sql</code> and{" "}
+            <code>lib/supabase/admin-kit.md</code>. Apply the SQL in the host project when you
+            want Supabase. Until then, use <code>createMemoryAdmin</code>. Answer no when the CLI
+            asks to overwrite primitives you already ship. Adapted list behavior is credited in
+            NOTICE.
+          </p>
+        </section>
         <section className="flex flex-col gap-3 text-sm leading-6 text-muted-foreground">
           <h2 className="text-lg font-semibold text-foreground">Host theme</h2>
           <p>
