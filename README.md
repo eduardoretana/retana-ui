@@ -6,7 +6,7 @@ Every item inherits the host project's existing shadcn theme and ships no theme 
 
 The site is a catalog. `registry.json` is the source of truth for `/` and for `/items/[name]`.
 
-Besides Layered Panel, the registry includes original chat, form, and media pieces (`chat-message`, `message-list`, `chat-composer`, `streaming-text`, `reasoning-steps`, `task-list`, `plan-card`, `question-card`, `inline-citation`, `code-block`, `file-diff`, `image-generation`, `ai-document`, `otp-field`, `dissolve-input`, `multi-select`, `color-picker`, `color-palette`, `magnetic-dropzone`, `gooey-slider`, `video-player`, `lightbox`, `logo-marquee`, `halftone-image`, `attachment-chip`, `marker`, `press-sound`, `crm-table`). They are clean-room implementations: common behaviors, new code, and the host theme. `crm-table` can stand alone or pass `crmColumnDefs()` into `AdminDataTable` when that item is installed.
+Besides Layered Panel, the registry includes original chat, form, and media pieces (`chat-message`, `message-list`, `chat-composer`, `streaming-text`, `reasoning-steps`, `task-list`, `plan-card`, `question-card`, `inline-citation`, `code-block`, `file-diff`, `image-generation`, `ai-document`, `otp-field`, `dissolve-input`, `multi-select`, `color-picker`, `color-palette`, `magnetic-dropzone`, `gooey-slider`, `video-player`, `lightbox`, `logo-marquee`, `halftone-image`, `attachment-chip`, `marker`, `press-sound`, `crm-table`, `dock-nav`). They are clean-room implementations: common behaviors, new code, and the host theme. `crm-table` can stand alone or pass `crmColumnDefs()` into `AdminDataTable` when that item is installed.
 
 - `/` — catalog index (search, type, category)
 - `/items/layered-panel` — preview, install command, API, and source

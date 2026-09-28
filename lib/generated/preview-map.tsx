@@ -30,6 +30,7 @@ import Preview25 from "@/app/examples/attachment-chip/preview"
 import Preview26 from "@/app/examples/marker/preview"
 import Preview27 from "@/app/examples/press-sound/preview"
 import Preview28 from "@/app/examples/crm-table/preview"
+import Preview29 from "@/app/examples/dock-nav/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -61,4 +62,5 @@ export const previewMap = {
   "marker": Preview26,
   "press-sound": Preview27,
   "crm-table": Preview28,
+  "dock-nav": Preview29,
 }
