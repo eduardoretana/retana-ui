@@ -73,11 +73,10 @@ This catalog is a Next.js app (App Router) on Tailwind v4 and shadcn's Radix Nov
 
 <!-- CATALOG:START -->
 
-`29` items are in `registry.json` on this branch. A name links to its source file.
-12 more are listed from [pull request #4](https://github.com/eduardoretana/retana-ui/pull/4) and are not linked, because those files are not on this branch yet. After that pull request merges, run `pnpm readme:catalog` and this sentence drops away.
+`42` items are in `registry.json` on this branch. A name links to its source file.
+Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
-That command does not cover the unregistered names below.
 
 ### Detail
 
@@ -125,20 +124,22 @@ That command does not cover the unregistered names below.
 
 ### Admin
 
-Unlinked names in this group are not in `registry.json` yet.
+- [`admin-utils`](registry/lib/admin-types.ts) · lib — Slug, reorder, CSV, date range, and analytics helpers for an admin that does not care which router or database the host uses.
+- [`admin-shell`](registry/ui/admin-shell.tsx) · ui — Collapsible shadcn sidebar, breadcrumbs from one nav config, a command palette, and a theme toggle that uses the host controller when you pass one.
+- [`sortable-list`](registry/ui/sortable-list.tsx) · ui — Mouse and keyboard drag list with screen-reader announcements, move buttons, a position number, and optimistic reorder that rolls back.
+- [`sortable-board`](registry/ui/sortable-board.tsx) · ui — Project board with category tabs and counts, search, list or grid, a homepage switch per row, and edit.
+- [`entity-form`](registry/ui/entity-form.tsx) · ui — Dialog or sheet form for one record, plus confirm-delete, an empty state, and a collapsible section. Submit stays disabled while busy.
+- [`settings-form`](registry/ui/settings-form.tsx) · ui — Grouped cards over a string key-value map, with a sticky save bar, discard, and a beforeunload guard.
+- [`media-library`](registry/ui/media-library.tsx) · ui — Dropzone field with image and video preview, a library picker, and a grid or table browser. Upload goes through an injected function and blocks submit while it runs.
+- [`data-table`](registry/ui/data-table.tsx) · ui — TanStack table for a bookings-style list: tabs, search, filters, sorting, column visibility, multi-select bulk actions, CSV export, and a detail side panel.
+- [`admin-charts`](registry/ui/admin-charts.tsx) · ui — KPI card with delta and sparkline, area trend with a range control, funnel, ranked bars, a day-by-hour heatmap, and a scroll-depth chart. Accent colors come from a tone mapped to chart-1…5.
+- [`overview-dashboard`](registry/ui/overview-dashboard.tsx) · ui — Composes KPI cards, a trend chart, an upcoming list, and content counts into one overview.
+- [`admin-kit`](registry/blocks/admin-kit.tsx) · block — Working admin demo: shell, projects, content lists, settings, media, bookings, and analytics, backed by an in-memory adapter and Spanish sample data.
+- [`supabase-admin`](registry/lib/supabase-admin.ts) · lib — Typed adapter for the admin ports. The host passes in @supabase/supabase-js. Includes SQL for content tables, RLS, and a media bucket. This item does not connect to a database.
 
-- `admin-utils` · lib — Slug, reorder, CSV, date range, and analytics helpers for an admin that does not care which router or database the host uses.
-- `admin-shell` · ui — Collapsible shadcn sidebar, breadcrumbs from one nav config, a command palette, and a theme toggle that uses the host controller when you pass one.
-- `sortable-list` · ui — Mouse and keyboard drag list with screen-reader announcements, move buttons, a position number, and optimistic reorder that rolls back.
-- `sortable-board` · ui — Project board with category tabs and counts, search, list or grid, a homepage switch per row, and edit.
-- `entity-form` · ui — Dialog or sheet form for one record, plus confirm-delete, an empty state, and a collapsible section. Submit stays disabled while busy.
-- `settings-form` · ui — Grouped cards over a string key-value map, with a sticky save bar, discard, and a beforeunload guard.
-- `media-library` · ui — Dropzone field with image and video preview, a library picker, and a grid or table browser. Upload goes through an injected function and blocks submit while it runs.
-- `data-table` · ui — TanStack table for a bookings-style list: tabs, search, filters, sorting, column visibility, multi-select bulk actions, CSV export, and a detail side panel.
-- `admin-charts` · ui — KPI card with delta and sparkline, area trend with a range control, funnel, ranked bars, a day-by-hour heatmap, and a scroll-depth chart. Accent colors come from a tone mapped to chart-1…5.
-- `overview-dashboard` · ui — Composes KPI cards, a trend chart, an upcoming list, and content counts into one overview.
-- `admin-kit` · block — Working admin demo: shell, projects, content lists, settings, media, bookings, and analytics, backed by an in-memory adapter and Spanish sample data.
-- `supabase-admin` · lib — Typed adapter for the admin ports. The host passes in @supabase/supabase-js. Includes SQL for content tables, RLS, and a media bucket. This item does not connect to a database.
+### Other
+
+- [`dock-nav`](registry/ui/dock-nav.tsx) · ui — Floating pill navigation with pointer magnification, tooltips, an active-route dot, grouped items, and a search item that morphs into a field under the bar.
 
 <!-- CATALOG:END -->
 
@@ -179,7 +180,7 @@ export function Members({
 
 Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry/ui/layered-panel.tsx). `crm-table` can stand alone, or pass `crmColumnDefs()` into `AdminDataTable` when that table is installed.
 
-Some admin-kit list behavior is adapted from [Maniruzzaman Jubayer's MIT admin panel](https://github.com/jubayer910/Admin-panel) and reimplemented on shadcn primitives. Those pieces are specified in [pull request #4](https://github.com/eduardoretana/retana-ui/pull/4). The Supabase adapter in that pull request includes SQL and does not connect this repo to a database.
+Some admin-kit list behavior is adapted from [Maniruzzaman Jubayer's MIT admin panel](https://github.com/jubayer910/Admin-panel) and reimplemented on shadcn primitives. That kit is part of this registry. The Supabase adapter includes SQL and does not connect this repo to a database.
 
 ## Develop
 

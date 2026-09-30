@@ -2876,6 +2876,86 @@
           "target": "@ui/crm-table.tsx"
         }
       ]
+    },
+    {
+      "name": "dock-nav",
+      "type": "registry:ui",
+      "title": "Dock Nav",
+      "description": "Floating pill navigation with pointer magnification, tooltips, an active-route dot, grouped items, and a search item that morphs into a field under the bar.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "tooltip",
+        "button",
+        "input",
+        "separator",
+        "badge"
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "meta": {
+        "titleEs": "Dock de navegación",
+        "descriptionEs": "Barra flotante en forma de píldora. El cursor amplía los iconos, cada uno tiene tooltip, la ruta activa muestra un punto, y Buscar se convierte en un campo bajo la barra.",
+        "preview": "app/examples/dock-nav/preview.tsx",
+        "previewHref": "/examples/dock-nav",
+        "examples": [
+          {
+            "title": "Dock de navegación",
+            "href": "/examples/dock-nav",
+            "description": "Iconos con aumento, tooltip con insignia, punto de ruta activa y búsqueda que se despliega."
+          }
+        ],
+        "usage": "<DockNav\n  label=\"Primary\"\n  items={items}\n  value={value}\n  onValueChange={setValue}\n  position=\"bottom\"\n  search={{ placeholder: \"Search\", onSearch }}\n/>",
+        "api": [
+          {
+            "name": "items",
+            "type": "DockNavItem[]",
+            "description": "icon, label, value, href or asChild, badge, disabled, group, and kind \"item\" | \"search\"."
+          },
+          {
+            "name": "value / defaultValue / onValueChange",
+            "type": "string / callback",
+            "description": "Active item. Omit value for internal state."
+          },
+          {
+            "name": "search",
+            "type": "DockNavSearch",
+            "description": "placeholder, onSearch, open, defaultOpen, onOpenChange, label, and closeLabel."
+          },
+          {
+            "name": "position",
+            "type": "\"inline\" | \"top\" | \"bottom\"",
+            "description": "Inline flow, or fixed to the top or bottom center. Default inline."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Accessible name of the nav landmark. Default Primary."
+          },
+          {
+            "name": "itemSize",
+            "type": "number",
+            "description": "Resting icon size in pixels. Default 44, or 40 below 640px."
+          },
+          {
+            "name": "className and slot classes",
+            "type": "string",
+            "description": "className, barClassName, itemClassName, panelClassName, and tooltipClassName."
+          }
+        ]
+      },
+      "docs": "Magnification runs only for a fine pointer that can hover, and it is off when the reader prefers reduced motion. In that case the search morph is an opacity fade. Answer no if the CLI asks to overwrite tooltip, button, input, separator, badge, or any other primitive the host already has. The item ships no theme, cssVars, or fixed colors. asChild takes a single element such as Next.js Link; the icon is rendered inside it.",
+      "files": [
+        {
+          "path": "registry/ui/dock-nav.tsx",
+          "type": "registry:component",
+          "target": "@ui/dock-nav.tsx"
+        }
+      ]
     }
   ]
 }
