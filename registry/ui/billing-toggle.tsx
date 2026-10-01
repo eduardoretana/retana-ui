@@ -186,16 +186,16 @@ function PriceCounter({ value, decimals }: { value: number; decimals: number }) 
 
 function StableSwap({ text, candidates, reduced, className }: { text: string; candidates: string[]; reduced: boolean; className?: string }) {
   return (
-    <span className={cn("relative inline-grid justify-items-center overflow-y-clip", className)}>
+    <span className={cn("relative grid w-full min-w-0 max-w-full grid-cols-[minmax(0,1fr)] justify-items-start overflow-hidden", className)}>
       {[...new Set(candidates)].map((candidate) => (
-        <span key={candidate} className="col-start-1 row-start-1 invisible" aria-hidden="true">
+        <span key={candidate} className="col-start-1 row-start-1 invisible max-w-full break-all" aria-hidden="true">
           {candidate}
         </span>
       ))}
       <AnimatePresence initial={false}>
         <motion.span
           key={text}
-          className="col-start-1 row-start-1 inline-block"
+          className="col-start-1 row-start-1 block max-w-full break-all"
           variants={reduced ? still : swap}
           initial="hidden"
           animate="shown"
@@ -262,7 +262,7 @@ export function BillingToggle({
       data-slot="billing-toggle"
       data-size={size}
       className={cn(
-        "relative isolate inline-flex max-w-full items-center rounded-full border border-border bg-muted p-0.5 text-sm",
+        "relative isolate flex w-full min-w-0 max-w-full items-center rounded-full border border-border bg-muted p-0.5 text-sm",
         size === "lg" && "p-1 text-base",
         className,
         classNames?.root,
@@ -299,17 +299,17 @@ export function BillingToggle({
             data-slot="billing-toggle-option"
             data-selected={selected || undefined}
             className={cn(
-              "relative inline-flex h-8 min-w-0 max-w-full cursor-pointer items-center rounded-full border-0 bg-transparent px-3.5 text-sm font-medium whitespace-normal text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none data-[selected]:cursor-default data-[selected]:text-foreground",
-              size === "lg" && "h-10 px-4 text-base",
-              option.badge && "pr-1",
+              "relative inline-flex min-h-8 min-w-0 max-w-full cursor-pointer items-center rounded-full border-0 bg-transparent px-3.5 text-sm font-medium text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none data-[selected]:cursor-default data-[selected]:text-foreground",
+              size === "lg" && "min-h-10 px-4 text-base",
+              option.badge ? "min-w-0 flex-1 pr-1" : "shrink-0",
               classNames?.option,
             )}
             onClick={() => onValueChange(option.value)}
             onKeyDown={(event) => onKeyDown(event, index)}
           >
             {selected && !thumb ? <span className="absolute inset-0 -z-10 rounded-full border border-border bg-background shadow-sm" aria-hidden="true" /> : null}
-            <span className="relative inline-flex min-w-0 items-center gap-2">
-              <span data-slot="billing-toggle-label" className={cn("font-medium break-all", classNames?.label)}>
+            <span className="relative inline-flex w-full min-w-0 max-w-full items-center gap-2">
+              <span data-slot="billing-toggle-label" className={cn("shrink-0 font-medium whitespace-nowrap", classNames?.label)}>
                 {option.label}
               </span>
               {badgeText ? (
@@ -317,7 +317,7 @@ export function BillingToggle({
                   data-slot="billing-toggle-badge"
                   data-active={selected || undefined}
                   className={cn(
-                    "inline-flex h-5 max-w-full items-center rounded-full bg-muted px-2 text-xs font-medium text-muted-foreground tabular-nums",
+                    "inline-flex min-h-5 min-w-0 max-w-full shrink items-center overflow-hidden rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground tabular-nums",
                     selected && "bg-primary/15 text-primary",
                     classNames?.badge,
                   )}
