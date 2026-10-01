@@ -14,6 +14,20 @@ class ResizeObserverStub {
 
 globalThis.ResizeObserver = ResizeObserverStub
 
+class IntersectionObserverStub {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+  takeRecords() {
+    return []
+  }
+  root = null
+  rootMargin = ""
+  thresholds: number[] = []
+}
+
+globalThis.IntersectionObserver = IntersectionObserverStub as unknown as typeof IntersectionObserver
+
 if (!Element.prototype.hasPointerCapture) {
   Element.prototype.hasPointerCapture = () => false
 }

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "search-field",
+  "title": "Search field",
+  "author": "Eduardo Retana",
+  "description": "A search field with a clear control that returns focus to the input.",
+  "dependencies": [
+    "motion",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button",
+    "input"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/search-field.tsx",
+      "content": "\"use client\"\n\n/** Adapted from Arc UI (MIT). */\n\nimport * as React from \"react\"\nimport { AnimatePresence, motion, useReducedMotion } from \"motion/react\"\nimport { Search, X } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Input } from \"@/components/ui/input\"\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\nexport type SearchFieldClassNames = {\n  root?: string\n  label?: string\n  shell?: string\n  input?: string\n  clear?: string\n}\n\nexport type SearchFieldProps = Omit<React.ComponentProps<\"input\">, \"type\" | \"value\" | \"onChange\"> & {\n  label: string\n  value: string\n  onValueChange: (value: string) => void\n  classNames?: SearchFieldClassNames\n}\n\nexport const SearchField = React.forwardRef<HTMLInputElement, SearchFieldProps>(function SearchField(\n  { label, value, onValueChange, id, className, classNames, ...props },\n  ref,\n) {\n  const generated = React.useId()\n  const controlId = id ?? generated\n  const reduced = useReducedMotion()\n  const inputRef = React.useRef<HTMLInputElement | null>(null)\n\n  const setRefs = (node: HTMLInputElement | null) => {\n    inputRef.current = node\n    if (typeof ref === \"function\") ref(node)\n    else if (ref) ref.current = node\n  }\n\n  function clear() {\n    onValueChange(\"\")\n    inputRef.current?.focus()\n  }\n\n  return (\n    <div data-slot=\"search-field\" className={cn(\"grid min-w-0 gap-2\", className, classNames?.root)}>\n      <label htmlFor={controlId} data-slot=\"search-field-label\" className={cn(\"text-sm font-medium\", classNames?.label)}>\n        {label}\n      </label>\n      <div\n        data-slot=\"search-field-shell\"\n        data-filled={value ? \"true\" : undefined}\n        className={cn(\n          \"flex h-9 min-w-0 items-center gap-1 rounded-lg border border-input bg-transparent pr-1 pl-2.5 focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50\",\n          classNames?.shell,\n        )}\n      >\n        <Search className=\"size-4 shrink-0 text-muted-foreground\" aria-hidden=\"true\" />\n        <Input\n          {...props}\n          ref={setRefs}\n          id={controlId}\n          type=\"search\"\n          value={value}\n          onChange={(event) => onValueChange(event.target.value)}\n          className={cn(\n            \"h-8 border-0 bg-transparent px-1 shadow-none focus-visible:ring-0 dark:bg-transparent [&::-webkit-search-cancel-button]:appearance-none\",\n            classNames?.input,\n          )}\n        />\n        <span className=\"grid size-6 shrink-0 place-items-center\">\n          <AnimatePresence initial={false}>\n            {value ? (\n              <motion.span\n                key=\"clear\"\n                initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.8 }}\n                animate={{ opacity: 1, scale: 1 }}\n                exit={reduced ? { opacity: 0, transition: { duration: 0 } } : { opacity: 0, scale: 0.8 }}\n                transition={reduced ? { duration: motionPresets.duration.instant } : motionPresets.spring.snappy}\n              >\n                <Button\n                  type=\"button\"\n                  variant=\"ghost\"\n                  size=\"icon-xs\"\n                  data-slot=\"search-field-clear\"\n                  className={classNames?.clear}\n                  aria-label=\"Clear search\"\n                  onClick={clear}\n                >\n                  <X aria-hidden=\"true\" />\n                </Button>\n              </motion.span>\n            ) : null}\n          </AnimatePresence>\n        </span>\n      </div>\n    </div>\n  )\n})\n",
+      "type": "registry:component",
+      "target": "@ui/search-field.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    exit: [0.7, 0, 0.84, 0] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Campo de búsqueda",
+    "descriptionEs": "Campo de búsqueda con un control para limpiar que devuelve el foco al texto.",
+    "preview": "app/examples/search-field/preview.tsx",
+    "previewHref": "/examples/search-field",
+    "examples": [
+      {
+        "title": "Campo de búsqueda",
+        "href": "/examples/search-field",
+        "description": "Campo de búsqueda con un control para limpiar que devuelve el foco al texto."
+      }
+    ],
+    "usage": "<SearchField label=\"Search\" value={query} onValueChange={setQuery} />",
+    "api": [
+      {
+        "name": "value / onValueChange",
+        "type": "string / callback",
+        "description": "Controlled query."
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Visible label."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "form",
+    "input"
+  ],
+  "type": "registry:ui"
+}

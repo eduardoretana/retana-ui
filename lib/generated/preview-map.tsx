@@ -43,6 +43,15 @@ import Preview38 from "@/app/examples/marker/preview"
 import Preview39 from "@/app/examples/press-sound/preview"
 import Preview40 from "@/app/examples/crm-table/preview"
 import Preview41 from "@/app/examples/dock-nav/preview"
+import Preview42 from "@/app/examples/theme-switch/preview"
+import Preview43 from "@/app/examples/password-field/preview"
+import Preview44 from "@/app/examples/search-field/preview"
+import Preview45 from "@/app/examples/copy-button/preview"
+import Preview46 from "@/app/examples/segmented-control/preview"
+import Preview47 from "@/app/examples/text-reveal/preview"
+import Preview48 from "@/app/examples/text-morph/preview"
+import Preview49 from "@/app/examples/text-shimmer/preview"
+import Preview50 from "@/app/examples/in-view-title/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -87,4 +96,13 @@ export const previewMap = {
   "press-sound": Preview39,
   "crm-table": Preview40,
   "dock-nav": Preview41,
+  "theme-switch": Preview42,
+  "password-field": Preview43,
+  "search-field": Preview44,
+  "copy-button": Preview45,
+  "segmented-control": Preview46,
+  "text-reveal": Preview47,
+  "text-morph": Preview48,
+  "text-shimmer": Preview49,
+  "in-view-title": Preview50,
 }

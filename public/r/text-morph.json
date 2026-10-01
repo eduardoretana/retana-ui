@@ -1,0 +1,56 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "text-morph",
+  "title": "Text morph",
+  "author": "Eduardo Retana",
+  "description": "Morphs one short label into the next. Shared letters glide and the width follows.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/text-morph.tsx",
+      "content": "\"use client\"\n\n/** Adapted from Arc UI (MIT). */\n\nimport { useEffect, useLayoutEffect, useMemo, useRef, useState } from \"react\"\nimport { AnimatePresence, animate, motion, useReducedMotion, type AnimationPlaybackControls } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\nexport type TextMorphProps = {\n  children: string\n  as?: \"span\" | \"div\" | \"p\" | \"strong\" | \"h1\" | \"h2\" | \"h3\"\n  className?: string\n  id?: string\n}\n\nconst enter = [...motionPresets.ease.enter] as [number, number, number, number]\nconst standard = [...motionPresets.ease.standard] as [number, number, number, number]\nconst blurred = `blur(${motionPresets.blur.soft}px)`\nconst HANDOFF = 0.05\n\nfunction toGlyphs(text: string) {\n  const seen = new Map<string, number>()\n  return Array.from(text).map((char) => {\n    const count = seen.get(char) ?? 0\n    seen.set(char, count + 1)\n    return { char, key: `${char}-${count}` }\n  })\n}\n\nconst measure = (element: HTMLElement) => parseFloat(getComputedStyle(element).width)\n\nexport function TextMorph({ children, as = \"span\", className, id }: TextMorphProps) {\n  const Tag = as\n  const reduced = useReducedMotion()\n  const frame = useRef<HTMLSpanElement>(null)\n  const track = useRef<HTMLSpanElement>(null)\n  const width = useRef(0)\n  const sizing = useRef<AnimationPlaybackControls | null>(null)\n  const glyphs = useMemo(() => toGlyphs(children), [children])\n  const [labels, setLabels] = useState({ current: children, previous: children })\n  if (labels.current !== children) setLabels({ current: children, previous: labels.current })\n  const kept = useMemo(() => new Set(toGlyphs(labels.previous).map((glyph) => glyph.key)), [labels.previous])\n  let entering = 0\n\n  useLayoutEffect(() => {\n    const frameElement = frame.current\n    const trackElement = track.current\n    if (!frameElement || !trackElement) return\n    const next = measure(trackElement)\n    if (!Number.isFinite(next)) return\n    if (width.current && Math.abs(next - width.current) > 0.5 && !reduced) {\n      sizing.current = animate(frameElement, { width: next }, motionPresets.spring.morph)\n    } else {\n      sizing.current?.stop()\n      frameElement.style.width = `${next}px`\n    }\n    width.current = next\n  }, [children, reduced])\n\n  useEffect(() => {\n    const frameElement = frame.current\n    const trackElement = track.current\n    if (!frameElement || !trackElement || typeof ResizeObserver === \"undefined\") return\n    const observer = new ResizeObserver(() => {\n      const next = measure(trackElement)\n      if (!Number.isFinite(next) || Math.abs(next - width.current) < 0.5) return\n      sizing.current?.stop()\n      frameElement.style.width = `${next}px`\n      width.current = next\n    })\n    observer.observe(trackElement)\n    return () => observer.disconnect()\n  }, [])\n\n  return (\n    <Tag id={id} data-slot=\"text-morph\" className={cn(\"inline-block max-w-full\", className)}>\n      <span className=\"sr-only\">{children}</span>\n      <span ref={frame} className=\"inline-block overflow-hidden align-bottom whitespace-nowrap\" aria-hidden=\"true\">\n        <span ref={track} className=\"inline-flex\">\n          <AnimatePresence mode=\"popLayout\" initial={false}>\n            {glyphs.map(({ char, key }) => {\n              const order = kept.has(key) ? 0 : entering++\n              return (\n                <motion.span\n                  key={key}\n                  layout=\"position\"\n                  className=\"inline-block\"\n                  initial={reduced ? false : { opacity: 0, scale: 0.8, y: \"0.14em\", filter: blurred }}\n                  animate={{ opacity: 1, scale: 1, y: \"0em\", filter: \"blur(0px)\" }}\n                  exit={\n                    reduced\n                      ? { opacity: 0, transition: { duration: 0 } }\n                      : { opacity: 0, scale: 0.86, y: \"-0.1em\", filter: blurred, transition: { duration: motionPresets.duration.exit, ease: standard } }\n                  }\n                  transition={\n                    reduced\n                      ? { duration: 0 }\n                      : {\n                          layout: motionPresets.spring.morph,\n                          default: {\n                            duration: motionPresets.duration.standard + 0.04,\n                            ease: enter,\n                            delay: HANDOFF + Math.min(order, 8) * motionPresets.stagger.char * 2,\n                          },\n                        }\n                  }\n                >\n                  {char === \" \" ? \"\\u00a0\" : char}\n                </motion.span>\n              )\n            })}\n          </AnimatePresence>\n        </span>\n      </span>\n    </Tag>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/text-morph.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    exit: [0.7, 0, 0.84, 0] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Texto que se transforma",
+    "descriptionEs": "Pasa de un rótulo corto al siguiente. Las letras compartidas se deslizan y el ancho las sigue.",
+    "preview": "app/examples/text-morph/preview.tsx",
+    "previewHref": "/examples/text-morph",
+    "examples": [
+      {
+        "title": "Texto que se transforma",
+        "href": "/examples/text-morph",
+        "description": "Pasa de un rótulo corto al siguiente. Las letras compartidas se deslizan y el ancho las sigue."
+      }
+    ],
+    "usage": "<TextMorph>Publishing</TextMorph>",
+    "api": [
+      {
+        "name": "children",
+        "type": "string",
+        "description": "The current label."
+      },
+      {
+        "name": "as",
+        "type": "\"span\" | \"div\" | \"p\" | \"strong\" | \"h1\" | \"h2\" | \"h3\"",
+        "description": "Element. Default span."
+      }
+    ]
+  },
+  "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "content"
+  ],
+  "type": "registry:ui"
+}
