@@ -1,0 +1,77 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty-state",
+  "title": "Empty state",
+  "author": "Eduardo Retana",
+  "description": "A useful next step when there is nothing to show yet.",
+  "dependencies": [
+    "motion",
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/empty-state.tsx",
+      "content": "\"use client\"\n\n/** Adapted from Arc UI (MIT). */\n\nimport * as React from \"react\"\nimport {\n  AnimatePresence,\n  animate,\n  motion,\n  useIsPresent,\n  useMotionValue,\n  useReducedMotion,\n  type AnimationPlaybackControls,\n  type HTMLMotionProps,\n  type MotionProps,\n  type TargetAndTransition,\n  type Transition,\n} from \"motion/react\"\nimport { Folder } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\nexport type EmptyStateClassNames = {\n  root?: string\n  icon?: string\n  title?: string\n  description?: string\n  action?: string\n}\n\nexport type EmptyStateProps = {\n  title: string\n  description: string\n  action?: React.ReactNode\n  icon?: React.ReactNode\n  className?: string\n  classNames?: EmptyStateClassNames\n  /** Optional accessible label for the state region. */\n  label?: string\n}\n\nconst exitFast: Transition = { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.standard] }\nconst textIn: TargetAndTransition = { opacity: 0, y: \"0.3em\", filter: `blur(${motionPresets.blur.soft}px)` }\nconst textOut: TargetAndTransition = {\n  opacity: 0,\n  y: \"-0.3em\",\n  filter: `blur(${motionPresets.blur.subtle}px)`,\n  transition: exitFast,\n}\nconst iconIn: TargetAndTransition = { opacity: 0, scale: 0.6, filter: `blur(${motionPresets.blur.subtle}px)` }\nconst shown: TargetAndTransition = { opacity: 1, y: \"0em\", scale: 1, filter: \"blur(0px)\" }\nconst fadeOut: TargetAndTransition = { opacity: 0, transition: { duration: motionPresets.duration.instant } }\n\nfunction Swap(props: HTMLMotionProps<\"span\">) {\n  const present = useIsPresent()\n  return <motion.span {...props} aria-hidden={present ? props[\"aria-hidden\"] : true} />\n}\n\nfunction iconKey(icon: React.ReactNode) {\n  if (!React.isValidElement(icon)) return \"icon\"\n  const type = icon.type as string | { displayName?: string; name?: string }\n  return typeof type === \"string\" ? type : type.displayName ?? type.name ?? \"icon\"\n}\n\nfunction HeightFrame({ reduce, morphKey, children }: { reduce: boolean | null; morphKey: string; children: React.ReactNode }) {\n  const frame = React.useRef<HTMLDivElement>(null)\n  const content = React.useRef<HTMLDivElement>(null)\n  const height = useMotionValue<number | \"auto\">(\"auto\")\n  const changedAt = React.useRef(0)\n  React.useLayoutEffect(() => {\n    changedAt.current = performance.now()\n  }, [morphKey])\n  React.useEffect(() => {\n    const node = content.current\n    if (!node || typeof ResizeObserver === \"undefined\") return\n    let last: number | undefined\n    let controls: AnimationPlaybackControls | undefined\n    const settle = () => {\n      height.jump(\"auto\")\n      if (frame.current) Object.assign(frame.current.style, { overflow: \"\", height: \"auto\" })\n    }\n    const observer = new ResizeObserver(([entry]) => {\n      const next = entry.borderBoxSize?.[0]?.blockSize ?? node.offsetHeight\n      const current = height.get()\n      const from = typeof current === \"number\" ? current : last\n      last = next\n      controls?.stop()\n      if (reduce || from === undefined || from === next || performance.now() - changedAt.current > 120) return settle()\n      if (frame.current) Object.assign(frame.current.style, { overflow: \"hidden\", height: `${from}px` })\n      controls = animate(height, [from, next], { ...motionPresets.spring.smooth, onComplete: settle })\n    })\n    observer.observe(node)\n    return () => {\n      observer.disconnect()\n      controls?.stop()\n    }\n  }, [height, reduce])\n  return (\n    <motion.div ref={frame} className=\"w-full max-w-full\" style={{ height }}>\n      <div ref={content} className=\"flow-root\">\n        {children}\n      </div>\n    </motion.div>\n  )\n}\n\nexport function EmptyState({ title, description, action, icon, className, classNames, label }: EmptyStateProps) {\n  const reduce = useReducedMotion()\n  const glyph = icon ?? <Folder width={24} height={24} strokeWidth={1.5} />\n  const enter: Transition = reduce\n    ? { duration: motionPresets.duration.instant }\n    : { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.enter] }\n  const swap: MotionProps = {\n    initial: reduce ? { opacity: 0 } : textIn,\n    animate: shown,\n    exit: reduce ? fadeOut : textOut,\n    transition: enter,\n  }\n  return (\n    <section\n      data-slot=\"empty-state\"\n      aria-label={label}\n      className={cn(\n        \"flex w-full min-w-0 flex-col items-center px-5 py-12 text-center\",\n        className,\n        classNames?.root,\n      )}\n    >\n      <motion.div\n        data-slot=\"empty-state-icon\"\n        aria-hidden=\"true\"\n        className={cn(\n          \"relative grid size-12 place-items-center rounded-xl border border-border bg-muted text-muted-foreground\",\n          classNames?.icon,\n        )}\n        initial={reduce ? false : { opacity: 0, scale: 0.92 }}\n        animate={{ opacity: 1, scale: 1 }}\n        transition={reduce ? { duration: 0 } : { duration: motionPresets.duration.considered, ease: [...motionPresets.ease.enter] }}\n      >\n        <AnimatePresence mode=\"popLayout\" initial={false}>\n          <Swap\n            key={iconKey(glyph)}\n            className=\"grid place-items-center\"\n            initial={reduce ? { opacity: 0 } : iconIn}\n            animate={shown}\n            exit={reduce ? fadeOut : { ...iconIn, transition: exitFast }}\n            transition={reduce ? enter : motionPresets.spring.snappy}\n          >\n            {glyph}\n          </Swap>\n        </AnimatePresence>\n      </motion.div>\n      <HeightFrame reduce={reduce} morphKey={`${title}\\n${description}`}>\n        <h3 className={cn(\"relative mt-5 text-base font-medium text-foreground\", classNames?.title)}>\n          <AnimatePresence mode=\"popLayout\" initial={false}>\n            <Swap key={title} className=\"block text-balance wrap-anywhere\" {...swap}>\n              {title}\n            </Swap>\n          </AnimatePresence>\n        </h3>\n        <p className={cn(\"relative mx-auto mt-2 max-w-72 text-sm text-muted-foreground\", classNames?.description)}>\n          <AnimatePresence mode=\"popLayout\" initial={false}>\n            <Swap key={description} className=\"block text-balance wrap-anywhere\" {...swap}>\n              {description}\n            </Swap>\n          </AnimatePresence>\n        </p>\n      </HeightFrame>\n      {action ? (\n        <div data-slot=\"empty-state-action\" className={cn(\"mt-5 flex flex-wrap justify-center gap-3\", classNames?.action)}>\n          {action}\n        </div>\n      ) : null}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/empty-state.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    exit: [0.7, 0, 0.84, 0] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Estado vacío",
+    "descriptionEs": "Un siguiente paso útil cuando todavía no hay nada que mostrar.",
+    "preview": "app/examples/empty-state/preview.tsx",
+    "previewHref": "/examples/empty-state",
+    "examples": [
+      {
+        "title": "Estado vacío",
+        "href": "/examples/empty-state",
+        "description": "Un siguiente paso útil cuando todavía no hay nada que mostrar."
+      }
+    ],
+    "usage": "<EmptyState title=\"No firings\" description=\"Schedule the next kiln.\" action={action} />",
+    "api": [
+      {
+        "name": "title",
+        "type": "string",
+        "description": "title"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "description": "description"
+      },
+      {
+        "name": "action",
+        "type": "React.ReactNode",
+        "description": "action"
+      },
+      {
+        "name": "icon",
+        "type": "React.ReactNode",
+        "description": "icon"
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "label"
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "content"
+  ],
+  "type": "registry:ui"
+}

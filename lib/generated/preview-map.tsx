@@ -54,6 +54,44 @@ import Preview49 from "@/app/examples/text-shimmer/preview"
 import Preview50 from "@/app/examples/in-view-title/preview"
 import Preview51 from "@/app/examples/slot-text/preview"
 import Preview52 from "@/app/examples/expandable-card/preview"
+import Preview53 from "@/app/examples/action-button/preview"
+import Preview54 from "@/app/examples/split-button/preview"
+import Preview55 from "@/app/examples/hold-to-confirm/preview"
+import Preview56 from "@/app/examples/swipe-actions/preview"
+import Preview57 from "@/app/examples/user-menu/preview"
+import Preview58 from "@/app/examples/confirm-morph/preview"
+import Preview59 from "@/app/examples/number-field/preview"
+import Preview60 from "@/app/examples/tag-input/preview"
+import Preview61 from "@/app/examples/time-picker/preview"
+import Preview62 from "@/app/examples/inline-edit/preview"
+import Preview63 from "@/app/examples/expanding-search/preview"
+import Preview64 from "@/app/examples/chip-group/preview"
+import Preview65 from "@/app/examples/password-strength/preview"
+import Preview66 from "@/app/examples/signature-pad/preview"
+import Preview67 from "@/app/examples/date-range-picker/preview"
+import Preview68 from "@/app/examples/phone-input/preview"
+import Preview69 from "@/app/examples/shortcut-recorder/preview"
+import Preview70 from "@/app/examples/mention-input/preview"
+import Preview71 from "@/app/examples/rich-text-editor/preview"
+import Preview72 from "@/app/examples/billing-toggle/preview"
+import Preview73 from "@/app/examples/radio-cards/preview"
+import Preview74 from "@/app/examples/avatar-group/preview"
+import Preview75 from "@/app/examples/metric-card/preview"
+import Preview76 from "@/app/examples/empty-state/preview"
+import Preview77 from "@/app/examples/tree-view/preview"
+import Preview78 from "@/app/examples/filter-toolbar/preview"
+import Preview79 from "@/app/examples/sparkline/preview"
+import Preview80 from "@/app/examples/gauge/preview"
+import Preview81 from "@/app/examples/animated-counter/preview"
+import Preview82 from "@/app/examples/image-compare/preview"
+import Preview83 from "@/app/examples/carousel/preview"
+import Preview84 from "@/app/examples/card-stack/preview"
+import Preview85 from "@/app/examples/activity-heatmap/preview"
+import Preview86 from "@/app/examples/timeline/preview"
+import Preview87 from "@/app/examples/toast-stack/preview"
+import Preview88 from "@/app/examples/usage-meter/preview"
+import Preview89 from "@/app/examples/stepper/preview"
+import Preview90 from "@/app/examples/announcement-bar/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -109,4 +147,42 @@ export const previewMap = {
   "in-view-title": Preview50,
   "slot-text": Preview51,
   "expandable-card": Preview52,
+  "action-button": Preview53,
+  "split-button": Preview54,
+  "hold-to-confirm": Preview55,
+  "swipe-actions": Preview56,
+  "user-menu": Preview57,
+  "confirm-morph": Preview58,
+  "number-field": Preview59,
+  "tag-input": Preview60,
+  "time-picker": Preview61,
+  "inline-edit": Preview62,
+  "expanding-search": Preview63,
+  "chip-group": Preview64,
+  "password-strength": Preview65,
+  "signature-pad": Preview66,
+  "date-range-picker": Preview67,
+  "phone-input": Preview68,
+  "shortcut-recorder": Preview69,
+  "mention-input": Preview70,
+  "rich-text-editor": Preview71,
+  "billing-toggle": Preview72,
+  "radio-cards": Preview73,
+  "avatar-group": Preview74,
+  "metric-card": Preview75,
+  "empty-state": Preview76,
+  "tree-view": Preview77,
+  "filter-toolbar": Preview78,
+  "sparkline": Preview79,
+  "gauge": Preview80,
+  "animated-counter": Preview81,
+  "image-compare": Preview82,
+  "carousel": Preview83,
+  "card-stack": Preview84,
+  "activity-heatmap": Preview85,
+  "timeline": Preview86,
+  "toast-stack": Preview87,
+  "usage-meter": Preview88,
+  "stepper": Preview89,
+  "announcement-bar": Preview90,
 }

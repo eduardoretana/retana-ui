@@ -1,0 +1,77 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tree-view",
+  "title": "Tree view",
+  "author": "Eduardo Retana",
+  "description": "Navigates nested folders and structured content from the keyboard.",
+  "dependencies": [
+    "motion",
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/tree-view.tsx",
+      "content": "\"use client\"\n\n/** Adapted from Arc UI (MIT). */\n\nimport * as React from \"react\"\nimport { ChevronRight, File, Folder, FolderOpen } from \"lucide-react\"\nimport { AnimatePresence, motion, useReducedMotion } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\nexport type TreeNode = {\n  id: string\n  label: string\n  children?: TreeNode[]\n  icon?: React.ReactNode\n}\n\nexport type TreeViewClassNames = {\n  root?: string\n  row?: string\n  item?: string\n  icon?: string\n  label?: string\n}\n\nexport type TreeViewProps = {\n  nodes: TreeNode[]\n  defaultExpandedIds?: string[]\n  expandedIds?: string[]\n  onExpandedChange?: (expandedIds: string[]) => void\n  onSelect?: (node: TreeNode) => void\n  \"aria-label\"?: string\n  className?: string\n  classNames?: TreeViewClassNames\n}\n\ntype VisibleNode = {\n  node: TreeNode\n  depth: number\n  parentId?: string\n  position: number\n  setSize: number\n}\n\nconst rowHeight = 38\nconst still = { duration: 0 } as const\nconst fadeIn = { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.enter] } as const\nconst fadeOut = { duration: motionPresets.duration.instant, ease: [...motionPresets.ease.standard] } as const\nconst blur = (px: number) => `blur(${px}px)`\n\nfunction flatten(nodes: TreeNode[], expanded: ReadonlySet<string>, depth = 1, parentId?: string): VisibleNode[] {\n  return nodes.flatMap((node, index) => [\n    { node, depth, parentId, position: index + 1, setSize: nodes.length },\n    ...(node.children && expanded.has(node.id) ? flatten(node.children, expanded, depth + 1, node.id) : []),\n  ])\n}\n\nfunction fileTone(label: string) {\n  const name = label.toLowerCase()\n  if (name.endsWith(\".tsx\") || name.endsWith(\".ts\")) return \"text-primary\"\n  if (name.endsWith(\".css\")) return \"text-chart-2\"\n  if (name.endsWith(\".md\")) return \"text-chart-3\"\n  if (name.endsWith(\".json\")) return \"text-chart-4\"\n  return \"text-muted-foreground\"\n}\n\nfunction FolderIcon({ open, reduced }: { open: boolean; reduced: boolean }) {\n  return (\n    <AnimatePresence initial={false} mode=\"popLayout\">\n      <motion.span\n        key={open ? \"open\" : \"closed\"}\n        className=\"absolute inset-0 grid place-items-center\"\n        initial={reduced ? false : { opacity: 0, scale: 0.6, filter: blur(motionPresets.blur.subtle) }}\n        animate={{ opacity: 1, scale: 1, filter: blur(0) }}\n        exit={\n          reduced\n            ? { opacity: 0, transition: still }\n            : { opacity: 0, scale: 0.6, filter: blur(motionPresets.blur.subtle), transition: fadeOut }\n        }\n        transition={reduced ? still : { ...motionPresets.spring.snappy, opacity: fadeIn, filter: fadeIn }}\n      >\n        {open ? <FolderOpen size={16} strokeWidth={1.7} /> : <Folder size={16} strokeWidth={1.7} />}\n      </motion.span>\n    </AnimatePresence>\n  )\n}\n\nexport function TreeView({\n  nodes,\n  defaultExpandedIds = [],\n  expandedIds,\n  onExpandedChange,\n  onSelect,\n  \"aria-label\": ariaLabel = \"File tree\",\n  className,\n  classNames,\n}: TreeViewProps) {\n  const reduced = useReducedMotion() ?? false\n  const selectionLayoutId = `tree-selection-${React.useId()}`\n  const [internalExpanded, setInternalExpanded] = React.useState(() => new Set(defaultExpandedIds))\n  const [focusedId, setFocusedId] = React.useState<string | null>(nodes[0]?.id ?? null)\n  const [selectedId, setSelectedId] = React.useState<string | null>(null)\n  const [openedId, setOpenedId] = React.useState<string | null>(null)\n  const refs = React.useRef(new Map<string, HTMLButtonElement>())\n  const expanded = expandedIds ? new Set(expandedIds) : internalExpanded\n  const visible = flatten(nodes, expanded)\n  const focusableId = visible.some(({ node }) => node.id === focusedId) ? focusedId : (visible[0]?.node.id ?? null)\n  const openedIndex = visible.findIndex(({ node }) => node.id === openedId)\n\n  function setExpanded(next: Set<string>) {\n    if (!expandedIds) setInternalExpanded(next)\n    onExpandedChange?.([...next])\n  }\n\n  function toggle(node: TreeNode) {\n    if (!node.children?.length) return\n    const next = new Set(expanded)\n    if (next.has(node.id)) next.delete(node.id)\n    else {\n      next.add(node.id)\n      setOpenedId(node.id)\n    }\n    setExpanded(next)\n  }\n\n  function focus(id: string) {\n    setFocusedId(id)\n    const row = refs.current.get(id)\n    if (row) row.focus()\n    else requestAnimationFrame(() => refs.current.get(id)?.focus())\n  }\n\n  function select(node: TreeNode) {\n    setSelectedId(node.id)\n    onSelect?.(node)\n  }\n\n  function onKeyDown(event: React.KeyboardEvent<HTMLButtonElement>, item: VisibleNode, index: number) {\n    const { node } = item\n    if (event.key === \"ArrowDown\") {\n      event.preventDefault()\n      focus(visible[Math.min(index + 1, visible.length - 1)].node.id)\n      return\n    }\n    if (event.key === \"ArrowUp\") {\n      event.preventDefault()\n      focus(visible[Math.max(index - 1, 0)].node.id)\n      return\n    }\n    if (event.key === \"Home\") {\n      event.preventDefault()\n      focus(visible[0].node.id)\n      return\n    }\n    if (event.key === \"End\") {\n      event.preventDefault()\n      focus(visible[visible.length - 1].node.id)\n      return\n    }\n    if (event.key === \"ArrowRight\" && node.children?.length) {\n      event.preventDefault()\n      if (!expanded.has(node.id)) toggle(node)\n      else if (visible[index + 1]?.parentId === node.id) focus(visible[index + 1].node.id)\n      return\n    }\n    if (event.key === \"ArrowLeft\") {\n      event.preventDefault()\n      if (node.children?.length && expanded.has(node.id)) toggle(node)\n      else if (item.parentId) focus(item.parentId)\n      return\n    }\n    if (event.key === \"Enter\" || event.key === \" \") {\n      event.preventDefault()\n      select(node)\n      if (node.children?.length) toggle(node)\n    }\n  }\n\n  return (\n    <div\n      data-slot=\"tree-view\"\n      className={cn(\"block w-full min-w-0 overflow-hidden rounded-2xl border border-border bg-card p-2 text-foreground\", className, classNames?.root)}\n      role=\"tree\"\n      aria-label={ariaLabel}\n      aria-multiselectable=\"false\"\n    >\n      <AnimatePresence initial={false} mode=\"sync\">\n        {visible.map((item, index) => {\n          const hasChildren = Boolean(item.node.children?.length)\n          const isExpanded = hasChildren && expanded.has(item.node.id)\n          const isSelected = selectedId === item.node.id\n          const delay = openedIndex >= 0 && index > openedIndex ? Math.min(index - openedIndex - 1, 7) * motionPresets.stagger.item : 0\n          return (\n            <motion.div\n              key={item.node.id}\n              data-slot=\"tree-view-row\"\n              className={cn(\"relative h-[38px] min-w-0\", classNames?.row)}\n              layout={reduced ? false : \"position\"}\n              initial={reduced ? false : { height: 0, opacity: 0, x: -6, overflow: \"hidden\" }}\n              animate={{\n                height: rowHeight,\n                opacity: 1,\n                x: 0,\n                transitionEnd: { overflow: \"visible\" },\n                transition: reduced\n                  ? still\n                  : { height: motionPresets.spring.smooth, opacity: { ...fadeIn, delay }, x: { ...motionPresets.spring.smooth, delay } },\n              }}\n              exit={\n                reduced\n                  ? { opacity: 0, transition: still }\n                  : { height: 0, opacity: 0, x: -4, overflow: \"hidden\", pointerEvents: \"none\", transition: { height: motionPresets.spring.smooth, opacity: fadeOut, x: fadeOut } }\n              }\n              transition={reduced ? still : { layout: motionPresets.spring.smooth }}\n            >\n              <button\n                ref={(element) => {\n                  if (element) refs.current.set(item.node.id, element)\n                  else refs.current.delete(item.node.id)\n                }}\n                type=\"button\"\n                data-slot=\"tree-view-item\"\n                className={cn(\n                  \"relative mt-0.5 flex h-9 w-full min-w-0 items-center gap-2 rounded-lg px-2.5 text-left text-sm text-muted-foreground outline-none\",\n                  \"focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring\",\n                  \"hover:bg-muted hover:text-foreground\",\n                  isSelected && \"text-foreground\",\n                  classNames?.item,\n                )}\n                style={{ paddingLeft: `calc(0.625rem + ${item.depth - 1} * 1.125rem)` }}\n                role=\"treeitem\"\n                aria-level={item.depth}\n                aria-posinset={item.position}\n                aria-setsize={item.setSize}\n                aria-expanded={hasChildren ? isExpanded : undefined}\n                aria-selected={isSelected}\n                tabIndex={focusableId === item.node.id ? 0 : -1}\n                onFocus={() => setFocusedId(item.node.id)}\n                onKeyDown={(event) => onKeyDown(event, item, index)}\n                onClick={() => {\n                  setFocusedId(item.node.id)\n                  select(item.node)\n                  if (hasChildren) toggle(item.node)\n                }}\n              >\n                {isSelected ? (\n                  <motion.span\n                    aria-hidden=\"true\"\n                    layoutId={selectionLayoutId}\n                    className=\"absolute inset-0 z-0 rounded-lg bg-muted\"\n                    transition={reduced ? still : motionPresets.spring.morph}\n                  />\n                ) : null}\n                {item.depth > 1 ? (\n                  <motion.span\n                    aria-hidden=\"true\"\n                    className=\"pointer-events-none absolute top-1 bottom-1 z-10 w-px origin-top bg-border\"\n                    style={{ left: `calc(1.125rem + ${item.depth - 2} * 1.125rem)` }}\n                    initial={reduced ? false : { opacity: 0, scaleY: 0 }}\n                    animate={{ opacity: 1, scaleY: 1 }}\n                    transition={reduced ? still : { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.enter], delay }}\n                  />\n                ) : null}\n                <motion.span\n                  className=\"relative z-10 grid h-4 w-3.5 shrink-0 place-items-center text-muted-foreground\"\n                  aria-hidden=\"true\"\n                  initial={false}\n                  animate={{ rotate: isExpanded ? 90 : 0 }}\n                  transition={reduced ? still : motionPresets.spring.snappy}\n                >\n                  {hasChildren ? <ChevronRight size={14} strokeWidth={1.9} /> : null}\n                </motion.span>\n                <span\n                  data-slot=\"tree-view-icon\"\n                  className={cn(\n                    \"relative z-10 grid size-4 shrink-0 place-items-center text-muted-foreground\",\n                    hasChildren && \"text-foreground\",\n                    !hasChildren && fileTone(item.node.label),\n                    classNames?.icon,\n                  )}\n                  aria-hidden=\"true\"\n                >\n                  {item.node.icon ?? (hasChildren ? <FolderIcon open={isExpanded} reduced={reduced} /> : <File size={16} strokeWidth={1.7} />)}\n                </span>\n                <span data-slot=\"tree-view-label\" className={cn(\"relative z-10 min-w-0 truncate\", classNames?.label)}>\n                  {item.node.label}\n                </span>\n              </button>\n            </motion.div>\n          )\n        })}\n      </AnimatePresence>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/tree-view.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    exit: [0.7, 0, 0.84, 0] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Árbol",
+    "descriptionEs": "Navega carpetas y contenido anidado con el teclado.",
+    "preview": "app/examples/tree-view/preview.tsx",
+    "previewHref": "/examples/tree-view",
+    "examples": [
+      {
+        "title": "Árbol",
+        "href": "/examples/tree-view",
+        "description": "Navega carpetas y contenido anidado con el teclado."
+      }
+    ],
+    "usage": "<TreeView label=\"Studio\" nodes={nodes} />",
+    "api": [
+      {
+        "name": "nodes",
+        "type": "TreeNode[]",
+        "description": "nodes"
+      },
+      {
+        "name": "defaultExpandedIds",
+        "type": "string[]",
+        "description": "defaultExpandedIds"
+      },
+      {
+        "name": "expandedIds",
+        "type": "string[]",
+        "description": "expandedIds"
+      },
+      {
+        "name": "onExpandedChange",
+        "type": "(expandedIds: string[]) => void",
+        "description": "onExpandedChange"
+      },
+      {
+        "name": "onSelect",
+        "type": "(node: TreeNode) => void",
+        "description": "onSelect"
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "content"
+  ],
+  "type": "registry:ui"
+}

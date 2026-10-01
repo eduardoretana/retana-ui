@@ -1,0 +1,79 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "split-button",
+  "title": "Split button",
+  "author": "Eduardo Retana",
+  "description": "A primary action with a menu of nearby alternatives.",
+  "dependencies": [
+    "motion",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "dropdown-menu"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/split-button.tsx",
+      "content": "\"use client\"\n\n/** Adapted from Arc UI (MIT). */\n\nimport * as React from \"react\"\nimport { AnimatePresence, animate, motion, useMotionValue, useReducedMotion, type TargetAndTransition, type Transition } from \"motion/react\"\nimport { ChevronDown } from \"lucide-react\"\n\nimport {\n  DropdownMenu,\n  DropdownMenuContent,\n  DropdownMenuItem,\n  DropdownMenuTrigger,\n} from \"@/components/ui/dropdown-menu\"\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\nexport type SplitButtonAction = {\n  label: string\n  onSelect?: () => void\n  disabled?: boolean\n  destructive?: boolean\n  icon?: React.ReactNode\n}\n\nexport type SplitButtonClassNames = {\n  root?: string\n  primary?: string\n  trigger?: string\n  menu?: string\n  item?: string\n  label?: string\n  icon?: string\n}\n\nexport type SplitButtonProps = {\n  label: string\n  actions: SplitButtonAction[]\n  onClick?: () => void\n  disabled?: boolean\n  icon?: React.ReactNode\n  variant?: \"primary\" | \"secondary\"\n  className?: string\n  classNames?: SplitButtonClassNames\n}\n\nconst rest: TargetAndTransition = { opacity: 1, y: 0, scale: 1, filter: \"blur(0px)\" }\nconst fadeIn: TargetAndTransition = { ...rest, opacity: 0 }\nconst fadeOut: TargetAndTransition = { opacity: 0, transition: { duration: motionPresets.duration.instant } }\nconst glyphIn: TargetAndTransition = { opacity: 0, y: 5, filter: `blur(${motionPresets.blur.soft}px)` }\nconst glyphOut: TargetAndTransition = {\n  opacity: 0,\n  y: -4,\n  filter: `blur(${motionPresets.blur.subtle}px)`,\n  transition: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.standard] },\n}\nconst iconIn: TargetAndTransition = { opacity: 0, scale: 0.6, filter: `blur(${motionPresets.blur.subtle}px)` }\nconst iconOut: TargetAndTransition = { ...iconIn, transition: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.standard] } }\nconst iconEnter: Transition = {\n  ...motionPresets.spring.snappy,\n  opacity: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.enter] },\n  filter: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.enter] },\n}\nconst instant = { duration: motionPresets.duration.instant }\n\nfunction iconKey(node: React.ReactNode): string {\n  if (!React.isValidElement(node)) return node == null || typeof node === \"boolean\" ? \"\" : String(node)\n  const type = node.type as string | { displayName?: string; name?: string }\n  return typeof type === \"string\" ? type : type?.displayName ?? type?.name ?? \"icon\"\n}\n\nfunction useMorphWidth(content: React.RefObject<HTMLElement | null>, key: string, reduced: boolean) {\n  const width = useMotionValue<number | \"auto\">(\"auto\")\n  const lastKey = React.useRef(key)\n  const armedUntil = React.useRef(0)\n\n  React.useLayoutEffect(() => {\n    if (lastKey.current === key) return\n    lastKey.current = key\n    armedUntil.current = performance.now() + 700\n  }, [key])\n\n  React.useEffect(() => {\n    const node = content.current\n    const slot = node?.parentElement\n    if (!node || !slot || typeof ResizeObserver === \"undefined\") return\n    let measured = false\n    const observer = new ResizeObserver(([entry]) => {\n      const next = entry?.contentRect.width ?? 0\n      if (!next || !measured || reduced || performance.now() > armedUntil.current) {\n        measured = next > 0\n        width.jump(next || \"auto\")\n        delete slot.dataset.morphing\n        return\n      }\n      slot.dataset.morphing = \"\"\n      animate(width, next, { ...motionPresets.spring.morph, onComplete: () => { delete slot.dataset.morphing } })\n    })\n    observer.observe(node)\n    return () => observer.disconnect()\n  }, [content, reduced, width])\n\n  return width\n}\n\ntype Glyph = { id: string; char: string; order: number }\nconst toGlyphs = (chars: string[], seq: number): Glyph[] => chars.map((char, order) => ({ id: `${seq}:${order}`, char, order }))\n\nfunction useGlyphs(text: string) {\n  const [state, setState] = React.useState(() => ({ text, seq: 0, glyphs: toGlyphs([...text], 0) }))\n  if (state.text === text) return state.glyphs\n  const prev = [...state.text]\n  const next = [...text]\n  let start = 0\n  let end = 0\n  while (start < prev.length && start < next.length && prev[start] === next[start]) start++\n  while (end < prev.length - start && end < next.length - start && prev[prev.length - 1 - end] === next[next.length - 1 - end]) end++\n  if (start < 2) start = 0\n  if (end < 2) end = 0\n  const seq = state.seq + 1\n  const glyphs = [\n    ...state.glyphs.slice(0, start),\n    ...toGlyphs(next.slice(start, next.length - end), seq),\n    ...state.glyphs.slice(state.glyphs.length - end),\n  ]\n  setState({ text, seq, glyphs })\n  return glyphs\n}\n\nfunction MorphText({ text, reduced, className }: { text: string; reduced: boolean; className?: string }) {\n  const glyphs = useGlyphs(text)\n  return (\n    <span data-slot=\"split-button-label\" className={cn(\"relative inline-flex min-w-0 flex-none whitespace-pre\", className)}>\n      <AnimatePresence mode=\"popLayout\" initial={false}>\n        {glyphs.map((glyph) => (\n          <motion.span\n            key={glyph.id}\n            className=\"inline-block\"\n            layout={reduced ? false : \"position\"}\n            layoutDependency={text}\n            initial={reduced ? fadeIn : glyphIn}\n            animate={rest}\n            exit={reduced ? fadeOut : glyphOut}\n            transition={reduced ? instant : { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.enter], delay: Math.min(glyph.order * motionPresets.stagger.char, 0.1), layout: motionPresets.spring.morph }}\n          >\n            {glyph.char}\n          </motion.span>\n        ))}\n      </AnimatePresence>\n    </span>\n  )\n}\n\nexport function SplitButton({\n  label,\n  actions,\n  onClick,\n  disabled,\n  icon,\n  variant = \"primary\",\n  className,\n  classNames,\n}: SplitButtonProps) {\n  const reduced = useReducedMotion() ?? false\n  const contentRef = React.useRef<HTMLSpanElement>(null)\n  const glyph = iconKey(icon)\n  const width = useMorphWidth(contentRef, `${glyph}|${label}`, reduced)\n  const secondary = variant === \"secondary\"\n\n  return (\n    <DropdownMenu>\n      <div\n        data-slot=\"split-button\"\n        className={cn(\n          \"inline-flex w-max max-w-full min-w-0 items-stretch overflow-hidden border text-sm font-medium transition-transform has-[[data-slot=split-button-primary]:active]:scale-[0.97] motion-reduce:transform-none motion-reduce:transition-none\",\n          secondary\n            ? \"rounded-full border-border bg-background text-foreground\"\n            : \"rounded-lg border-primary bg-primary text-primary-foreground\",\n          className,\n          classNames?.root,\n        )}\n      >\n        <button\n          data-slot=\"split-button-primary\"\n          className={cn(\n            \"inline-grid min-h-9 min-w-0 flex-1 place-items-center px-3 transition-colors focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50\",\n            secondary ? \"text-xs hover:bg-muted active:bg-muted\" : \"hover:bg-primary/80 active:bg-primary/80\",\n            classNames?.primary,\n          )}\n          type=\"button\"\n          onClick={onClick}\n          disabled={disabled}\n        >\n          <motion.span\n            className=\"inline-flex min-w-0 max-w-full items-center overflow-hidden data-morphing:[clip-path:inset(-50%_-0.5rem)]\"\n            style={{ width }}\n            aria-hidden=\"true\"\n          >\n            <span ref={contentRef} className=\"inline-flex flex-none items-center gap-2 whitespace-nowrap\">\n              {icon ? (\n                <span data-slot=\"split-button-icon\" className={cn(\"inline-grid shrink-0 place-items-center [&_svg]:size-4\", classNames?.icon)}>\n                  <AnimatePresence initial={false}>\n                    <motion.span\n                      key={glyph}\n                      className=\"col-start-1 row-start-1 inline-flex items-center justify-center\"\n                      initial={reduced ? fadeIn : iconIn}\n                      animate={rest}\n                      exit={reduced ? fadeOut : iconOut}\n                      transition={reduced ? instant : iconEnter}\n                    >\n                      {icon}\n                    </motion.span>\n                  </AnimatePresence>\n                </span>\n              ) : null}\n              <MorphText text={label} reduced={reduced} className={classNames?.label} />\n            </span>\n          </motion.span>\n          <span className=\"sr-only\" aria-live=\"polite\">{label}</span>\n        </button>\n        <DropdownMenuTrigger\n          data-slot=\"split-button-trigger\"\n          className={cn(\n            \"group grid w-9 shrink-0 place-items-center border-l transition-colors focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50\",\n            secondary\n              ? \"w-8 border-border hover:bg-muted data-[state=open]:bg-muted\"\n              : \"border-primary-foreground/25 hover:bg-primary/80 data-[state=open]:bg-primary/80\",\n            classNames?.trigger,\n          )}\n          type=\"button\"\n          aria-label={`${label} more actions`}\n          disabled={disabled}\n        >\n          <ChevronDown className=\"size-4 transition-transform group-data-[state=open]:rotate-180 motion-reduce:transition-none\" strokeWidth={1.8} aria-hidden=\"true\" />\n        </DropdownMenuTrigger>\n      </div>\n      <DropdownMenuContent\n        data-slot=\"split-button-menu\"\n        align=\"end\"\n        sideOffset={4}\n        collisionPadding={12}\n        loop\n        className={cn(\"w-max max-w-[min(20rem,calc(100vw-1.5rem))] min-w-36\", classNames?.menu)}\n      >\n        {actions.map((action, index) => (\n          <DropdownMenuItem\n            key={`${action.label}-${index}`}\n            className={cn(\"max-w-full min-w-0\", classNames?.item)}\n            variant={action.destructive ? \"destructive\" : \"default\"}\n            disabled={action.disabled}\n            onSelect={() => action.onSelect?.()}\n          >\n            {action.icon ? <span className=\"inline-flex shrink-0\" aria-hidden=\"true\">{action.icon}</span> : null}\n            <span className=\"min-w-0 truncate\">{action.label}</span>\n          </DropdownMenuItem>\n        ))}\n      </DropdownMenuContent>\n    </DropdownMenu>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/split-button.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    exit: [0.7, 0, 0.84, 0] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Botón dividido",
+    "descriptionEs": "Una acción principal con un menú de alternativas cercanas.",
+    "preview": "app/examples/split-button/preview.tsx",
+    "previewHref": "/examples/split-button",
+    "examples": [
+      {
+        "title": "Botón dividido",
+        "href": "/examples/split-button",
+        "description": "Una acción principal con un menú de alternativas cercanas."
+      }
+    ],
+    "usage": "<SplitButton label=\"Publish\" actions={actions} onClick={publish} />",
+    "api": [
+      {
+        "name": "label",
+        "type": "string",
+        "description": "label"
+      },
+      {
+        "name": "actions",
+        "type": "SplitButtonAction[]",
+        "description": "actions"
+      },
+      {
+        "name": "onClick",
+        "type": "() => void",
+        "description": "onClick"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "disabled"
+      },
+      {
+        "name": "icon",
+        "type": "React.ReactNode",
+        "description": "icon"
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "action"
+  ],
+  "type": "registry:ui"
+}

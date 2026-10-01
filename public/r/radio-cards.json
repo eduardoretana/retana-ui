@@ -1,0 +1,72 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "radio-cards",
+  "title": "Radio cards",
+  "author": "Eduardo Retana",
+  "description": "Selectable option cards with one tab stop and arrow-key behavior.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/radio-cards.tsx",
+      "content": "\"use client\"\n\n/** Adapted from Arc UI (MIT). */\n\nimport * as React from \"react\"\nimport { animate, motion, useMotionValue, useReducedMotion, type Transition } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\nexport type RadioCardOption = {\n  value: string\n  label: React.ReactNode\n  /** One or two short lines under the label. */\n  description?: React.ReactNode\n  /** A price, estimate, or other value. Sits at the end of a list row, or under the text in a grid card. */\n  meta?: React.ReactNode\n  /** Plain decorative icon beside the label. */\n  icon?: React.ReactNode\n  disabled?: boolean\n  /** Short reason shown in place of the description when the option is disabled. */\n  disabledReason?: React.ReactNode\n}\n\nexport type RadioCardsClassNames = {\n  root?: string\n  card?: string\n  indicator?: string\n  label?: string\n  description?: string\n  meta?: string\n}\n\nexport type RadioCardsProps = Omit<React.HTMLAttributes<HTMLDivElement>, \"onChange\" | \"defaultValue\"> & {\n  options: RadioCardOption[]\n  value?: string | null\n  defaultValue?: string | null\n  onValueChange?: (value: string) => void\n  /** \"grid\" places cards in responsive columns; \"list\" stacks full width rows. */\n  layout?: \"grid\" | \"list\"\n  /** Narrowest a grid column may get before the grid drops a column, in px. */\n  minColumnWidth?: number\n  /** Form field name. Renders a hidden input with the selected value. */\n  name?: string\n  required?: boolean\n  disabled?: boolean\n  classNames?: RadioCardsClassNames\n}\n\ntype Bezier = [number, number, number, number]\nconst standard = [...motionPresets.ease.standard] as Bezier\n\nconst physical = (visualDuration: number, bounce: number): Transition => {\n  const root = (2 * Math.PI) / (visualDuration * 1.2)\n  return { type: \"spring\", stiffness: root * root, damping: 2 * (1 - bounce) * root, mass: 1 }\n}\n\nconst GLIDE = physical(0.42, 0.14)\nconst subscribe = () => () => {}\n\nfunction useReducedFlag() {\n  const hydrated = React.useSyncExternalStore(subscribe, () => true, () => false)\n  return !!useReducedMotion() && hydrated\n}\n\nexport const RadioCards = React.forwardRef<HTMLDivElement, RadioCardsProps>(function RadioCards(\n  {\n    options,\n    value,\n    defaultValue = null,\n    onValueChange,\n    layout = \"grid\",\n    minColumnWidth = 180,\n    name,\n    required,\n    disabled = false,\n    className,\n    classNames,\n    style,\n    ...rest\n  },\n  forwardedRef,\n) {\n  const reduced = useReducedFlag()\n  const uid = React.useId().replace(/[^a-zA-Z0-9_-]/g, \"\")\n  const rootRef = React.useRef<HTMLDivElement>(null)\n  React.useImperativeHandle(forwardedRef, () => rootRef.current as HTMLDivElement)\n  const [internal, setInternal] = React.useState<string | null>(defaultValue)\n  const selected = value !== undefined ? value : internal\n  const selectedIndex = options.findIndex((option) => option.value === selected)\n  const usable = (option: RadioCardOption) => !disabled && !option.disabled\n  const tabStop = selectedIndex >= 0 && usable(options[selectedIndex]) ? selectedIndex : options.findIndex(usable)\n\n  const select = (next: string) => {\n    if (next === selected) return\n    if (value === undefined) setInternal(next)\n    onValueChange?.(next)\n  }\n\n  const x = useMotionValue(0)\n  const y = useMotionValue(0)\n  const w = useMotionValue(0)\n  const h = useMotionValue(0)\n  const o = useMotionValue(0)\n  const placed = React.useRef(false)\n  const place = React.useCallback(\n    (spring: boolean) => {\n      const node = selectedIndex < 0 ? null : rootRef.current?.querySelector<HTMLElement>(`[data-card=\"${selectedIndex}\"]`)\n      if (!node) {\n        o.set(0)\n        placed.current = false\n        return\n      }\n      const box = [node.offsetLeft, node.offsetTop, node.offsetWidth, node.offsetHeight]\n      if (!spring || !placed.current || reduced) {\n        x.jump(box[0])\n        y.jump(box[1])\n        w.jump(box[2])\n        h.jump(box[3])\n        if (!placed.current && !reduced && spring) {\n          o.jump(0)\n          animate(o, 1, { duration: 0.18, ease: standard })\n        } else o.jump(1)\n        placed.current = true\n        return\n      }\n      animate(x, box[0], GLIDE)\n      animate(y, box[1], GLIDE)\n      animate(w, box[2], GLIDE)\n      animate(h, box[3], GLIDE)\n      o.set(1)\n    },\n    [h, o, reduced, selectedIndex, w, x, y],\n  )\n\n  const placeRef = React.useRef(place)\n  React.useLayoutEffect(() => {\n    placeRef.current = place\n    place(true)\n  }, [place])\n  React.useLayoutEffect(() => {\n    const root = rootRef.current\n    if (!root || typeof ResizeObserver === \"undefined\") return\n    const observer = new ResizeObserver(() => placeRef.current(false))\n    observer.observe(root)\n    return () => observer.disconnect()\n  }, [])\n\n  const cards = () => Array.from(rootRef.current?.querySelectorAll<HTMLElement>(\"[data-card]\") ?? [])\n\n  const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, index: number) => {\n    const step = event.key === \"ArrowRight\" || event.key === \"ArrowDown\" ? 1 : event.key === \"ArrowLeft\" || event.key === \"ArrowUp\" ? -1 : 0\n    if (event.key === \" \" || event.key === \"Enter\") {\n      event.preventDefault()\n      if (usable(options[index])) select(options[index].value)\n      return\n    }\n    if (!step && event.key !== \"Home\" && event.key !== \"End\") return\n    event.preventDefault()\n    const count = options.length\n    const rtl = step && (event.key === \"ArrowLeft\" || event.key === \"ArrowRight\") && getComputedStyle(event.currentTarget).direction === \"rtl\" ? -1 : 1\n    let at = event.key === \"Home\" ? -1 : event.key === \"End\" ? count : index\n    const dir = event.key === \"Home\" ? 1 : event.key === \"End\" ? -1 : step * rtl\n    for (let tries = 0; tries < count; tries++) {\n      at = (at + dir + count) % count\n      if (usable(options[at])) {\n        cards()[at]?.focus()\n        select(options[at].value)\n        return\n      }\n    }\n  }\n\n  return (\n    <div\n      ref={rootRef}\n      role=\"radiogroup\"\n      data-slot=\"radio-cards\"\n      aria-disabled={disabled || undefined}\n      aria-required={required || undefined}\n      data-layout={layout}\n      className={cn(\n        \"relative grid min-w-0 max-w-full gap-2.5 text-sm text-foreground\",\n        layout === \"grid\" && \"grid-cols-[repeat(auto-fill,minmax(min(100%,var(--min-column,180px)),1fr))]\",\n        layout === \"list\" && \"grid-cols-1 gap-2\",\n        className,\n        classNames?.root,\n      )}\n      style={{ \"--min-column\": `${minColumnWidth}px`, ...style } as React.CSSProperties}\n      {...rest}\n    >\n      <motion.span\n        className=\"pointer-events-none absolute top-0 left-0 z-10 rounded-lg border-2 border-primary\"\n        style={{ x, y, width: w, height: h, opacity: o }}\n        aria-hidden=\"true\"\n      />\n      {options.map((option, index) => {\n        const checked = index === selectedIndex\n        const off = !usable(option)\n        const labelId = `${uid}-${index}-label`\n        const descriptionId = `${uid}-${index}-description`\n        const description = off && option.disabledReason ? option.disabledReason : option.description\n        return (\n          <div\n            key={option.value}\n            role=\"radio\"\n            data-card={index}\n            data-slot=\"radio-cards-card\"\n            className={cn(\n              \"relative grid min-w-0 cursor-pointer gap-x-3 gap-y-1 rounded-lg border border-border bg-card p-3.5 select-none hover:border-ring focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none data-[checked]:bg-accent aria-disabled:cursor-not-allowed aria-disabled:bg-muted\",\n              layout === \"grid\" && \"grid-cols-[minmax(0,1fr)_auto] content-start [grid-template-areas:'body_indicator''meta_meta']\",\n              layout === \"list\" && \"grid-cols-[auto_minmax(0,1fr)_auto] items-center py-3 pr-4 pl-3.5 [grid-template-areas:'indicator_body_meta']\",\n              classNames?.card,\n            )}\n            aria-checked={checked}\n            aria-disabled={off || undefined}\n            aria-labelledby={labelId}\n            aria-describedby={description ? descriptionId : undefined}\n            tabIndex={index === tabStop ? 0 : -1}\n            data-checked={checked || undefined}\n            onClick={() => {\n              if (!off) select(option.value)\n            }}\n            onKeyDown={(event) => onKeyDown(event, index)}\n          >\n            <span\n              className={cn(\n                \"grid size-[18px] place-items-center rounded-full border border-input [grid-area:indicator]\",\n                checked && \"border-primary bg-primary\",\n                off && \"border-border\",\n                classNames?.indicator,\n              )}\n              aria-hidden=\"true\"\n            >\n              <motion.span\n                className=\"size-1.5 rounded-full bg-primary-foreground\"\n                initial={false}\n                animate={{ scale: checked ? 1 : 0 }}\n                transition={reduced ? { duration: 0 } : motionPresets.spring.snappy}\n              />\n            </span>\n            <span className=\"grid min-w-0 gap-0.5 [grid-area:body]\">\n              <span id={labelId} className={cn(\"flex min-w-0 items-center gap-2 font-medium\", off && \"text-muted-foreground\", classNames?.label)}>\n                {option.icon ? <span className=\"grid size-[18px] shrink-0 place-items-center text-muted-foreground [&_svg]:size-[18px]\">{option.icon}</span> : null}\n                <span className=\"min-w-0 truncate\">{option.label}</span>\n              </span>\n              {description ? (\n                <span id={descriptionId} className={cn(\"text-xs text-muted-foreground break-all\", classNames?.description)}>\n                  {description}\n                </span>\n              ) : null}\n            </span>\n            {option.meta ? (\n              <span\n                className={cn(\n                  \"text-foreground tabular-nums [grid-area:meta]\",\n                  off && \"text-muted-foreground\",\n                  layout === \"grid\" && \"mt-2.5 text-lg\",\n                  layout === \"list\" && \"font-medium whitespace-nowrap\",\n                  classNames?.meta,\n                )}\n              >\n                {option.meta}\n              </span>\n            ) : null}\n          </div>\n        )\n      })}\n      {name ? <input type=\"hidden\" name={name} value={selected ?? \"\"} required={required} /> : null}\n    </div>\n  )\n})\n",
+      "type": "registry:component",
+      "target": "@ui/radio-cards.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    exit: [0.7, 0, 0.84, 0] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Tarjetas de opción",
+    "descriptionEs": "Tarjetas seleccionables con un solo tabulador y flechas.",
+    "preview": "app/examples/radio-cards/preview.tsx",
+    "previewHref": "/examples/radio-cards",
+    "examples": [
+      {
+        "title": "Tarjetas de opción",
+        "href": "/examples/radio-cards",
+        "description": "Tarjetas seleccionables con un solo tabulador y flechas."
+      }
+    ],
+    "usage": "<RadioCards options={plans} value={plan} onValueChange={setPlan} />",
+    "api": [
+      {
+        "name": "options",
+        "type": "RadioCardOption[]",
+        "description": "value, label, description, meta, icon, and disabled."
+      },
+      {
+        "name": "value / defaultValue / onValueChange",
+        "type": "string | null",
+        "description": "The selected card. Omit value for internal state."
+      },
+      {
+        "name": "layout",
+        "type": "\"grid\" | \"list\"",
+        "description": "Columns or full-width rows."
+      },
+      {
+        "name": "name / required",
+        "type": "string / boolean",
+        "description": "Hidden input for forms."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "form",
+    "input"
+  ],
+  "type": "registry:ui"
+}

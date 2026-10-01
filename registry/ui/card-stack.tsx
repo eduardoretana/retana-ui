@@ -1,0 +1,459 @@
+"use client"
+
+/** Adapted from Arc UI (MIT). */
+
+import { useEffect, useId, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react"
+import type { KeyboardEvent, PointerEvent as ReactPointerEvent, ReactNode } from "react"
+import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "motion/react"
+import type { MotionValue } from "motion/react"
+import { Check, RotateCcw, X } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { cn } from "@/lib/utils"
+import { motionPresets } from "@/registry/retana/lib/motion"
+
+export type CardDecision = "left" | "right"
+
+/**
+ * A deck of cards reviewed one at a time: drag or flick the top card left or right, or use the buttons and arrow keys.
+ * Use it for quick, one-by-one triage where each item deserves a moment of attention: shortlisting destinations, candidates, or design options.
+ * Use a list or table when people need to compare items side by side.
+ */
+export interface CardStackProps<T> {
+  items: T[]
+  getKey: (item: T) => string
+  /** A short name for the card, used in its accessible label and announcements, such as "Lisbon". */
+  getLabel: (item: T) => string
+  renderCard: (item: T) => ReactNode
+  onDecide?: (item: T, decision: CardDecision) => void
+  onUndo?: (item: T, decision: CardDecision) => void
+  onReset?: () => void
+  /** Action names for each side, used on the buttons and the stamps that appear while dragging. */
+  labels?: { left: string; right: string }
+  /** Past tense of each action for announcements, such as "skipped" and "shortlisted". */
+  outcomes?: { left: string; right: string }
+  /** Accessible name for the stack. */
+  label?: string
+  /** Shown once every card has been decided. Receives a function that brings all cards back. */
+  renderEmpty?: (reset: () => void) => ReactNode
+  className?: string
+  classNames?: CardStackClassNames
+}
+
+export type CardStackClassNames = {
+  root?: string
+  stage?: string
+  card?: string
+  controls?: string
+  empty?: string
+}
+
+type Point = { x: number; y: number }
+type Exit = Point & { tilt: number }
+type Return = Exit & { delay: number }
+
+const VISIBLE = 4
+const PEEK = 12
+const SHRINK = 0.05
+const LIFT = 0.4
+const LIFT_DISTANCE = 160
+const ROTATE = 0.065
+const FLICK = 500
+const FREE_Y = 48
+const STRETCH_Y = 140
+
+const noop = () => () => {}
+const resistY = (raw: number) => {
+  const distance = Math.abs(raw)
+  return distance <= FREE_Y ? raw : Math.sign(raw) * (FREE_Y + (1 - 1 / ((distance - FREE_Y) * 0.55 / STRETCH_Y + 1)) * STRETCH_Y)
+}
+const unresistY = (shown: number) => {
+  const distance = Math.abs(shown)
+  if (distance <= FREE_Y) return shown
+  const stretch = Math.min(distance - FREE_Y, STRETCH_Y - 1)
+  return Math.sign(shown) * (FREE_Y + (1 / (1 - stretch / STRETCH_Y) - 1) * STRETCH_Y / 0.55)
+}
+const clampUnit = (value: number) => Math.min(1, Math.max(0, value))
+const throwSpring = { type: "spring" as const, visualDuration: 0.5, bounce: 0 }
+const fadeOut = { duration: 0.22, delay: 0.12, ease: [...motionPresets.ease.standard] } as const
+const reducedFade = { duration: 0.15, ease: "linear" as const }
+
+function velocityOf(samples: { t: number; x: number; y: number }[], now: number): Point {
+  const recent = samples.filter((sample) => now - sample.t <= 80)
+  const first = recent[0]
+  const last = recent[recent.length - 1]
+  if (!first || !last || first === last || now - last.t > 60) return { x: 0, y: 0 }
+  const seconds = (last.t - first.t) / 1000
+  return { x: (last.x - first.x) / seconds, y: (last.y - first.y) / seconds }
+}
+
+interface CardProps {
+  id: string
+  depth: number
+  decision: CardDecision | null
+  returnFrom?: Return
+  interactive: boolean
+  zIndex: number
+  label: string
+  labels: { left: string; right: string }
+  lift: MotionValue<number>
+  reduced: boolean
+  className?: string
+  fling: (id: string) => Point | undefined
+  onRelease: (id: string, offset: Point, velocity: Point, width: number) => boolean
+  onThrown: (id: string, exit: Exit) => void
+  onGone: (id: string) => void
+  children: ReactNode
+}
+
+function StackCard({ id, depth, decision, returnFrom, interactive, zIndex, label, labels, lift, reduced, className, fling, onRelease, onThrown, onGone, children }: CardProps) {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const travel = returnFrom && !reduced ? returnFrom : undefined
+  const x = useMotionValue(travel?.x ?? 0)
+  const y = useMotionValue(travel?.y ?? 0)
+  const tilt = useMotionValue(travel?.tilt ?? 1)
+  const opacity = useMotionValue(returnFrom ? 0 : 1)
+  const rotate = useTransform([x, tilt], ([offset, sign]: number[]) => offset * ROTATE * sign)
+  const depthTarget = useTransform(lift, (value) => depth - (depth > 0 ? value * LIFT : 0))
+  const depthSpring = useSpring(depthTarget, motionPresets.spring.smooth)
+  const shown = reduced ? depthTarget : depthSpring
+  const scale = useTransform(shown, (value) => 1 - value * SHRINK)
+  const lower = useTransform(shown, (value) => value * PEEK)
+  const presence = useTransform(shown, [VISIBLE - 2, VISIBLE - 1], [1, 0])
+  const shade = useTransform(shown, [0, 2], [0, 1])
+  const keep = useTransform(x, [16, 96], [0, 1])
+  const pass = useTransform(x, [-96, -16], [1, 0])
+  const drag = useRef<{ ox: number; oy: number; samples: { t: number; x: number; y: number }[] } | null>(null)
+  const settled = useRef(!returnFrom)
+  const wasDecided = useRef(false)
+  const homing = useRef(false)
+
+  useEffect(() => {
+    if (!interactive) return
+    const update = () => {
+      if (!homing.current) lift.set(clampUnit(Math.hypot(x.get(), y.get() * 0.5) / LIFT_DISTANCE))
+    }
+    const offX = x.on("change", update)
+    const offY = y.on("change", update)
+    return () => {
+      offX()
+      offY()
+    }
+  }, [interactive, lift, x, y])
+
+  useLayoutEffect(() => {
+    if (decision) {
+      drag.current = null
+      homing.current = false
+      cardRef.current?.removeAttribute("data-dragging")
+      wasDecided.current = true
+      const direction = decision === "right" ? 1 : -1
+      const width = cardRef.current?.offsetWidth ?? 320
+      const cx = x.get()
+      const cy = y.get()
+      const velocity = fling(id) ?? { x: direction * 900, y: -120 }
+      const speed = Math.hypot(velocity.x, velocity.y)
+      let ux = velocity.x
+      let uy = velocity.y
+      if (speed < 200 || Math.sign(ux) !== direction) {
+        ux = Math.abs(cx) > 8 ? cx : direction
+        uy = Math.abs(cx) > 8 ? cy * 0.5 : -0.12
+      }
+      const length = Math.hypot(ux, uy) || 1
+      ux /= length
+      uy /= length
+      if (Math.abs(ux) < 0.45) {
+        ux = direction * 0.45
+        uy = Math.sign(uy || -1) * Math.sqrt(1 - 0.45 * 0.45)
+      }
+      const reach = width * 1.6
+      const exit = { x: cx + ux * reach, y: cy + uy * reach, tilt: tilt.get() }
+      onThrown(id, exit)
+      if (reduced) {
+        animate(opacity, 0, { ...reducedFade, onComplete: () => onGone(id) })
+        return
+      }
+      animate(x, exit.x, { ...throwSpring, velocity: velocity.x })
+      animate(y, exit.y, { ...throwSpring, velocity: velocity.y })
+      animate(opacity, 0, { ...fadeOut, onComplete: () => onGone(id) })
+      return
+    }
+    if (!wasDecided.current && settled.current) return
+    wasDecided.current = false
+    settled.current = true
+    const delay = returnFrom?.delay ?? 0
+    if (reduced) {
+      x.jump(0)
+      y.jump(0)
+      animate(opacity, 1, { ...reducedFade, delay })
+      return
+    }
+    homing.current = true
+    animate(x, 0, { ...motionPresets.spring.smooth, delay, onComplete: () => { homing.current = false } })
+    animate(y, 0, { ...motionPresets.spring.smooth, delay })
+    animate(opacity, 1, { duration: motionPresets.duration.fast, delay, ease: [...motionPresets.ease.enter] })
+    // Only the decision drives this effect; the return position is read once at that moment.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [decision])
+
+  function down(event: ReactPointerEvent<HTMLDivElement>) {
+    if (!interactive || event.button !== 0 || !event.isPrimary) return
+    if (event.target instanceof Element && event.target.closest("button, a, input, select, textarea, [role='button']")) return
+    x.stop()
+    y.stop()
+    homing.current = false
+    if (Math.abs(x.get()) < 2) {
+      const rect = event.currentTarget.getBoundingClientRect()
+      tilt.set(event.clientY < rect.top + rect.height / 2 ? 1 : -1)
+    }
+    drag.current = { ox: event.clientX - x.get(), oy: event.clientY - unresistY(y.get()), samples: [{ t: event.timeStamp, x: event.clientX, y: event.clientY }] }
+    event.currentTarget.setPointerCapture(event.pointerId)
+    event.currentTarget.setAttribute("data-dragging", "")
+  }
+  function move(event: ReactPointerEvent<HTMLDivElement>) {
+    const state = drag.current
+    if (!state || !interactive) return
+    x.set(event.clientX - state.ox)
+    y.set(resistY(event.clientY - state.oy))
+    state.samples.push({ t: event.timeStamp, x: event.clientX, y: event.clientY })
+    if (state.samples.length > 12) state.samples.shift()
+  }
+  function up(event: ReactPointerEvent<HTMLDivElement>) {
+    const state = drag.current
+    drag.current = null
+    event.currentTarget.removeAttribute("data-dragging")
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId)
+    if (!state || !interactive) return
+    const velocity = event.type === "pointercancel" ? { x: 0, y: 0 } : velocityOf(state.samples, event.timeStamp)
+    if (onRelease(id, { x: x.get(), y: y.get() }, velocity, event.currentTarget.offsetWidth)) return
+    if (reduced) {
+      x.jump(0)
+      y.jump(0)
+      return
+    }
+    animate(x, 0, { ...motionPresets.spring.morph, velocity: velocity.x })
+    animate(y, 0, { ...motionPresets.spring.morph, velocity: velocity.y })
+  }
+
+  const flying = decision !== null
+  return (
+    <motion.div className="pointer-events-none absolute inset-x-0 top-0 h-(--card-height) origin-bottom" style={{ zIndex, scale, y: lower, opacity: presence }} aria-hidden={interactive ? undefined : true} inert={!interactive}>
+      <motion.div
+        ref={cardRef}
+        data-slot="card-stack-card"
+        data-top={interactive ? "" : undefined}
+        data-flying={flying ? "" : undefined}
+        role={interactive ? "group" : undefined}
+        aria-label={interactive ? label : undefined}
+        className={cn("pointer-events-auto absolute inset-0 touch-pan-y rounded-xl select-none data-[top]:cursor-grab data-[dragging]:cursor-grabbing not-data-[top]:pointer-events-none not-data-[top]:not-data-[flying]:[&_[data-stamp]]:invisible before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:shadow-lg before:transition-opacity before:content-[''] data-[dragging]:before:opacity-100 data-[flying]:before:opacity-100", className)}
+        style={{ x, y, rotate, opacity }}
+        onPointerDown={down}
+        onPointerMove={move}
+        onPointerUp={up}
+        onPointerCancel={up}
+      >
+        <Card className="relative h-full gap-0 overflow-hidden rounded-xl bg-card py-0 text-foreground ring-foreground/10">
+          {children}
+          <motion.span className="pointer-events-none absolute inset-0 bg-foreground/10" style={{ opacity: shade }} aria-hidden="true" />
+        </Card>
+        <motion.span data-stamp="" className="pointer-events-none absolute top-4 left-4 inline-flex h-8 items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 text-sm font-medium whitespace-nowrap text-foreground [&_svg]:text-primary" style={{ opacity: keep }} aria-hidden="true">
+          <Check size={16} strokeWidth={2} />
+          {labels.right}
+        </motion.span>
+        <motion.span data-stamp="" className="pointer-events-none absolute top-4 right-4 inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-popover px-3 text-sm font-medium whitespace-nowrap text-foreground [&_svg]:text-muted-foreground" style={{ opacity: pass }} aria-hidden="true">
+          <X size={16} strokeWidth={2} />
+          {labels.left}
+        </motion.span>
+      </motion.div>
+    </motion.div>
+  )
+}
+
+function Control({ children, onClick, disabled, reduced, tone, className }: { children: ReactNode; onClick: () => void; disabled: boolean; reduced: boolean; tone?: "primary" | "quiet"; className?: string }) {
+  return (
+    <motion.div whileTap={{ scale: reduced || disabled ? 1 : 0.97 }} transition={motionPresets.spring.snappy} className={className}>
+      <Button
+        type="button"
+        variant={tone === "primary" ? "default" : tone === "quiet" ? "ghost" : "outline"}
+        aria-disabled={disabled || undefined}
+        className={cn("min-h-9", tone === "quiet" && "text-muted-foreground max-[22.5rem]:size-9 max-[22.5rem]:px-0")}
+        onClick={() => {
+          if (!disabled) onClick()
+        }}
+      >
+        {children}
+      </Button>
+    </motion.div>
+  )
+}
+
+function EmptySlot({ render, onReset }: { render: (reset: () => void) => ReactNode; onReset: () => void }) {
+  return <>{render(onReset)}</>
+}
+
+export function CardStack<T>({ items, getKey, getLabel, renderCard, onDecide, onUndo, onReset, labels = { left: "Pass", right: "Keep" }, outcomes, label = "Cards", renderEmpty, className, classNames }: CardStackProps<T>) {
+  const hydrated = useSyncExternalStore(noop, () => true, () => false)
+  const reduced = !!useReducedMotion() && hydrated
+  const hintId = useId()
+  const [position, setPosition] = useState(0)
+  const [history, setHistory] = useState<{ key: string; decision: CardDecision }[]>([])
+  const [flying, setFlying] = useState<string[]>([])
+  const [returning, setReturning] = useState<Record<string, Return>>({})
+  const [message, setMessage] = useState("")
+  const lift = useMotionValue(0)
+  const exits = useRef<Record<string, Exit>>({})
+  const flings = useRef(new Map<string, Point>())
+  const top = items[position]
+  const remaining = Math.max(0, items.length - position)
+
+  function decide(decision: CardDecision) {
+    if (!top) return
+    const key = getKey(top)
+    lift.set(0)
+    setPosition(position + 1)
+    setHistory([...history, { key, decision }])
+    setFlying((current) => [...current, key])
+    setReturning({})
+    const left = remaining - 1
+    setMessage(`${getLabel(top)}${outcomes ? ` ${outcomes[decision]}` : `: ${labels[decision]}`}. ${left ? `${left} left.` : "All cards reviewed."}`)
+    onDecide?.(top, decision)
+  }
+
+  function undo() {
+    const last = history[history.length - 1]
+    const item = last && items.find((entry) => getKey(entry) === last.key)
+    if (!last || !item) return
+    const exit = exits.current[last.key]
+    setPosition(position - 1)
+    setHistory(history.slice(0, -1))
+    setFlying((current) => current.filter((key) => key !== last.key))
+    setReturning(exit ? { [last.key]: { ...exit, delay: 0 } } : {})
+    setMessage(`${getLabel(item)} restored.`)
+    onUndo?.(item, last.decision)
+  }
+
+  function reset() {
+    if (!history.length) return
+    const count = Math.min(VISIBLE, items.length)
+    const back: Record<string, Return> = {}
+    items.slice(0, count).forEach((item, index) => {
+      const key = getKey(item)
+      const exit = exits.current[key]
+      if (exit && index < position) back[key] = { ...exit, delay: (count - 1 - index) * 0.06 }
+    })
+    setPosition(0)
+    setHistory([])
+    setFlying([])
+    setReturning(back)
+    setMessage("All cards are back in the stack.")
+    onReset?.()
+  }
+
+  function release(key: string, offset: Point, velocity: Point, width: number) {
+    const direction = Math.sign(offset.x)
+    if (!direction || !top || getKey(top) !== key) return false
+    const flick = Math.abs(velocity.x) > FLICK && Math.sign(velocity.x) === direction && Math.abs(offset.x) > 12
+    const far = Math.abs(offset.x) > Math.min(width * 0.35, 140) && !(Math.sign(velocity.x) === -direction && Math.abs(velocity.x) > 300)
+    if (!flick && !far) return false
+    flings.current.set(key, velocity)
+    decide(direction > 0 ? "right" : "left")
+    return true
+  }
+
+  function key(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.target !== event.currentTarget) return
+    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+      event.preventDefault()
+      decide(event.key === "ArrowRight" ? "right" : "left")
+    } else if (event.key === "Backspace" || ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "z")) {
+      event.preventDefault()
+      undo()
+    }
+  }
+
+  const decided = new Map(history.map((entry) => [entry.key, entry.decision]))
+  const windowKeys = new Set(items.slice(position, position + VISIBLE).map(getKey))
+  const rendered = items.filter((item) => windowKeys.has(getKey(item)) || flying.includes(getKey(item)))
+  const empty = position >= items.length && flying.length === 0
+
+  return (
+    <div data-slot="card-stack" className={cn("grid w-full justify-items-center gap-5 [--card-height:19rem] [--stack-peek:24px] max-[26rem]:gap-4 max-[26rem]:[--card-height:17.5rem]", className, classNames?.root)}>
+      <div data-slot="card-stack-stage" role="group" aria-roledescription="card stack" aria-label={label} aria-describedby={hintId} tabIndex={0} onKeyDown={key} className={cn("relative isolate h-[calc(var(--card-height)+var(--stack-peek))] w-full max-w-80 outline-none focus-visible:[&_[data-top]]:ring-2 focus-visible:[&_[data-top]]:ring-ring focus-visible:[&_[data-slot=card-stack-empty]]:ring-2 focus-visible:[&_[data-slot=card-stack-empty]]:ring-ring", classNames?.stage)}>
+        {rendered.map((item) => {
+          const id = getKey(item)
+          const index = items.indexOf(item)
+          const decision = decided.get(id) ?? null
+          const depth = decision ? 0 : index - position
+          return (
+            <StackCard
+              key={id}
+              id={id}
+              depth={depth}
+              decision={decision}
+              returnFrom={returning[id]}
+              interactive={!decision && depth === 0}
+              zIndex={decision ? 20 + flying.indexOf(id) : VISIBLE - depth}
+              label={`${getLabel(item)}, ${index + 1} of ${items.length}`}
+              labels={labels}
+              lift={lift}
+              reduced={reduced}
+              className={classNames?.card}
+              fling={(cardKey) => {
+                const velocity = flings.current.get(cardKey)
+                flings.current.delete(cardKey)
+                return velocity
+              }}
+              onRelease={release}
+              onThrown={(cardKey, exit) => {
+                exits.current[cardKey] = exit
+              }}
+              onGone={(cardKey) => setFlying((current) => current.filter((entry) => entry !== cardKey))}
+            >
+              {renderCard(item)}
+            </StackCard>
+          )
+        })}
+        <AnimatePresence initial={false}>
+          {empty ? (
+            <motion.div
+              key="empty"
+              data-slot="card-stack-empty"
+              className={cn("absolute inset-x-0 top-0 grid h-(--card-height) place-content-center justify-items-center gap-3 rounded-xl border border-border bg-card p-6 text-center", classNames?.empty)}
+              initial={reduced ? { opacity: 0 } : { opacity: 0, y: 8, filter: `blur(${motionPresets.blur.soft}px)` }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, transition: { duration: motionPresets.duration.instant } }}
+              transition={reduced ? reducedFade : { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.enter] }}
+            >
+              {renderEmpty ? <EmptySlot render={renderEmpty} onReset={reset} /> : (
+                <>
+                  <p className="m-0 text-base font-medium">All cards reviewed</p>
+                  <Button type="button" variant="outline" onClick={reset}>
+                    <RotateCcw size={16} strokeWidth={1.75} aria-hidden="true" />
+                    Start over
+                  </Button>
+                </>
+              )}
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+      </div>
+      <div data-slot="card-stack-controls" className={cn("flex flex-wrap justify-center gap-2 max-[26rem]:flex-nowrap", classNames?.controls)}>
+        <Control onClick={() => decide("left")} disabled={!top} reduced={reduced}>
+          <X size={16} strokeWidth={1.75} aria-hidden="true" />
+          {labels.left}
+        </Control>
+        <Control onClick={undo} disabled={!history.length} reduced={reduced} tone="quiet">
+          <RotateCcw size={16} strokeWidth={1.75} aria-hidden="true" />
+          <span className="max-[22.5rem]:sr-only">Undo</span>
+        </Control>
+        <Control onClick={() => decide("right")} disabled={!top} reduced={reduced} tone="primary">
+          <Check size={16} strokeWidth={1.75} aria-hidden="true" />
+          {labels.right}
+        </Control>
+      </div>
+      <p id={hintId} className="sr-only">Drag the top card, or use the left and right arrow keys to {labels.left.toLowerCase()} or {labels.right.toLowerCase()} it. Backspace undoes the last decision.</p>
+      <p className="sr-only" role="status" aria-live="polite">{message}</p>
+    </div>
+  )
+}

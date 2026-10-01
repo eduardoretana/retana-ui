@@ -73,7 +73,7 @@ This catalog is a Next.js app (App Router) on Tailwind v4 and shadcn's Radix Nov
 
 <!-- CATALOG:START -->
 
-`53` items are in `registry.json` on this branch. A name links to its source file.
+`91` items are in `registry.json` on this branch. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -110,6 +110,21 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`password-field`](registry/ui/password-field.tsx) · ui — A password field with a reveal control whose slash draws across the eye.
 - [`search-field`](registry/ui/search-field.tsx) · ui — A search field with a clear control that returns focus to the input.
 - [`segmented-control`](registry/ui/segmented-control.tsx) · ui — A small set of related choices. Arrow keys move the selection and the highlight glides.
+- [`number-field`](registry/ui/number-field.tsx) · ui — A bounded number with step buttons, keyboard steps, and an optional scrub.
+- [`tag-input`](registry/ui/tag-input.tsx) · ui — Turns short text values into removable tags.
+- [`time-picker`](registry/ui/time-picker.tsx) · ui — Chooses a time with a listbox and arrow keys.
+- [`inline-edit`](registry/ui/inline-edit.tsx) · ui — Renames in place: the text becomes a field without moving.
+- [`expanding-search`](registry/ui/expanding-search.tsx) · ui — An icon that morphs into a search field with results beneath it.
+- [`chip-group`](registry/ui/chip-group.tsx) · ui — Filters a few facets with chips that show the current pick.
+- [`password-strength`](registry/ui/password-strength.tsx) · ui — Shows how strong a new password is while it is typed.
+- [`signature-pad`](registry/ui/signature-pad.tsx) · ui — Ink that thins with speed, with undo, replay, and PNG or SVG export.
+- [`date-range-picker`](registry/ui/date-range-picker.tsx) · ui — A range picker with two months, presets, and keyboard selection.
+- [`phone-input`](registry/ui/phone-input.tsx) · ui — A phone field with a country picker, formatting as you type, and E.164 output.
+- [`shortcut-recorder`](registry/ui/shortcut-recorder.tsx) · ui — Records key combinations, warns on conflicts, and lists them in a cheatsheet.
+- [`mention-input`](registry/ui/mention-input.tsx) · ui — A textarea where @people and #channels act as single tokens.
+- [`rich-text-editor`](registry/ui/rich-text-editor.tsx) · ui — A lightweight editor with markdown shortcuts, a floating toolbar, a slash menu, and HTML and markdown output.
+- [`billing-toggle`](registry/ui/billing-toggle.tsx) · ui — A monthly and yearly switch with a savings badge and prices that roll.
+- [`radio-cards`](registry/ui/radio-cards.tsx) · ui — Selectable option cards with one tab stop and arrow-key behavior.
 
 ### Media and content
 
@@ -125,10 +140,20 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`text-shimmer`](registry/ui/text-shimmer.tsx) · ui — A calm light across a short status line while work is ongoing. Sets aria-busy.
 - [`in-view-title`](registry/ui/in-view-title.tsx) · ui — A section title that reveals as it scrolls into view: blur, word, line, tracking, or wipe.
 - [`slot-text`](registry/ui/slot-text.tsx) · ui — Text and numbers that spin into their next value on staggered reels, like a slot machine.
+- [`avatar-group`](registry/ui/avatar-group.tsx) · ui — Shows a team in a small stack, with an overflow count.
+- [`empty-state`](registry/ui/empty-state.tsx) · ui — A useful next step when there is nothing to show yet.
+- [`tree-view`](registry/ui/tree-view.tsx) · ui — Navigates nested folders and structured content from the keyboard.
+- [`filter-toolbar`](registry/ui/filter-toolbar.tsx) · ui — Keeps collection filters close and easy to reset.
+- [`animated-counter`](registry/ui/animated-counter.tsx) · ui — Gives a changing total a clear sense of movement.
+- [`image-compare`](registry/ui/image-compare.tsx) · ui — Drags a divider across two images to see what changed.
+- [`carousel`](registry/ui/carousel.tsx) · ui — Browses a row of slides with controls, tabs, and arrow keys.
+- [`card-stack`](registry/ui/card-stack.tsx) · ui — Reviews a deck one card at a time, with a throw and an undo.
+- [`timeline`](registry/ui/timeline.tsx) · ui — Follows what happened, newest first, grouped by day.
 
 ### Tables
 
 - [`crm-table`](registry/ui/crm-table.tsx) · ui — CRM-shaped table with avatar and name, a status badge, stage, owner, and last activity. Column helpers match a TanStack column definition so they can be passed to AdminDataTable when that item is installed.
+- [`metric-card`](registry/ui/metric-card.tsx) · ui — A compact summary for a number that needs a label and context.
 
 ### Admin
 
@@ -151,6 +176,19 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`theme-switch`](registry/ui/theme-switch.tsx) · ui — Four ways to move between light and dark: fade, eclipse, split, and rise. Uses the View Transitions API when the browser has it, and changes the theme immediately otherwise.
 - [`copy-button`](registry/ui/copy-button.tsx) · ui — Copies a value and confirms in place, with a drawn check and a live announcement.
 - [`expandable-card`](registry/ui/expandable-card.tsx) · ui — A dense card that grows in width and height to show more, and closes with Escape.
+- [`action-button`](registry/ui/action-button.tsx) · ui — A compact button that moves through pending and success after an async action.
+- [`split-button`](registry/ui/split-button.tsx) · ui — A primary action with a menu of nearby alternatives.
+- [`hold-to-confirm`](registry/ui/hold-to-confirm.tsx) · ui — Confirms a destructive action by holding, not by a single tap.
+- [`swipe-actions`](registry/ui/swipe-actions.tsx) · ui — Reveals row actions with a swipe, and the same actions from a menu.
+- [`user-menu`](registry/ui/user-menu.tsx) · ui — Account, settings, theme, and sign out behind the avatar. A sheet on a narrow screen.
+- [`confirm-morph`](registry/ui/confirm-morph.tsx) · ui — A destructive button that morphs into an inline confirmation, a spinner, and a result with undo.
+- [`sparkline`](registry/ui/sparkline.tsx) · ui — A compact trend beside a value.
+- [`gauge`](registry/ui/gauge.tsx) · ui — Shows a value against a known range.
+- [`activity-heatmap`](registry/ui/activity-heatmap.tsx) · ui — A year of activity, one cell per day.
+- [`toast-stack`](registry/ui/toast-stack.tsx) · ui — Stacks short results at the edge until they are dismissed.
+- [`usage-meter`](registry/ui/usage-meter.tsx) · ui — Shows what fills an allowance and how close it is to the limit.
+- [`stepper`](registry/ui/stepper.tsx) · ui — Shows where a person is in a multi-step flow and what is done.
+- [`announcement-bar`](registry/ui/announcement-bar.tsx) · ui — A top banner that rotates messages and collapses when dismissed.
 
 <!-- CATALOG:END -->
 

@@ -67,6 +67,45 @@ Adapted items:
 - in-view-title
 - slot-text
 - expandable-card
+- action-button
+- split-button
+- hold-to-confirm
+- swipe-actions
+- user-menu
+- confirm-morph
+- number-field
+- tag-input
+- time-picker
+- inline-edit
+- expanding-search
+- chip-group
+- password-strength
+- signature-pad
+- date-range-picker
+- phone-input
+- shortcut-recorder
+- mention-input
+- rich-text-editor
+- billing-toggle
+- radio-cards
+- avatar-group
+- metric-card
+- empty-state
+- tree-view
+- filter-toolbar
+- sparkline
+- gauge
+- animated-counter
+- image-compare
+- carousel
+- card-stack
+- activity-heatmap
+- timeline
+- toast-stack
+- usage-meter
+- stepper
+- announcement-bar
+
 
 The adapted portions are licensed under the MIT License below. The year and
 copyright holder match the original repository's LICENSE file.
