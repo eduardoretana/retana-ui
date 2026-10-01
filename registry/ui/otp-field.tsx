@@ -26,6 +26,8 @@ export type OtpFieldProps = {
   cooldownSeconds?: number
   onResend?: () => void
   disabled?: boolean
+  autoFocus?: boolean
+  inputMode?: "numeric" | "text"
   className?: string
 }
 
@@ -51,6 +53,8 @@ export function OtpField({
   cooldownSeconds = 30,
   onResend,
   disabled = false,
+  autoFocus = false,
+  inputMode = "numeric",
   className,
 }: OtpFieldProps) {
   const [uncontrolled, setUncontrolled] = React.useState(defaultValue)
@@ -106,6 +110,8 @@ export function OtpField({
           onChange={change}
           onComplete={onComplete}
           disabled={disabled || state === "success"}
+          autoFocus={autoFocus}
+          inputMode={inputMode}
           aria-labelledby={`${describedBy}-label`}
           aria-describedby={describedBy}
           aria-invalid={state === "error" || undefined}

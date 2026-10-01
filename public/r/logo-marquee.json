@@ -4,12 +4,16 @@
   "title": "Logo Marquee",
   "author": "Eduardo Retana",
   "description": "Infinite logo row that pauses on hover and fades at the edges.",
-  "dependencies": [],
-  "registryDependencies": [],
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
   "files": [
     {
       "path": "registry/ui/logo-marquee.tsx",
-      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type LogoMarqueeProps = {\n  children: React.ReactNode\n  /** Seconds for one full loop. */\n  duration?: number\n  pauseOnHover?: boolean\n  fade?: boolean\n  label?: string\n  className?: string\n}\n\nexport function LogoMarquee({\n  children,\n  duration = 28,\n  pauseOnHover = true,\n  fade = true,\n  label = \"Logo carousel\",\n  className,\n}: LogoMarqueeProps) {\n  const trackId = React.useId().replace(/:/g, \"\")\n  const mask = fade\n    ? \"linear-gradient(to right, transparent, var(--foreground) 12%, var(--foreground) 88%, transparent)\"\n    : undefined\n\n  return (\n    <div\n      data-slot=\"logo-marquee\"\n      role=\"region\"\n      aria-label={label}\n      className={cn(\"group relative overflow-hidden\", className)}\n      style={mask ? { maskImage: mask, WebkitMaskImage: mask } : undefined}\n    >\n      <style>\n        {`@keyframes retana-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}\n.m${trackId}{animation:retana-marquee ${duration}s linear infinite}\n${pauseOnHover ? `.group:hover .m${trackId}{animation-play-state:paused}` : \"\"}\n@media (prefers-reduced-motion: reduce){.m${trackId}{animation:none}}`}\n      </style>\n      <div className={cn(`m${trackId}`, \"flex w-max\")}>\n        <div className=\"flex items-center gap-10 px-5\">{children}</div>\n        <div className=\"flex items-center gap-10 px-5\" aria-hidden>\n          {children}\n        </div>\n      </div>\n    </div>\n  )\n}\n",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { Pause, Play } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Button } from \"@/components/ui/button\"\n\nexport type LogoMarqueeProps = {\n  children: React.ReactNode\n  /** Seconds for one full loop. */\n  duration?: number\n  pauseOnHover?: boolean\n  fade?: boolean\n  /** Shows a pause and play control. The loop still pauses on hover when that option is on. */\n  controls?: boolean\n  pauseLabel?: string\n  playLabel?: string\n  label?: string\n  className?: string\n}\n\nexport function LogoMarquee({\n  children,\n  duration = 28,\n  pauseOnHover = true,\n  fade = true,\n  controls = false,\n  pauseLabel = \"Pause logos\",\n  playLabel = \"Play logos\",\n  label = \"Logo carousel\",\n  className,\n}: LogoMarqueeProps) {\n  const [paused, setPaused] = React.useState(false)\n  const trackId = React.useId().replace(/:/g, \"\")\n  const mask = fade\n    ? \"linear-gradient(to right, transparent, var(--foreground) 12%, var(--foreground) 88%, transparent)\"\n    : undefined\n\n  return (\n    <div\n      data-slot=\"logo-marquee\"\n      role=\"region\"\n      aria-label={label}\n      className={cn(\"group relative overflow-hidden\", className)}\n      style={mask ? { maskImage: mask, WebkitMaskImage: mask } : undefined}\n    >\n      <style>\n        {`@keyframes retana-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}\n.m${trackId}{animation:retana-marquee ${duration}s linear infinite}\n${pauseOnHover ? `.group:hover .m${trackId}{animation-play-state:paused}` : \"\"}\n${paused ? `.m${trackId}{animation-play-state:paused}` : \"\"}\n@media (prefers-reduced-motion: reduce){.m${trackId}{animation:none}}`}\n      </style>\n      <div className={cn(`m${trackId}`, \"flex w-max\")}>\n        <div className=\"flex items-center gap-10 px-5\">{children}</div>\n        <div className=\"flex items-center gap-10 px-5\" aria-hidden>\n          {children}\n        </div>\n      </div>\n      {controls ? (\n        <Button\n          type=\"button\"\n          variant=\"outline\"\n          size=\"icon-sm\"\n          className=\"absolute right-2 bottom-2\"\n          aria-pressed={paused}\n          onClick={() => setPaused((current) => !current)}\n        >\n          {paused ? <Play /> : <Pause />}\n          <span className=\"sr-only\">{paused ? playLabel : pauseLabel}</span>\n        </Button>\n      ) : null}\n    </div>\n  )\n}\n",
       "type": "registry:component",
       "target": "@ui/logo-marquee.tsx"
     }
@@ -47,10 +51,15 @@
         "name": "label",
         "type": "string",
         "description": "Accessible name. Default Logo carousel."
+      },
+      {
+        "name": "controls",
+        "type": "boolean",
+        "description": "Pause and play button. Brand color assets are not included. Adapted from Arc UI (MIT)."
       }
     ]
   },
-  "docs": "The edge fade uses the host foreground token as a mask. The animation stops when the reader prefers reduced motion. No theme is shipped.",
+  "docs": "The edge fade uses the host foreground token as a mask. The animation stops when the reader prefers reduced motion. No theme is shipped. Adapted behaviors from Arc UI (MIT) are optional and do not change existing props.",
   "categories": [
     "media",
     "content"

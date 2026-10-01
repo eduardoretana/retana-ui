@@ -1327,10 +1327,15 @@
             "name": "labels",
             "type": "string",
             "description": "sendingLabel, errorLabel, retryLabel, copyLabel, copiedLabel, and regenerateLabel default to English."
+          },
+          {
+            "name": "reactions / onReact",
+            "type": "{ emoji, count, mine? }[] / callback",
+            "description": "Optional reaction chips. Adapted from Arc UI (MIT)."
           }
         ]
       },
-      "docs": "Import ChatMessage from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "docs": "Import ChatMessage from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Adapted behaviors from Arc UI (MIT) are optional and do not change existing props.",
       "files": [
         {
           "path": "registry/ui/chat-message.tsx",
@@ -1844,10 +1849,15 @@
             "name": "copyLabel / copiedLabel",
             "type": "string",
             "description": "Default Copy and Copied."
+          },
+          {
+            "name": "maxLines",
+            "type": "number",
+            "description": "Collapses longer sources. A control expands them in place. Adapted from Arc UI (MIT)."
           }
         ]
       },
-      "docs": "Highlighting uses the host primary and muted tokens, not a color theme. highlightLine is exported for tests and custom renderers. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "docs": "Highlighting uses the host primary and muted tokens, not a color theme. highlightLine is exported for tests and custom renderers. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Adapted behaviors from Arc UI (MIT) are optional and do not change existing props.",
       "files": [
         {
           "path": "registry/ui/code-block.tsx",
@@ -2078,10 +2088,15 @@
             "name": "labels",
             "type": "string",
             "description": "label, hint, error, success, and resend labels default to English."
+          },
+          {
+            "name": "autoFocus / inputMode",
+            "type": "boolean / \"numeric\" | \"text\"",
+            "description": "Focus on mount and the keypad mode. Adapted from Arc UI (MIT)."
           }
         ]
       },
-      "docs": "Built on the input-otp primitive. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "docs": "Built on the input-otp primitive. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion. Adapted behaviors from Arc UI (MIT) are optional and do not change existing props.",
       "files": [
         {
           "path": "registry/ui/otp-field.tsx",
@@ -2186,10 +2201,15 @@
             "name": "labels",
             "type": "string",
             "description": "placeholder, search, empty, create, and remove labels default to English."
+          },
+          {
+            "name": "label / description / maxVisible",
+            "type": "string / string / number",
+            "description": "Optional field label, hint, and a chip overflow count. Adapted from Arc UI (MIT)."
           }
         ]
       },
-      "docs": "The control is a combobox with a multi-select listbox. Backspace removes the last chip when the query is empty. No theme is shipped.",
+      "docs": "The control is a combobox with a multi-select listbox. Backspace removes the last chip when the query is empty. No theme is shipped. Adapted behaviors from Arc UI (MIT) are optional and do not change existing props.",
       "files": [
         {
           "path": "registry/ui/multi-select.tsx",
@@ -2204,10 +2224,13 @@
       "title": "Color Picker",
       "description": "Accessible color picker with a saturation and brightness field, hue, alpha, and a hex input.",
       "author": "Eduardo Retana",
-      "dependencies": [],
+      "dependencies": [
+        "lucide-react"
+      ],
       "registryDependencies": [
         "input",
-        "label"
+        "label",
+        "button"
       ],
       "categories": [
         "form",
@@ -2241,10 +2264,15 @@
             "name": "labels",
             "type": "string",
             "description": "hue, alpha, hex, and saturation labels default to English."
+          },
+          {
+            "name": "swatches / eyedropper",
+            "type": "HsvaColor[] / button",
+            "description": "Optional saved swatches and the EyeDropper API when the browser has it. Adapted from Arc UI (MIT)."
           }
         ]
       },
-      "docs": "hsvaToCss, hsvaToHex, and hexToHsva are exported. Arrow keys move saturation and brightness. The component does not ship a palette. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "docs": "hsvaToCss, hsvaToHex, and hexToHsva are exported. Arrow keys move saturation and brightness. The component does not ship a palette. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Adapted behaviors from Arc UI (MIT) are optional and do not change existing props.",
       "files": [
         {
           "path": "registry/ui/color-picker.tsx",
@@ -2356,10 +2384,15 @@
             "name": "labels",
             "type": "string",
             "description": "label, hint, remove, too large, and type labels default to English."
+          },
+          {
+            "name": "onUpload",
+            "type": "(file, { onProgress, signal }) => Promise<void>",
+            "description": "Real upload with progress and abort on remove. Retry stays on the failed row. Adapted from Arc UI (MIT)."
           }
         ]
       },
-      "docs": "The lean is disabled when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "docs": "The lean is disabled when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Adapted behaviors from Arc UI (MIT) are optional and do not change existing props.",
       "files": [
         {
           "path": "registry/ui/magnetic-dropzone.tsx",
@@ -2550,8 +2583,12 @@
       "title": "Logo Marquee",
       "description": "Infinite logo row that pauses on hover and fades at the edges.",
       "author": "Eduardo Retana",
-      "dependencies": [],
-      "registryDependencies": [],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
       "categories": [
         "media",
         "content"
@@ -2589,10 +2626,15 @@
             "name": "label",
             "type": "string",
             "description": "Accessible name. Default Logo carousel."
+          },
+          {
+            "name": "controls",
+            "type": "boolean",
+            "description": "Pause and play button. Brand color assets are not included. Adapted from Arc UI (MIT)."
           }
         ]
       },
-      "docs": "The edge fade uses the host foreground token as a mask. The animation stops when the reader prefers reduced motion. No theme is shipped.",
+      "docs": "The edge fade uses the host foreground token as a mask. The animation stops when the reader prefers reduced motion. No theme is shipped. Adapted behaviors from Arc UI (MIT) are optional and do not change existing props.",
       "files": [
         {
           "path": "registry/ui/logo-marquee.tsx",
@@ -6464,6 +6506,62 @@
           "path": "registry/lib/motion.ts",
           "type": "registry:lib",
           "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "command-palette",
+      "type": "registry:ui",
+      "title": "Command palette",
+      "description": "Searchable command list on the host command primitive. Admin shell keeps its own nav palette.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "cmdk",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "command"
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "meta": {
+        "titleEs": "Paleta de comandos",
+        "descriptionEs": "Lista de comandos que se filtra al escribir, sobre la primitiva command del anfitri\u00f3n.",
+        "preview": "app/examples/command-palette/preview.tsx",
+        "previewHref": "/examples/command-palette",
+        "examples": [
+          {
+            "title": "Paleta de comandos",
+            "href": "/examples/command-palette",
+            "description": "Lista de comandos que se filtra al escribir."
+          }
+        ],
+        "usage": "<CommandPalette items={items} onSelect={run} />",
+        "api": [
+          {
+            "name": "items",
+            "type": "CommandPaletteItem[]",
+            "description": "id, label, description, group, keywords, icon, shortcut."
+          },
+          {
+            "name": "onSelect",
+            "type": "(item) => void",
+            "description": "Fires when a command is chosen."
+          },
+          {
+            "name": "placeholder / emptyLabel / label",
+            "type": "string",
+            "description": "Field copy, empty copy, and the accessible name."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Built on the host command primitive. Answer no if the CLI asks to overwrite command or dialog. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/command-palette.tsx",
+          "type": "registry:component",
+          "target": "@ui/command-palette.tsx"
         }
       ]
     }

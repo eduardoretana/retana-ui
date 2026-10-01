@@ -18,6 +18,8 @@ export type ChatMessageProps = {
   time?: string
   avatar?: React.ReactNode
   status?: ChatMessageStatus
+  reactions?: readonly { emoji: string; count: number; mine?: boolean }[]
+  onReact?: (emoji: string) => void
   /** Plain text passed to the copy action. Falls back to string children. */
   copyText?: string
   onRetry?: () => void
@@ -73,6 +75,8 @@ export function ChatMessage({
   time,
   avatar,
   status = "sent",
+  reactions,
+  onReact,
   copyText,
   onRetry,
   onRegenerate,
@@ -144,6 +148,27 @@ export function ChatMessage({
         >
           {children}
         </div>
+        {reactions?.length ? (
+          <div className="flex flex-wrap gap-1 px-1">
+            {reactions.map((reaction) => (
+              <button
+                key={reaction.emoji}
+                type="button"
+                aria-pressed={reaction.mine || undefined}
+                aria-label={`${reaction.emoji}, ${reaction.count}`}
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs",
+                  reaction.mine && "border-primary bg-primary/10",
+                )}
+                onClick={() => onReact?.(reaction.emoji)}
+              >
+                <span aria-hidden>{reaction.emoji}</span>
+                <span className="tabular-nums">{reaction.count}</span>
+                <span className="sr-only">{reaction.emoji}</span>
+              </button>
+            ))}
+          </div>
+        ) : null}
         {status === "sending" ? (
           <p className="px-1 text-[11px] text-muted-foreground">{sendingLabel}</p>
         ) : null}

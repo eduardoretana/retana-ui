@@ -73,7 +73,7 @@ This catalog is a Next.js app (App Router) on Tailwind v4 and shadcn's Radix Nov
 
 <!-- CATALOG:START -->
 
-`91` items are in `registry.json` on this branch. A name links to its source file.
+`92` items are in `registry.json` on this branch. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -189,6 +189,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`usage-meter`](registry/ui/usage-meter.tsx) · ui — Shows what fills an allowance and how close it is to the limit.
 - [`stepper`](registry/ui/stepper.tsx) · ui — Shows where a person is in a multi-step flow and what is done.
 - [`announcement-bar`](registry/ui/announcement-bar.tsx) · ui — A top banner that rotates messages and collapses when dismissed.
+- [`command-palette`](registry/ui/command-palette.tsx) · ui — Searchable command list on the host command primitive. Admin shell keeps its own nav palette.
 
 <!-- CATALOG:END -->
 

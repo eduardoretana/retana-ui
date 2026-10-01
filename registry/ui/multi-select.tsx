@@ -18,6 +18,11 @@ export type MultiSelectProps = {
   onValueChange?: (value: string[]) => void
   onCreate?: (label: string) => void
   creatable?: boolean
+  /** Visible field label. Omitted callers keep the placeholder-only field. */
+  label?: string
+  description?: string
+  /** Chips past this count collapse into a “+N” overflow. */
+  maxVisible?: number
   placeholder?: string
   searchPlaceholder?: string
   emptyLabel?: string
@@ -34,6 +39,9 @@ export function MultiSelect({
   onValueChange,
   onCreate,
   creatable = false,
+  label,
+  description,
+  maxVisible,
   placeholder = "Select",
   searchPlaceholder = "Search",
   emptyLabel = "No results",
@@ -104,15 +112,24 @@ export function MultiSelect({
     }
   }
 
+  const hiddenCount = maxVisible != null && selected.length > maxVisible ? selected.length - maxVisible : 0
+  const visibleSelected = hiddenCount > 0 ? selected.slice(0, maxVisible) : selected
+  const labelId = React.useId()
+
   return (
-    <div data-slot="multi-select" className={cn("relative", className)}>
+    <div data-slot="multi-select" className={cn("relative flex flex-col gap-1.5", className)}>
+      {label ? (
+        <span id={labelId} className="text-sm font-medium">
+          {label}
+        </span>
+      ) : null}
       <div
         className={cn(
           "flex min-h-9 flex-wrap items-center gap-1 rounded-lg border border-input bg-transparent px-1.5 py-1 focus-within:ring-2 focus-within:ring-ring",
           disabled && "opacity-50",
         )}
       >
-        {selected.map((item) => {
+        {visibleSelected.map((item) => {
           const option = allOptions.find((entry) => entry.value === item)
           return (
             <span key={item} className="inline-flex items-center gap-1 rounded-md bg-muted px-1.5 py-0.5 text-xs">
@@ -129,8 +146,13 @@ export function MultiSelect({
             </span>
           )
         })}
+        {hiddenCount > 0 ? (
+          <span className="rounded-md bg-muted px-1.5 py-0.5 text-xs text-muted-foreground tabular-nums">+{hiddenCount}</span>
+        ) : null}
         <input
           role="combobox"
+          aria-labelledby={label ? labelId : undefined}
+          aria-describedby={description ? `${labelId}-hint` : undefined}
           aria-expanded={open}
           aria-controls={listId}
           aria-autocomplete="list"
@@ -204,6 +226,11 @@ export function MultiSelect({
           ) : null}
           {!filtered.length && !canCreate ? <li className="px-2 py-1.5 text-sm text-muted-foreground">{emptyLabel}</li> : null}
         </ul>
+      ) : null}
+      {description ? (
+        <p id={`${labelId}-hint`} className="text-xs text-muted-foreground">
+          {description}
+        </p>
       ) : null}
     </div>
   )

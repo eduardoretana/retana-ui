@@ -24,4 +24,23 @@ describe("MultiSelect", () => {
     await user.keyboard("{Backspace}")
     expect(screen.queryByRole("button", { name: "Remove Bruma" })).not.toBeInTheDocument()
   })
+
+  it("collapses chips past maxVisible", () => {
+    render(
+      <MultiSelect
+        label="Clay"
+        description="Pick bodies"
+        maxVisible={1}
+        value={["a", "b"]}
+        options={[
+          { value: "a", label: "Stoneware" },
+          { value: "b", label: "Porcelain" },
+        ]}
+      />,
+    )
+    expect(screen.getByText("Stoneware")).toBeInTheDocument()
+    expect(screen.queryByText("Porcelain")).not.toBeInTheDocument()
+    expect(screen.getByText("+1")).toBeInTheDocument()
+    expect(screen.getByText("Pick bodies")).toBeInTheDocument()
+  })
 })

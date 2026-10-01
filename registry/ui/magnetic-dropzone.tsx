@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { FileUp, X } from "lucide-react"
+import { FileUp, RotateCcw, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -14,6 +14,7 @@ export type DropzoneItem = {
   progress: number
   status: "uploading" | "done" | "error"
   error?: string
+  retryable?: boolean
 }
 
 export type MagneticDropzoneProps = {
@@ -23,10 +24,13 @@ export type MagneticDropzoneProps = {
   items?: readonly DropzoneItem[]
   onItemsChange?: (items: DropzoneItem[]) => void
   onFiles?: (files: File[]) => void
+  /** Uploads each accepted file. Progress is 0–100. Reject to mark the row failed. Removing the row aborts the signal. */
+  onUpload?: (file: File, options: { onProgress: (percent: number) => void; signal: AbortSignal }) => Promise<void>
   simulateProgress?: boolean
   label?: string
   hint?: string
   removeLabel?: string
+  retryLabel?: string
   tooLargeLabel?: string
   typeLabel?: string
   className?: string
@@ -57,10 +61,12 @@ export function MagneticDropzone({
   items,
   onItemsChange,
   onFiles,
+  onUpload,
   simulateProgress = false,
   label = "Drop files here",
   hint = "or choose them from your computer",
   removeLabel = "Remove",
+  retryLabel = "Retry",
   tooLargeLabel = "File is too large",
   typeLabel = "File type is not allowed",
   className,
@@ -72,14 +78,44 @@ export function MagneticDropzone({
   const depth = React.useRef(0)
   const list = items ?? local
   const listRef = React.useRef(list)
+  const filesRef = React.useRef(new Map<string, File>())
+  const uploadsRef = React.useRef(new Map<string, AbortController>())
 
   React.useEffect(() => {
     listRef.current = list
   }, [list])
 
   function commit(next: DropzoneItem[]) {
+    listRef.current = next
     if (items === undefined) setLocal(next)
     onItemsChange?.(next)
+  }
+
+  function patchItem(id: string, update: (item: DropzoneItem) => DropzoneItem) {
+    commit(listRef.current.map((item) => (item.id === id ? update(item) : item)))
+  }
+
+  function startUpload(id: string, file: File) {
+    if (!onUpload) return
+    uploadsRef.current.get(id)?.abort()
+    const controller = new AbortController()
+    uploadsRef.current.set(id, controller)
+    patchItem(id, (item) => ({ ...item, status: "uploading", progress: 0, error: undefined }))
+    void onUpload(file, {
+      signal: controller.signal,
+      onProgress: (percent) => {
+        patchItem(id, (item) => ({ ...item, progress: Math.max(0, Math.min(100, percent)) }))
+      },
+    })
+      .then(() => {
+        if (controller.signal.aborted) return
+        patchItem(id, (item) => ({ ...item, status: "done", progress: 100, error: undefined }))
+      })
+      .catch((error: unknown) => {
+        if (controller.signal.aborted) return
+        const message = error instanceof Error && error.message ? error.message : "Upload failed"
+        patchItem(id, (item) => ({ ...item, status: "error", error: message }))
+      })
   }
 
   function ingest(files: File[]) {
@@ -97,21 +133,29 @@ export function MagneticDropzone({
         continue
       }
       accepted.push(file)
+      filesRef.current.set(id, file)
       next.push({
         id,
         name: file.name,
         size: file.size,
         type: file.type,
-        progress: simulateProgress ? 8 : 100,
-        status: simulateProgress ? "uploading" : "done",
+        progress: onUpload || simulateProgress ? 8 : 100,
+        status: onUpload || simulateProgress ? "uploading" : "done",
+        retryable: Boolean(onUpload),
       })
     }
     commit(next)
     if (accepted.length) onFiles?.(accepted)
+    if (onUpload) {
+      for (const file of accepted) {
+        const match = next.find((item) => filesRef.current.get(item.id) === file && item.status === "uploading")
+        if (match) startUpload(match.id, file)
+      }
+    }
   }
 
   React.useEffect(() => {
-    if (!simulateProgress) return
+    if (!simulateProgress || onUpload) return
     const id = window.setInterval(() => {
       const current = listRef.current
       if (!current.some((item) => item.status === "uploading")) return
@@ -128,7 +172,7 @@ export function MagneticDropzone({
       onItemsChange?.(next)
     }, 280)
     return () => window.clearInterval(id)
-  }, [items, onItemsChange, simulateProgress])
+  }, [items, onItemsChange, onUpload, simulateProgress])
 
   function onPointerMove(event: React.PointerEvent<HTMLDivElement>) {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
@@ -202,12 +246,31 @@ export function MagneticDropzone({
                     {item.error ?? formatBytes(item.size)}
                   </p>
                 </div>
+                {item.status === "error" && item.retryable ? (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-xs"
+                    aria-label={`${retryLabel} ${item.name}`}
+                    onClick={() => {
+                      const file = filesRef.current.get(item.id)
+                      if (file) startUpload(item.id, file)
+                    }}
+                  >
+                    <RotateCcw />
+                  </Button>
+                ) : null}
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon-xs"
                   aria-label={`${removeLabel} ${item.name}`}
-                  onClick={() => commit(list.filter((entry) => entry.id !== item.id))}
+                  onClick={() => {
+                    uploadsRef.current.get(item.id)?.abort()
+                    uploadsRef.current.delete(item.id)
+                    filesRef.current.delete(item.id)
+                    commit(list.filter((entry) => entry.id !== item.id))
+                  }}
                 >
                   <X />
                 </Button>

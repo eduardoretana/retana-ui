@@ -14,6 +14,14 @@ describe("CodeBlock", () => {
     expect(writeText).toHaveBeenCalledWith("const a = 1\nreturn a")
   })
 
+  it("collapses lines past maxLines", async () => {
+    const user = userEvent.setup()
+    render(<CodeBlock code={"one\ntwo\nthree"} maxLines={1} expandLabel="Show all lines" />)
+    expect(screen.queryByText("three", { exact: false })).not.toBeInTheDocument()
+    await user.click(screen.getByRole("button", { name: "Show all lines" }))
+    expect(screen.getByText("3")).toBeInTheDocument()
+  })
+
   it("classifies keywords and strings", () => {
     const tokens = highlightLine('const name = "Bruma"')
     expect(tokens.some((token) => token.type === "keyword" && token.value === "const")).toBe(true)

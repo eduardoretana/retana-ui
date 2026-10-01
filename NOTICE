@@ -105,6 +105,7 @@ Adapted items:
 - usage-meter
 - stepper
 - announcement-bar
+- command-palette
 
 
 The adapted portions are licensed under the MIT License below. The year and

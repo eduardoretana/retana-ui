@@ -92,6 +92,7 @@ import Preview87 from "@/app/examples/toast-stack/preview"
 import Preview88 from "@/app/examples/usage-meter/preview"
 import Preview89 from "@/app/examples/stepper/preview"
 import Preview90 from "@/app/examples/announcement-bar/preview"
+import Preview91 from "@/app/examples/command-palette/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -185,4 +186,5 @@ export const previewMap = {
   "usage-meter": Preview88,
   "stepper": Preview89,
   "announcement-bar": Preview90,
+  "command-palette": Preview91,
 }
