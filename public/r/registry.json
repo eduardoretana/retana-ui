@@ -3510,6 +3510,133 @@
           "target": "@lib/motion.ts"
         }
       ]
+    },
+    {
+      "name": "slot-text",
+      "type": "registry:ui",
+      "title": "Slot text",
+      "description": "Text and numbers that spin into their next value on staggered reels, like a slot machine.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Texto de rodillo",
+        "descriptionEs": "Texto y cifras que giran hasta el nuevo valor, un rodillo por car\u00e1cter.",
+        "preview": "app/examples/slot-text/preview.tsx",
+        "previewHref": "/examples/slot-text",
+        "examples": [
+          {
+            "title": "Texto de rodillo",
+            "href": "/examples/slot-text",
+            "description": "Texto y cifras que giran hasta el nuevo valor, un rodillo por car\u00e1cter."
+          }
+        ],
+        "usage": "<SlotText value={orders} announce />",
+        "api": [
+          {
+            "name": "value",
+            "type": "string | number",
+            "description": "What to show. Numbers are grouped for en-US unless format is set."
+          },
+          {
+            "name": "format",
+            "type": "(value: number) => string",
+            "description": "Optional number formatter."
+          },
+          {
+            "name": "duration / stagger / spins",
+            "type": "number",
+            "description": "First reel length, delay between reels, and extra digit turns."
+          },
+          {
+            "name": "align",
+            "type": "\"start\" | \"end\"",
+            "description": "Which end keeps its identity when the length changes. Numbers default to end."
+          },
+          {
+            "name": "announce",
+            "type": "boolean",
+            "description": "Polite live region for the new value."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/slot-text.tsx",
+          "type": "registry:component",
+          "target": "@ui/slot-text.tsx"
+        }
+      ]
+    },
+    {
+      "name": "expandable-card",
+      "type": "registry:ui",
+      "title": "Expandable card",
+      "description": "A dense card that grows in width and height to show more, and closes with Escape.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "disclosure"
+      ],
+      "meta": {
+        "titleEs": "Tarjeta expandible",
+        "descriptionEs": "Una tarjeta densa que crece en ancho y alto para mostrar el detalle. Escape la cierra.",
+        "preview": "app/examples/expandable-card/preview.tsx",
+        "previewHref": "/examples/expandable-card",
+        "examples": [
+          {
+            "title": "Tarjeta expandible",
+            "href": "/examples/expandable-card",
+            "description": "Una tarjeta densa que crece en ancho y alto para mostrar el detalle. Escape la cierra."
+          }
+        ],
+        "usage": "<ExpandableCard title=\"Kiln log\" description=\"Saturday firing\"><p>Cone 6.</p></ExpandableCard>",
+        "api": [
+          {
+            "name": "title / description / children",
+            "type": "string / ReactNode",
+            "description": "Summary and the details that open in place."
+          },
+          {
+            "name": "defaultExpanded",
+            "type": "boolean",
+            "description": "Open on first render. Default false."
+          },
+          {
+            "name": "width / expandedWidth",
+            "type": "number",
+            "description": "Collapsed and expanded width caps in pixels."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes for the trigger, title, and panel."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/expandable-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/expandable-card.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
     }
   ]
 }

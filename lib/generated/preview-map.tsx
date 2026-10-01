@@ -52,6 +52,8 @@ import Preview47 from "@/app/examples/text-reveal/preview"
 import Preview48 from "@/app/examples/text-morph/preview"
 import Preview49 from "@/app/examples/text-shimmer/preview"
 import Preview50 from "@/app/examples/in-view-title/preview"
+import Preview51 from "@/app/examples/slot-text/preview"
+import Preview52 from "@/app/examples/expandable-card/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -105,4 +107,6 @@ export const previewMap = {
   "text-morph": Preview48,
   "text-shimmer": Preview49,
   "in-view-title": Preview50,
+  "slot-text": Preview51,
+  "expandable-card": Preview52,
 }

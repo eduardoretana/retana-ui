@@ -65,6 +65,8 @@ Adapted items:
 - text-morph
 - text-shimmer
 - in-view-title
+- slot-text
+- expandable-card
 
 The adapted portions are licensed under the MIT License below. The year and
 copyright holder match the original repository's LICENSE file.

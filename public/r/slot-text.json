@@ -1,0 +1,65 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slot-text",
+  "title": "Slot text",
+  "author": "Eduardo Retana",
+  "description": "Text and numbers that spin into their next value on staggered reels, like a slot machine.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/slot-text.tsx",
+      "content": "\"use client\"\n\n/** Adapted from Arc UI (MIT). */\n\nimport { useLayoutEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from \"react\"\nimport { AnimatePresence, animate, motion, useMotionValue, usePresence, useReducedMotion, useTransform, useVelocity } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type SlotTextProps = {\n  value: string | number\n  format?: (value: number) => string\n  duration?: number\n  stagger?: number\n  spins?: number\n  align?: \"start\" | \"end\"\n  announce?: boolean\n  className?: string\n  style?: CSSProperties\n}\n\nconst DIGITS = \"0123456789\"\nconst LOWER = \"abcdefghijklmnopqrstuvwxyz\"\nconst UPPER = LOWER.toUpperCase()\nconst LANDING = [0.12, 0.8, 0.16, 1] as const\nconst subscribe = () => () => {}\nconst CELL = 1.6\n\nfunction useReducedFlag() {\n  const hydrated = useSyncExternalStore(subscribe, () => true, () => false)\n  return !!useReducedMotion() && hydrated\n}\n\nconst classOf = (char: string) =>\n  DIGITS.includes(char) ? DIGITS : LOWER.includes(char) ? LOWER : UPPER.includes(char) ? UPPER : null\n\nfunction seeded(seed: number) {\n  let state = seed >>> 0 || 1\n  return () => {\n    state = (state * 1664525 + 1013904223) >>> 0\n    return state / 4294967296\n  }\n}\n\nfunction buildStrip(from: string, to: string, spins: number, rising: boolean, seed: number) {\n  if (from === to) return [to]\n  const set = classOf(to)\n  if (!set) return [from, to]\n  if (set === DIGITS && classOf(from) === DIGITS) {\n    const a = Number(from)\n    const b = Number(to)\n    const steps = spins * 10 + (rising ? (b - a + 10) % 10 : (a - b + 10) % 10)\n    return Array.from({ length: steps + 1 }, (_, i) => String((a + (rising ? i : -i) + 100) % 10))\n  }\n  const random = seeded(seed)\n  const fillers = Array.from({ length: Math.max(2, spins * 5 + 2) }, () => set[Math.floor(random() * set.length)])\n  return [from, ...fillers, to]\n}\n\nfunction Reel({\n  char,\n  order,\n  entering,\n  rising,\n  duration,\n  stagger,\n  spins,\n  reduced,\n}: {\n  char: string\n  order: number\n  entering: boolean\n  rising: boolean\n  duration: number\n  stagger: number\n  spins: number\n  reduced: boolean\n}) {\n  const pos = useMotionValue(0)\n  const width = useMotionValue<number | \"auto\">(\"auto\")\n  const sizer = useRef<HTMLSpanElement>(null)\n  const [isPresent, safeToRemove] = usePresence()\n  const [reel, setReel] = useState(() => ({\n    char,\n    strip: entering && !reduced ? buildStrip(\"\", char, spins, rising, char.charCodeAt(0) + order) : [char],\n    from: 0,\n    grow: entering,\n    time: duration + order * stagger,\n  }))\n\n  if (reel.char !== char) {\n    const current = pos.get()\n    const index = Math.max(0, Math.min(reel.strip.length - 1, Math.round(current)))\n    const visible = reel.strip[index]\n    setReel({\n      char,\n      strip: reduced\n        ? [char]\n        : buildStrip(visible, char, spins, rising, char.charCodeAt(0) * 31 + visible.charCodeAt(0) * 7 + order + reel.strip.length),\n      from: reduced ? 0 : current - index,\n      grow: false,\n      time: duration + order * stagger,\n    })\n  }\n\n  const blur = useTransform(useVelocity(pos), (velocity) => {\n    const amount = Math.min(Math.abs(velocity) * 0.05, 2.4)\n    return amount < 0.15 ? \"none\" : `blur(${amount.toFixed(2)}px)`\n  })\n  const y = useTransform(pos, (value) => `translate3d(0, ${(-value * CELL).toFixed(4)}em, 0)`)\n\n  useLayoutEffect(() => {\n    const measured = sizer.current?.getBoundingClientRect().width ?? 0\n    const last = reel.strip.length - 1\n    if (reduced) {\n      pos.jump(last)\n      width.jump(measured)\n      return\n    }\n    pos.jump(reel.from)\n    const spin = animate(pos, last, { duration: last === 0 ? 0.2 : reel.time, ease: [...LANDING] })\n    if (reel.grow) width.jump(0)\n    if (width.get() === \"auto\") {\n      width.jump(measured)\n      return () => spin.stop()\n    }\n    const size = animate(width, measured, { type: \"spring\", visualDuration: Math.min(reel.time, 0.6), bounce: 0 })\n    return () => {\n      spin.stop()\n      size.stop()\n    }\n  }, [reel, pos, width, reduced])\n\n  useLayoutEffect(() => {\n    if (isPresent) return\n    if (reduced) {\n      safeToRemove()\n      return\n    }\n    const exit = animate(width, 0, { type: \"spring\", visualDuration: 0.35, bounce: 0, onComplete: safeToRemove })\n    return () => exit.stop()\n  }, [isPresent, safeToRemove, width, reduced])\n\n  return (\n    <motion.span data-slot=\"slot-text-reel\" className=\"relative inline-block overflow-hidden\" style={{ width }} data-exiting={isPresent ? undefined : \"\"}>\n      <span ref={sizer} className=\"invisible absolute\">\n        {char === \" \" ? \"\\u00a0\" : char}\n      </span>\n      <span className=\"block h-[1.6em] overflow-hidden leading-[1.6em]\">\n        <motion.span className=\"flex flex-col\" style={{ transform: y, filter: blur }}>\n          {reel.strip.map((cell, i) => (\n            <span key={i} className=\"block h-[1.6em] leading-[1.6em]\">\n              {cell === \" \" ? \"\\u00a0\" : cell}\n            </span>\n          ))}\n        </motion.span>\n      </span>\n    </motion.span>\n  )\n}\n\nexport function SlotText({\n  value,\n  format,\n  duration = 0.9,\n  stagger = 0.07,\n  spins = 1,\n  align,\n  announce = false,\n  className,\n  style,\n}: SlotTextProps) {\n  const reduced = useReducedFlag()\n  const text = typeof value === \"number\" ? (format ? format(value) : value.toLocaleString(\"en-US\")) : value\n  const fromEnd = (align ?? (typeof value === \"number\" ? \"end\" : \"start\")) === \"end\"\n  const chars = Array.from(text)\n  const lead = fromEnd ? chars.findIndex((char) => /[\\p{L}\\p{N}]/u.test(char)) : 0\n  const prefix = lead < 0 ? chars.length : lead\n  const keyOf = (i: number) => (i < prefix ? `p${i}` : fromEnd ? `e${chars.length - 1 - i}` : `s${i}`)\n  const [initialKeys] = useState(() => new Set(chars.map((_, i) => keyOf(i))))\n  const [trend, setTrend] = useState<{ value: string | number; rising: boolean }>({ value, rising: true })\n  if (trend.value !== value) {\n    setTrend({\n      value,\n      rising: typeof value === \"number\" && typeof trend.value === \"number\" ? value >= trend.value : true,\n    })\n  }\n\n  return (\n    <span data-slot=\"slot-text\" className={cn(\"inline-flex max-w-full\", className)} style={style}>\n      <span className=\"sr-only\" aria-live={announce ? \"polite\" : undefined}>\n        {text}\n      </span>\n      <span className=\"inline-flex\" aria-hidden=\"true\">\n        <AnimatePresence initial={false}>\n          {chars.map((char, i) => (\n            <Reel\n              key={keyOf(i)}\n              char={char}\n              order={i}\n              entering={!initialKeys.has(keyOf(i))}\n              rising={trend.rising}\n              duration={duration}\n              stagger={stagger}\n              spins={spins}\n              reduced={reduced}\n            />\n          ))}\n        </AnimatePresence>\n      </span>\n    </span>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/slot-text.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Texto de rodillo",
+    "descriptionEs": "Texto y cifras que giran hasta el nuevo valor, un rodillo por carácter.",
+    "preview": "app/examples/slot-text/preview.tsx",
+    "previewHref": "/examples/slot-text",
+    "examples": [
+      {
+        "title": "Texto de rodillo",
+        "href": "/examples/slot-text",
+        "description": "Texto y cifras que giran hasta el nuevo valor, un rodillo por carácter."
+      }
+    ],
+    "usage": "<SlotText value={orders} announce />",
+    "api": [
+      {
+        "name": "value",
+        "type": "string | number",
+        "description": "What to show. Numbers are grouped for en-US unless format is set."
+      },
+      {
+        "name": "format",
+        "type": "(value: number) => string",
+        "description": "Optional number formatter."
+      },
+      {
+        "name": "duration / stagger / spins",
+        "type": "number",
+        "description": "First reel length, delay between reels, and extra digit turns."
+      },
+      {
+        "name": "align",
+        "type": "\"start\" | \"end\"",
+        "description": "Which end keeps its identity when the length changes. Numbers default to end."
+      },
+      {
+        "name": "announce",
+        "type": "boolean",
+        "description": "Polite live region for the new value."
+      }
+    ]
+  },
+  "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "content"
+  ],
+  "type": "registry:ui"
+}

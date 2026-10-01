@@ -73,7 +73,7 @@ This catalog is a Next.js app (App Router) on Tailwind v4 and shadcn's Radix Nov
 
 <!-- CATALOG:START -->
 
-`51` items are in `registry.json` on this branch. A name links to its source file.
+`53` items are in `registry.json` on this branch. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -124,6 +124,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`text-morph`](registry/ui/text-morph.tsx) · ui — Morphs one short label into the next. Shared letters glide and the width follows.
 - [`text-shimmer`](registry/ui/text-shimmer.tsx) · ui — A calm light across a short status line while work is ongoing. Sets aria-busy.
 - [`in-view-title`](registry/ui/in-view-title.tsx) · ui — A section title that reveals as it scrolls into view: blur, word, line, tracking, or wipe.
+- [`slot-text`](registry/ui/slot-text.tsx) · ui — Text and numbers that spin into their next value on staggered reels, like a slot machine.
 
 ### Tables
 
@@ -149,6 +150,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`dock-nav`](registry/ui/dock-nav.tsx) · ui — Floating pill navigation with pointer magnification, tooltips, an active-route dot, grouped items, and a search item that morphs into a field under the bar.
 - [`theme-switch`](registry/ui/theme-switch.tsx) · ui — Four ways to move between light and dark: fade, eclipse, split, and rise. Uses the View Transitions API when the browser has it, and changes the theme immediately otherwise.
 - [`copy-button`](registry/ui/copy-button.tsx) · ui — Copies a value and confirms in place, with a drawn check and a live announcement.
+- [`expandable-card`](registry/ui/expandable-card.tsx) · ui — A dense card that grows in width and height to show more, and closes with Escape.
 
 <!-- CATALOG:END -->
 
