@@ -470,9 +470,12 @@ export function DonutChart({ data, label, unit = "", formatValue = (value) => gr
       >
         <svg ref={svg} className={cn("block size-full overflow-visible", current !== null && "cursor-pointer")} viewBox={`0 0 ${size} ${size}`} aria-hidden="true" focusable="false" onPointerMove={onRingMove} onPointerLeave={() => setPreview(null)} onClick={onRingClick}>
           <circle className={cn("fill-none stroke-muted transition-opacity motion-reduce:transition-none", shown && total ? "opacity-0" : "opacity-100")} cx={c} cy={c} r={(outer + inner) / 2} strokeWidth={outer - inner} />
-          {drawn.map((item) => (
-            <path key={item.key} ref={registerPath} data-key={item.key} data-slot="donut-chart-segment" data-active={item.key === current || undefined} className={cn("transition-opacity motion-reduce:transition-none", current !== null && item.key !== current && "opacity-45")} fill={colorFor(item)} />
-          ))}
+          {drawn.map((item) => {
+            const arc = layout(slices, hidden).get(item.key)
+            return (
+              <path key={item.key} ref={registerPath} data-key={item.key} data-slot="donut-chart-segment" data-active={item.key === current || undefined} d={arc ? sector(c, outer, inner, arc.start, arc.end, GAP, corner) : ""} className={cn("transition-opacity motion-reduce:transition-none", current !== null && item.key !== current && "opacity-45")} fill={colorFor(item)} />
+            )
+          })}
         </svg>
         <div data-slot="donut-chart-center" className={cn("pointer-events-none absolute top-1/2 left-1/2 grid -translate-x-1/2 -translate-y-1/2", classNames?.center)} style={{ width: `calc(${(inner * 2) / size * 100}% - 16px)` }} aria-hidden="true">
           {readouts.map((item, index) => (

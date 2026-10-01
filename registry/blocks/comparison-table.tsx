@@ -238,7 +238,7 @@ export function ComparisonTable({
           aria-label={maxHeight !== undefined ? title : undefined}
           role={maxHeight !== undefined ? "region" : undefined}
         >
-          <div role="table" aria-labelledby={`${uid}-title`} data-slot="comparison-table-grid" className={cn("grid min-w-0", classNames?.table)} style={gridStyle}>
+          <div role="table" aria-labelledby={`${uid}-title`} data-slot="comparison-table-grid" className={cn("grid min-w-0", classNames?.table)}>
             <div role="rowgroup" className="sticky z-10 bg-background/95 backdrop-blur" style={{ top: stickyTop }}>
               <div role="row" className="grid border-b border-border" style={gridStyle}>
                 <div role="columnheader" className="min-h-16">
@@ -255,7 +255,7 @@ export function ComparisonTable({
                         exit={reduced ? { opacity: 0 } : { opacity: 0, y: -8 }}
                         transition={reduced ? { duration: 0 } : motionPresets.spring.smooth}
                       >
-                        <span className={cn("text-base font-medium wrap-anywhere", column === own && "text-primary")}>{column.name}</span>
+                        <span className={cn("text-base font-medium break-words", column === own && "text-primary")}>{column.name}</span>
                         {column.caption ? <span className="text-xs text-muted-foreground tabular-nums">{column.caption}</span> : null}
                       </motion.span>
                     </AnimatePresence>
@@ -301,7 +301,7 @@ export function ComparisonTable({
                           exit={{ height: 0, opacity: 0 }}
                           transition={reduced ? { duration: 0 } : motionPresets.spring.smooth}
                         >
-                          <div role="rowheader" data-slot="comparison-table-feature" className={cn("grid content-center gap-0.5 border-b border-border py-3 pr-3 text-sm font-medium wrap-anywhere", classNames?.feature)}>
+                          <div role="rowheader" data-slot="comparison-table-feature" className={cn("grid min-w-0 content-center gap-0.5 border-b border-border py-3 pr-3 text-sm font-medium break-words", classNames?.feature)}>
                             <span>{row.feature}</span>
                             {row.hint ? <span className="text-xs font-normal text-muted-foreground">{row.hint}</span> : null}
                           </div>
