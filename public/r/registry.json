@@ -6564,6 +6564,2262 @@
           "target": "@ui/command-palette.tsx"
         }
       ]
+    },
+    {
+      "name": "bar-chart",
+      "type": "registry:ui",
+      "title": "Bar chart",
+      "description": "Compare one measure across categories and read a bar's value.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Gr\u00e1fico de barras",
+        "descriptionEs": "Compara una medida entre categor\u00edas y lee el valor de una barra.",
+        "preview": "app/examples/bar-chart/preview.tsx",
+        "previewHref": "/examples/bar-chart",
+        "examples": [
+          {
+            "title": "Gr\u00e1fico de barras",
+            "href": "/examples/bar-chart",
+            "description": "Compara una medida entre categor\u00edas y lee el valor de una barra."
+          }
+        ],
+        "usage": "<BarChart />",
+        "api": [
+          {
+            "name": "data",
+            "type": "BarChartDatum[]",
+            "description": "data"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "label"
+          },
+          {
+            "name": "period",
+            "type": "string",
+            "description": "period"
+          },
+          {
+            "name": "unit",
+            "type": "string",
+            "description": "unit"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/bar-chart.tsx",
+          "type": "registry:component",
+          "target": "@ui/bar-chart.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "line-chart",
+      "type": "registry:ui",
+      "title": "Line chart",
+      "description": "A multi-series line chart with a crosshair and legend toggles.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Gr\u00e1fico de l\u00edneas",
+        "descriptionEs": "Un gr\u00e1fico de varias series con cruz y leyenda que se puede apagar.",
+        "preview": "app/examples/line-chart/preview.tsx",
+        "previewHref": "/examples/line-chart",
+        "examples": [
+          {
+            "title": "Gr\u00e1fico de l\u00edneas",
+            "href": "/examples/line-chart",
+            "description": "Un gr\u00e1fico de varias series con cruz y leyenda que se puede apagar."
+          }
+        ],
+        "usage": "<LineChart />",
+        "api": [
+          {
+            "name": "data",
+            "type": "LineChartDatum[]",
+            "description": "data"
+          },
+          {
+            "name": "series",
+            "type": "LineChartSeries[]",
+            "description": "series"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "label"
+          },
+          {
+            "name": "unit",
+            "type": "string",
+            "description": "unit"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/line-chart.tsx",
+          "type": "registry:component",
+          "target": "@ui/line-chart.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        }
+      ]
+    },
+    {
+      "name": "donut-chart",
+      "type": "registry:ui",
+      "title": "Donut chart",
+      "description": "A donut whose arcs show shares, with the active value in the center.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Gr\u00e1fico de dona",
+        "descriptionEs": "Una dona cuyas porciones muestran el reparto, con el valor activo en el centro.",
+        "preview": "app/examples/donut-chart/preview.tsx",
+        "previewHref": "/examples/donut-chart",
+        "examples": [
+          {
+            "title": "Gr\u00e1fico de dona",
+            "href": "/examples/donut-chart",
+            "description": "Una dona cuyas porciones muestran el reparto, con el valor activo en el centro."
+          }
+        ],
+        "usage": "<DonutChart />",
+        "api": [
+          {
+            "name": "data",
+            "type": "DonutChartDatum[]",
+            "description": "data"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "label"
+          },
+          {
+            "name": "unit",
+            "type": "string",
+            "description": "unit"
+          },
+          {
+            "name": "formatValue",
+            "type": "(value: number) => string",
+            "description": "formatValue"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/donut-chart.tsx",
+          "type": "registry:component",
+          "target": "@ui/donut-chart.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        }
+      ]
+    },
+    {
+      "name": "streamgraph",
+      "type": "registry:ui",
+      "title": "Streamgraph",
+      "description": "Layered streams with a layer you can isolate.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Gr\u00e1fico de flujos",
+        "descriptionEs": "Flujos apilados con una capa que se puede aislar.",
+        "preview": "app/examples/streamgraph/preview.tsx",
+        "previewHref": "/examples/streamgraph",
+        "examples": [
+          {
+            "title": "Gr\u00e1fico de flujos",
+            "href": "/examples/streamgraph",
+            "description": "Flujos apilados con una capa que se puede aislar."
+          }
+        ],
+        "usage": "<Streamgraph />",
+        "api": [
+          {
+            "name": "data",
+            "type": "StreamgraphDatum[]",
+            "description": "data"
+          },
+          {
+            "name": "series",
+            "type": "StreamgraphSeries[]",
+            "description": "series"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "label"
+          },
+          {
+            "name": "unit",
+            "type": "string",
+            "description": "unit"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/streamgraph.tsx",
+          "type": "registry:component",
+          "target": "@ui/streamgraph.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        }
+      ]
+    },
+    {
+      "name": "brush-chart",
+      "type": "registry:ui",
+      "title": "Brush chart",
+      "description": "A dense series with an overview strip you drag to zoom.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Gr\u00e1fico con cepillo",
+        "descriptionEs": "Una serie densa con una franja que se arrastra para acercar.",
+        "preview": "app/examples/brush-chart/preview.tsx",
+        "previewHref": "/examples/brush-chart",
+        "examples": [
+          {
+            "title": "Gr\u00e1fico con cepillo",
+            "href": "/examples/brush-chart",
+            "description": "Una serie densa con una franja que se arrastra para acercar."
+          }
+        ],
+        "usage": "<BrushChart />",
+        "api": [
+          {
+            "name": "data",
+            "type": "BrushChartDatum[]",
+            "description": "data"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "label"
+          },
+          {
+            "name": "unit",
+            "type": "string",
+            "description": "unit"
+          },
+          {
+            "name": "formatValue",
+            "type": "(value: number) => string",
+            "description": "formatValue"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/brush-chart.tsx",
+          "type": "registry:component",
+          "target": "@ui/brush-chart.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "ridgeline",
+      "type": "registry:ui",
+      "title": "Ridgeline",
+      "description": "Overlapping distributions, one ridge per group.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Crestas",
+        "descriptionEs": "Distribuciones superpuestas, una cresta por grupo.",
+        "preview": "app/examples/ridgeline/preview.tsx",
+        "previewHref": "/examples/ridgeline",
+        "examples": [
+          {
+            "title": "Crestas",
+            "href": "/examples/ridgeline",
+            "description": "Distribuciones superpuestas, una cresta por grupo."
+          }
+        ],
+        "usage": "<Ridgeline />",
+        "api": [
+          {
+            "name": "series",
+            "type": "RidgelineSeries[]",
+            "description": "series"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "label"
+          },
+          {
+            "name": "unit",
+            "type": "string",
+            "description": "unit"
+          },
+          {
+            "name": "formatValue",
+            "type": "(value: number) => string",
+            "description": "formatValue"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/ridgeline.tsx",
+          "type": "registry:component",
+          "target": "@ui/ridgeline.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "treemap",
+      "type": "registry:ui",
+      "title": "Treemap",
+      "description": "A squarified treemap that drills in and comes back by breadcrumb.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Mapa de \u00e1rbol",
+        "descriptionEs": "Un mapa de rect\u00e1ngulos que entra en un grupo y vuelve con la ruta.",
+        "preview": "app/examples/treemap/preview.tsx",
+        "previewHref": "/examples/treemap",
+        "examples": [
+          {
+            "title": "Mapa de \u00e1rbol",
+            "href": "/examples/treemap",
+            "description": "Un mapa de rect\u00e1ngulos que entra en un grupo y vuelve con la ruta."
+          }
+        ],
+        "usage": "<Treemap />",
+        "api": [
+          {
+            "name": "data",
+            "type": "TreemapNode",
+            "description": "data"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "label"
+          },
+          {
+            "name": "formatValue",
+            "type": "(value: number) => string",
+            "description": "formatValue"
+          },
+          {
+            "name": "colorLabel",
+            "type": "string",
+            "description": "colorLabel"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/treemap.tsx",
+          "type": "registry:component",
+          "target": "@ui/treemap.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "waffle-chart",
+      "type": "registry:ui",
+      "title": "Waffle chart",
+      "description": "A ten by ten chart where every cell is one percent.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Gr\u00e1fico de celdas",
+        "descriptionEs": "Un cuadro de diez por diez donde cada celda es un uno por ciento.",
+        "preview": "app/examples/waffle-chart/preview.tsx",
+        "previewHref": "/examples/waffle-chart",
+        "examples": [
+          {
+            "title": "Gr\u00e1fico de celdas",
+            "href": "/examples/waffle-chart",
+            "description": "Un cuadro de diez por diez donde cada celda es un uno por ciento."
+          }
+        ],
+        "usage": "<WaffleChart />",
+        "api": [
+          {
+            "name": "data",
+            "type": "WaffleCategory[]",
+            "description": "data"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "label"
+          },
+          {
+            "name": "unit",
+            "type": "string",
+            "description": "unit"
+          },
+          {
+            "name": "formatValue",
+            "type": "(value: number, category: WaffleCategory) => string",
+            "description": "formatValue"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/waffle-chart.tsx",
+          "type": "registry:component",
+          "target": "@ui/waffle-chart.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "slope-chart",
+      "type": "registry:ui",
+      "title": "Slope chart",
+      "description": "Before and after on two axes, with the rank move beside each value.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Gr\u00e1fico de pendientes",
+        "descriptionEs": "Antes y despu\u00e9s en dos ejes, con el cambio de puesto junto a cada valor.",
+        "preview": "app/examples/slope-chart/preview.tsx",
+        "previewHref": "/examples/slope-chart",
+        "examples": [
+          {
+            "title": "Gr\u00e1fico de pendientes",
+            "href": "/examples/slope-chart",
+            "description": "Antes y despu\u00e9s en dos ejes, con el cambio de puesto junto a cada valor."
+          }
+        ],
+        "usage": "<SlopeChart />",
+        "api": [
+          {
+            "name": "data",
+            "type": "SlopeItem[]",
+            "description": "data"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "label"
+          },
+          {
+            "name": "startLabel",
+            "type": "string",
+            "description": "startLabel"
+          },
+          {
+            "name": "endLabel",
+            "type": "string",
+            "description": "endLabel"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/slope-chart.tsx",
+          "type": "registry:component",
+          "target": "@ui/slope-chart.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "bottom-sheet",
+      "type": "registry:ui",
+      "title": "Bottom sheet",
+      "description": "A sheet that rests at a peek or full height.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "overlay"
+      ],
+      "meta": {
+        "titleEs": "Hoja inferior",
+        "descriptionEs": "Una hoja que se queda a media altura o se abre del todo.",
+        "preview": "app/examples/bottom-sheet/preview.tsx",
+        "previewHref": "/examples/bottom-sheet",
+        "examples": [
+          {
+            "title": "Hoja inferior",
+            "href": "/examples/bottom-sheet",
+            "description": "Una hoja que se queda a media altura o se abre del todo."
+          }
+        ],
+        "usage": "<BottomSheet />",
+        "api": [
+          {
+            "name": "trigger",
+            "type": "ReactNode",
+            "description": "trigger"
+          },
+          {
+            "name": "open",
+            "type": "boolean",
+            "description": "open"
+          },
+          {
+            "name": "defaultOpen",
+            "type": "boolean",
+            "description": "defaultOpen"
+          },
+          {
+            "name": "onOpenChange",
+            "type": "(open: boolean) => void",
+            "description": "onOpenChange"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/bottom-sheet.tsx",
+          "type": "registry:component",
+          "target": "@ui/bottom-sheet.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "json-viewer",
+      "type": "registry:ui",
+      "title": "JSON viewer",
+      "description": "A collapsible JSON tree with search and copy for a value or a path.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Visor JSON",
+        "descriptionEs": "Un \u00e1rbol JSON que se pliega, se busca y copia un valor o su ruta.",
+        "preview": "app/examples/json-viewer/preview.tsx",
+        "previewHref": "/examples/json-viewer",
+        "examples": [
+          {
+            "title": "Visor JSON",
+            "href": "/examples/json-viewer",
+            "description": "Un \u00e1rbol JSON que se pliega, se busca y copia un valor o su ruta."
+          }
+        ],
+        "usage": "<JsonViewer />",
+        "api": [
+          {
+            "name": "data",
+            "type": "unknown",
+            "description": "data"
+          },
+          {
+            "name": "rootName",
+            "type": "string",
+            "description": "rootName"
+          },
+          {
+            "name": "defaultExpandDepth",
+            "type": "number",
+            "description": "defaultExpandDepth"
+          },
+          {
+            "name": "expanded",
+            "type": "string[]",
+            "description": "expanded"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/json-viewer.tsx",
+          "type": "registry:component",
+          "target": "@ui/json-viewer.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "comment-thread",
+      "type": "registry:ui",
+      "title": "Comment thread",
+      "description": "Threaded comments with replies, reactions, and resolve.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "textarea"
+      ],
+      "categories": [
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Hilo de comentarios",
+        "descriptionEs": "Comentarios con respuestas, reacciones y resoluci\u00f3n.",
+        "preview": "app/examples/comment-thread/preview.tsx",
+        "previewHref": "/examples/comment-thread",
+        "examples": [
+          {
+            "title": "Hilo de comentarios",
+            "href": "/examples/comment-thread",
+            "description": "Comentarios con respuestas, reacciones y resoluci\u00f3n."
+          }
+        ],
+        "usage": "<CommentThread />",
+        "api": [
+          {
+            "name": "comments",
+            "type": "ThreadComment[]",
+            "description": "comments"
+          },
+          {
+            "name": "defaultComments",
+            "type": "ThreadComment[]",
+            "description": "defaultComments"
+          },
+          {
+            "name": "onCommentsChange",
+            "type": "(comments: ThreadComment[], event: CommentThreadEvent) => void",
+            "description": "onCommentsChange"
+          },
+          {
+            "name": "currentUser",
+            "type": "CommentAuthor",
+            "description": "currentUser"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/comment-thread.tsx",
+          "type": "registry:component",
+          "target": "@ui/comment-thread.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "signup-form",
+      "type": "registry:block",
+      "title": "Signup form",
+      "description": "Account creation with validation and password strength.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "checkbox",
+        "input",
+        "label",
+        "separator"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Formulario de registro",
+        "descriptionEs": "Alta de cuenta con validaci\u00f3n y fortaleza de la contrase\u00f1a.",
+        "preview": "app/examples/signup-form/preview.tsx",
+        "previewHref": "/examples/signup-form",
+        "examples": [
+          {
+            "title": "Formulario de registro",
+            "href": "/examples/signup-form",
+            "description": "Alta de cuenta con validaci\u00f3n y fortaleza de la contrase\u00f1a."
+          }
+        ],
+        "usage": "<SignupForm />",
+        "api": [
+          {
+            "name": "onSubmit",
+            "type": "(details: SignupDetails) => void | Promise<void>",
+            "description": "onSubmit"
+          },
+          {
+            "name": "serverError",
+            "type": "string | null",
+            "description": "serverError"
+          },
+          {
+            "name": "onProvider",
+            "type": "(provider: SignupProvider) => void",
+            "description": "onProvider"
+          },
+          {
+            "name": "defaultValues",
+            "type": "Partial<SignupDetails>",
+            "description": "defaultValues"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/signup-form.tsx",
+          "type": "registry:component",
+          "target": "@ui/signup-form.tsx"
+        },
+        {
+          "path": "registry/ui/password-field.tsx",
+          "type": "registry:component",
+          "target": "@ui/password-field.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "plan-comparison",
+      "type": "registry:block",
+      "title": "Plan comparison",
+      "description": "Compare plan differences across billing periods.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "label",
+        "switch"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Comparaci\u00f3n de planes",
+        "descriptionEs": "Compara las diferencias entre planes y periodos de pago.",
+        "preview": "app/examples/plan-comparison/preview.tsx",
+        "previewHref": "/examples/plan-comparison",
+        "examples": [
+          {
+            "title": "Comparaci\u00f3n de planes",
+            "href": "/examples/plan-comparison",
+            "description": "Compara las diferencias entre planes y periodos de pago."
+          }
+        ],
+        "usage": "<PlanComparison />",
+        "api": [
+          {
+            "name": "title",
+            "type": "string",
+            "description": "title"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "description": "description"
+          },
+          {
+            "name": "features",
+            "type": "PlanFeature[]",
+            "description": "features"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/plan-comparison.tsx",
+          "type": "registry:component",
+          "target": "@ui/plan-comparison.tsx"
+        },
+        {
+          "path": "registry/ui/segmented-control.tsx",
+          "type": "registry:component",
+          "target": "@ui/segmented-control.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/ui/billing-toggle.tsx",
+          "type": "registry:component",
+          "target": "@ui/billing-toggle.tsx"
+        }
+      ]
+    },
+    {
+      "name": "notification-center",
+      "type": "registry:block",
+      "title": "Notification center",
+      "description": "A home for updates with read state and grouped disclosure.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "popover"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Centro de avisos",
+        "descriptionEs": "Un lugar para avisos, con le\u00eddo y grupos que se abren.",
+        "preview": "app/examples/notification-center/preview.tsx",
+        "previewHref": "/examples/notification-center",
+        "examples": [
+          {
+            "title": "Centro de avisos",
+            "href": "/examples/notification-center",
+            "description": "Un lugar para avisos, con le\u00eddo y grupos que se abren."
+          }
+        ],
+        "usage": "<NotificationCenter />",
+        "api": [
+          {
+            "name": "notifications",
+            "type": "NotificationItem[]",
+            "description": "notifications"
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "label"
+          },
+          {
+            "name": "onReadChange",
+            "type": "(notification: NotificationItem, read: boolean) => void",
+            "description": "onReadChange"
+          },
+          {
+            "name": "onDismiss",
+            "type": "(notification: NotificationItem) => void",
+            "description": "onDismiss"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/notification-center.tsx",
+          "type": "registry:component",
+          "target": "@ui/notification-center.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "changelog-feed",
+      "type": "registry:block",
+      "title": "Changelog feed",
+      "description": "Release notes you can filter and open in place.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "input"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Novedades",
+        "descriptionEs": "Notas de versi\u00f3n que se filtran y se abren en el sitio.",
+        "preview": "app/examples/changelog-feed/preview.tsx",
+        "previewHref": "/examples/changelog-feed",
+        "examples": [
+          {
+            "title": "Novedades",
+            "href": "/examples/changelog-feed",
+            "description": "Notas de versi\u00f3n que se filtran y se abren en el sitio."
+          }
+        ],
+        "usage": "<ChangelogFeed />",
+        "api": [
+          {
+            "name": "entries",
+            "type": "ChangelogEntry[]",
+            "description": "entries"
+          },
+          {
+            "name": "months",
+            "type": "ChangelogMonth[]",
+            "description": "months"
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "description": "title"
+          },
+          {
+            "name": "subtitle",
+            "type": "string",
+            "description": "subtitle"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/changelog-feed.tsx",
+          "type": "registry:component",
+          "target": "@ui/changelog-feed.tsx"
+        },
+        {
+          "path": "registry/blocks/changelog-feed-data.ts",
+          "type": "registry:component",
+          "target": "@ui/changelog-feed-data.ts"
+        },
+        {
+          "path": "registry/ui/copy-button.tsx",
+          "type": "registry:component",
+          "target": "@ui/copy-button.tsx"
+        },
+        {
+          "path": "registry/hooks/use-copy-feedback.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-copy-feedback.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "sign-in",
+      "type": "registry:block",
+      "title": "Sign in",
+      "description": "A sign-in card that moves from email to a code.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "card",
+        "input",
+        "label",
+        "separator",
+        "input-otp"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Entrar",
+        "descriptionEs": "Una tarjeta de acceso que pasa del correo a un c\u00f3digo.",
+        "preview": "app/examples/sign-in/preview.tsx",
+        "previewHref": "/examples/sign-in",
+        "examples": [
+          {
+            "title": "Entrar",
+            "href": "/examples/sign-in",
+            "description": "Una tarjeta de acceso que pasa del correo a un c\u00f3digo."
+          }
+        ],
+        "usage": "<SignIn />",
+        "api": [
+          {
+            "name": "demoCode",
+            "type": "string",
+            "description": "demoCode"
+          },
+          {
+            "name": "onSignIn",
+            "type": "(account: SignInAccount, method: SignInMethod) => void",
+            "description": "onSignIn"
+          },
+          {
+            "name": "accounts",
+            "type": "SignInAccount[]",
+            "description": "accounts"
+          },
+          {
+            "name": "defaultEmail",
+            "type": "string",
+            "description": "defaultEmail"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/sign-in.tsx",
+          "type": "registry:component",
+          "target": "@ui/sign-in.tsx"
+        },
+        {
+          "path": "registry/ui/otp-field.tsx",
+          "type": "registry:component",
+          "target": "@ui/otp-field.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "page-header",
+      "type": "registry:block",
+      "title": "Page header",
+      "description": "A project header that folds into a compact bar as you scroll.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "dropdown-menu",
+        "tabs"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Encabezado de p\u00e1gina",
+        "descriptionEs": "Un encabezado de proyecto que se pliega al hacer scroll.",
+        "preview": "app/examples/page-header/preview.tsx",
+        "previewHref": "/examples/page-header",
+        "examples": [
+          {
+            "title": "Encabezado de p\u00e1gina",
+            "href": "/examples/page-header",
+            "description": "Un encabezado de proyecto que se pliega al hacer scroll."
+          }
+        ],
+        "usage": "<PageHeader />",
+        "api": [
+          {
+            "name": "title",
+            "type": "string",
+            "description": "title"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "description": "description"
+          },
+          {
+            "name": "crumbs",
+            "type": "string[]",
+            "description": "crumbs"
+          },
+          {
+            "name": "members",
+            "type": "AvatarGroupMember[]",
+            "description": "members"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/page-header.tsx",
+          "type": "registry:component",
+          "target": "@ui/page-header.tsx"
+        },
+        {
+          "path": "registry/blocks/page-header-data.ts",
+          "type": "registry:component",
+          "target": "@ui/page-header-data.ts"
+        },
+        {
+          "path": "registry/ui/avatar-group.tsx",
+          "type": "registry:component",
+          "target": "@ui/avatar-group.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/ui/animated-counter.tsx",
+          "type": "registry:component",
+          "target": "@ui/animated-counter.tsx"
+        }
+      ]
+    },
+    {
+      "name": "empty-states",
+      "type": "registry:block",
+      "title": "Empty states",
+      "description": "Several empty states in one switchable set.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Estados vac\u00edos",
+        "descriptionEs": "Varios estados vac\u00edos en un mismo conjunto que se cambia.",
+        "preview": "app/examples/empty-states/preview.tsx",
+        "previewHref": "/examples/empty-states",
+        "examples": [
+          {
+            "title": "Estados vac\u00edos",
+            "href": "/examples/empty-states",
+            "description": "Varios estados vac\u00edos en un mismo conjunto que se cambia."
+          }
+        ],
+        "usage": "<EmptyStates />",
+        "api": [
+          {
+            "name": "scenes",
+            "type": "EmptyScene[]",
+            "description": "scenes"
+          },
+          {
+            "name": "waits",
+            "type": "Partial<Record<string, number>>",
+            "description": "waits"
+          },
+          {
+            "name": "onSceneChange",
+            "type": "(id: string) => void",
+            "description": "onSceneChange"
+          },
+          {
+            "name": "onPhaseChange",
+            "type": "(id: string, phase: EmptyPhase) => void",
+            "description": "onPhaseChange"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/empty-states.tsx",
+          "type": "registry:component",
+          "target": "@ui/empty-states.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "login-centered",
+      "type": "registry:block",
+      "title": "Centered login",
+      "description": "A passkey-first login that continues through email and a code.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "input",
+        "label",
+        "input-otp"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Acceso centrado",
+        "descriptionEs": "Un acceso que empieza por llave de paso y sigue con correo y c\u00f3digo.",
+        "preview": "app/examples/login-centered/preview.tsx",
+        "previewHref": "/examples/login-centered",
+        "examples": [
+          {
+            "title": "Acceso centrado",
+            "href": "/examples/login-centered",
+            "description": "Un acceso que empieza por llave de paso y sigue con correo y c\u00f3digo."
+          }
+        ],
+        "usage": "<LoginCentered />",
+        "api": [
+          {
+            "name": "demoCode",
+            "type": "string",
+            "description": "demoCode"
+          },
+          {
+            "name": "fullScreen",
+            "type": "boolean",
+            "description": "fullScreen"
+          },
+          {
+            "name": "demoEmail",
+            "type": "string",
+            "description": "demoEmail"
+          },
+          {
+            "name": "brand",
+            "type": "{ name: string",
+            "description": "brand"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/login-centered.tsx",
+          "type": "registry:component",
+          "target": "@ui/login-centered.tsx"
+        },
+        {
+          "path": "registry/ui/otp-field.tsx",
+          "type": "registry:component",
+          "target": "@ui/otp-field.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "site-header",
+      "type": "registry:block",
+      "title": "Site header",
+      "description": "A sticky header that turns solid on scroll, with a mobile sheet.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Encabezado del sitio",
+        "descriptionEs": "Un encabezado fijo que se vuelve s\u00f3lido al bajar, con una hoja en el tel\u00e9fono.",
+        "preview": "app/examples/site-header/preview.tsx",
+        "previewHref": "/examples/site-header",
+        "examples": [
+          {
+            "title": "Encabezado del sitio",
+            "href": "/examples/site-header",
+            "description": "Un encabezado fijo que se vuelve s\u00f3lido al bajar, con una hoja en el tel\u00e9fono."
+          }
+        ],
+        "usage": "<SiteHeader />",
+        "api": [
+          {
+            "name": "variant",
+            "type": "SiteHeaderVariant",
+            "description": "variant"
+          },
+          {
+            "name": "brand",
+            "type": "{ name: string",
+            "description": "brand"
+          },
+          {
+            "name": "items",
+            "type": "SiteHeaderItem[]",
+            "description": "items"
+          },
+          {
+            "name": "current",
+            "type": "string",
+            "description": "current"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/site-header.tsx",
+          "type": "registry:component",
+          "target": "@ui/site-header.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "site-footer",
+      "type": "registry:block",
+      "title": "Site footer",
+      "description": "A footer with link columns and a newsletter field.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "input",
+        "label"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Pie del sitio",
+        "descriptionEs": "Un pie con columnas de enlaces y un campo de bolet\u00edn.",
+        "preview": "app/examples/site-footer/preview.tsx",
+        "previewHref": "/examples/site-footer",
+        "examples": [
+          {
+            "title": "Pie del sitio",
+            "href": "/examples/site-footer",
+            "description": "Un pie con columnas de enlaces y un campo de bolet\u00edn."
+          }
+        ],
+        "usage": "<SiteFooter />",
+        "api": [
+          {
+            "name": "variant",
+            "type": "SiteFooterVariant",
+            "description": "variant"
+          },
+          {
+            "name": "brand",
+            "type": "{ name: string",
+            "description": "brand"
+          },
+          {
+            "name": "tagline",
+            "type": "string",
+            "description": "tagline"
+          },
+          {
+            "name": "columns",
+            "type": "SiteFooterColumn[]",
+            "description": "columns"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/site-footer.tsx",
+          "type": "registry:component",
+          "target": "@ui/site-footer.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "hero-section",
+      "type": "registry:block",
+      "title": "Hero section",
+      "description": "Three SaaS heroes: dashboard, workflow, and editorial.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Secci\u00f3n principal",
+        "descriptionEs": "Tres aperturas: tablero, flujo y editorial.",
+        "preview": "app/examples/hero-section/preview.tsx",
+        "previewHref": "/examples/hero-section",
+        "examples": [
+          {
+            "title": "Secci\u00f3n principal",
+            "href": "/examples/hero-section",
+            "description": "Tres aperturas: tablero, flujo y editorial."
+          }
+        ],
+        "usage": "<HeroSection />",
+        "api": [
+          {
+            "name": "variant",
+            "type": "HeroSectionVariant",
+            "description": "variant"
+          },
+          {
+            "name": "animateIn",
+            "type": "boolean",
+            "description": "animateIn"
+          },
+          {
+            "name": "primaryAction",
+            "type": "HeroAction | null",
+            "description": "primaryAction"
+          },
+          {
+            "name": "secondaryAction",
+            "type": "HeroAction | null",
+            "description": "secondaryAction"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/hero-section.tsx",
+          "type": "registry:component",
+          "target": "@ui/hero-section.tsx"
+        },
+        {
+          "path": "registry/blocks/hero-section-data.ts",
+          "type": "registry:component",
+          "target": "@ui/hero-section-data.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/ui/segmented-control.tsx",
+          "type": "registry:component",
+          "target": "@ui/segmented-control.tsx"
+        },
+        {
+          "path": "registry/ui/sparkline.tsx",
+          "type": "registry:component",
+          "target": "@ui/sparkline.tsx"
+        },
+        {
+          "path": "registry/ui/copy-button.tsx",
+          "type": "registry:component",
+          "target": "@ui/copy-button.tsx"
+        },
+        {
+          "path": "registry/hooks/use-copy-feedback.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-copy-feedback.ts"
+        }
+      ]
+    },
+    {
+      "name": "faq-section",
+      "type": "registry:block",
+      "title": "FAQ section",
+      "description": "FAQs as an accordion, a topic rail, or a searchable list.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "input",
+        "label"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Preguntas frecuentes",
+        "descriptionEs": "Preguntas como acorde\u00f3n, riel de temas o lista con b\u00fasqueda.",
+        "preview": "app/examples/faq-section/preview.tsx",
+        "previewHref": "/examples/faq-section",
+        "examples": [
+          {
+            "title": "Preguntas frecuentes",
+            "href": "/examples/faq-section",
+            "description": "Preguntas como acorde\u00f3n, riel de temas o lista con b\u00fasqueda."
+          }
+        ],
+        "usage": "<FaqSection />",
+        "api": [
+          {
+            "name": "variant",
+            "type": "FaqSectionVariant",
+            "description": "variant"
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "description": "title"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "description": "description"
+          },
+          {
+            "name": "items",
+            "type": "FaqItem[]",
+            "description": "items"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/faq-section.tsx",
+          "type": "registry:component",
+          "target": "@ui/faq-section.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "contact-section",
+      "type": "registry:block",
+      "title": "Contact section",
+      "description": "A contact form that becomes a confirmation, plus support channels.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "input",
+        "label",
+        "textarea"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Contacto",
+        "descriptionEs": "Un formulario de contacto que pasa a confirmaci\u00f3n, con canales de ayuda.",
+        "preview": "app/examples/contact-section/preview.tsx",
+        "previewHref": "/examples/contact-section",
+        "examples": [
+          {
+            "title": "Contacto",
+            "href": "/examples/contact-section",
+            "description": "Un formulario de contacto que pasa a confirmaci\u00f3n, con canales de ayuda."
+          }
+        ],
+        "usage": "<ContactSection />",
+        "api": [
+          {
+            "name": "variant",
+            "type": "ContactSectionVariant",
+            "description": "variant"
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "description": "title"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "description": "description"
+          },
+          {
+            "name": "topics",
+            "type": "string[]",
+            "description": "topics"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/contact-section.tsx",
+          "type": "registry:component",
+          "target": "@ui/contact-section.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "blog-grid",
+      "type": "registry:block",
+      "title": "Blog grid",
+      "description": "A blog index with a featured post, filters, and an in-place reader.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Rejilla de blog",
+        "descriptionEs": "Un \u00edndice con destacado, filtros y lectura en el sitio.",
+        "preview": "app/examples/blog-grid/preview.tsx",
+        "previewHref": "/examples/blog-grid",
+        "examples": [
+          {
+            "title": "Rejilla de blog",
+            "href": "/examples/blog-grid",
+            "description": "Un \u00edndice con destacado, filtros y lectura en el sitio."
+          }
+        ],
+        "usage": "<BlogGrid />",
+        "api": [
+          {
+            "name": "title",
+            "type": "string",
+            "description": "title"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "description": "description"
+          },
+          {
+            "name": "posts",
+            "type": "BlogPost[]",
+            "description": "posts"
+          },
+          {
+            "name": "categories",
+            "type": "string[]",
+            "description": "categories"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/blog-grid.tsx",
+          "type": "registry:component",
+          "target": "@ui/blog-grid.tsx"
+        },
+        {
+          "path": "registry/blocks/blog-grid-data.ts",
+          "type": "registry:component",
+          "target": "@ui/blog-grid-data.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "comparison-table",
+      "type": "registry:block",
+      "title": "Comparison table",
+      "description": "An us-versus-them table with a stacked phone view.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "switch"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Tabla comparativa",
+        "descriptionEs": "Una tabla de nosotros y ellos que se apila en el tel\u00e9fono.",
+        "preview": "app/examples/comparison-table/preview.tsx",
+        "previewHref": "/examples/comparison-table",
+        "examples": [
+          {
+            "title": "Tabla comparativa",
+            "href": "/examples/comparison-table",
+            "description": "Una tabla de nosotros y ellos que se apila en el tel\u00e9fono."
+          }
+        ],
+        "usage": "<ComparisonTable />",
+        "api": [
+          {
+            "name": "title",
+            "type": "string",
+            "description": "title"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "description": "description"
+          },
+          {
+            "name": "columns",
+            "type": "ComparisonColumn[]",
+            "description": "columns"
+          },
+          {
+            "name": "sections",
+            "type": "ComparisonSection[]",
+            "description": "sections"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/comparison-table.tsx",
+          "type": "registry:component",
+          "target": "@ui/comparison-table.tsx"
+        },
+        {
+          "path": "registry/blocks/comparison-table-data.ts",
+          "type": "registry:component",
+          "target": "@ui/comparison-table-data.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "stats-band",
+      "type": "registry:block",
+      "title": "Stats band",
+      "description": "Headline numbers that count up in view.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Banda de cifras",
+        "descriptionEs": "Cifras de portada que cuentan al entrar en la vista.",
+        "preview": "app/examples/stats-band/preview.tsx",
+        "previewHref": "/examples/stats-band",
+        "examples": [
+          {
+            "title": "Banda de cifras",
+            "href": "/examples/stats-band",
+            "description": "Cifras de portada que cuentan al entrar en la vista."
+          }
+        ],
+        "usage": "<StatsBand />",
+        "api": [
+          {
+            "name": "stats",
+            "type": "Stat[]",
+            "description": "stats"
+          },
+          {
+            "name": "layout",
+            "type": "StatsBandLayout",
+            "description": "layout"
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "description": "title"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "description": "description"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/stats-band.tsx",
+          "type": "registry:component",
+          "target": "@ui/stats-band.tsx"
+        },
+        {
+          "path": "registry/blocks/stats-band-data.ts",
+          "type": "registry:component",
+          "target": "@ui/stats-band-data.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "cta-section",
+      "type": "registry:block",
+      "title": "CTA section",
+      "description": "A closing call to action, a split setup, or a dismissible banner.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Llamada a la acci\u00f3n",
+        "descriptionEs": "Un cierre, un bloque partido o una banda que se puede descartar.",
+        "preview": "app/examples/cta-section/preview.tsx",
+        "previewHref": "/examples/cta-section",
+        "examples": [
+          {
+            "title": "Llamada a la acci\u00f3n",
+            "href": "/examples/cta-section",
+            "description": "Un cierre, un bloque partido o una banda que se puede descartar."
+          }
+        ],
+        "usage": "<CtaSection />",
+        "api": [
+          {
+            "name": "variant",
+            "type": "CtaVariant",
+            "description": "variant"
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "description": "title"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "description": "description"
+          },
+          {
+            "name": "primaryAction",
+            "type": "CtaAction",
+            "description": "primaryAction"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/cta-section.tsx",
+          "type": "registry:component",
+          "target": "@ui/cta-section.tsx"
+        },
+        {
+          "path": "registry/blocks/cta-section-data.ts",
+          "type": "registry:component",
+          "target": "@ui/cta-section-data.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "newsletter-signup",
+      "type": "registry:block",
+      "title": "Newsletter signup",
+      "description": "An email signup framed by a stack of past issues.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "input"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Bolet\u00edn",
+        "descriptionEs": "Un alta de correo enmarcada por n\u00fameros anteriores.",
+        "preview": "app/examples/newsletter-signup/preview.tsx",
+        "previewHref": "/examples/newsletter-signup",
+        "examples": [
+          {
+            "title": "Bolet\u00edn",
+            "href": "/examples/newsletter-signup",
+            "description": "Un alta de correo enmarcada por n\u00fameros anteriores."
+          }
+        ],
+        "usage": "<NewsletterSignup />",
+        "api": [
+          {
+            "name": "variant",
+            "type": "NewsletterVariant",
+            "description": "variant"
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "description": "title"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "description": "description"
+          },
+          {
+            "name": "placeholder",
+            "type": "string",
+            "description": "placeholder"
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/newsletter-signup.tsx",
+          "type": "registry:component",
+          "target": "@ui/newsletter-signup.tsx"
+        },
+        {
+          "path": "registry/blocks/newsletter-signup-data.ts",
+          "type": "registry:component",
+          "target": "@ui/newsletter-signup-data.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/ui/animated-counter.tsx",
+          "type": "registry:component",
+          "target": "@ui/animated-counter.tsx"
+        }
+      ]
     }
   ]
 }

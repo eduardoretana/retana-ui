@@ -73,7 +73,7 @@ This catalog is a Next.js app (App Router) on Tailwind v4 and shadcn's Radix Nov
 
 <!-- CATALOG:START -->
 
-`92` items are in `registry.json` on this branch. A name links to its source file.
+`122` items are in `registry.json` on this branch. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -149,6 +149,8 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`carousel`](registry/ui/carousel.tsx) · ui — Browses a row of slides with controls, tabs, and arrow keys.
 - [`card-stack`](registry/ui/card-stack.tsx) · ui — Reviews a deck one card at a time, with a throw and an undo.
 - [`timeline`](registry/ui/timeline.tsx) · ui — Follows what happened, newest first, grouped by day.
+- [`json-viewer`](registry/ui/json-viewer.tsx) · ui — A collapsible JSON tree with search and copy for a value or a path.
+- [`comment-thread`](registry/ui/comment-thread.tsx) · ui — Threaded comments with replies, reactions, and resolve.
 
 ### Tables
 
@@ -190,6 +192,34 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`stepper`](registry/ui/stepper.tsx) · ui — Shows where a person is in a multi-step flow and what is done.
 - [`announcement-bar`](registry/ui/announcement-bar.tsx) · ui — A top banner that rotates messages and collapses when dismissed.
 - [`command-palette`](registry/ui/command-palette.tsx) · ui — Searchable command list on the host command primitive. Admin shell keeps its own nav palette.
+- [`bar-chart`](registry/ui/bar-chart.tsx) · ui — Compare one measure across categories and read a bar's value.
+- [`line-chart`](registry/ui/line-chart.tsx) · ui — A multi-series line chart with a crosshair and legend toggles.
+- [`donut-chart`](registry/ui/donut-chart.tsx) · ui — A donut whose arcs show shares, with the active value in the center.
+- [`streamgraph`](registry/ui/streamgraph.tsx) · ui — Layered streams with a layer you can isolate.
+- [`brush-chart`](registry/ui/brush-chart.tsx) · ui — A dense series with an overview strip you drag to zoom.
+- [`ridgeline`](registry/ui/ridgeline.tsx) · ui — Overlapping distributions, one ridge per group.
+- [`treemap`](registry/ui/treemap.tsx) · ui — A squarified treemap that drills in and comes back by breadcrumb.
+- [`waffle-chart`](registry/ui/waffle-chart.tsx) · ui — A ten by ten chart where every cell is one percent.
+- [`slope-chart`](registry/ui/slope-chart.tsx) · ui — Before and after on two axes, with the rank move beside each value.
+- [`bottom-sheet`](registry/ui/bottom-sheet.tsx) · ui — A sheet that rests at a peek or full height.
+- [`signup-form`](registry/blocks/signup-form.tsx) · block — Account creation with validation and password strength.
+- [`plan-comparison`](registry/blocks/plan-comparison.tsx) · block — Compare plan differences across billing periods.
+- [`notification-center`](registry/blocks/notification-center.tsx) · block — A home for updates with read state and grouped disclosure.
+- [`changelog-feed`](registry/blocks/changelog-feed.tsx) · block — Release notes you can filter and open in place.
+- [`sign-in`](registry/blocks/sign-in.tsx) · block — A sign-in card that moves from email to a code.
+- [`page-header`](registry/blocks/page-header.tsx) · block — A project header that folds into a compact bar as you scroll.
+- [`empty-states`](registry/blocks/empty-states.tsx) · block — Several empty states in one switchable set.
+- [`login-centered`](registry/blocks/login-centered.tsx) · block — A passkey-first login that continues through email and a code.
+- [`site-header`](registry/blocks/site-header.tsx) · block — A sticky header that turns solid on scroll, with a mobile sheet.
+- [`site-footer`](registry/blocks/site-footer.tsx) · block — A footer with link columns and a newsletter field.
+- [`hero-section`](registry/blocks/hero-section.tsx) · block — Three SaaS heroes: dashboard, workflow, and editorial.
+- [`faq-section`](registry/blocks/faq-section.tsx) · block — FAQs as an accordion, a topic rail, or a searchable list.
+- [`contact-section`](registry/blocks/contact-section.tsx) · block — A contact form that becomes a confirmation, plus support channels.
+- [`blog-grid`](registry/blocks/blog-grid.tsx) · block — A blog index with a featured post, filters, and an in-place reader.
+- [`comparison-table`](registry/blocks/comparison-table.tsx) · block — An us-versus-them table with a stacked phone view.
+- [`stats-band`](registry/blocks/stats-band.tsx) · block — Headline numbers that count up in view.
+- [`cta-section`](registry/blocks/cta-section.tsx) · block — A closing call to action, a split setup, or a dismissible banner.
+- [`newsletter-signup`](registry/blocks/newsletter-signup.tsx) · block — An email signup framed by a stack of past issues.
 
 <!-- CATALOG:END -->
 

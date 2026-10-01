@@ -2,7 +2,7 @@
 
 /** Adapted from Arc UI (MIT). */
 
-import { useId, useLayoutEffect, useRef, useState, type ComponentPropsWithoutRef, type CSSProperties, type KeyboardEvent, type ReactNode } from "react"
+import { useId, useLayoutEffect, useRef, useState, type ComponentPropsWithoutRef, type KeyboardEvent, type ReactNode } from "react"
 import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion, type Transition, type Variants } from "motion/react"
 import { ChevronDown } from "lucide-react"
 
@@ -127,7 +127,7 @@ export function ExpandableCard({
     ...style,
     width: boxWidthValue,
     maxWidth: "100%",
-  } as CSSProperties
+  }
 
   return (
     <div ref={trackRef} data-slot="expandable-card-track" className="flex w-full min-w-0 justify-center">

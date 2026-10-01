@@ -93,6 +93,36 @@ import Preview88 from "@/app/examples/usage-meter/preview"
 import Preview89 from "@/app/examples/stepper/preview"
 import Preview90 from "@/app/examples/announcement-bar/preview"
 import Preview91 from "@/app/examples/command-palette/preview"
+import Preview92 from "@/app/examples/bar-chart/preview"
+import Preview93 from "@/app/examples/line-chart/preview"
+import Preview94 from "@/app/examples/donut-chart/preview"
+import Preview95 from "@/app/examples/streamgraph/preview"
+import Preview96 from "@/app/examples/brush-chart/preview"
+import Preview97 from "@/app/examples/ridgeline/preview"
+import Preview98 from "@/app/examples/treemap/preview"
+import Preview99 from "@/app/examples/waffle-chart/preview"
+import Preview100 from "@/app/examples/slope-chart/preview"
+import Preview101 from "@/app/examples/bottom-sheet/preview"
+import Preview102 from "@/app/examples/json-viewer/preview"
+import Preview103 from "@/app/examples/comment-thread/preview"
+import Preview104 from "@/app/examples/signup-form/preview"
+import Preview105 from "@/app/examples/plan-comparison/preview"
+import Preview106 from "@/app/examples/notification-center/preview"
+import Preview107 from "@/app/examples/changelog-feed/preview"
+import Preview108 from "@/app/examples/sign-in/preview"
+import Preview109 from "@/app/examples/page-header/preview"
+import Preview110 from "@/app/examples/empty-states/preview"
+import Preview111 from "@/app/examples/login-centered/preview"
+import Preview112 from "@/app/examples/site-header/preview"
+import Preview113 from "@/app/examples/site-footer/preview"
+import Preview114 from "@/app/examples/hero-section/preview"
+import Preview115 from "@/app/examples/faq-section/preview"
+import Preview116 from "@/app/examples/contact-section/preview"
+import Preview117 from "@/app/examples/blog-grid/preview"
+import Preview118 from "@/app/examples/comparison-table/preview"
+import Preview119 from "@/app/examples/stats-band/preview"
+import Preview120 from "@/app/examples/cta-section/preview"
+import Preview121 from "@/app/examples/newsletter-signup/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -187,4 +217,34 @@ export const previewMap = {
   "stepper": Preview89,
   "announcement-bar": Preview90,
   "command-palette": Preview91,
+  "bar-chart": Preview92,
+  "line-chart": Preview93,
+  "donut-chart": Preview94,
+  "streamgraph": Preview95,
+  "brush-chart": Preview96,
+  "ridgeline": Preview97,
+  "treemap": Preview98,
+  "waffle-chart": Preview99,
+  "slope-chart": Preview100,
+  "bottom-sheet": Preview101,
+  "json-viewer": Preview102,
+  "comment-thread": Preview103,
+  "signup-form": Preview104,
+  "plan-comparison": Preview105,
+  "notification-center": Preview106,
+  "changelog-feed": Preview107,
+  "sign-in": Preview108,
+  "page-header": Preview109,
+  "empty-states": Preview110,
+  "login-centered": Preview111,
+  "site-header": Preview112,
+  "site-footer": Preview113,
+  "hero-section": Preview114,
+  "faq-section": Preview115,
+  "contact-section": Preview116,
+  "blog-grid": Preview117,
+  "comparison-table": Preview118,
+  "stats-band": Preview119,
+  "cta-section": Preview120,
+  "newsletter-signup": Preview121,
 }

@@ -30,7 +30,11 @@ const TRACK_EM = 0.06
 function reveal(instant: boolean, visible: boolean, delay: number, settle = 0.8): Transition {
   if (instant) return { duration: 0 }
   if (!visible) return { duration: motionPresets.duration.exit, ease: standard }
-  const track = (duration: number, ease: readonly number[] = enter) => ({ duration, delay, ease })
+  const track = (duration: number, ease: readonly [number, number, number, number] = enter) => ({
+    duration,
+    delay,
+    ease: [ease[0], ease[1], ease[2], ease[3]] as [number, number, number, number],
+  })
   return {
     y: track(settle),
     x: track(settle),

@@ -106,6 +106,36 @@ Adapted items:
 - stepper
 - announcement-bar
 - command-palette
+- bar-chart
+- line-chart
+- donut-chart
+- streamgraph
+- brush-chart
+- ridgeline
+- treemap
+- waffle-chart
+- slope-chart
+- bottom-sheet
+- json-viewer
+- comment-thread
+- signup-form
+- plan-comparison
+- notification-center
+- changelog-feed
+- sign-in
+- page-header
+- empty-states
+- login-centered
+- site-header
+- site-footer
+- hero-section
+- faq-section
+- contact-section
+- blog-grid
+- comparison-table
+- stats-band
+- cta-section
+- newsletter-signup
 
 
 The adapted portions are licensed under the MIT License below. The year and
