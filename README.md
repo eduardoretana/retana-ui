@@ -73,7 +73,7 @@ This catalog is a Next.js app (App Router) on Tailwind v4 and shadcn's Radix Nov
 
 <!-- CATALOG:START -->
 
-`122` items are in `registry.json` on this branch. A name links to its source file.
+`131` items are in `registry.json` on this branch. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -156,6 +156,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 
 - [`crm-table`](registry/ui/crm-table.tsx) · ui — CRM-shaped table with avatar and name, a status badge, stage, owner, and last activity. Column helpers match a TanStack column definition so they can be passed to AdminDataTable when that item is installed.
 - [`metric-card`](registry/ui/metric-card.tsx) · ui — A compact summary for a number that needs a label and context.
+- [`adaptive-table`](registry/ui/adaptive-table.tsx) · ui — Grouped table that drops, folds, and stretches columns to its container width. For a narrow panel. data-table is the full TanStack table; crm-table is a fixed contact layout.
 
 ### Admin
 
@@ -220,6 +221,14 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`stats-band`](registry/blocks/stats-band.tsx) · block — Headline numbers that count up in view.
 - [`cta-section`](registry/blocks/cta-section.tsx) · block — A closing call to action, a split setup, or a dismissible banner.
 - [`newsletter-signup`](registry/blocks/newsletter-signup.tsx) · block — An email signup framed by a stack of past issues.
+- [`rail-sidebar`](registry/blocks/rail-sidebar.tsx) · block — Two-layer app sidebar: an icon rail for sections and a panel for that section's navigation. Built on the host shadcn sidebar, including its mobile sheet.
+- [`presence`](registry/lib/presence.ts) · lib — Provider-agnostic presence types, an in-memory adapter, and hooks for others, self, updates, and a debounced typing flag.
+- [`presence-liveblocks`](registry/lib/presence-liveblocks.tsx) · lib — Liveblocks room adapter for the presence hooks. Uses @liveblocks/client and @liveblocks/react. Does not depend on the AGPL server package.
+- [`presence-supabase`](registry/lib/presence-supabase.ts) · lib — Supabase Realtime Presence adapter. Tracks a channel and maps sync, join, and leave onto the shared presence hooks.
+- [`presence-avatars`](registry/ui/presence-avatars.tsx) · ui — Avatar stack for people in the room, with overflow, tooltips, a live dot, and an optional single avatar for all agents.
+- [`live-cursors`](registry/ui/live-cursors.tsx) · ui — Cursors and name labels positioned inside a relative container. Pointer updates are container-relative and throttled with requestAnimationFrame.
+- [`typing-indicator`](registry/ui/typing-indicator.tsx) · ui — Polite live region that names who is typing, including “Ana and 2 others are typing…”.
+- [`presence-outline`](registry/ui/presence-outline.tsx) · ui — Outlines and labels an element when another person's selection presence matches.
 
 <!-- CATALOG:END -->
 
