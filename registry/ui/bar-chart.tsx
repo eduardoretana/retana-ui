@@ -121,7 +121,7 @@ const centerOf = ({ width, unit }: Frame, place: number) => width.get() - (place
 
 function Bar({ id, place, value, delay, shown, active, scrubbing, frame, scale, height, reduced }: { id: string; place: number; value: number; delay: number; shown: boolean; active: boolean; scrubbing: boolean; frame: Frame; scale: MotionValue<number>; height: number; reduced: boolean }) {
   const [isPresent, safeToRemove] = usePresence()
-  const amount = useMotionValue(0)
+  const amount = useMotionValue(value)
   const slot = usePlace(place, reduced)
   const [firstDelay] = useState(delay)
   const grown = useRef(false)
@@ -130,7 +130,7 @@ function Bar({ id, place, value, delay, shown, active, scrubbing, frame, scale, 
     remove.current = safeToRemove
   }, [safeToRemove])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isPresent) return
     if (reduced) {
       amount.jump(value)
@@ -139,6 +139,7 @@ function Bar({ id, place, value, delay, shown, active, scrubbing, frame, scale, 
     }
     if (!shown) return
     const first = !grown.current
+    if (first) amount.jump(0)
     grown.current = true
     return soon(() => animate(amount, value, first ? { ...grow, delay: firstDelay } : settle))
   }, [amount, firstDelay, isPresent, reduced, shown, value])
@@ -333,25 +334,26 @@ export function BarChart({ data, label, period, unit = "", averageLabel = "Daily
     })
   }
 
-  const width = useMotionValue(0)
+  const width = useMotionValue(320)
   const unitShare = useMotionValue(1 / count)
   const scale = useMotionValue(top)
   const mean = useMotionValue(0)
   const cursor = useMotionValue(0)
   const frameMotion = useMemo(() => ({ width, unit: unitShare }), [width, unitShare])
 
-  const [plotWidth, setPlotWidth] = useState(0)
+  const [plotWidth, setPlotWidth] = useState(320)
   const [labelSizes, setLabelSizes] = useState<Record<string, number>>({})
   const measure = useRef<HTMLSpanElement>(null)
   const labelTexts = [...new Set(data.map((item) => item.axisLabel).filter((text): text is string => !!text))].join("\n")
   useLayoutEffect(() => {
     const node = plot.current
     const ruler = measure.current
-    ;(globalThis as { __barMeasure?: unknown }).__barMeasure = [Boolean(node), node?.clientWidth ?? -1, Boolean(ruler)]
     if (!node || !ruler) return
     const read = () => {
-      width.set(node.clientWidth)
-      setPlotWidth(node.clientWidth)
+      const next = node.clientWidth
+      if (!next) return
+      width.set(next)
+      setPlotWidth(next)
       const sizes: Record<string, number> = {}
       ruler.querySelectorAll<HTMLElement>("[data-text]").forEach((item) => {
         sizes[item.dataset.text ?? ""] = item.offsetWidth
@@ -465,7 +467,7 @@ export function BarChart({ data, label, period, unit = "", averageLabel = "Daily
       </div>
       <div className="relative grid min-w-0 grid-cols-[minmax(0,1fr)_52px] grid-rows-[auto_26px]" data-scrubbing={scrubbing || undefined}>
         <div ref={plot} data-slot="bar-chart-plot" className={cn("relative col-start-1 row-start-1 min-w-0", classNames?.plot)} style={{ height }}>
-          <svg className="block overflow-hidden" width="100%" height={height} role="img" aria-label={summary}>
+          <svg className="block overflow-hidden" width="100%" height={height} viewBox={`0 0 ${Math.max(plotWidth, 1)} ${height}`} preserveAspectRatio="none" role="img" aria-label={summary}>
             <AnimatePresence initial={false}>{ticks.map((value) => <Gridline key={value} value={value} scale={scale} height={height} />)}</AnimatePresence>
             <motion.line className="stroke-foreground/40" strokeWidth={1} shapeRendering="crispEdges" x1={cursorX} x2={cursorX} y1={TOP} y2={height} initial={false} animate={{ opacity: scrubbing ? 1 : 0 }} transition={reduced ? { duration: 0 } : fadeFast} />
             <AnimatePresence initial={false}>
@@ -473,8 +475,8 @@ export function BarChart({ data, label, period, unit = "", averageLabel = "Daily
                 <Bar key={item.key} id={item.key} place={last - at} value={item.value} delay={known.fresh.get(item.key) ?? at * revealStep} shown={shown} active={index === at} scrubbing={scrubbing} frame={frameMotion} scale={scale} height={height} reduced={reduced} />
               ))}
             </AnimatePresence>
-            <line className="stroke-border" strokeWidth={1} shapeRendering="crispEdges" x1={0} x2="100%" y1={height - 0.5} y2={height - 0.5} />
-            {showAverage ? <motion.line className="stroke-muted-foreground" strokeWidth={1} strokeDasharray="3 3" shapeRendering="crispEdges" x1={0} x2="100%" y1={meanY} y2={meanY} initial={false} animate={{ opacity: shown ? 1 : 0 }} transition={reduced ? { duration: 0 } : { duration: motionPresets.duration.standard, delay: 0.12 }} /> : null}
+            <line className="stroke-border" strokeWidth={1} shapeRendering="crispEdges" x1={0} x2={plotWidth} y1={height - 0.5} y2={height - 0.5} />
+            {showAverage ? <motion.line className="stroke-muted-foreground" strokeWidth={1} strokeDasharray="3 3" shapeRendering="crispEdges" x1={0} x2={plotWidth} y1={meanY} y2={meanY} initial={false} animate={{ opacity: shown ? 1 : 0 }} transition={reduced ? { duration: 0 } : { duration: motionPresets.duration.standard, delay: 0.12 }} /> : null}
           </svg>
         </div>
         <div className="relative col-start-2 row-start-1 min-w-0" aria-hidden="true">

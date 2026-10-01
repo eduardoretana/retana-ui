@@ -170,6 +170,41 @@ function axisPicks(data: StreamgraphDatum[], width: number) {
   return labeled.reverse().filter((_, rank) => rank % stride === 0).reverse()
 }
 
+function outlinesFor(order: StreamgraphSeries[], shapes: Map<string, number[]>, mode: StreamgraphProps["offset"], w: number, height: number) {
+  const layers = order.map((line) => shapes.get(line.key) ?? new Array<number>(N).fill(0))
+  const stack = stackOrder(order.length, mode)
+  const g = baseline(stack.map((i) => layers[i]), mode)
+  const lower: number[][] = new Array(order.length)
+  const upper: number[][] = new Array(order.length)
+  let running = g.slice()
+  for (const i of stack) {
+    lower[i] = running
+    running = running.map((value, j) => value + layers[i][j])
+    upper[i] = running
+  }
+  let lo = Infinity
+  let hi = -Infinity
+  for (let j = 0; j < N; j++) {
+    lo = Math.min(lo, g[j])
+    hi = Math.max(hi, running[j])
+  }
+  if (!Number.isFinite(lo) || hi - lo < 1e-9) {
+    lo = -1
+    hi = 1
+  }
+  const span = hi - lo
+  const toY = (value: number) => PAD + (1 - (value - lo) / span) * (height - PAD * 2)
+  const xs = Array.from({ length: N }, (_, j) => (j / (N - 1)) * w)
+  const paths = new Map<string, string>()
+  order.forEach((line, i) => {
+    let d = ""
+    for (let j = 0; j < N; j++) d += `${j ? "L" : "M"}${xs[j].toFixed(1)},${toY(upper[i][j]).toFixed(1)}`
+    for (let j = N - 1; j >= 0; j--) d += `L${xs[j].toFixed(1)},${toY(lower[i][j]).toFixed(1)}`
+    paths.set(line.key, `${d}Z`)
+  })
+  return paths
+}
+
 function textLength(node: SVGTextElement) {
   try {
     return node.getComputedTextLength?.() || 60
@@ -213,8 +248,9 @@ export function Streamgraph({ data, series, label, unit = "", height = 260, offs
   const wanted = hover?.key ?? legendKey
   const activeKey = wanted && visible.some((item) => item.key === wanted) ? wanted : null
 
-  const width = useRef(0)
-  const [plotWidth, setPlotWidth] = useState(0)
+  const width = useRef(640)
+  const [plotWidth, setPlotWidth] = useState(640)
+  const outlines = useMemo(() => outlinesFor(series, targets, offset, plotWidth, height), [height, offset, plotWidth, series, targets])
   const shapes = useRef(new Map<string, number[]>())
   const presence = useRef(new Map<string, { value: number; stop: (() => void) | null }>())
   const frame = useRef<Frame | null>(null)
@@ -290,8 +326,10 @@ export function Streamgraph({ data, series, label, unit = "", height = 260, offs
     const node = plot.current
     if (!node) return
     const read = () => {
-      width.current = node.clientWidth
-      setPlotWidth(node.clientWidth)
+      const next = node.clientWidth
+      if (!next) return
+      width.current = next
+      setPlotWidth(next)
       paint()
     }
     read()
@@ -536,6 +574,7 @@ export function Streamgraph({ data, series, label, unit = "", height = 260, offs
                   if (node) paths.current.set(line.key, node)
                   else paths.current.delete(line.key)
                 }}
+                d={outlines.get(line.key)}
                 className={cn("stroke-background transition-opacity motion-reduce:transition-none", activeKey && activeKey !== line.key && "opacity-35")}
                 fill={seriesColor(line.color, at)}
                 strokeWidth={2}

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 import { StressCases } from "@/app/examples/arc/stress"
 import { atelier, unbreakable } from "@/app/examples/arc/demo-data"
@@ -41,6 +41,7 @@ const options: { value: SiteHeaderVariant; label: string }[] = [
 
 export function Demo() {
   const [variant, setVariant] = useState<SiteHeaderVariant>("mega")
+  const scrollRef = useRef<HTMLDivElement>(null)
   return (
     <div className="flex flex-col gap-8">
       <div role="group" aria-label="Variante de cabecera" className="flex flex-wrap gap-2">
@@ -50,12 +51,13 @@ export function Demo() {
           </button>
         ))}
       </div>
-      <div className="relative h-[28rem] overflow-y-auto rounded-xl border border-border">
+      <div ref={scrollRef} className="relative h-[28rem] overflow-y-auto rounded-xl border border-border">
         <SiteHeader
           variant={variant}
           brand={{ name: atelier.name }}
           items={items}
           label="Principal"
+          scrollContainer={scrollRef}
           secondaryAction={{ label: "Entrar" }}
           primaryAction={{ label: "Escribir" }}
         />

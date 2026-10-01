@@ -171,6 +171,14 @@ function valueAt(shape: Point[], x: number) {
 
 const update = (track: Track, patch: Partial<Track>) => Object.assign(track, patch)
 
+function staticLine(shape: Point[], w: number, height: number, lo: number, hi: number) {
+  if (!shape.length || !w) return { line: "", area: "" }
+  const span = hi - lo || 1
+  const y = (value: number) => TOP + (1 - (value - lo) / span) * (height - TOP)
+  const line = `M${shape.map(([x, value]) => `${(x * w).toFixed(1)},${y(value).toFixed(1)}`).join("L")}`
+  return { line, area: `${line}L${w},${height}L0,${height}Z` }
+}
+
 function remember<T>(bucket: { current: Map<string, T> }, key: string) {
   return (node: T | null) => {
     if (node) bucket.current.set(key, node)
@@ -282,8 +290,8 @@ export function LineChart({ data, series, label, unit = "", height = 220, format
   const index = active === null || empty ? null : Math.min(active, last)
   const scrubbing = index !== null
 
-  const width = useRef(0)
-  const [plotWidth, setPlotWidth] = useState(0)
+  const width = useRef(640)
+  const [plotWidth, setPlotWidth] = useState(640)
   const tipSize = useRef({ w: 0, h: 0 })
   const tracks = useRef(new Map<string, Track>())
   const drawn = useMotionValue(0)
@@ -345,8 +353,10 @@ export function LineChart({ data, series, label, unit = "", height = 220, format
     const bubble = tip.current
     if (!node) return
     const read = () => {
-      width.current = node.clientWidth
-      setPlotWidth(node.clientWidth)
+      const next = node.clientWidth
+      if (!next) return
+      width.current = next
+      setPlotWidth(next)
       if (bubble) tipSize.current = { w: bubble.offsetWidth, h: bubble.offsetHeight }
       paint()
     }
@@ -546,7 +556,7 @@ export function LineChart({ data, series, label, unit = "", height = 220, format
           }}
         >
           <svg className="block overflow-visible" width="100%" height={height} aria-hidden="true" focusable="false">
-            <defs><clipPath id={`${uid}-draw`} clipPathUnits="userSpaceOnUse"><rect ref={clip} x={-8} y={-16} width={0} height={height + 32} /></clipPath></defs>
+            <defs><clipPath id={`${uid}-draw`} clipPathUnits="userSpaceOnUse"><rect ref={clip} x={-8} y={-16} width={plotWidth + 16} height={height + 32} /></clipPath></defs>
             <AnimatePresence initial={false}>{steady.ticks.slice(1).map((value) => <Gridline key={value} value={value} scale={scale} height={height} />)}</AnimatePresence>
             <line className="stroke-border" strokeWidth={1} shapeRendering="crispEdges" x1={0} x2="100%" y1={height - 0.5} y2={height - 0.5} />
             <line ref={crosshair} data-slot="line-chart-crosshair" className={cn("pointer-events-none stroke-foreground/45 transition-opacity motion-reduce:transition-none", scrubbing ? "opacity-100" : "opacity-0")} strokeWidth={1} shapeRendering="crispEdges" y1={TOP - 4} y2={height} />
@@ -555,8 +565,8 @@ export function LineChart({ data, series, label, unit = "", height = 220, format
                 const color = seriesColor(line.color, at)
                 return (
                   <g key={line.key} data-slot="line-chart-series" data-series={line.key} ref={remember(groups, line.key)} style={{ color } as CSSProperties}>
-                    {(line.area ?? at === 0) ? <path ref={remember(areas, line.key)} className="fill-current opacity-10" /> : null}
-                    <path ref={remember(lines, line.key)} data-slot="line-chart-line" className="fill-none stroke-current [stroke-linecap:round] [stroke-linejoin:round]" strokeWidth={line.dashed ? 1.75 : 2} strokeDasharray={line.dashed ? "4 5" : undefined} />
+                    {(line.area ?? at === 0) ? <path ref={remember(areas, line.key)} d={staticLine(targets.get(line.key) ?? [], plotWidth, height, steady.min, steady.max).area} className="fill-current opacity-10" /> : null}
+                    <path ref={remember(lines, line.key)} d={staticLine(targets.get(line.key) ?? [], plotWidth, height, steady.min, steady.max).line} data-slot="line-chart-line" className="fill-none stroke-current [stroke-linecap:round] [stroke-linejoin:round]" strokeWidth={line.dashed ? 1.75 : 2} strokeDasharray={line.dashed ? "4 5" : undefined} />
                   </g>
                 )
               })}

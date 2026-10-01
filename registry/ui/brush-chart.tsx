@@ -3,7 +3,7 @@
 /** Adapted from Arc UI (MIT). */
 
 import { useEffect, useId, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type KeyboardEvent, type PointerEvent, type Ref } from "react"
-import { animate, motion, useInView, useMotionValue, useReducedMotion, useSpring } from "motion/react"
+import { animate, motion, useInView, useMotionValue, useMotionValueEvent, useReducedMotion, useSpring } from "motion/react"
 
 import { cn } from "@/lib/utils"
 import { motionPresets } from "@/registry/retana/lib/motion"
@@ -184,15 +184,19 @@ function useReducedMotionSafe() {
   return !!useReducedMotion() && hydrated
 }
 
-function useWidth<T extends HTMLElement>() {
+function useWidth<T extends HTMLElement>(fallback = 640) {
   const node = useRef<T>(null)
-  const [width, setWidth] = useState(0)
+  const [width, setWidth] = useState(fallback)
   useLayoutEffect(() => {
     const element = node.current
     if (!element) return
-    setWidth(element.clientWidth)
+    const apply = () => {
+      const next = element.clientWidth
+      if (next) setWidth(next)
+    }
+    apply()
     if (typeof ResizeObserver === "undefined") return
-    const observer = new ResizeObserver(() => setWidth(element.clientWidth))
+    const observer = new ResizeObserver(apply)
     observer.observe(element)
     return () => observer.disconnect()
   }, [])
@@ -326,16 +330,20 @@ export function BrushChart({ data, label, unit = "", formatValue = (value) => gr
   const wx0 = ox(start)
   const wx1 = ox(end)
 
-  const drawn = useMotionValue(0)
-  const [reveal, setReveal] = useState(0)
-  useEffect(() => {
+  const drawn = useMotionValue(1)
+  const [reveal, setReveal] = useState(1)
+  const played = useRef(false)
+  useMotionValueEvent(drawn, "change", setReveal)
+  useLayoutEffect(() => {
     if (empty) return
     if (reduced) {
       drawn.jump(1)
       return
     }
-    if (!inView || drawn.get() >= 1) return
-    const controls = animate(drawn, 1, { ...draw, onUpdate: setReveal })
+    if (!inView || played.current) return
+    played.current = true
+    drawn.jump(0)
+    const controls = animate(drawn, 1, draw)
     return () => controls.stop()
   }, [drawn, empty, inView, reduced])
 
@@ -517,7 +525,7 @@ export function BrushChart({ data, label, unit = "", formatValue = (value) => gr
           onDoubleClick={reset}
           onFocus={(event) => { if (event.currentTarget.matches(":focus-visible") && !empty) setActive((current) => current ?? to - 1) }}
         >
-          <svg className="block overflow-visible" width="100%" height={plotH} aria-hidden="true" focusable="false">
+          <svg className="block h-auto w-full overflow-visible" width="100%" height={plotH} viewBox={`0 0 ${Math.max(width, 1)} ${plotH}`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
             <defs><clipPath id={`${uid}-plot`}><rect x={0} y={-8} width={Math.max(0, width * (reduced ? 1 : reveal))} height={plotH + 16} /></clipPath></defs>
             {ticks.slice(1).map((value) => <line key={value} className="stroke-border" strokeWidth={1} shapeRendering="crispEdges" x1={0} x2="100%" y1={Math.round(y(value)) + 0.5} y2={Math.round(y(value)) + 0.5} />)}
             <line className="stroke-border" strokeWidth={1} shapeRendering="crispEdges" x1={0} x2="100%" y1={plotH - 0.5} y2={plotH - 0.5} />
@@ -572,7 +580,7 @@ export function BrushChart({ data, label, unit = "", formatValue = (value) => gr
           })}
         </div>
         <div ref={strip} data-slot="brush-chart-overview" className={cn("relative col-start-1 row-start-3 mt-2 min-w-0 cursor-crosshair rounded-lg bg-muted/40 select-none touch-pan-y", classNames?.overview)} style={{ height: overviewHeight }} onPointerDown={onStripDown} onPointerMove={onStripMove} onPointerUp={onStripUp} onPointerCancel={() => { drag.current = null }} onDoubleClick={reset}>
-          <svg className="block overflow-visible" width="100%" height={overviewHeight} aria-hidden="true" focusable="false">
+          <svg className="block h-auto w-full overflow-visible" width="100%" height={overviewHeight} viewBox={`0 0 ${Math.max(stripWidth, 1)} ${overviewHeight}`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
             <defs><clipPath id={`${uid}-window`}><rect x={wx0} y={-2} width={Math.max(0, wx1 - wx0)} height={overviewHeight + 4} /></clipPath></defs>
             <path className="fill-foreground/5" d={overview.area} />
             <path className="fill-none stroke-muted-foreground" strokeWidth={1} strokeLinejoin="round" d={overview.line} />
