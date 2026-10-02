@@ -151,7 +151,13 @@ export function ComparisonTable({
   useLayoutEffect(() => {
     const node = rootRef.current
     if (!node) return
-    const read = () => setNarrow(node.getBoundingClientRect().width < stackBelow)
+    const read = () => {
+      const box = node.clientWidth
+      const parent = node.parentElement?.clientWidth ?? box
+      const viewport = window.innerWidth || box
+      const width = Math.min(box || viewport, parent || viewport, viewport)
+      setNarrow(width < stackBelow)
+    }
     read()
     if (typeof ResizeObserver === "undefined") return
     const observer = new ResizeObserver(read)
@@ -186,7 +192,7 @@ export function ComparisonTable({
       ref={rootRef}
       data-slot="comparison-table"
       data-narrow={narrow ? "" : undefined}
-      className={cn("@container/compare w-full min-w-0 bg-background text-foreground", className, classNames?.root)}
+      className={cn("@container/compare w-full max-w-full min-w-0 overflow-x-clip bg-background text-foreground", className, classNames?.root)}
       aria-labelledby={`${uid}-title`}
     >
       <div className="mx-auto grid max-w-5xl gap-6 px-4 py-8 @min-[640px]/compare:gap-8 @min-[640px]/compare:px-6 @min-[640px]/compare:py-12">

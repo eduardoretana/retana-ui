@@ -457,7 +457,8 @@ export function DonutChart({ data, label, unit = "", formatValue = (value) => gr
   const ringLabel = `${label}. Use the arrow keys to read each segment.`
 
   return (
-    <figure ref={figure} data-slot="donut-chart" data-legend={legend || undefined} aria-label={label} className={cn("@container grid min-w-0 text-foreground", legend && "gap-6 @min-[460px]:grid-cols-[auto_minmax(0,1fr)] @min-[460px]:items-center @min-[460px]:gap-8", className, classNames?.root)}>
+    <figure ref={figure} data-slot="donut-chart" data-legend={legend || undefined} aria-label={label} className={cn("@container min-w-0 text-foreground", className, classNames?.root)}>
+      <div className={cn("grid min-w-0", legend && "gap-6 @min-[460px]:grid-cols-[auto_minmax(0,1fr)] @min-[460px]:items-center @min-[460px]:gap-8")}>
       <div
         data-slot="donut-chart-ring"
         className={cn("relative aspect-square w-full max-w-full justify-self-center outline-none focus-visible:ring-2 focus-visible:ring-ring", classNames?.ring)}
@@ -520,6 +521,7 @@ export function DonutChart({ data, label, unit = "", formatValue = (value) => gr
           })}
         </ul>
       ) : null}
+      </div>
       <p className="sr-only">{summary}</p>
       <p className="sr-only" aria-live="polite" role="status">{announcement}</p>
       {total > 0 ? (

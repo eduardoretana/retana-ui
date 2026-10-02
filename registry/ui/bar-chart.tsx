@@ -219,7 +219,7 @@ function fittingLabels(data: BarChartDatum[], width: number, sizes: Record<strin
   if (!width) return fitting
   const count = Math.max(1, data.length)
   const labels = data.flatMap((item, index) => {
-    const size = item.axisLabel ? sizes[item.axisLabel] : undefined
+    const size = item.axisLabel ? sizes[item.axisLabel] ?? Math.max(12, item.axisLabel.length * 7) : undefined
     if (size === undefined) return []
     const natural = width - (data.length - 1 - index + 0.5) * (width / count) - size / 2
     return [{ key: item.key, size, natural, left: clamp(natural, 0, Math.max(0, width - size)) }]

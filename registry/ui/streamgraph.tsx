@@ -564,7 +564,7 @@ export function Streamgraph({ data, series, label, unit = "", height = 260, offs
           onBlur={() => setHover(null)}
           onFocus={(event) => { if (event.currentTarget.matches(":focus-visible") && !empty) setHover((current) => current ?? { index: last, key: null, y: null }) }}
         >
-          <svg className="block overflow-visible" width="100%" height={height} aria-hidden="true" focusable="false">
+          <svg className="block overflow-visible" width="100%" height={height} viewBox={`0 0 ${Math.max(plotWidth, 1)} ${height}`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
             {series.map((line, at) => (
               <path
                 key={line.key}

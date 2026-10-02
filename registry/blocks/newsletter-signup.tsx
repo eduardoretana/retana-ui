@@ -12,7 +12,6 @@ import { Avatar, AvatarFallback, AvatarGroup, AvatarImage } from "@/components/u
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
-import { AnimatedCounter } from "@/registry/retana/ui/animated-counter"
 import { motionPresets } from "@/registry/retana/lib/motion"
 
 import { newsletterCopy, newsletterPublication, newsletterReaders } from "./newsletter-signup-data"
@@ -201,7 +200,7 @@ function Readers({ readers, done, reduced, className }: { readers: { count: numb
         ))}
       </AvatarGroup>
       <span className="min-w-0 tabular-nums">
-        <AnimatedCounter value={readers.count + (done ? 1 : 0)} className="inline text-sm font-medium text-foreground" /> readers
+        <span className="font-medium text-foreground">{new Intl.NumberFormat("en-US").format(readers.count + (done ? 1 : 0))}</span> readers
         <AnimatePresence initial={false}>
           {done ? (
             <motion.span key="you" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduced ? 0.12 : motionPresets.duration.standard, ease: enter, delay: reduced ? 0 : 0.18 }}>
@@ -442,10 +441,10 @@ export const NewsletterSignup = forwardRef<HTMLElement, NewsletterSignupProps>(f
     <section ref={ref} data-slot="newsletter-signup" data-variant="inline" className={root} aria-labelledby={`${id}-title`}>
       <div className={cn("mx-auto grid max-w-6xl gap-12 px-4 py-12 @min-[860px]/newsletter:items-center @min-[860px]/newsletter:px-8 @min-[860px]/newsletter:py-24", (publication || readers) && "@min-[860px]/newsletter:grid-cols-[minmax(0,1fr)_minmax(0,27rem)]")}>
         <div className="grid max-w-xl">
-          <h2 id={`${id}-title`} className={cn("m-0 font-heading text-3xl font-medium tracking-tight text-balance @min-[860px]/newsletter:text-4xl", classNames?.title)}>
+          <h2 id={`${id}-title`} className={cn("m-0 font-heading text-3xl font-medium tracking-tight text-balance break-words @min-[860px]/newsletter:text-4xl", classNames?.title)}>
             {title ?? copy.title}
           </h2>
-          <p className={cn("mt-4 mb-0 text-pretty text-muted-foreground @min-[860px]/newsletter:text-lg", classNames?.description)}>{description ?? copy.description}</p>
+          <p className={cn("mt-4 mb-0 text-pretty break-words text-muted-foreground @min-[860px]/newsletter:text-lg", classNames?.description)}>{description ?? copy.description}</p>
           <div className="mt-8">{form}</div>
         </div>
         {publication || readers ? (

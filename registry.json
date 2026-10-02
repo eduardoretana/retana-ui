@@ -8813,11 +8813,6 @@
           "path": "registry/lib/motion.ts",
           "type": "registry:lib",
           "target": "@lib/motion.ts"
-        },
-        {
-          "path": "registry/ui/animated-counter.tsx",
-          "type": "registry:component",
-          "target": "@ui/animated-counter.tsx"
         }
       ]
     }

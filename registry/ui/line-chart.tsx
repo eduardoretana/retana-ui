@@ -555,7 +555,7 @@ export function LineChart({ data, series, label, unit = "", height = 220, format
             if (event.currentTarget.matches(":focus-visible") && !empty) setActive((current) => current ?? last)
           }}
         >
-          <svg className="block overflow-visible" width="100%" height={height} aria-hidden="true" focusable="false">
+          <svg className="block overflow-visible" width="100%" height={height} viewBox={`0 0 ${Math.max(plotWidth, 1)} ${height}`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
             <defs><clipPath id={`${uid}-draw`} clipPathUnits="userSpaceOnUse"><rect ref={clip} x={-8} y={-16} width={plotWidth + 16} height={height + 32} /></clipPath></defs>
             <AnimatePresence initial={false}>{steady.ticks.slice(1).map((value) => <Gridline key={value} value={value} scale={scale} height={height} />)}</AnimatePresence>
             <line className="stroke-border" strokeWidth={1} shapeRendering="crispEdges" x1={0} x2="100%" y1={height - 0.5} y2={height - 0.5} />

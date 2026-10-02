@@ -547,7 +547,7 @@ export function BrushChart({ data, label, unit = "", formatValue = (value) => gr
             return (
               <span key={event.t} className={cn("absolute top-1.5 flex min-h-6 items-center gap-1.5 text-xs whitespace-nowrap text-muted-foreground", flipped && "flex-row-reverse")} style={{ left: px, marginLeft: flipped ? 0 : -12, translate: flipped ? "calc(-100% + 12px) 0" : undefined }} aria-hidden="true" onPointerEnter={() => setHoverEvent(i)} onPointerLeave={() => setHoverEvent(null)} onPointerDown={(press) => press.stopPropagation()}>
                 <span className="grid size-6 place-items-center"><span className={cn("size-1.5 rounded-full bg-chart-2 ring-2 ring-background transition-transform motion-reduce:transition-none", marked && "scale-125")} /></span>
-                <span className={cn("transition-opacity motion-reduce:transition-none", labelled.has(event.t) ? "opacity-100" : "opacity-0", marked && "text-foreground")}>{event.label}</span>
+                <span className={cn("max-w-40 truncate transition-opacity motion-reduce:transition-none", labelled.has(event.t) ? "opacity-100" : "opacity-0", marked && "text-foreground")}>{event.label}</span>
               </span>
             )
           })}
