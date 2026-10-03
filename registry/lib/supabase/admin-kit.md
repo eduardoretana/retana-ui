@@ -9,6 +9,8 @@ npm install @supabase/supabase-js
 npx shadcn@latest add @retana/admin-kit
 ```
 
+The same item is also `npx shadcn@latest add @retana/supabase-admin` when you only want the adapter and SQL. The public registry host is not chosen yet. Until a domain exists, the URL form is `npx shadcn@latest add https://<your-deployment>/r/<name>.json`.
+
 Answer **no** if the CLI asks to overwrite primitives the host already has (`button`, `sidebar`, `dialog`, and the rest).
 
 Apply `001_admin_content.sql` in the Supabase SQL editor. It creates the content tables, RLS, and a public `media` storage bucket.

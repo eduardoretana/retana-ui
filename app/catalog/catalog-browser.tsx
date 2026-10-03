@@ -70,8 +70,13 @@ export function CatalogBrowser({
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-semibold tracking-tight">Catalog</h1>
         <p className="max-w-2xl text-sm text-muted-foreground">
-          Components, blocks, and hooks for Eduardo&apos;s projects. Each item inherits the host
-          shadcn theme. Descriptions are in Spanish.
+          {items.length} components, blocks, hooks, and libraries. Each piece inherits the host
+          shadcn theme, including dark mode, and ships no colors, fonts, or tokens of its own.
+          Card descriptions are in Spanish. Labels on the pieces are props. Install notes are on{" "}
+          <Link href="/docs" className="underline-offset-2 hover:underline">
+            the docs page
+          </Link>
+          .
         </p>
       </div>
 

@@ -2,7 +2,28 @@
 
 Provider-agnostic presence for cursors, avatars, typing, and selection. UI in this registry reads `PresenceProvider` only, so the same components work with the in-memory adapter, Liveblocks, or Supabase Realtime.
 
-Pick **Supabase** when the app already has a Supabase project. Pick **Liveblocks** when you want their hosted room network. Do not install both servers. The memory adapter is for demos and tests.
+Pick **Supabase** when the app already has a Supabase project. Pick **Liveblocks** when you want their hosted room network. The memory adapter is for demos and tests. Connect one backend.
+
+## Install
+
+```bash
+npx shadcn@latest add @retana/presence
+npx shadcn@latest add @retana/presence-avatars
+npx shadcn@latest add @retana/live-cursors
+npx shadcn@latest add @retana/typing-indicator
+npx shadcn@latest add @retana/presence-outline
+```
+
+Add one adapter:
+
+```bash
+npx shadcn@latest add @retana/presence-liveblocks
+npx shadcn@latest add @retana/presence-supabase
+```
+
+`presence-avatars` is the live stack for people in the room. `avatar-group` is a static stack and does not read presence. Answer **no** if the CLI asks to overwrite `avatar` or `tooltip`. The pieces ship no theme. Color is `info.color` or `var(--chart-1)` through `var(--chart-5)`.
+
+The public registry host is not chosen yet. Until a domain exists, the URL form is `npx shadcn@latest add https://<your-deployment>/r/<name>.json`.
 
 ## Shared types
 

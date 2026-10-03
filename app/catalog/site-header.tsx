@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 
 const links = [
   { href: "/", label: "Catalog" },
-  { href: "/docs", label: "Install" },
+  { href: "/docs", label: "Docs" },
 ]
 
 export function SiteHeader() {

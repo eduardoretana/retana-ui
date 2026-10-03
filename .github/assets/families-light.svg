@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" viewBox="0 0 1200 400" role="img" aria-labelledby="title desc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title id="title">Newest Retana UI families</title>
+  <desc id="desc">Three groups. Arc UI free-tier charts, blocks, and inputs on host tokens. An icon rail, a folding table, and room presence. One collection shown as table, kanban, calendar, timeline, list, and gallery.</desc>
+  <rect x="1" y="1" width="1198" height="398" rx="28" fill="#F4F4F5" stroke="#E4E4E7"/>
+  <g id="motif" fill="none" stroke="#18181B" stroke-width="1.5">
+    <path d="M44 32 H64 M44 32 V52"/>
+    <path d="M1156 32 H1136 M1156 32 V52"/>
+    <path d="M44 368 H64 M44 368 V348"/>
+    <path d="M1156 368 H1136 M1156 368 V348"/>
+  </g>
+  <g id="arc" transform="translate(56 48)">
+    <rect width="336" height="304" rx="16" fill="#FFFFFF" stroke="#E4E4E7"/>
+    <text x="24" y="44" fill="#52525B" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="20">01</text>
+    <text x="24" y="86" fill="#18181B" font-size="34" font-weight="650">Arc UI</text>
+    <text x="24" y="140" fill="#3F3F46" font-size="20">Free-tier charts,</text>
+    <text x="24" y="168" fill="#3F3F46" font-size="20">blocks, and inputs</text>
+    <text x="24" y="196" fill="#3F3F46" font-size="20">on host tokens.</text>
+    <g id="arc-specimen" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="18">
+      <rect x="24" y="228" width="132" height="36" rx="8" fill="#F4F4F5"/>
+      <text x="40" y="252" fill="#18181B">bar-chart</text>
+      <rect x="164" y="228" width="108" height="36" rx="8" fill="#F4F4F5"/>
+      <text x="180" y="252" fill="#18181B">blocks</text>
+    </g>
+  </g>
+  <g id="presence" transform="translate(432 48)">
+    <rect width="336" height="304" rx="16" fill="#FFFFFF" stroke="#E4E4E7"/>
+    <text x="24" y="44" fill="#52525B" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="20">02</text>
+    <text x="24" y="86" fill="#18181B" font-size="34" font-weight="650">Presence</text>
+    <text x="24" y="140" fill="#3F3F46" font-size="20">Icon rail, folding</text>
+    <text x="24" y="168" fill="#3F3F46" font-size="20">table, and room</text>
+    <text x="24" y="196" fill="#3F3F46" font-size="20">presence.</text>
+    <g id="rail-specimen">
+      <rect x="24" y="228" width="36" height="44" rx="8" fill="#18181B"/>
+      <rect x="68" y="228" width="108" height="44" rx="8" fill="#F4F4F5" stroke="#E4E4E7"/>
+      <circle cx="210" cy="250" r="14" fill="#E4E4E7"/>
+      <circle cx="232" cy="250" r="14" fill="#D4D4D8"/>
+      <circle cx="254" cy="250" r="14" fill="#18181B"/>
+    </g>
+  </g>
+  <g id="views" transform="translate(808 48)">
+    <rect width="336" height="304" rx="16" fill="#FFFFFF" stroke="#E4E4E7"/>
+    <g id="view-crop" fill="none" stroke="#18181B" stroke-width="1.5">
+      <path d="M16 16 H32 M16 16 V32"/>
+      <path d="M320 16 H304 M320 16 V32"/>
+      <path d="M16 288 H32 M16 288 V272"/>
+      <path d="M320 288 H304 M320 288 V272"/>
+    </g>
+    <text x="24" y="44" fill="#52525B" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="20">03</text>
+    <text x="24" y="86" fill="#18181B" font-size="34" font-weight="650">Multi-view</text>
+    <text x="24" y="140" fill="#3F3F46" font-size="20">Six views of one</text>
+    <text x="24" y="168" fill="#3F3F46" font-size="20">collection, with</text>
+    <text x="24" y="196" fill="#3F3F46" font-size="20">one record panel.</text>
+    <g id="view-specimen" font-size="18">
+      <rect x="24" y="228" width="88" height="36" rx="8" fill="#18181B"/>
+      <text x="68" y="252" fill="#FAFAFA" text-anchor="middle">Table</text>
+      <rect x="120" y="228" width="92" height="36" rx="8" fill="#F4F4F5" stroke="#E4E4E7"/>
+      <text x="166" y="252" fill="#18181B" text-anchor="middle">Board</text>
+      <rect x="220" y="228" width="92" height="36" rx="8" fill="#F4F4F5" stroke="#E4E4E7"/>
+      <text x="266" y="252" fill="#18181B" text-anchor="middle">Month</text>
+    </g>
+  </g>
+</svg>

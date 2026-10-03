@@ -23,13 +23,16 @@ export default function SupabaseAdminPage() {
         <pre className="overflow-x-auto rounded-xl bg-muted p-4">{`npm install @supabase/supabase-js
 npx shadcn@latest add @retana/supabase-admin`}</pre>
         <p className="text-muted-foreground">
-          Aplica <code>registry/lib/supabase/001_admin_content.sql</code> en el editor SQL. Luego
-          inserta tu usuario en <code>public.admins</code>. El texto completo está en{" "}
+          El archivo en este repositorio es{" "}
+          <code>registry/lib/supabase/001_admin_content.sql</code>. Al instalar queda en{" "}
+          <code>lib/supabase/001_admin_content.sql</code>. Aplícalo en el editor SQL e inserta tu
+          usuario en <code>public.admins</code>. El texto completo está en{" "}
           <code>registry/lib/supabase/admin-kit.md</code> y en{" "}
           <Link href="/docs" className="underline-offset-2 hover:underline">
-            la guía de instalación
+            la documentación
           </Link>
-          .
+          . <code>https://&lt;your-deployment&gt;</code> sigue siendo un marcador hasta que exista
+          el dominio.
         </p>
       </section>
       <section className="flex flex-col gap-2">

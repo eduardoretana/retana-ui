@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: "%s · Retana UI",
   },
   description:
-    "Catalog of shared shadcn components, blocks, and hooks. Items inherit the host project's theme.",
+    "Catalog of shared shadcn components, blocks, hooks, and libraries. Each piece inherits the host project's theme, including dark mode.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
