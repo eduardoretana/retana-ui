@@ -89,8 +89,12 @@ export type CodeBlockProps = {
   filename?: string
   language?: string
   showLineNumbers?: boolean
+  /** Collapse longer sources. A control expands the rest in place. */
+  maxLines?: number
   copyLabel?: string
   copiedLabel?: string
+  expandLabel?: string
+  collapseLabel?: string
   className?: string
 }
 
@@ -99,13 +103,19 @@ export function CodeBlock({
   filename,
   language = "text",
   showLineNumbers = true,
+  maxLines,
   copyLabel = "Copy",
   copiedLabel = "Copied",
+  expandLabel = "Show all lines",
+  collapseLabel = "Show fewer lines",
   className,
 }: CodeBlockProps) {
   const [copied, setCopied] = React.useState(false)
+  const [expanded, setExpanded] = React.useState(false)
   const timer = React.useRef<number>(0)
   const lines = code.replace(/\n$/, "").split("\n")
+  const collapsed = maxLines != null && lines.length > maxLines && !expanded
+  const visible = collapsed ? lines.slice(0, maxLines) : lines
 
   React.useEffect(() => () => window.clearTimeout(timer.current), [])
 
@@ -136,7 +146,7 @@ export function CodeBlock({
       </figcaption>
       <pre className="overflow-x-auto p-3 font-mono text-[13px] leading-6">
         <code>
-          {lines.map((line, index) => (
+          {visible.map((line, index) => (
             <span key={index} className="flex">
               {showLineNumbers ? (
                 <span className="mr-4 w-6 shrink-0 select-none text-right text-muted-foreground tabular-nums" aria-hidden>
@@ -156,6 +166,13 @@ export function CodeBlock({
           ))}
         </code>
       </pre>
+      {maxLines != null && lines.length > maxLines ? (
+        <div className="border-t border-border px-3 py-1.5">
+          <Button type="button" variant="ghost" size="xs" aria-expanded={expanded} onClick={() => setExpanded((current) => !current)}>
+            {expanded ? collapseLabel : expandLabel}
+          </Button>
+        </div>
+      ) : null}
     </figure>
   )
 }

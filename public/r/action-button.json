@@ -1,0 +1,72 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "action-button",
+  "title": "Action button",
+  "author": "Eduardo Retana",
+  "description": "A compact button that moves through pending and success after an async action.",
+  "dependencies": [
+    "motion",
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/action-button.tsx",
+      "content": "\"use client\"\n\n/** Adapted from Arc UI (MIT). */\n\nimport * as React from \"react\"\nimport { AnimatePresence, animate, motion, useMotionValue, useReducedMotion, type TargetAndTransition, type Transition, type Variants } from \"motion/react\"\nimport { ArrowRight } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\nexport type ActionButtonClassNames = {\n  root?: string\n  content?: string\n  label?: string\n  icon?: string\n}\n\nexport type ActionButtonProps = Omit<\n  React.ButtonHTMLAttributes<HTMLButtonElement>,\n  \"onClick\" | \"onDrag\" | \"onDragEnd\" | \"onDragStart\" | \"onAnimationStart\"\n> & {\n  label: string\n  successLabel?: string\n  pendingLabel?: string\n  onAction: () => void | Promise<void>\n  resetAfterMs?: number\n  onActionError?: (error: unknown) => void\n  classNames?: ActionButtonClassNames\n}\n\nconst pressVariants: Variants = {\n  pressed: (button: React.RefObject<HTMLButtonElement | null>) => ({\n    scale: (button.current?.offsetWidth ?? 0) > 220 ? 0.985 : 0.97,\n    transition: { duration: motionPresets.duration.instant, ease: [...motionPresets.ease.standard] },\n  }),\n}\n\nconst rest: TargetAndTransition = { opacity: 1, y: 0, scale: 1, filter: \"blur(0px)\" }\nconst glyphIn: TargetAndTransition = { opacity: 0, y: 5, filter: `blur(${motionPresets.blur.soft}px)` }\nconst glyphOut: TargetAndTransition = {\n  opacity: 0,\n  y: -4,\n  filter: `blur(${motionPresets.blur.subtle}px)`,\n  transition: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.standard] },\n}\nconst iconIn: TargetAndTransition = { opacity: 0, scale: 0.6, filter: `blur(${motionPresets.blur.subtle}px)` }\nconst iconOut: TargetAndTransition = { ...iconIn, transition: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.standard] } }\nconst arrowIn: TargetAndTransition = { opacity: 0, x: -6, filter: `blur(${motionPresets.blur.subtle}px)` }\nconst arrowOut: TargetAndTransition = {\n  opacity: 0,\n  x: 8,\n  filter: `blur(${motionPresets.blur.subtle}px)`,\n  transition: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.standard] },\n}\nconst iconRest: TargetAndTransition = { ...rest, x: 0 }\nconst fadeIn: TargetAndTransition = { ...rest, opacity: 0 }\nconst fadeOut: TargetAndTransition = { opacity: 0, transition: { duration: motionPresets.duration.instant } }\nconst iconEnter: Transition = {\n  ...motionPresets.spring.snappy,\n  opacity: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.enter] },\n  filter: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.enter] },\n}\nconst instant = { duration: motionPresets.duration.instant }\n\nfunction useMorphWidth(content: React.RefObject<HTMLElement | null>, key: string, reduced: boolean) {\n  const width = useMotionValue<number | \"auto\">(\"auto\")\n  const lastKey = React.useRef(key)\n  const armedUntil = React.useRef(0)\n\n  React.useLayoutEffect(() => {\n    if (lastKey.current === key) return\n    lastKey.current = key\n    armedUntil.current = performance.now() + 700\n  }, [key])\n\n  React.useEffect(() => {\n    const node = content.current\n    const slot = node?.parentElement\n    if (!node || !slot || typeof ResizeObserver === \"undefined\") return\n    let measured = false\n    const observer = new ResizeObserver(([entry]) => {\n      const next = entry?.contentRect.width ?? 0\n      if (!next || !measured || reduced || performance.now() > armedUntil.current) {\n        measured = next > 0\n        width.jump(next || \"auto\")\n        delete slot.dataset.morphing\n        return\n      }\n      slot.dataset.morphing = \"\"\n      animate(width, next, { ...motionPresets.spring.morph, onComplete: () => { delete slot.dataset.morphing } })\n    })\n    observer.observe(node)\n    return () => observer.disconnect()\n  }, [content, reduced, width])\n\n  return width\n}\n\nfunction DrawnCheck({ reduced }: { reduced: boolean }) {\n  return (\n    <svg width={17} height={17} viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth={2} strokeLinecap=\"round\" strokeLinejoin=\"round\" aria-hidden=\"true\">\n      <motion.path\n        d=\"M4 12l5 5L20 6\"\n        initial={reduced ? false : { pathLength: 0, opacity: 0 }}\n        animate={{ pathLength: 1, opacity: 1 }}\n        transition={{\n          pathLength: { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.enter], delay: 0.05 },\n          opacity: { duration: 0.05, delay: 0.05 },\n        }}\n      />\n    </svg>\n  )\n}\n\ntype Glyph = { id: string; char: string; order: number }\nconst toGlyphs = (chars: string[], seq: number): Glyph[] => chars.map((char, order) => ({ id: `${seq}:${order}`, char, order }))\n\nfunction useGlyphs(text: string) {\n  const [state, setState] = React.useState(() => ({ text, seq: 0, glyphs: toGlyphs([...text], 0) }))\n  if (state.text === text) return state.glyphs\n  const prev = [...state.text]\n  const next = [...text]\n  let start = 0\n  let end = 0\n  while (start < prev.length && start < next.length && prev[start] === next[start]) start++\n  while (end < prev.length - start && end < next.length - start && prev[prev.length - 1 - end] === next[next.length - 1 - end]) end++\n  if (start < 2) start = 0\n  if (end < 2) end = 0\n  const seq = state.seq + 1\n  const glyphs = [\n    ...state.glyphs.slice(0, start),\n    ...toGlyphs(next.slice(start, next.length - end), seq),\n    ...state.glyphs.slice(state.glyphs.length - end),\n  ]\n  setState({ text, seq, glyphs })\n  return glyphs\n}\n\nfunction MorphText({ text, reduced, className }: { text: string; reduced: boolean; className?: string }) {\n  const glyphs = useGlyphs(text)\n  const rowRef = React.useRef<HTMLSpanElement>(null)\n  const width = useMorphWidth(rowRef, text, reduced)\n  return (\n    <motion.span\n      data-slot=\"action-button-label\"\n      className={cn(\"inline-flex min-w-0 max-w-full overflow-hidden data-morphing:[clip-path:inset(-0.6em_0_-0.6em_-0.3em)]\", className)}\n      style={{ width }}\n      aria-hidden=\"true\"\n    >\n      <span ref={rowRef} className=\"relative inline-flex flex-none whitespace-pre\">\n        <AnimatePresence mode=\"popLayout\" initial={false}>\n          {glyphs.map((glyph) => (\n            <motion.span\n              key={glyph.id}\n              className=\"inline-block\"\n              layout={reduced ? false : \"position\"}\n              layoutDependency={text}\n              initial={reduced ? fadeIn : glyphIn}\n              animate={rest}\n              exit={reduced ? fadeOut : glyphOut}\n              transition={reduced ? instant : { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.enter], delay: Math.min(glyph.order * motionPresets.stagger.char, 0.1), layout: motionPresets.spring.morph }}\n            >\n              {glyph.char}\n            </motion.span>\n          ))}\n        </AnimatePresence>\n      </span>\n    </motion.span>\n  )\n}\n\nexport function ActionButton({\n  label,\n  successLabel = \"Saved\",\n  pendingLabel = \"Saving\",\n  onAction,\n  resetAfterMs = 2400,\n  onActionError,\n  className,\n  classNames,\n  disabled,\n  ...props\n}: ActionButtonProps) {\n  const [state, setState] = React.useState<\"idle\" | \"pending\" | \"success\">(\"idle\")\n  const resetTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)\n  const buttonRef = React.useRef<HTMLButtonElement>(null)\n  const reduceMotion = useReducedMotion() ?? false\n  const text = state === \"pending\" ? pendingLabel : state === \"success\" ? successLabel : label\n\n  React.useEffect(() => () => { if (resetTimer.current) clearTimeout(resetTimer.current) }, [])\n\n  async function run() {\n    if (state === \"pending\") return\n    if (resetTimer.current) clearTimeout(resetTimer.current)\n    setState(\"pending\")\n    try {\n      await onAction()\n      setState(\"success\")\n      if (resetAfterMs > 0) resetTimer.current = setTimeout(() => setState(\"idle\"), resetAfterMs)\n    } catch (error) {\n      setState(\"idle\")\n      onActionError?.(error)\n    }\n  }\n\n  const pending = state === \"pending\"\n  const arrow = state === \"idle\"\n\n  return (\n    <motion.button\n      {...props}\n      ref={buttonRef}\n      tabIndex={props.tabIndex ?? 0}\n      type={props.type ?? \"button\"}\n      data-slot=\"action-button\"\n      data-state={state}\n      className={cn(\n        \"relative inline-flex w-max max-w-full min-w-0 min-h-9 items-center justify-center overflow-hidden rounded-lg border border-primary bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80 hover:shadow-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-70 data-[state=pending]:cursor-progress motion-reduce:transition-none\",\n        className,\n        classNames?.root,\n      )}\n      disabled={disabled}\n      aria-disabled={pending ? true : props[\"aria-disabled\"]}\n      aria-busy={pending}\n      onClick={() => void run()}\n      custom={buttonRef}\n      variants={pressVariants}\n      whileTap={reduceMotion || disabled || pending ? undefined : \"pressed\"}\n      transition={motionPresets.spring.snappy}\n    >\n      <span data-slot=\"action-button-content\" className={cn(\"inline-flex min-w-0 max-w-full items-center justify-center gap-2 whitespace-nowrap\", classNames?.content)} aria-hidden=\"true\">\n        <MorphText text={text} reduced={reduceMotion} className={classNames?.label} />\n        <span data-slot=\"action-button-icon\" className={cn(\"grid size-[17px] shrink-0 place-items-center\", classNames?.icon)}>\n          <AnimatePresence initial={false}>\n            <motion.span\n              key={state}\n              className=\"col-start-1 row-start-1 grid size-[17px] place-items-center\"\n              initial={reduceMotion ? fadeIn : arrow ? arrowIn : iconIn}\n              animate={iconRest}\n              exit={reduceMotion ? fadeOut : arrow ? arrowOut : iconOut}\n              transition={reduceMotion ? instant : iconEnter}\n            >\n              {pending ? (\n                <span className=\"inline-block size-4 animate-spin rounded-full border-2 border-current border-r-transparent motion-reduce:animate-none\" />\n              ) : state === \"success\" ? (\n                <DrawnCheck reduced={reduceMotion} />\n              ) : (\n                <ArrowRight className=\"size-[17px]\" width={17} height={17} aria-hidden=\"true\" />\n              )}\n            </motion.span>\n          </AnimatePresence>\n        </span>\n      </span>\n      <span className=\"sr-only\">{label}</span>\n      <span className=\"sr-only\" role=\"status\">{state === \"pending\" ? pendingLabel : state === \"success\" ? successLabel : \"\"}</span>\n    </motion.button>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/action-button.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    exit: [0.7, 0, 0.84, 0] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Botón de acción",
+    "descriptionEs": "Un botón compacto que pasa por pendiente y éxito después de una acción.",
+    "preview": "app/examples/action-button/preview.tsx",
+    "previewHref": "/examples/action-button",
+    "examples": [
+      {
+        "title": "Botón de acción",
+        "href": "/examples/action-button",
+        "description": "Un botón compacto que pasa por pendiente y éxito después de una acción."
+      }
+    ],
+    "usage": "<ActionButton label=\"Save\" onAction={save} />",
+    "api": [
+      {
+        "name": "label / pendingLabel / successLabel",
+        "type": "string",
+        "description": "Idle, pending, and success copy."
+      },
+      {
+        "name": "onAction",
+        "type": "() => void | Promise<void>",
+        "description": "Runs the action. The button stays pending until it settles."
+      },
+      {
+        "name": "resetAfterMs",
+        "type": "number",
+        "description": "How long success stays before the label returns."
+      },
+      {
+        "name": "onActionError",
+        "type": "(error: unknown) => void",
+        "description": "Called when the action rejects. The button returns to idle."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "action"
+  ],
+  "type": "registry:ui"
+}

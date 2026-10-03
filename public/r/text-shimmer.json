@@ -1,0 +1,61 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "text-shimmer",
+  "title": "Text shimmer",
+  "author": "Eduardo Retana",
+  "description": "A calm light across a short status line while work is ongoing. Sets aria-busy.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/text-shimmer.tsx",
+      "content": "\"use client\"\n\n/** Adapted from Arc UI (MIT). */\n\nimport { useEffect, useRef, useState, useSyncExternalStore } from \"react\"\nimport { AnimatePresence, motion, useInView, useReducedMotion } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\nexport type TextShimmerProps = {\n  children: string\n  active?: boolean\n  duration?: number\n  as?: \"span\" | \"p\" | \"div\" | \"h2\" | \"h3\" | \"h4\"\n  className?: string\n  id?: string\n}\n\nconst subscribe = () => () => {}\n\nfunction usePageVisible() {\n  const [visible, setVisible] = useState(true)\n  useEffect(() => {\n    const onChange = () => setVisible(document.visibilityState !== \"hidden\")\n    onChange()\n    document.addEventListener(\"visibilitychange\", onChange)\n    return () => document.removeEventListener(\"visibilitychange\", onChange)\n  }, [])\n  return visible\n}\n\nexport function TextShimmer({ children, active = true, duration = 1.8, as = \"span\", className, id }: TextShimmerProps) {\n  const ref = useRef<HTMLSpanElement>(null)\n  const prefersReduced = useReducedMotion()\n  const hydrated = useSyncExternalStore(subscribe, () => true, () => false)\n  const reduced = Boolean(hydrated && prefersReduced)\n  const inView = useInView(ref, { margin: \"64px\" })\n  const pageVisible = usePageVisible()\n  const running = active && !reduced && inView && pageVisible\n  const Tag = as\n\n  return (\n    <Tag\n      id={id}\n      data-slot=\"text-shimmer\"\n      data-state={active ? \"active\" : \"idle\"}\n      className={cn(\"inline-block max-w-full\", className)}\n      aria-busy={active || undefined}\n    >\n      <span ref={ref} className=\"inline-grid\">\n        <AnimatePresence mode=\"popLayout\" initial={false}>\n          <motion.span\n            key={children}\n            className=\"col-start-1 row-start-1 bg-clip-text text-transparent\"\n            style={{\n              backgroundImage:\n                \"linear-gradient(90deg, var(--muted-foreground), var(--foreground), var(--muted-foreground))\",\n              backgroundSize: \"200% 100%\",\n            }}\n            initial={reduced ? { opacity: 0 } : { opacity: 0, y: \"0.3em\", filter: `blur(${motionPresets.blur.soft}px)` }}\n            animate={\n              reduced\n                ? { opacity: 1, backgroundPositionX: \"0%\" }\n                : {\n                    opacity: 1,\n                    y: \"0em\",\n                    filter: \"blur(0px)\",\n                    backgroundPositionX: running ? [\"100%\", \"-100%\"] : \"0%\",\n                  }\n            }\n            transition={\n              running\n                ? { backgroundPositionX: { duration, repeat: Infinity, ease: \"linear\" }, default: { duration: motionPresets.duration.standard } }\n                : { duration: reduced ? motionPresets.duration.instant : motionPresets.duration.standard, ease: [...motionPresets.ease.enter] }\n            }\n            exit={\n              reduced\n                ? { opacity: 0, transition: { duration: motionPresets.duration.instant } }\n                : { opacity: 0, y: \"-0.24em\", filter: `blur(${motionPresets.blur.subtle}px)` }\n            }\n          >\n            {children}\n          </motion.span>\n        </AnimatePresence>\n      </span>\n    </Tag>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/text-shimmer.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    exit: [0.7, 0, 0.84, 0] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Texto con brillo",
+    "descriptionEs": "Una luz recorre una línea corta de estado mientras el trabajo sigue. Marca aria-busy.",
+    "preview": "app/examples/text-shimmer/preview.tsx",
+    "previewHref": "/examples/text-shimmer",
+    "examples": [
+      {
+        "title": "Texto con brillo",
+        "href": "/examples/text-shimmer",
+        "description": "Una luz recorre una línea corta de estado mientras el trabajo sigue. Marca aria-busy."
+      }
+    ],
+    "usage": "<TextShimmer active={busy}>Firing the kiln</TextShimmer>",
+    "api": [
+      {
+        "name": "children",
+        "type": "string",
+        "description": "Status text. Keep it to one short line."
+      },
+      {
+        "name": "active",
+        "type": "boolean",
+        "description": "Sweep while work continues. Default true."
+      },
+      {
+        "name": "duration",
+        "type": "number",
+        "description": "Seconds for one sweep. Default 1.8."
+      }
+    ]
+  },
+  "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "content"
+  ],
+  "type": "registry:ui"
+}

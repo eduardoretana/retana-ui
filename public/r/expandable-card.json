@@ -1,0 +1,67 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "expandable-card",
+  "title": "Expandable card",
+  "author": "Eduardo Retana",
+  "description": "A dense card that grows in width and height to show more, and closes with Escape.",
+  "dependencies": [
+    "motion",
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/expandable-card.tsx",
+      "content": "\"use client\"\n\n/** Adapted from Arc UI (MIT). */\n\nimport { useId, useLayoutEffect, useRef, useState, type ComponentPropsWithoutRef, type KeyboardEvent, type ReactNode } from \"react\"\nimport { AnimatePresence, animate, motion, useMotionValue, useReducedMotion, type Transition, type Variants } from \"motion/react\"\nimport { ChevronDown } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\nexport type ExpandableCardProps = Omit<\n  ComponentPropsWithoutRef<\"article\">,\n  \"title\" | \"children\" | \"onAnimationStart\" | \"onAnimationEnd\" | \"onAnimationIteration\" | \"onDrag\" | \"onDragStart\" | \"onDragEnd\" | \"onDragOver\" | \"onDragLeave\" | \"onDragEnter\" | \"onDragExit\" | \"onDrop\"\n> & {\n  title: string\n  description?: string\n  children: ReactNode\n  defaultExpanded?: boolean\n  width?: number\n  expandedWidth?: number\n  classNames?: { trigger?: string; panel?: string; title?: string }\n}\n\nconst morph = motionPresets.spring.smooth\nconst closeHold = 0.06\nconst settleTime = 450\nconst boxTransition = (expanded: boolean, hold: boolean): Transition => (expanded || !hold ? morph : { ...morph, delay: closeHold })\nconst contentTransition = (expanded: boolean): Transition =>\n  expanded\n    ? { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.standard], delay: 0.12 }\n    : { duration: 0.1, ease: [...motionPresets.ease.standard] }\nconst still: Transition = { duration: 0 }\n\nconst wordMotion: Variants = {\n  enter: { opacity: 0, y: \".35em\", filter: `blur(${motionPresets.blur.soft}px)` },\n  center: { opacity: 1, y: 0, filter: \"blur(0px)\", transition: { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.enter] } },\n  exit: { opacity: 0, y: \"-.3em\", filter: `blur(${motionPresets.blur.subtle}px)`, transition: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.standard] } },\n}\n\nfunction RollingText({ text, reduced }: { text: string; reduced: boolean }) {\n  return (\n    <span>\n      <span className=\"sr-only\">{text}</span>\n      <span aria-hidden=\"true\">\n        <AnimatePresence mode=\"popLayout\" initial={false}>\n          {text.split(/(\\s+)/).map((word, index) => (\n            <motion.span key={`${index}:${word}`} className=\"inline-block whitespace-pre\" variants={wordMotion} initial={reduced ? false : \"enter\"} animate=\"center\" exit={reduced ? undefined : \"exit\"}>\n              {word}\n            </motion.span>\n          ))}\n        </AnimatePresence>\n      </span>\n    </span>\n  )\n}\n\nexport function ExpandableCard({\n  title,\n  description,\n  children,\n  defaultExpanded = false,\n  width,\n  expandedWidth,\n  className,\n  classNames,\n  style,\n  onKeyDown,\n  ...rest\n}: ExpandableCardProps) {\n  const [expanded, setExpanded] = useState(defaultExpanded)\n  const [hold, setHold] = useState(true)\n  const lastToggle = useRef(0)\n  const [room, setRoom] = useState<number | null>(null)\n  const trackRef = useRef<HTMLDivElement>(null)\n  const triggerRef = useRef<HTMLButtonElement>(null)\n  const panelId = useId()\n  const reduceMotion = useReducedMotion() ?? false\n\n  useLayoutEffect(() => {\n    const track = trackRef.current\n    if (!track) return\n    const measure = () => setRoom(track.clientWidth)\n    measure()\n    const observer = new ResizeObserver(measure)\n    observer.observe(track)\n    return () => observer.disconnect()\n  }, [])\n\n  const openCap = expandedWidth ?? width\n  const fit = (cap: number | undefined) => (room === null ? undefined : Math.min(room, cap ?? room))\n  const boxWidth = fit(expanded ? openCap : width)\n  const innerWidth = fit(openCap)\n  const boxWidthValue = useMotionValue<number | string>(\"100%\")\n  const placed = useRef(false)\n  const widthTransition = reduceMotion ? still : boxTransition(expanded, hold)\n\n  useLayoutEffect(() => {\n    if (boxWidth === undefined) return\n    if (!placed.current) {\n      placed.current = true\n      boxWidthValue.jump(boxWidth)\n      return\n    }\n    const controls = animate(boxWidthValue, boxWidth, widthTransition)\n    return () => controls.stop()\n    // widthTransition is derived from expanded and hold, which already change boxWidth.\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n  }, [boxWidth, boxWidthValue])\n\n  const toggle = (next: boolean) => {\n    const now = performance.now()\n    setHold(now - lastToggle.current > settleTime)\n    lastToggle.current = now\n    setExpanded(next)\n  }\n\n  const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {\n    onKeyDown?.(event)\n    if (event.defaultPrevented || event.key !== \"Escape\" || !expanded) return\n    event.preventDefault()\n    toggle(false)\n    triggerRef.current?.focus()\n  }\n\n  const capStyle = {\n    ...style,\n    width: boxWidthValue,\n    maxWidth: \"100%\",\n  }\n\n  return (\n    <div ref={trackRef} data-slot=\"expandable-card-track\" className=\"flex w-full min-w-0 justify-center\">\n      <motion.article\n        {...rest}\n        data-slot=\"expandable-card\"\n        data-expanded={expanded || undefined}\n        className={cn(\"min-w-0 overflow-hidden rounded-lg border border-border bg-card text-card-foreground\", className)}\n        style={{ ...capStyle, ...(width ? { maxWidth: expanded ? (expandedWidth ?? width) : width } : {}) }}\n        onKeyDown={handleKeyDown}\n      >\n        <button\n          ref={triggerRef}\n          type=\"button\"\n          data-slot=\"expandable-card-trigger\"\n          className={cn(\"flex w-full items-center gap-3 px-4 py-3 text-left\", classNames?.trigger)}\n          aria-expanded={expanded}\n          aria-controls={panelId}\n          onClick={() => toggle(!expanded)}\n        >\n          <span className=\"min-w-0 flex-1\">\n            <strong data-slot=\"expandable-card-title\" className={cn(\"block truncate\", classNames?.title)}>\n              {title}\n            </strong>\n            {description ? (\n              <span className=\"text-sm text-muted-foreground\">\n                <RollingText text={description} reduced={reduceMotion} />\n              </span>\n            ) : null}\n          </span>\n          <motion.span aria-hidden=\"true\" initial={false} animate={{ rotate: expanded ? 180 : 0 }} transition={reduceMotion ? still : boxTransition(expanded, hold)}>\n            <ChevronDown />\n          </motion.span>\n        </button>\n        <motion.div\n          id={panelId}\n          data-slot=\"expandable-card-panel\"\n          className={cn(\"overflow-hidden\", classNames?.panel)}\n          inert={!expanded}\n          initial={false}\n          animate={{ height: expanded ? \"auto\" : 0 }}\n          transition={reduceMotion ? still : boxTransition(expanded, hold)}\n        >\n          <motion.div\n            className=\"px-4 pb-4\"\n            style={innerWidth === undefined ? undefined : { width: innerWidth }}\n            initial={false}\n            animate={{ opacity: expanded ? 1 : 0 }}\n            transition={reduceMotion ? still : contentTransition(expanded)}\n          >\n            {children}\n          </motion.div>\n        </motion.div>\n      </motion.article>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/expandable-card.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    exit: [0.7, 0, 0.84, 0] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Tarjeta expandible",
+    "descriptionEs": "Una tarjeta densa que crece en ancho y alto para mostrar el detalle. Escape la cierra.",
+    "preview": "app/examples/expandable-card/preview.tsx",
+    "previewHref": "/examples/expandable-card",
+    "examples": [
+      {
+        "title": "Tarjeta expandible",
+        "href": "/examples/expandable-card",
+        "description": "Una tarjeta densa que crece en ancho y alto para mostrar el detalle. Escape la cierra."
+      }
+    ],
+    "usage": "<ExpandableCard title=\"Kiln log\" description=\"Saturday firing\"><p>Cone 6.</p></ExpandableCard>",
+    "api": [
+      {
+        "name": "title / description / children",
+        "type": "string / ReactNode",
+        "description": "Summary and the details that open in place."
+      },
+      {
+        "name": "defaultExpanded",
+        "type": "boolean",
+        "description": "Open on first render. Default false."
+      },
+      {
+        "name": "width / expandedWidth",
+        "type": "number",
+        "description": "Collapsed and expanded width caps in pixels."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes for the trigger, title, and panel."
+      }
+    ]
+  },
+  "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "disclosure"
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "in-view-title",
+  "title": "In-view title",
+  "author": "Eduardo Retana",
+  "description": "A section title that reveals as it scrolls into view: blur, word, line, tracking, or wipe.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/in-view-title.tsx",
+      "content": "\"use client\"\n\n/** Adapted from Arc UI (MIT). */\n\nimport { Fragment, useEffect, useRef, useState, useSyncExternalStore } from \"react\"\nimport { motion, useInView, useReducedMotion, type Transition } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\nexport type InViewTitleVariant = \"word\" | \"line\" | \"blur\" | \"tracking\" | \"wipe\"\n\nexport type InViewTitleProps = {\n  text: string\n  variant?: InViewTitleVariant\n  as?: \"h1\" | \"h2\" | \"h3\"\n  lines?: string[]\n  className?: string\n  id?: string\n  once?: boolean\n}\n\nconst subscribe = () => () => {}\nconst FALLBACK_MS = 2400\nconst lateBoot = typeof window !== \"undefined\" && performance.now() > FALLBACK_MS\nconst enter = [...motionPresets.ease.enter] as [number, number, number, number]\nconst standard = [...motionPresets.ease.standard] as [number, number, number, number]\nconst TRACK_EM = 0.06\n\nfunction reveal(instant: boolean, visible: boolean, delay: number, settle = 0.8): Transition {\n  if (instant) return { duration: 0 }\n  if (!visible) return { duration: motionPresets.duration.exit, ease: standard }\n  const track = (duration: number, ease: readonly [number, number, number, number] = enter) => ({\n    duration,\n    delay,\n    ease: [ease[0], ease[1], ease[2], ease[3]] as [number, number, number, number],\n  })\n  return {\n    y: track(settle),\n    x: track(settle),\n    filter: track(settle * 0.78),\n    opacity: track(settle * 0.56, standard),\n  }\n}\n\nexport function InViewTitle({ text, variant = \"blur\", as = \"h2\", lines, className, id, once = true }: InViewTitleProps) {\n  const ref = useRef<HTMLDivElement>(null)\n  const inView = useInView(ref, { once, amount: 0.45 })\n  const [passed, setPassed] = useState(false)\n  useEffect(() => {\n    if (inView || passed) return\n    const revealPassedTitle = () => {\n      if (ref.current && ref.current.getBoundingClientRect().top < 0) setPassed(true)\n    }\n    revealPassedTitle()\n    window.addEventListener(\"scroll\", revealPassedTitle, { passive: true })\n    return () => window.removeEventListener(\"scroll\", revealPassedTitle)\n  }, [inView, passed])\n  const prefersReduced = useReducedMotion()\n  const hydrated = useSyncExternalStore(subscribe, () => true, () => false)\n  const [serverRendered] = useState(!hydrated)\n  const reduced = Boolean(hydrated && prefersReduced)\n  const late = hydrated && serverRendered && lateBoot\n  const visible = reduced || late || inView || passed\n  const instant = Boolean(reduced || late)\n  const Tag = as\n  const words = text.split(\" \").filter(Boolean)\n  const step = Math.min(motionPresets.stagger.word * 1.5, 0.4 / Math.max(words.length, 1))\n\n  if (variant === \"word\") {\n    return (\n      <div ref={ref} data-slot=\"in-view-title\" className={cn(\"max-w-full\", className)}>\n        <Tag id={id} aria-label={text}>\n          {words.map((word, index) => (\n            <Fragment key={`${word}-${index}`}>\n              <span className=\"inline-block overflow-hidden align-bottom\" aria-hidden=\"true\">\n                <motion.span\n                  className=\"inline-block\"\n                  initial={false}\n                  animate={visible ? { y: \"0em\", opacity: 1 } : { y: \"0.9em\", opacity: 0 }}\n                  transition={reveal(instant, visible, index * step)}\n                >\n                  {word}\n                </motion.span>\n              </span>\n              {index < words.length - 1 ? \" \" : null}\n            </Fragment>\n          ))}\n        </Tag>\n      </div>\n    )\n  }\n\n  if (variant === \"line\") {\n    const titleLines = lines?.length ? lines : [text]\n    return (\n      <div ref={ref} data-slot=\"in-view-title\" className={cn(\"max-w-full\", className)}>\n        <Tag id={id} aria-label={text}>\n          {titleLines.map((line, index) => (\n            <span className=\"block overflow-hidden\" aria-hidden=\"true\" key={`${line}-${index}`}>\n              <motion.span\n                className=\"block\"\n                initial={false}\n                animate={visible ? { y: \"0%\", opacity: 1 } : { y: \"112%\", opacity: 0 }}\n                transition={reveal(instant, visible, index * motionPresets.stagger.line, 0.86)}\n              >\n                {line}\n              </motion.span>\n            </span>\n          ))}\n        </Tag>\n      </div>\n    )\n  }\n\n  if (variant === \"tracking\") {\n    return (\n      <div ref={ref} data-slot=\"in-view-title\" className={cn(\"max-w-full\", className)}>\n        <Tag id={id} aria-label={text}>\n          {words.map((word, index) => {\n            const letters = Array.from(word)\n            const center = (letters.length - 1) / 2\n            const delay = index * motionPresets.stagger.char * 2\n            return (\n              <Fragment key={`${word}-${index}`}>\n                <motion.span\n                  className=\"inline-flex\"\n                  aria-hidden=\"true\"\n                  initial={false}\n                  animate={visible ? { opacity: 1, filter: \"blur(0px)\" } : { opacity: 0, filter: `blur(${motionPresets.blur.soft}px)` }}\n                  transition={reveal(instant, visible, delay, 0.9)}\n                >\n                  {letters.map((letter, letterIndex) => (\n                    <motion.span\n                      key={letterIndex}\n                      className=\"inline-block\"\n                      initial={false}\n                      animate={{ x: visible ? \"0em\" : `${(center - letterIndex) * TRACK_EM}em` }}\n                      transition={reveal(instant, visible, delay, 1)}\n                    >\n                      {letter}\n                    </motion.span>\n                  ))}\n                </motion.span>\n                {index < words.length - 1 ? \" \" : null}\n              </Fragment>\n            )\n          })}\n        </Tag>\n      </div>\n    )\n  }\n\n  if (variant === \"wipe\") {\n    return (\n      <div ref={ref} data-slot=\"in-view-title\" className={cn(\"max-w-full\", className)}>\n        <motion.div\n          className=\"inline-block max-w-full\"\n          initial={false}\n          animate={visible ? { clipPath: \"inset(0 0% 0 0)\", x: \"0em\" } : { clipPath: \"inset(0 100% 0 0)\", x: \"-0.12em\" }}\n          transition={reveal(instant, visible, 0, 0.9)}\n        >\n          <Tag id={id}>{text}</Tag>\n        </motion.div>\n      </div>\n    )\n  }\n\n  return (\n    <div ref={ref} data-slot=\"in-view-title\" className={cn(\"max-w-full\", className)}>\n      <Tag id={id} aria-label={text}>\n        {words.map((word, index) => (\n          <Fragment key={`${word}-${index}`}>\n            <motion.span\n              className=\"inline-block\"\n              aria-hidden=\"true\"\n              initial={false}\n              animate={visible ? { opacity: 1, y: \"0em\", filter: \"blur(0px)\" } : { opacity: 0, y: \"0.2em\", filter: `blur(${motionPresets.blur.text}px)` }}\n              transition={reveal(instant, visible, index * step)}\n            >\n              {word}\n            </motion.span>\n            {index < words.length - 1 ? \" \" : null}\n          </Fragment>\n        ))}\n      </Tag>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/in-view-title.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    exit: [0.7, 0, 0.84, 0] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Título al entrar",
+    "descriptionEs": "Un título de sección que se revela al entrar en la vista: desenfoque, palabra, línea, tracking o barrido.",
+    "preview": "app/examples/in-view-title/preview.tsx",
+    "previewHref": "/examples/in-view-title",
+    "examples": [
+      {
+        "title": "Título al entrar",
+        "href": "/examples/in-view-title",
+        "description": "Un título de sección que se revela al entrar en la vista: desenfoque, palabra, línea, tracking o barrido."
+      }
+    ],
+    "usage": "<InViewTitle text=\"Coastal clay\" variant=\"blur\" />",
+    "api": [
+      {
+        "name": "text",
+        "type": "string",
+        "description": "The title."
+      },
+      {
+        "name": "variant",
+        "type": "\"word\" | \"line\" | \"blur\" | \"tracking\" | \"wipe\"",
+        "description": "How it enters. Default blur."
+      },
+      {
+        "name": "lines",
+        "type": "string[]",
+        "description": "Explicit line breaks for the line variant."
+      },
+      {
+        "name": "once",
+        "type": "boolean",
+        "description": "Reveal a single time. Default true."
+      }
+    ]
+  },
+  "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "content"
+  ],
+  "type": "registry:ui"
+}

@@ -43,6 +43,86 @@ import Preview38 from "@/app/examples/marker/preview"
 import Preview39 from "@/app/examples/press-sound/preview"
 import Preview40 from "@/app/examples/crm-table/preview"
 import Preview41 from "@/app/examples/dock-nav/preview"
+import Preview42 from "@/app/examples/theme-switch/preview"
+import Preview43 from "@/app/examples/password-field/preview"
+import Preview44 from "@/app/examples/search-field/preview"
+import Preview45 from "@/app/examples/copy-button/preview"
+import Preview46 from "@/app/examples/segmented-control/preview"
+import Preview47 from "@/app/examples/text-reveal/preview"
+import Preview48 from "@/app/examples/text-morph/preview"
+import Preview49 from "@/app/examples/text-shimmer/preview"
+import Preview50 from "@/app/examples/in-view-title/preview"
+import Preview51 from "@/app/examples/slot-text/preview"
+import Preview52 from "@/app/examples/expandable-card/preview"
+import Preview53 from "@/app/examples/action-button/preview"
+import Preview54 from "@/app/examples/split-button/preview"
+import Preview55 from "@/app/examples/hold-to-confirm/preview"
+import Preview56 from "@/app/examples/swipe-actions/preview"
+import Preview57 from "@/app/examples/user-menu/preview"
+import Preview58 from "@/app/examples/confirm-morph/preview"
+import Preview59 from "@/app/examples/number-field/preview"
+import Preview60 from "@/app/examples/tag-input/preview"
+import Preview61 from "@/app/examples/time-picker/preview"
+import Preview62 from "@/app/examples/inline-edit/preview"
+import Preview63 from "@/app/examples/expanding-search/preview"
+import Preview64 from "@/app/examples/chip-group/preview"
+import Preview65 from "@/app/examples/password-strength/preview"
+import Preview66 from "@/app/examples/signature-pad/preview"
+import Preview67 from "@/app/examples/date-range-picker/preview"
+import Preview68 from "@/app/examples/phone-input/preview"
+import Preview69 from "@/app/examples/shortcut-recorder/preview"
+import Preview70 from "@/app/examples/mention-input/preview"
+import Preview71 from "@/app/examples/rich-text-editor/preview"
+import Preview72 from "@/app/examples/billing-toggle/preview"
+import Preview73 from "@/app/examples/radio-cards/preview"
+import Preview74 from "@/app/examples/avatar-group/preview"
+import Preview75 from "@/app/examples/metric-card/preview"
+import Preview76 from "@/app/examples/empty-state/preview"
+import Preview77 from "@/app/examples/tree-view/preview"
+import Preview78 from "@/app/examples/filter-toolbar/preview"
+import Preview79 from "@/app/examples/sparkline/preview"
+import Preview80 from "@/app/examples/gauge/preview"
+import Preview81 from "@/app/examples/animated-counter/preview"
+import Preview82 from "@/app/examples/image-compare/preview"
+import Preview83 from "@/app/examples/carousel/preview"
+import Preview84 from "@/app/examples/card-stack/preview"
+import Preview85 from "@/app/examples/activity-heatmap/preview"
+import Preview86 from "@/app/examples/timeline/preview"
+import Preview87 from "@/app/examples/toast-stack/preview"
+import Preview88 from "@/app/examples/usage-meter/preview"
+import Preview89 from "@/app/examples/stepper/preview"
+import Preview90 from "@/app/examples/announcement-bar/preview"
+import Preview91 from "@/app/examples/command-palette/preview"
+import Preview92 from "@/app/examples/bar-chart/preview"
+import Preview93 from "@/app/examples/line-chart/preview"
+import Preview94 from "@/app/examples/donut-chart/preview"
+import Preview95 from "@/app/examples/streamgraph/preview"
+import Preview96 from "@/app/examples/brush-chart/preview"
+import Preview97 from "@/app/examples/ridgeline/preview"
+import Preview98 from "@/app/examples/treemap/preview"
+import Preview99 from "@/app/examples/waffle-chart/preview"
+import Preview100 from "@/app/examples/slope-chart/preview"
+import Preview101 from "@/app/examples/bottom-sheet/preview"
+import Preview102 from "@/app/examples/json-viewer/preview"
+import Preview103 from "@/app/examples/comment-thread/preview"
+import Preview104 from "@/app/examples/signup-form/preview"
+import Preview105 from "@/app/examples/plan-comparison/preview"
+import Preview106 from "@/app/examples/notification-center/preview"
+import Preview107 from "@/app/examples/changelog-feed/preview"
+import Preview108 from "@/app/examples/sign-in/preview"
+import Preview109 from "@/app/examples/page-header/preview"
+import Preview110 from "@/app/examples/empty-states/preview"
+import Preview111 from "@/app/examples/login-centered/preview"
+import Preview112 from "@/app/examples/site-header/preview"
+import Preview113 from "@/app/examples/site-footer/preview"
+import Preview114 from "@/app/examples/hero-section/preview"
+import Preview115 from "@/app/examples/faq-section/preview"
+import Preview116 from "@/app/examples/contact-section/preview"
+import Preview117 from "@/app/examples/blog-grid/preview"
+import Preview118 from "@/app/examples/comparison-table/preview"
+import Preview119 from "@/app/examples/stats-band/preview"
+import Preview120 from "@/app/examples/cta-section/preview"
+import Preview121 from "@/app/examples/newsletter-signup/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -87,4 +167,84 @@ export const previewMap = {
   "press-sound": Preview39,
   "crm-table": Preview40,
   "dock-nav": Preview41,
+  "theme-switch": Preview42,
+  "password-field": Preview43,
+  "search-field": Preview44,
+  "copy-button": Preview45,
+  "segmented-control": Preview46,
+  "text-reveal": Preview47,
+  "text-morph": Preview48,
+  "text-shimmer": Preview49,
+  "in-view-title": Preview50,
+  "slot-text": Preview51,
+  "expandable-card": Preview52,
+  "action-button": Preview53,
+  "split-button": Preview54,
+  "hold-to-confirm": Preview55,
+  "swipe-actions": Preview56,
+  "user-menu": Preview57,
+  "confirm-morph": Preview58,
+  "number-field": Preview59,
+  "tag-input": Preview60,
+  "time-picker": Preview61,
+  "inline-edit": Preview62,
+  "expanding-search": Preview63,
+  "chip-group": Preview64,
+  "password-strength": Preview65,
+  "signature-pad": Preview66,
+  "date-range-picker": Preview67,
+  "phone-input": Preview68,
+  "shortcut-recorder": Preview69,
+  "mention-input": Preview70,
+  "rich-text-editor": Preview71,
+  "billing-toggle": Preview72,
+  "radio-cards": Preview73,
+  "avatar-group": Preview74,
+  "metric-card": Preview75,
+  "empty-state": Preview76,
+  "tree-view": Preview77,
+  "filter-toolbar": Preview78,
+  "sparkline": Preview79,
+  "gauge": Preview80,
+  "animated-counter": Preview81,
+  "image-compare": Preview82,
+  "carousel": Preview83,
+  "card-stack": Preview84,
+  "activity-heatmap": Preview85,
+  "timeline": Preview86,
+  "toast-stack": Preview87,
+  "usage-meter": Preview88,
+  "stepper": Preview89,
+  "announcement-bar": Preview90,
+  "command-palette": Preview91,
+  "bar-chart": Preview92,
+  "line-chart": Preview93,
+  "donut-chart": Preview94,
+  "streamgraph": Preview95,
+  "brush-chart": Preview96,
+  "ridgeline": Preview97,
+  "treemap": Preview98,
+  "waffle-chart": Preview99,
+  "slope-chart": Preview100,
+  "bottom-sheet": Preview101,
+  "json-viewer": Preview102,
+  "comment-thread": Preview103,
+  "signup-form": Preview104,
+  "plan-comparison": Preview105,
+  "notification-center": Preview106,
+  "changelog-feed": Preview107,
+  "sign-in": Preview108,
+  "page-header": Preview109,
+  "empty-states": Preview110,
+  "login-centered": Preview111,
+  "site-header": Preview112,
+  "site-footer": Preview113,
+  "hero-section": Preview114,
+  "faq-section": Preview115,
+  "contact-section": Preview116,
+  "blog-grid": Preview117,
+  "comparison-table": Preview118,
+  "stats-band": Preview119,
+  "cta-section": Preview120,
+  "newsletter-signup": Preview121,
 }

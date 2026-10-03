@@ -1,0 +1,69 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme-switch",
+  "title": "Theme switch",
+  "author": "Eduardo Retana",
+  "description": "Four ways to move between light and dark: fade, eclipse, split, and rise. Uses the View Transitions API when the browser has it, and changes the theme immediately otherwise.",
+  "dependencies": [
+    "motion",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/theme-switch.tsx",
+      "content": "\"use client\"\n\n/** Adapted from Arc UI (MIT). */\n\nimport * as React from \"react\"\nimport { AnimatePresence, motion, useReducedMotion } from \"motion/react\"\nimport { Moon, Sun } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\nexport type ThemeSwitchVariant = \"fade\" | \"eclipse\" | \"split\" | \"rise\"\nexport type ThemeName = \"light\" | \"dark\"\n\nexport type ThemeSwitchClassNames = {\n  root?: string\n  icon?: string\n  label?: string\n}\n\nexport type ThemeSwitchProps = {\n  theme: ThemeName\n  /** Page transition. `fade` crossfades; `eclipse` opens from the control; `split` from a center seam; `rise` from the bottom. */\n  variant?: ThemeSwitchVariant\n  /** Next-themes compatible. Called with the next theme inside the view transition when the browser supports it. */\n  onThemeChange: (next: ThemeName) => void\n  label?: string\n  iconOnly?: boolean\n  className?: string\n  classNames?: ThemeSwitchClassNames\n}\n\nconst TRANSITION_CSS = `\n@media (prefers-reduced-motion: no-preference) {\n  html[data-theme-switch=\"fade\"]::view-transition-old(root),\n  html[data-theme-switch=\"fade\"]::view-transition-new(root) {\n    animation-duration: 280ms;\n    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);\n  }\n  html[data-theme-switch=\"eclipse\"]::view-transition-old(root) { animation: none; }\n  html[data-theme-switch=\"eclipse\"]::view-transition-new(root) {\n    animation: retana-theme-eclipse 520ms cubic-bezier(0.22, 1, 0.36, 1);\n  }\n  html[data-theme-switch=\"split\"]::view-transition-old(root) { animation: none; }\n  html[data-theme-switch=\"split\"]::view-transition-new(root) {\n    animation: retana-theme-split 480ms cubic-bezier(0.22, 1, 0.36, 1);\n  }\n  html[data-theme-switch=\"rise\"]::view-transition-old(root) { animation: none; }\n  html[data-theme-switch=\"rise\"]::view-transition-new(root) {\n    animation: retana-theme-rise 480ms cubic-bezier(0.22, 1, 0.36, 1);\n  }\n  @keyframes retana-theme-eclipse {\n    from { clip-path: circle(0px at var(--theme-switch-x, 50%) var(--theme-switch-y, 50%)); }\n    to { clip-path: circle(150vmax at var(--theme-switch-x, 50%) var(--theme-switch-y, 50%)); }\n  }\n  @keyframes retana-theme-split {\n    from { clip-path: inset(0 50% 0 50%); }\n    to { clip-path: inset(0 0 0 0); }\n  }\n  @keyframes retana-theme-rise {\n    from { clip-path: inset(100% 0 0 0); }\n    to { clip-path: inset(0 0 0 0); }\n  }\n}\n`\n\nconst iconSpring = {\n  ...motionPresets.spring.snappy,\n  opacity: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.enter] },\n  filter: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.enter] },\n} as const\n\nfunction useSettled() {\n  const [settled, setSettled] = React.useState(false)\n  React.useEffect(() => {\n    let second = 0\n    const first = requestAnimationFrame(() => {\n      second = requestAnimationFrame(() => setSettled(true))\n    })\n    return () => {\n      cancelAnimationFrame(first)\n      cancelAnimationFrame(second)\n    }\n  }, [])\n  return settled\n}\n\nfunction ThemeIcon({\n  theme,\n  reduced,\n  settled,\n  className,\n}: {\n  theme: ThemeName\n  reduced: boolean\n  settled: boolean\n  className?: string\n}) {\n  const Icon = theme === \"light\" ? Sun : Moon\n  const angle = theme === \"light\" ? 30 : -30\n  return (\n    <AnimatePresence initial={false} mode=\"popLayout\">\n      <motion.span\n        key={theme}\n        data-slot=\"theme-switch-glyph\"\n        className={cn(\"absolute grid size-[18px] place-items-center\", className)}\n        initial={\n          !settled\n            ? false\n            : reduced\n              ? { opacity: 0 }\n              : { opacity: 0, scale: 0.7, rotate: angle, filter: `blur(${motionPresets.blur.subtle}px)` }\n        }\n        animate={{ opacity: 1, scale: 1, rotate: 0, filter: \"blur(0px)\" }}\n        exit={\n          !settled\n            ? { opacity: 0, transition: { duration: 0 } }\n            : reduced\n              ? { opacity: 0, transition: { duration: motionPresets.duration.instant } }\n              : {\n                  opacity: 0,\n                  scale: 0.7,\n                  rotate: angle,\n                  filter: `blur(${motionPresets.blur.subtle}px)`,\n                  transition: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.standard] },\n                }\n        }\n        transition={reduced ? { duration: motionPresets.duration.instant } : iconSpring}\n        aria-hidden=\"true\"\n      >\n        <Icon />\n      </motion.span>\n    </AnimatePresence>\n  )\n}\n\nfunction reducedMotion() {\n  return window.matchMedia(\"(prefers-reduced-motion: reduce)\").matches\n}\n\n/** Runs `onThemeChange` inside `document.startViewTransition` when the browser can, otherwise immediately. */\nexport function runThemeSwitch(\n  next: ThemeName,\n  variant: ThemeSwitchVariant,\n  origin: HTMLElement | null,\n  onThemeChange: (next: ThemeName) => void,\n) {\n  const apply = () => onThemeChange(next)\n  const viewTransition = document.startViewTransition?.bind(document)\n  if (!viewTransition || reducedMotion()) {\n    apply()\n    return\n  }\n  const root = document.documentElement\n  if (origin) {\n    const box = origin.getBoundingClientRect()\n    root.style.setProperty(\"--theme-switch-x\", `${box.left + box.width / 2}px`)\n    root.style.setProperty(\"--theme-switch-y\", `${box.top + box.height / 2}px`)\n  }\n  root.dataset.themeSwitch = variant\n  const transition = viewTransition(() => {\n    apply()\n  })\n  void transition.finished.finally(() => {\n    delete root.dataset.themeSwitch\n    root.style.removeProperty(\"--theme-switch-x\")\n    root.style.removeProperty(\"--theme-switch-y\")\n  })\n}\n\nconst nudge: Record<ThemeSwitchVariant, string> = {\n  fade: \"data-[theme=dark]:scale-105\",\n  eclipse: \"data-[theme=dark]:-translate-x-0.5\",\n  split: \"data-[theme=dark]:translate-x-px\",\n  rise: \"data-[theme=dark]:-translate-y-0.5\",\n}\n\nexport function ThemeSwitch({\n  theme,\n  variant = \"fade\",\n  onThemeChange,\n  label,\n  iconOnly = false,\n  className,\n  classNames,\n}: ThemeSwitchProps) {\n  const reduced = useReducedMotion() ?? false\n  const settled = useSettled()\n  const next = theme === \"light\" ? \"dark\" : \"light\"\n\n  return (\n    <>\n      <style>{TRANSITION_CSS}</style>\n      <Button\n        type=\"button\"\n        size={iconOnly ? \"icon\" : \"sm\"}\n        variant=\"outline\"\n        data-slot=\"theme-switch\"\n        data-variant={variant}\n        data-theme={theme}\n        className={cn(\n          \"relative\",\n          iconOnly && \"size-9\",\n          className,\n          classNames?.root,\n        )}\n        aria-label={label ?? `Switch to ${next} mode`}\n        aria-pressed={theme === \"dark\"}\n        onClick={(event) => runThemeSwitch(next, variant, event.currentTarget, onThemeChange)}\n      >\n        <span\n          data-slot=\"theme-switch-icon\"\n          className={cn(\n            \"relative grid size-5 place-items-center motion-reduce:transition-none\",\n            settled && \"transition-transform duration-300\",\n            nudge[variant],\n            classNames?.icon,\n          )}\n        >\n          <ThemeIcon theme={theme} reduced={reduced} settled={settled} />\n        </span>\n        {iconOnly ? null : (\n          <span data-slot=\"theme-switch-label\" className={cn(\"truncate\", classNames?.label)}>\n            {label ?? \"Switch theme\"}\n          </span>\n        )}\n      </Button>\n    </>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/theme-switch.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    exit: [0.7, 0, 0.84, 0] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Interruptor de tema",
+    "descriptionEs": "Cuatro formas de pasar de claro a oscuro: fade, eclipse, split y rise. Usa View Transitions si el navegador las tiene y, si no, cambia el tema al instante.",
+    "preview": "app/examples/theme-switch/preview.tsx",
+    "previewHref": "/examples/theme-switch",
+    "examples": [
+      {
+        "title": "Interruptor de tema",
+        "href": "/examples/theme-switch",
+        "description": "Cuatro formas de pasar de claro a oscuro: fade, eclipse, split y rise. Usa View Transitions si el navegador las tiene y, si no, cambia el tema al instante."
+      }
+    ],
+    "usage": "<ThemeSwitch theme={theme} variant=\"eclipse\" onThemeChange={setTheme} />",
+    "api": [
+      {
+        "name": "theme",
+        "type": "\"light\" | \"dark\"",
+        "description": "The theme that is showing now."
+      },
+      {
+        "name": "variant",
+        "type": "\"fade\" | \"eclipse\" | \"split\" | \"rise\"",
+        "description": "How the next theme enters. Default fade."
+      },
+      {
+        "name": "onThemeChange",
+        "type": "(next: ThemeName) => void",
+        "description": "Next-themes compatible. Receives the next theme."
+      },
+      {
+        "name": "iconOnly / label / className / classNames",
+        "type": "boolean / string",
+        "description": "Icon-only control, accessible label, and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "theme"
+  ],
+  "type": "registry:ui"
+}

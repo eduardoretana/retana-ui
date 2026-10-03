@@ -2,7 +2,10 @@
 
 import * as React from "react"
 
+import { Pipette } from "lucide-react"
+
 import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
@@ -108,6 +111,10 @@ export type ColorPickerProps = {
   alphaLabel?: string
   hexLabel?: string
   saturationLabel?: string
+  /** Saved colors. Selecting one commits that value. */
+  swatches?: readonly HsvaColor[]
+  onSwatchSelect?: (value: HsvaColor) => void
+  eyedropperLabel?: string
   className?: string
 }
 
@@ -121,6 +128,9 @@ export function ColorPicker({
   alphaLabel = "Alpha",
   hexLabel = "Hex",
   saturationLabel = "Saturation and brightness",
+  swatches,
+  onSwatchSelect,
+  eyedropperLabel = "Pick a color from the screen",
   className,
 }: ColorPickerProps) {
   const [uncontrolled, setUncontrolled] = React.useState(defaultValue)
@@ -247,7 +257,47 @@ export function ColorPicker({
             className="font-mono uppercase"
           />
         </div>
+        {"EyeDropper" in globalThis ? (
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            aria-label={eyedropperLabel}
+            onClick={() => {
+              const Dropper = (globalThis as { EyeDropper?: new () => { open: () => Promise<{ sRGBHex: string }> } }).EyeDropper
+              if (!Dropper) return
+              void new Dropper()
+                .open()
+                .then((result) => {
+                  const next = hexToHsva(result.sRGBHex)
+                  if (next) commit({ ...next, a: color.a })
+                })
+                .catch(() => {})
+            }}
+          >
+            <Pipette />
+          </Button>
+        ) : null}
       </div>
+      {swatches?.length ? (
+        <div className="flex flex-wrap gap-1.5" role="listbox" aria-label={hexLabel}>
+          {swatches.map((swatch, index) => (
+            <button
+              key={`${swatch.h}-${swatch.s}-${swatch.v}-${index}`}
+              type="button"
+              role="option"
+              aria-selected={swatch.h === color.h && swatch.s === color.s && swatch.v === color.v}
+              aria-label={`${hexLabel} ${index + 1}`}
+              className="size-6 rounded-md border border-border"
+              style={{ background: hsvaToCss(swatch) }}
+              onClick={() => {
+                commit(swatch)
+                onSwatchSelect?.(swatch)
+              }}
+            />
+          ))}
+        </div>
+      ) : null}
     </div>
   )
 }

@@ -1,0 +1,76 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "gauge",
+  "title": "Gauge",
+  "author": "Eduardo Retana",
+  "description": "Shows a value against a known range.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/gauge.tsx",
+      "content": "\"use client\"\n\n/** Adapted from Arc UI (MIT). */\n\nimport * as React from \"react\"\nimport {\n  AnimatePresence,\n  animate,\n  motion,\n  useInView,\n  useMotionValue,\n  useMotionValueEvent,\n  useReducedMotion,\n  useTransform,\n  type Variants,\n} from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\nexport type GaugeTone = \"accent\" | \"success\" | \"warning\" | \"danger\"\n\nexport type GaugeThreshold = {\n  from: number\n  tone: GaugeTone\n  label: string\n}\n\nexport type GaugeClassNames = {\n  root?: string\n  visual?: string\n  value?: string\n  status?: string\n  label?: string\n  detail?: string\n}\n\nexport type GaugeProps = {\n  value: number\n  min?: number\n  max?: number\n  label: string\n  detail?: string\n  tone?: GaugeTone\n  thresholds?: GaugeThreshold[]\n  className?: string\n  classNames?: GaugeClassNames\n}\n\nconst rise: Variants = {\n  hidden: (direction: number) => ({\n    opacity: 0,\n    y: `${0.3 * direction}em`,\n    filter: `blur(${motionPresets.blur.soft}px)`,\n  }),\n  shown: {\n    opacity: 1,\n    y: 0,\n    filter: \"blur(0px)\",\n    transition: { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.enter] },\n  },\n  gone: (direction: number) => ({\n    opacity: 0,\n    y: `${-0.3 * direction}em`,\n    filter: `blur(${motionPresets.blur.subtle}px)`,\n    transition: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.standard] },\n  }),\n}\n\nconst fade: Variants = {\n  hidden: { opacity: 0, y: 0, filter: \"blur(0px)\" },\n  shown: { opacity: 1, y: 0, filter: \"blur(0px)\", transition: { duration: motionPresets.duration.instant } },\n  gone: { opacity: 0, y: 0, filter: \"blur(0px)\", transition: { duration: motionPresets.duration.instant } },\n}\n\nconst reveal = { ...motionPresets.spring.smooth, visualDuration: motionPresets.duration.considered * 1.6 }\n\nconst toneClass: Record<GaugeTone, string> = {\n  accent: \"text-primary\",\n  success: \"text-primary\",\n  warning: \"text-muted-foreground\",\n  danger: \"text-destructive\",\n}\n\nfunction Swap({ text, direction = 1 }: { text: string; direction?: number }) {\n  const reduceMotion = !!useReducedMotion()\n  return (\n    <span className=\"relative block min-w-0\">\n      <AnimatePresence mode=\"popLayout\" initial={false} custom={direction}>\n        <motion.span key={text} className=\"inline-block wrap-anywhere\" custom={direction} variants={reduceMotion ? fade : rise} initial=\"hidden\" animate=\"shown\" exit=\"gone\">\n          {text}\n        </motion.span>\n      </AnimatePresence>\n    </span>\n  )\n}\n\nconst radius = 42\nconst start = -135\nconst span = 270\n\nfunction arcFor(sweep: number) {\n  const end = start + span * Math.min(1, Math.max(0, sweep))\n  const at = (angle: number) =>\n    `${(50 + radius * Math.sin((angle * Math.PI) / 180)).toFixed(3)} ${(50 - radius * Math.cos((angle * Math.PI) / 180)).toFixed(3)}`\n  return `M ${at(start)} A ${radius} ${radius} 0 ${end - start > 180 ? 1 : 0} 1 ${at(end)}`\n}\n\nconst track = arcFor(1)\n\nexport function Gauge({\n  value,\n  min = 0,\n  max = 100,\n  label,\n  detail,\n  tone = \"accent\",\n  thresholds,\n  className,\n  classNames,\n}: GaugeProps) {\n  const safeMax = max > min ? max : min + 1\n  const percentage = Math.min(1, Math.max(0, (value - min) / (safeMax - min)))\n  const displayValue = Math.round(percentage * 100)\n  const bands = [...(thresholds ?? [])].sort((a, b) => a.from - b.from)\n  const bandAt = (at: number) => bands.filter((threshold) => at >= threshold.from - 1e-6).pop()\n  const band = bandAt(value)\n  const ref = React.useRef<HTMLElement>(null)\n  const sizer = React.useRef<HTMLSpanElement>(null)\n  const inView = useInView(ref, { once: true, amount: 0.5 })\n  const reduceMotion = !!useReducedMotion()\n  const sweep = useMotionValue(0)\n  const count = useMotionValue(0)\n  const digitsWidth = useMotionValue<number | \"auto\">(\"auto\")\n  const [filled, setFilled] = React.useState(false)\n  const [live, setLive] = React.useState(band)\n  const path = useTransform(sweep, arcFor)\n  const arcOpacity = useTransform(sweep, (current) => Math.min(1, Math.max(0, current / 0.02)))\n  const digits = useTransform(count, (current) => String(Math.round(Math.min(100, Math.max(0, current)))))\n  const [moved, setMoved] = React.useState({ value: displayValue, direction: 1 })\n  if (moved.value !== displayValue) setMoved({ value: displayValue, direction: displayValue < moved.value ? -1 : 1 })\n\n  React.useEffect(() => {\n    if (reduceMotion) {\n      sweep.jump(percentage)\n      count.jump(percentage * 100)\n      const frame = requestAnimationFrame(() => setFilled(true))\n      return () => cancelAnimationFrame(frame)\n    }\n    if (!inView) return\n    const arc = animate(sweep, percentage, filled ? motionPresets.spring.morph : reveal)\n    const number = animate(count, percentage * 100, {\n      ...(filled ? motionPresets.spring.smooth : reveal),\n      onComplete: () => setFilled(true),\n    })\n    return () => {\n      arc.stop()\n      number.stop()\n    }\n  }, [count, filled, inView, percentage, reduceMotion, sweep])\n\n  useMotionValueEvent(count, \"change\", (current) => {\n    const next = bandAt(min + (current / 100) * (safeMax - min))\n    const changed = next?.from !== live?.from || next?.label !== live?.label\n    if (filled) {\n      if (changed) setLive(next)\n    } else if (inView && Math.abs(current - percentage * 100) < 1) {\n      if (changed) setLive(next)\n      setFilled(true)\n    }\n  })\n  const shown = reduceMotion || !filled ? band : live\n  const activeTone = shown?.tone ?? tone\n\n  React.useEffect(() => {\n    const node = sizer.current\n    if (!node || typeof ResizeObserver === \"undefined\") return\n    let measured: string | null = null\n    const observer = new ResizeObserver(([entry]) => {\n      const next = entry.borderBoxSize?.[0]?.inlineSize ?? node.offsetWidth\n      if (measured !== null && measured !== node.textContent && !reduceMotion) animate(digitsWidth, next, motionPresets.spring.smooth)\n      else digitsWidth.jump(next)\n      measured = node.textContent\n    })\n    observer.observe(node)\n    return () => observer.disconnect()\n  }, [digitsWidth, reduceMotion])\n\n  return (\n    <figure\n      ref={ref}\n      data-slot=\"gauge\"\n      data-tone={activeTone}\n      aria-label={`${label}: ${value} of ${safeMax}${band ? `, ${band.label}` : \"\"}`}\n      className={cn(\"grid min-w-0 justify-items-center gap-2.5 text-center\", className, classNames?.root)}\n    >\n      <div\n        data-slot=\"gauge-visual\"\n        role=\"meter\"\n        aria-label={label}\n        aria-valuemin={min}\n        aria-valuemax={safeMax}\n        aria-valuenow={Math.min(safeMax, Math.max(min, value))}\n        aria-valuetext={`${displayValue}%${band ? `, ${band.label}` : \"\"}`}\n        className={cn(\"relative aspect-[100/90] w-full max-w-44\", classNames?.visual)}\n      >\n        <svg viewBox=\"0 0 100 90\" className=\"block size-full overflow-visible\" aria-hidden=\"true\" focusable=\"false\">\n          <path d={track} fill=\"none\" stroke=\"currentColor\" strokeWidth={9} strokeLinecap=\"round\" className=\"text-muted-foreground/30\" />\n          <motion.path d={path} fill=\"none\" stroke=\"currentColor\" strokeWidth={9} strokeLinecap=\"round\" className={toneClass[activeTone]} style={{ opacity: arcOpacity }} />\n        </svg>\n        <div className=\"pointer-events-none absolute inset-x-0 top-0 grid aspect-square place-content-center justify-items-center gap-1\" aria-hidden=\"true\">\n          <span className={cn(\"relative inline-flex items-baseline text-3xl leading-none font-medium text-foreground tabular-nums\", classNames?.value)}>\n            <motion.span className=\"inline-flex justify-end whitespace-nowrap\" style={{ width: digitsWidth }}>\n              {digits}\n            </motion.span>\n            <span className=\"ms-px font-sans text-[0.5em] text-muted-foreground\">%</span>\n            <span ref={sizer} className=\"pointer-events-none absolute top-0 left-0 invisible whitespace-nowrap\">\n              {displayValue}\n            </span>\n          </span>\n          {thresholds ? (\n            <span className={cn(\"min-h-[1.4em] min-w-24 text-xs leading-snug font-medium\", toneClass[activeTone], classNames?.status)}>\n              <Swap text={filled ? (shown?.label ?? \"\") : \"\"} direction={moved.direction} />\n            </span>\n          ) : null}\n        </div>\n      </div>\n      <figcaption className=\"grid min-w-0 gap-0.5\">\n        <strong className={cn(\"text-sm font-medium\", classNames?.label)}>\n          <Swap text={label} />\n        </strong>\n        {detail ? (\n          <span className={cn(\"text-xs text-muted-foreground tabular-nums\", classNames?.detail)}>\n            <Swap text={detail} direction={moved.direction} />\n          </span>\n        ) : null}\n      </figcaption>\n    </figure>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/gauge.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    exit: [0.7, 0, 0.84, 0] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Medidor",
+    "descriptionEs": "Muestra un valor contra un rango conocido.",
+    "preview": "app/examples/gauge/preview.tsx",
+    "previewHref": "/examples/gauge",
+    "examples": [
+      {
+        "title": "Medidor",
+        "href": "/examples/gauge",
+        "description": "Muestra un valor contra un rango conocido."
+      }
+    ],
+    "usage": "<Gauge label=\"Kiln load\" value={72} min={0} max={100} />",
+    "api": [
+      {
+        "name": "value",
+        "type": "number",
+        "description": "value"
+      },
+      {
+        "name": "min",
+        "type": "number",
+        "description": "min"
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "description": "max"
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "label"
+      },
+      {
+        "name": "detail",
+        "type": "string",
+        "description": "detail"
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "chart"
+  ],
+  "type": "registry:ui"
+}

@@ -28,4 +28,12 @@ describe("ChatMessage", () => {
     await user.click(screen.getByRole("button", { name: "Retry" }))
     expect(onRetry).toHaveBeenCalledOnce()
   })
+
+  it("toggles a reaction", async () => {
+    const user = userEvent.setup()
+    const onReact = vi.fn()
+    render(<ChatMessage role="assistant" reactions={[{ emoji: "🔥", count: 2 }]} onReact={onReact}>Hola</ChatMessage>)
+    await user.click(screen.getByRole("button", { name: "🔥, 2" }))
+    expect(onReact).toHaveBeenCalledWith("🔥")
+  })
 })

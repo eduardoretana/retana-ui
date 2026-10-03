@@ -1,0 +1,80 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "time-picker",
+  "title": "Time picker",
+  "author": "Eduardo Retana",
+  "description": "Chooses a time with a listbox and arrow keys.",
+  "dependencies": [
+    "motion",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/time-picker.tsx",
+      "content": "\"use client\"\n\n/** Adapted from Arc UI (MIT). */\n\nimport * as React from \"react\"\nimport { AnimatePresence, motion, useReducedMotion, type Variants } from \"motion/react\"\nimport { ChevronDown, Clock3 } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\nexport type TimePickerClassNames = {\n  root?: string\n  label?: string\n  trigger?: string\n  menu?: string\n  option?: string\n  description?: string\n}\n\nexport type TimePickerProps = {\n  label: string\n  value?: string\n  defaultValue?: string\n  onChange?: (value: string) => void\n  description?: string\n  placeholder?: string\n  minuteStep?: 1 | 5 | 10 | 15 | 30\n  format?: \"12h\" | \"24h\"\n  disabled?: boolean\n  className?: string\n  classNames?: TimePickerClassNames\n}\n\nconst pad = (value: number) => String(value).padStart(2, \"0\")\n\nconst toMinutes = (value: string) => {\n  const [h, m] = value.split(\":\").map(Number)\n  return Number.isFinite(h) && Number.isFinite(m) ? h * 60 + m : 0\n}\n\nconst valueRoll: Variants = {\n  enter: (direction: number) => ({ opacity: 0, y: `${direction * 0.35}em`, filter: `blur(${motionPresets.blur.soft}px)` }),\n  center: { opacity: 1, y: 0, filter: \"blur(0px)\", transition: { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.enter] } },\n  exit: (direction: number) => ({\n    opacity: 0,\n    y: `${direction * -0.3}em`,\n    filter: `blur(${motionPresets.blur.subtle}px)`,\n    transition: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.standard] },\n  }),\n}\n\nconst valueFade: Variants = {\n  enter: { opacity: 0 },\n  center: { opacity: 1, y: 0, filter: \"blur(0px)\", transition: { duration: motionPresets.duration.instant } },\n  exit: { opacity: 0, transition: { duration: motionPresets.duration.instant } },\n}\n\nexport function TimePicker({\n  label,\n  value,\n  defaultValue = \"09:00\",\n  onChange,\n  description,\n  placeholder = \"Select a time\",\n  minuteStep = 15,\n  format = \"12h\",\n  disabled = false,\n  className,\n  classNames,\n}: TimePickerProps) {\n  const id = React.useId()\n  const labelId = `${id}-label`\n  const valueId = `${id}-value`\n  const rootRef = React.useRef<HTMLDivElement>(null)\n  const optionRefs = React.useRef<Array<HTMLButtonElement | null>>([])\n  const centerOnOpen = React.useRef(false)\n  const [internal, setInternal] = React.useState(defaultValue)\n  const [open, setOpen] = React.useState(false)\n  const [activeIndex, setActiveIndex] = React.useState(-1)\n  const selected = value ?? internal\n  const reduce = useReducedMotion()\n  const [previous, setPrevious] = React.useState(selected)\n  const [direction, setDirection] = React.useState(1)\n  if (previous !== selected) {\n    setPrevious(selected)\n    setDirection(toMinutes(selected) >= toMinutes(previous) ? 1 : -1)\n  }\n\n  const options = Array.from({ length: Math.ceil(1440 / minuteStep) }, (_, index) => {\n    const minutes = index * minuteStep\n    const hour = Math.floor(minutes / 60)\n    const minute = minutes % 60\n    return `${pad(hour)}:${pad(minute)}`\n  })\n\n  const display = (raw: string) => {\n    const minutes = toMinutes(raw)\n    const hour = Math.floor(minutes / 60)\n    const minute = minutes % 60\n    return format === \"24h\" ? `${pad(hour)}:${pad(minute)}` : `${hour % 12 || 12}:${pad(minute)} ${hour < 12 ? \"AM\" : \"PM\"}`\n  }\n\n  React.useEffect(() => {\n    const close = (event: PointerEvent) => {\n      if (!rootRef.current?.contains(event.target as Node)) setOpen(false)\n    }\n    document.addEventListener(\"pointerdown\", close)\n    return () => document.removeEventListener(\"pointerdown\", close)\n  }, [])\n\n  React.useLayoutEffect(() => {\n    if (!open || activeIndex < 0) return\n    const option = optionRefs.current[activeIndex]\n    const menu = option?.parentElement\n    if (!option || !menu) return\n    const top = option.offsetTop\n    const bottom = top + option.offsetHeight\n    if (centerOnOpen.current) {\n      centerOnOpen.current = false\n      menu.scrollTop = top - (menu.clientHeight - option.offsetHeight) / 2\n    } else if (top < menu.scrollTop) menu.scrollTop = top\n    else if (bottom > menu.scrollTop + menu.clientHeight) menu.scrollTop = bottom - menu.clientHeight\n  }, [activeIndex, open])\n\n  const choose = (next: string) => {\n    if (value === undefined) setInternal(next)\n    onChange?.(next)\n    setOpen(false)\n  }\n\n  const openMenu = () => {\n    const selectedIndex = options.indexOf(selected)\n    setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0)\n    centerOnOpen.current = true\n    setOpen(true)\n  }\n\n  const onKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {\n    if (event.key === \"Escape\") {\n      event.preventDefault()\n      setOpen(false)\n      return\n    }\n    if (event.key === \"Enter\" || event.key === \" \") {\n      event.preventDefault()\n      if (open && activeIndex >= 0) choose(options[activeIndex])\n      else openMenu()\n      return\n    }\n    if (event.key === \"ArrowDown\" || event.key === \"ArrowUp\") {\n      event.preventDefault()\n      if (!open) {\n        openMenu()\n        return\n      }\n      setActiveIndex((index) => (index + (event.key === \"ArrowDown\" ? 1 : -1) + options.length) % options.length)\n    }\n  }\n\n  return (\n    <div\n      ref={rootRef}\n      data-slot=\"time-picker\"\n      className={cn(\"grid min-w-0 max-w-full gap-2\", className, classNames?.root)}\n    >\n      <span id={labelId} data-slot=\"time-picker-label\" className={cn(\"text-sm font-medium\", classNames?.label)}>\n        {label}\n      </span>\n      <div className=\"relative min-w-0\">\n        <Button\n          type=\"button\"\n          variant=\"outline\"\n          disabled={disabled}\n          aria-labelledby={`${labelId} ${valueId}`}\n          aria-haspopup=\"listbox\"\n          aria-expanded={open}\n          aria-controls={`${id}-listbox`}\n          data-slot=\"time-picker-trigger\"\n          className={cn(\"h-9 w-full justify-start gap-2 px-3 font-normal\", classNames?.trigger)}\n          onClick={() => (open ? setOpen(false) : openMenu())}\n          onKeyDown={onKeyDown}\n        >\n          <Clock3 className=\"size-4 shrink-0 text-muted-foreground\" aria-hidden=\"true\" />\n          <span id={valueId} className=\"sr-only\">\n            {selected ? display(selected) : placeholder}\n          </span>\n          <span className=\"grid min-w-0 flex-1 grid-cols-1\" aria-hidden=\"true\">\n            <AnimatePresence initial={false} custom={direction}>\n              <motion.span\n                key={selected || \"placeholder\"}\n                className={cn(\n                  \"col-start-1 row-start-1 min-w-0 truncate\",\n                  selected ? \"tabular-nums text-foreground\" : \"text-muted-foreground\",\n                )}\n                custom={direction}\n                variants={reduce ? valueFade : valueRoll}\n                initial=\"enter\"\n                animate=\"center\"\n                exit=\"exit\"\n              >\n                {selected ? display(selected) : placeholder}\n              </motion.span>\n            </AnimatePresence>\n          </span>\n          <ChevronDown\n            className={cn(\"size-4 shrink-0 text-muted-foreground transition-transform motion-reduce:transition-none\", open && \"rotate-180\")}\n            aria-hidden=\"true\"\n          />\n        </Button>\n        <AnimatePresence initial={false}>\n          {open ? (\n            <motion.div\n              id={`${id}-listbox`}\n              role=\"listbox\"\n              aria-label={`${label} options`}\n              data-slot=\"time-picker-menu\"\n              className={cn(\n                \"absolute top-[calc(100%+6px)] right-0 left-0 z-50 max-h-[250px] overflow-y-auto overscroll-contain rounded-lg border border-border bg-popover p-1 shadow-sm\",\n                classNames?.menu,\n              )}\n              initial={reduce ? { opacity: 0 } : { opacity: 0, y: -6, scale: 0.97 }}\n              animate={{\n                opacity: 1,\n                y: 0,\n                scale: 1,\n                transition: reduce\n                  ? { duration: motionPresets.duration.instant }\n                  : { ...motionPresets.spring.snappy, opacity: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.enter] } },\n              }}\n              exit={{\n                opacity: 0,\n                ...(reduce ? {} : { y: -4, scale: 0.98 }),\n                transition: { duration: 0.13, ease: [...motionPresets.ease.standard] },\n              }}\n            >\n              {options.map((option, index) => (\n                <button\n                  ref={(node) => {\n                    optionRefs.current[index] = node\n                  }}\n                  id={`${id}-option-${index}`}\n                  key={option}\n                  type=\"button\"\n                  role=\"option\"\n                  aria-selected={option === selected}\n                  data-active={activeIndex === index || undefined}\n                  data-slot=\"time-picker-option\"\n                  className={cn(\n                    \"flex min-h-9 w-full cursor-pointer items-center justify-between rounded-md border-0 bg-transparent px-2.5 text-left text-sm text-foreground tabular-nums transition-colors data-[active]:bg-muted motion-reduce:transition-none\",\n                    classNames?.option,\n                  )}\n                  onPointerMove={() => {\n                    if (activeIndex !== index) setActiveIndex(index)\n                  }}\n                  onClick={() => choose(option)}\n                >\n                  {display(option)}\n                  {option === selected ? <span className=\"size-1.5 rounded-full bg-primary\" aria-hidden=\"true\" /> : null}\n                </button>\n              ))}\n            </motion.div>\n          ) : null}\n        </AnimatePresence>\n      </div>\n      {description ? (\n        <span data-slot=\"time-picker-description\" className={cn(\"text-xs text-muted-foreground break-all\", classNames?.description)}>\n          {description}\n        </span>\n      ) : null}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/time-picker.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    exit: [0.7, 0, 0.84, 0] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Selector de hora",
+    "descriptionEs": "Elige una hora con una lista y las flechas del teclado.",
+    "preview": "app/examples/time-picker/preview.tsx",
+    "previewHref": "/examples/time-picker",
+    "examples": [
+      {
+        "title": "Selector de hora",
+        "href": "/examples/time-picker",
+        "description": "Elige una hora con una lista y las flechas del teclado."
+      }
+    ],
+    "usage": "<TimePicker label=\"Firing\" value={time} onChange={setTime} />",
+    "api": [
+      {
+        "name": "label",
+        "type": "string",
+        "description": "label"
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "description": "value"
+      },
+      {
+        "name": "defaultValue",
+        "type": "string",
+        "description": "defaultValue"
+      },
+      {
+        "name": "onChange",
+        "type": "(value: string) => void",
+        "description": "onChange"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "description": "description"
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "form",
+    "input"
+  ],
+  "type": "registry:ui"
+}

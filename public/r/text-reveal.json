@@ -1,0 +1,59 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "text-reveal",
+  "title": "Text reveal",
+  "author": "Eduardo Retana",
+  "description": "Reveals a short line once, word by word, and shows the plain text if motion is reduced.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/text-reveal.tsx",
+      "content": "\"use client\"\n\n/** Adapted from Arc UI (MIT). */\n\nimport { Fragment, type CSSProperties } from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\nexport type TextRevealProps = {\n  text: string\n  as?: \"h1\" | \"h2\" | \"h3\" | \"p\"\n  className?: string\n  classNames?: { word?: string; line?: string }\n  id?: string\n  /** Seconds before the first word rises. */\n  delay?: number\n}\n\nconst MAX_STAGGER = motionPresets.duration.considered\n\nconst css = `\n@keyframes retana-text-reveal {\n  from { opacity: 0; transform: translateY(0.35em); filter: blur(var(--reveal-blur, 4px)); }\n  to { opacity: 1; transform: none; filter: none; }\n}\n[data-slot=\"text-reveal-word\"] {\n  display: inline-block;\n  animation: retana-text-reveal 0.48s cubic-bezier(0.16, 1, 0.3, 1) both;\n  animation-delay: var(--reveal-delay, 0s);\n}\n@media (prefers-reduced-motion: reduce) {\n  [data-slot=\"text-reveal-word\"] { animation: none; }\n}\n`\n\nexport function TextReveal({ text, as = \"h2\", className, classNames, id, delay = 0 }: TextRevealProps) {\n  const Tag = as\n  const lines = text.split(\"\\n\").map((line) => line.split(\" \").filter(Boolean))\n  const count = lines.reduce((total, words) => total + words.length, 0)\n  const step = Math.min(motionPresets.stagger.word, MAX_STAGGER / Math.max(count, 1))\n  const blur = as === \"p\" ? motionPresets.blur.soft : motionPresets.blur.text\n  let index = 0\n\n  return (\n    <Tag\n      id={id}\n      data-slot=\"text-reveal\"\n      className={cn(\"max-w-full\", className)}\n      style={{ \"--reveal-blur\": `${blur}px` } as CSSProperties}\n    >\n      <style>{css}</style>\n      <span className=\"sr-only\">{text.replace(/\\n/g, \" \")}</span>\n      {lines.map((words, lineIndex) => (\n        <Fragment key={lineIndex}>\n          <span data-slot=\"text-reveal-line\" className={cn(\"inline\", classNames?.line)} aria-hidden=\"true\">\n            {words.map((word, wordIndex) => {\n              const position = index++\n              return (\n                <Fragment key={`${word}-${position}`}>\n                  <span className=\"inline-block overflow-hidden align-bottom\">\n                    <span\n                      data-slot=\"text-reveal-word\"\n                      className={classNames?.word}\n                      style={{ \"--reveal-delay\": `${delay + position * step + lineIndex * step}s` } as CSSProperties}\n                    >\n                      {word}\n                    </span>\n                  </span>\n                  {wordIndex < words.length - 1 ? \" \" : null}\n                </Fragment>\n              )\n            })}\n          </span>\n          {lineIndex < lines.length - 1 ? \" \" : null}\n        </Fragment>\n      ))}\n    </Tag>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/text-reveal.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    exit: [0.7, 0, 0.84, 0] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Texto que aparece",
+    "descriptionEs": "Revela una frase corta palabra por palabra. Con movimiento reducido el texto está visible desde el inicio.",
+    "preview": "app/examples/text-reveal/preview.tsx",
+    "previewHref": "/examples/text-reveal",
+    "examples": [
+      {
+        "title": "Texto que aparece",
+        "href": "/examples/text-reveal",
+        "description": "Revela una frase corta palabra por palabra. Con movimiento reducido el texto está visible desde el inicio."
+      }
+    ],
+    "usage": "<TextReveal as=\"h2\" text={\"Kiln open\\nSaturday\"} />",
+    "api": [
+      {
+        "name": "text",
+        "type": "string",
+        "description": "Copy. A newline starts another line."
+      },
+      {
+        "name": "as",
+        "type": "\"h1\" | \"h2\" | \"h3\" | \"p\"",
+        "description": "Element. Default h2."
+      },
+      {
+        "name": "delay",
+        "type": "number",
+        "description": "Seconds before the first word. Default 0."
+      }
+    ]
+  },
+  "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "content"
+  ],
+  "type": "registry:ui"
+}
