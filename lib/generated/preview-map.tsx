@@ -132,6 +132,16 @@ import Preview127 from "@/app/examples/presence-avatars/preview"
 import Preview128 from "@/app/examples/live-cursors/preview"
 import Preview129 from "@/app/examples/typing-indicator/preview"
 import Preview130 from "@/app/examples/presence-outline/preview"
+import Preview131 from "@/app/examples/multi-view-core/preview"
+import Preview132 from "@/app/examples/use-multi-view/preview"
+import Preview133 from "@/app/examples/view-table/preview"
+import Preview134 from "@/app/examples/view-kanban/preview"
+import Preview135 from "@/app/examples/view-calendar/preview"
+import Preview136 from "@/app/examples/view-timeline/preview"
+import Preview137 from "@/app/examples/view-grouped-list/preview"
+import Preview138 from "@/app/examples/view-gallery/preview"
+import Preview139 from "@/app/examples/record-properties/preview"
+import Preview140 from "@/app/examples/multi-view/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -265,4 +275,14 @@ export const previewMap = {
   "live-cursors": Preview128,
   "typing-indicator": Preview129,
   "presence-outline": Preview130,
+  "multi-view-core": Preview131,
+  "use-multi-view": Preview132,
+  "view-table": Preview133,
+  "view-kanban": Preview134,
+  "view-calendar": Preview135,
+  "view-timeline": Preview136,
+  "view-grouped-list": Preview137,
+  "view-gallery": Preview138,
+  "record-properties": Preview139,
+  "multi-view": Preview140,
 }

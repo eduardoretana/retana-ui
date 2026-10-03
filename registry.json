@@ -9480,6 +9480,886 @@
         ]
       },
       "docs": "Requires PresenceProvider. The outline color is info.color or a chart token. Several people on the same target show the first name plus a count."
+    },
+    {
+      "name": "multi-view-core",
+      "type": "registry:lib",
+      "title": "Multi-view core",
+      "description": "Field schema and pure helpers for one collection shown in many views: search, filter, sort, group, month grid, timeline scale, Intl formatting, and CSV.",
+      "author": "Eduardo Retana",
+      "categories": [
+        "table"
+      ],
+      "meta": {
+        "titleEs": "Núcleo de vistas múltiples",
+        "descriptionEs": "Esquema de campos y funciones puras para buscar, filtrar, ordenar, agrupar, armar el mes y el cronograma, y exportar CSV.",
+        "preview": "app/examples/multi-view-core/preview.tsx",
+        "previewHref": "/examples/multi-view-core",
+        "examples": [
+          {
+            "title": "Formato y búsqueda",
+            "href": "/examples/multi-view-core",
+            "description": "Moneda compacta en es-MX y en-US, y una fecha que no cambia de día."
+          }
+        ],
+        "usage": "formatCurrency(42000, \"en-US\")\nsearchRecords(records, fields, query, locale)\nmonthGrid(2026, 3, 1)",
+        "api": [
+          {
+            "name": "FieldDef",
+            "type": "type",
+            "description": "id, label, type, icon, options, currency, format, section, readOnly."
+          },
+          {
+            "name": "ViewConfig",
+            "type": "type",
+            "description": "kind plus the fields that title, group, date, or cover a view."
+          },
+          {
+            "name": "searchRecords / filterRecords / sortRecords",
+            "type": "functions",
+            "description": "Pure list transforms. Dates are YYYY-MM-DD and never shift with the timezone."
+          },
+          {
+            "name": "monthGrid / moveRange / resizeRange",
+            "type": "functions",
+            "description": "Monday-first month grid and timeline move or resize by one zoom unit."
+          },
+          {
+            "name": "recordsToCsv",
+            "type": "function",
+            "description": "Uses the shared CSV helper, including spreadsheet-formula escaping."
+          }
+        ]
+      },
+      "docs": "Pure field schema and helpers for the view-* items. No React and no data fetching. Pass a locale from the host. This is not a table component: keep data-table, crm-table, and adaptive-table for those jobs.",
+      "files": [
+        {
+          "path": "registry/lib/multi-view.ts",
+          "type": "registry:lib",
+          "target": "@lib/multi-view.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-multi-view",
+      "type": "registry:hook",
+      "title": "useMultiView",
+      "description": "View, search, filter, sort, group, selection, and open-record state, controlled or uncontrolled, with an optional URL adapter.",
+      "author": "Eduardo Retana",
+      "categories": [
+        "table"
+      ],
+      "meta": {
+        "titleEs": "Estado de vistas múltiples",
+        "descriptionEs": "Vista, búsqueda, filtros, orden, grupo, selección y ficha abierta. Controlado o interno, con un adaptador de URL.",
+        "preview": "app/examples/use-multi-view/preview.tsx",
+        "previewHref": "/examples/use-multi-view",
+        "examples": [
+          {
+            "title": "Adaptador de history",
+            "href": "/examples/use-multi-view",
+            "description": "La búsqueda y la vista se escriben en la query sin cambiar de ruta."
+          }
+        ],
+        "usage": "const state = useMultiView({ views, url })\nconst data = useOptimisticRecords({ records, onRecordChange, onCreate, onDelete, onMove })",
+        "api": [
+          {
+            "name": "views",
+            "type": "ViewConfig[]",
+            "description": "Enabled views and their order."
+          },
+          {
+            "name": "url",
+            "type": "UrlAdapter",
+            "description": "get(key) and set(key, value). createHistoryAdapter or useNextMultiViewAdapter."
+          },
+          {
+            "name": "viewId / query / filters / sort / groupBy / selectedIds / openId",
+            "type": "controlled props",
+            "description": "Omit them for internal state. groupBy null means no group."
+          },
+          {
+            "name": "useOptimisticRecords",
+            "type": "hook",
+            "description": "Shows a patch immediately and restores the row if the callback rejects."
+          }
+        ]
+      },
+      "docs": "The state hook does not import Next.js. URL sync for the App Router lives in use-multi-view-url. Changing the view does not clear search or selection. Pair list reordering with use-optimistic-list when you only need order, not a field patch. This hook does not replace filter-toolbar.",
+      "files": [
+        {
+          "path": "registry/hooks/use-multi-view.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-multi-view.ts"
+        },
+        {
+          "path": "registry/hooks/use-multi-view-url.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-multi-view-url.ts"
+        },
+        {
+          "path": "registry/lib/multi-view.ts",
+          "type": "registry:lib",
+          "target": "@lib/multi-view.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        }
+      ]
+    },
+    {
+      "name": "view-table",
+      "type": "registry:ui",
+      "title": "Table view",
+      "description": "Schema-driven table with checkbox selection, sortable headers, per-type cells, row actions, and column visibility.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "@tanstack/react-table",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "checkbox",
+        "dropdown-menu",
+        "table"
+      ],
+      "categories": [
+        "table"
+      ],
+      "meta": {
+        "titleEs": "Vista de tabla",
+        "descriptionEs": "Tabla desde el esquema: selección, columnas ordenables, celdas por tipo y columnas visibles.",
+        "preview": "app/examples/view-table/preview.tsx",
+        "previewHref": "/examples/view-table",
+        "examples": [
+          {
+            "title": "Oportunidades",
+            "href": "/examples/view-table",
+            "description": "Nombre, empresa, monto compacto, etapa, dueño y cierre."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/view-table/stress",
+            "description": "320px, columna apretada, ancho, y hasta 200 filas."
+          }
+        ],
+        "usage": "<ViewTable records={records} fields={fields} config={view} sort={sort} onSortChange={setSort} onOpen={open} />",
+        "api": [
+          {
+            "name": "records / fields / config",
+            "type": "props",
+            "description": "Rows, schema, and the table ViewConfig."
+          },
+          {
+            "name": "sort / onSortChange",
+            "type": "SortClause | null",
+            "description": "Header click cycles ascending, descending, then off."
+          },
+          {
+            "name": "selectedIds / onSelectedIdsChange",
+            "type": "string[]",
+            "description": "Checkbox selection. Omit for internal state."
+          },
+          {
+            "name": "className and slot classes",
+            "type": "string",
+            "description": "className, toolbarClassName, tableClassName, rowClassName, headerClassName."
+          }
+        ]
+      },
+      "docs": "Schema-driven table for rows that can also appear in other views. Keep data-table for the bookings admin, crm-table for fixed CRM columns, and adaptive-table for a width-adaptive grouped table. This file does not replace those and does not import them. Built on TanStack Table. The title cell opens the record. Answer no if the CLI asks to overwrite table, checkbox, or badge.",
+      "files": [
+        {
+          "path": "registry/ui/view-table.tsx",
+          "type": "registry:component",
+          "target": "@ui/view-table.tsx"
+        },
+        {
+          "path": "registry/ui/multi-view-fields.tsx",
+          "type": "registry:component",
+          "target": "@ui/multi-view-fields.tsx"
+        },
+        {
+          "path": "registry/lib/multi-view.ts",
+          "type": "registry:lib",
+          "target": "@lib/multi-view.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        }
+      ]
+    },
+    {
+      "name": "view-kanban",
+      "type": "registry:ui",
+      "title": "Kanban view",
+      "description": "Status columns with counts and sums, draggable cards, a keyboard sensor, and a Move to menu.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "checkbox",
+        "dropdown-menu"
+      ],
+      "categories": [
+        "table"
+      ],
+      "meta": {
+        "titleEs": "Vista kanban",
+        "descriptionEs": "Columnas de un campo de estado, con conteo, suma, arrastre y menú Mover a.",
+        "preview": "app/examples/view-kanban/preview.tsx",
+        "previewHref": "/examples/view-kanban",
+        "examples": [
+          {
+            "title": "Etapas",
+            "href": "/examples/view-kanban",
+            "description": "Oportunidades por etapa. Flechas o Mover a cambian la columna."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/view-kanban/stress",
+            "description": "Scroll horizontal con snap en 320px."
+          }
+        ],
+        "usage": "<ViewKanban records={records} fields={fields} config={view} onMove={move} onCreateRequest={add} />",
+        "api": [
+          {
+            "name": "config.groupField / sumField",
+            "type": "string",
+            "description": "Column field and the numeric field summed in the header."
+          },
+          {
+            "name": "onMove",
+            "type": "(id, patch) => Promise",
+            "description": "Called by drag, ArrowLeft/ArrowRight, and Move to."
+          },
+          {
+            "name": "onCreateRequest",
+            "type": "(seed) => void",
+            "description": "Add item at the bottom of a column, with that column prefilled."
+          },
+          {
+            "name": "className and slot classes",
+            "type": "string",
+            "description": "className, columnClassName, cardClassName."
+          }
+        ]
+      },
+      "docs": "Status or select board over a field schema. Keep sortable-board for the homepage project board with category tabs. This is not that board. Drag uses PointerSensor and KeyboardSensor with screen-reader announcements. Arrow keys on a title are the non-drag move. Reduced motion drops the drop animation. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/ui/view-kanban.tsx",
+          "type": "registry:component",
+          "target": "@ui/view-kanban.tsx"
+        },
+        {
+          "path": "registry/ui/multi-view-fields.tsx",
+          "type": "registry:component",
+          "target": "@ui/multi-view-fields.tsx"
+        },
+        {
+          "path": "registry/lib/multi-view.ts",
+          "type": "registry:lib",
+          "target": "@lib/multi-view.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        }
+      ]
+    },
+    {
+      "name": "view-calendar",
+      "type": "registry:ui",
+      "title": "Calendar view",
+      "description": "Month grid for a date field, with overflow, drag or Alt+Arrow reschedule, and an agenda below 560px.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "@dnd-kit/core",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "popover"
+      ],
+      "categories": [
+        "table"
+      ],
+      "meta": {
+        "titleEs": "Vista de calendario",
+        "descriptionEs": "Mes con las fichas en su fecha, desborde, reagendar y lista de agenda en contenedores estrechos.",
+        "preview": "app/examples/view-calendar/preview.tsx",
+        "previewHref": "/examples/view-calendar",
+        "examples": [
+          {
+            "title": "Cierres",
+            "href": "/examples/view-calendar",
+            "description": "Lunes primero. Alt y flecha mueven la ficha un día."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/view-calendar/stress",
+            "description": "En 320px la cuadrícula pasa a agenda."
+          }
+        ],
+        "usage": "<ViewCalendar records={records} fields={fields} config={view} weekStartsOn={1} today=\"2026-04-03\" onMove={move} />",
+        "api": [
+          {
+            "name": "weekStartsOn",
+            "type": "number",
+            "description": "0 is Sunday. Default 1, Monday. Weekday names come from Intl."
+          },
+          {
+            "name": "today",
+            "type": "YYYY-MM-DD",
+            "description": "Marks today. Default is the local calendar day."
+          },
+          {
+            "name": "onMove",
+            "type": "(id, patch) => Promise",
+            "description": "Drag onto a day, or Alt+Arrow on a record, writes the date field."
+          },
+          {
+            "name": "className and slot classes",
+            "type": "string",
+            "description": "className, gridClassName, cardClassName, agendaClassName."
+          }
+        ]
+      },
+      "docs": "Month grid for one date field. role=grid with arrow keys between days. A record moves with drag or Alt+Arrow. Below a measured width of 560px the month becomes an agenda list. Dates stay YYYY-MM-DD. This is not date-range-picker. Answer no if the CLI asks to overwrite button or popover.",
+      "files": [
+        {
+          "path": "registry/ui/view-calendar.tsx",
+          "type": "registry:component",
+          "target": "@ui/view-calendar.tsx"
+        },
+        {
+          "path": "registry/ui/multi-view-fields.tsx",
+          "type": "registry:component",
+          "target": "@ui/multi-view-fields.tsx"
+        },
+        {
+          "path": "registry/lib/multi-view.ts",
+          "type": "registry:lib",
+          "target": "@lib/multi-view.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        }
+      ]
+    },
+    {
+      "name": "view-timeline",
+      "type": "registry:ui",
+      "title": "Timeline view",
+      "description": "Horizontal start/end schedule with collapsible groups, zoom, a today line, and keyboard move or resize.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button"
+      ],
+      "categories": [
+        "table"
+      ],
+      "meta": {
+        "titleEs": "Vista de cronograma",
+        "descriptionEs": "Barras de inicio a fin, grupos plegables, zoom y una línea de hoy.",
+        "preview": "app/examples/view-timeline/preview.tsx",
+        "previewHref": "/examples/view-timeline",
+        "examples": [
+          {
+            "title": "Proyectos",
+            "href": "/examples/view-timeline",
+            "description": "Flechas mueven la barra. Shift y flechas alargan el fin."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/view-timeline/stress",
+            "description": "El cronograma hace scroll dentro de 320px."
+          }
+        ],
+        "usage": "<ViewTimeline records={records} fields={fields} config={view} zoom=\"week\" onMove={move} />",
+        "api": [
+          {
+            "name": "zoom",
+            "type": "\"day\" | \"week\" | \"month\" | \"quarter\"",
+            "description": "One keyboard step is one unit of the current zoom."
+          },
+          {
+            "name": "config.startField / endField / groupField",
+            "type": "string",
+            "description": "Bar range and optional collapsible groups."
+          },
+          {
+            "name": "onMove",
+            "type": "(id, patch) => Promise",
+            "description": "Arrows move both dates. Shift+arrows resize the end. Edges drag too."
+          },
+          {
+            "name": "className and slot classes",
+            "type": "string",
+            "description": "className, rowClassName, barClassName."
+          }
+        ]
+      },
+      "docs": "Horizontal start/end schedule with zoom, a today line, and keyboard move or resize. The catalog item timeline is an activity feed grouped by day; use that for what happened, and view-timeline for a span of dates. Not a dependency graph. Reduced motion removes bar transitions. Answer no if the CLI asks to overwrite button.",
+      "files": [
+        {
+          "path": "registry/ui/view-timeline.tsx",
+          "type": "registry:component",
+          "target": "@ui/view-timeline.tsx"
+        },
+        {
+          "path": "registry/ui/multi-view-fields.tsx",
+          "type": "registry:component",
+          "target": "@ui/multi-view-fields.tsx"
+        },
+        {
+          "path": "registry/lib/multi-view.ts",
+          "type": "registry:lib",
+          "target": "@lib/multi-view.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        }
+      ]
+    },
+    {
+      "name": "view-grouped-list",
+      "type": "registry:ui",
+      "title": "Grouped list",
+      "description": "Rows grouped by a field, with collapsible headers and compact trailing fields including a progress ring.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge"
+      ],
+      "categories": [
+        "table"
+      ],
+      "meta": {
+        "titleEs": "Lista agrupada",
+        "descriptionEs": "Filas agrupadas con encabezado plegable, conteo y campos compactos a la derecha.",
+        "preview": "app/examples/view-grouped-list/preview.tsx",
+        "previewHref": "/examples/view-grouped-list",
+        "examples": [
+          {
+            "title": "Proyectos por equipo",
+            "href": "/examples/view-grouped-list",
+            "description": "Salud, prioridad, responsable, fecha, conteo y progreso."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/view-grouped-list/stress",
+            "description": "Títulos largos y grupos vacíos en 320px."
+          }
+        ],
+        "usage": "<ViewGroupedList records={records} fields={fields} config={view} onOpen={open} />",
+        "api": [
+          {
+            "name": "config.groupField",
+            "type": "string",
+            "description": "Group header. Empty groups say No items."
+          },
+          {
+            "name": "config.cardFields",
+            "type": "string[]",
+            "description": "Trailing compact fields. Progress renders as a ring."
+          },
+          {
+            "name": "emptyLabel",
+            "type": "string",
+            "description": "Default No items."
+          },
+          {
+            "name": "className and slot classes",
+            "type": "string",
+            "description": "className, groupClassName, rowClassName."
+          }
+        ]
+      },
+      "docs": "Collapsible groups of compact rows, including a progress ring. adaptive-table is the width-adaptive grouped table; this list does not replace it and does not import it. Keep crm-table for fixed CRM columns. Answer no if the CLI asks to overwrite avatar or badge.",
+      "files": [
+        {
+          "path": "registry/ui/view-grouped-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/view-grouped-list.tsx"
+        },
+        {
+          "path": "registry/ui/multi-view-fields.tsx",
+          "type": "registry:component",
+          "target": "@ui/multi-view-fields.tsx"
+        },
+        {
+          "path": "registry/lib/multi-view.ts",
+          "type": "registry:lib",
+          "target": "@lib/multi-view.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        }
+      ]
+    },
+    {
+      "name": "view-gallery",
+      "type": "registry:ui",
+      "title": "Gallery view",
+      "description": "Responsive cards with an optional cover, status, clamped description, footer slot, and quick filter chips.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button"
+      ],
+      "categories": [
+        "table"
+      ],
+      "meta": {
+        "titleEs": "Vista de galería",
+        "descriptionEs": "Tarjetas con portada opcional, estado, descripción recortada y filtros rápidos.",
+        "preview": "app/examples/view-gallery/preview.tsx",
+        "previewHref": "/examples/view-gallery",
+        "examples": [
+          {
+            "title": "Promociones",
+            "href": "/examples/view-gallery",
+            "description": "Portadas generadas en la página, sin imágenes externas."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/view-gallery/stress",
+            "description": "La cuadrícula se reduce en 320px."
+          }
+        ],
+        "usage": "<ViewGallery records={records} fields={fields} config={view} footer={(record) => <span>Edit</span>} />",
+        "api": [
+          {
+            "name": "config.coverField / chipField",
+            "type": "string",
+            "description": "Cover image and the select field used as chips."
+          },
+          {
+            "name": "chip / onChipChange",
+            "type": "string | null",
+            "description": "Quick filter. Omit for internal state."
+          },
+          {
+            "name": "footer",
+            "type": "(record) => ReactNode",
+            "description": "Actions slot at the bottom of each card."
+          },
+          {
+            "name": "className and slot classes",
+            "type": "string",
+            "description": "className, gridClassName, cardClassName, coverClassName."
+          }
+        ]
+      },
+      "docs": "Card grid with an optional cover, status, headline, and chips from a select field. Covers are an aspect-ratio box with a 1px border. A placeholder icon shows when the field is not an http URL, so demos need no external images. This is not blog-grid or card-stack. Answer no if the CLI asks to overwrite button or badge.",
+      "files": [
+        {
+          "path": "registry/ui/view-gallery.tsx",
+          "type": "registry:component",
+          "target": "@ui/view-gallery.tsx"
+        },
+        {
+          "path": "registry/ui/multi-view-fields.tsx",
+          "type": "registry:component",
+          "target": "@ui/multi-view-fields.tsx"
+        },
+        {
+          "path": "registry/lib/multi-view.ts",
+          "type": "registry:lib",
+          "target": "@lib/multi-view.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        }
+      ]
+    },
+    {
+      "name": "record-properties",
+      "type": "registry:ui",
+      "title": "Record properties",
+      "description": "Schema-driven property rows with inline editing per field type, Enter to commit, and Escape to cancel.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "checkbox",
+        "dropdown-menu",
+        "input",
+        "popover"
+      ],
+      "categories": [
+        "table"
+      ],
+      "meta": {
+        "titleEs": "Propiedades del registro",
+        "descriptionEs": "Filas de propiedades según el esquema, con edición en línea por tipo de campo.",
+        "preview": "app/examples/record-properties/preview.tsx",
+        "previewHref": "/examples/record-properties",
+        "examples": [
+          {
+            "title": "Ficha",
+            "href": "/examples/record-properties",
+            "description": "Enter guarda. Escape cancela. Un rechazo restaura el valor."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/record-properties/stress",
+            "description": "La ficha cabe en 320px."
+          }
+        ],
+        "usage": "<RecordProperties record={record} fields={fields} locale=\"es-MX\" onChange={save} />",
+        "api": [
+          {
+            "name": "fields",
+            "type": "FieldDef[]",
+            "description": "section groups the rows. readOnly skips editing."
+          },
+          {
+            "name": "onChange",
+            "type": "(id, patch) => Promise",
+            "description": "Enter commits. A rejected promise restores the previous value."
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "description": "Passed to Intl for currency and dates."
+          },
+          {
+            "name": "className and slot classes",
+            "type": "string",
+            "description": "className, sectionClassName, rowClassName, labelClassName, valueClassName."
+          }
+        ]
+      },
+      "docs": "A whole schema of property rows, inside layered-panel or on its own. inline-edit is a single field; this list does not replace it. Select and status use a menu. Dates use the host popover with a date input. System fields marked readOnly stay text. Enter commits, Escape cancels, and a rejected promise restores the value. Answer no if the CLI asks to overwrite input, checkbox, or popover.",
+      "files": [
+        {
+          "path": "registry/ui/record-properties.tsx",
+          "type": "registry:component",
+          "target": "@ui/record-properties.tsx"
+        },
+        {
+          "path": "registry/ui/multi-view-fields.tsx",
+          "type": "registry:component",
+          "target": "@ui/multi-view-fields.tsx"
+        },
+        {
+          "path": "registry/lib/multi-view.ts",
+          "type": "registry:lib",
+          "target": "@lib/multi-view.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        }
+      ]
+    },
+    {
+      "name": "multi-view",
+      "type": "registry:block",
+      "title": "Multi-view",
+      "description": "One collection in table, kanban, calendar, timeline, grouped list, and gallery, with shared search, a record panel, and a create form.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "@tanstack/react-table",
+        "lucide-react",
+        "radix-ui",
+        "sonner"
+      ],
+      "registryDependencies": [
+        "alert-dialog",
+        "avatar",
+        "badge",
+        "button",
+        "checkbox",
+        "collapsible",
+        "dialog",
+        "dropdown-menu",
+        "input",
+        "popover",
+        "scroll-area",
+        "separator",
+        "sheet",
+        "table",
+        "tabs"
+      ],
+      "categories": [
+        "table"
+      ],
+      "meta": {
+        "titleEs": "Vistas múltiples",
+        "descriptionEs": "Una colección en tabla, tablero, calendario, cronograma, lista y galería, con búsqueda compartida y ficha.",
+        "preview": "app/examples/multi-view/preview.tsx",
+        "previewHref": "/examples/multi-view",
+        "examples": [
+          {
+            "title": "Tres colecciones",
+            "href": "/examples/multi-view",
+            "description": "Oportunidades, proyectos y promociones, con datos ficticios."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/multi-view/stress",
+            "description": "320px, columna apretada y hasta 200 filas."
+          }
+        ],
+        "usage": "<MultiView\n  title=\"Opportunities\"\n  records={records}\n  fields={fields}\n  views={views}\n  locale=\"es-MX\"\n  onRecordChange={save}\n  onCreate={create}\n  onDelete={remove}\n  onMove={move}\n/>",
+        "api": [
+          {
+            "name": "views",
+            "type": "ViewConfig[]",
+            "description": "Which views are enabled, and their order."
+          },
+          {
+            "name": "onRecordChange / onCreate / onDelete / onMove",
+            "type": "callbacks",
+            "description": "The only way data changes. A rejection rolls the optimistic row back."
+          },
+          {
+            "name": "tabs",
+            "type": "MultiViewTab[]",
+            "description": "Extra panel tabs after Details. Each receives the open record."
+          },
+          {
+            "name": "url",
+            "type": "UrlAdapter",
+            "description": "Optional. Share view, search, filters, sort, group, selection, and open id."
+          },
+          {
+            "name": "className and slot classes",
+            "type": "string",
+            "description": "className, toolbarClassName, switcherClassName, searchClassName, viewClassName, panelClassName."
+          }
+        ]
+      },
+      "docs": "Independent implementation of the common multi-view pattern. The block composes the view-* items, layered-panel, and entity-form. It does not fetch. The toolbar is its own and does not import filter-toolbar or segmented-control. view-grouped-list does not delegate to adaptive-table. view-timeline is a schedule, separate from the timeline activity feed. Keep data-table, crm-table, adaptive-table, and sortable-board for those jobs. Wiring notes for Supabase and REST are in the shipped README. Answer no if the CLI asks to overwrite a primitive the host already has, including layered-panel or entity-form if they are already installed.",
+      "files": [
+        {
+          "path": "registry/blocks/multi-view.tsx",
+          "type": "registry:component",
+          "target": "@ui/multi-view.tsx"
+        },
+        {
+          "path": "registry/ui/view-table.tsx",
+          "type": "registry:component",
+          "target": "@ui/view-table.tsx"
+        },
+        {
+          "path": "registry/ui/view-kanban.tsx",
+          "type": "registry:component",
+          "target": "@ui/view-kanban.tsx"
+        },
+        {
+          "path": "registry/ui/view-calendar.tsx",
+          "type": "registry:component",
+          "target": "@ui/view-calendar.tsx"
+        },
+        {
+          "path": "registry/ui/view-timeline.tsx",
+          "type": "registry:component",
+          "target": "@ui/view-timeline.tsx"
+        },
+        {
+          "path": "registry/ui/view-grouped-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/view-grouped-list.tsx"
+        },
+        {
+          "path": "registry/ui/view-gallery.tsx",
+          "type": "registry:component",
+          "target": "@ui/view-gallery.tsx"
+        },
+        {
+          "path": "registry/ui/record-properties.tsx",
+          "type": "registry:component",
+          "target": "@ui/record-properties.tsx"
+        },
+        {
+          "path": "registry/ui/multi-view-fields.tsx",
+          "type": "registry:component",
+          "target": "@ui/multi-view-fields.tsx"
+        },
+        {
+          "path": "registry/ui/layered-panel.tsx",
+          "type": "registry:component",
+          "target": "@ui/layered-panel.tsx"
+        },
+        {
+          "path": "registry/ui/entity-form.tsx",
+          "type": "registry:component",
+          "target": "@ui/entity-form.tsx"
+        },
+        {
+          "path": "registry/hooks/use-multi-view.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-multi-view.ts"
+        },
+        {
+          "path": "registry/lib/multi-view.ts",
+          "type": "registry:lib",
+          "target": "@lib/multi-view.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        },
+        {
+          "path": "registry/lib/multi-view/README.md",
+          "type": "registry:file",
+          "target": "lib/multi-view/README.md"
+        }
+      ]
     }
   ]
 }
