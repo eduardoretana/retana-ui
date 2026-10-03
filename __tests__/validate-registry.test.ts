@@ -61,6 +61,8 @@ describe("validateRegistry", () => {
     expect(input(passingItem(), "export const x = 'bg-blue-500'\n").join("\n")).toMatch(/palette/)
     expect(input(passingItem(), "const color = '#fff'\n").join("\n")).toMatch(/hex/)
     expect(input(passingItem(), "background: oklch(1 0 0)\n").join("\n")).toMatch(/color function/)
+    expect(input(passingItem(), "background: color-mix(in oklch, red 18%, white)\n").join("\n")).toMatch(/color function/)
+    expect(input(passingItem(), "background: color-mix(in oklch, var(--chart-1) 18%, var(--background))\n")).toEqual([])
   })
 
   it("accepts the repository registry", () => {

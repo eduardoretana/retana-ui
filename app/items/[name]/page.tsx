@@ -108,7 +108,7 @@ export default async function ItemPage({ params }: PageProps) {
         {item.docs ? (
           <section className="flex flex-col gap-3">
             <h2 className="text-lg font-semibold">Notes</h2>
-            <p className="max-w-3xl text-sm leading-6 text-muted-foreground">{item.docs}</p>
+            <Notes text={item.docs} />
           </section>
         ) : null}
 
@@ -163,6 +163,23 @@ export default async function ItemPage({ params }: PageProps) {
         </section>
       </main>
     </>
+  )
+}
+
+function Notes({ text }: { text: string }) {
+  const parts = text.split(/(https?:\/\/[^\s)]+)/g)
+  return (
+    <p className="max-w-3xl text-sm leading-6 text-muted-foreground">
+      {parts.map((part, index) =>
+        part.startsWith("http") ? (
+          <a key={index} href={part} className="underline-offset-2 hover:underline">
+            {part}
+          </a>
+        ) : (
+          <span key={index}>{part}</span>
+        ),
+      )}
+    </p>
   )
 }
 

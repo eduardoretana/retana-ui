@@ -10360,6 +10360,105 @@
           "target": "lib/multi-view/README.md"
         }
       ]
+    },
+    {
+      "name": "magnetic-bento",
+      "type": "registry:ui",
+      "title": "Magnetic bento",
+      "description": "Bento grid with one shared highlight that glides and stretches between cards.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "radix-ui",
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Rejilla magnética",
+        "descriptionEs": "Una rejilla bento con un solo resalte que se desliza y se estira entre las tarjetas.",
+        "preview": "app/examples/magnetic-bento/preview.tsx",
+        "previewHref": "/examples/magnetic-bento",
+        "examples": [
+          {
+            "title": "Taller",
+            "href": "/examples/magnetic-bento",
+            "description": "Seis tarjetas. El resalte se queda en la última."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/magnetic-bento/stress",
+            "description": "320px, título largo, RTL, una tarjeta, doce y emoji."
+          }
+        ],
+        "usage": "<MagneticBento defaultActive=\"north\">\n  <MagneticBentoItem value=\"north\" span={{ col: 2, row: 2 }} accent=\"chart-1\">\n    <MagneticBentoIcon><Compass /></MagneticBentoIcon>\n    <MagneticBentoIndex>01</MagneticBentoIndex>\n    <MagneticBentoTitle>North bench</MagneticBentoTitle>\n    <MagneticBentoDescription>Shared firing calendar.</MagneticBentoDescription>\n    <MagneticBentoCta asChild><a href=\"/north\">Open</a></MagneticBentoCta>\n  </MagneticBentoItem>\n</MagneticBento>",
+        "api": [
+          {
+            "name": "active / defaultActive / onActiveChange",
+            "type": "string | null",
+            "description": "The lit card. Omit active for internal state. null hides the highlight."
+          },
+          {
+            "name": "persist",
+            "type": "boolean",
+            "description": "Keep the last card lit when the pointer leaves. Default true."
+          },
+          {
+            "name": "roving",
+            "type": "boolean",
+            "description": "Arrow keys move the highlight. Home and End jump to the ends. Default true."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Accessible name for the group."
+          },
+          {
+            "name": "MagneticBentoItem value",
+            "type": "string",
+            "description": "Stable id for the card. Required."
+          },
+          {
+            "name": "span",
+            "type": "{ col?: number; row?: number }",
+            "description": "Column and row span. Columns clamp to 1 on a narrow container, 2 from 36rem, and the requested span from 56rem."
+          },
+          {
+            "name": "accent",
+            "type": "\"chart-1\" | \"chart-2\" | \"chart-3\" | \"chart-4\" | \"chart-5\" | \"primary\"",
+            "description": "Host chart or primary token for the icon, the call to action, and the highlight mix."
+          },
+          {
+            "name": "MagneticBentoCta asChild",
+            "type": "boolean",
+            "description": "Render a router link or other element instead of an anchor."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes for the grid, indicator, item, icon, index, title, description, and cta."
+          }
+        ]
+      },
+      "docs": "The active card sets anchor-name. The indicator uses position-anchor and inset: anchor(inside), and transitions inset for about 450ms with a slight overshoot. That path works in Chromium since mid-2024, Safari since September 2025, and Firefox 147 (January 2026). When CSS.supports('anchor-name: --x') is false, ResizeObserver and getBoundingClientRect place the same indicator. Each grid uses its own anchor name. With reduced motion the indicator moves without the stretch, and the call to action fades in without a slide. Answer no if the CLI asks to overwrite a primitive the host already has. The anchor-positioning idea is from jh3yy: https://x.com/jh3yy/status/2105823926978814273. This is an independent implementation.",
+      "files": [
+        {
+          "path": "registry/ui/magnetic-bento.tsx",
+          "type": "registry:component",
+          "target": "@ui/magnetic-bento.tsx"
+        },
+        {
+          "path": "registry/hooks/use-magnetic-indicator.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-magnetic-indicator.ts"
+        },
+        {
+          "path": "registry/blocks/magnetic-bento.tsx",
+          "type": "registry:component",
+          "target": "@ui/magnetic-bento-grid.tsx"
+        }
+      ]
     }
   ]
 }

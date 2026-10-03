@@ -37,6 +37,14 @@ const people = [
   ["presence-avatars", "People in a presence room. Reads PresenceProvider."],
 ] as const
 
+const layouts = [
+  ["magnetic-bento", "Mixed spans with one highlight that glides between cards."],
+  ["blog-grid", "A page of posts."],
+  ["card-stack", "A pile of cards you move through."],
+  ["radio-cards", "One choice among option cards."],
+  ["view-gallery", "Schema records as cards, inside multi-view."],
+] as const
+
 export default function DocsPage() {
   const count = getCatalog().length
 
@@ -142,6 +150,7 @@ export default function DocsPage() {
           <ChoiceTable title="Time" rows={time} />
           <ChoiceTable title="Editing a record" rows={editing} />
           <ChoiceTable title="People" rows={people} />
+          <ChoiceTable title="Layouts" rows={layouts} />
           <p className="text-muted-foreground">
             <ItemLink name="view-calendar" /> is a month grid. <ItemLink name="view-grouped-list" />{" "}
             is collapsible groups of compact rows. <ItemLink name="view-gallery" /> is cards.{" "}
@@ -241,6 +250,13 @@ npx shadcn@latest add @retana/presence-outline`}</pre>
             </li>
             <li>
               <code>adaptive-table</code> and the multi-view pieces are clean-room implementations.
+            </li>
+            <li>
+              <code>magnetic-bento</code> takes the anchor-positioning idea from{" "}
+              <a href="https://x.com/jh3yy/status/2105823926978814273" className="underline-offset-2 hover:underline">
+                jh3yy
+              </a>
+              . The cards, labels, and icons here are original.
             </li>
             <li>
               Some admin list behavior is adapted from Maniruzzaman Jubayer&apos;s MIT admin panel
