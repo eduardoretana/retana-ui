@@ -123,6 +123,15 @@ import Preview118 from "@/app/examples/comparison-table/preview"
 import Preview119 from "@/app/examples/stats-band/preview"
 import Preview120 from "@/app/examples/cta-section/preview"
 import Preview121 from "@/app/examples/newsletter-signup/preview"
+import Preview122 from "@/app/examples/rail-sidebar/preview"
+import Preview123 from "@/app/examples/adaptive-table/preview"
+import Preview124 from "@/app/examples/presence/preview"
+import Preview125 from "@/app/examples/presence-liveblocks/preview"
+import Preview126 from "@/app/examples/presence-supabase/preview"
+import Preview127 from "@/app/examples/presence-avatars/preview"
+import Preview128 from "@/app/examples/live-cursors/preview"
+import Preview129 from "@/app/examples/typing-indicator/preview"
+import Preview130 from "@/app/examples/presence-outline/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -247,4 +256,13 @@ export const previewMap = {
   "stats-band": Preview119,
   "cta-section": Preview120,
   "newsletter-signup": Preview121,
+  "rail-sidebar": Preview122,
+  "adaptive-table": Preview123,
+  "presence": Preview124,
+  "presence-liveblocks": Preview125,
+  "presence-supabase": Preview126,
+  "presence-avatars": Preview127,
+  "live-cursors": Preview128,
+  "typing-indicator": Preview129,
+  "presence-outline": Preview130,
 }

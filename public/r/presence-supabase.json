@@ -1,0 +1,66 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "presence-supabase",
+  "title": "Supabase presence",
+  "author": "Eduardo Retana",
+  "description": "Supabase Realtime Presence adapter. Tracks a channel and maps sync, join, and leave onto the shared presence hooks.",
+  "dependencies": [
+    "@supabase/supabase-js"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/lib/presence-supabase.ts",
+      "content": "\"use client\"\n\nimport type { SupabaseClient } from \"@supabase/supabase-js\"\n\nimport {\n  defaultIsAgent,\n  type PresenceAdapter,\n  type PresenceSnapshot,\n  type PresenceUser,\n} from \"@/lib/presence\"\n\ntype ChannelLike = {\n  on: (type: \"presence\", filter: { event: \"sync\" | \"join\" | \"leave\" }, callback: () => void) => ChannelLike\n  subscribe: (callback: (status: string) => void) => ChannelLike\n  track: (payload: unknown) => unknown\n  untrack: () => unknown\n  presenceState: () => Record<string, readonly unknown[]>\n}\n\nexport type SupabaseTracked<P, I> = {\n  userId?: string\n  info?: I\n  presence?: P\n  presence_ref?: string\n}\n\nexport function mapSupabasePresence<P extends object, I>(\n  state: Record<string, readonly unknown[]>,\n  isAgent: (userId: string) => boolean = defaultIsAgent,\n): PresenceUser<P, I>[] {\n  const users: PresenceUser<P, I>[] = []\n  for (const [key, entries] of Object.entries(state)) {\n    entries.forEach((entry, index) => {\n      if (!entry || typeof entry !== \"object\") return\n      const record = entry as SupabaseTracked<P, I>\n      const userId = record.userId || key\n      const connectionId = record.presence_ref || `${key}:${index}`\n      users.push({\n        connectionId,\n        userId,\n        info: (record.info ?? ({} as I)),\n        presence: (record.presence ?? (record as unknown as P)),\n        isAgent: isAgent(userId),\n      })\n    })\n  }\n  return users\n}\n\nexport function createSupabasePresence<P extends object, I>(options: {\n  supabase: SupabaseClient\n  room: string\n  presenceKey: string\n  userId: string\n  info: I\n  initialPresence: P\n  isAgent?: (userId: string) => boolean\n}): PresenceAdapter<P, I> {\n  const isAgent = options.isAgent ?? defaultIsAgent\n  let current = options.initialPresence\n  const info = options.info\n  let left = false\n  let channel: ChannelLike | null = null\n  let subscribers = 0\n  const listeners = new Set<(snapshot: PresenceSnapshot<P, I>) => void>()\n\n  function selfUser(): PresenceUser<P, I> | null {\n    if (left) return null\n    return {\n      connectionId: options.presenceKey,\n      userId: options.userId,\n      info,\n      presence: current,\n      isAgent: isAgent(options.userId),\n    }\n  }\n\n  function snapshot(): PresenceSnapshot<P, I> {\n    const self = selfUser()\n    const others = channel\n      ? mapSupabasePresence<P, I>(channel.presenceState(), isAgent).filter((user) => user.userId !== options.userId)\n      : []\n    return { self, others }\n  }\n\n  function emit() {\n    const next = snapshot()\n    for (const listener of listeners) listener(next)\n  }\n\n  function payload() {\n    return { userId: options.userId, info, presence: current }\n  }\n\n  function ensureChannel() {\n    if (channel) return channel\n    const created = options.supabase.channel(options.room, {\n      config: { presence: { key: options.presenceKey } },\n    }) as unknown as ChannelLike\n    created.on(\"presence\", { event: \"sync\" }, emit)\n    created.on(\"presence\", { event: \"join\" }, emit)\n    created.on(\"presence\", { event: \"leave\" }, emit)\n    created.subscribe((status) => {\n      if (status === \"SUBSCRIBED\" && !left) void created.track(payload())\n    })\n    channel = created\n    return created\n  }\n\n  function closeChannel() {\n    if (!channel) return\n    void channel.untrack()\n    options.supabase.removeChannel(channel as unknown as ReturnType<SupabaseClient[\"channel\"]>)\n    channel = null\n  }\n\n  return {\n    subscribe(callback) {\n      listeners.add(callback)\n      subscribers += 1\n      if (!left) ensureChannel()\n      callback(snapshot())\n      return () => {\n        listeners.delete(callback)\n        subscribers -= 1\n        if (subscribers <= 0) closeChannel()\n      }\n    },\n    updateMyPresence(patch) {\n      current = { ...current, ...patch }\n      if (channel && !left) void channel.track(payload())\n      emit()\n    },\n    getSelf: selfUser,\n    leave() {\n      left = true\n      closeChannel()\n      emit()\n    },\n  }\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/presence-supabase.ts"
+    },
+    {
+      "path": "registry/lib/presence.ts",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nexport type PresenceUser<P, I> = {\n  connectionId: string\n  userId: string\n  presence: P\n  info: I\n  isAgent: boolean\n}\n\nexport type PresenceSnapshot<P, I> = {\n  self: PresenceUser<P, I> | null\n  others: PresenceUser<P, I>[]\n}\n\nexport type PresenceAdapter<P, I> = {\n  subscribe: (callback: (snapshot: PresenceSnapshot<P, I>) => void) => () => void\n  updateMyPresence: (patch: Partial<P>) => void\n  getSelf: () => PresenceUser<P, I> | null\n  leave: () => void\n}\n\nexport type MemoryPresence<P, I> = PresenceAdapter<P, I> & {\n  join: (user: { connectionId?: string; userId: string; info: I; presence: P }) => string\n  update: (connectionId: string, patch: Partial<P>) => void\n  remove: (connectionId: string) => void\n}\n\nexport function defaultIsAgent(userId: string) {\n  return userId.startsWith(\"agent-\")\n}\n\nexport function presenceColor(seed: string, explicit?: string) {\n  if (explicit) return explicit\n  let hash = 0\n  for (const char of seed) hash = (hash + char.charCodeAt(0)) % 5\n  return `var(--chart-${hash + 1})`\n}\n\nexport type PresenceInfo = {\n  name?: string\n  avatar?: string\n  color?: string\n}\n\nexport function readPresenceInfo(info: unknown): PresenceInfo & { name: string } {\n  if (info && typeof info === \"object\") {\n    const record = info as PresenceInfo\n    return {\n      name: record.name?.trim() ? record.name : \"Someone\",\n      avatar: record.avatar,\n      color: record.color,\n    }\n  }\n  return { name: \"Someone\" }\n}\n\ntype MemoryOptions<P, I> = {\n  self?: { connectionId?: string; userId: string; info: I; presence: P }\n  isAgent?: (userId: string) => boolean\n}\n\nexport function createMemoryPresence<P extends object, I>(options: MemoryOptions<P, I> = {}): MemoryPresence<P, I> {\n  const isAgent = options.isAgent ?? defaultIsAgent\n  const users = new Map<string, PresenceUser<P, I>>()\n  let selfId: string | null = null\n  const listeners = new Set<(snapshot: PresenceSnapshot<P, I>) => void>()\n\n  const toUser = (connectionId: string, userId: string, info: I, presence: P): PresenceUser<P, I> => ({\n    connectionId,\n    userId,\n    info,\n    presence,\n    isAgent: isAgent(userId),\n  })\n\n  if (options.self) {\n    selfId = options.self.connectionId ?? \"self\"\n    users.set(selfId, toUser(selfId, options.self.userId, options.self.info, options.self.presence))\n  }\n\n  function snapshot(): PresenceSnapshot<P, I> {\n    const self = selfId ? (users.get(selfId) ?? null) : null\n    const others = [...users.values()].filter((user) => user.connectionId !== selfId)\n    return { self, others }\n  }\n\n  function emit() {\n    const next = snapshot()\n    for (const listener of listeners) listener(next)\n  }\n\n  return {\n    subscribe(callback) {\n      listeners.add(callback)\n      callback(snapshot())\n      return () => listeners.delete(callback)\n    },\n    updateMyPresence(patch) {\n      if (!selfId) return\n      const current = users.get(selfId)\n      if (!current) return\n      users.set(selfId, { ...current, presence: { ...current.presence, ...patch } })\n      emit()\n    },\n    getSelf() {\n      return selfId ? (users.get(selfId) ?? null) : null\n    },\n    leave() {\n      if (selfId) users.delete(selfId)\n      selfId = null\n      emit()\n    },\n    join(user) {\n      const connectionId = user.connectionId ?? `conn-${users.size + 1}-${user.userId}`\n      users.set(connectionId, toUser(connectionId, user.userId, user.info, user.presence))\n      emit()\n      return connectionId\n    },\n    update(connectionId, patch) {\n      const current = users.get(connectionId)\n      if (!current) return\n      users.set(connectionId, { ...current, presence: { ...current.presence, ...patch } })\n      emit()\n    },\n    remove(connectionId) {\n      if (connectionId === selfId) selfId = null\n      users.delete(connectionId)\n      emit()\n    },\n  }\n}\n\ntype PresenceContextValue = {\n  snapshot: PresenceSnapshot<unknown, unknown>\n  updateMyPresence: (patch: object) => void\n}\n\nconst PresenceContext = React.createContext<PresenceContextValue | null>(null)\n\nexport function PresenceProvider<P extends object, I>({\n  adapter,\n  children,\n}: {\n  adapter: PresenceAdapter<P, I>\n  children: React.ReactNode\n}) {\n  const [snapshot, setSnapshot] = React.useState<PresenceSnapshot<P, I>>(() => ({\n    self: adapter.getSelf(),\n    others: [],\n  }))\n\n  React.useEffect(() => adapter.subscribe(setSnapshot), [adapter])\n\n  const updateMyPresence = React.useCallback(\n    (patch: Partial<P>) => adapter.updateMyPresence(patch),\n    [adapter],\n  )\n\n  const value = React.useMemo<PresenceContextValue>(\n    () => ({ snapshot, updateMyPresence: updateMyPresence as (patch: object) => void }),\n    [snapshot, updateMyPresence],\n  )\n\n  return React.createElement(PresenceContext.Provider, { value }, children)\n}\n\nfunction usePresenceContext() {\n  const context = React.useContext(PresenceContext)\n  if (!context) throw new Error(\"Presence hooks must be used inside PresenceProvider.\")\n  return context\n}\n\nexport function useOthers<P = unknown, I = unknown>() {\n  return usePresenceContext().snapshot.others as PresenceUser<P, I>[]\n}\n\nexport function useSelf<P = unknown, I = unknown>() {\n  return usePresenceContext().snapshot.self as PresenceUser<P, I> | null\n}\n\nexport function useUpdateMyPresence<P extends object = Record<string, unknown>>() {\n  return usePresenceContext().updateMyPresence as (patch: Partial<P>) => void\n}\n\nexport function useTypingPresence<P extends object>(key: keyof P & string, options?: { idleMs?: number }) {\n  const idleMs = options?.idleMs ?? 1000\n  const update = useUpdateMyPresence<P>()\n  const timeout = React.useRef<ReturnType<typeof setTimeout> | number | null>(null)\n  const typing = React.useRef(false)\n\n  const notify = React.useCallback(() => {\n    if (!typing.current) {\n      typing.current = true\n      update({ [key]: true } as Partial<P>)\n    }\n    if (timeout.current) window.clearTimeout(timeout.current)\n    timeout.current = window.setTimeout(() => {\n      typing.current = false\n      update({ [key]: false } as Partial<P>)\n    }, idleMs)\n  }, [idleMs, key, update])\n\n  React.useEffect(\n    () => () => {\n      if (timeout.current) window.clearTimeout(timeout.current)\n      if (typing.current) update({ [key]: false } as Partial<P>)\n    },\n    [key, update],\n  )\n\n  return notify\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/presence.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Presencia con Supabase",
+    "descriptionEs": "Adaptador de Supabase Realtime Presence. No obliga a usar Liveblocks.",
+    "preview": "app/examples/presence-supabase/preview.tsx",
+    "previewHref": "/examples/presence-supabase",
+    "examples": [
+      {
+        "title": "Canal",
+        "href": "/examples/presence-supabase",
+        "description": "Ejemplo del estado de presencia. No abre un canal real."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/presence-supabase/stress",
+        "description": "Estado vacío, un usuario y cuarenta."
+      }
+    ],
+    "usage": "const adapter = createSupabasePresence({\n  supabase,\n  room,\n  presenceKey: userId,\n  userId,\n  info,\n  initialPresence,\n})",
+    "api": [
+      {
+        "name": "createSupabasePresence",
+        "type": "function",
+        "description": "channel(room, { config: { presence: { key } } }), track, and sync, join, and leave."
+      },
+      {
+        "name": "mapSupabasePresence",
+        "type": "function",
+        "description": "Turns presenceState() into PresenceUser records."
+      },
+      {
+        "name": "presenceKey / userId / info",
+        "type": "options",
+        "description": "Key for the channel and the local user payload."
+      }
+    ]
+  },
+  "docs": "Enable Realtime and authorize the channel in the host project. Presence is not an authorization source. Answer no if the CLI asks to overwrite an existing Supabase client file; this item does not ship one.",
+  "categories": [
+    "collaboration"
+  ],
+  "type": "registry:lib"
+}

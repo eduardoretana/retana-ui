@@ -1,0 +1,74 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "presence-avatars",
+  "title": "Presence avatars",
+  "author": "Eduardo Retana",
+  "description": "Avatar stack for people in the room, with overflow, tooltips, a live dot, and an optional single avatar for all agents.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "avatar",
+    "tooltip"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/presence-avatars.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { Bot } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Avatar, AvatarFallback, AvatarImage } from \"@/components/ui/avatar\"\nimport {\n  Tooltip,\n  TooltipContent,\n  TooltipProvider,\n  TooltipTrigger,\n} from \"@/components/ui/tooltip\"\nimport {\n  presenceColor,\n  readPresenceInfo,\n  useOthers,\n  useSelf,\n  type PresenceInfo,\n  type PresenceUser,\n} from \"@/lib/presence\"\n\nfunction initials(name: string) {\n  const parts = name.split(/\\s+/).filter(Boolean).slice(0, 2)\n  const letters = parts.map((part) => part[0] ?? \"\").join(\"\")\n  return letters || name.slice(0, 1)\n}\n\nexport type PresenceAvatarsProps = {\n  max?: number\n  groupAgents?: boolean\n  includeSelf?: boolean\n  className?: string\n  avatarClassName?: string\n  overflowClassName?: string\n  moreLabel?: (count: number) => string\n}\n\nexport function PresenceAvatars({\n  max = 4,\n  groupAgents = false,\n  includeSelf = false,\n  className,\n  avatarClassName,\n  overflowClassName,\n  moreLabel = (count) => `${count} more`,\n}: PresenceAvatarsProps) {\n  const others = useOthers<Record<string, unknown>, PresenceInfo>()\n  const self = useSelf<Record<string, unknown>, PresenceInfo>()\n  const people = includeSelf && self ? [...others, self] : others\n  const agents = groupAgents ? people.filter((user) => user.isAgent) : []\n  const humans = groupAgents ? people.filter((user) => !user.isAgent) : people\n  const shown = humans.slice(0, max)\n  const hidden = humans.slice(max)\n  const overflow = hidden.length\n\n  return (\n    <TooltipProvider>\n      <ul className={cn(\"flex items-center\", className)}>\n        {shown.map((user) => (\n          <li key={user.connectionId} className=\"-ms-2 first:ms-0\">\n            <PersonAvatar user={user} className={avatarClassName} />\n          </li>\n        ))}\n        {agents.length > 0 ? (\n          <li className=\"-ms-2 first:ms-0\">\n            <AgentAvatar agents={agents} className={avatarClassName} />\n          </li>\n        ) : null}\n        {overflow > 0 ? (\n          <li className=\"-ms-2 first:ms-0\">\n            <Tooltip>\n              <TooltipTrigger asChild>\n                <button\n                  type=\"button\"\n                  aria-label={moreLabel(overflow)}\n                  className={cn(\n                    \"grid size-8 place-items-center rounded-full bg-muted text-xs font-medium text-muted-foreground ring-2 ring-background focus-visible:outline-none focus-visible:ring-ring\",\n                    overflowClassName,\n                  )}\n                >\n                  +{overflow}\n                </button>\n              </TooltipTrigger>\n              <TooltipContent className=\"max-w-48\">\n                <span className=\"block break-words\">{hidden.map((user) => readPresenceInfo(user.info).name).join(\", \")}</span>\n              </TooltipContent>\n            </Tooltip>\n          </li>\n        ) : null}\n      </ul>\n    </TooltipProvider>\n  )\n}\n\nfunction PersonAvatar({ user, className }: { user: PresenceUser<unknown, PresenceInfo>; className?: string }) {\n  const info = readPresenceInfo(user.info)\n  const color = presenceColor(user.userId, info.color)\n  return (\n    <Tooltip>\n      <TooltipTrigger asChild>\n        <span className=\"relative inline-flex rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\">\n          <Avatar className={className}>\n            {info.avatar ? <AvatarImage src={info.avatar} alt=\"\" /> : null}\n            <AvatarFallback>{initials(info.name)}</AvatarFallback>\n          </Avatar>\n          <span\n            className=\"absolute end-0 bottom-0 size-2 rounded-full ring-2 ring-background\"\n            style={{ backgroundColor: color }}\n            aria-hidden\n          />\n        </span>\n      </TooltipTrigger>\n      <TooltipContent className=\"max-w-48\">\n        <span className=\"block break-words\">{info.name}</span>\n      </TooltipContent>\n    </Tooltip>\n  )\n}\n\nfunction AgentAvatar({\n  agents,\n  className,\n}: {\n  agents: readonly PresenceUser<unknown, PresenceInfo>[]\n  className?: string\n}) {\n  const names = agents.map((user) => readPresenceInfo(user.info).name)\n  const color = presenceColor(agents[0]?.userId ?? \"agent\", readPresenceInfo(agents[0]?.info).color)\n  return (\n    <Tooltip>\n      <TooltipTrigger asChild>\n        <span className=\"relative inline-flex\" aria-label={names.join(\", \")}>\n          <Avatar className={className}>\n            <AvatarFallback>\n              <Bot className=\"size-4\" />\n            </AvatarFallback>\n          </Avatar>\n          <span\n            className=\"absolute end-0 bottom-0 size-2 rounded-full ring-2 ring-background\"\n            style={{ backgroundColor: color }}\n            aria-hidden\n          />\n        </span>\n      </TooltipTrigger>\n      <TooltipContent className=\"max-w-48\">\n        <span className=\"block break-words\">{names.join(\", \")}</span>\n      </TooltipContent>\n    </Tooltip>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/presence-avatars.tsx"
+    },
+    {
+      "path": "registry/lib/presence.ts",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nexport type PresenceUser<P, I> = {\n  connectionId: string\n  userId: string\n  presence: P\n  info: I\n  isAgent: boolean\n}\n\nexport type PresenceSnapshot<P, I> = {\n  self: PresenceUser<P, I> | null\n  others: PresenceUser<P, I>[]\n}\n\nexport type PresenceAdapter<P, I> = {\n  subscribe: (callback: (snapshot: PresenceSnapshot<P, I>) => void) => () => void\n  updateMyPresence: (patch: Partial<P>) => void\n  getSelf: () => PresenceUser<P, I> | null\n  leave: () => void\n}\n\nexport type MemoryPresence<P, I> = PresenceAdapter<P, I> & {\n  join: (user: { connectionId?: string; userId: string; info: I; presence: P }) => string\n  update: (connectionId: string, patch: Partial<P>) => void\n  remove: (connectionId: string) => void\n}\n\nexport function defaultIsAgent(userId: string) {\n  return userId.startsWith(\"agent-\")\n}\n\nexport function presenceColor(seed: string, explicit?: string) {\n  if (explicit) return explicit\n  let hash = 0\n  for (const char of seed) hash = (hash + char.charCodeAt(0)) % 5\n  return `var(--chart-${hash + 1})`\n}\n\nexport type PresenceInfo = {\n  name?: string\n  avatar?: string\n  color?: string\n}\n\nexport function readPresenceInfo(info: unknown): PresenceInfo & { name: string } {\n  if (info && typeof info === \"object\") {\n    const record = info as PresenceInfo\n    return {\n      name: record.name?.trim() ? record.name : \"Someone\",\n      avatar: record.avatar,\n      color: record.color,\n    }\n  }\n  return { name: \"Someone\" }\n}\n\ntype MemoryOptions<P, I> = {\n  self?: { connectionId?: string; userId: string; info: I; presence: P }\n  isAgent?: (userId: string) => boolean\n}\n\nexport function createMemoryPresence<P extends object, I>(options: MemoryOptions<P, I> = {}): MemoryPresence<P, I> {\n  const isAgent = options.isAgent ?? defaultIsAgent\n  const users = new Map<string, PresenceUser<P, I>>()\n  let selfId: string | null = null\n  const listeners = new Set<(snapshot: PresenceSnapshot<P, I>) => void>()\n\n  const toUser = (connectionId: string, userId: string, info: I, presence: P): PresenceUser<P, I> => ({\n    connectionId,\n    userId,\n    info,\n    presence,\n    isAgent: isAgent(userId),\n  })\n\n  if (options.self) {\n    selfId = options.self.connectionId ?? \"self\"\n    users.set(selfId, toUser(selfId, options.self.userId, options.self.info, options.self.presence))\n  }\n\n  function snapshot(): PresenceSnapshot<P, I> {\n    const self = selfId ? (users.get(selfId) ?? null) : null\n    const others = [...users.values()].filter((user) => user.connectionId !== selfId)\n    return { self, others }\n  }\n\n  function emit() {\n    const next = snapshot()\n    for (const listener of listeners) listener(next)\n  }\n\n  return {\n    subscribe(callback) {\n      listeners.add(callback)\n      callback(snapshot())\n      return () => listeners.delete(callback)\n    },\n    updateMyPresence(patch) {\n      if (!selfId) return\n      const current = users.get(selfId)\n      if (!current) return\n      users.set(selfId, { ...current, presence: { ...current.presence, ...patch } })\n      emit()\n    },\n    getSelf() {\n      return selfId ? (users.get(selfId) ?? null) : null\n    },\n    leave() {\n      if (selfId) users.delete(selfId)\n      selfId = null\n      emit()\n    },\n    join(user) {\n      const connectionId = user.connectionId ?? `conn-${users.size + 1}-${user.userId}`\n      users.set(connectionId, toUser(connectionId, user.userId, user.info, user.presence))\n      emit()\n      return connectionId\n    },\n    update(connectionId, patch) {\n      const current = users.get(connectionId)\n      if (!current) return\n      users.set(connectionId, { ...current, presence: { ...current.presence, ...patch } })\n      emit()\n    },\n    remove(connectionId) {\n      if (connectionId === selfId) selfId = null\n      users.delete(connectionId)\n      emit()\n    },\n  }\n}\n\ntype PresenceContextValue = {\n  snapshot: PresenceSnapshot<unknown, unknown>\n  updateMyPresence: (patch: object) => void\n}\n\nconst PresenceContext = React.createContext<PresenceContextValue | null>(null)\n\nexport function PresenceProvider<P extends object, I>({\n  adapter,\n  children,\n}: {\n  adapter: PresenceAdapter<P, I>\n  children: React.ReactNode\n}) {\n  const [snapshot, setSnapshot] = React.useState<PresenceSnapshot<P, I>>(() => ({\n    self: adapter.getSelf(),\n    others: [],\n  }))\n\n  React.useEffect(() => adapter.subscribe(setSnapshot), [adapter])\n\n  const updateMyPresence = React.useCallback(\n    (patch: Partial<P>) => adapter.updateMyPresence(patch),\n    [adapter],\n  )\n\n  const value = React.useMemo<PresenceContextValue>(\n    () => ({ snapshot, updateMyPresence: updateMyPresence as (patch: object) => void }),\n    [snapshot, updateMyPresence],\n  )\n\n  return React.createElement(PresenceContext.Provider, { value }, children)\n}\n\nfunction usePresenceContext() {\n  const context = React.useContext(PresenceContext)\n  if (!context) throw new Error(\"Presence hooks must be used inside PresenceProvider.\")\n  return context\n}\n\nexport function useOthers<P = unknown, I = unknown>() {\n  return usePresenceContext().snapshot.others as PresenceUser<P, I>[]\n}\n\nexport function useSelf<P = unknown, I = unknown>() {\n  return usePresenceContext().snapshot.self as PresenceUser<P, I> | null\n}\n\nexport function useUpdateMyPresence<P extends object = Record<string, unknown>>() {\n  return usePresenceContext().updateMyPresence as (patch: Partial<P>) => void\n}\n\nexport function useTypingPresence<P extends object>(key: keyof P & string, options?: { idleMs?: number }) {\n  const idleMs = options?.idleMs ?? 1000\n  const update = useUpdateMyPresence<P>()\n  const timeout = React.useRef<ReturnType<typeof setTimeout> | number | null>(null)\n  const typing = React.useRef(false)\n\n  const notify = React.useCallback(() => {\n    if (!typing.current) {\n      typing.current = true\n      update({ [key]: true } as Partial<P>)\n    }\n    if (timeout.current) window.clearTimeout(timeout.current)\n    timeout.current = window.setTimeout(() => {\n      typing.current = false\n      update({ [key]: false } as Partial<P>)\n    }, idleMs)\n  }, [idleMs, key, update])\n\n  React.useEffect(\n    () => () => {\n      if (timeout.current) window.clearTimeout(timeout.current)\n      if (typing.current) update({ [key]: false } as Partial<P>)\n    },\n    [key, update],\n  )\n\n  return notify\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/presence.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Avatares de presencia",
+    "descriptionEs": "Pila de avatares con desborde, tooltip y un avatar único para los agentes.",
+    "preview": "app/examples/presence-avatars/preview.tsx",
+    "previewHref": "/examples/presence-avatars",
+    "examples": [
+      {
+        "title": "Sala",
+        "href": "/examples/presence-avatars",
+        "description": "Humanos y un agente agrupado."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/presence-avatars/stress",
+        "description": "Cero, uno, nombres largos y cuarenta."
+      }
+    ],
+    "usage": "<PresenceAvatars groupAgents max={4} />",
+    "api": [
+      {
+        "name": "max",
+        "type": "number",
+        "description": "Visible humans before +N. Default 4."
+      },
+      {
+        "name": "groupAgents",
+        "type": "boolean",
+        "description": "One avatar for every isAgent user."
+      },
+      {
+        "name": "includeSelf",
+        "type": "boolean",
+        "description": "Include the local user. Default false."
+      },
+      {
+        "name": "className and slot classes",
+        "type": "string",
+        "description": "className, avatarClassName, overflowClassName."
+      }
+    ]
+  },
+  "docs": "Requires PresenceProvider. Answer no if the CLI asks to overwrite avatar or tooltip. Color comes from info.color or var(--chart-1) through var(--chart-5).",
+  "categories": [
+    "collaboration"
+  ],
+  "type": "registry:ui"
+}

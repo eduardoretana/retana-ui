@@ -8815,6 +8815,671 @@
           "target": "@lib/motion.ts"
         }
       ]
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "rail-sidebar",
+      "type": "registry:block",
+      "title": "Rail sidebar",
+      "description": "Two-layer app sidebar: an icon rail for sections and a panel for that section's navigation. Built on the host shadcn sidebar, including its mobile sheet.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "sidebar",
+        "avatar",
+        "tooltip",
+        "dropdown-menu",
+        "badge",
+        "input",
+        "button"
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/rail-sidebar.tsx",
+          "type": "registry:component",
+          "target": "@ui/rail-sidebar.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Barra lateral de dos capas",
+        "descriptionEs": "Riel de iconos y panel con la navegación de la sección elegida. En móvil se abre en la hoja del sidebar de shadcn.",
+        "preview": "app/examples/rail-sidebar/preview.tsx",
+        "previewHref": "/examples/rail-sidebar",
+        "examples": [
+          {
+            "title": "Estudio Lumen Field",
+            "href": "/examples/rail-sidebar",
+            "description": "Secciones, grupos plegables, buscador y ficha de persona."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/rail-sidebar/stress",
+            "description": "Textos largos, RTL, muchas entradas y un contenedor de 320px."
+          }
+        ],
+        "usage": "<RailSidebar\n  sections={sections}\n  value={section}\n  onValueChange={setSection}\n  activeHref={pathname}\n  onNavigate={setPathname}\n  onOpenCommand={openPalette}\n  workspace={workspace}\n  user={user}\n>\n  {children}\n</RailSidebar>",
+        "api": [
+          {
+            "name": "sections",
+            "type": "RailSection[]",
+            "description": "Rail entries. Each has id, icon, label, optional badge, placement, and nav groups."
+          },
+          {
+            "name": "value / defaultValue / onValueChange",
+            "type": "string",
+            "description": "Active rail section. Uncontrolled when value is omitted."
+          },
+          {
+            "name": "activeHref",
+            "type": "string",
+            "description": "Current page. Matching links set aria-current=\"page\"."
+          },
+          {
+            "name": "renderLink / asChild",
+            "type": "function / element",
+            "description": "Router-agnostic link. renderLink receives href, className, and children. asChild takes one element."
+          },
+          {
+            "name": "onNavigate",
+            "type": "(href: string) => void",
+            "description": "Called instead of following the href when the host owns routing."
+          },
+          {
+            "name": "workspace",
+            "type": "RailWorkspace",
+            "description": "Switcher card. options open a dropdown."
+          },
+          {
+            "name": "user / footerSlot",
+            "type": "RailUser / ReactNode",
+            "description": "Footer card. footerSlot is the dropdown body."
+          },
+          {
+            "name": "onSearch / onOpenCommand",
+            "type": "functions",
+            "description": "Search field and ⌘K. No command palette is built in."
+          },
+          {
+            "name": "type",
+            "type": "\"single\" | \"multiple\"",
+            "description": "Accordion mode. Default single."
+          },
+          {
+            "name": "collapsible",
+            "type": "\"icon\" | \"offcanvas\" | \"none\"",
+            "description": "icon keeps the rail and hides the panel. Default icon."
+          },
+          {
+            "name": "contained",
+            "type": "boolean",
+            "description": "In-flow layout for a narrow container. The shell uses the shadcn sidebar."
+          },
+          {
+            "name": "className and slot classes",
+            "type": "string",
+            "description": "className, railClassName, panelClassName, itemClassName, groupClassName, headerClassName, footerClassName, searchClassName, insetClassName."
+          }
+        ]
+      },
+      "docs": "Answer no if the CLI asks to overwrite sidebar, avatar, tooltip, dropdown-menu, badge, input, or button. Behavior is inspired by the Sakani design system; no code or assets were copied. See NOTICE."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "adaptive-table",
+      "type": "registry:ui",
+      "title": "Adaptive table",
+      "description": "Grouped table that drops, folds, and stretches columns to its container width. For a narrow panel. data-table is the full TanStack table; crm-table is a fixed contact layout.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "avatar"
+      ],
+      "categories": [
+        "table"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/adaptive-table.tsx",
+          "type": "registry:component",
+          "target": "@ui/adaptive-table.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tabla adaptativa",
+        "descriptionEs": "Tabla agrupada que oculta, pliega y estira columnas según el ancho del contenedor. Para listas dentro de un panel, no para una tabla TanStack completa.",
+        "preview": "app/examples/adaptive-table/preview.tsx",
+        "previewHref": "/examples/adaptive-table",
+        "examples": [
+          {
+            "title": "Pipeline",
+            "href": "/examples/adaptive-table",
+            "description": "Contenedor con borde arrastrable y anchos fijos de 320, 480, 720 y 1100."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/adaptive-table/stress",
+            "description": "Vacío, textos largos, números, RTL y carga."
+          }
+        ],
+        "usage": "<AdaptiveTable\n  title=\"Pipeline\"\n  locale={locale}\n  columns={columns}\n  groups={groups}\n  getRowId={(row) => row.id}\n  onRowClick={openRow}\n  collapsibleGroups\n/>",
+        "api": [
+          {
+            "name": "columns",
+            "type": "AdaptiveColumn[]",
+            "description": "priority (lower drops first), minWidth, mergeInto, render, compactRender, textValue, and header icon plus label."
+          },
+          {
+            "name": "groups",
+            "type": "AdaptiveGroup[]",
+            "description": "id, label, icon, and rows. The first group header carries the column icons."
+          },
+          {
+            "name": "getRowId",
+            "type": "(row) => string",
+            "description": "Stable row id."
+          },
+          {
+            "name": "onRowClick",
+            "type": "(row) => void",
+            "description": "Click and Enter or Space on the row."
+          },
+          {
+            "name": "collapsibleGroups",
+            "type": "boolean",
+            "description": "Group headers can hide their rows."
+          },
+          {
+            "name": "emptyState / loading",
+            "type": "ReactNode / boolean",
+            "description": "Empty copy and a loading status."
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "description": "Language of the table. Format money with formatAdaptiveNumber."
+          },
+          {
+            "name": "className and slot classes",
+            "type": "string",
+            "description": "className, tableClassName, headerClassName, groupClassName, rowClassName, cellClassName."
+          }
+        ]
+      },
+      "docs": "Answer no if the CLI asks to overwrite badge or button. Hidden columns are removed from the table, not visually hidden. Folded values stay in the target cell's text. Motion is a 200ms ease-out FLIP and is skipped when the reader prefers reduced motion. data-table remains the piece for full TanStack tables."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "presence",
+      "type": "registry:lib",
+      "title": "Presence",
+      "description": "Provider-agnostic presence types, an in-memory adapter, and hooks for others, self, updates, and a debounced typing flag.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "collaboration"
+      ],
+      "files": [
+        {
+          "path": "registry/lib/presence.ts",
+          "type": "registry:lib",
+          "target": "@lib/presence.ts"
+        },
+        {
+          "path": "registry/lib/presence/README.md",
+          "type": "registry:file",
+          "target": "@lib/presence/README.md"
+        }
+      ],
+      "meta": {
+        "titleEs": "Presencia",
+        "descriptionEs": "Tipos, adaptador en memoria y hooks de presencia. La interfaz no depende de Liveblocks ni de Supabase.",
+        "preview": "app/examples/presence/preview.tsx",
+        "previewHref": "/examples/presence",
+        "examples": [
+          {
+            "title": "Sala simulada",
+            "href": "/examples/presence",
+            "description": "Tres personas y un agente. El cableado de Liveblocks y Supabase se muestra, no se conecta."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/presence/stress",
+            "description": "Cero personas, nombres largos y una sala de 40."
+          }
+        ],
+        "usage": "const adapter = createMemoryPresence({\n  self: { userId, info, presence },\n})\n\n<PresenceProvider adapter={adapter}>\n  {children}\n</PresenceProvider>",
+        "api": [
+          {
+            "name": "PresenceUser",
+            "type": "type",
+            "description": "connectionId, userId, presence, info, and isAgent."
+          },
+          {
+            "name": "PresenceAdapter",
+            "type": "interface",
+            "description": "subscribe, updateMyPresence, getSelf, and leave."
+          },
+          {
+            "name": "createMemoryPresence",
+            "type": "function",
+            "description": "In-memory adapter with join, update, and remove for demos and tests."
+          },
+          {
+            "name": "PresenceProvider",
+            "type": "component",
+            "description": "Subscribes to an adapter and provides the hooks."
+          },
+          {
+            "name": "useOthers / useSelf / useUpdateMyPresence",
+            "type": "hooks",
+            "description": "Read the room and publish a partial presence patch."
+          },
+          {
+            "name": "useTypingPresence",
+            "type": "hook",
+            "description": "Sets a boolean key immediately and clears it after idleMs (default 1000)."
+          }
+        ]
+      },
+      "docs": "The setup guide ships as registry/lib/presence/README.md. UI pieces only read these hooks, so they work with the memory, Liveblocks, or Supabase adapter."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "presence-liveblocks",
+      "type": "registry:lib",
+      "title": "Liveblocks presence",
+      "description": "Liveblocks room adapter for the presence hooks. Uses @liveblocks/client and @liveblocks/react. Does not depend on the AGPL server package.",
+      "dependencies": [
+        "@liveblocks/client",
+        "@liveblocks/react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "collaboration"
+      ],
+      "files": [
+        {
+          "path": "registry/lib/presence-liveblocks.tsx",
+          "type": "registry:lib",
+          "target": "@lib/presence-liveblocks.tsx"
+        },
+        {
+          "path": "registry/lib/presence.ts",
+          "type": "registry:lib",
+          "target": "@lib/presence.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Presencia con Liveblocks",
+        "descriptionEs": "Adaptador de una sala Liveblocks. Los agentes son usuarios cuyo id empieza por agent-.",
+        "preview": "app/examples/presence-liveblocks/preview.tsx",
+        "previewHref": "/examples/presence-liveblocks",
+        "examples": [
+          {
+            "title": "Mapeo",
+            "href": "/examples/presence-liveblocks",
+            "description": "Ejemplo del mapeo y del cableado. No abre una sala de pago."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/presence-liveblocks/stress",
+            "description": "Cero, uno y cuarenta usuarios mapeados."
+          }
+        ],
+        "usage": "<LiveblocksPresenceRoom\n  authEndpoint=\"/api/liveblocks-auth\"\n  roomId=\"studio\"\n  initialPresence={{ cursor: null }}\n>\n  {children}\n</LiveblocksPresenceRoom>",
+        "api": [
+          {
+            "name": "useLiveblocksPresenceAdapter",
+            "type": "hook",
+            "description": "Maps useOthers, useSelf, and useUpdateMyPresence. Call it inside RoomProvider."
+          },
+          {
+            "name": "LiveblocksPresenceBridge",
+            "type": "component",
+            "description": "Puts that adapter in PresenceProvider."
+          },
+          {
+            "name": "LiveblocksPresenceRoom",
+            "type": "component",
+            "description": "LiveblocksProvider, RoomProvider, and the bridge."
+          },
+          {
+            "name": "mapLiveblocksPresence",
+            "type": "function",
+            "description": "Pure mapping used by the hook. isAgent defaults to userId.startsWith(\"agent-\")."
+          },
+          {
+            "name": "createLiveblocksClient",
+            "type": "function",
+            "description": "createClient from @liveblocks/client."
+          }
+        ]
+      },
+      "docs": "Apache-2.0 client SDKs only. Do not add @liveblocks/server or the liveblocks CLI (AGPL-3.0). Auth with @liveblocks/node stays in the host server. The Free plan needs visible Liveblocks branding and allows 10 connections per room. See registry/lib/presence/README.md."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "presence-supabase",
+      "type": "registry:lib",
+      "title": "Supabase presence",
+      "description": "Supabase Realtime Presence adapter. Tracks a channel and maps sync, join, and leave onto the shared presence hooks.",
+      "dependencies": [
+        "@supabase/supabase-js"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "collaboration"
+      ],
+      "files": [
+        {
+          "path": "registry/lib/presence-supabase.ts",
+          "type": "registry:lib",
+          "target": "@lib/presence-supabase.ts"
+        },
+        {
+          "path": "registry/lib/presence.ts",
+          "type": "registry:lib",
+          "target": "@lib/presence.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Presencia con Supabase",
+        "descriptionEs": "Adaptador de Supabase Realtime Presence. No obliga a usar Liveblocks.",
+        "preview": "app/examples/presence-supabase/preview.tsx",
+        "previewHref": "/examples/presence-supabase",
+        "examples": [
+          {
+            "title": "Canal",
+            "href": "/examples/presence-supabase",
+            "description": "Ejemplo del estado de presencia. No abre un canal real."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/presence-supabase/stress",
+            "description": "Estado vacío, un usuario y cuarenta."
+          }
+        ],
+        "usage": "const adapter = createSupabasePresence({\n  supabase,\n  room,\n  presenceKey: userId,\n  userId,\n  info,\n  initialPresence,\n})",
+        "api": [
+          {
+            "name": "createSupabasePresence",
+            "type": "function",
+            "description": "channel(room, { config: { presence: { key } } }), track, and sync, join, and leave."
+          },
+          {
+            "name": "mapSupabasePresence",
+            "type": "function",
+            "description": "Turns presenceState() into PresenceUser records."
+          },
+          {
+            "name": "presenceKey / userId / info",
+            "type": "options",
+            "description": "Key for the channel and the local user payload."
+          }
+        ]
+      },
+      "docs": "Enable Realtime and authorize the channel in the host project. Presence is not an authorization source. Answer no if the CLI asks to overwrite an existing Supabase client file; this item does not ship one."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "presence-avatars",
+      "type": "registry:ui",
+      "title": "Presence avatars",
+      "description": "Avatar stack for people in the room, with overflow, tooltips, a live dot, and an optional single avatar for all agents.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "tooltip"
+      ],
+      "categories": [
+        "collaboration"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/presence-avatars.tsx",
+          "type": "registry:component",
+          "target": "@ui/presence-avatars.tsx"
+        },
+        {
+          "path": "registry/lib/presence.ts",
+          "type": "registry:lib",
+          "target": "@lib/presence.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Avatares de presencia",
+        "descriptionEs": "Pila de avatares con desborde, tooltip y un avatar único para los agentes.",
+        "preview": "app/examples/presence-avatars/preview.tsx",
+        "previewHref": "/examples/presence-avatars",
+        "examples": [
+          {
+            "title": "Sala",
+            "href": "/examples/presence-avatars",
+            "description": "Humanos y un agente agrupado."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/presence-avatars/stress",
+            "description": "Cero, uno, nombres largos y cuarenta."
+          }
+        ],
+        "usage": "<PresenceAvatars groupAgents max={4} />",
+        "api": [
+          {
+            "name": "max",
+            "type": "number",
+            "description": "Visible humans before +N. Default 4."
+          },
+          {
+            "name": "groupAgents",
+            "type": "boolean",
+            "description": "One avatar for every isAgent user."
+          },
+          {
+            "name": "includeSelf",
+            "type": "boolean",
+            "description": "Include the local user. Default false."
+          },
+          {
+            "name": "className and slot classes",
+            "type": "string",
+            "description": "className, avatarClassName, overflowClassName."
+          }
+        ]
+      },
+      "docs": "Requires PresenceProvider. Answer no if the CLI asks to overwrite avatar or tooltip. Color comes from info.color or var(--chart-1) through var(--chart-5)."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "live-cursors",
+      "type": "registry:ui",
+      "title": "Live cursors",
+      "description": "Cursors and name labels positioned inside a relative container. Pointer updates are container-relative and throttled with requestAnimationFrame.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "collaboration"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/live-cursors.tsx",
+          "type": "registry:component",
+          "target": "@ui/live-cursors.tsx"
+        },
+        {
+          "path": "registry/lib/presence.ts",
+          "type": "registry:lib",
+          "target": "@lib/presence.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Cursores en vivo",
+        "descriptionEs": "Cursores con nombre, en coordenadas del contenedor. Sin deslizamiento si se prefiere menos movimiento.",
+        "preview": "app/examples/live-cursors/preview.tsx",
+        "previewHref": "/examples/live-cursors",
+        "examples": [
+          {
+            "title": "Marco",
+            "href": "/examples/live-cursors",
+            "description": "Cursores de la sala simulada."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/live-cursors/stress",
+            "description": "Cero, uno y muchos cursores en 320px."
+          }
+        ],
+        "usage": "const ref = useRef<HTMLDivElement>(null)\nuseContainerCursor(ref)\n\n<div ref={ref} className=\"relative\">\n  <LiveCursors />\n</div>",
+        "api": [
+          {
+            "name": "LiveCursors",
+            "type": "component",
+            "description": "Renders other users' presence.cursor with a name label."
+          },
+          {
+            "name": "useContainerCursor",
+            "type": "hook",
+            "description": "Writes container-relative coordinates, throttled with requestAnimationFrame."
+          },
+          {
+            "name": "className and slot classes",
+            "type": "string",
+            "description": "className, cursorClassName, labelClassName."
+          }
+        ]
+      },
+      "docs": "Requires PresenceProvider and presence.cursor. Reduced motion snaps to the latest point instead of smoothing. The layer is aria-hidden because positions change continuously; names are on the avatar stack."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "typing-indicator",
+      "type": "registry:ui",
+      "title": "Typing indicator",
+      "description": "Polite live region that names who is typing, including “Ana and 2 others are typing…”.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "collaboration"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/typing-indicator.tsx",
+          "type": "registry:component",
+          "target": "@ui/typing-indicator.tsx"
+        },
+        {
+          "path": "registry/lib/presence.ts",
+          "type": "registry:lib",
+          "target": "@lib/presence.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Indicador de escritura",
+        "descriptionEs": "Región en vivo que dice quién escribe.",
+        "preview": "app/examples/typing-indicator/preview.tsx",
+        "previewHref": "/examples/typing-indicator",
+        "examples": [
+          {
+            "title": "Campo",
+            "href": "/examples/typing-indicator",
+            "description": "Priya escribe y el campo propio se apaga tras un segundo."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/typing-indicator/stress",
+            "description": "Cero, uno, dos y varios nombres."
+          }
+        ],
+        "usage": "<TypingIndicator />",
+        "api": [
+          {
+            "name": "field",
+            "type": "string",
+            "description": "Presence key that is true while typing. Default isTyping."
+          },
+          {
+            "name": "label",
+            "type": "(names: string[]) => string",
+            "description": "Override the sentence. Default is English."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Class on the live region."
+          }
+        ]
+      },
+      "docs": "Requires PresenceProvider. The region uses aria-live=\"polite\". Pair it with useTypingPresence on the local field."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "presence-outline",
+      "type": "registry:ui",
+      "title": "Presence outline",
+      "description": "Outlines and labels an element when another person's selection presence matches.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "collaboration"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/presence-outline.tsx",
+          "type": "registry:component",
+          "target": "@ui/presence-outline.tsx"
+        },
+        {
+          "path": "registry/lib/presence.ts",
+          "type": "registry:lib",
+          "target": "@lib/presence.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Contorno de selección",
+        "descriptionEs": "Dibuja el contorno y el nombre de quien tiene seleccionado ese elemento.",
+        "preview": "app/examples/presence-outline/preview.tsx",
+        "previewHref": "/examples/presence-outline",
+        "examples": [
+          {
+            "title": "Campos",
+            "href": "/examples/presence-outline",
+            "description": "Brief y notas con la selección de la sala."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/presence-outline/stress",
+            "description": "Nadie, una persona y nombres largos."
+          }
+        ],
+        "usage": "<PresenceOutline selection=\"brief\">\n  <input onFocus={() => update({ selection: \"brief\" })} />\n</PresenceOutline>",
+        "api": [
+          {
+            "name": "selection",
+            "type": "string",
+            "description": "Value compared with the other user's selection."
+          },
+          {
+            "name": "field",
+            "type": "string",
+            "description": "Presence key. Default selection."
+          },
+          {
+            "name": "className / labelClassName",
+            "type": "string",
+            "description": "Classes for the wrapper and the name label."
+          }
+        ]
+      },
+      "docs": "Requires PresenceProvider. The outline color is info.color or a chart token. Several people on the same target show the first name plus a count."
     }
   ]
 }

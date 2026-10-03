@@ -23,3 +23,15 @@ Catalog metadata lives on each item's `meta` object (shadcn passes `meta` throug
 4. Declara los primitivos del anfitrión en `registryDependencies` (`button`, `scroll-area`, …). No copies esos archivos. En la documentación indica que, si `shadcn add` pregunta si debe sobrescribirlos, la respuesta es **no**.
 5. Corre `pnpm registry:build`. El script valida el item, genera `public/r/<name>.json` y regenera el mapa de vistas previas. Falla si falta la descripción, la preview, o si `registry/` trae `cssVars`, hex, `rgb`/`oklch` o clases de paleta (`bg-blue-500`). También reescribe los imports `@/registry/retana/...` del payload a `@/lib`, `@/components/ui` y `@/hooks`, y falla si queda un import que el host no puede resolver.
 6. Corre `pnpm test` y `pnpm build`. La pieza aparece en `/` y en `/items/<name>`.
+
+## Escenarios de estrés
+
+Cada pieza nueva incluye una ruta `app/examples/<nombre>/stress/page.tsx`. Es un client component que importa el componente real del registry, sin cambiarle los estilos, y muestra solo los ejes que aplican a esa pieza. Cada bloque lleva una etiqueta visible.
+
+- Largo del contenido: vacío, una palabra, varias frases y una cadena de 60 caracteres sin espacios.
+- Forma del contenido: emoji, texto de derecha a izquierda y alineación de números.
+- Cantidad: 0, 1, un caso realista y diez veces más elementos.
+- Contenedor: 320px, apretado por un hermano en un flex y muy ancho.
+- Estado: carga, vacío o deshabilitado, cuando la pieza tiene esos estados.
+
+Si algo se rompe a la vista —texto que se sale, foco que desaparece, un desborde que tapa otro control— se corrige en la pieza antes de darla por lista.
