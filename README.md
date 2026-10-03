@@ -73,7 +73,7 @@ This catalog is a Next.js app (App Router) on Tailwind v4 and shadcn's Radix Nov
 
 <!-- CATALOG:START -->
 
-`131` items are in `registry.json` on this branch. A name links to its source file.
+`141` items are in `registry.json` on this branch. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -157,6 +157,16 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`crm-table`](registry/ui/crm-table.tsx) · ui — CRM-shaped table with avatar and name, a status badge, stage, owner, and last activity. Column helpers match a TanStack column definition so they can be passed to AdminDataTable when that item is installed.
 - [`metric-card`](registry/ui/metric-card.tsx) · ui — A compact summary for a number that needs a label and context.
 - [`adaptive-table`](registry/ui/adaptive-table.tsx) · ui — Grouped table that drops, folds, and stretches columns to its container width. For a narrow panel. data-table is the full TanStack table; crm-table is a fixed contact layout.
+- [`multi-view-core`](registry/lib/multi-view.ts) · lib — Field schema and pure helpers for one collection shown in many views: search, filter, sort, group, month grid, timeline scale, Intl formatting, and CSV.
+- [`use-multi-view`](registry/hooks/use-multi-view.ts) · hook — View, search, filter, sort, group, selection, and open-record state, controlled or uncontrolled, with an optional URL adapter.
+- [`view-table`](registry/ui/view-table.tsx) · ui — Schema-driven table with checkbox selection, sortable headers, per-type cells, row actions, and column visibility.
+- [`view-kanban`](registry/ui/view-kanban.tsx) · ui — Status columns with counts and sums, draggable cards, a keyboard sensor, and a Move to menu.
+- [`view-calendar`](registry/ui/view-calendar.tsx) · ui — Month grid for a date field, with overflow, drag or Alt+Arrow reschedule, and an agenda below 560px.
+- [`view-timeline`](registry/ui/view-timeline.tsx) · ui — Horizontal start/end schedule with collapsible groups, zoom, a today line, and keyboard move or resize.
+- [`view-grouped-list`](registry/ui/view-grouped-list.tsx) · ui — Rows grouped by a field, with collapsible headers and compact trailing fields including a progress ring.
+- [`view-gallery`](registry/ui/view-gallery.tsx) · ui — Responsive cards with an optional cover, status, clamped description, footer slot, and quick filter chips.
+- [`record-properties`](registry/ui/record-properties.tsx) · ui — Schema-driven property rows with inline editing per field type, Enter to commit, and Escape to cancel.
+- [`multi-view`](registry/blocks/multi-view.tsx) · block — One collection in table, kanban, calendar, timeline, grouped list, and gallery, with shared search, a record panel, and a create form.
 
 ### Admin
 
