@@ -1,16 +1,40 @@
 # Multi-view wiring
 
-`multi-view` renders one collection through several views. It does not fetch. Pass records in and handle mutations in the callbacks. If a callback rejects, the optimistic row rolls back.
+`multi-view` renders one collection through several views. Pass records in and handle mutations in the callbacks. If a callback rejects, the optimistic row rolls back.
+
+## Install
+
+One command copies the block, the six views, `record-properties`, `multi-view-core`, `use-multi-view`, `layered-panel`, and `entity-form`:
+
+```bash
+npx shadcn@latest add @retana/multi-view
+```
+
+A single view, when the block is already present or you only need that view:
+
+```bash
+npx shadcn@latest add @retana/view-table
+npx shadcn@latest add @retana/view-kanban
+npx shadcn@latest add @retana/view-calendar
+npx shadcn@latest add @retana/view-timeline
+npx shadcn@latest add @retana/view-grouped-list
+npx shadcn@latest add @retana/view-gallery
+npx shadcn@latest add @retana/record-properties
+npx shadcn@latest add @retana/multi-view-core
+npx shadcn@latest add @retana/use-multi-view
+```
+
+Answer **no** if the CLI asks to overwrite a primitive the host already has, including `layered-panel` or `entity-form` when those files are already installed. The public registry host is not chosen yet. Until a domain exists, the URL form is `npx shadcn@latest add https://<your-deployment>/r/<name>.json`.
 
 This is an independent implementation of the common multi-view pattern (one dataset shown as a table, board, calendar, timeline, list, or gallery).
 
 ## When to use which piece
 
 - `multi-view` when the same records must switch views and share search, filter, sort, selection, and the record panel.
-- `view-table` when columns come from a field schema and the same rows may also appear in other views. Keep `data-table` for the bookings admin, `crm-table` for fixed CRM columns, and `adaptive-table` for a width-adaptive grouped table. This view does not replace those.
-- `view-kanban` for a status or select board over a field schema. Keep `sortable-board` for the homepage project board with category tabs.
-- `view-timeline` for a start/end schedule. The catalog item `timeline` is an activity feed grouped by day; use that for what happened.
-- `view-grouped-list` for collapsible groups of compact rows. It does not replace `adaptive-table`.
+- `view-table` when columns come from a field schema and the same rows may also appear in other views. `data-table` remains the bookings admin, `crm-table` the fixed contact layout, and `adaptive-table` the width-adaptive grouped table.
+- `view-kanban` for a status or select board over a field schema. `sortable-board` remains the homepage project board with category tabs.
+- `view-timeline` for a start/end schedule. The catalog item `timeline` is an activity feed grouped by day.
+- `view-grouped-list` for collapsible groups of compact rows. `adaptive-table` remains the width-adaptive grouped table.
 - `view-gallery` for cards with a cover and quick chips.
 - `record-properties` for a whole schema of editable rows, including inside `layered-panel`. `inline-edit` is a single field.
 

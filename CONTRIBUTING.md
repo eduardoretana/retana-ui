@@ -11,6 +11,14 @@ Registry items in this repo are installed across my projects. Each of those apps
 - Prefer props over hard-coded sizes. Widths, labels, and a `className` (or a named slot class) on every part belong in the public API, with a sensible default.
 - The demo site may define its own theme so the preview is readable. Keep that theme in `app/` (`app/globals.css`, `app/layout.tsx`). Do not import it from anything under `registry/`.
 
+## Sources
+
+- Paid component libraries are never ported.
+- An unlicensed reference is clean-room only: implement the behavior, and copy no source, sample data, icons, or assets. Say so in `NOTICE` and in the item's `docs`.
+- An MIT (or similarly permissive) adaptation keeps the upstream copyright in `NOTICE`, and a short note in the installed file when the notice has to travel with the code.
+- Liveblocks stays on the Apache-2.0 client packages `@liveblocks/client` and `@liveblocks/react`. `@liveblocks/node` may be documented for a host server. Do not add `@liveblocks/server` or the `liveblocks` CLI. Those are AGPL-3.0.
+- A new npm package goes in the item's `dependencies` and in the root `package.json`. `motion` is the package Arc-adapted pieces use for timing. It does not add colors or fonts.
+
 `registry.json` should list `dependencies` and `registryDependencies` the item actually imports, and nothing else. Run `pnpm registry:build` so `public/r/*.json` and `lib/generated/preview-map.tsx` stay in sync. The built JSON must not contain a `cssVars` key.
 
 Catalog metadata lives on each item's `meta` object (shadcn passes `meta` through). The index and `/items/[name]` read `registry.json` only.
@@ -22,7 +30,9 @@ Catalog metadata lives on each item's `meta` object (shadcn passes `meta` throug
 3. En `meta` escribe `titleEs`, `descriptionEs`, `preview` (un `.tsx` en `app/examples/<name>/preview.tsx`), `previewHref` (ruta `/examples/...` con la demo en vivo), `examples`, `usage` y `api` (filas para la tabla de props). La vista previa y la demo viven en `app/`, nunca en `registry/`.
 4. Declara los primitivos del anfitrión en `registryDependencies` (`button`, `scroll-area`, …). No copies esos archivos. En la documentación indica que, si `shadcn add` pregunta si debe sobrescribirlos, la respuesta es **no**.
 5. Corre `pnpm registry:build`. El script valida el item, genera `public/r/<name>.json` y regenera el mapa de vistas previas. Falla si falta la descripción, la preview, o si `registry/` trae `cssVars`, hex, `rgb`/`oklch` o clases de paleta (`bg-blue-500`). También reescribe los imports `@/registry/retana/...` del payload a `@/lib`, `@/components/ui` y `@/hooks`, y falla si queda un import que el host no puede resolver.
-6. Corre `pnpm test` y `pnpm build`. La pieza aparece en `/` y en `/items/<name>`.
+6. Corre `pnpm readme:catalog` para regenerar el bloque del README. No edites a mano lo que está entre `<!-- CATALOG:START -->` y `<!-- CATALOG:END -->`.
+7. Si la pieza adapta una fuente con licencia, o es clean-room, actualiza `NOTICE` y el campo `docs` del item. La página `/items/<name>` muestra ese texto junto al comando de instalación.
+8. Corre `pnpm test` y `pnpm build`. La pieza aparece en `/` y en `/items/<name>`.
 
 ## Escenarios de estrés
 

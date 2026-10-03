@@ -56,6 +56,9 @@ export default async function ItemPage({ params }: PageProps) {
             </span>
           </div>
           <p className="max-w-3xl text-sm text-muted-foreground">{item.descriptionEs}</p>
+          {item.description && item.description !== item.descriptionEs ? (
+            <p className="max-w-3xl text-sm text-muted-foreground">{item.description}</p>
+          ) : null}
           <ul className="flex flex-wrap gap-1.5" aria-label="Categories">
             {item.categories.map((category) => (
               <li key={category}>
@@ -96,7 +99,18 @@ export default async function ItemPage({ params }: PageProps) {
         <section className="flex flex-col gap-3">
           <h2 className="text-lg font-semibold">Install</h2>
           <InstallCommands name={item.name} />
+          <p className="text-sm text-muted-foreground">
+            <code>https://&lt;your-deployment&gt;</code> in the URL command is a placeholder until
+            the catalog domain is chosen. On this site the command uses the current origin.
+          </p>
         </section>
+
+        {item.docs ? (
+          <section className="flex flex-col gap-3">
+            <h2 className="text-lg font-semibold">Notes</h2>
+            <p className="max-w-3xl text-sm leading-6 text-muted-foreground">{item.docs}</p>
+          </section>
+        ) : null}
 
         <section className="flex flex-col gap-3">
           <h2 className="text-lg font-semibold">Dependencies</h2>

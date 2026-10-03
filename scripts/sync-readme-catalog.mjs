@@ -31,7 +31,12 @@ const GROUP_ORDER = [
   "Chat and agents",
   "Forms",
   "Media and content",
-  "Tables",
+  "Tables and views",
+  "Charts",
+  "Collaboration",
+  "Navigation",
+  "Page blocks",
+  "Actions and overlays",
   "Admin",
   "Other",
 ]
@@ -51,10 +56,23 @@ function groupOf(item) {
   if (item.pending || cats.has("admin")) return "Admin"
   if (cats.has("panel")) return "Detail"
   if (cats.has("chat") || cats.has("ai")) return "Chat and agents"
-  if (cats.has("table")) return "Tables"
+  if (cats.has("collaboration")) return "Collaboration"
+  if (cats.has("table")) return "Tables and views"
+  if (cats.has("chart")) return "Charts"
+  if (cats.has("navigation")) return "Navigation"
+  if (cats.has("block")) return "Page blocks"
   if (cats.has("form") || cats.has("input")) return "Forms"
   if (cats.has("media") || cats.has("content") || cats.has("hook")) return "Media and content"
-  if (cats.has("dashboard")) return "Tables"
+  if (cats.has("dashboard")) return "Tables and views"
+  if (
+    cats.has("action") ||
+    cats.has("feedback") ||
+    cats.has("theme") ||
+    cats.has("disclosure") ||
+    cats.has("overlay")
+  ) {
+    return "Actions and overlays"
+  }
   return "Other"
 }
 
@@ -83,7 +101,8 @@ function itemLine(item) {
   const file = item.files?.[0]?.path
   const linked = file && fs.existsSync(path.join(root, file))
   const name = linked ? `[\`${item.name}\`](${file})` : `\`${item.name}\``
-  return `- ${name} · ${kind} — ${description}`
+  const install = item.pending ? "" : ` Install: \`npx shadcn@latest add @retana/${item.name}\`.`
+  return `- ${name} · ${kind} — ${description}${install}`
 }
 
 /**
@@ -124,8 +143,15 @@ function render(registryItems, pendingItems) {
 
   const lines = []
   const onBranch = registryItems.length
+  const counts = { ui: 0, block: 0, hook: 0, lib: 0 }
+  for (const item of registryItems) {
+    const kind = KIND[item.type]
+    if (kind && kind in counts) counts[kind] += 1
+  }
+  const plural = (count, singular, pluralLabel) =>
+    `\`${count}\` ${count === 1 ? singular : pluralLabel}`
   lines.push(
-    `\`${onBranch}\` items are in \`registry.json\` on this branch. A name links to its source file.`,
+    `\`${onBranch}\` items are in \`registry.json\` on this branch: ${plural(counts.ui, "component", "components")}, ${plural(counts.block, "block", "blocks")}, ${plural(counts.hook, "hook", "hooks")}, and ${plural(counts.lib, "library", "libraries")}. A name links to its source file.`,
   )
   if (pendingItems.length) {
     lines.push(

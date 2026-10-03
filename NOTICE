@@ -1,61 +1,28 @@
-Retana UI includes interaction patterns adapted from the MIT-licensed
-admin panel by Maniruzzaman Jubayer:
+Retana UI is Copyright (c) 2026 Eduardo Retana and is licensed under the MIT
+License. See LICENSE.
 
-  https://github.com/jubayer910/Admin-panel
-
-The original work is a Next.js admin with its own CSS modules. This registry
-reimplements the behavior on shadcn primitives. It does not include the
-original stylesheet, the Roobert font, Hugeicons, or the author's brand assets.
-
-Adapted behavior:
-
-- Reordering a filtered list only permutes the visible rows. Hidden rows
-  keep their slots (`reorderVisible` in registry/lib/reorder.ts).
-- Keyboard drag announcements, move up/down/top/bottom, and a position number.
-- A per-row "show on homepage" switch on a project board.
-- A sticky save bar that warns with `beforeunload` while the form is dirty.
-- Content tables shaped around position, show_on_homepage, and published.
-
-The adapted portions are licensed under the MIT License below. The year and
-copyright holder match the original repository's LICENSE file.
+Paid component libraries are never ported. When a reference has no license
+that allows reuse, the piece is a clean-room implementation of the behavior:
+no source, sample data, icons, or assets are copied. Third-party notices for
+code and behavior that this registry does include are below.
 
 ---
 
-MIT License
+Arc UI free tier
 
-Copyright (c) 2026 Maniruzzaman Jubayer
+Retana UI includes components adapted from the free tier of Arc UI by Elia
+Kuratli (MIT):
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+  https://github.com/kuratlielia/arc-library
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Copyright (c) 2026 Elia Kuratli
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
----
-
-rail-sidebar behavior inspired by Sakani Design System by Samuel Okpere, MIT; no code or assets copied.
-https://github.com/samzydd/Sakani-design-system
-
-The rest of this repository is Copyright (c) Eduardo Retana and is licensed
-under the MIT License. See LICENSE.
-
----
-
-Retana UI includes components adapted from Arc UI by Elia Kuratli (MIT),
-https://github.com/kuratlielia/arc-library, adapted to shadcn tokens; no Arc
-stylesheet, tokens or Pro items included.
+The pieces are adapted onto shadcn semantic classes. This registry does not
+include the Arc stylesheet, Arc tokens, cssVars, or Pro components and blocks.
+Pro items were not fetched, ported, or reconstructed. Adapted motion uses the
+`motion` package. Durations live in registry/lib/motion.ts and carry no colors,
+fonts, or theme tokens. Motion is skipped when the reader prefers reduced
+motion.
 
 Adapted items:
 
@@ -140,6 +107,22 @@ Adapted items:
 - cta-section
 - newsletter-signup
 
+Supporting files for those items, not separate catalog entries:
+
+- registry/lib/motion.ts
+- registry/hooks/use-copy-feedback.ts
+- the *-data.ts modules that ship beside the page blocks
+
+Optional behaviors from the same free tier, added to pieces that already
+existed:
+
+- chat-message — reaction chips
+- code-block — collapse after maxLines
+- color-picker — saved swatches and the EyeDropper API when the browser has it
+- multi-select — field label, hint, and a chip overflow count
+- magnetic-dropzone — upload progress, abort, and retry
+- logo-marquee — pause and play. Brand color assets are not included
+- otp-field — focus on mount and the keypad input mode
 
 The adapted portions are licensed under the MIT License below. The year and
 copyright holder match the original repository's LICENSE file.
@@ -167,3 +150,98 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+Admin panel
+
+Retana UI includes interaction patterns adapted from the MIT-licensed
+admin panel by Maniruzzaman Jubayer:
+
+  https://github.com/jubayer910/Admin-panel
+
+The original work is a Next.js admin with its own CSS modules. This registry
+reimplements the behavior on shadcn primitives. It does not include the
+original stylesheet, the Roobert font, Hugeicons, or the author's brand assets.
+
+Adapted behavior:
+
+- Reordering a filtered list only permutes the visible rows. Hidden rows
+  keep their slots (`reorderVisible` in registry/lib/reorder.ts).
+- Keyboard drag announcements, move up/down/top/bottom, and a position number.
+- A per-row "show on homepage" switch on a project board.
+- A sticky save bar that warns with `beforeunload` while the form is dirty.
+- Content tables shaped around position, show_on_homepage, and published.
+
+The adapted portions are licensed under the MIT License below. The year and
+copyright holder match the original repository's LICENSE file.
+
+---
+
+MIT License
+
+Copyright (c) 2026 Maniruzzaman Jubayer
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+Sakani Design System
+
+rail-sidebar behavior is inspired by the Sakani Design System by Samuel Okpere
+(MIT):
+
+  https://github.com/samzydd/Sakani-design-system
+
+No code, CSS modules, tokens, Geist, or logo were copied. The piece is built
+on the host shadcn sidebar and the host's semantic classes.
+
+---
+
+Clean-room pieces
+
+adaptive-table is a clean-room reimplementation from a behavior description
+only. No names, icons, or rows from that reference were copied. Columns drop,
+fold, and stretch to the container width.
+
+The multi-view pieces (multi-view-core, use-multi-view, view-table,
+view-kanban, view-calendar, view-timeline, view-grouped-list, view-gallery,
+record-properties, and the multi-view block) are an independent implementation
+of the common pattern: one collection shown as a table, board, calendar,
+timeline, list, or gallery. No shadcn/studio code, data, or assets were
+consulted.
+
+---
+
+Liveblocks
+
+presence-liveblocks uses @liveblocks/client and @liveblocks/react, both
+Apache-2.0. @liveblocks/node is also Apache-2.0. It is documented in
+registry/lib/presence/README.md for a host auth route and for server-side
+agent presence. It is not a dependency of this repository.
+
+@liveblocks/server and the liveblocks CLI are AGPL-3.0. They are not
+dependencies, and this registry does not include them.
+
+The Liveblocks Free plan needs a visible Liveblocks badge and allows 10
+concurrent connections per room. Confirm the current plan limits before
+shipping.
+
+Supabase Realtime Presence uses @supabase/supabase-js, already used by the
+admin adapter. Presence payloads are not an authorization source.
