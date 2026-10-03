@@ -28,6 +28,8 @@ The index at the bottom is generated from `registry.json`. These three groups ar
 
 **Multi-view.** `multi-view` shows one collection as `view-table`, `view-kanban`, `view-calendar`, `view-timeline`, `view-grouped-list`, and `view-gallery`, with `record-properties` in the record panel. `multi-view-core` and `use-multi-view` hold the field schema and the view state. Pass records in. Saves go through host callbacks and roll back when a callback rejects. Wiring for Supabase and a plain REST API is in [`registry/lib/multi-view/README.md`](registry/lib/multi-view/README.md).
 
+**Layouts.** [`magnetic-bento`](registry/ui/magnetic-bento.tsx) is a bento grid with one shared highlight. The active card sets `anchor-name` and the highlight uses `position-anchor` with `inset: anchor(inside)`, so the four edges stretch between cards of different sizes. Browsers where `CSS.supports("anchor-name: --x")` is false measure the active card instead. The technique idea is from [jh3yy](https://x.com/jh3yy/status/2105823926978814273). The cards in this registry are original.
+
 ## How a piece stays on the host theme
 
 <p align="center">
@@ -83,6 +85,16 @@ Names that sit near each other do different jobs. Install the row that matches t
 | --- | --- |
 | [`avatar-group`](registry/ui/avatar-group.tsx) | A static stack of people, with an overflow count. |
 | [`presence-avatars`](registry/ui/presence-avatars.tsx) | People currently in a presence room, with a live dot, tooltips, and an optional single avatar for every agent. It reads `PresenceProvider`. |
+
+### Layouts
+
+| Piece | Use it for |
+| --- | --- |
+| [`magnetic-bento`](registry/ui/magnetic-bento.tsx) | Mixed column and row spans with one highlight that glides between cards. Hover, focus, and tap move it, and it stays on the last card. |
+| [`blog-grid`](registry/blocks/blog-grid.tsx) | A page of posts. |
+| [`card-stack`](registry/ui/card-stack.tsx) | A pile of cards you move through. |
+| [`radio-cards`](registry/ui/radio-cards.tsx) | One choice among option cards, with arrow keys. |
+| [`view-gallery`](registry/ui/view-gallery.tsx) | Schema records as cards, inside multi-view. |
 
 `admin-shell` is the collapsible admin sidebar with breadcrumbs and a command palette. `rail-sidebar` is the two-layer app sidebar: an icon rail for sections and a panel for that section's links. `multi-view` is the block that switches the six views and opens the record panel.
 
@@ -186,7 +198,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`141` items are in `registry.json` on this branch: `112` components, `22` blocks, `1` hook, and `6` libraries. A name links to its source file.
+`142` items are in `registry.json` on this branch: `113` components, `22` blocks, `1` hook, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -264,6 +276,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`timeline`](registry/ui/timeline.tsx) · ui — Follows what happened, newest first, grouped by day. Install: `npx shadcn@latest add @retana/timeline`.
 - [`json-viewer`](registry/ui/json-viewer.tsx) · ui — A collapsible JSON tree with search and copy for a value or a path. Install: `npx shadcn@latest add @retana/json-viewer`.
 - [`comment-thread`](registry/ui/comment-thread.tsx) · ui — Threaded comments with replies, reactions, and resolve. Install: `npx shadcn@latest add @retana/comment-thread`.
+- [`magnetic-bento`](registry/ui/magnetic-bento.tsx) · ui — Bento grid with one shared highlight that glides and stretches between cards. Install: `npx shadcn@latest add @retana/magnetic-bento`.
 
 ### Tables and views
 

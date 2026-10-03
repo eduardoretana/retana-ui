@@ -84,13 +84,33 @@ function examplePagePath(href: string) {
   return `app${clean}/page.tsx`
 }
 
+function callArgs(source: string, openParen: number) {
+  let depth = 0
+  for (let index = openParen; index < source.length; index++) {
+    const char = source[index]
+    if (char === "(") depth++
+    else if (char === ")") {
+      depth--
+      if (depth === 0) return source.slice(openParen + 1, index)
+    }
+  }
+  return source.slice(openParen + 1)
+}
+
+/** color-mix of host tokens only. `in oklch` names a space; it is not an oklch() color. */
+function isHostTokenMix(args: string) {
+  if (/#[0-9a-fA-F]{3,8}\b/.test(args)) return false
+  if (/\b(?:rgb|rgba|hsl|hsla|oklch|oklab|hwb|color-mix)\s*\(/i.test(args)) return false
+  if (/\b(?:red|blue|green|white|black|gray|grey|orange|purple|pink|yellow|transparent)\b/i.test(args)) return false
+  return /\bvar\s*\(/.test(args)
+}
+
 function scanSource(filePath: string, source: string) {
   const errors: string[] = []
   const rules: { label: string; pattern: RegExp }[] = [
     { label: "Tailwind palette color", pattern: palettePattern },
     { label: "hard-coded black/white color", pattern: namedColorPattern },
     { label: "hex color", pattern: hexPattern },
-    { label: "color function", pattern: colorFnPattern },
   ]
   for (const rule of rules) {
     rule.pattern.lastIndex = 0
@@ -98,6 +118,16 @@ function scanSource(filePath: string, source: string) {
     if (match) {
       errors.push(`${filePath} ships a ${rule.label} ("${match[0]}"). Registry items inherit the host theme.`)
     }
+  }
+
+  for (const match of source.matchAll(colorFnPattern)) {
+    const token = match[0]
+    if (token.startsWith("color-mix")) {
+      const args = callArgs(source, (match.index ?? 0) + token.length - 1)
+      if (isHostTokenMix(args)) continue
+    }
+    errors.push(`${filePath} ships a color function ("${token.trim()}"). Registry items inherit the host theme.`)
+    break
   }
   return errors
 }

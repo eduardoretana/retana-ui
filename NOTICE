@@ -245,3 +245,18 @@ shipping.
 
 Supabase Realtime Presence uses @supabase/supabase-js, already used by the
 admin adapter. Presence payloads are not an authorization source.
+
+---
+
+Magnetic bento
+
+The shared highlight in magnetic-bento follows a technique idea from jh3yy
+(Jhey Tompkins):
+
+  https://x.com/jh3yy/status/2105823926978814273
+
+The post shows anchor-name on the active card and one indicator positioned
+with position-anchor and inset: anchor(inside). That idea is inspiration
+only. This registry does not include the post's demo code, labels, icons, or
+layout copy. The component, the measurement fallback, and the studio cards
+are an independent implementation.
