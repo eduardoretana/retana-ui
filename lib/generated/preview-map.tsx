@@ -145,6 +145,21 @@ import Preview140 from "@/app/examples/multi-view/preview"
 import Preview141 from "@/app/examples/magnetic-bento/preview"
 import Preview142 from "@/app/examples/two-factor-card/preview"
 import Preview143 from "@/app/examples/notification-stack/preview"
+import Preview144 from "@/app/examples/well-card/preview"
+import Preview145 from "@/app/examples/stat-strip/preview"
+import Preview146 from "@/app/examples/priority-badge/preview"
+import Preview147 from "@/app/examples/attention-list/preview"
+import Preview148 from "@/app/examples/annotated-trend-chart/preview"
+import Preview149 from "@/app/examples/ranked-bars/preview"
+import Preview150 from "@/app/examples/breakdown-bar/preview"
+import Preview151 from "@/app/examples/record-timeline/preview"
+import Preview152 from "@/app/examples/suggestion-card/preview"
+import Preview153 from "@/app/examples/suggested-choice-dialog/preview"
+import Preview154 from "@/app/examples/record-header/preview"
+import Preview155 from "@/app/examples/radial-gauge/preview"
+import Preview156 from "@/app/examples/tier-distribution/preview"
+import Preview157 from "@/app/examples/triage-dashboard/preview"
+import Preview158 from "@/app/examples/case-review/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -291,4 +306,19 @@ export const previewMap = {
   "magnetic-bento": Preview141,
   "two-factor-card": Preview142,
   "notification-stack": Preview143,
+  "well-card": Preview144,
+  "stat-strip": Preview145,
+  "priority-badge": Preview146,
+  "attention-list": Preview147,
+  "annotated-trend-chart": Preview148,
+  "ranked-bars": Preview149,
+  "breakdown-bar": Preview150,
+  "record-timeline": Preview151,
+  "suggestion-card": Preview152,
+  "suggested-choice-dialog": Preview153,
+  "record-header": Preview154,
+  "radial-gauge": Preview155,
+  "tier-distribution": Preview156,
+  "triage-dashboard": Preview157,
+  "case-review": Preview158,
 }

@@ -216,7 +216,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`144` items are in `registry.json` on this branch: `115` components, `22` blocks, `1` hook, and `6` libraries. A name links to its source file.
+`159` items are in `registry.json` on this branch: `128` components, `24` blocks, `1` hook, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -240,6 +240,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`file-diff`](registry/ui/file-diff.tsx) · ui — Unified diff with added and removed lines, and collapsible runs of unchanged lines. Install: `npx shadcn@latest add @retana/file-diff`.
 - [`image-generation`](registry/ui/image-generation.tsx) · ui — Image frame that shows progress and a shimmer while generating, then reveals the result. Install: `npx shadcn@latest add @retana/image-generation`.
 - [`ai-document`](registry/ui/ai-document.tsx) · ui — Document where an agent proposes highlighted edits the reader can accept or reject. Install: `npx shadcn@latest add @retana/ai-document`.
+- [`suggestion-card`](registry/ui/suggestion-card.tsx) · ui — A system suggestion with confidence, facts, evidence, and confirm, change, or dismiss. Install: `npx shadcn@latest add @retana/suggestion-card`.
 
 ### Forms
 
@@ -305,13 +306,20 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`multi-view-core`](registry/lib/multi-view.ts) · lib — Field schema and pure helpers for one collection shown in many views: search, filter, sort, group, month grid, timeline scale, Intl formatting, and CSV. Install: `npx shadcn@latest add @retana/multi-view-core`.
 - [`use-multi-view`](registry/hooks/use-multi-view.ts) · hook — View, search, filter, sort, group, selection, and open-record state, controlled or uncontrolled, with an optional URL adapter. Install: `npx shadcn@latest add @retana/use-multi-view`.
 - [`view-table`](registry/ui/view-table.tsx) · ui — Schema-driven table with checkbox selection, sortable headers, per-type cells, row actions, and column visibility. Install: `npx shadcn@latest add @retana/view-table`.
-- [`view-kanban`](registry/ui/view-kanban.tsx) · ui — Status columns with counts and sums, draggable cards, a keyboard sensor, and a Move to menu. Install: `npx shadcn@latest add @retana/view-kanban`.
+- [`view-kanban`](registry/ui/view-kanban.tsx) · ui — Status columns with counts and sums, draggable cards, a keyboard sensor, a Move to menu, an optional summary card, a collapsed overflow, and a short highlight ring. Install: `npx shadcn@latest add @retana/view-kanban`.
 - [`view-calendar`](registry/ui/view-calendar.tsx) · ui — Month grid for a date field, with overflow, drag or Alt+Arrow reschedule, and an agenda below 560px. Install: `npx shadcn@latest add @retana/view-calendar`.
 - [`view-timeline`](registry/ui/view-timeline.tsx) · ui — Horizontal start/end schedule with collapsible groups, zoom, a today line, and keyboard move or resize. Install: `npx shadcn@latest add @retana/view-timeline`.
 - [`view-grouped-list`](registry/ui/view-grouped-list.tsx) · ui — Rows grouped by a field, with collapsible headers and compact trailing fields including a progress ring. Install: `npx shadcn@latest add @retana/view-grouped-list`.
 - [`view-gallery`](registry/ui/view-gallery.tsx) · ui — Responsive cards with an optional cover, status, clamped description, footer slot, and quick filter chips. Install: `npx shadcn@latest add @retana/view-gallery`.
 - [`record-properties`](registry/ui/record-properties.tsx) · ui — Schema-driven property rows with inline editing per field type, Enter to commit, and Escape to cancel. Install: `npx shadcn@latest add @retana/record-properties`.
 - [`multi-view`](registry/blocks/multi-view.tsx) · block — One collection in table, kanban, calendar, timeline, grouped list, and gallery, with shared search, a record panel, and a create form. Install: `npx shadcn@latest add @retana/multi-view`.
+- [`well-card`](registry/ui/well-card.tsx) · ui — Muted outer well with a header and an inset card. The host theme supplies the surfaces. Install: `npx shadcn@latest add @retana/well-card`.
+- [`stat-strip`](registry/ui/stat-strip.tsx) · ui — A dense row or a divided panel of labelled numbers, each with a text delta. Distinct from metric-card and stats-band. Install: `npx shadcn@latest add @retana/stat-strip`.
+- [`priority-badge`](registry/ui/priority-badge.tsx) · ui — A four-level priority chip with a signal glyph. Critical uses the destructive tone. Install: `npx shadcn@latest add @retana/priority-badge`.
+- [`attention-list`](registry/ui/attention-list.tsx) · ui — A prioritized list of rows that need a decision, with chips, an empty state, and a loading skeleton. Install: `npx shadcn@latest add @retana/attention-list`.
+- [`record-timeline`](registry/ui/record-timeline.tsx) · ui — The lifecycle of one record, oldest first, with status marks. timeline stays the newest-first activity feed. Install: `npx shadcn@latest add @retana/record-timeline`.
+- [`suggested-choice-dialog`](registry/ui/suggested-choice-dialog.tsx) · ui — A confirm dialog whose suggested radio starts selected. radio-cards remains the large option cards. Install: `npx shadcn@latest add @retana/suggested-choice-dialog`.
+- [`record-header`](registry/ui/record-header.tsx) · ui — Breadcrumb, title, status, meta, people, and actions for one record. page-header remains the scrolling page fold. Install: `npx shadcn@latest add @retana/record-header`.
 
 ### Charts
 
@@ -327,6 +335,11 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`treemap`](registry/ui/treemap.tsx) · ui — A squarified treemap that drills in and comes back by breadcrumb. Install: `npx shadcn@latest add @retana/treemap`.
 - [`waffle-chart`](registry/ui/waffle-chart.tsx) · ui — A ten by ten chart where every cell is one percent. Install: `npx shadcn@latest add @retana/waffle-chart`.
 - [`slope-chart`](registry/ui/slope-chart.tsx) · ui — Before and after on two axes, with the rank move beside each value. Install: `npx shadcn@latest add @retana/slope-chart`.
+- [`annotated-trend-chart`](registry/ui/annotated-trend-chart.tsx) · ui — An SVG trend with a target line, a highlighted band, an end value, and a comparison series. line-chart remains the generic crosshair chart. Install: `npx shadcn@latest add @retana/annotated-trend-chart`.
+- [`ranked-bars`](registry/ui/ranked-bars.tsx) · ui — Horizontal share bars sorted by value, with a label, meta, and percent. admin-charts RankedBars stays the analytics card. Install: `npx shadcn@latest add @retana/ranked-bars`.
+- [`breakdown-bar`](registry/ui/breakdown-bar.tsx) · ui — A total, a segmented bar, and a legend. Unlike usage-meter, there is no limit. Install: `npx shadcn@latest add @retana/breakdown-bar`.
+- [`radial-gauge`](registry/ui/radial-gauge.tsx) · ui — A half-circle meter with ticks and a needle. Values above max are labelled over budget and the needle stops at the end. gauge remains the filled arc. Install: `npx shadcn@latest add @retana/radial-gauge`.
+- [`tier-distribution`](registry/ui/tier-distribution.tsx) · ui — Two to four tiers. Each shows its count and a block sized by share, and the row is a radio group. Install: `npx shadcn@latest add @retana/tier-distribution`.
 
 ### Collaboration
 
@@ -342,7 +355,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 
 - [`dock-nav`](registry/ui/dock-nav.tsx) · ui — Floating pill navigation with pointer magnification, tooltips, an active-route dot, grouped items, and a search item that morphs into a field under the bar. Install: `npx shadcn@latest add @retana/dock-nav`.
 - [`command-palette`](registry/ui/command-palette.tsx) · ui — Searchable command list on the host command primitive. Admin shell keeps its own nav palette. Install: `npx shadcn@latest add @retana/command-palette`.
-- [`rail-sidebar`](registry/blocks/rail-sidebar.tsx) · block — Two-layer app sidebar: an icon rail for sections and a panel for that section's navigation. Built on the host shadcn sidebar, including its mobile sheet. Install: `npx shadcn@latest add @retana/rail-sidebar`.
+- [`rail-sidebar`](registry/blocks/rail-sidebar.tsx) · block — Two-layer app sidebar: circular section buttons on an icon rail and a panel for that section's navigation, with an optional scope toggle, alert counts, and footer links. Built on the host shadcn sidebar, including its mobile sheet. Install: `npx shadcn@latest add @retana/rail-sidebar`.
 
 ### Page blocks
 
@@ -364,6 +377,8 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`stats-band`](registry/blocks/stats-band.tsx) · block — Headline numbers that count up in view. Install: `npx shadcn@latest add @retana/stats-band`.
 - [`cta-section`](registry/blocks/cta-section.tsx) · block — A closing call to action, a split setup, or a dismissible banner. Install: `npx shadcn@latest add @retana/cta-section`.
 - [`newsletter-signup`](registry/blocks/newsletter-signup.tsx) · block — An email signup framed by a stack of past issues. Install: `npx shadcn@latest add @retana/newsletter-signup`.
+- [`triage-dashboard`](registry/blocks/triage-dashboard.tsx) · block — Greeting, stat strip, annotated trend, attention list, ranked bars, and a period card. Pass shell to wrap it in the rail sidebar. Install: `npx shadcn@latest add @retana/triage-dashboard`.
+- [`case-review`](registry/blocks/case-review.tsx) · block — One record: header, tabs and timeline, suggestion, cost breakdown, confirm dialog, and an undo toast. Install: `npx shadcn@latest add @retana/case-review`.
 
 ### Actions and overlays
 
@@ -376,7 +391,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`swipe-actions`](registry/ui/swipe-actions.tsx) · ui — Reveals row actions with a swipe, and the same actions from a menu. Install: `npx shadcn@latest add @retana/swipe-actions`.
 - [`user-menu`](registry/ui/user-menu.tsx) · ui — Account, settings, theme, and sign out behind the avatar. A sheet on a narrow screen. Install: `npx shadcn@latest add @retana/user-menu`.
 - [`confirm-morph`](registry/ui/confirm-morph.tsx) · ui — A destructive button that morphs into an inline confirmation, a spinner, and a result with undo. Install: `npx shadcn@latest add @retana/confirm-morph`.
-- [`toast-stack`](registry/ui/toast-stack.tsx) · ui — Stacks short results at the edge until they are dismissed. Install: `npx shadcn@latest add @retana/toast-stack`.
+- [`toast-stack`](registry/ui/toast-stack.tsx) · ui — Stacks short results at the edge until they are dismissed. An undo appearance is a dark pill that pauses on hover. Install: `npx shadcn@latest add @retana/toast-stack`.
 - [`usage-meter`](registry/ui/usage-meter.tsx) · ui — Shows what fills an allowance and how close it is to the limit. Install: `npx shadcn@latest add @retana/usage-meter`.
 - [`stepper`](registry/ui/stepper.tsx) · ui — Shows where a person is in a multi-step flow and what is done. Install: `npx shadcn@latest add @retana/stepper`.
 - [`announcement-bar`](registry/ui/announcement-bar.tsx) · ui — A top banner that rotates messages and collapses when dismissed. Install: `npx shadcn@latest add @retana/announcement-bar`.

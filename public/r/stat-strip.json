@@ -1,0 +1,71 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "stat-strip",
+  "title": "Stat strip",
+  "author": "Eduardo Retana",
+  "description": "A dense row or a divided panel of labelled numbers, each with a text delta. Distinct from metric-card and stats-band.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/stat-strip.tsx",
+      "content": "\"use client\"\n\n/** Independent implementation of a common dashboard pattern. */\n\nimport * as React from \"react\"\nimport { ArrowDownRight, ArrowUpRight } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { formatDashboardValue, type DashboardFormat } from \"@/lib/dashboard-format\"\n\nexport type StatDelta = {\n  value: number\n  format?: DashboardFormat\n  /** Visual arrow. Inferred from the sign when omitted. */\n  direction?: \"up\" | \"down\"\n  /** Which direction counts as an improvement. */\n  good?: \"up\" | \"down\"\n  label?: string\n}\n\nexport type StatStripItem = {\n  id: string\n  label: string\n  value: number | string\n  format?: DashboardFormat\n  currency?: string\n  delta?: StatDelta\n  caption?: string\n}\n\nexport type StatStripClassNames = {\n  root?: string\n  item?: string\n  label?: string\n  value?: string\n  delta?: string\n  caption?: string\n}\n\nexport type StatStripProps = {\n  items: readonly StatStripItem[]\n  variant?: \"inline\" | \"panel\"\n  locale?: string\n  className?: string\n  classNames?: StatStripClassNames\n}\n\nfunction deltaDirection(delta: StatDelta): \"up\" | \"down\" {\n  if (delta.direction) return delta.direction\n  return delta.value < 0 ? \"down\" : \"up\"\n}\n\nfunction deltaIsGood(delta: StatDelta): boolean {\n  const direction = deltaDirection(delta)\n  return direction === (delta.good ?? \"up\")\n}\n\nfunction deltaText(delta: StatDelta, locale: string): string {\n  if (delta.label) return delta.label\n  return formatDashboardValue(delta.value, delta.format ?? \"number\", locale)\n}\n\nexport function statAccessibleName(item: StatStripItem, locale: string): string {\n  const value = formatDashboardValue(item.value, item.format ?? \"text\", locale, item.currency)\n  if (!item.delta) return [item.label, value, item.caption].filter(Boolean).join(\", \")\n  const direction = deltaDirection(item.delta)\n  const quality = deltaIsGood(item.delta) ? \"better\" : \"worse\"\n  return [item.label, value, direction, deltaText(item.delta, locale), item.caption, quality].filter(Boolean).join(\", \")\n}\n\nexport function StatStrip({ items, variant = \"inline\", locale = \"en-US\", className, classNames }: StatStripProps) {\n  return (\n    <div\n      data-slot=\"stat-strip\"\n      data-variant={variant}\n      className={cn(\n        \"@container min-w-0\",\n        variant === \"panel\"\n          ? \"grid grid-cols-1 overflow-hidden rounded-xl bg-card text-card-foreground @min-[16rem]:grid-cols-2 @min-[36rem]:grid-cols-4\"\n          : \"flex min-w-0 flex-wrap gap-x-6 gap-y-3\",\n        className,\n        classNames?.root,\n      )}\n    >\n      {items.map((item, index) => {\n        const value = formatDashboardValue(item.value, item.format ?? \"text\", locale, item.currency)\n        const direction = item.delta ? deltaDirection(item.delta) : null\n        const good = item.delta ? deltaIsGood(item.delta) : false\n        const Icon = direction === \"down\" ? ArrowDownRight : ArrowUpRight\n        return (\n          <div\n            key={item.id}\n            data-slot=\"stat-strip-item\"\n            className={cn(\n              \"min-w-0\",\n              variant === \"inline\" && \"min-w-36 shrink-0\",\n              variant === \"panel\" && \"border-border px-4 py-3 @min-[16rem]:border-s @min-[16rem]:[&:nth-child(2n+1)]:border-s-0 @min-[36rem]:[&:nth-child(2n+1)]:border-s @min-[36rem]:first:border-s-0\",\n              variant === \"panel\" && index > 0 && \"border-t @min-[16rem]:border-t-0\",\n              classNames?.item,\n            )}\n          >\n            <p className={cn(\"text-xs text-muted-foreground\", classNames?.label)}>{item.label}</p>\n            <p className={cn(\"mt-1 flex flex-wrap items-center gap-2 text-3xl font-normal tabular-nums tracking-tight\", classNames?.value)}>\n              <span className=\"break-words\">{value}</span>\n              {item.delta && direction ? (\n                <span\n                  className={cn(\n                    \"inline-flex items-center gap-0.5 text-sm tabular-nums\",\n                    good ? \"text-foreground\" : \"text-destructive\",\n                    classNames?.delta,\n                  )}\n                >\n                  <span className={cn(\"grid size-5 place-items-center rounded-full\", good ? \"bg-chart-2/20\" : \"bg-destructive/10\")} aria-hidden>\n                    <Icon className=\"size-3.5\" />\n                  </span>\n                  {deltaText(item.delta, locale)}\n                </span>\n              ) : null}\n            </p>\n            {item.caption ? <p className={cn(\"mt-1 text-xs text-muted-foreground\", classNames?.caption)}>{item.caption}</p> : null}\n            <span className=\"sr-only\">{statAccessibleName(item, locale)}</span>\n          </div>\n        )\n      })}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/stat-strip.tsx"
+    },
+    {
+      "path": "registry/lib/dashboard-format.ts",
+      "content": "/** Number, date, and greeting helpers for dashboard pieces. No theme tokens. */\n\nexport type DashboardFormat = \"number\" | \"currency\" | \"percent\" | \"compact\" | \"text\" | \"points\"\n\nexport function formatDashboardValue(\n  value: number | string,\n  format: DashboardFormat = \"text\",\n  locale = \"en-US\",\n  currency = \"USD\",\n): string {\n  if (typeof value !== \"number\" || !Number.isFinite(value) || format === \"text\") return String(value)\n  if (format === \"currency\") {\n    return new Intl.NumberFormat(locale, {\n      style: \"currency\",\n      currency,\n      notation: Math.abs(value) >= 10000 ? \"compact\" : \"standard\",\n      maximumFractionDigits: Math.abs(value) >= 10000 ? 1 : 0,\n    }).format(value)\n  }\n  if (format === \"percent\") {\n    return new Intl.NumberFormat(locale, {\n      style: \"percent\",\n      maximumFractionDigits: 1,\n    }).format(value)\n  }\n  if (format === \"compact\") {\n    return new Intl.NumberFormat(locale, { notation: \"compact\", maximumFractionDigits: 1 }).format(value)\n  }\n  if (format === \"points\") {\n    const formatted = new Intl.NumberFormat(locale, {\n      signDisplay: \"exceptZero\",\n      maximumFractionDigits: 1,\n    }).format(value)\n    return `${formatted} pts`\n  }\n  return new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(value)\n}\n\nexport function formatDashboardDate(\n  value: string | number | Date,\n  locale = \"en-US\",\n  options: Intl.DateTimeFormatOptions = { month: \"short\", day: \"numeric\" },\n): string {\n  const date = value instanceof Date ? value : new Date(value)\n  if (Number.isNaN(date.getTime())) return String(value)\n  return new Intl.DateTimeFormat(locale, options).format(date)\n}\n\nexport function joinMeta(parts: Array<string | number | null | undefined | false>): string {\n  return parts.filter((part) => part != null && part !== false && part !== \"\").map(String).join(\" · \")\n}\n\nconst DAY_PART = {\n  en: { morning: \"Good morning\", afternoon: \"Good afternoon\", evening: \"Good evening\" },\n  es: { morning: \"Buenos días\", afternoon: \"Buenas tardes\", evening: \"Buenas noches\" },\n} as const\n\n/** Time-of-day greeting. Spanish locales use es; everything else uses en. */\nexport function greeting(date: Date, locale: string, name: string): string {\n  const hour = date.getHours()\n  const part = hour < 12 ? \"morning\" : hour < 18 ? \"afternoon\" : \"evening\"\n  const table = locale.toLowerCase().startsWith(\"es\") ? DAY_PART.es : DAY_PART.en\n  return `${table[part]}, ${name}`\n}\n\nexport function shareOf(value: number, total: number): number {\n  if (!Number.isFinite(value) || !Number.isFinite(total) || total <= 0) return 0\n  return value / total\n}\n\nexport function clampRatio(value: number, min: number, max: number): number {\n  const span = max - min\n  if (!Number.isFinite(span) || span <= 0) return 0\n  return Math.min(1, Math.max(0, (value - min) / span))\n}\n\nexport type RankedInput = { id: string; value: number; share?: number }\n\nexport function orderRanked<T extends RankedInput>(items: readonly T[], sort: \"asc\" | \"desc\" | \"none\" = \"desc\"): T[] {\n  const copy = items.map((item) => ({ ...item }))\n  if (sort === \"asc\") copy.sort((a, b) => a.value - b.value || a.id.localeCompare(b.id))\n  if (sort === \"desc\") copy.sort((a, b) => b.value - a.value || a.id.localeCompare(b.id))\n  const total = copy.reduce((sum, item) => sum + (Number.isFinite(item.value) ? item.value : 0), 0)\n  return copy.map((item) => ({ ...item, share: item.share ?? shareOf(item.value, total) }))\n}\n\n/** Delay in seconds for a short opacity stagger. Zero when motion is reduced. */\nexport function staggerDelay(index: number, reduced: boolean, step = 0.04): number {\n  if (reduced || index <= 0) return 0\n  return index * step\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/dashboard-format.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Franja de cifras",
+    "descriptionEs": "Una fila densa o un panel dividido de números, cada uno con su cambio en texto.",
+    "preview": "app/examples/stat-strip/preview.tsx",
+    "previewHref": "/examples/stat-strip",
+    "examples": [
+      {
+        "title": "Franja de cifras",
+        "href": "/examples/stat-strip",
+        "description": "Fila y panel, es-MX y en-US."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/stat-strip/stress",
+        "description": "320px y diez cifras."
+      }
+    ],
+    "usage": "<StatStrip items={items} variant=\"panel\" locale=\"es-MX\" />",
+    "api": [
+      {
+        "name": "items",
+        "type": "StatStripItem[]",
+        "description": "Label, value, format, delta, and caption."
+      },
+      {
+        "name": "variant",
+        "type": "\"inline\" | \"panel\"",
+        "description": "A wrapping row, or equal columns with dividers."
+      },
+      {
+        "name": "locale",
+        "type": "string",
+        "description": "Passed to Intl."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+  "categories": [
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}

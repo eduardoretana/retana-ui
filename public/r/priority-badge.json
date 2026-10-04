@@ -1,0 +1,58 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "priority-badge",
+  "title": "Priority badge",
+  "author": "Eduardo Retana",
+  "description": "A four-level priority chip with a signal glyph. Critical uses the destructive tone.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/priority-badge.tsx",
+      "content": "\"use client\"\n\n/** Independent implementation of a common dashboard pattern. */\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport const PRIORITY_LEVELS = [\"low\", \"medium\", \"high\", \"critical\"] as const\n\nexport type PriorityLevel = (typeof PRIORITY_LEVELS)[number]\n\nexport type PriorityBadgeClassNames = {\n  root?: string\n  glyph?: string\n  label?: string\n}\n\nexport type PriorityBadgeProps = {\n  level: PriorityLevel\n  label?: string\n  variant?: \"chip\" | \"glyph\"\n  className?: string\n  classNames?: PriorityBadgeClassNames\n}\n\nconst DEFAULT_LABEL: Record<PriorityLevel, string> = {\n  low: \"Low\",\n  medium: \"Medium\",\n  high: \"High\",\n  critical: \"Critical\",\n}\n\nexport function priorityRank(level: PriorityLevel): number {\n  return PRIORITY_LEVELS.indexOf(level) + 1\n}\n\nexport function comparePriority(a: PriorityLevel, b: PriorityLevel): number {\n  return priorityRank(a) - priorityRank(b)\n}\n\nfunction SignalGlyph({ filled, className }: { filled: number; className?: string }) {\n  const heights = [4, 7, 10, 13]\n  return (\n    <svg viewBox=\"0 0 16 14\" className={cn(\"h-3.5 w-4\", className)} aria-hidden>\n      {heights.map((height, index) => (\n        <rect\n          key={height}\n          x={index * 4}\n          y={14 - height}\n          width=\"2.5\"\n          height={height}\n          rx=\"0.5\"\n          className={index < filled ? \"fill-current\" : \"fill-current opacity-30\"}\n        />\n      ))}\n    </svg>\n  )\n}\n\nexport function PriorityBadge({\n  level,\n  label,\n  variant = \"chip\",\n  className,\n  classNames,\n}: PriorityBadgeProps) {\n  const text = label ?? DEFAULT_LABEL[level]\n  const critical = level === \"critical\"\n  if (variant === \"glyph\") {\n    return (\n      <span className={cn(\"inline-flex text-foreground\", critical && \"text-destructive\", className, classNames?.root)} aria-label={text}>\n        <SignalGlyph filled={priorityRank(level)} className={classNames?.glyph} />\n      </span>\n    )\n  }\n  return (\n    <span\n      data-slot=\"priority-badge\"\n      data-level={level}\n      className={cn(\n        \"inline-flex h-6 max-w-full items-center gap-1 rounded-full px-2 text-xs font-medium\",\n        critical ? \"bg-destructive/10 text-destructive\" : \"bg-muted text-foreground\",\n        className,\n        classNames?.root,\n      )}\n    >\n      <SignalGlyph filled={priorityRank(level)} className={classNames?.glyph} />\n      <span className={cn(\"truncate\", classNames?.label)}>{text}</span>\n    </span>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/priority-badge.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Insignia de prioridad",
+    "descriptionEs": "Una ficha de cuatro niveles con un glifo de señal. Crítico usa el tono destructive.",
+    "preview": "app/examples/priority-badge/preview.tsx",
+    "previewHref": "/examples/priority-badge",
+    "examples": [
+      {
+        "title": "Insignia de prioridad",
+        "href": "/examples/priority-badge",
+        "description": "Bajo, medio, alto y crítico."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/priority-badge/stress",
+        "description": "Etiqueta sin espacios."
+      }
+    ],
+    "usage": "<PriorityBadge level=\"critical\" />",
+    "api": [
+      {
+        "name": "level",
+        "type": "\"low\" | \"medium\" | \"high\" | \"critical\"",
+        "description": "How many bars are filled."
+      },
+      {
+        "name": "variant",
+        "type": "\"chip\" | \"glyph\"",
+        "description": "Glyph only still has an accessible name."
+      },
+      {
+        "name": "priorityRank",
+        "type": "(level) => number",
+        "description": "1 through 4, for sorting."
+      }
+    ]
+  },
+  "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+  "categories": [
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}

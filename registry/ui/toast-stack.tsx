@@ -14,6 +14,8 @@ import { motionPresets } from "@/registry/retana/lib/motion"
 
 export type ToastType = "success" | "info" | "warning" | "error" | "loading"
 
+export type ToastAppearance = "default" | "undo"
+
 export interface ToastAction {
   label: string
   /** Runs the action. The toast closes afterwards unless the handler updates it, so an Undo can morph the toast into its result. */
@@ -24,6 +26,8 @@ export interface ToastOptions {
   /** Reuse an id to update a toast in place instead of stacking a new one. */
   id?: string
   type?: ToastType
+  /** Dark pill with an undo action. Pauses with the rest of the stack and lasts 6 seconds unless duration is set. */
+  appearance?: ToastAppearance
   title: string
   description?: string
   action?: ToastAction
@@ -78,7 +82,7 @@ export type ToastStackClassNames = {
   close?: string
 }
 
-type ToastRecord = { id: string; type: ToastType; title: string; description?: string; action?: ToastAction; duration: number; seq: number; version: number }
+type ToastRecord = { id: string; type: ToastType; appearance: ToastAppearance; title: string; description?: string; action?: ToastAction; duration: number; seq: number; version: number }
 type ToastStore = ToastStackApi & { subscribe: (listener: () => void) => () => void; getSnapshot: () => ToastRecord[]; runAction: (id: string) => void }
 type Target = { y: number; scale: number; height: number; opacity: number; content: number }
 
@@ -154,7 +158,15 @@ function createToastStore(base: number, limit: number): ToastStore {
     const found = toasts.find((item) => item.id === id)
     if (!found) return
     const type = patch.type ?? found.type
-    const record: ToastRecord = { ...found, ...patch, type, duration: patch.duration ?? durationFor(type, base), version: found.version + 1 }
+    const appearance = patch.appearance ?? found.appearance
+    const record: ToastRecord = {
+      ...found,
+      ...patch,
+      type,
+      appearance,
+      duration: patch.duration ?? (appearance === "undo" ? 6000 : durationFor(type, base)),
+      version: found.version + 1,
+    }
     commit(toasts.map((item) => (item.id === id ? record : item)))
   }
   const toast: ToastStackApi["toast"] = ({ id, ...options }) => {
@@ -163,8 +175,17 @@ function createToastStore(base: number, limit: number): ToastStore {
       return id
     }
     const type = options.type ?? "info"
+    const appearance = options.appearance ?? "default"
     seq += 1
-    const record: ToastRecord = { ...options, id: id ?? `toast-${seq}`, type, duration: options.duration ?? durationFor(type, base), seq, version: 0 }
+    const record: ToastRecord = {
+      ...options,
+      id: id ?? `toast-${seq}`,
+      type,
+      appearance,
+      duration: options.duration ?? (appearance === "undo" ? 6000 : durationFor(type, base)),
+      seq,
+      version: 0,
+    }
     commit([record, ...toasts].slice(0, limit))
     return record.id
   }
@@ -414,10 +435,17 @@ function ToastItem({ toast, target, expanded, front, hidden, paused, reduce, sto
   const swap = reduce ? fadeOnly : textSwap
 
   return (
-    <motion.li ref={itemRef} data-slot="toast-stack-item" className={cn("absolute inset-x-0 bottom-0 origin-top", classNames?.item)} style={{ y, scale, height, opacity, zIndex: toast.seq }} data-front={front} data-expanded={expanded} inert={hidden} onKeyDown={onKeyDown}>
+    <motion.li ref={itemRef} data-slot="toast-stack-item" role={toast.appearance === "undo" ? "status" : undefined} className={cn("absolute inset-x-0 bottom-0 origin-top", classNames?.item)} style={{ y, scale, height, opacity, zIndex: toast.seq }} data-front={front} data-expanded={expanded} inert={hidden} onKeyDown={onKeyDown}>
       <motion.div
         data-slot="toast-stack-card"
-        className={cn("@container absolute inset-0 overflow-hidden rounded-xl border border-border bg-popover text-foreground shadow-md touch-pan-y data-[dragging]:cursor-grabbing data-[dragging]:select-none", !front && !expanded && "bg-muted", (front || expanded) && "shadow-lg", classNames?.card)}
+        data-appearance={toast.appearance}
+        className={cn(
+          "@container absolute inset-0 overflow-hidden rounded-xl border border-border bg-popover text-foreground shadow-md touch-pan-y data-[dragging]:cursor-grabbing data-[dragging]:select-none",
+          !front && !expanded && "bg-muted",
+          (front || expanded) && "shadow-lg",
+          toast.appearance === "undo" && "rounded-full border-transparent bg-primary text-primary-foreground",
+          classNames?.card,
+        )}
         style={{ x, opacity: swipeFade }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
@@ -441,7 +469,7 @@ function ToastItem({ toast, target, expanded, front, hidden, paused, reduce, sto
               </AnimatePresence>
             </span>
             <AnimatePresence mode="popLayout" initial={false}>
-              {toast.description ? <Swap key={toast.description} data-slot="toast-stack-description" className={cn("mt-0.5 block text-muted-foreground", classNames?.description)} {...swap}>{toast.description}</Swap> : null}
+              {toast.description ? <Swap key={toast.description} data-slot="toast-stack-description" className={cn("mt-0.5 block", toast.appearance === "undo" ? "text-primary-foreground/80" : "text-muted-foreground", classNames?.description)} {...swap}>{toast.description}</Swap> : null}
             </AnimatePresence>
           </div>
           <AnimatePresence initial={false}>
@@ -457,11 +485,11 @@ function ToastItem({ toast, target, expanded, front, hidden, paused, reduce, sto
                 onAnimationStart={() => markMoving(true)}
                 onAnimationComplete={() => markMoving(false)}
               >
-                <Button type="button" variant="outline" size="sm" className={cn("h-7 rounded-full", classNames?.action)} onClick={runAction}>{toast.action.label}</Button>
+                <Button type="button" variant={toast.appearance === "undo" ? "ghost" : "outline"} size="sm" className={cn("h-7 rounded-full", toast.appearance === "undo" && "text-primary-foreground hover:bg-primary-foreground/10", classNames?.action)} onClick={runAction}>{toast.action.label}</Button>
               </motion.div>
             ) : null}
           </AnimatePresence>
-          <Button ref={closeRef} type="button" variant="ghost" size="icon-sm" className={cn("-mt-1 -mr-0.5 size-7 rounded-full text-muted-foreground", classNames?.close)} aria-label="Dismiss notification" onClick={() => store.dismiss(id)}>
+                <Button ref={closeRef} type="button" variant="ghost" size="icon-sm" className={cn("-mt-1 -mr-0.5 size-7 rounded-full", toast.appearance === "undo" ? "text-primary-foreground" : "text-muted-foreground", classNames?.close)} aria-label="Dismiss notification" onClick={() => store.dismiss(id)}>
             <X width={16} height={16} strokeWidth={1.75} aria-hidden="true" />
           </Button>
         </motion.div>

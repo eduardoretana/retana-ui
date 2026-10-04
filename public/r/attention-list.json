@@ -1,0 +1,70 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "attention-list",
+  "title": "Attention list",
+  "author": "Eduardo Retana",
+  "description": "A prioritized list of rows that need a decision, with chips, an empty state, and a loading skeleton.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button",
+    "dropdown-menu",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/attention-list.tsx",
+      "content": "\"use client\"\n\n/** Independent implementation of a common dashboard pattern. */\n\nimport * as React from \"react\"\nimport { ChevronRight, MoreHorizontal } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport {\n  DropdownMenu,\n  DropdownMenuContent,\n  DropdownMenuItem,\n  DropdownMenuTrigger,\n} from \"@/components/ui/dropdown-menu\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\nimport { PriorityBadge, type PriorityLevel } from \"@/components/ui/priority-badge\"\n\nexport type AttentionChip =\n  | { type: \"priority\"; level: PriorityLevel; label?: string }\n  | { type: \"date\"; label: string }\n  | { type: \"status\"; label: string; tone?: \"neutral\" | \"good\" | \"bad\" }\n  | { type: \"progress\"; done: number; total: number }\n  | { type: \"text\"; label: string }\n\nexport type AttentionAction = {\n  id: string\n  label: string\n  onSelect: () => void\n}\n\nexport type AttentionItem = {\n  id: string\n  title: string\n  description?: string\n  tone?: \"critical\" | \"neutral\" | \"positive\"\n  chips?: readonly AttentionChip[]\n  href?: string\n  onSelect?: (item: AttentionItem) => void\n  actions?: readonly AttentionAction[]\n}\n\nexport type AttentionListClassNames = {\n  root?: string\n  item?: string\n  title?: string\n  description?: string\n  empty?: string\n}\n\nexport type AttentionListProps = {\n  items: readonly AttentionItem[]\n  label?: string\n  max?: number\n  moreLabel?: (hidden: number) => string\n  emptyLabel?: string\n  emptyHint?: string\n  loading?: boolean\n  loadingRows?: number\n  className?: string\n  classNames?: AttentionListClassNames\n}\n\nconst tileClass = {\n  critical: \"bg-destructive/10 text-destructive\",\n  neutral: \"bg-muted text-muted-foreground\",\n  positive: \"bg-chart-2/20 text-foreground\",\n} as const\n\nfunction chipText(chip: AttentionChip): string {\n  if (chip.type === \"priority\") return chip.label ?? chip.level\n  if (chip.type === \"progress\") return `${chip.done} of ${chip.total}`\n  return chip.label\n}\n\nfunction rowName(item: AttentionItem): string {\n  const chips = (item.chips ?? []).map(chipText).filter(Boolean)\n  return [item.title, ...chips].join(\", \")\n}\n\nfunction Chips({ chips }: { chips: readonly AttentionChip[] }) {\n  return (\n    <div className=\"flex flex-wrap gap-1\" aria-hidden>\n      {chips.map((chip, index) => {\n        if (chip.type === \"priority\") return <PriorityBadge key={`${chip.level}-${index}`} level={chip.level} label={chip.label} />\n        const tone = chip.type === \"status\" ? chip.tone : undefined\n        return (\n          <span\n            key={`${chip.type}-${index}`}\n            className={cn(\n              \"inline-flex h-6 max-w-full items-center rounded-full bg-muted px-2 text-xs text-foreground\",\n              tone === \"good\" && \"bg-chart-2/20\",\n              tone === \"bad\" && \"bg-destructive/10 text-destructive\",\n              chip.type === \"progress\" && \"bg-chart-2/15\",\n            )}\n          >\n            <span className=\"truncate\">{chipText(chip)}</span>\n          </span>\n        )\n      })}\n    </div>\n  )\n}\n\nexport function AttentionList({\n  items,\n  label = \"Needs you\",\n  max,\n  moreLabel = (hidden) => `Show ${hidden} more`,\n  emptyLabel = \"You're all caught up\",\n  emptyHint = \"Nothing is waiting on you.\",\n  loading = false,\n  loadingRows = 3,\n  className,\n  classNames,\n}: AttentionListProps) {\n  const [open, setOpen] = React.useState(false)\n  const visible = max != null && !open ? items.slice(0, max) : items\n  const hidden = items.length - visible.length\n\n  function onRowKey(event: React.KeyboardEvent<HTMLElement>, index: number) {\n    if (event.key !== \"ArrowDown\" && event.key !== \"ArrowUp\") return\n    const rows = event.currentTarget.closest(\"ul\")?.querySelectorAll<HTMLElement>(\"[data-attention-row]\")\n    if (!rows?.length) return\n    event.preventDefault()\n    const next = event.key === \"ArrowDown\" ? Math.min(rows.length - 1, index + 1) : Math.max(0, index - 1)\n    rows[next]?.focus()\n  }\n\n  return (\n    <div data-slot=\"attention-list\" className={cn(\"min-w-0\", className, classNames?.root)}>\n      {loading ? (\n        <ul className=\"flex flex-col gap-3\" aria-busy=\"true\" aria-label={label}>\n          {Array.from({ length: loadingRows }, (_, index) => (\n            <li key={index} className=\"flex gap-3\">\n              <Skeleton className=\"size-8 shrink-0\" />\n              <div className=\"flex flex-1 flex-col gap-2\">\n                <Skeleton className=\"h-4 w-2/3\" />\n                <Skeleton className=\"h-3 w-full\" />\n              </div>\n            </li>\n          ))}\n        </ul>\n      ) : items.length === 0 ? (\n        <div className={cn(\"flex flex-col items-start gap-1 py-4\", classNames?.empty)}>\n          <p className=\"text-sm font-medium\">{emptyLabel}</p>\n          <p className=\"text-xs text-muted-foreground\">{emptyHint}</p>\n        </div>\n      ) : (\n        <ul role=\"list\" aria-label={label} className=\"flex flex-col\">\n          {visible.map((item, index) => {\n            const tone = item.tone ?? \"neutral\"\n            const name = rowName(item)\n            const interactive = Boolean(item.href || item.onSelect)\n            const body = (\n              <>\n                <span className={cn(\"grid size-8 shrink-0 place-items-center rounded-lg text-xs font-medium\", tileClass[tone])} aria-hidden>\n                  {index + 1}\n                </span>\n                <span className=\"min-w-0 flex-1\">\n                  <span className={cn(\"block truncate text-sm font-medium\", classNames?.title)}>{item.title}</span>\n                  {item.description ? (\n                    <span className={cn(\"mt-0.5 line-clamp-2 block text-xs text-muted-foreground\", classNames?.description)}>\n                      {item.description}\n                    </span>\n                  ) : null}\n                  {item.chips?.length ? (\n                    <span className=\"mt-2 block\">\n                      <Chips chips={item.chips} />\n                    </span>\n                  ) : null}\n                </span>\n                {interactive ? <ChevronRight className=\"size-4 shrink-0 text-muted-foreground\" aria-hidden /> : null}\n              </>\n            )\n            const rowClass = cn(\n              \"flex w-full min-w-0 items-start gap-3 rounded-lg py-3 text-start hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\",\n              index > 0 && \"border-t border-border\",\n              classNames?.item,\n            )\n            return (\n              <li key={item.id} className=\"flex min-w-0 items-start gap-1\">\n                {item.href ? (\n                  <a\n                    data-attention-row=\"\"\n                    href={item.href}\n                    aria-label={name}\n                    className={cn(rowClass, \"flex-1\")}\n                    onClick={(event) => {\n                      if (!item.onSelect) return\n                      event.preventDefault()\n                      item.onSelect(item)\n                    }}\n                    onKeyDown={(event) => onRowKey(event, index)}\n                  >\n                    {body}\n                  </a>\n                ) : interactive ? (\n                  <button\n                    data-attention-row=\"\"\n                    type=\"button\"\n                    aria-label={name}\n                    className={cn(rowClass, \"flex-1\")}\n                    onClick={() => item.onSelect?.(item)}\n                    onKeyDown={(event) => onRowKey(event, index)}\n                  >\n                    {body}\n                  </button>\n                ) : (\n                  <div className={cn(rowClass, \"flex-1\")}>{body}</div>\n                )}\n                {item.actions?.length ? (\n                  <DropdownMenu>\n                    <DropdownMenuTrigger asChild>\n                      <Button type=\"button\" variant=\"ghost\" size=\"icon-sm\" className=\"mt-2 shrink-0\" aria-label={`Actions for ${item.title}`}>\n                        <MoreHorizontal />\n                      </Button>\n                    </DropdownMenuTrigger>\n                    <DropdownMenuContent align=\"end\">\n                      {item.actions.map((action) => (\n                        <DropdownMenuItem key={action.id} onSelect={() => action.onSelect()}>\n                          {action.label}\n                        </DropdownMenuItem>\n                      ))}\n                    </DropdownMenuContent>\n                  </DropdownMenu>\n                ) : null}\n              </li>\n            )\n          })}\n        </ul>\n      )}\n      {hidden > 0 ? (\n        <Button type=\"button\" variant=\"ghost\" size=\"sm\" className=\"mt-1\" onClick={() => setOpen(true)}>\n          {moreLabel(hidden)}\n        </Button>\n      ) : null}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/attention-list.tsx"
+    },
+    {
+      "path": "registry/ui/priority-badge.tsx",
+      "content": "\"use client\"\n\n/** Independent implementation of a common dashboard pattern. */\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport const PRIORITY_LEVELS = [\"low\", \"medium\", \"high\", \"critical\"] as const\n\nexport type PriorityLevel = (typeof PRIORITY_LEVELS)[number]\n\nexport type PriorityBadgeClassNames = {\n  root?: string\n  glyph?: string\n  label?: string\n}\n\nexport type PriorityBadgeProps = {\n  level: PriorityLevel\n  label?: string\n  variant?: \"chip\" | \"glyph\"\n  className?: string\n  classNames?: PriorityBadgeClassNames\n}\n\nconst DEFAULT_LABEL: Record<PriorityLevel, string> = {\n  low: \"Low\",\n  medium: \"Medium\",\n  high: \"High\",\n  critical: \"Critical\",\n}\n\nexport function priorityRank(level: PriorityLevel): number {\n  return PRIORITY_LEVELS.indexOf(level) + 1\n}\n\nexport function comparePriority(a: PriorityLevel, b: PriorityLevel): number {\n  return priorityRank(a) - priorityRank(b)\n}\n\nfunction SignalGlyph({ filled, className }: { filled: number; className?: string }) {\n  const heights = [4, 7, 10, 13]\n  return (\n    <svg viewBox=\"0 0 16 14\" className={cn(\"h-3.5 w-4\", className)} aria-hidden>\n      {heights.map((height, index) => (\n        <rect\n          key={height}\n          x={index * 4}\n          y={14 - height}\n          width=\"2.5\"\n          height={height}\n          rx=\"0.5\"\n          className={index < filled ? \"fill-current\" : \"fill-current opacity-30\"}\n        />\n      ))}\n    </svg>\n  )\n}\n\nexport function PriorityBadge({\n  level,\n  label,\n  variant = \"chip\",\n  className,\n  classNames,\n}: PriorityBadgeProps) {\n  const text = label ?? DEFAULT_LABEL[level]\n  const critical = level === \"critical\"\n  if (variant === \"glyph\") {\n    return (\n      <span className={cn(\"inline-flex text-foreground\", critical && \"text-destructive\", className, classNames?.root)} aria-label={text}>\n        <SignalGlyph filled={priorityRank(level)} className={classNames?.glyph} />\n      </span>\n    )\n  }\n  return (\n    <span\n      data-slot=\"priority-badge\"\n      data-level={level}\n      className={cn(\n        \"inline-flex h-6 max-w-full items-center gap-1 rounded-full px-2 text-xs font-medium\",\n        critical ? \"bg-destructive/10 text-destructive\" : \"bg-muted text-foreground\",\n        className,\n        classNames?.root,\n      )}\n    >\n      <SignalGlyph filled={priorityRank(level)} className={classNames?.glyph} />\n      <span className={cn(\"truncate\", classNames?.label)}>{text}</span>\n    </span>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/priority-badge.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Lista de atención",
+    "descriptionEs": "Filas que piden una decisión, con fichas, estado vacío y esqueleto de carga.",
+    "preview": "app/examples/attention-list/preview.tsx",
+    "previewHref": "/examples/attention-list",
+    "examples": [
+      {
+        "title": "Lista de atención",
+        "href": "/examples/attention-list",
+        "description": "Tres defectos ficticios."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/attention-list/stress",
+        "description": "Vacío, carga y diez filas."
+      }
+    ],
+    "usage": "<AttentionList items={items} max={5} />",
+    "api": [
+      {
+        "name": "items",
+        "type": "AttentionItem[]",
+        "description": "Title, description, tone, chips, href or onSelect, and a menu."
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "description": "Hides the rest behind Show N more."
+      },
+      {
+        "name": "loading / emptyLabel",
+        "type": "boolean / string",
+        "description": "Skeleton rows, or the caught-up copy."
+      }
+    ]
+  },
+  "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+  "categories": [
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}
