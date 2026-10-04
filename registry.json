@@ -14088,6 +14088,232 @@
           }
         ]
       }
+    },
+    {
+      "name": "bug-report-form",
+      "type": "registry:ui",
+      "title": "Bug report form",
+      "description": "Card form for a bug report: title, description, type chips, priority, environment, and a screenshot dropzone, with validation and submit states.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "input",
+        "label",
+        "textarea"
+      ],
+      "categories": [
+        "form"
+      ],
+      "meta": {
+        "titleEs": "Formulario de reporte",
+        "descriptionEs": "Tarjeta para reportar un error: tipo, prioridad, entorno y captura, con validación y estados de envío.",
+        "preview": "app/examples/bug-report-form/preview.tsx",
+        "previewHref": "/examples/bug-report-form",
+        "examples": [
+          {
+            "title": "Reportar un error",
+            "href": "/examples/bug-report-form",
+            "description": "Tipo, prioridad, entorno y captura. El envío de prueba tarda un segundo y medio."
+          }
+        ],
+        "usage": "<BugReportForm\n  onSubmit={async (report) => {\n    await saveBugReport(report)\n  }}\n  autoDetectEnvironment\n/>",
+        "api": [
+          {
+            "name": "onSubmit",
+            "type": "(report: BugReport) => Promise<void> | void",
+            "description": "Receives title, description, type, priority, environment, and files. Resolve for success. Reject for the retry state."
+          },
+          {
+            "name": "types / priorities",
+            "type": "BugReportType[] / BugReportPriority[]",
+            "description": "Chip options. Priority tone is muted, primary, or destructive. Defaults are UI issue, Functionality, Performance, Other, and Low, Medium, High."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<BugReportLabels>",
+            "description": "Every visible string, including errors, the submit labels, and the dropzone hint. {max} is replaced in the size and count messages."
+          },
+          {
+            "name": "defaultValues / values / onValuesChange",
+            "type": "Partial<BugReportValues> / BugReportValues",
+            "description": "Uncontrolled defaults, or a controlled value object. Priority defaults to medium when that option exists."
+          },
+          {
+            "name": "accept / maxSizeMB / maxFiles",
+            "type": "string / number",
+            "description": "Screenshot rules. Defaults: JPG and PNG, 5 MB, 1 file. Paste an image onto the form to attach it."
+          },
+          {
+            "name": "autoDetectEnvironment",
+            "type": "boolean",
+            "description": "Fills an empty environment from userAgentData, or userAgent. A Detect control fills it again."
+          },
+          {
+            "name": "resetAfterSuccessMs / disabled / className",
+            "type": "number / boolean / string",
+            "description": "Clear the form after success, lock the fields, and class the form."
+          },
+          {
+            "name": "useBugReportForm",
+            "type": "hook",
+            "description": "Headless state for the same fields, files, validation, and submit status. Pass its return as the form prop to render BugReportForm."
+          }
+        ]
+      },
+      "docs": "Clean-room behavior inspired by a Design & Code With AV reel. No premium code, class names, colors, or Bootstrap Icons were copied. Answer no if the CLI asks to overwrite button, card, input, label, or textarea. The item ships no theme. The live example includes an optional Supabase insert and storage upload for a host that already has a client; this item does not depend on Supabase. With reduced motion the type check does not animate and the spinner does not spin.",
+      "files": [
+        {
+          "path": "registry/ui/bug-report-form.tsx",
+          "type": "registry:component",
+          "target": "@ui/bug-report-form.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tree-nav",
+      "type": "registry:ui",
+      "title": "Tree nav",
+      "description": "Navigation card with a person header, nested rows, counts, a guide line, and a keyboard tree.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button"
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "meta": {
+        "titleEs": "Árbol de navegación",
+        "descriptionEs": "Tarjeta con encabezado, carpetas anidadas, conteos y una línea guía. Se maneja con el teclado.",
+        "preview": "app/examples/tree-nav/preview.tsx",
+        "previewHref": "/examples/tree-nav",
+        "examples": [
+          {
+            "title": "Árbol de navegación",
+            "href": "/examples/tree-nav",
+            "description": "Encabezado, carpetas con conteo y la fila Browse all."
+          }
+        ],
+        "usage": "<TreeNav\n  label=\"Projects\"\n  items={items}\n  header={<TreeNavHeader name=\"Morgan Lee\" role=\"Product Designer\" />}\n  defaultExpanded={[\"updates\"]}\n  onSelect={(node) => setSelected(node)}\n  onAddNew={() => addItem()}\n/>",
+        "api": [
+          {
+            "name": "items",
+            "type": "TreeNavNode[]",
+            "description": "id, label, icon, count, children, href, and disabled. Any depth."
+          },
+          {
+            "name": "expanded / defaultExpanded / onExpandedChange",
+            "type": "string[]",
+            "description": "Open folder ids. Omit expanded for internal state."
+          },
+          {
+            "name": "selected / defaultSelected / onSelect",
+            "type": "string | null / (node) => void",
+            "description": "Selected row. onSelect receives the node."
+          },
+          {
+            "name": "renderIcon / renderLink",
+            "type": "functions",
+            "description": "Replace the folder or file icon. renderLink returns the row element, such as a Next.js link, and must render the props it receives."
+          },
+          {
+            "name": "header / footer / onAddNew / addLabel",
+            "type": "ReactNode / () => void / string",
+            "description": "Slots around the tree. TreeNavHeader is the person row. onAddNew renders the Add new button."
+          },
+          {
+            "name": "label / className",
+            "type": "string",
+            "description": "Accessible name of the tree, default Navigation, and the card class."
+          }
+        ]
+      },
+      "docs": "Clean-room behavior inspired by a Design & Code With AV reel. No premium code, class names, colors, or Bootstrap Icons were copied. This is a navigation card, separate from tree-view, which is a file tree without the header, counts, or guide line. Answer no if the CLI asks to overwrite avatar or button. The item ships no theme. Rows follow the WAI-ARIA tree pattern. With reduced motion the chevron and the branch height do not animate. A row with href renders an anchor; pass renderLink for a router link.",
+      "files": [
+        {
+          "path": "registry/ui/tree-nav.tsx",
+          "type": "registry:component",
+          "target": "@ui/tree-nav.tsx"
+        }
+      ]
+    },
+    {
+      "name": "mega-menu",
+      "type": "registry:ui",
+      "title": "Mega menu",
+      "description": "Navigation bar whose triggers open a wide panel. A container under 768px stacks the same panel as an accordion.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "separator"
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "meta": {
+        "titleEs": "Mega menú",
+        "descriptionEs": "Barra con un panel ancho por sección. En un contenedor estrecho se vuelve un acordeón.",
+        "preview": "app/examples/mega-menu/preview.tsx",
+        "previewHref": "/examples/mega-menu",
+        "examples": [
+          {
+            "title": "Mega menú",
+            "href": "/examples/mega-menu",
+            "description": "Panel de tienda al pasar el cursor. En 320px se apila."
+          }
+        ],
+        "usage": "<MegaMenu\n  label=\"Store\"\n  items={items}\n  openOn=\"hover\"\n  value={value}\n  onValueChange={setValue}\n  renderLink={({ href, className, children }) => <Link href={href} className={className}>{children}</Link>}\n/>",
+        "api": [
+          {
+            "name": "items",
+            "type": "MegaMenuItem[]",
+            "description": "A link, or a trigger with a panel: featured card, columns, and highlights."
+          },
+          {
+            "name": "openOn",
+            "type": "\"hover\" | \"click\"",
+            "description": "Hover waits briefly before open and close. Click still toggles. Default hover."
+          },
+          {
+            "name": "value / defaultValue / onValueChange",
+            "type": "string | null",
+            "description": "Open panel id. Null is closed. Omit value for internal state."
+          },
+          {
+            "name": "renderLink",
+            "type": "(props) => ReactElement",
+            "description": "Render each href, for example with Next.js Link. The element must accept className, onClick, and children."
+          },
+          {
+            "name": "layout",
+            "type": "\"auto\" | \"wide\" | \"narrow\"",
+            "description": "auto uses the nav width and switches under 768px. wide and narrow force a layout."
+          },
+          {
+            "name": "openDelayMs / closeDelayMs / label / className",
+            "type": "number / string",
+            "description": "Hover delays, the nav landmark name, and the root class."
+          }
+        ]
+      },
+      "docs": "Clean-room behavior inspired by a Design & Code With AV reel. No premium code, class names, colors, images, or Bootstrap Icons were copied. The host has no navigation-menu primitive, so this item is its own disclosure nav and does not replace site-header or dock-nav. Answer no if the CLI asks to overwrite badge or separator. The item ships no theme. Triggers are buttons with aria-expanded and aria-controls. Escape closes and returns focus. Arrow keys move across the bar. Under 768px the panel stacks in the flow. With reduced motion the panel fades without the vertical slide.",
+      "files": [
+        {
+          "path": "registry/ui/mega-menu.tsx",
+          "type": "registry:component",
+          "target": "@ui/mega-menu.tsx"
+        }
+      ]
     }
   ]
 }
