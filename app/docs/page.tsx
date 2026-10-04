@@ -40,9 +40,21 @@ const people = [
 const layouts = [
   ["magnetic-bento", "Mixed spans with one highlight that glides between cards."],
   ["blog-grid", "A page of posts."],
-  ["card-stack", "A pile of cards you move through."],
+  ["card-stack", "A triage deck you flick left or right. For a depth stack of notices, use notification-stack."],
   ["radio-cards", "One choice among option cards."],
   ["view-gallery", "Schema records as cards, inside multi-view."],
+] as const
+
+const verification = [
+  ["otp-field", "The code field alone, with an error, a success line, and a resend cooldown."],
+  ["two-factor-card", "The whole verification card: countdown, verify, alternate methods, and a success handoff. Same input-otp primitive."],
+] as const
+
+const notices = [
+  ["toast-stack", "Short results at the edge of the screen."],
+  ["notification-center", "A grouped list that keeps read state."],
+  ["notification-stack", "A depth stack. Dismiss the front card and the next one steps forward."],
+  ["card-stack", "A triage deck you flick left or right."],
 ] as const
 
 export default function DocsPage() {
@@ -151,6 +163,8 @@ export default function DocsPage() {
           <ChoiceTable title="Editing a record" rows={editing} />
           <ChoiceTable title="People" rows={people} />
           <ChoiceTable title="Layouts" rows={layouts} />
+          <ChoiceTable title="Verification" rows={verification} />
+          <ChoiceTable title="Notices" rows={notices} />
           <p className="text-muted-foreground">
             <ItemLink name="view-calendar" /> is a month grid. <ItemLink name="view-grouped-list" />{" "}
             is collapsible groups of compact rows. <ItemLink name="view-gallery" /> is cards.{" "}
@@ -257,6 +271,10 @@ npx shadcn@latest add @retana/presence-outline`}</pre>
                 jh3yy
               </a>
               . The cards, labels, and icons here are original.
+            </li>
+            <li>
+              <code>two-factor-card</code> and <code>notification-stack</code> take visual inspiration
+              from Design &amp; Code With AV Facebook reels. No code was used.
             </li>
             <li>
               Some admin list behavior is adapted from Maniruzzaman Jubayer&apos;s MIT admin panel

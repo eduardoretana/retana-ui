@@ -10459,6 +10459,199 @@
           "target": "@ui/magnetic-bento-grid.tsx"
         }
       ]
+    },
+    {
+      "name": "two-factor-card",
+      "type": "registry:ui",
+      "title": "Two-factor card",
+      "description": "Verification card for a one-time code, with a countdown, alternate methods, and a success handoff.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "input-otp",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "input-otp",
+        "button"
+      ],
+      "categories": [
+        "form",
+        "input"
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de verificación",
+        "descriptionEs": "Tarjeta para un código de un solo uso, con cuenta regresiva, métodos alternos y una vista de éxito.",
+        "preview": "app/examples/two-factor-card/preview.tsx",
+        "previewHref": "/examples/two-factor-card",
+        "examples": [
+          {
+            "title": "Verificación",
+            "href": "/examples/two-factor-card",
+            "description": "Cuenta regresiva, error y éxito. El código 246810 continúa."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/two-factor-card/stress",
+            "description": "320px, RTL, separador, carga, error y éxito."
+          }
+        ],
+        "usage": "<TwoFactorCard\n  expiresIn={180}\n  gradient\n  onVerify={async (code) => code === \"246810\"}\n  onContinue={() => router.push(\"/home\")}\n  methods={[{ id: \"qr\", label: \"Scan QR code\", onSelect: showQr }]}\n/>",
+        "api": [
+          {
+            "name": "length / separator",
+            "type": "number / boolean | node",
+            "description": "Digit count. Default 6. separator draws a break at the midpoint, or a node you pass."
+          },
+          {
+            "name": "value / defaultValue / onValueChange",
+            "type": "string",
+            "description": "The code. Omit value for internal state. Digits only."
+          },
+          {
+            "name": "onVerify",
+            "type": "(code) => boolean | Promise<boolean>",
+            "description": "Return false or throw to show the error. Otherwise the card crossfades to success. An incomplete code errors without calling it."
+          },
+          {
+            "name": "autoSubmit",
+            "type": "boolean",
+            "description": "Verify as soon as every slot is filled. Default false."
+          },
+          {
+            "name": "expiresIn / onExpire / onResend",
+            "type": "number / callbacks",
+            "description": "Countdown in seconds. A polite live region speaks once per remaining minute and at zero. Zero shows Resend, which restores the countdown."
+          },
+          {
+            "name": "onContinue / successTitle",
+            "type": "callback / string",
+            "description": "The success view hides the code, the timer, and the alternate methods."
+          },
+          {
+            "name": "onBack / onMenu",
+            "type": "() => void",
+            "description": "Optional header actions. Omitted buttons are not rendered."
+          },
+          {
+            "name": "methods",
+            "type": "{ id, label, icon?, onSelect? }[]",
+            "description": "Footer actions. Defaults to Scan QR code and Use message. Pass [] to hide them."
+          },
+          {
+            "name": "gradient",
+            "type": "boolean",
+            "description": "Blends primary toward chart-2 on the main buttons. Default false."
+          },
+          {
+            "name": "labels",
+            "type": "string",
+            "description": "title, description, verify, continue, success, expiry, resend, and error strings default to English."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes for the header, icon, title, description, slots, timer, submit, methods, and success view."
+          }
+        ]
+      },
+      "docs": "Built on the input-otp primitive. otp-field is the field alone; this card is the verification step around it. Answer no if the CLI asks to overwrite input-otp or button. The item ships no theme, cssVars, or fixed colors. The digit pop and the error shake are skipped when the reader prefers reduced motion. Visual inspiration is a Facebook reel by Design & Code With AV (2FA UI Upgrade). No code from that reel was used.",
+      "files": [
+        {
+          "path": "registry/ui/two-factor-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/two-factor-card.tsx"
+        }
+      ]
+    },
+    {
+      "name": "notification-stack",
+      "type": "registry:ui",
+      "title": "Notification stack",
+      "description": "A depth stack of notices. Dismiss the front card and the next one steps forward.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "feedback"
+      ],
+      "meta": {
+        "titleEs": "Pila de avisos en profundidad",
+        "descriptionEs": "Avisos en capas. Al descartar el de enfrente, el siguiente avanza.",
+        "preview": "app/examples/notification-stack/preview.tsx",
+        "previewHref": "/examples/notification-stack",
+        "examples": [
+          {
+            "title": "Pila",
+            "href": "/examples/notification-stack",
+            "description": "Cuatro avisos. La palomita, Supr o Retroceso descartan el de enfrente."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/notification-stack/stress",
+            "description": "320px, vacío, uno, cuarenta, RTL y un título sin espacios."
+          }
+        ],
+        "usage": "<NotificationStack\n  items={notices}\n  onDismiss={(id) => setNotices((current) => current.filter((item) => item.id !== id))}\n  onEmpty={() => setQuiet(true)}\n/>",
+        "api": [
+          {
+            "name": "items / defaultItems",
+            "type": "NotificationStackItem[]",
+            "description": "Pass items to control the list. Omit items and pass defaultItems for internal state. The first item is the front card."
+          },
+          {
+            "name": "onDismiss / onEmpty",
+            "type": "(id) => void / () => void",
+            "description": "onDismiss fires with the removed id. onEmpty fires when that dismiss clears the list."
+          },
+          {
+            "name": "onItemClick / renderAction",
+            "type": "callbacks",
+            "description": "Optional body click and an action slot under the copy."
+          },
+          {
+            "name": "tone",
+            "type": "\"chart-1\" … \"chart-5\" | \"primary\"",
+            "description": "Host chart or primary token for the icon tile, mixed with the background."
+          },
+          {
+            "name": "empty / emptyLabel",
+            "type": "node / string",
+            "description": "Shown when nothing is left. emptyLabel defaults to You're all caught up."
+          },
+          {
+            "name": "expandable",
+            "type": "boolean",
+            "description": "Show all fans the stack into a vertical list. Default true."
+          },
+          {
+            "name": "dismissOnEscape",
+            "type": "boolean",
+            "description": "Escape dismisses the focused card. Default true. Delete and Backspace always dismiss it."
+          },
+          {
+            "name": "label / dismissLabel",
+            "type": "string / (item) => string",
+            "description": "Region name and the accessible name of the done button."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes for the card, icon, title, body, time, dismiss, badge, depth, and empty state."
+          }
+        ]
+      },
+      "docs": "A depth stack, separate from toast-stack (short results at the edge), notification-center (a grouped list with read state), and card-stack (a left-or-right triage deck). Up to three cards peek above the front one. Only the front card is interactive. Answer no if the CLI asks to overwrite button. The item ships no theme, cssVars, or fixed colors. With reduced motion the dismiss does not slide and the tiers do not scale. Visual inspiration is a Facebook reel by Design & Code With AV (Notification Stack UI Upgrade). No code from that reel was used.",
+      "files": [
+        {
+          "path": "registry/ui/notification-stack.tsx",
+          "type": "registry:component",
+          "target": "@ui/notification-stack.tsx"
+        }
+      ]
     }
   ]
 }
