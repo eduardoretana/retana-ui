@@ -81,7 +81,7 @@ const verification = [
 ] as const
 
 const notices = [
-  ["toast-stack", "Short results at the edge of the screen."],
+  ["toast-stack", "Short results at the edge. The undo appearance is a dark pill that pauses on hover."],
   ["notification-center", "A grouped list that keeps read state."],
   ["notification-stack", "A depth stack. Dismiss the front card and the next one steps forward."],
   ["card-stack", "A triage deck you flick left or right."],
