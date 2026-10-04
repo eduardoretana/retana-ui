@@ -31,7 +31,7 @@ export function Demo() {
       </div>
       <div className="rounded-2xl border border-border bg-muted/30 p-3">
         <MegaMenu label="Store" items={storeMenu} openOn={openOn} value={value} onValueChange={setValue} />
-        <div className="min-h-72" />
+        <div className="min-h-[28rem]" />
       </div>
       <p className="text-sm text-muted-foreground">
         Panel: <span className="text-foreground">{value ?? "cerrado"}</span>

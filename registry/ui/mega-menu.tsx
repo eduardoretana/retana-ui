@@ -401,15 +401,15 @@ function PanelBody({
       aria-label={label}
       data-state="open"
       className={cn(
-        "rounded-xl bg-popover p-4 text-popover-foreground shadow-lg ring-1 ring-foreground/10",
+        "@container rounded-xl bg-popover p-4 text-popover-foreground shadow-lg ring-1 ring-foreground/10",
         "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:duration-300 motion-safe:data-[state=open]:slide-in-from-top-2 motion-reduce:animate-none",
         !floating && "shadow-none ring-0 px-0",
       )}
     >
-      <div className="@container grid gap-5 @min-[48rem]:grid-cols-[minmax(12rem,0.9fr)_minmax(0,1.6fr)_minmax(10rem,0.8fr)]">
+      <div className="grid gap-5 @min-[48rem]:grid-cols-[minmax(12rem,0.9fr)_minmax(0,1.6fr)_minmax(10rem,0.8fr)]">
         {panel.featured ? <Featured featured={panel.featured} link={link} onNavigate={onNavigate} /> : null}
         {panel.columns?.length ? (
-          <div className="@container grid gap-5 @min-[28rem]:grid-cols-2 @min-[42rem]:grid-cols-3">
+          <div className="grid gap-5 @min-[36rem]:grid-cols-3">
             {panel.columns.map((column) => (
               <section key={column.id} aria-label={column.title} className="min-w-0">
                 <h3 className="flex items-center gap-2 text-sm font-semibold">

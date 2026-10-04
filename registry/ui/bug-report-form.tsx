@@ -625,7 +625,7 @@ export function BugReportForm({ className, form, ...options }: BugReportFormProp
       className={cn("w-full min-w-0", className)}
     >
       <Card className="overflow-visible shadow-sm">
-        <CardHeader className="flex-row items-center gap-3">
+        <CardHeader className="flex flex-row items-center gap-3">
           <span className="grid size-10 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground" aria-hidden="true">
             <Bug className="size-5" />
           </span>
