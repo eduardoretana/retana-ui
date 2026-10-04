@@ -153,7 +153,7 @@ export function CatalogBrowser({
                 data-kind={item.kind}
                 className="flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm"
               >
-                <div className="h-44 border-b border-border bg-muted/30">
+                <div className="h-44 overflow-hidden border-b border-border bg-muted/30">
                   {renderPreview ? (
                     renderPreview(item.name)
                   ) : (

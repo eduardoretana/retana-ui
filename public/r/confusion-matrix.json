@@ -1,0 +1,54 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "confusion-matrix",
+  "title": "Confusion matrix",
+  "author": "Eduardo Retana",
+  "description": "An N by N heat grid with counts or percents and a table fallback.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/confusion-matrix.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/results/evaluation-metrics-dashboard/evaluation-metrics-dashboard.tsx\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type ConfusionMatrixProps = {\n  labels: string[]\n  counts: number[][]\n  className?: string\n}\n\nexport function ConfusionMatrix({ labels, counts, className }: ConfusionMatrixProps) {\n  const [percent, setPercent] = React.useState(false)\n  const [active, setActive] = React.useState<{ row: number; column: number } | null>(null)\n  const total = counts.reduce((sum, row) => sum + row.reduce((inner, value) => inner + value, 0), 0)\n  const max = Math.max(1, ...counts.flat())\n\n  const move = (row: number, column: number, key: string) => {\n    const last = labels.length - 1\n    if (key === \"ArrowRight\") setActive({ row, column: Math.min(last, column + 1) })\n    if (key === \"ArrowLeft\") setActive({ row, column: Math.max(0, column - 1) })\n    if (key === \"ArrowDown\") setActive({ row: Math.min(last, row + 1), column })\n    if (key === \"ArrowUp\") setActive({ row: Math.max(0, row - 1), column })\n  }\n\n  return (\n    <div className={cn(\"flex min-w-0 flex-col gap-2\", className)}>\n      <button\n        type=\"button\"\n        className=\"self-start text-xs text-muted-foreground underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n        aria-pressed={percent}\n        onClick={() => setPercent((value) => !value)}\n      >\n        {percent ? \"Show counts\" : \"Show percent\"}\n      </button>\n      <div className=\"overflow-x-auto\">\n        <div role=\"grid\" aria-label=\"Confusion matrix\" className=\"inline-grid gap-1\" style={{ gridTemplateColumns: `auto repeat(${labels.length}, minmax(2.5rem, 1fr))` }}>\n          <span />\n          {labels.map((label) => (\n            <span key={`col-${label}`} className=\"text-center text-xs text-muted-foreground\">\n              {label}\n            </span>\n          ))}\n          {labels.map((label, row) => (\n            <React.Fragment key={label}>\n              <span className=\"pr-2 text-xs text-muted-foreground\">{label}</span>\n              {labels.map((predicted, column) => {\n                const count = counts[row]?.[column] ?? 0\n                const share = total > 0 ? count / total : 0\n                const intensity = Math.round((count / max) * 80)\n                const selected = active?.row === row && active?.column === column\n                return (\n                  <button\n                    key={`${label}-${predicted}`}\n                    type=\"button\"\n                    role=\"gridcell\"\n                    tabIndex={selected || (!active && row === 0 && column === 0) ? 0 : -1}\n                    aria-selected={selected}\n                    className={cn(\"size-10 rounded-sm text-xs tabular-nums focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\", row === column && \"ring-1 ring-foreground/30\")}\n                    style={{ backgroundColor: `color-mix(in oklab, var(--primary) ${intensity}%, var(--background))` }}\n                    onFocus={() => setActive({ row, column })}\n                    onKeyDown={(event) => move(row, column, event.key)}\n                    aria-label={`Actual ${label}, predicted ${predicted}: ${count} (${Math.round(share * 100)}%)`}\n                  >\n                    {percent ? `${Math.round(share * 100)}%` : count}\n                  </button>\n                )\n              })}\n            </React.Fragment>\n          ))}\n        </div>\n      </div>\n      <table className=\"sr-only\">\n        <caption>Confusion matrix</caption>\n        <thead>\n          <tr>\n            <th>Actual</th>\n            {labels.map((label) => (\n              <th key={label}>{label}</th>\n            ))}\n          </tr>\n        </thead>\n        <tbody>\n          {labels.map((label, row) => (\n            <tr key={label}>\n              <th>{label}</th>\n              {labels.map((predicted, column) => (\n                <td key={predicted}>{counts[row]?.[column] ?? 0}</td>\n              ))}\n            </tr>\n          ))}\n        </tbody>\n      </table>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/confusion-matrix.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Matriz de confusión",
+    "descriptionEs": "Una rejilla de calor, con conteos o porcentajes y una tabla de respaldo.",
+    "preview": "app/examples/confusion-matrix/preview.tsx",
+    "previewHref": "/examples/confusion-matrix",
+    "examples": [
+      {
+        "title": "Matriz de confusión",
+        "href": "/examples/confusion-matrix",
+        "description": "Una rejilla de calor, con conteos o porcentajes y una tabla de respaldo."
+      }
+    ],
+    "usage": "<ConfusionMatrix labels={labels} counts={counts} />",
+    "api": [
+      {
+        "name": "labels",
+        "type": "string[]",
+        "description": "Row and column names."
+      },
+      {
+        "name": "counts",
+        "type": "number[][]",
+        "description": "Row-major counts."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "chart"
+  ],
+  "type": "registry:ui"
+}

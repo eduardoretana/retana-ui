@@ -1,0 +1,61 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "context-meter",
+  "title": "Context meter",
+  "author": "Eduardo Retana",
+  "description": "A compact ring for a context window, with a breakdown on click.",
+  "dependencies": [],
+  "registryDependencies": [
+    "popover"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/context-meter.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/local-first/context-usage-meter/context-usage-meter.tsx\n\nimport * as React from \"react\"\n\nimport { Popover, PopoverContent, PopoverTrigger } from \"@/components/ui/popover\"\nimport { cn } from \"@/lib/utils\"\n\nexport type ContextUsage = {\n  input?: number\n  output?: number\n  reasoning?: number\n  cached?: number\n}\n\nexport type ContextMeterClassNames = {\n  root?: string\n  trigger?: string\n  content?: string\n  bar?: string\n  row?: string\n}\n\nexport type ContextMeterProps = {\n  used: number\n  contextWindow: number\n  usage?: ContextUsage\n  warnThreshold?: number\n  costPerToken?: number\n  formatCost?: (cost: number) => string\n  locale?: string\n  label?: string\n  className?: string\n  classNames?: ContextMeterClassNames\n}\n\nexport function formatCompact(value: number, locale = \"en\") {\n  return new Intl.NumberFormat(locale, { notation: \"compact\", maximumFractionDigits: 1 }).format(value)\n}\n\nfunction Ring({ ratio, warn, over, size = 16 }: { ratio: number; warn: boolean; over: boolean; size?: number }) {\n  const stroke = 2\n  const radius = (size - stroke) / 2\n  const turn = Math.min(Math.max(ratio, 0), 1)\n  const color = over ? \"var(--destructive)\" : warn ? \"var(--accent-foreground)\" : \"var(--primary)\"\n  return (\n    <span\n      aria-hidden=\"true\"\n      className=\"inline-block shrink-0 rounded-full\"\n      style={{\n        width: size,\n        height: size,\n        background: `conic-gradient(${color} ${turn}turn, var(--muted) 0)`,\n      }}\n    >\n      <span className=\"sr-only\" style={{ width: radius }} />\n    </span>\n  )\n}\n\nexport function ContextMeterTrigger({\n  used,\n  contextWindow,\n  warnThreshold = 0.8,\n  locale = \"en\",\n  className,\n  ref,\n}: Pick<ContextMeterProps, \"used\" | \"contextWindow\" | \"warnThreshold\" | \"locale\" | \"className\"> & {\n  ref?: React.Ref<HTMLButtonElement>\n}) {\n  const ratio = contextWindow > 0 ? used / contextWindow : 0\n  const percent = Math.round(ratio * 100)\n  const warn = ratio >= warnThreshold && ratio < 1\n  const over = ratio >= 1\n  const label = `Context used: ${percent}%, ${used.toLocaleString(locale)} of ${contextWindow.toLocaleString(locale)} tokens`\n  return (\n    <button\n      ref={ref}\n      type=\"button\"\n      aria-label={label}\n      className={cn(\n        \"inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2 py-1 text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\",\n        over ? \"text-destructive\" : warn ? \"text-accent-foreground\" : \"text-foreground\",\n        className,\n      )}\n    >\n      <Ring ratio={ratio} warn={warn} over={over} />\n      <span className=\"tabular-nums\">{percent}%</span>\n    </button>\n  )\n}\n\nexport function ContextMeterRow({ label, value, locale = \"en\", className }: { label: string; value: number; locale?: string; className?: string }) {\n  return (\n    <div className={cn(\"flex items-center justify-between gap-3 text-sm\", className)}>\n      <span className=\"text-muted-foreground\">{label}</span>\n      <span className=\"font-mono text-foreground tabular-nums\">{formatCompact(value, locale)}</span>\n    </div>\n  )\n}\n\nexport function ContextMeterContent({\n  used,\n  contextWindow,\n  usage,\n  warnThreshold = 0.8,\n  costPerToken,\n  formatCost,\n  locale = \"en\",\n  className,\n}: ContextMeterProps) {\n  const ratio = contextWindow > 0 ? used / contextWindow : 0\n  const percent = Math.round(Math.min(ratio, 1) * 100)\n  const over = ratio >= 1\n  const warn = ratio >= warnThreshold\n  const cost = costPerToken != null ? used * costPerToken : undefined\n  return (\n    <div className={cn(\"flex w-64 flex-col gap-2\", className)}>\n      <div className=\"flex items-baseline justify-between gap-2\">\n        <p className=\"font-medium text-foreground\">Context window</p>\n        <p className=\"text-xs text-muted-foreground tabular-nums\">\n          {formatCompact(used, locale)} / {formatCompact(contextWindow, locale)} tokens\n        </p>\n      </div>\n      <div\n        role=\"meter\"\n        aria-valuemin={0}\n        aria-valuemax={contextWindow}\n        aria-valuenow={Math.min(used, contextWindow)}\n        aria-valuetext={`${formatCompact(used, locale)} of ${formatCompact(contextWindow, locale)} tokens`}\n        className=\"h-1.5 overflow-hidden rounded-full bg-muted\"\n      >\n        <div className={cn(\"h-full rounded-full\", over ? \"bg-destructive\" : warn ? \"bg-accent\" : \"bg-primary\")} style={{ width: `${percent}%` }} />\n      </div>\n      {usage?.input != null ? <ContextMeterRow label=\"Input\" value={usage.input} locale={locale} /> : null}\n      {usage?.output != null ? <ContextMeterRow label=\"Output\" value={usage.output} locale={locale} /> : null}\n      {usage?.reasoning != null ? <ContextMeterRow label=\"Reasoning\" value={usage.reasoning} locale={locale} /> : null}\n      {usage?.cached != null ? <ContextMeterRow label=\"Cached\" value={usage.cached} locale={locale} /> : null}\n      {cost != null ? (\n        <ContextMeterRow label=\"Cost\" value={0} locale={locale} className=\"sr-only\" />\n      ) : null}\n      {cost != null ? <p className=\"text-xs text-muted-foreground\">{formatCost ? formatCost(cost) : cost.toLocaleString(locale, { style: \"currency\", currency: \"USD\" })}</p> : null}\n    </div>\n  )\n}\n\nexport function ContextMeter({ className, classNames, label, ...props }: ContextMeterProps) {\n  return (\n    <Popover>\n      <PopoverTrigger asChild>\n        <ContextMeterTrigger {...props} className={cn(className, classNames?.root, classNames?.trigger)} />\n      </PopoverTrigger>\n      <PopoverContent className={classNames?.content} aria-label={label ?? \"Context window\"}>\n        <ContextMeterContent {...props} className={classNames?.content} />\n      </PopoverContent>\n    </Popover>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/context-meter.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Medidor de contexto",
+    "descriptionEs": "Un anillo compacto del cupo de contexto, con el desglose al pulsarlo.",
+    "preview": "app/examples/context-meter/preview.tsx",
+    "previewHref": "/examples/context-meter",
+    "examples": [
+      {
+        "title": "Medidor de contexto",
+        "href": "/examples/context-meter",
+        "description": "Un anillo compacto del cupo de contexto, con el desglose al pulsarlo."
+      }
+    ],
+    "usage": "<ContextMeter used={12400} contextWindow={32000} usage={{ input: 8000, output: 4400 }} />",
+    "api": [
+      {
+        "name": "used",
+        "type": "number",
+        "description": "Tokens already used."
+      },
+      {
+        "name": "contextWindow",
+        "type": "number",
+        "description": "Window size."
+      },
+      {
+        "name": "warnThreshold",
+        "type": "number",
+        "description": "Fraction that switches the ring to a warning."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "chat"
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-webcam",
+  "title": "Webcam hook",
+  "author": "Eduardo Retana",
+  "description": "Start, stop, and switch a camera stream. Tracks stop on unmount.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/hooks/use-webcam.ts",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/media-vision/use-webcam/use-webcam.ts\n\nimport * as React from \"react\"\n\nexport type WebcamErrorKind = \"permission\" | \"hardware\" | \"unknown\"\n\nexport type WebcamStatus = \"idle\" | \"starting\" | \"active\" | \"error\"\n\nexport type UseWebcamOptions = {\n  facingMode?: \"user\" | \"environment\"\n  width?: number\n  height?: number\n  audio?: boolean\n  autoStart?: boolean\n}\n\nexport function useWebcam(options: UseWebcamOptions = {}) {\n  const { facingMode = \"user\", width = 1280, height = 720, audio = false, autoStart = false } = options\n  const videoRef = React.useRef<HTMLVideoElement>(null)\n  const streamRef = React.useRef<MediaStream | null>(null)\n  const [stream, setStream] = React.useState<MediaStream | null>(null)\n  const [status, setStatus] = React.useState<WebcamStatus>(\"idle\")\n  const [error, setError] = React.useState<{ kind: WebcamErrorKind; message: string } | null>(null)\n  const facing = React.useRef(facingMode)\n\n  const stop = React.useCallback(() => {\n    streamRef.current?.getTracks().forEach((track) => track.stop())\n    streamRef.current = null\n    setStream(null)\n    if (videoRef.current) videoRef.current.srcObject = null\n    setStatus(\"idle\")\n  }, [])\n\n  const start = React.useCallback(async () => {\n    if (!navigator.mediaDevices?.getUserMedia) {\n      setStatus(\"error\")\n      setError({ kind: \"hardware\", message: \"This browser has no camera API.\" })\n      return\n    }\n    setStatus(\"starting\")\n    setError(null)\n    try {\n      const next = await navigator.mediaDevices.getUserMedia({\n        audio,\n        video: { facingMode: facing.current, width, height },\n      })\n      streamRef.current?.getTracks().forEach((track) => track.stop())\n      streamRef.current = next\n      setStream(next)\n      if (videoRef.current) {\n        videoRef.current.srcObject = next\n        await videoRef.current.play().catch(() => undefined)\n      }\n      setStatus(\"active\")\n    } catch (err) {\n      const name = err instanceof DOMException ? err.name : \"\"\n      const kind: WebcamErrorKind = name === \"NotAllowedError\" || name === \"SecurityError\" ? \"permission\" : name === \"NotFoundError\" ? \"hardware\" : \"unknown\"\n      setStatus(\"error\")\n      setError({ kind, message: err instanceof Error ? err.message : \"The camera could not start.\" })\n    }\n  }, [audio, height, width])\n\n  const switchCamera = React.useCallback(async () => {\n    facing.current = facing.current === \"user\" ? \"environment\" : \"user\"\n    await start()\n  }, [start])\n\n  React.useEffect(() => {\n    if (!autoStart) {\n      return () => {\n        streamRef.current?.getTracks().forEach((track) => track.stop())\n      }\n    }\n    const timer = window.setTimeout(() => void start(), 0)\n    return () => {\n      window.clearTimeout(timer)\n      streamRef.current?.getTracks().forEach((track) => track.stop())\n    }\n  }, [autoStart, start])\n\n  React.useEffect(() => {\n    const onChange = () => {\n      if (status === \"active\") void start()\n    }\n    navigator.mediaDevices?.addEventListener?.(\"devicechange\", onChange)\n    return () => navigator.mediaDevices?.removeEventListener?.(\"devicechange\", onChange)\n  }, [start, status])\n\n  return { videoRef, stream, status, error, start, stop, switchCamera }\n}\n",
+      "type": "registry:hook",
+      "target": "@hooks/use-webcam.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Hook de cámara",
+    "descriptionEs": "Arranca, detiene y cambia la cámara. Los tracks se cierran al desmontar.",
+    "preview": "app/examples/use-webcam/preview.tsx",
+    "previewHref": "/examples/use-webcam",
+    "examples": [
+      {
+        "title": "Hook de cámara",
+        "href": "/examples/use-webcam",
+        "description": "Arranca, detiene y cambia la cámara. Los tracks se cierran al desmontar."
+      }
+    ],
+    "usage": "const { videoRef, status, start, stop } = useWebcam()",
+    "api": [
+      {
+        "name": "facingMode",
+        "type": "\"user\" | \"environment\"",
+        "description": "Camera facing."
+      },
+      {
+        "name": "status",
+        "type": "WebcamStatus",
+        "description": "idle, starting, active, or error."
+      },
+      {
+        "name": "start",
+        "type": "() => Promise<void>",
+        "description": "Requests the camera."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "hook"
+  ],
+  "type": "registry:hook"
+}

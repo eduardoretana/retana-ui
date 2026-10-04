@@ -1,0 +1,64 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "language-pair",
+  "title": "Language pair",
+  "author": "Eduardo Retana",
+  "description": "From and to language pickers with a swap.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button",
+    "select"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/language-pair.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/input-controls/language-pair-selector/language-pair-selector.tsx\n\nimport * as React from \"react\"\nimport { ArrowLeftRight } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from \"@/components/ui/select\"\nimport { cn } from \"@/lib/utils\"\n\nexport type LanguageOption = { code: string; label: string }\n\nconst DEFAULTS = [\"en\", \"es\", \"fr\", \"de\", \"pt\", \"ja\", \"ar\", \"zh\"]\n\nexport function languageOptions(locale = \"en\", codes = DEFAULTS): LanguageOption[] {\n  const names = typeof Intl !== \"undefined\" && \"DisplayNames\" in Intl ? new Intl.DisplayNames([locale], { type: \"language\" }) : null\n  return [\n    { code: \"auto\", label: \"Detect language\" },\n    ...codes.map((code) => ({ code, label: names?.of(code) ?? code })),\n  ]\n}\n\nexport type LanguagePairProps = {\n  from?: string\n  to?: string\n  defaultFrom?: string\n  defaultTo?: string\n  onFromChange?: (code: string) => void\n  onToChange?: (code: string) => void\n  options?: LanguageOption[]\n  locale?: string\n  className?: string\n}\n\nexport function LanguagePair({\n  from,\n  to,\n  defaultFrom = \"auto\",\n  defaultTo = \"en\",\n  onFromChange,\n  onToChange,\n  options,\n  locale = \"en\",\n  className,\n}: LanguagePairProps) {\n  const list = options ?? languageOptions(locale)\n  const [fromState, setFromState] = React.useState(defaultFrom)\n  const [toState, setToState] = React.useState(defaultTo)\n  const [live, setLive] = React.useState(\"\")\n  const source = from ?? fromState\n  const target = to ?? toState\n  const labelOf = (code: string) => list.find((item) => item.code === code)?.label ?? code\n\n  const setFrom = (code: string) => {\n    if (from === undefined) setFromState(code)\n    onFromChange?.(code)\n  }\n  const setTo = (code: string) => {\n    if (to === undefined) setToState(code)\n    onToChange?.(code)\n  }\n\n  return (\n    <div className={cn(\"flex min-w-0 flex-wrap items-center gap-2\", className)}>\n      <Select value={source} onValueChange={setFrom}>\n        <SelectTrigger aria-label=\"Translate from\" className=\"min-w-0 flex-1\">\n          <SelectValue />\n        </SelectTrigger>\n        <SelectContent>\n          <SelectGroup>\n            {list.map((option) => (\n              <SelectItem key={option.code} value={option.code}>\n                {option.label}\n              </SelectItem>\n            ))}\n          </SelectGroup>\n        </SelectContent>\n      </Select>\n      <Button\n        type=\"button\"\n        size=\"icon\"\n        variant=\"outline\"\n        aria-label=\"Swap languages\"\n        disabled={source === \"auto\"}\n        onClick={() => {\n          if (source === \"auto\") return\n          setFrom(target)\n          setTo(source)\n          setLive(`Swapped: ${labelOf(target)} to ${labelOf(source)}`)\n        }}\n      >\n        <ArrowLeftRight data-icon=\"inline-start\" />\n      </Button>\n      <Select value={target} onValueChange={setTo}>\n        <SelectTrigger aria-label=\"Translate to\" className=\"min-w-0 flex-1\">\n          <SelectValue />\n        </SelectTrigger>\n        <SelectContent>\n          <SelectGroup>\n            {list\n              .filter((option) => option.code !== \"auto\")\n              .map((option) => (\n                <SelectItem key={option.code} value={option.code}>\n                  {option.label}\n                </SelectItem>\n              ))}\n          </SelectGroup>\n        </SelectContent>\n      </Select>\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/language-pair.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Par de idiomas",
+    "descriptionEs": "Selectores de idioma de origen y destino, con intercambio.",
+    "preview": "app/examples/language-pair/preview.tsx",
+    "previewHref": "/examples/language-pair",
+    "examples": [
+      {
+        "title": "Par de idiomas",
+        "href": "/examples/language-pair",
+        "description": "Selectores de idioma de origen y destino, con intercambio."
+      }
+    ],
+    "usage": "<LanguagePair defaultFrom=\"es\" defaultTo=\"en\" />",
+    "api": [
+      {
+        "name": "from",
+        "type": "string",
+        "description": "Source language code."
+      },
+      {
+        "name": "to",
+        "type": "string",
+        "description": "Target language code."
+      },
+      {
+        "name": "options",
+        "type": "LanguageOption[]",
+        "description": "Custom language list."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "input"
+  ],
+  "type": "registry:ui"
+}

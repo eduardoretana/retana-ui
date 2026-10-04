@@ -1,0 +1,68 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "mic-select",
+  "title": "Microphone select",
+  "author": "Eduardo Retana",
+  "description": "A microphone or camera picker with permission states.",
+  "dependencies": [],
+  "registryDependencies": [
+    "button",
+    "select"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/mic-select.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/audio/mic-selector/mic-selector.tsx\n\nimport * as React from \"react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from \"@/components/ui/select\"\nimport { cn } from \"@/lib/utils\"\nimport { AudioBars } from \"@/components/ui/audio-bars\"\n\nexport type DeviceKind = \"audioinput\" | \"videoinput\"\n\nexport type MicSelectProps = {\n  kind?: DeviceKind\n  value?: string\n  onValueChange?: (deviceId: string) => void\n  showLevel?: boolean\n  className?: string\n}\n\ntype Permission = \"prompt\" | \"granted\" | \"denied\"\n\nexport function MicSelect({ kind = \"audioinput\", value, onValueChange, showLevel = false, className }: MicSelectProps) {\n  const [permission, setPermission] = React.useState<Permission>(\"prompt\")\n  const [devices, setDevices] = React.useState<MediaDeviceInfo[]>([])\n  const [level, setLevel] = React.useState(0.2)\n\n  const enumerate = React.useCallback(async () => {\n    if (!navigator.mediaDevices?.enumerateDevices) return\n    const list = await navigator.mediaDevices.enumerateDevices()\n    setDevices(list.filter((device) => device.kind === kind))\n  }, [kind])\n\n  const allow = async () => {\n    try {\n      const stream = await navigator.mediaDevices.getUserMedia(kind === \"audioinput\" ? { audio: true } : { video: true })\n      stream.getTracks().forEach((track) => track.stop())\n      setPermission(\"granted\")\n      await enumerate()\n    } catch {\n      setPermission(\"denied\")\n    }\n  }\n\n  React.useEffect(() => {\n    const onChange = () => void enumerate()\n    navigator.mediaDevices?.addEventListener?.(\"devicechange\", onChange)\n    const timer = window.setTimeout(() => void enumerate(), 0)\n    return () => {\n      window.clearTimeout(timer)\n      navigator.mediaDevices?.removeEventListener?.(\"devicechange\", onChange)\n    }\n  }, [enumerate])\n\n  const noun = kind === \"videoinput\" ? \"camera\" : \"microphone\"\n  return (\n    <div className={cn(\"flex min-w-0 flex-col gap-2\", className)}>\n      {permission === \"denied\" ? <p className=\"text-sm text-destructive\">Allow the {noun} in the browser settings, then reload.</p> : null}\n      {permission === \"prompt\" && devices.every((device) => !device.label) ? (\n        <Button type=\"button\" variant=\"outline\" onClick={() => void allow()}>\n          Allow {noun}\n        </Button>\n      ) : null}\n      <div className=\"flex items-center gap-2\">\n        <Select value={value} onValueChange={onValueChange}>\n          <SelectTrigger aria-label={kind === \"videoinput\" ? \"Camera\" : \"Microphone\"} className=\"w-full min-w-0\">\n            <SelectValue placeholder={`Choose a ${noun}`} />\n          </SelectTrigger>\n          <SelectContent>\n            <SelectGroup>\n              {devices.map((device, index) => (\n                <SelectItem key={device.deviceId || index} value={device.deviceId || `device-${index}`}>\n                  {device.label || `${noun[0].toUpperCase()}${noun.slice(1)} ${index + 1}`}\n                </SelectItem>\n              ))}\n            </SelectGroup>\n          </SelectContent>\n        </Select>\n        {showLevel ? <AudioBars levels={[level, level * 0.8, level * 0.5]} label=\"Input level\" /> : null}\n      </div>\n      <button type=\"button\" className=\"sr-only\" onClick={() => setLevel((current) => (current > 0.8 ? 0.2 : current + 0.2))}>\n        Preview level\n      </button>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/mic-select.tsx"
+    },
+    {
+      "path": "registry/ui/audio-bars.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/audio/waveform-activity-bars/waveform-activity-bars.tsx\n\nimport { cn } from \"@/lib/utils\"\n\nexport type AudioBarsProps = {\n  count?: number\n  levels?: number[]\n  active?: boolean\n  label?: string\n  className?: string\n}\n\nexport function AudioBars({ count = 5, levels, active = false, label, className }: AudioBarsProps) {\n  const bars = levels ?? Array.from({ length: count }, () => (active ? 0.65 : 0.35))\n  return (\n    <span\n      className={cn(\"inline-flex h-6 items-end gap-0.5\", className)}\n      role={label ? \"img\" : undefined}\n      aria-label={label}\n      aria-hidden={label ? undefined : true}\n    >\n      {bars.map((level, index) => (\n        <span\n          key={index}\n          className={cn(\"w-1 rounded-full bg-primary\", active && !levels && \"motion-safe:animate-pulse\")}\n          style={{\n            height: `${Math.max(15, Math.min(100, level * 100))}%`,\n            animationDelay: active && !levels ? `${index * 80}ms` : undefined,\n          }}\n        />\n      ))}\n    </span>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/audio-bars.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Selector de micrófono",
+    "descriptionEs": "Un selector de micrófono o cámara, con los estados de permiso.",
+    "preview": "app/examples/mic-select/preview.tsx",
+    "previewHref": "/examples/mic-select",
+    "examples": [
+      {
+        "title": "Selector de micrófono",
+        "href": "/examples/mic-select",
+        "description": "Un selector de micrófono o cámara, con los estados de permiso."
+      }
+    ],
+    "usage": "<MicSelect kind=\"audioinput\" onValueChange={setDevice} />",
+    "api": [
+      {
+        "name": "kind",
+        "type": "\"audioinput\" | \"videoinput\"",
+        "description": "Device kind."
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "description": "Selected device id."
+      },
+      {
+        "name": "showLevel",
+        "type": "boolean",
+        "description": "Shows a level preview."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "media"
+  ],
+  "type": "registry:ui"
+}

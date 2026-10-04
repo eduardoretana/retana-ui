@@ -37,6 +37,17 @@ const people = [
   ["presence-avatars", "People in a presence room. Reads PresenceProvider."],
 ] as const
 
+const agents = [
+  ["tool-call", "One tool's inputs and output. reasoning-steps is the thinking list."],
+  ["tool-approval", "Approve or deny before that tool runs."],
+  ["message-branch", "Page between regenerated replies. chat-message is the bubble."],
+  ["context-meter", "A context window. usage-meter is a plan allowance."],
+  ["slash-menu", "Commands after /. mention-input is @. command-palette is the global list."],
+  ["source-list", "Numbered sources for a reply. inline-citation is the marker in the prose."],
+  ["network-status", "Online or offline. system-notice is a line inside the thread."],
+  ["install-command", "Package-manager tabs around one command. copy-button is the control it uses."],
+] as const
+
 const layouts = [
   ["magnetic-bento", "Mixed spans with one highlight that glides between cards."],
   ["blog-grid", "A page of posts."],
@@ -165,6 +176,17 @@ export default function DocsPage() {
           <ChoiceTable title="Layouts" rows={layouts} />
           <ChoiceTable title="Verification" rows={verification} />
           <ChoiceTable title="Notices" rows={notices} />
+          <ChoiceTable title="Agents" rows={agents} />
+          <p className="text-muted-foreground">
+            The agents family is adapted from LocalMode UI (MIT). It inherits the host theme.
+            Pieces that need the <code>@localmode</code> SDK — an in-browser chat hook and a full
+            on-device chat block — are not in this registry, so installing an item does not download
+            a model runtime. Open the catalog filter{" "}
+            <Link href="/?category=agents" className="underline-offset-2 hover:underline">
+              agents
+            </Link>
+            .
+          </p>
           <p className="text-muted-foreground">
             <ItemLink name="view-calendar" /> is a month grid. <ItemLink name="view-grouped-list" />{" "}
             is collapsible groups of compact rows. <ItemLink name="view-gallery" /> is cards.{" "}
@@ -279,6 +301,11 @@ npx shadcn@latest add @retana/presence-outline`}</pre>
             <li>
               Some admin list behavior is adapted from Maniruzzaman Jubayer&apos;s MIT admin panel
               and reimplemented on shadcn primitives.
+            </li>
+            <li>
+              LocalMode UI (MIT, Copyright (c) 2025 LocalMode) is the source for the agents family:
+              tool calls, voice, device capability, and the other pieces listed in NOTICE. The{" "}
+              <code>@localmode</code> SDK is not a dependency.
             </li>
           </ul>
           <p className="text-muted-foreground">

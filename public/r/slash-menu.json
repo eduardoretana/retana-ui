@@ -1,0 +1,63 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slash-menu",
+  "title": "Slash menu",
+  "author": "Eduardo Retana",
+  "description": "A slash command menu anchored to a textarea.",
+  "dependencies": [
+    "cmdk"
+  ],
+  "registryDependencies": [
+    "command"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/slash-menu.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/input-controls/slash-command-palette/slash-command-palette.tsx\n\nimport * as React from \"react\"\n\nimport { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from \"@/components/ui/command\"\nimport { cn } from \"@/lib/utils\"\n\nexport type SlashCommand = {\n  id: string\n  name: string\n  description?: string\n  category?: string\n  icon?: React.ReactNode\n}\n\nexport type SlashTriggerState = {\n  open: boolean\n  query: string\n  anchorRect: DOMRect | null\n  close: () => void\n  replaceTrigger: (text: string) => void\n}\n\nexport function useSlashTrigger(\n  ref: React.RefObject<HTMLTextAreaElement | HTMLInputElement | null>,\n  options?: { trigger?: string },\n) {\n  const trigger = options?.trigger ?? \"/\"\n  const [open, setOpen] = React.useState(false)\n  const [query, setQuery] = React.useState(\"\")\n  const [anchorRect, setAnchorRect] = React.useState<DOMRect | null>(null)\n  const dismissed = React.useRef<string | null>(null)\n\n  const tokenAtCaret = React.useCallback(\n    (element: HTMLTextAreaElement | HTMLInputElement) => {\n      const cursor = element.selectionStart ?? element.value.length\n      const before = element.value.slice(0, cursor)\n      const escaped = trigger.replace(/[.*+?^${}()|[\\]\\\\]/g, \"\\\\$&\")\n      return before.match(new RegExp(`(?:^|\\\\s)(${escaped}[^\\\\s]*)$`))\n    },\n    [trigger],\n  )\n\n  const read = React.useCallback(() => {\n    const element = ref.current\n    if (!element) return\n    const match = tokenAtCaret(element)\n    if (!match || !match[1].startsWith(trigger)) {\n      dismissed.current = null\n      setOpen(false)\n      setQuery(\"\")\n      return\n    }\n    if (dismissed.current === match[1]) {\n      setOpen(false)\n      return\n    }\n    setOpen(true)\n    setQuery(match[1].slice(trigger.length))\n    setAnchorRect(element.getBoundingClientRect())\n  }, [ref, tokenAtCaret, trigger])\n\n  React.useEffect(() => {\n    const element = ref.current\n    if (!element) return\n    const onInput = () => read()\n    element.addEventListener(\"input\", onInput)\n    element.addEventListener(\"click\", onInput)\n    element.addEventListener(\"keyup\", onInput)\n    return () => {\n      element.removeEventListener(\"input\", onInput)\n      element.removeEventListener(\"click\", onInput)\n      element.removeEventListener(\"keyup\", onInput)\n    }\n  }, [read, ref])\n\n  const close = React.useCallback(() => {\n    const element = ref.current\n    const match = element ? tokenAtCaret(element) : null\n    dismissed.current = match?.[1] ?? \"\"\n    setOpen(false)\n  }, [ref, tokenAtCaret])\n\n  const replaceTrigger = React.useCallback(\n    (text: string) => {\n      const element = ref.current\n      if (!element) return\n      const cursor = element.selectionStart ?? element.value.length\n      const before = element.value.slice(0, cursor)\n      const after = element.value.slice(cursor)\n      const match = tokenAtCaret(element)\n      if (!match || match.index == null) return\n      const start = match.index + (match[0].length - match[1].length)\n      const next = `${element.value.slice(0, start)}${text}${after}`\n      const prototype = Object.getPrototypeOf(element)\n      const setter = Object.getOwnPropertyDescriptor(prototype, \"value\")?.set\n      setter?.call(element, next)\n      element.dispatchEvent(new Event(\"input\", { bubbles: true }))\n      const caret = start + text.length\n      element.setSelectionRange(caret, caret)\n      setOpen(false)\n      setQuery(\"\")\n    },\n    [ref, tokenAtCaret],\n  )\n\n  return { open, query, anchorRect, close, replaceTrigger }\n}\n\nexport type SlashMenuProps = {\n  commands: SlashCommand[]\n  open: boolean\n  query?: string\n  onSelect: (command: SlashCommand) => void\n  onDismiss: () => void\n  placement?: \"input\" | \"caret\"\n  inputId?: string\n  className?: string\n  classNames?: { root?: string; item?: string }\n}\n\nexport function SlashMenu({ commands, open, query = \"\", onSelect, onDismiss, inputId, className, classNames }: SlashMenuProps) {\n  const listId = React.useId()\n  const filtered = React.useMemo(() => {\n    const needle = query.trim().toLowerCase()\n    if (!needle) return commands\n    return commands.filter((command) => `${command.name} ${command.description ?? \"\"}`.toLowerCase().includes(needle))\n  }, [commands, query])\n  const queryKey = `${open}:${query}`\n  const [activeState, setActiveState] = React.useState({ key: queryKey, index: 0 })\n  const active = activeState.key === queryKey ? activeState.index : 0\n  const setActive = (update: number | ((current: number) => number)) => {\n    setActiveState((current) => {\n      const base = current.key === queryKey ? current.index : 0\n      const index = typeof update === \"function\" ? update(base) : update\n      return { key: queryKey, index }\n    })\n  }\n\n  React.useEffect(() => {\n    const input = inputId ? document.getElementById(inputId) : null\n    if (!input) return\n    input.setAttribute(\"aria-expanded\", open ? \"true\" : \"false\")\n    input.setAttribute(\"aria-controls\", listId)\n    input.setAttribute(\"role\", \"combobox\")\n    input.setAttribute(\"aria-autocomplete\", \"list\")\n    if (open && filtered[active]) input.setAttribute(\"aria-activedescendant\", `${listId}-${filtered[active].id}`)\n    else input.removeAttribute(\"aria-activedescendant\")\n  }, [active, filtered, inputId, listId, open])\n\n  React.useEffect(() => {\n    if (!open || !inputId) return\n    const input = document.getElementById(inputId)\n    if (!input) return\n    const onKey = (event: Event) => {\n      const key = (event as KeyboardEvent).key\n      if (key === \"ArrowDown\" || key === \"ArrowUp\") {\n        event.preventDefault()\n        setActive((current) => {\n          if (filtered.length === 0) return 0\n          const delta = key === \"ArrowDown\" ? 1 : -1\n          return (current + delta + filtered.length) % filtered.length\n        })\n      }\n      if ((key === \"Enter\" || key === \"Tab\") && filtered[active]) {\n        event.preventDefault()\n        onSelect(filtered[active])\n      }\n      if (key === \"Escape\") {\n        event.preventDefault()\n        onDismiss()\n      }\n    }\n    input.addEventListener(\"keydown\", onKey)\n    return () => input.removeEventListener(\"keydown\", onKey)\n  }, [active, filtered, inputId, onDismiss, onSelect, open])\n\n  if (!open) return null\n\n  const groups = new Map<string, SlashCommand[]>()\n  for (const command of filtered) {\n    const key = command.category ?? \"Commands\"\n    groups.set(key, [...(groups.get(key) ?? []), command])\n  }\n\n  return (\n    <div\n      id={listId}\n      className={cn(\"w-full max-w-sm overflow-hidden rounded-lg border border-border bg-popover text-popover-foreground shadow-md\", className, classNames?.root)}\n    >\n      <Command shouldFilter={false} label=\"Commands\">\n        <CommandList>\n          {filtered.length === 0 ? <CommandEmpty>No commands</CommandEmpty> : null}\n          {[...groups.entries()].map(([category, items]) => (\n            <CommandGroup key={category} heading={category}>\n              {items.map((command) => {\n                const index = filtered.findIndex((item) => item.id === command.id)\n                const selected = index === active\n                return (\n                  <CommandItem\n                    key={command.id}\n                    id={`${listId}-${command.id}`}\n                    value={command.id}\n                    data-selected={selected ? \"true\" : undefined}\n                    onSelect={() => onSelect(command)}\n                    onMouseMove={() => setActive(index)}\n                    className={classNames?.item}\n                  >\n                    {command.icon}\n                    <span className=\"truncate font-medium\">/{command.name}</span>\n                    {command.description ? <span className=\"ml-auto max-w-[9rem] truncate text-xs text-muted-foreground\">{command.description}</span> : null}\n                  </CommandItem>\n                )\n              })}\n            </CommandGroup>\n          ))}\n        </CommandList>\n      </Command>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/slash-menu.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Menú de barras",
+    "descriptionEs": "Un menú de comandos con barra, anclado a un área de texto.",
+    "preview": "app/examples/slash-menu/preview.tsx",
+    "previewHref": "/examples/slash-menu",
+    "examples": [
+      {
+        "title": "Menú de barras",
+        "href": "/examples/slash-menu",
+        "description": "Un menú de comandos con barra, anclado a un área de texto."
+      }
+    ],
+    "usage": "const slash = useSlashTrigger(ref); <SlashMenu commands={commands} open={slash.open} query={slash.query} onSelect={pick} onDismiss={slash.close} />",
+    "api": [
+      {
+        "name": "commands",
+        "type": "SlashCommand[]",
+        "description": "id, name, description, category."
+      },
+      {
+        "name": "query",
+        "type": "string",
+        "description": "Text after the slash."
+      },
+      {
+        "name": "onSelect",
+        "type": "(command) => void",
+        "description": "Chosen command."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "input"
+  ],
+  "type": "registry:ui"
+}

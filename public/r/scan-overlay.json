@@ -1,0 +1,63 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scan-overlay",
+  "title": "Scan overlay",
+  "author": "Eduardo Retana",
+  "description": "A processing veil over an image, still when motion is reduced.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/scan-overlay.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/media-vision/image-processing-overlay/image-processing-overlay.tsx\n\nimport { Loader2 } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\n\nexport type ScanOverlayProps = {\n  active?: boolean\n  variant?: \"spinner\" | \"scan\"\n  status?: string\n  detail?: string\n  onCancel?: () => void\n  children?: React.ReactNode\n  className?: string\n}\n\nexport function ScanOverlay({\n  active = true,\n  variant = \"scan\",\n  status = \"Processing…\",\n  detail,\n  onCancel,\n  children,\n  className,\n}: ScanOverlayProps) {\n  return (\n    <div aria-busy={active} className={cn(\"relative overflow-hidden\", className)}>\n      {children}\n      {active ? (\n        <div className=\"absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/60 p-4 text-center backdrop-blur-sm\">\n          {variant === \"scan\" ? (\n            <span\n              aria-hidden=\"true\"\n              className=\"pointer-events-none absolute inset-0 opacity-40 motion-reduce:hidden\"\n              style={{\n                backgroundImage: \"linear-gradient(var(--primary) 1px, transparent 1px)\",\n                backgroundSize: \"100% 12px\",\n              }}\n            />\n          ) : null}\n          <p role=\"status\" className=\"relative flex items-center gap-2 text-sm text-foreground\">\n            {variant === \"spinner\" ? <Loader2 aria-hidden=\"true\" className=\"size-4 animate-spin motion-reduce:hidden\" /> : null}\n            <span className={variant === \"spinner\" ? \"motion-reduce:inline hidden motion-reduce:block\" : undefined}>{status}</span>\n            {variant === \"spinner\" ? <span className=\"motion-reduce:hidden\">{status}</span> : null}\n          </p>\n          {detail ? <p className=\"relative text-xs text-muted-foreground\">{detail}</p> : null}\n          {onCancel ? (\n            <Button type=\"button\" size=\"sm\" variant=\"outline\" className=\"relative\" onClick={onCancel}>\n              Cancel\n            </Button>\n          ) : null}\n        </div>\n      ) : null}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/scan-overlay.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Capa de proceso",
+    "descriptionEs": "Un velo de proceso sobre una imagen, quieto si se reduce el movimiento.",
+    "preview": "app/examples/scan-overlay/preview.tsx",
+    "previewHref": "/examples/scan-overlay",
+    "examples": [
+      {
+        "title": "Capa de proceso",
+        "href": "/examples/scan-overlay",
+        "description": "Un velo de proceso sobre una imagen, quieto si se reduce el movimiento."
+      }
+    ],
+    "usage": "<ScanOverlay status=\"Reading the plate…\" onCancel={cancel}>{image}</ScanOverlay>",
+    "api": [
+      {
+        "name": "active",
+        "type": "boolean",
+        "description": "Shows the veil."
+      },
+      {
+        "name": "variant",
+        "type": "\"spinner\" | \"scan\"",
+        "description": "Spinner or a still grid."
+      },
+      {
+        "name": "onCancel",
+        "type": "() => void",
+        "description": "Optional cancel."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "media"
+  ],
+  "type": "registry:ui"
+}

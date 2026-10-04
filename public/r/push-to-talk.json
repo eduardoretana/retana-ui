@@ -1,0 +1,61 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "push-to-talk",
+  "title": "Push to talk",
+  "author": "Eduardo Retana",
+  "description": "Hold to record and release to send, with a toggle mode.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/push-to-talk.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/audio/voice-button/voice-button.tsx\n\nimport * as React from \"react\"\nimport { Loader2, Mic } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type PushToTalkState = \"idle\" | \"recording\" | \"processing\" | \"success\" | \"error\"\n\nexport type PushToTalkProps = {\n  state?: PushToTalkState\n  defaultState?: PushToTalkState\n  onStateChange?: (state: PushToTalkState) => void\n  onStart?: () => void\n  onStop?: (blob?: Blob) => void\n  onCancel?: () => void\n  volume?: number\n  mode?: \"hold\" | \"toggle\"\n  error?: string\n  labels?: Partial<Record<PushToTalkState, string>>\n  className?: string\n}\n\nconst DEFAULT_LABELS: Record<PushToTalkState, string> = {\n  idle: \"Hold to talk\",\n  recording: \"Recording… release to send\",\n  processing: \"Transcribing…\",\n  success: \"Done\",\n  error: \"Try again\",\n}\n\nexport function useRecorder() {\n  const recorder = React.useRef<MediaRecorder | null>(null)\n  const chunks = React.useRef<Blob[]>([])\n  const stream = React.useRef<MediaStream | null>(null)\n\n  const start = React.useCallback(async () => {\n    const media = await navigator.mediaDevices.getUserMedia({ audio: true })\n    stream.current = media\n    chunks.current = []\n    const mediaRecorder = new MediaRecorder(media)\n    recorder.current = mediaRecorder\n    mediaRecorder.ondataavailable = (event) => {\n      if (event.data.size > 0) chunks.current.push(event.data)\n    }\n    mediaRecorder.start()\n  }, [])\n\n  const stop = React.useCallback(async () => {\n    const mediaRecorder = recorder.current\n    const blob = await new Promise<Blob | undefined>((resolve) => {\n      if (!mediaRecorder || mediaRecorder.state === \"inactive\") {\n        resolve(undefined)\n        return\n      }\n      mediaRecorder.onstop = () => resolve(new Blob(chunks.current, { type: mediaRecorder.mimeType || \"audio/webm\" }))\n      mediaRecorder.stop()\n    })\n    stream.current?.getTracks().forEach((track) => track.stop())\n    stream.current = null\n    recorder.current = null\n    return blob\n  }, [])\n\n  React.useEffect(() => {\n    return () => {\n      stream.current?.getTracks().forEach((track) => track.stop())\n    }\n  }, [])\n\n  return { start, stop }\n}\n\nexport function PushToTalk({\n  state: stateProp,\n  defaultState = \"idle\",\n  onStateChange,\n  onStart,\n  onStop,\n  onCancel,\n  volume = 0,\n  mode = \"hold\",\n  error,\n  labels,\n  className,\n}: PushToTalkProps) {\n  const [internal, setInternal] = React.useState(defaultState)\n  const state = stateProp ?? internal\n  const [elapsed, setElapsed] = React.useState(0)\n  const origin = React.useRef<{ x: number; y: number } | null>(null)\n  const copy = { ...DEFAULT_LABELS, ...labels }\n  const setState = (next: PushToTalkState) => {\n    if (stateProp === undefined) setInternal(next)\n    onStateChange?.(next)\n  }\n\n  React.useEffect(() => {\n    if (state !== \"recording\") return\n    const started = Date.now()\n    const timer = window.setInterval(() => setElapsed(Math.floor((Date.now() - started) / 1000)), 250)\n    return () => window.clearInterval(timer)\n  }, [state])\n\n  const begin = () => {\n    if (state === \"processing\") return\n    setState(\"recording\")\n    setElapsed(0)\n    onStart?.()\n  }\n\n  const finish = () => {\n    if (state !== \"recording\") return\n    setState(\"processing\")\n    onStop?.()\n  }\n\n  const cancel = () => {\n    if (state !== \"recording\") return\n    setState(\"idle\")\n    onCancel?.()\n  }\n\n  return (\n    <div className={cn(\"flex flex-col items-center gap-2\", className)}>\n      <button\n        type=\"button\"\n        aria-pressed={state === \"recording\"}\n        aria-label={copy[state]}\n        disabled={state === \"processing\"}\n        className=\"relative inline-flex size-16 items-center justify-center rounded-full bg-primary text-primary-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:opacity-60\"\n        onPointerDown={(event) => {\n          if (mode === \"toggle\") return\n          origin.current = { x: event.clientX, y: event.clientY }\n          event.currentTarget.setPointerCapture(event.pointerId)\n          begin()\n        }}\n        onPointerUp={() => {\n          if (mode === \"toggle\") return\n          finish()\n        }}\n        onPointerMove={(event) => {\n          if (mode === \"toggle\" || !origin.current || state !== \"recording\") return\n          const distance = Math.hypot(event.clientX - origin.current.x, event.clientY - origin.current.y)\n          if (distance > 40) cancel()\n        }}\n        onKeyDown={(event) => {\n          if (event.key === \"Escape\") {\n            cancel()\n            return\n          }\n          if (event.repeat) return\n          if (mode === \"toggle\" && (event.key === \" \" || event.key === \"Enter\")) {\n            event.preventDefault()\n            if (state === \"recording\") finish()\n            else begin()\n            return\n          }\n          if ((event.key === \" \" || event.key === \"Enter\") && state !== \"recording\") {\n            event.preventDefault()\n            begin()\n          }\n        }}\n        onKeyUp={(event) => {\n          if (mode === \"toggle\") return\n          if (event.key === \" \" || event.key === \"Enter\") finish()\n        }}\n        onClick={() => {\n          if (mode !== \"toggle\") return\n          if (state === \"recording\") finish()\n          else begin()\n        }}\n      >\n        {state === \"recording\" ? (\n          <span\n            aria-hidden=\"true\"\n            className=\"absolute inset-0 rounded-full bg-primary/30 motion-reduce:transition-none\"\n            style={{ transform: `scale(${1.15 + Math.min(1, Math.max(0, volume)) * 0.45})` }}\n          />\n        ) : null}\n        {state === \"processing\" ? <Loader2 className=\"size-5 animate-spin motion-reduce:animate-none\" /> : <Mic className=\"relative size-5\" />}\n      </button>\n      <p className=\"text-center text-xs text-muted-foreground\" aria-live=\"polite\">\n        {state === \"recording\" ? `${copy.recording} ${elapsed}s` : error && state === \"error\" ? error : copy[state]}\n      </p>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/push-to-talk.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Pulsar para hablar",
+    "descriptionEs": "Mantén para grabar y suelta para enviar, con un modo de alternar.",
+    "preview": "app/examples/push-to-talk/preview.tsx",
+    "previewHref": "/examples/push-to-talk",
+    "examples": [
+      {
+        "title": "Pulsar para hablar",
+        "href": "/examples/push-to-talk",
+        "description": "Mantén para grabar y suelta para enviar, con un modo de alternar."
+      }
+    ],
+    "usage": "<PushToTalk mode=\"toggle\" onStart={start} onStop={stop} />",
+    "api": [
+      {
+        "name": "mode",
+        "type": "\"hold\" | \"toggle\"",
+        "description": "Hold is the default. Toggle is the click alternative."
+      },
+      {
+        "name": "onStart",
+        "type": "() => void",
+        "description": "Recording began."
+      },
+      {
+        "name": "onStop",
+        "type": "(blob?) => void",
+        "description": "Recording ended."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "media"
+  ],
+  "type": "registry:ui"
+}

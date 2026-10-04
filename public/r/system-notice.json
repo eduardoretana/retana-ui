@@ -1,0 +1,63 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "system-notice",
+  "title": "System notice",
+  "author": "Eduardo Retana",
+  "description": "A slim in-thread status line, not a message bubble.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/system-notice.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/conversation/system-notice-banner/system-notice-banner.tsx\n\nimport * as React from \"react\"\nimport { Info, TriangleAlert, Wifi, WifiOff, X } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\n\nexport type SystemNoticeTone = \"info\" | \"warning\" | \"error\"\nexport type SystemNoticeKind = \"info\" | \"warning\" | \"offline\" | \"online\" | \"switched\"\n\nexport type SystemNoticeClassNames = {\n  root?: string\n  text?: string\n}\n\nconst PRESETS: Record<SystemNoticeKind, { tone: SystemNoticeTone; text: string }> = {\n  info: { tone: \"info\", text: \"Update\" },\n  warning: { tone: \"warning\", text: \"Check this before you continue.\" },\n  offline: { tone: \"warning\", text: \"You are offline. Changes stay on this device.\" },\n  online: { tone: \"info\", text: \"Back online.\" },\n  switched: { tone: \"info\", text: \"Switched.\" },\n}\n\nexport type SystemNoticeProps = {\n  kind?: SystemNoticeKind\n  tone?: SystemNoticeTone\n  children?: React.ReactNode\n  actionLabel?: string\n  onAction?: () => void\n  onDismiss?: () => void\n  messages?: Partial<Record<SystemNoticeKind, string>>\n  className?: string\n  classNames?: SystemNoticeClassNames\n}\n\nexport function SystemNotice({\n  kind = \"info\",\n  tone,\n  children,\n  actionLabel,\n  onAction,\n  onDismiss,\n  messages,\n  className,\n  classNames,\n}: SystemNoticeProps) {\n  const preset = PRESETS[kind]\n  const resolvedTone = tone ?? preset.tone\n  const text = children ?? messages?.[kind] ?? preset.text\n  const Icon = kind === \"offline\" ? WifiOff : kind === \"online\" ? Wifi : resolvedTone === \"warning\" || resolvedTone === \"error\" ? TriangleAlert : Info\n\n  return (\n    <div\n      role={resolvedTone === \"error\" ? \"alert\" : \"status\"}\n      className={cn(\n        \"flex flex-wrap items-center justify-center gap-2 rounded-md px-3 py-1.5 text-center text-sm\",\n        resolvedTone === \"info\" && \"text-muted-foreground\",\n        resolvedTone === \"warning\" && \"bg-accent text-accent-foreground\",\n        resolvedTone === \"error\" && \"bg-destructive/10 text-destructive\",\n        className,\n        classNames?.root,\n      )}\n    >\n      <Icon aria-hidden=\"true\" className=\"size-4 shrink-0\" />\n      <p className={cn(\"min-w-0\", classNames?.text)}>{text}</p>\n      {actionLabel && onAction ? (\n        <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={onAction}>\n          {actionLabel}\n        </Button>\n      ) : null}\n      {onDismiss ? (\n        <Button type=\"button\" size=\"icon-sm\" variant=\"ghost\" aria-label=\"Dismiss\" onClick={onDismiss}>\n          <X data-icon=\"inline-start\" />\n        </Button>\n      ) : null}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/system-notice.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Aviso del hilo",
+    "descriptionEs": "Una línea breve de estado dentro del hilo, no una burbuja.",
+    "preview": "app/examples/system-notice/preview.tsx",
+    "previewHref": "/examples/system-notice",
+    "examples": [
+      {
+        "title": "Aviso del hilo",
+        "href": "/examples/system-notice",
+        "description": "Una línea breve de estado dentro del hilo, no una burbuja."
+      }
+    ],
+    "usage": "<SystemNotice kind=\"offline\" />",
+    "api": [
+      {
+        "name": "kind",
+        "type": "SystemNoticeKind",
+        "description": "info, warning, offline, online, or switched."
+      },
+      {
+        "name": "tone",
+        "type": "\"info\" | \"warning\" | \"error\"",
+        "description": "Overrides the preset tone."
+      },
+      {
+        "name": "onDismiss",
+        "type": "() => void",
+        "description": "Shows a dismiss control."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "chat"
+  ],
+  "type": "registry:ui"
+}

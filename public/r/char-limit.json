@@ -1,0 +1,59 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "char-limit",
+  "title": "Character limit",
+  "author": "Eduardo Retana",
+  "description": "A ring and counter that appears as an input nears its limit.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/char-limit.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/input-controls/char-limit-indicator/char-limit-indicator.tsx\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type CharLimitClassNames = {\n  root?: string\n  ring?: string\n  label?: string\n}\n\nexport type CharLimitProps = {\n  value?: string\n  count?: number\n  max: number\n  showAt?: number\n  alwaysShow?: boolean\n  countFn?: (value: string) => number\n  size?: number\n  describedById?: string\n  locale?: string\n  className?: string\n  classNames?: CharLimitClassNames\n}\n\nexport function countGraphemes(value: string, locale = \"en\") {\n  if (typeof Intl !== \"undefined\" && \"Segmenter\" in Intl) {\n    const segmenter = new Intl.Segmenter(locale, { granularity: \"grapheme\" })\n    return [...segmenter.segment(value)].length\n  }\n  return [...value].length\n}\n\nexport function countWords(value: string) {\n  const trimmed = value.trim()\n  if (!trimmed) return 0\n  return trimmed.split(/\\s+/).length\n}\n\nfunction band(ratio: number, over: boolean) {\n  if (over) return \"over\"\n  if (ratio >= 0.9) return \"warn\"\n  return \"ok\"\n}\n\nexport function CharLimit({\n  value = \"\",\n  count,\n  max,\n  showAt,\n  alwaysShow = false,\n  countFn,\n  size = 20,\n  describedById,\n  locale = \"en\",\n  className,\n  classNames,\n}: CharLimitProps) {\n  const used = count ?? (countFn ? countFn(value) : countGraphemes(value, locale))\n  const safeMax = max > 0 ? max : 1\n  const ratio = used / safeMax\n  const over = used > max\n  const revealAt = showAt ?? 0.7 * max\n  const visible = alwaysShow || used >= revealAt\n  const generatedId = React.useId()\n  const liveId = describedById ?? generatedId\n  const bandNow = band(ratio, over)\n  const [announced, setAnnounced] = React.useState({ band: bandNow, text: \"\" })\n  let announcement = announced.text\n  if (announced.band !== bandNow) {\n    const left = max - used\n    announcement = over ? `${Math.abs(left)} characters over the limit` : `${left} characters left`\n    setAnnounced({ band: bandNow, text: announcement })\n  }\n\n  if (!visible) {\n    return (\n      <span id={liveId} className=\"sr-only\">\n        {announcement}\n      </span>\n    )\n  }\n\n  const stroke = 2\n  const radius = (size - stroke) / 2\n  const circumference = 2 * Math.PI * radius\n  const dash = circumference * (1 - Math.min(Math.max(ratio, 0), 1))\n  const tone = over ? \"text-destructive\" : ratio >= 0.9 ? \"text-accent-foreground\" : \"text-primary\"\n  const label = over ? `${used - max}` : `${used}/${max}`\n\n  return (\n    <span className={cn(\"inline-flex items-center gap-1.5 text-xs\", className, classNames?.root)}>\n      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className={cn(\"-rotate-90\", classNames?.ring)} aria-hidden=\"true\">\n        <circle cx={size / 2} cy={size / 2} r={radius} fill=\"none\" strokeWidth={stroke} className=\"text-muted\" stroke=\"currentColor\" />\n        <circle\n          cx={size / 2}\n          cy={size / 2}\n          r={radius}\n          fill=\"none\"\n          strokeWidth={stroke}\n          strokeLinecap=\"round\"\n          strokeDasharray={circumference}\n          strokeDashoffset={dash}\n          className={tone}\n          stroke=\"currentColor\"\n        />\n      </svg>\n      <span className={cn(\"font-mono tabular-nums\", tone, over ? \"\" : ratio >= 0.9 ? \"\" : \"text-muted-foreground\", classNames?.label)}>\n        {over ? `-${used - max}` : label}\n      </span>\n      <span id={liveId} className=\"sr-only\" aria-live=\"polite\">\n        {announcement || `${max - used} characters left`}\n      </span>\n    </span>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/char-limit.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Límite de caracteres",
+    "descriptionEs": "Un anillo y un contador que aparecen cuando el texto se acerca al límite.",
+    "preview": "app/examples/char-limit/preview.tsx",
+    "previewHref": "/examples/char-limit",
+    "examples": [
+      {
+        "title": "Límite de caracteres",
+        "href": "/examples/char-limit",
+        "description": "Un anillo y un contador que aparecen cuando el texto se acerca al límite."
+      }
+    ],
+    "usage": "<CharLimit value={text} max={280} />",
+    "api": [
+      {
+        "name": "value",
+        "type": "string",
+        "description": "Text to measure."
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "description": "Limit."
+      },
+      {
+        "name": "showAt",
+        "type": "number",
+        "description": "Count at which the ring appears."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "input"
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "parameter-slider",
+  "title": "Parameter slider",
+  "author": "Eduardo Retana",
+  "description": "A labelled slider with a live value and a reset.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button",
+    "slider",
+    "tooltip"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/parameter-slider.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/input-controls/parameter-slider/parameter-slider.tsx\n\nimport * as React from \"react\"\nimport { Info, RotateCcw } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Slider } from \"@/components/ui/slider\"\nimport { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from \"@/components/ui/tooltip\"\nimport { cn } from \"@/lib/utils\"\n\nexport type ParameterMark = { value: number; label: string }\n\nexport type ParameterSliderProps = {\n  label: string\n  value?: number\n  defaultValue?: number\n  onValueChange?: (value: number) => void\n  min?: number\n  max?: number\n  step?: number\n  format?: (value: number) => string\n  info?: string\n  marks?: ParameterMark[]\n  resetLabel?: string\n  className?: string\n  classNames?: { root?: string; label?: string; value?: string; slider?: string }\n}\n\nfunction decimalsOf(step: number) {\n  const text = String(step)\n  const index = text.indexOf(\".\")\n  return index === -1 ? 0 : text.length - index - 1\n}\n\nexport function ParameterSlider({\n  label,\n  value,\n  defaultValue = 0,\n  onValueChange,\n  min = 0,\n  max = 1,\n  step = 0.1,\n  format,\n  info,\n  marks,\n  resetLabel = \"Reset\",\n  className,\n  classNames,\n}: ParameterSliderProps) {\n  const [internal, setInternal] = React.useState(defaultValue)\n  const [editing, setEditing] = React.useState(false)\n  const current = value ?? internal\n  const digits = decimalsOf(step)\n  const text = format ? format(current) : current.toFixed(digits)\n\n  const commit = (next: number) => {\n    const clamped = Math.min(max, Math.max(min, next))\n    const stepped = Number(clamped.toFixed(digits))\n    if (value === undefined) setInternal(stepped)\n    onValueChange?.(stepped)\n  }\n\n  return (\n    <div className={cn(\"flex flex-col gap-2\", className, classNames?.root)}>\n      <div className=\"flex items-center gap-2\">\n        <span className={cn(\"text-sm text-foreground\", classNames?.label)}>{label}</span>\n        {info ? (\n          <TooltipProvider>\n            <Tooltip>\n              <TooltipTrigger asChild>\n                <button type=\"button\" aria-label={`About ${label}`} className=\"text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\">\n                  <Info className=\"size-3.5\" />\n                </button>\n              </TooltipTrigger>\n              <TooltipContent>{info}</TooltipContent>\n            </Tooltip>\n          </TooltipProvider>\n        ) : null}\n        <span className=\"ml-auto\">\n          {editing ? (\n            <input\n              aria-label={label}\n              className=\"w-16 rounded-md border border-border bg-background px-1 text-right font-mono text-sm tabular-nums focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n              defaultValue={current}\n              inputMode=\"decimal\"\n              onBlur={(event) => {\n                const parsed = Number(event.target.value)\n                if (Number.isFinite(parsed)) commit(parsed)\n                setEditing(false)\n              }}\n              onKeyDown={(event) => {\n                if (event.key === \"Enter\") event.currentTarget.blur()\n                if (event.key === \"Escape\") setEditing(false)\n              }}\n            />\n          ) : (\n            <button\n              type=\"button\"\n              className={cn(\"font-mono text-sm tabular-nums focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\", classNames?.value)}\n              onClick={() => setEditing(true)}\n            >\n              {text}\n            </button>\n          )}\n        </span>\n        {current !== defaultValue ? (\n          <Button type=\"button\" variant=\"ghost\" size=\"icon-sm\" aria-label={resetLabel} onClick={() => commit(defaultValue)}>\n            <RotateCcw data-icon=\"inline-start\" />\n          </Button>\n        ) : null}\n      </div>\n      <Slider\n        aria-label={label}\n        aria-valuetext={text}\n        min={min}\n        max={max}\n        step={step}\n        value={[current]}\n        onValueChange={(next) => commit(next[0] ?? current)}\n        className={classNames?.slider}\n      />\n      {marks && marks.length > 0 ? (\n        <div className=\"flex justify-between text-xs text-muted-foreground\">\n          {marks.map((mark) => (\n            <span key={mark.label}>{mark.label}</span>\n          ))}\n        </div>\n      ) : (\n        <div className=\"flex justify-between text-xs text-muted-foreground\">\n          <span>{min}</span>\n          <span>{max}</span>\n        </div>\n      )}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/parameter-slider.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Deslizador",
+    "descriptionEs": "Un deslizador con etiqueta, valor en vivo y reinicio.",
+    "preview": "app/examples/parameter-slider/preview.tsx",
+    "previewHref": "/examples/parameter-slider",
+    "examples": [
+      {
+        "title": "Deslizador",
+        "href": "/examples/parameter-slider",
+        "description": "Un deslizador con etiqueta, valor en vivo y reinicio."
+      }
+    ],
+    "usage": "<ParameterSlider label=\"Temperature\" min={0} max={1} step={0.05} defaultValue={0.4} />",
+    "api": [
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Accessible name."
+      },
+      {
+        "name": "min",
+        "type": "number",
+        "description": "Lower bound."
+      },
+      {
+        "name": "marks",
+        "type": "ParameterMark[]",
+        "description": "Optional captions."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "input"
+  ],
+  "type": "registry:ui"
+}

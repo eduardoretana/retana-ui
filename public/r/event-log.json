@@ -1,0 +1,62 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "event-log",
+  "title": "Event log",
+  "author": "Eduardo Retana",
+  "description": "A newest-first log with filters, pause, and expandable payloads.",
+  "dependencies": [],
+  "registryDependencies": [
+    "button",
+    "input"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/event-log.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/devtools/event-log-viewer/event-log-viewer.tsx\n\nimport * as React from \"react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Input } from \"@/components/ui/input\"\nimport { cn } from \"@/lib/utils\"\n\nexport type EventLogEntry = {\n  id: string\n  time: string | number | Date\n  type: string\n  message: string\n  payload?: unknown\n}\n\nexport type EventLogProps = {\n  entries: EventLogEntry[]\n  paused?: boolean\n  onPausedChange?: (paused: boolean) => void\n  onClear?: () => void\n  maxVisible?: number\n  className?: string\n}\n\nfunction chartFor(namespace: string, namespaces: string[]) {\n  const index = Math.max(0, namespaces.indexOf(namespace))\n  return `var(--chart-${(index % 5) + 1})`\n}\n\nfunction relative(time: string | number | Date) {\n  const ms = time instanceof Date ? time.getTime() : typeof time === \"number\" ? time : Date.parse(time)\n  if (!Number.isFinite(ms)) return \"\"\n  const delta = Math.round((Date.now() - ms) / 1000)\n  if (Math.abs(delta) < 5) return \"just now\"\n  if (delta >= 0 && delta < 60) return `${delta}s ago`\n  if (delta >= 60 && delta < 3600) return `${Math.floor(delta / 60)}m ago`\n  return new Intl.DateTimeFormat(\"en\", { hour: \"numeric\", minute: \"2-digit\" }).format(ms)\n}\n\nexport function EventLog({ entries, paused = false, onPausedChange, onClear, maxVisible = 50, className }: EventLogProps) {\n  const [query, setQuery] = React.useState(\"\")\n  const [namespace, setNamespace] = React.useState<string | null>(null)\n  const [open, setOpen] = React.useState<string | null>(null)\n  const [shown, setShown] = React.useState(maxVisible)\n  const namespaces = [...new Set(entries.map((entry) => entry.type.split(\":\")[0]))]\n  const filtered = entries.filter((entry) => {\n    const space = entry.type.split(\":\")[0]\n    if (namespace && space !== namespace) return false\n    if (!query.trim()) return true\n    return `${entry.type} ${entry.message}`.toLowerCase().includes(query.trim().toLowerCase())\n  })\n  const visible = filtered.slice(0, shown)\n\n  return (\n    <section className={cn(\"flex min-w-0 flex-col gap-2 rounded-lg border border-border bg-card p-3\", className)}>\n      <div className=\"flex flex-wrap items-center gap-2\">\n        <Input aria-label=\"Filter log\" value={query} onChange={(event) => setQuery(event.target.value)} placeholder=\"Filter\" className=\"h-8 max-w-xs\" />\n        <Button type=\"button\" size=\"sm\" variant=\"outline\" aria-pressed={paused} onClick={() => onPausedChange?.(!paused)}>\n          {paused ? \"Resume\" : \"Pause\"}\n        </Button>\n        {onClear ? (\n          <Button type=\"button\" size=\"sm\" variant=\"ghost\" onClick={onClear}>\n            Clear\n          </Button>\n        ) : null}\n      </div>\n      <div className=\"flex flex-wrap gap-1\">\n        {namespaces.map((item) => (\n          <button\n            key={item}\n            type=\"button\"\n            aria-pressed={namespace === item}\n            className=\"rounded-full border border-border px-2 py-0.5 text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n            style={{ color: chartFor(item, namespaces) }}\n            onClick={() => setNamespace((current) => (current === item ? null : item))}\n          >\n            {item}\n          </button>\n        ))}\n      </div>\n      <ul role=\"log\" aria-live={paused ? \"off\" : \"polite\"} className=\"flex max-h-80 flex-col gap-1 overflow-auto\">\n        {visible.map((entry) => {\n          const space = entry.type.split(\":\")[0]\n          const when = entry.time instanceof Date ? entry.time : new Date(entry.time)\n          return (\n            <li key={entry.id} className=\"rounded-md px-1 py-1 text-sm\">\n              <button\n                type=\"button\"\n                className=\"flex w-full min-w-0 items-baseline gap-2 text-left focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n                aria-expanded={open === entry.id}\n                onClick={() => setOpen((current) => (current === entry.id ? null : entry.id))}\n              >\n                <time dateTime={Number.isNaN(when.getTime()) ? undefined : when.toISOString()} title={Number.isNaN(when.getTime()) ? undefined : when.toISOString()} className=\"shrink-0 font-mono text-xs text-muted-foreground\">\n                  {relative(entry.time)}\n                </time>\n                <span className=\"shrink-0 rounded-full px-1.5 text-xs\" style={{ backgroundColor: `color-mix(in oklab, ${chartFor(space, namespaces)} 18%, var(--background))` }}>\n                  {entry.type}\n                </span>\n                <span className=\"min-w-0 truncate text-foreground\">{entry.message}</span>\n              </button>\n              {open === entry.id && entry.payload !== undefined ? (\n                <pre className=\"mt-1 max-h-32 overflow-auto rounded-md bg-muted p-2 font-mono text-xs\">{JSON.stringify(entry.payload, null, 2)}</pre>\n              ) : null}\n            </li>\n          )\n        })}\n      </ul>\n      {filtered.length > shown ? (\n        <Button type=\"button\" size=\"sm\" variant=\"ghost\" onClick={() => setShown((count) => count + maxVisible)}>\n          Show more\n        </Button>\n      ) : null}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/event-log.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Registro de eventos",
+    "descriptionEs": "Un registro de lo más nuevo a lo más viejo, con filtros, pausa y cargas expandibles.",
+    "preview": "app/examples/event-log/preview.tsx",
+    "previewHref": "/examples/event-log",
+    "examples": [
+      {
+        "title": "Registro de eventos",
+        "href": "/examples/event-log",
+        "description": "Un registro de lo más nuevo a lo más viejo, con filtros, pausa y cargas expandibles."
+      }
+    ],
+    "usage": "<EventLog entries={entries} onClear={clear} />",
+    "api": [
+      {
+        "name": "entries",
+        "type": "EventLogEntry[]",
+        "description": "id, time, type, message, payload."
+      },
+      {
+        "name": "paused",
+        "type": "boolean",
+        "description": "Turns the live region off."
+      },
+      {
+        "name": "maxVisible",
+        "type": "number",
+        "description": "Page size before Show more."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "content"
+  ],
+  "type": "registry:ui"
+}

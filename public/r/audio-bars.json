@@ -1,0 +1,59 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "audio-bars",
+  "title": "Audio bars",
+  "author": "Eduardo Retana",
+  "description": "A row of activity bars driven by levels or an idle pulse.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/audio-bars.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/audio/waveform-activity-bars/waveform-activity-bars.tsx\n\nimport { cn } from \"@/lib/utils\"\n\nexport type AudioBarsProps = {\n  count?: number\n  levels?: number[]\n  active?: boolean\n  label?: string\n  className?: string\n}\n\nexport function AudioBars({ count = 5, levels, active = false, label, className }: AudioBarsProps) {\n  const bars = levels ?? Array.from({ length: count }, () => (active ? 0.65 : 0.35))\n  return (\n    <span\n      className={cn(\"inline-flex h-6 items-end gap-0.5\", className)}\n      role={label ? \"img\" : undefined}\n      aria-label={label}\n      aria-hidden={label ? undefined : true}\n    >\n      {bars.map((level, index) => (\n        <span\n          key={index}\n          className={cn(\"w-1 rounded-full bg-primary\", active && !levels && \"motion-safe:animate-pulse\")}\n          style={{\n            height: `${Math.max(15, Math.min(100, level * 100))}%`,\n            animationDelay: active && !levels ? `${index * 80}ms` : undefined,\n          }}\n        />\n      ))}\n    </span>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/audio-bars.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Barras de audio",
+    "descriptionEs": "Una fila de barras de actividad, por niveles o en reposo.",
+    "preview": "app/examples/audio-bars/preview.tsx",
+    "previewHref": "/examples/audio-bars",
+    "examples": [
+      {
+        "title": "Barras de audio",
+        "href": "/examples/audio-bars",
+        "description": "Una fila de barras de actividad, por niveles o en reposo."
+      }
+    ],
+    "usage": "<AudioBars levels={[0.2, 0.8, 0.4]} label=\"Level\" />",
+    "api": [
+      {
+        "name": "levels",
+        "type": "number[]",
+        "description": "0 to 1 bar heights."
+      },
+      {
+        "name": "active",
+        "type": "boolean",
+        "description": "CSS pulse when levels are omitted."
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Accessible name."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "media"
+  ],
+  "type": "registry:ui"
+}
