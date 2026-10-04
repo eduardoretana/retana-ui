@@ -198,6 +198,9 @@ import Preview193 from "@/app/examples/radial-gauge/preview"
 import Preview194 from "@/app/examples/tier-distribution/preview"
 import Preview195 from "@/app/examples/triage-dashboard/preview"
 import Preview196 from "@/app/examples/case-review/preview"
+import Preview197 from "@/app/examples/bug-report-form/preview"
+import Preview198 from "@/app/examples/tree-nav/preview"
+import Preview199 from "@/app/examples/mega-menu/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -397,4 +400,7 @@ export const previewMap = {
   "tier-distribution": Preview194,
   "triage-dashboard": Preview195,
   "case-review": Preview196,
+  "bug-report-form": Preview197,
+  "tree-nav": Preview198,
+  "mega-menu": Preview199,
 }
