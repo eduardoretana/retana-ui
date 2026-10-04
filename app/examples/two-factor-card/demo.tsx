@@ -36,12 +36,12 @@ export function Demo() {
         methods={[
           {
             id: "qr",
-            label: "Escanear código QR",
+            label: "Código QR",
             onSelect: () => setNote("Elegiste escanear el código QR."),
           },
           {
             id: "message",
-            label: "Usar mensaje",
+            label: "Mensaje",
             onSelect: () => setNote("Elegiste recibir un mensaje."),
           },
         ]}

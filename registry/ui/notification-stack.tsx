@@ -176,8 +176,8 @@ function StackCard({
     <div
       data-slot="notification-card"
       className={cn(
-        "flex min-w-0 flex-col gap-3 rounded-2xl border border-border p-3 shadow-lg",
-        muted ? "bg-card/60 shadow-sm backdrop-blur-md" : "bg-card",
+        "flex min-w-0 flex-col gap-3 rounded-2xl border border-border bg-card p-3 shadow-lg",
+        muted && "shadow-sm",
         classNames?.card,
       )}
     >
@@ -403,11 +403,12 @@ export function NotificationStack({
                   data-tier={tier}
                   aria-hidden
                   inert
-                  className="absolute inset-x-0"
+                  className="absolute inset-x-0 overflow-hidden"
                   style={{
                     top: (behind.length - tier) * PEEK,
+                    height: PEEK,
                     zIndex: index + 1,
-                    opacity: 1 - tier * 0.18,
+                    opacity: 1 - tier * 0.16,
                     transform: `scale(${scale})`,
                     transformOrigin: "top center",
                   }}

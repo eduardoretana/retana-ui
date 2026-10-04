@@ -134,11 +134,12 @@ function scopeId(id: string) {
   return id.replace(/[^a-zA-Z0-9_-]/g, "") || "code"
 }
 
-function methodIcon(method: TwoFactorMethod) {
-  if (method.icon) return method.icon
-  if (method.id === "qr") return <QrCode />
-  if (method.id === "message") return <MessageSquareDot />
-  return null
+function MethodGlyph({ method }: { method: TwoFactorMethod }) {
+  const icon =
+    method.icon ??
+    (method.id === "qr" ? <QrCode /> : method.id === "message" ? <MessageSquareDot /> : null)
+  if (!React.isValidElement<{ "data-icon"?: string }>(icon)) return icon
+  return React.cloneElement(icon, { "data-icon": "inline-start" })
 }
 
 const successTileStyle = {
@@ -147,8 +148,8 @@ const successTileStyle = {
 } as const
 
 const gradientStyle = {
-  backgroundImage:
-    "linear-gradient(90deg, var(--primary), color-mix(in oklch, var(--primary) 42%, var(--chart-2)))",
+    backgroundImage:
+      "linear-gradient(90deg, var(--primary), color-mix(in oklch, var(--primary) 28%, var(--chart-2)))",
 } as const
 
 function cardCss(scope: string) {
@@ -526,12 +527,12 @@ export function TwoFactorCard({
                   key={method.id}
                   type="button"
                   variant="ghost"
-                  className="h-auto min-w-0 whitespace-normal px-2 py-2 text-center"
+                  className="h-auto min-h-8 min-w-0 gap-1.5 px-2 py-2 text-center text-xs leading-tight whitespace-normal"
                   disabled={disabled || loading}
                   onClick={method.onSelect}
                 >
-                  {methodIcon(method)}
-                  {method.label}
+                  <MethodGlyph method={method} />
+                  <span className="min-w-0 text-balance">{method.label}</span>
                 </Button>
               ))}
             </div>
