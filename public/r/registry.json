@@ -6222,7 +6222,7 @@
       "name": "toast-stack",
       "type": "registry:ui",
       "title": "Toast stack",
-      "description": "Stacks short results at the edge until they are dismissed.",
+      "description": "Stacks short results at the edge until they are dismissed. An undo appearance is a dark pill that pauses on hover.",
       "author": "Eduardo Retana",
       "dependencies": [
         "motion",
@@ -8821,7 +8821,7 @@
       "name": "rail-sidebar",
       "type": "registry:block",
       "title": "Rail sidebar",
-      "description": "Two-layer app sidebar: an icon rail for sections and a panel for that section's navigation. Built on the host shadcn sidebar, including its mobile sheet.",
+      "description": "Two-layer app sidebar: circular section buttons on an icon rail and a panel for that section's navigation, with an optional scope toggle, alert counts, and footer links. Built on the host shadcn sidebar, including its mobile sheet.",
       "dependencies": [
         "lucide-react"
       ],
@@ -9704,7 +9704,7 @@
       "name": "view-kanban",
       "type": "registry:ui",
       "title": "Kanban view",
-      "description": "Status columns with counts and sums, draggable cards, a keyboard sensor, and a Move to menu.",
+      "description": "Status columns with counts and sums, draggable cards, a keyboard sensor, a Move to menu, an optional summary card, a collapsed overflow, and a short highlight ring.",
       "author": "Eduardo Retana",
       "dependencies": [
         "@dnd-kit/core",
@@ -9769,6 +9769,11 @@
           "path": "registry/ui/view-kanban.tsx",
           "type": "registry:component",
           "target": "@ui/view-kanban.tsx"
+        },
+        {
+          "path": "registry/ui/priority-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/priority-badge.tsx"
         },
         {
           "path": "registry/ui/multi-view-fields.tsx",
@@ -10300,6 +10305,11 @@
           "target": "@ui/view-kanban.tsx"
         },
         {
+          "path": "registry/ui/priority-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/priority-badge.tsx"
+        },
+        {
           "path": "registry/ui/view-calendar.tsx",
           "type": "registry:component",
           "target": "@ui/view-calendar.tsx"
@@ -10652,6 +10662,1079 @@
           "target": "@ui/notification-stack.tsx"
         }
       ]
+    },
+    {
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard"
+      ],
+      "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "name": "well-card",
+      "type": "registry:ui",
+      "title": "Well card",
+      "description": "Muted outer well with a header and an inset card. The host theme supplies the surfaces.",
+      "files": [
+        {
+          "path": "registry/ui/well-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/well-card.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tarjeta en pozo",
+        "descriptionEs": "Un pozo apagado con encabezado y una tarjeta interior. El tema del anfitrión pone las superficies.",
+        "preview": "app/examples/well-card/preview.tsx",
+        "previewHref": "/examples/well-card",
+        "examples": [
+          {
+            "title": "Tarjeta en pozo",
+            "href": "/examples/well-card",
+            "description": "Encabezado, conteo y cuerpo."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/well-card/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<WellCard title=\"Open defects\" subtitle=\"Oldest first\" count={18}>…</WellCard>",
+        "api": [
+          {
+            "name": "title",
+            "type": "string",
+            "description": "Names the section."
+          },
+          {
+            "name": "inset",
+            "type": "boolean",
+            "description": "Draws the body on a card. Default true."
+          },
+          {
+            "name": "density",
+            "type": "\"default\" | \"compact\"",
+            "description": "Padding of the well and the inset."
+          },
+          {
+            "name": "actions / footer",
+            "type": "ReactNode",
+            "description": "Header end slot and a footer inside the body."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard"
+      ],
+      "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "name": "stat-strip",
+      "type": "registry:ui",
+      "title": "Stat strip",
+      "description": "A dense row or a divided panel of labelled numbers, each with a text delta. Distinct from metric-card and stats-band.",
+      "files": [
+        {
+          "path": "registry/ui/stat-strip.tsx",
+          "type": "registry:component",
+          "target": "@ui/stat-strip.tsx"
+        },
+        {
+          "path": "registry/lib/dashboard-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboard-format.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Franja de cifras",
+        "descriptionEs": "Una fila densa o un panel dividido de números, cada uno con su cambio en texto.",
+        "preview": "app/examples/stat-strip/preview.tsx",
+        "previewHref": "/examples/stat-strip",
+        "examples": [
+          {
+            "title": "Franja de cifras",
+            "href": "/examples/stat-strip",
+            "description": "Fila y panel, es-MX y en-US."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/stat-strip/stress",
+            "description": "320px y diez cifras."
+          }
+        ],
+        "usage": "<StatStrip items={items} variant=\"panel\" locale=\"es-MX\" />",
+        "api": [
+          {
+            "name": "items",
+            "type": "StatStripItem[]",
+            "description": "Label, value, format, delta, and caption."
+          },
+          {
+            "name": "variant",
+            "type": "\"inline\" | \"panel\"",
+            "description": "A wrapping row, or equal columns with dividers."
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "description": "Passed to Intl."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard"
+      ],
+      "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "name": "priority-badge",
+      "type": "registry:ui",
+      "title": "Priority badge",
+      "description": "A four-level priority chip with a signal glyph. Critical uses the destructive tone.",
+      "files": [
+        {
+          "path": "registry/ui/priority-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/priority-badge.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Insignia de prioridad",
+        "descriptionEs": "Una ficha de cuatro niveles con un glifo de señal. Crítico usa el tono destructive.",
+        "preview": "app/examples/priority-badge/preview.tsx",
+        "previewHref": "/examples/priority-badge",
+        "examples": [
+          {
+            "title": "Insignia de prioridad",
+            "href": "/examples/priority-badge",
+            "description": "Bajo, medio, alto y crítico."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/priority-badge/stress",
+            "description": "Etiqueta sin espacios."
+          }
+        ],
+        "usage": "<PriorityBadge level=\"critical\" />",
+        "api": [
+          {
+            "name": "level",
+            "type": "\"low\" | \"medium\" | \"high\" | \"critical\"",
+            "description": "How many bars are filled."
+          },
+          {
+            "name": "variant",
+            "type": "\"chip\" | \"glyph\"",
+            "description": "Glyph only still has an accessible name."
+          },
+          {
+            "name": "priorityRank",
+            "type": "(level) => number",
+            "description": "1 through 4, for sorting."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "dropdown-menu",
+        "skeleton"
+      ],
+      "categories": [
+        "dashboard"
+      ],
+      "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "name": "attention-list",
+      "type": "registry:ui",
+      "title": "Attention list",
+      "description": "A prioritized list of rows that need a decision, with chips, an empty state, and a loading skeleton.",
+      "files": [
+        {
+          "path": "registry/ui/attention-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/attention-list.tsx"
+        },
+        {
+          "path": "registry/ui/priority-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/priority-badge.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Lista de atención",
+        "descriptionEs": "Filas que piden una decisión, con fichas, estado vacío y esqueleto de carga.",
+        "preview": "app/examples/attention-list/preview.tsx",
+        "previewHref": "/examples/attention-list",
+        "examples": [
+          {
+            "title": "Lista de atención",
+            "href": "/examples/attention-list",
+            "description": "Tres defectos ficticios."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/attention-list/stress",
+            "description": "Vacío, carga y diez filas."
+          }
+        ],
+        "usage": "<AttentionList items={items} max={5} />",
+        "api": [
+          {
+            "name": "items",
+            "type": "AttentionItem[]",
+            "description": "Title, description, tone, chips, href or onSelect, and a menu."
+          },
+          {
+            "name": "max",
+            "type": "number",
+            "description": "Hides the rest behind Show N more."
+          },
+          {
+            "name": "loading / emptyLabel",
+            "type": "boolean / string",
+            "description": "Skeleton rows, or the caught-up copy."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "chart",
+        "dashboard"
+      ],
+      "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "name": "annotated-trend-chart",
+      "type": "registry:ui",
+      "title": "Annotated trend chart",
+      "description": "An SVG trend with a target line, a highlighted band, an end value, and a comparison series. line-chart remains the generic crosshair chart.",
+      "files": [
+        {
+          "path": "registry/ui/annotated-trend-chart.tsx",
+          "type": "registry:component",
+          "target": "@ui/annotated-trend-chart.tsx"
+        },
+        {
+          "path": "registry/lib/dashboard-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboard-format.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tendencia anotada",
+        "descriptionEs": "Una curva SVG con meta, banda, valor final y serie de comparación. line-chart sigue siendo la tendencia genérica.",
+        "preview": "app/examples/annotated-trend-chart/preview.tsx",
+        "previewHref": "/examples/annotated-trend-chart",
+        "examples": [
+          {
+            "title": "Tendencia anotada",
+            "href": "/examples/annotated-trend-chart",
+            "description": "Tasa de reapertura ficticia."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/annotated-trend-chart/stress",
+            "description": "320px."
+          }
+        ],
+        "usage": "<AnnotatedTrendChart label=\"Reopen rate\" series={series} yFormat=\"percent\" target={{ y: 0.04, label: \"Target 4%\" }} />",
+        "api": [
+          {
+            "name": "series",
+            "type": "TrendSeries[]",
+            "description": "Points and emphasis primary or muted."
+          },
+          {
+            "name": "target / bands / markers",
+            "type": "annotations",
+            "description": "A dashed target, a tinted range, and point labels."
+          },
+          {
+            "name": "compare",
+            "type": "boolean",
+            "description": "Shows muted series when true."
+          },
+          {
+            "name": "locale / yFormat",
+            "type": "string",
+            "description": "Intl formatting for the axis, tooltip, and table."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "chart",
+        "dashboard"
+      ],
+      "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "name": "ranked-bars",
+      "type": "registry:ui",
+      "title": "Ranked bars",
+      "description": "Horizontal share bars sorted by value, with a label, meta, and percent. admin-charts RankedBars stays the analytics card.",
+      "files": [
+        {
+          "path": "registry/ui/ranked-bars.tsx",
+          "type": "registry:component",
+          "target": "@ui/ranked-bars.tsx"
+        },
+        {
+          "path": "registry/lib/dashboard-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboard-format.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Barras ordenadas",
+        "descriptionEs": "Barras horizontales ordenadas por valor, con etiqueta, meta y porcentaje.",
+        "preview": "app/examples/ranked-bars/preview.tsx",
+        "previewHref": "/examples/ranked-bars",
+        "examples": [
+          {
+            "title": "Barras ordenadas",
+            "href": "/examples/ranked-bars",
+            "description": "Causas ficticias de defectos."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/ranked-bars/stress",
+            "description": "Vacío y etiqueta larga."
+          }
+        ],
+        "usage": "<RankedBars items={causes} sort=\"desc\" locale=\"es-MX\" />",
+        "api": [
+          {
+            "name": "items",
+            "type": "RankedBarItem[]",
+            "description": "id, label, value, and optional meta or share."
+          },
+          {
+            "name": "sort",
+            "type": "\"asc\" | \"desc\" | \"none\"",
+            "description": "Default desc. Ties break on id."
+          },
+          {
+            "name": "layout",
+            "type": "\"stacked\" | \"inline\"",
+            "description": "Label over the bar, or label, bar, and value in one row."
+          },
+          {
+            "name": "highlight",
+            "type": "\"first\" | \"none\" | id",
+            "description": "The emphasized bar uses primary."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "chart",
+        "dashboard"
+      ],
+      "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "name": "breakdown-bar",
+      "type": "registry:ui",
+      "title": "Breakdown bar",
+      "description": "A total, a segmented bar, and a legend. Unlike usage-meter, there is no limit.",
+      "files": [
+        {
+          "path": "registry/ui/breakdown-bar.tsx",
+          "type": "registry:component",
+          "target": "@ui/breakdown-bar.tsx"
+        },
+        {
+          "path": "registry/lib/dashboard-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboard-format.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Barra de desglose",
+        "descriptionEs": "Un total, una barra segmentada y una leyenda. No hay tope, a diferencia de usage-meter.",
+        "preview": "app/examples/breakdown-bar/preview.tsx",
+        "previewHref": "/examples/breakdown-bar",
+        "examples": [
+          {
+            "title": "Barra de desglose",
+            "href": "/examples/breakdown-bar",
+            "description": "Costo abierto ficticio."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/breakdown-bar/stress",
+            "description": "320px."
+          }
+        ],
+        "usage": "<BreakdownBar total={3570} segments={segments} locale=\"es-MX\" currency=\"USD\" />",
+        "api": [
+          {
+            "name": "total",
+            "type": "number",
+            "description": "The large figure."
+          },
+          {
+            "name": "segments",
+            "type": "BreakdownSegment[]",
+            "description": "Label and value. Colors cycle chart tokens, starting with primary."
+          },
+          {
+            "name": "format / locale / currency",
+            "type": "Intl",
+            "description": "How values are written."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "dashboard"
+      ],
+      "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "name": "record-timeline",
+      "type": "registry:ui",
+      "title": "Record timeline",
+      "description": "The lifecycle of one record, oldest first, with status marks. timeline stays the newest-first activity feed.",
+      "files": [
+        {
+          "path": "registry/ui/record-timeline.tsx",
+          "type": "registry:component",
+          "target": "@ui/record-timeline.tsx"
+        },
+        {
+          "path": "registry/lib/dashboard-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboard-format.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Línea de un expediente",
+        "descriptionEs": "La vida de un registro, de lo antiguo a lo nuevo, con marcas de estado.",
+        "preview": "app/examples/record-timeline/preview.tsx",
+        "previewHref": "/examples/record-timeline",
+        "examples": [
+          {
+            "title": "Línea de un expediente",
+            "href": "/examples/record-timeline",
+            "description": "Un defecto ficticio."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/record-timeline/stress",
+            "description": "Vacío, uno y texto largo."
+          }
+        ],
+        "usage": "<RecordTimeline events={events} order=\"asc\" locale=\"es-MX\" />",
+        "api": [
+          {
+            "name": "events",
+            "type": "RecordTimelineEvent[]",
+            "description": "Title, date, description, meta, and status."
+          },
+          {
+            "name": "order",
+            "type": "\"asc\" | \"desc\"",
+            "description": "Default oldest first."
+          },
+          {
+            "name": "collapseAfter",
+            "type": "number",
+            "description": "Hides earlier events behind a button."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "dropdown-menu"
+      ],
+      "categories": [
+        "dashboard",
+        "ai"
+      ],
+      "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "name": "suggestion-card",
+      "type": "registry:ui",
+      "title": "Suggestion card",
+      "description": "A system suggestion with confidence, facts, evidence, and confirm, change, or dismiss.",
+      "files": [
+        {
+          "path": "registry/ui/suggestion-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/suggestion-card.tsx"
+        },
+        {
+          "path": "registry/lib/dashboard-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboard-format.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de sugerencia",
+        "descriptionEs": "Una sugerencia del sistema con confianza, datos, evidencia y confirmar, cambiar o descartar.",
+        "preview": "app/examples/suggestion-card/preview.tsx",
+        "previewHref": "/examples/suggestion-card",
+        "examples": [
+          {
+            "title": "Tarjeta de sugerencia",
+            "href": "/examples/suggestion-card",
+            "description": "De sugerida a confirmada."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/suggestion-card/stress",
+            "description": "320px."
+          }
+        ],
+        "usage": "<SuggestionCard title=\"Suggested cause\" suggestion=\"Stale cache\" onConfirm={confirm} />",
+        "api": [
+          {
+            "name": "status",
+            "type": "\"suggested\" | \"confirmed\" | \"dismissed\"",
+            "description": "Dismissed collapses to one line with Undo."
+          },
+          {
+            "name": "variant",
+            "type": "\"cause\" | \"action\"",
+            "description": "Action adds steps, an estimate, and a create button."
+          },
+          {
+            "name": "facts / evidence",
+            "type": "lists",
+            "description": "Key values and a tinted callout."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "dialog"
+      ],
+      "categories": [
+        "dashboard",
+        "overlay"
+      ],
+      "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "name": "suggested-choice-dialog",
+      "type": "registry:ui",
+      "title": "Suggested choice dialog",
+      "description": "A confirm dialog whose suggested radio starts selected. radio-cards remains the large option cards.",
+      "files": [
+        {
+          "path": "registry/ui/suggested-choice-dialog.tsx",
+          "type": "registry:component",
+          "target": "@ui/suggested-choice-dialog.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Diálogo con sugerencia",
+        "descriptionEs": "Un diálogo de confirmación cuya opción sugerida empieza seleccionada.",
+        "preview": "app/examples/suggested-choice-dialog/preview.tsx",
+        "previewHref": "/examples/suggested-choice-dialog",
+        "examples": [
+          {
+            "title": "Diálogo con sugerencia",
+            "href": "/examples/suggested-choice-dialog",
+            "description": "Causa sugerida y dos campos."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/suggested-choice-dialog/stress",
+            "description": "Cerrado."
+          }
+        ],
+        "usage": "<SuggestedChoiceDialog open title=\"Confirm cause\" options={options} onConfirm={save} />",
+        "api": [
+          {
+            "name": "options",
+            "type": "SuggestedChoice[]",
+            "description": "Mark one suggested. It is selected when value is omitted."
+          },
+          {
+            "name": "fields",
+            "type": "SuggestedChoiceField[]",
+            "description": "Extra selects. Confirm waits until each has a value."
+          },
+          {
+            "name": "onConfirm",
+            "type": "(id, fields) => void",
+            "description": "Called with the choice and the field values."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "breadcrumb",
+        "button",
+        "dropdown-menu"
+      ],
+      "categories": [
+        "dashboard"
+      ],
+      "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "name": "record-header",
+      "type": "registry:ui",
+      "title": "Record header",
+      "description": "Breadcrumb, title, status, meta, people, and actions for one record. page-header remains the scrolling page fold.",
+      "files": [
+        {
+          "path": "registry/ui/record-header.tsx",
+          "type": "registry:component",
+          "target": "@ui/record-header.tsx"
+        },
+        {
+          "path": "registry/ui/priority-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/priority-badge.tsx"
+        },
+        {
+          "path": "registry/lib/dashboard-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboard-format.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Encabezado de expediente",
+        "descriptionEs": "Miga, título, estado, meta, personas y acciones de un registro.",
+        "preview": "app/examples/record-header/preview.tsx",
+        "previewHref": "/examples/record-header",
+        "examples": [
+          {
+            "title": "Encabezado de expediente",
+            "href": "/examples/record-header",
+            "description": "Un defecto ficticio."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/record-header/stress",
+            "description": "320px."
+          }
+        ],
+        "usage": "<RecordHeader title=\"Checkout stays pending\" crumbs={crumbs} priority=\"critical\" primary={button} />",
+        "api": [
+          {
+            "name": "crumbs",
+            "type": "RecordCrumb[]",
+            "description": "Middle crumbs collapse under 480px."
+          },
+          {
+            "name": "priority / people / meta",
+            "type": "slots",
+            "description": "A priority chip, avatars, and a dot-separated line."
+          },
+          {
+            "name": "collapseActions",
+            "type": "boolean",
+            "description": "Secondary actions move into the menu when the header is narrow."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "chart",
+        "dashboard"
+      ],
+      "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "name": "radial-gauge",
+      "type": "registry:ui",
+      "title": "Radial gauge",
+      "description": "A half-circle meter with ticks and a needle. Values above max are labelled over budget and the needle stops at the end. gauge remains the filled arc.",
+      "files": [
+        {
+          "path": "registry/ui/radial-gauge.tsx",
+          "type": "registry:component",
+          "target": "@ui/radial-gauge.tsx"
+        },
+        {
+          "path": "registry/lib/dashboard-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboard-format.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Medidor radial",
+        "descriptionEs": "Un semicírculo con marcas y aguja. Si el valor pasa el máximo, lo dice y la aguja se detiene.",
+        "preview": "app/examples/radial-gauge/preview.tsx",
+        "previewHref": "/examples/radial-gauge",
+        "examples": [
+          {
+            "title": "Medidor radial",
+            "href": "/examples/radial-gauge",
+            "description": "Dentro del tope y por encima."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/radial-gauge/stress",
+            "description": "320px y varios valores."
+          }
+        ],
+        "usage": "<RadialGauge value={128} max={100} label=\"Spend\" overLabel=\"Over budget\" />",
+        "api": [
+          {
+            "name": "value / min / max",
+            "type": "number",
+            "description": "aria-valuenow keeps the real value."
+          },
+          {
+            "name": "ticks",
+            "type": "number",
+            "description": "Tick marks along the arc. Default 5."
+          },
+          {
+            "name": "formatter / overLabel / tone",
+            "type": "display",
+            "description": "Value text, the over-budget label, and the stroke tone."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "chart",
+        "dashboard"
+      ],
+      "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "name": "tier-distribution",
+      "type": "registry:ui",
+      "title": "Tier distribution",
+      "description": "Two to four tiers. Each shows its count and a block sized by share, and the row is a radio group.",
+      "files": [
+        {
+          "path": "registry/ui/tier-distribution.tsx",
+          "type": "registry:component",
+          "target": "@ui/tier-distribution.tsx"
+        },
+        {
+          "path": "registry/lib/dashboard-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboard-format.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Distribución por tramos",
+        "descriptionEs": "De dos a cuatro tramos. Cada uno muestra su conteo y un bloque según su parte, y la fila es un grupo de radio.",
+        "preview": "app/examples/tier-distribution/preview.tsx",
+        "previewHref": "/examples/tier-distribution",
+        "examples": [
+          {
+            "title": "Distribución por tramos",
+            "href": "/examples/tier-distribution",
+            "description": "Severidad de defectos ficticios."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/tier-distribution/stress",
+            "description": "320px, dos, vacío y RTL."
+          }
+        ],
+        "usage": "<TierDistribution label=\"Severity\" tiers={tiers} value={tier} onValueChange={setTier} />",
+        "api": [
+          {
+            "name": "tiers",
+            "type": "TierDistributionTier[]",
+            "description": "id, label, value, and an optional chart tone. Only the first four render."
+          },
+          {
+            "name": "value / onValueChange",
+            "type": "string",
+            "description": "Controlled selection. Arrow keys move it."
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "description": "Count and percent formatting."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "dropdown-menu",
+        "input",
+        "sidebar",
+        "skeleton",
+        "switch",
+        "tooltip"
+      ],
+      "categories": [
+        "dashboard",
+        "block"
+      ],
+      "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "name": "triage-dashboard",
+      "type": "registry:block",
+      "title": "Triage dashboard",
+      "description": "Greeting, stat strip, annotated trend, attention list, ranked bars, and a period card. Pass shell to wrap it in the rail sidebar.",
+      "files": [
+        {
+          "path": "registry/blocks/triage-dashboard.tsx",
+          "type": "registry:component",
+          "target": "@ui/triage-dashboard.tsx"
+        },
+        {
+          "path": "registry/blocks/rail-sidebar.tsx",
+          "type": "registry:component",
+          "target": "@ui/rail-sidebar.tsx"
+        },
+        {
+          "path": "registry/ui/annotated-trend-chart.tsx",
+          "type": "registry:component",
+          "target": "@ui/annotated-trend-chart.tsx"
+        },
+        {
+          "path": "registry/ui/attention-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/attention-list.tsx"
+        },
+        {
+          "path": "registry/ui/ranked-bars.tsx",
+          "type": "registry:component",
+          "target": "@ui/ranked-bars.tsx"
+        },
+        {
+          "path": "registry/ui/stat-strip.tsx",
+          "type": "registry:component",
+          "target": "@ui/stat-strip.tsx"
+        },
+        {
+          "path": "registry/ui/well-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/well-card.tsx"
+        },
+        {
+          "path": "registry/ui/priority-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/priority-badge.tsx"
+        },
+        {
+          "path": "registry/lib/dashboard-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboard-format.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tablero de triaje",
+        "descriptionEs": "Saludo, cifras, tendencia anotada, lista de atención, barras y un periodo. shell lo envuelve en el riel.",
+        "preview": "app/examples/triage-dashboard/preview.tsx",
+        "previewHref": "/examples/triage-dashboard",
+        "examples": [
+          {
+            "title": "Cola de defectos",
+            "href": "/examples/triage-dashboard",
+            "description": "Datos ficticios de Marea, en es-MX y en-US."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/triage-dashboard/stress",
+            "description": "320px."
+          }
+        ],
+        "usage": "<TriageDashboard name=\"Inés\" now={now} locale=\"es-MX\" stats={stats} trend={trend} attention={items} causes={causes} period={period} />",
+        "api": [
+          {
+            "name": "name / now / locale",
+            "type": "greeting",
+            "description": "greeting() picks morning, afternoon, or evening."
+          },
+          {
+            "name": "stats / trend / attention / causes / period",
+            "type": "data",
+            "description": "Passed through to the pieces. No fetching."
+          },
+          {
+            "name": "shell",
+            "type": "false | rail props",
+            "description": "false renders the content only. An object wraps rail-sidebar."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "breadcrumb",
+        "button",
+        "dialog",
+        "dropdown-menu",
+        "tabs"
+      ],
+      "categories": [
+        "dashboard",
+        "block"
+      ],
+      "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "name": "case-review",
+      "type": "registry:block",
+      "title": "Case review",
+      "description": "One record: header, tabs and timeline, suggestion, cost breakdown, confirm dialog, and an undo toast.",
+      "files": [
+        {
+          "path": "registry/blocks/case-review.tsx",
+          "type": "registry:component",
+          "target": "@ui/case-review.tsx"
+        },
+        {
+          "path": "registry/ui/breakdown-bar.tsx",
+          "type": "registry:component",
+          "target": "@ui/breakdown-bar.tsx"
+        },
+        {
+          "path": "registry/ui/record-header.tsx",
+          "type": "registry:component",
+          "target": "@ui/record-header.tsx"
+        },
+        {
+          "path": "registry/ui/record-timeline.tsx",
+          "type": "registry:component",
+          "target": "@ui/record-timeline.tsx"
+        },
+        {
+          "path": "registry/ui/suggestion-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/suggestion-card.tsx"
+        },
+        {
+          "path": "registry/ui/suggested-choice-dialog.tsx",
+          "type": "registry:component",
+          "target": "@ui/suggested-choice-dialog.tsx"
+        },
+        {
+          "path": "registry/ui/toast-stack.tsx",
+          "type": "registry:component",
+          "target": "@ui/toast-stack.tsx"
+        },
+        {
+          "path": "registry/ui/well-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/well-card.tsx"
+        },
+        {
+          "path": "registry/ui/priority-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/priority-badge.tsx"
+        },
+        {
+          "path": "registry/lib/dashboard-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboard-format.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Revisión de caso",
+        "descriptionEs": "Un expediente: encabezado, línea de tiempo, sugerencia, desglose, diálogo y aviso con deshacer.",
+        "preview": "app/examples/case-review/preview.tsx",
+        "previewHref": "/examples/case-review",
+        "examples": [
+          {
+            "title": "Revisión de caso",
+            "href": "/examples/case-review",
+            "description": "Un defecto ficticio de Marea."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/case-review/stress",
+            "description": "320px."
+          }
+        ],
+        "usage": "<CaseReview title=\"Checkout stays pending\" timeline={events} suggestion={suggestion} choices={choices} dialogTitle=\"Confirm cause\" costTotal={3570} costSegments={segments} onConfirm={save} onUndo={undo} />",
+        "api": [
+          {
+            "name": "onConfirm / onUndo / onReassign / onCreateAction",
+            "type": "callbacks",
+            "description": "The block does not fetch. Undo rolls the status back."
+          },
+          {
+            "name": "choices / fields",
+            "type": "dialog",
+            "description": "The suggested choice starts selected."
+          },
+          {
+            "name": "locale / currency",
+            "type": "string",
+            "description": "Formatting for the timeline and the cost."
+          }
+        ]
+      }
     }
   ]
 }

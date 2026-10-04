@@ -1,0 +1,68 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "well-card",
+  "title": "Well card",
+  "author": "Eduardo Retana",
+  "description": "Muted outer well with a header and an inset card. The host theme supplies the surfaces.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/well-card.tsx",
+      "content": "\"use client\"\n\n/** Independent implementation of a common dashboard pattern. */\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type WellCardClassNames = {\n  root?: string\n  header?: string\n  title?: string\n  subtitle?: string\n  count?: string\n  actions?: string\n  body?: string\n  footer?: string\n}\n\nexport type WellCardProps = {\n  title: string\n  subtitle?: React.ReactNode\n  count?: number | string\n  actions?: React.ReactNode\n  footer?: React.ReactNode\n  /** Inset body sits on a card surface inside the muted well. */\n  inset?: boolean\n  density?: \"default\" | \"compact\"\n  as?: \"section\" | \"article\" | \"div\"\n  headerLevel?: 2 | 3 | 4\n  children?: React.ReactNode\n  className?: string\n  classNames?: WellCardClassNames\n}\n\nexport function WellCard({\n  title,\n  subtitle,\n  count,\n  actions,\n  footer,\n  inset = true,\n  density = \"default\",\n  as: Tag = \"section\",\n  headerLevel = 2,\n  children,\n  className,\n  classNames,\n}: WellCardProps) {\n  const titleId = React.useId()\n  const Heading = `h${headerLevel}` as \"h2\" | \"h3\" | \"h4\"\n  const pad = density === \"compact\" ? \"p-1.5\" : \"p-2\"\n  const bodyPad = density === \"compact\" ? \"p-3\" : \"p-4\"\n  return (\n    <Tag\n      data-slot=\"well-card\"\n      data-density={density}\n      aria-labelledby={titleId}\n      className={cn(\"@container min-w-0 rounded-2xl bg-muted text-foreground\", pad, className, classNames?.root)}\n    >\n      <div className={cn(\"flex flex-wrap items-start justify-between gap-2 px-3 pt-2 pb-3\", classNames?.header)}>\n        <div className=\"min-w-0\">\n          <div className=\"flex min-w-0 flex-wrap items-center gap-2\">\n            <Heading id={titleId} className={cn(\"m-0 text-[15px] font-medium break-words\", classNames?.title)}>\n              {title}\n            </Heading>\n            {count != null && count !== \"\" ? (\n              <span className={cn(\"rounded-full bg-background px-2 py-0.5 text-xs tabular-nums text-muted-foreground\", classNames?.count)}>\n                {count}\n              </span>\n            ) : null}\n          </div>\n          {subtitle ? <p className={cn(\"mt-0.5 text-xs text-muted-foreground\", classNames?.subtitle)}>{subtitle}</p> : null}\n        </div>\n        {actions ? <div className={cn(\"flex flex-wrap items-center gap-2\", classNames?.actions)}>{actions}</div> : null}\n      </div>\n      <div className={cn(inset && \"rounded-xl bg-card text-card-foreground\", inset && bodyPad, classNames?.body)}>\n        {children}\n        {footer ? <div className={cn(\"mt-3 text-sm\", classNames?.footer)}>{footer}</div> : null}\n      </div>\n    </Tag>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/well-card.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Tarjeta en pozo",
+    "descriptionEs": "Un pozo apagado con encabezado y una tarjeta interior. El tema del anfitrión pone las superficies.",
+    "preview": "app/examples/well-card/preview.tsx",
+    "previewHref": "/examples/well-card",
+    "examples": [
+      {
+        "title": "Tarjeta en pozo",
+        "href": "/examples/well-card",
+        "description": "Encabezado, conteo y cuerpo."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/well-card/stress",
+        "description": "320px, vacío y RTL."
+      }
+    ],
+    "usage": "<WellCard title=\"Open defects\" subtitle=\"Oldest first\" count={18}>…</WellCard>",
+    "api": [
+      {
+        "name": "title",
+        "type": "string",
+        "description": "Names the section."
+      },
+      {
+        "name": "inset",
+        "type": "boolean",
+        "description": "Draws the body on a card. Default true."
+      },
+      {
+        "name": "density",
+        "type": "\"default\" | \"compact\"",
+        "description": "Padding of the well and the inset."
+      },
+      {
+        "name": "actions / footer",
+        "type": "ReactNode",
+        "description": "Header end slot and a footer inside the body."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+  "categories": [
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}

@@ -24,7 +24,26 @@ const boards = [
 
 const time = [
   ["timeline", "Activity feed, newest first, grouped by day."],
+  ["record-timeline", "One record's lifecycle, oldest first, with status marks."],
   ["view-timeline", "Horizontal start and end schedule, with zoom and a today line."],
+] as const
+
+const dashboards = [
+  ["overview-dashboard", "Admin KPIs, a trend, upcoming items, and content counts."],
+  ["triage-dashboard", "Greeting, a dense stat row, an annotated trend, and a needs-you list."],
+  ["case-review", "One record: header, timeline, suggestion, cost breakdown, and an undo toast."],
+  ["metric-card", "A single number with a count-up change."],
+  ["stat-strip", "A dense row or divided panel of labelled numbers."],
+  ["stats-band", "A marketing band of figures."],
+] as const
+
+const meters = [
+  ["gauge", "A filled arc that names the threshold the value has reached."],
+  ["radial-gauge", "A half-circle needle meter with an explicit over-budget state."],
+  ["usage-meter", "Segments measured against a limit."],
+  ["tier-distribution", "Two to four share blocks, selectable as a radio group."],
+  ["line-chart", "A generic multi-series trend with a crosshair."],
+  ["annotated-trend-chart", "A trend with a target line, a highlighted band, and an end value."],
 ] as const
 
 const editing = [
@@ -160,6 +179,8 @@ export default function DocsPage() {
           <ChoiceTable title="Tables" rows={tables} />
           <ChoiceTable title="Boards" rows={boards} />
           <ChoiceTable title="Time" rows={time} />
+          <ChoiceTable title="Dashboards" rows={dashboards} />
+          <ChoiceTable title="Meters and trends" rows={meters} />
           <ChoiceTable title="Editing a record" rows={editing} />
           <ChoiceTable title="People" rows={people} />
           <ChoiceTable title="Layouts" rows={layouts} />
@@ -264,6 +285,10 @@ npx shadcn@latest add @retana/presence-outline`}</pre>
             </li>
             <li>
               <code>adaptive-table</code> and the multi-view pieces are clean-room implementations.
+            </li>
+            <li>
+              Dashboard wells, triage, case review, the radial gauge, and the tier meter are an
+              independent implementation of common dashboard patterns.
             </li>
             <li>
               <code>magnetic-bento</code> takes the anchor-positioning idea from{" "}

@@ -1,0 +1,64 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "suggested-choice-dialog",
+  "title": "Suggested choice dialog",
+  "author": "Eduardo Retana",
+  "description": "A confirm dialog whose suggested radio starts selected. radio-cards remains the large option cards.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button",
+    "dialog"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/suggested-choice-dialog.tsx",
+      "content": "\"use client\"\n\n/** Independent implementation of a common dashboard pattern. */\n\nimport * as React from \"react\"\nimport { Check, Sparkles } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport {\n  Dialog,\n  DialogContent,\n  DialogDescription,\n  DialogFooter,\n  DialogHeader,\n  DialogTitle,\n} from \"@/components/ui/dialog\"\nimport { cn } from \"@/lib/utils\"\n\nexport type SuggestedChoice = {\n  id: string\n  label: string\n  description?: string\n  suggested?: boolean\n}\n\nexport type SuggestedChoiceField = {\n  id: string\n  label: string\n  value?: string\n  placeholder?: string\n  options: readonly { value: string; label: string }[]\n}\n\nexport type SuggestedChoiceDialogProps = {\n  open?: boolean\n  defaultOpen?: boolean\n  onOpenChange?: (open: boolean) => void\n  title: string\n  subtitle?: string\n  hint?: string\n  options: readonly SuggestedChoice[]\n  value?: string\n  defaultValue?: string\n  onValueChange?: (id: string) => void\n  fields?: readonly SuggestedChoiceField[]\n  onFieldChange?: (id: string, value: string) => void\n  onConfirm?: (choiceId: string, fields: Record<string, string>) => void\n  confirmLabel?: string\n  cancelLabel?: string\n  suggestedLabel?: string\n  busy?: boolean\n  className?: string\n}\n\nexport function SuggestedChoiceDialog({\n  open,\n  defaultOpen = false,\n  onOpenChange,\n  title,\n  subtitle,\n  hint,\n  options,\n  value,\n  defaultValue,\n  onValueChange,\n  fields = [],\n  onFieldChange,\n  onConfirm,\n  confirmLabel = \"Confirm\",\n  cancelLabel = \"Cancel\",\n  suggestedLabel = \"Suggested\",\n  busy = false,\n  className,\n}: SuggestedChoiceDialogProps) {\n  const suggested = options.find((option) => option.suggested)?.id ?? options[0]?.id ?? \"\"\n  const [internalOpen, setInternalOpen] = React.useState(defaultOpen)\n  const [internalValue, setInternalValue] = React.useState(defaultValue ?? suggested)\n  const [internalFields, setInternalFields] = React.useState<Record<string, string>>(() =>\n    Object.fromEntries(fields.map((field) => [field.id, field.value ?? \"\"])),\n  )\n  const shown = open ?? internalOpen\n  const selected = value ?? internalValue\n  const fieldValues = Object.fromEntries(fields.map((field) => [field.id, field.value ?? internalFields[field.id] ?? \"\"]))\n  const missing = fields.some((field) => !fieldValues[field.id])\n  const groupName = React.useId()\n\n  function setOpen(next: boolean) {\n    if (open === undefined) setInternalOpen(next)\n    onOpenChange?.(next)\n  }\n\n  function select(id: string) {\n    if (value === undefined) setInternalValue(id)\n    onValueChange?.(id)\n  }\n\n  function changeField(id: string, next: string) {\n    setInternalFields((current) => ({ ...current, [id]: next }))\n    onFieldChange?.(id, next)\n  }\n\n  return (\n    <Dialog open={shown} onOpenChange={setOpen}>\n      <DialogContent className={cn(\"@container max-w-lg\", className)}>\n        <DialogHeader>\n          <DialogTitle>{title}</DialogTitle>\n          {subtitle ? <DialogDescription>{subtitle}</DialogDescription> : <DialogDescription className=\"sr-only\">{title}</DialogDescription>}\n        </DialogHeader>\n        {hint ? (\n          <p className=\"flex items-start gap-2 rounded-lg bg-chart-3/15 px-3 py-2 text-sm\">\n            <Sparkles className=\"mt-0.5 size-4 shrink-0\" aria-hidden />\n            <span>{hint}</span>\n          </p>\n        ) : null}\n        <div role=\"radiogroup\" aria-label={title} className=\"flex flex-col gap-1 rounded-xl border border-border p-1\">\n          {options.map((option) => {\n            const checked = option.id === selected\n            return (\n              <label\n                key={option.id}\n                className={cn(\n                  \"flex cursor-pointer items-start gap-3 rounded-lg px-3 py-2 text-sm\",\n                  checked && \"bg-muted\",\n                )}\n              >\n                <input\n                  type=\"radio\"\n                  name={groupName}\n                  className=\"mt-1 accent-primary\"\n                  value={option.id}\n                  checked={checked}\n                  autoFocus={checked}\n                  onChange={() => select(option.id)}\n                />\n                <span className=\"min-w-0 flex-1\">\n                  <span className=\"flex items-center justify-between gap-2\">\n                    <span className=\"font-medium break-words\">{option.label}</span>\n                    {option.suggested ? (\n                      <span className=\"shrink-0 rounded-full bg-chart-3/15 px-2 py-0.5 text-xs\">{suggestedLabel}</span>\n                    ) : null}\n                  </span>\n                  {option.description ? <span className=\"mt-0.5 block text-xs text-muted-foreground\">{option.description}</span> : null}\n                </span>\n              </label>\n            )\n          })}\n        </div>\n        {fields.length ? (\n          <div className=\"grid gap-3 @min-[26rem]:grid-cols-2\">\n            {fields.map((field) => (\n              <label key={field.id} className=\"flex min-w-0 flex-col gap-1 text-sm\">\n                <span>{field.label}</span>\n                <select\n                  className=\"h-9 rounded-md border border-input bg-background px-2 text-sm\"\n                  value={fieldValues[field.id] ?? \"\"}\n                  onChange={(event) => changeField(field.id, event.target.value)}\n                >\n                  <option value=\"\">{field.placeholder ?? \"Choose\"}</option>\n                  {field.options.map((option) => (\n                    <option key={option.value} value={option.value}>\n                      {option.label}\n                    </option>\n                  ))}\n                </select>\n              </label>\n            ))}\n          </div>\n        ) : null}\n        <DialogFooter>\n          <Button type=\"button\" variant=\"secondary\" className=\"rounded-full\" onClick={() => setOpen(false)}>\n            {cancelLabel}\n          </Button>\n          <Button\n            type=\"button\"\n            className=\"rounded-full\"\n            disabled={busy || !selected || missing}\n            onClick={() => {\n              if (!selected) return\n              onConfirm?.(selected, fieldValues)\n            }}\n          >\n            {busy ? <span className=\"size-3.5 animate-spin rounded-full border-2 border-current border-r-transparent motion-reduce:animate-none\" aria-hidden /> : <Check data-icon=\"inline-start\" />}\n            {confirmLabel}\n          </Button>\n        </DialogFooter>\n      </DialogContent>\n    </Dialog>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/suggested-choice-dialog.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Diálogo con sugerencia",
+    "descriptionEs": "Un diálogo de confirmación cuya opción sugerida empieza seleccionada.",
+    "preview": "app/examples/suggested-choice-dialog/preview.tsx",
+    "previewHref": "/examples/suggested-choice-dialog",
+    "examples": [
+      {
+        "title": "Diálogo con sugerencia",
+        "href": "/examples/suggested-choice-dialog",
+        "description": "Causa sugerida y dos campos."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/suggested-choice-dialog/stress",
+        "description": "Cerrado."
+      }
+    ],
+    "usage": "<SuggestedChoiceDialog open title=\"Confirm cause\" options={options} onConfirm={save} />",
+    "api": [
+      {
+        "name": "options",
+        "type": "SuggestedChoice[]",
+        "description": "Mark one suggested. It is selected when value is omitted."
+      },
+      {
+        "name": "fields",
+        "type": "SuggestedChoiceField[]",
+        "description": "Extra selects. Confirm waits until each has a value."
+      },
+      {
+        "name": "onConfirm",
+        "type": "(id, fields) => void",
+        "description": "Called with the choice and the field values."
+      }
+    ]
+  },
+  "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+  "categories": [
+    "dashboard",
+    "overlay"
+  ],
+  "type": "registry:ui"
+}
