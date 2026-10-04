@@ -29,6 +29,7 @@ const KIND = {
 const GROUP_ORDER = [
   "Detail",
   "Chat and agents",
+  "Agents",
   "Forms",
   "Media and content",
   "Tables and views",
@@ -54,6 +55,7 @@ function groupOf(item) {
   if (GROUP_OVERRIDE[item.name]) return GROUP_OVERRIDE[item.name]
   const cats = new Set(item.categories ?? [])
   if (item.pending || cats.has("admin")) return "Admin"
+  if (cats.has("agents")) return "Agents"
   if (cats.has("panel")) return "Detail"
   if (cats.has("chat") || cats.has("ai")) return "Chat and agents"
   if (cats.has("collaboration")) return "Collaboration"

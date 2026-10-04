@@ -1,0 +1,54 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "demo-collage",
+  "title": "Demo collage",
+  "author": "Eduardo Retana",
+  "description": "A grid of live mini demos that render when they scroll into view.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/demo-collage.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/src/components/live-collage.tsx\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type DemoCollageItem = {\n  name: string\n  href: string\n  render: () => React.ReactNode\n}\n\nexport type DemoCollageProps = {\n  items: DemoCollageItem[]\n  ctaHref?: string\n  ctaLabel?: string\n  linkComponent?: React.ElementType<{ href: string; className?: string; children?: React.ReactNode }>\n  className?: string\n}\n\nfunction Cell({ item, linkComponent: Link = \"a\" }: { item: DemoCollageItem; linkComponent?: DemoCollageProps[\"linkComponent\"] }) {\n  const ref = React.useRef<HTMLElement>(null)\n  const [shown, setShown] = React.useState(false)\n  React.useEffect(() => {\n    const node = ref.current\n    if (!node) return\n    const observer = new IntersectionObserver((entries) => {\n      if (entries.some((entry) => entry.isIntersecting)) setShown(true)\n    })\n    observer.observe(node)\n    return () => observer.disconnect()\n  }, [])\n  return (\n    <article ref={ref} className=\"mb-3 break-inside-avoid overflow-hidden rounded-xl border border-border bg-card\">\n      <Link href={item.href} className=\"flex items-center justify-between bg-muted/40 px-3 py-2 font-mono text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\">\n        {item.name}\n        <span aria-hidden=\"true\">↗</span>\n      </Link>\n      <div className=\"pointer-events-none p-3\">{shown ? item.render() : <div className=\"h-16\" />}</div>\n    </article>\n  )\n}\n\nexport function DemoCollage({ items, ctaHref = \"/\", ctaLabel = \"Explore all components\", linkComponent: Link = \"a\", className }: DemoCollageProps) {\n  return (\n    <div className={cn(\"columns-1 gap-3 sm:columns-2\", className)}>\n      {items.map((item) => (\n        <Cell key={item.name} item={item} linkComponent={Link} />\n      ))}\n      <Link href={ctaHref} className=\"mb-3 flex break-inside-avoid items-center justify-center rounded-xl border border-dashed border-border p-6 text-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\">\n        {ctaLabel}\n      </Link>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/demo-collage.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Collage de demos",
+    "descriptionEs": "Una rejilla de minidemos que se dibujan al entrar en pantalla.",
+    "preview": "app/examples/demo-collage/preview.tsx",
+    "previewHref": "/examples/demo-collage",
+    "examples": [
+      {
+        "title": "Collage de demos",
+        "href": "/examples/demo-collage",
+        "description": "Una rejilla de minidemos que se dibujan al entrar en pantalla."
+      }
+    ],
+    "usage": "<DemoCollage items={items} />",
+    "api": [
+      {
+        "name": "items",
+        "type": "DemoCollageItem[]",
+        "description": "name, href, and render."
+      },
+      {
+        "name": "linkComponent",
+        "type": "ElementType",
+        "description": "Router link. Defaults to an anchor."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "block"
+  ],
+  "type": "registry:block"
+}

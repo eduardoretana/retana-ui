@@ -216,7 +216,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`144` items are in `registry.json` on this branch: `115` components, `22` blocks, `1` hook, and `6` libraries. A name links to its source file.
+`182` items are in `registry.json` on this branch: `150` components, `23` blocks, `3` hooks, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -240,6 +240,47 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`file-diff`](registry/ui/file-diff.tsx) · ui — Unified diff with added and removed lines, and collapsible runs of unchanged lines. Install: `npx shadcn@latest add @retana/file-diff`.
 - [`image-generation`](registry/ui/image-generation.tsx) · ui — Image frame that shows progress and a shimmer while generating, then reveals the result. Install: `npx shadcn@latest add @retana/image-generation`.
 - [`ai-document`](registry/ui/ai-document.tsx) · ui — Document where an agent proposes highlighted edits the reader can accept or reject. Install: `npx shadcn@latest add @retana/ai-document`.
+
+### Agents
+
+- [`tool-call`](registry/ui/tool-call.tsx) · ui — One tool invocation with status, parameters, and a result or error. Install: `npx shadcn@latest add @retana/tool-call`.
+- [`tool-approval`](registry/ui/tool-approval.tsx) · ui — A human gate before a tool runs, then a compact receipt. Install: `npx shadcn@latest add @retana/tool-approval`.
+- [`message-branch`](registry/ui/message-branch.tsx) · ui — Page between regenerated variants of one reply. Install: `npx shadcn@latest add @retana/message-branch`.
+- [`context-meter`](registry/ui/context-meter.tsx) · ui — A compact ring for a context window, with a breakdown on click. Install: `npx shadcn@latest add @retana/context-meter`.
+- [`prompt-suggestions`](registry/ui/prompt-suggestions.tsx) · ui — A chip row that seeds a composer. Install: `npx shadcn@latest add @retana/prompt-suggestions`.
+- [`source-list`](registry/ui/source-list.tsx) · ui — A collapsible list of numbered sources with excerpts. Install: `npx shadcn@latest add @retana/source-list`.
+- [`message-error`](registry/ui/message-error.tsx) · ui — An inline failure under an assistant message, with retry. Install: `npx shadcn@latest add @retana/message-error`.
+- [`system-notice`](registry/ui/system-notice.tsx) · ui — A slim in-thread status line, not a message bubble. Install: `npx shadcn@latest add @retana/system-notice`.
+- [`slash-menu`](registry/ui/slash-menu.tsx) · ui — A slash command menu anchored to a textarea. Install: `npx shadcn@latest add @retana/slash-menu`.
+- [`char-limit`](registry/ui/char-limit.tsx) · ui — A ring and counter that appears as an input nears its limit. Install: `npx shadcn@latest add @retana/char-limit`.
+- [`parameter-slider`](registry/ui/parameter-slider.tsx) · ui — A labelled slider with a live value and a reset. Install: `npx shadcn@latest add @retana/parameter-slider`.
+- [`confidence-badge`](registry/ui/confidence-badge.tsx) · ui — A 0–1 score as a badge, dial, or bar, with a text tier. Install: `npx shadcn@latest add @retana/confidence-badge`.
+- [`voice-orb`](registry/ui/voice-orb.tsx) · ui — A state-driven voice visual that pauses when motion is reduced. Install: `npx shadcn@latest add @retana/voice-orb`.
+- [`push-to-talk`](registry/ui/push-to-talk.tsx) · ui — Hold to record and release to send, with a toggle mode. Install: `npx shadcn@latest add @retana/push-to-talk`.
+- [`audio-bars`](registry/ui/audio-bars.tsx) · ui — A row of activity bars driven by levels or an idle pulse. Install: `npx shadcn@latest add @retana/audio-bars`.
+- [`audio-player`](registry/ui/audio-player.tsx) · ui — A compact player with a keyboard scrub bar. Install: `npx shadcn@latest add @retana/audio-player`.
+- [`synced-transcript`](registry/ui/synced-transcript.tsx) · ui — A transcript that highlights the word at the current time. Install: `npx shadcn@latest add @retana/synced-transcript`.
+- [`mic-select`](registry/ui/mic-select.tsx) · ui — A microphone or camera picker with permission states. Install: `npx shadcn@latest add @retana/mic-select`.
+- [`use-device-capabilities`](registry/hooks/use-device-capabilities.ts) · hook — Browser capability, storage, and network hooks. Nothing is prompted or uploaded. Install: `npx shadcn@latest add @retana/use-device-capabilities`.
+- [`capability-gate`](registry/ui/capability-gate.tsx) · ui — Renders children only after a feature check, without flashing the fallback. Install: `npx shadcn@latest add @retana/capability-gate`.
+- [`capability-grid`](registry/ui/capability-grid.tsx) · ui — A local report of what this browser can do. Install: `npx shadcn@latest add @retana/capability-grid`.
+- [`storage-meter`](registry/ui/storage-meter.tsx) · ui — Origin storage used, with a persistence request. Install: `npx shadcn@latest add @retana/storage-meter`.
+- [`network-status`](registry/ui/network-status.tsx) · ui — An online or offline indicator, with an optional banner. Install: `npx shadcn@latest add @retana/network-status`.
+- [`download-progress`](registry/ui/download-progress.tsx) · ui — A card for a large asset download, with speed and ETA. Install: `npx shadcn@latest add @retana/download-progress`.
+- [`use-webcam`](registry/hooks/use-webcam.ts) · hook — Start, stop, and switch a camera stream. Tracks stop on unmount. Install: `npx shadcn@latest add @retana/use-webcam`.
+- [`webcam-canvas`](registry/ui/webcam-canvas.tsx) · ui — A camera preview with a frame callback. The loop pauses offscreen. Install: `npx shadcn@latest add @retana/webcam-canvas`.
+- [`detection-overlay`](registry/ui/detection-overlay.tsx) · ui — Labelled boxes over an image, with a legend. Install: `npx shadcn@latest add @retana/detection-overlay`.
+- [`scan-overlay`](registry/ui/scan-overlay.tsx) · ui — A processing veil over an image, still when motion is reduced. Install: `npx shadcn@latest add @retana/scan-overlay`.
+- [`entity-text`](registry/ui/entity-text.tsx) · ui — Inline highlights, masks, or redaction tokens for annotated spans. Install: `npx shadcn@latest add @retana/entity-text`.
+- [`force-graph`](registry/ui/force-graph.tsx) · ui — An SVG node-link graph with a list fallback. Install: `npx shadcn@latest add @retana/force-graph`.
+- [`confusion-matrix`](registry/ui/confusion-matrix.tsx) · ui — An N by N heat grid with counts or percents and a table fallback. Install: `npx shadcn@latest add @retana/confusion-matrix`.
+- [`event-log`](registry/ui/event-log.tsx) · ui — A newest-first log with filters, pause, and expandable payloads. Install: `npx shadcn@latest add @retana/event-log`.
+- [`error-boundary`](registry/ui/error-boundary.tsx) · ui — Catches a section error and offers try again. Install: `npx shadcn@latest add @retana/error-boundary`.
+- [`passphrase-gate`](registry/ui/passphrase-gate.tsx) · ui — Create or unlock with a passphrase. The value is not stored. Install: `npx shadcn@latest add @retana/passphrase-gate`.
+- [`artifact-panel`](registry/ui/artifact-panel.tsx) · ui — A docked canvas for generated content, with copy and download. Install: `npx shadcn@latest add @retana/artifact-panel`.
+- [`language-pair`](registry/ui/language-pair.tsx) · ui — From and to language pickers with a swap. Install: `npx shadcn@latest add @retana/language-pair`.
+- [`install-command`](registry/ui/install-command.tsx) · ui — Package-manager tabs that rewrite one install command and copy it. Install: `npx shadcn@latest add @retana/install-command`.
+- [`demo-collage`](registry/blocks/demo-collage.tsx) · block — A grid of live mini demos that render when they scroll into view. Install: `npx shadcn@latest add @retana/demo-collage`.
 
 ### Forms
 

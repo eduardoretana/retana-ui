@@ -1,0 +1,64 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tool-approval",
+  "title": "Tool approval",
+  "author": "Eduardo Retana",
+  "description": "A human gate before a tool runs, then a compact receipt.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button",
+    "checkbox"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/tool-approval.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/conversation/tool-approval/tool-approval.tsx\n\nimport * as React from \"react\"\nimport { AlertTriangle, Check, ShieldAlert, X } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Checkbox } from \"@/components/ui/checkbox\"\nimport { cn } from \"@/lib/utils\"\n\nexport type ApprovalDecision = \"approved\" | \"rejected\"\nexport type ApprovalRisk = \"low\" | \"medium\" | \"high\"\n\nexport type ToolApprovalClassNames = {\n  root?: string\n  title?: string\n  args?: string\n  actions?: string\n  receipt?: string\n}\n\nexport type ToolApprovalProps = {\n  toolName: string\n  args?: Record<string, unknown>\n  reason?: string\n  risk?: ApprovalRisk\n  decision?: ApprovalDecision | null\n  defaultDecision?: ApprovalDecision | null\n  onApprove?: () => void\n  onDeny?: () => void\n  onDecision?: (decision: ApprovalDecision) => void\n  busy?: boolean\n  alwaysAllow?: boolean\n  onAlwaysAllowChange?: (value: boolean) => void\n  hotkeys?: boolean\n  title?: string\n  approveLabel?: string\n  denyLabel?: string\n  className?: string\n  classNames?: ToolApprovalClassNames\n}\n\nconst CLAMP = 80\n\nfunction ArgValue({ value }: { value: unknown }) {\n  const text = typeof value === \"string\" ? value : JSON.stringify(value)\n  const [open, setOpen] = React.useState(false)\n  const long = text.length > CLAMP\n  return (\n    <span className=\"min-w-0 font-mono text-foreground\">\n      {long && !open ? `${text.slice(0, CLAMP)}…` : text}\n      {long ? (\n        <button\n          type=\"button\"\n          className=\"ml-1 text-xs text-muted-foreground underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n          onClick={() => setOpen((current) => !current)}\n        >\n          {open ? \"Show less\" : \"Show more\"}\n        </button>\n      ) : null}\n    </span>\n  )\n}\n\nexport function ToolApproval({\n  toolName,\n  args,\n  reason,\n  risk,\n  decision: decisionProp,\n  defaultDecision = null,\n  onApprove,\n  onDeny,\n  onDecision,\n  busy = false,\n  alwaysAllow,\n  onAlwaysAllowChange,\n  hotkeys = false,\n  title = \"Approval needed\",\n  approveLabel = \"Approve\",\n  denyLabel = \"Deny\",\n  className,\n  classNames,\n}: ToolApprovalProps) {\n  const titleId = React.useId()\n  const liveId = React.useId()\n  const receiptRef = React.useRef<HTMLParagraphElement>(null)\n  const [internal, setInternal] = React.useState<ApprovalDecision | null>(defaultDecision)\n  const decision = decisionProp !== undefined ? decisionProp : internal\n  const entries = Object.entries(args ?? {})\n\n  const decide = React.useCallback(\n    (next: ApprovalDecision) => {\n      if (busy || decision) return\n      if (decisionProp === undefined) setInternal(next)\n      onDecision?.(next)\n      if (next === \"approved\") onApprove?.()\n      else onDeny?.()\n    },\n    [busy, decision, decisionProp, onApprove, onDecision, onDeny],\n  )\n\n  React.useEffect(() => {\n    if (!decision) return\n    receiptRef.current?.focus()\n  }, [decision])\n\n  React.useEffect(() => {\n    if (!hotkeys || decision) return\n    const onKey = (event: KeyboardEvent) => {\n      if (event.key === \"Escape\") {\n        event.preventDefault()\n        decide(\"rejected\")\n      }\n      if (event.key === \"Enter\" && (event.metaKey || event.ctrlKey)) {\n        event.preventDefault()\n        decide(\"approved\")\n      }\n    }\n    window.addEventListener(\"keydown\", onKey)\n    return () => window.removeEventListener(\"keydown\", onKey)\n  }, [decide, decision, hotkeys])\n\n  if (decision) {\n    const approved = decision === \"approved\"\n    return (\n      <div\n        role=\"group\"\n        aria-labelledby={titleId}\n        className={cn(\"rounded-lg border border-border bg-card p-3 text-sm\", className, classNames?.root)}\n      >\n        <p id={liveId} className=\"sr-only\" aria-live=\"polite\">\n          {approved ? `${toolName} approved` : `${toolName} denied`}\n        </p>\n        <p\n          id={titleId}\n          ref={receiptRef}\n          tabIndex={-1}\n          className={cn(\"flex items-center gap-2 text-muted-foreground outline-none\", classNames?.receipt)}\n        >\n          {approved ? <Check aria-hidden=\"true\" className=\"size-4\" /> : <X aria-hidden=\"true\" className=\"size-4\" />}\n          <span>{approved ? \"Approved\" : \"Denied\"}</span>\n          <span className=\"font-mono text-foreground\">{toolName}</span>\n        </p>\n      </div>\n    )\n  }\n\n  return (\n    <div\n      role=\"group\"\n      aria-labelledby={titleId}\n      className={cn(\"flex flex-col gap-3 rounded-lg border border-border bg-card p-3 text-sm\", className, classNames?.root)}\n    >\n      <div className=\"flex flex-col gap-1\">\n        <p id={titleId} className={cn(\"font-medium text-foreground\", classNames?.title)}>\n          {title}\n        </p>\n        <p className=\"truncate font-mono text-foreground\">{toolName}</p>\n        {reason ? <p className=\"text-muted-foreground\">{reason}</p> : null}\n        {risk ? (\n          <p className={cn(\"flex items-center gap-1 text-xs\", risk === \"high\" ? \"text-destructive\" : \"text-muted-foreground\")}>\n            {risk === \"high\" ? <ShieldAlert aria-hidden=\"true\" className=\"size-3.5\" /> : <AlertTriangle aria-hidden=\"true\" className=\"size-3.5\" />}\n            Risk {risk}\n          </p>\n        ) : null}\n      </div>\n      {entries.length > 0 ? (\n        <dl className={cn(\"flex flex-col gap-1\", classNames?.args)}>\n          {entries.map(([key, value]) => (\n            <div key={key} className=\"flex min-w-0 flex-wrap items-baseline gap-2\">\n              <dt className=\"text-xs text-muted-foreground\">{key}</dt>\n              <dd className=\"min-w-0\">\n                <ArgValue value={value} />\n              </dd>\n            </div>\n          ))}\n        </dl>\n      ) : null}\n      {onAlwaysAllowChange ? (\n        <label className=\"flex items-center gap-2 text-sm text-foreground\">\n          <Checkbox checked={alwaysAllow} onCheckedChange={(value) => onAlwaysAllowChange(value === true)} />\n          Always allow this tool\n        </label>\n      ) : null}\n      <div className={cn(\"flex flex-wrap gap-2\", classNames?.actions)}>\n        <Button type=\"button\" disabled={busy} onClick={() => decide(\"approved\")}>\n          {approveLabel}\n        </Button>\n        <Button type=\"button\" variant=\"outline\" disabled={busy} onClick={() => decide(\"rejected\")}>\n          {denyLabel}\n        </Button>\n      </div>\n      <p id={liveId} className=\"sr-only\" aria-live=\"polite\">\n        Waiting for a decision on {toolName}\n      </p>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/tool-approval.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Aprobación de herramienta",
+    "descriptionEs": "Una puerta humana antes de ejecutar una herramienta, y luego un recibo breve.",
+    "preview": "app/examples/tool-approval/preview.tsx",
+    "previewHref": "/examples/tool-approval",
+    "examples": [
+      {
+        "title": "Aprobación de herramienta",
+        "href": "/examples/tool-approval",
+        "description": "Una puerta humana antes de ejecutar una herramienta, y luego un recibo breve."
+      }
+    ],
+    "usage": "<ToolApproval toolName=\"archive_shelf\" args={{ shelf: \"north\" }} onApprove={approve} />",
+    "api": [
+      {
+        "name": "toolName",
+        "type": "string",
+        "description": "Tool waiting for a decision."
+      },
+      {
+        "name": "risk",
+        "type": "\"low\" | \"medium\" | \"high\"",
+        "description": "Shown as text and an icon."
+      },
+      {
+        "name": "onApprove",
+        "type": "() => void",
+        "description": "Runs when the person approves."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "chat"
+  ],
+  "type": "registry:ui"
+}

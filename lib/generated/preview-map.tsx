@@ -145,6 +145,44 @@ import Preview140 from "@/app/examples/multi-view/preview"
 import Preview141 from "@/app/examples/magnetic-bento/preview"
 import Preview142 from "@/app/examples/two-factor-card/preview"
 import Preview143 from "@/app/examples/notification-stack/preview"
+import Preview144 from "@/app/examples/tool-call/preview"
+import Preview145 from "@/app/examples/tool-approval/preview"
+import Preview146 from "@/app/examples/message-branch/preview"
+import Preview147 from "@/app/examples/context-meter/preview"
+import Preview148 from "@/app/examples/prompt-suggestions/preview"
+import Preview149 from "@/app/examples/source-list/preview"
+import Preview150 from "@/app/examples/message-error/preview"
+import Preview151 from "@/app/examples/system-notice/preview"
+import Preview152 from "@/app/examples/slash-menu/preview"
+import Preview153 from "@/app/examples/char-limit/preview"
+import Preview154 from "@/app/examples/parameter-slider/preview"
+import Preview155 from "@/app/examples/confidence-badge/preview"
+import Preview156 from "@/app/examples/voice-orb/preview"
+import Preview157 from "@/app/examples/push-to-talk/preview"
+import Preview158 from "@/app/examples/audio-bars/preview"
+import Preview159 from "@/app/examples/audio-player/preview"
+import Preview160 from "@/app/examples/synced-transcript/preview"
+import Preview161 from "@/app/examples/mic-select/preview"
+import Preview162 from "@/app/examples/use-device-capabilities/preview"
+import Preview163 from "@/app/examples/capability-gate/preview"
+import Preview164 from "@/app/examples/capability-grid/preview"
+import Preview165 from "@/app/examples/storage-meter/preview"
+import Preview166 from "@/app/examples/network-status/preview"
+import Preview167 from "@/app/examples/download-progress/preview"
+import Preview168 from "@/app/examples/use-webcam/preview"
+import Preview169 from "@/app/examples/webcam-canvas/preview"
+import Preview170 from "@/app/examples/detection-overlay/preview"
+import Preview171 from "@/app/examples/scan-overlay/preview"
+import Preview172 from "@/app/examples/entity-text/preview"
+import Preview173 from "@/app/examples/force-graph/preview"
+import Preview174 from "@/app/examples/confusion-matrix/preview"
+import Preview175 from "@/app/examples/event-log/preview"
+import Preview176 from "@/app/examples/error-boundary/preview"
+import Preview177 from "@/app/examples/passphrase-gate/preview"
+import Preview178 from "@/app/examples/artifact-panel/preview"
+import Preview179 from "@/app/examples/language-pair/preview"
+import Preview180 from "@/app/examples/install-command/preview"
+import Preview181 from "@/app/examples/demo-collage/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -291,4 +329,42 @@ export const previewMap = {
   "magnetic-bento": Preview141,
   "two-factor-card": Preview142,
   "notification-stack": Preview143,
+  "tool-call": Preview144,
+  "tool-approval": Preview145,
+  "message-branch": Preview146,
+  "context-meter": Preview147,
+  "prompt-suggestions": Preview148,
+  "source-list": Preview149,
+  "message-error": Preview150,
+  "system-notice": Preview151,
+  "slash-menu": Preview152,
+  "char-limit": Preview153,
+  "parameter-slider": Preview154,
+  "confidence-badge": Preview155,
+  "voice-orb": Preview156,
+  "push-to-talk": Preview157,
+  "audio-bars": Preview158,
+  "audio-player": Preview159,
+  "synced-transcript": Preview160,
+  "mic-select": Preview161,
+  "use-device-capabilities": Preview162,
+  "capability-gate": Preview163,
+  "capability-grid": Preview164,
+  "storage-meter": Preview165,
+  "network-status": Preview166,
+  "download-progress": Preview167,
+  "use-webcam": Preview168,
+  "webcam-canvas": Preview169,
+  "detection-overlay": Preview170,
+  "scan-overlay": Preview171,
+  "entity-text": Preview172,
+  "force-graph": Preview173,
+  "confusion-matrix": Preview174,
+  "event-log": Preview175,
+  "error-boundary": Preview176,
+  "passphrase-gate": Preview177,
+  "artifact-panel": Preview178,
+  "language-pair": Preview179,
+  "install-command": Preview180,
+  "demo-collage": Preview181,
 }

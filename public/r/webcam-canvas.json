@@ -1,0 +1,67 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "webcam-canvas",
+  "title": "Webcam canvas",
+  "author": "Eduardo Retana",
+  "description": "A camera preview with a frame callback. The loop pauses offscreen.",
+  "dependencies": [],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/webcam-canvas.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/media-vision/video-canvas/video-canvas.tsx\n\nimport * as React from \"react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\nimport { useWebcam } from \"@/hooks/use-webcam\"\n\nexport type WebcamCanvasProps = {\n  facingMode?: \"user\" | \"environment\"\n  aspectRatio?: number\n  mirror?: boolean\n  onFrame?: (context: CanvasRenderingContext2D, video: HTMLVideoElement) => void\n  showFps?: boolean\n  className?: string\n}\n\nexport function WebcamCanvas({ facingMode = \"user\", aspectRatio = 16 / 9, mirror = true, onFrame, showFps = false, className }: WebcamCanvasProps) {\n  const { videoRef, status, error, start, stop } = useWebcam({ facingMode, autoStart: false })\n  const canvasRef = React.useRef<HTMLCanvasElement>(null)\n  const [fps, setFps] = React.useState(0)\n\n  React.useEffect(() => {\n    if (status !== \"active\") return\n    const canvas = canvasRef.current\n    const video = videoRef.current\n    if (!canvas || !video) return\n    const ctx = canvas.getContext(\"2d\")\n    if (!ctx) return\n    let frame = 0\n    let stopped = false\n    let frames = 0\n    let last = performance.now()\n    const hidden = { current: false }\n    const observer = new IntersectionObserver((entries) => {\n      hidden.current = entries.every((entry) => !entry.isIntersecting)\n    })\n    observer.observe(canvas)\n\n    const draw = (now: number) => {\n      if (stopped) return\n      if (!hidden.current && video.readyState >= 2) {\n        canvas.width = video.videoWidth || canvas.clientWidth\n        canvas.height = video.videoHeight || canvas.clientHeight\n        ctx.save()\n        if (mirror) {\n          ctx.translate(canvas.width, 0)\n          ctx.scale(-1, 1)\n        }\n        ctx.drawImage(video, 0, 0, canvas.width, canvas.height)\n        ctx.restore()\n        onFrame?.(ctx, video)\n        frames += 1\n        if (now - last > 1000) {\n          setFps(frames)\n          frames = 0\n          last = now\n        }\n      }\n      frame = requestAnimationFrame(draw)\n    }\n    frame = requestAnimationFrame(draw)\n    return () => {\n      stopped = true\n      cancelAnimationFrame(frame)\n      observer.disconnect()\n    }\n  }, [mirror, onFrame, status, videoRef])\n\n  return (\n    <div className={cn(\"flex flex-col gap-2\", className)}>\n      <div className=\"relative overflow-hidden rounded-lg bg-muted\" style={{ aspectRatio }}>\n        <video ref={videoRef} className=\"sr-only\" muted playsInline />\n        <canvas ref={canvasRef} className=\"size-full\" aria-label=\"Camera preview\" />\n        {showFps && status === \"active\" ? <span className=\"absolute top-2 right-2 rounded-md bg-background/80 px-1.5 text-xs tabular-nums\">{fps} fps</span> : null}\n        {status !== \"active\" ? (\n          <div className=\"absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 text-center\">\n            <p className=\"text-sm text-muted-foreground\">{error?.message ?? \"Camera is off.\"}</p>\n            <Button type=\"button\" size=\"sm\" onClick={() => void (status === \"idle\" || status === \"error\" ? start() : stop())}>\n              {status === \"starting\" ? \"Starting…\" : \"Start\"}\n            </Button>\n          </div>\n        ) : (\n          <Button type=\"button\" size=\"sm\" variant=\"outline\" className=\"absolute bottom-2 left-2\" onClick={stop}>\n            Stop\n          </Button>\n        )}\n      </div>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/webcam-canvas.tsx"
+    },
+    {
+      "path": "registry/hooks/use-webcam.ts",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/media-vision/use-webcam/use-webcam.ts\n\nimport * as React from \"react\"\n\nexport type WebcamErrorKind = \"permission\" | \"hardware\" | \"unknown\"\n\nexport type WebcamStatus = \"idle\" | \"starting\" | \"active\" | \"error\"\n\nexport type UseWebcamOptions = {\n  facingMode?: \"user\" | \"environment\"\n  width?: number\n  height?: number\n  audio?: boolean\n  autoStart?: boolean\n}\n\nexport function useWebcam(options: UseWebcamOptions = {}) {\n  const { facingMode = \"user\", width = 1280, height = 720, audio = false, autoStart = false } = options\n  const videoRef = React.useRef<HTMLVideoElement>(null)\n  const streamRef = React.useRef<MediaStream | null>(null)\n  const [stream, setStream] = React.useState<MediaStream | null>(null)\n  const [status, setStatus] = React.useState<WebcamStatus>(\"idle\")\n  const [error, setError] = React.useState<{ kind: WebcamErrorKind; message: string } | null>(null)\n  const facing = React.useRef(facingMode)\n\n  const stop = React.useCallback(() => {\n    streamRef.current?.getTracks().forEach((track) => track.stop())\n    streamRef.current = null\n    setStream(null)\n    if (videoRef.current) videoRef.current.srcObject = null\n    setStatus(\"idle\")\n  }, [])\n\n  const start = React.useCallback(async () => {\n    if (!navigator.mediaDevices?.getUserMedia) {\n      setStatus(\"error\")\n      setError({ kind: \"hardware\", message: \"This browser has no camera API.\" })\n      return\n    }\n    setStatus(\"starting\")\n    setError(null)\n    try {\n      const next = await navigator.mediaDevices.getUserMedia({\n        audio,\n        video: { facingMode: facing.current, width, height },\n      })\n      streamRef.current?.getTracks().forEach((track) => track.stop())\n      streamRef.current = next\n      setStream(next)\n      if (videoRef.current) {\n        videoRef.current.srcObject = next\n        await videoRef.current.play().catch(() => undefined)\n      }\n      setStatus(\"active\")\n    } catch (err) {\n      const name = err instanceof DOMException ? err.name : \"\"\n      const kind: WebcamErrorKind = name === \"NotAllowedError\" || name === \"SecurityError\" ? \"permission\" : name === \"NotFoundError\" ? \"hardware\" : \"unknown\"\n      setStatus(\"error\")\n      setError({ kind, message: err instanceof Error ? err.message : \"The camera could not start.\" })\n    }\n  }, [audio, height, width])\n\n  const switchCamera = React.useCallback(async () => {\n    facing.current = facing.current === \"user\" ? \"environment\" : \"user\"\n    await start()\n  }, [start])\n\n  React.useEffect(() => {\n    if (!autoStart) {\n      return () => {\n        streamRef.current?.getTracks().forEach((track) => track.stop())\n      }\n    }\n    const timer = window.setTimeout(() => void start(), 0)\n    return () => {\n      window.clearTimeout(timer)\n      streamRef.current?.getTracks().forEach((track) => track.stop())\n    }\n  }, [autoStart, start])\n\n  React.useEffect(() => {\n    const onChange = () => {\n      if (status === \"active\") void start()\n    }\n    navigator.mediaDevices?.addEventListener?.(\"devicechange\", onChange)\n    return () => navigator.mediaDevices?.removeEventListener?.(\"devicechange\", onChange)\n  }, [start, status])\n\n  return { videoRef, stream, status, error, start, stop, switchCamera }\n}\n",
+      "type": "registry:hook",
+      "target": "@hooks/use-webcam.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Lienzo de cámara",
+    "descriptionEs": "Una vista de cámara con un callback por cuadro. El bucle se pausa fuera de pantalla.",
+    "preview": "app/examples/webcam-canvas/preview.tsx",
+    "previewHref": "/examples/webcam-canvas",
+    "examples": [
+      {
+        "title": "Lienzo de cámara",
+        "href": "/examples/webcam-canvas",
+        "description": "Una vista de cámara con un callback por cuadro. El bucle se pausa fuera de pantalla."
+      }
+    ],
+    "usage": "<WebcamCanvas />",
+    "api": [
+      {
+        "name": "onFrame",
+        "type": "(ctx, video) => void",
+        "description": "Called each animation frame."
+      },
+      {
+        "name": "mirror",
+        "type": "boolean",
+        "description": "Flips the preview."
+      },
+      {
+        "name": "aspectRatio",
+        "type": "number",
+        "description": "Box ratio. Defaults to 16/9."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "media"
+  ],
+  "type": "registry:ui"
+}

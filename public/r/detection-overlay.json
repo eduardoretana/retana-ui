@@ -1,0 +1,59 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "detection-overlay",
+  "title": "Detection overlay",
+  "author": "Eduardo Retana",
+  "description": "Labelled boxes over an image, with a legend.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/detection-overlay.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/media-vision/bounding-box-overlay/bounding-box-overlay.tsx\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type Detection = {\n  label: string\n  score?: number\n  box: { x: number; y: number; width: number; height: number }\n}\n\nexport type DetectionOverlayProps = {\n  detections: Detection[]\n  naturalWidth: number\n  naturalHeight: number\n  hideLabels?: boolean\n  minScore?: number\n  interactive?: boolean\n  hiddenLabels?: string[]\n  onHiddenLabelsChange?: (labels: string[]) => void\n  children?: React.ReactNode\n  className?: string\n}\n\nfunction chartFor(label: string, labels: string[]) {\n  const index = Math.max(0, labels.indexOf(label))\n  return `var(--chart-${(index % 5) + 1})`\n}\n\nexport function DetectionLegend({\n  detections,\n  hidden = [],\n  onToggle,\n}: {\n  detections: Detection[]\n  hidden?: string[]\n  onToggle?: (label: string) => void\n}) {\n  const counts = new Map<string, number>()\n  for (const detection of detections) counts.set(detection.label, (counts.get(detection.label) ?? 0) + 1)\n  const labels = [...counts.keys()]\n  return (\n    <ul className=\"flex flex-wrap gap-1.5\">\n      {labels.map((label) => (\n        <li key={label}>\n          <button\n            type=\"button\"\n            aria-pressed={!hidden.includes(label)}\n            className=\"inline-flex items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n            onClick={() => onToggle?.(label)}\n          >\n            <span aria-hidden=\"true\" className=\"size-2 rounded-full\" style={{ backgroundColor: chartFor(label, labels) }} />\n            {label} {counts.get(label)}\n          </button>\n        </li>\n      ))}\n    </ul>\n  )\n}\n\nexport function DetectionOverlay({\n  detections,\n  naturalWidth,\n  naturalHeight,\n  hideLabels = false,\n  minScore = 0,\n  interactive = true,\n  hiddenLabels = [],\n  children,\n  className,\n}: DetectionOverlayProps) {\n  const [focus, setFocus] = React.useState<number | null>(null)\n  const labels = [...new Set(detections.map((item) => item.label))]\n  const visible = detections\n    .map((detection, index) => ({ detection, index }))\n    .filter(({ detection }) => (detection.score ?? 1) >= minScore && !hiddenLabels.includes(detection.label))\n\n  return (\n    <div className={cn(\"relative\", className)}>\n      {children}\n      <ul className=\"pointer-events-none absolute inset-0\">\n        {visible.map(({ detection, index }) => {\n          const left = (detection.box.x / naturalWidth) * 100\n          const top = (detection.box.y / naturalHeight) * 100\n          const width = (detection.box.width / naturalWidth) * 100\n          const height = (detection.box.height / naturalHeight) * 100\n          const percent = detection.score != null ? `${Math.round(detection.score * 100)}%` : \"\"\n          const dimmed = focus != null && focus !== index\n          return (\n            <li\n              key={`${detection.label}-${index}`}\n              className=\"absolute\"\n              style={{ left: `${left}%`, top: `${top}%`, width: `${width}%`, height: `${height}%`, opacity: dimmed ? 0.35 : 1 }}\n            >\n              <span\n                tabIndex={interactive ? 0 : undefined}\n                className=\"pointer-events-auto absolute inset-0 border-2 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n                style={{ borderColor: chartFor(detection.label, labels) }}\n                onMouseEnter={() => setFocus(index)}\n                onMouseLeave={() => setFocus(null)}\n                onFocus={() => setFocus(index)}\n                onBlur={() => setFocus(null)}\n              >\n                <span className=\"sr-only\">\n                  {detection.label}\n                  {percent ? `, ${percent} confidence` : \"\"}, top-left\n                </span>\n              </span>\n              {hideLabels ? null : (\n                <span\n                  className=\"absolute left-0 max-w-full -translate-y-full truncate rounded-sm px-1 text-[10px] text-primary-foreground\"\n                  style={{ backgroundColor: chartFor(detection.label, labels), top: top < 8 ? \"100%\" : 0 }}\n                >\n                  {detection.label} {percent}\n                </span>\n              )}\n            </li>\n          )\n        })}\n      </ul>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/detection-overlay.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Cajas de detección",
+    "descriptionEs": "Cajas con etiqueta sobre una imagen, y una leyenda.",
+    "preview": "app/examples/detection-overlay/preview.tsx",
+    "previewHref": "/examples/detection-overlay",
+    "examples": [
+      {
+        "title": "Cajas de detección",
+        "href": "/examples/detection-overlay",
+        "description": "Cajas con etiqueta sobre una imagen, y una leyenda."
+      }
+    ],
+    "usage": "<DetectionOverlay detections={boxes} naturalWidth={800} naturalHeight={600}>{image}</DetectionOverlay>",
+    "api": [
+      {
+        "name": "detections",
+        "type": "Detection[]",
+        "description": "label, score, and box."
+      },
+      {
+        "name": "naturalWidth",
+        "type": "number",
+        "description": "Source width used to place boxes."
+      },
+      {
+        "name": "minScore",
+        "type": "number",
+        "description": "Hides weaker boxes."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "media"
+  ],
+  "type": "registry:ui"
+}

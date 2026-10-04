@@ -1,0 +1,61 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "entity-text",
+  "title": "Entity text",
+  "author": "Eduardo Retana",
+  "description": "Inline highlights, masks, or redaction tokens for annotated spans.",
+  "dependencies": [],
+  "registryDependencies": [
+    "tooltip"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/entity-text.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/results/redacted-text-display/redacted-text-display.tsx\n\nimport * as React from \"react\"\n\nimport { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from \"@/components/ui/tooltip\"\nimport { cn } from \"@/lib/utils\"\n\nexport type EntitySpan = {\n  start: number\n  end: number\n  type: string\n  score?: number\n}\n\nexport type EntityTextMode = \"highlight\" | \"redact\" | \"mask\"\n\nexport type EntitySegment =\n  | { kind: \"text\"; value: string }\n  | { kind: \"entity\"; value: string; entity: EntitySpan }\n\nexport function segmentText(text: string, entities: EntitySpan[]): EntitySegment[] {\n  const ranked = [...entities]\n    .filter((entity) => entity.start >= 0 && entity.end <= text.length && entity.start < entity.end)\n    .sort((a, b) => b.end - b.start - (a.end - a.start) || a.start - b.start)\n  const chosen: EntitySpan[] = []\n  for (const entity of ranked) {\n    if (chosen.some((other) => entity.start < other.end && other.start < entity.end)) continue\n    chosen.push(entity)\n  }\n  chosen.sort((a, b) => a.start - b.start)\n  const segments: EntitySegment[] = []\n  let cursor = 0\n  for (const entity of chosen) {\n    if (entity.start > cursor) segments.push({ kind: \"text\", value: text.slice(cursor, entity.start) })\n    segments.push({ kind: \"entity\", value: text.slice(entity.start, entity.end), entity })\n    cursor = entity.end\n  }\n  if (cursor < text.length) segments.push({ kind: \"text\", value: text.slice(cursor) })\n  return segments\n}\n\nfunction chartFor(type: string, types: string[]) {\n  const index = Math.max(0, types.indexOf(type))\n  return `var(--chart-${(index % 5) + 1})`\n}\n\nexport type EntityTextProps = {\n  text: string\n  entities: EntitySpan[]\n  mode?: EntityTextMode\n  maskedTypes?: string[]\n  onMaskedTypesChange?: (types: string[]) => void\n  types?: Record<string, { label?: string; color?: string }>\n  className?: string\n}\n\nexport function EntityText({ text, entities, mode = \"highlight\", maskedTypes = [], onMaskedTypesChange, types, className }: EntityTextProps) {\n  const segments = segmentText(text, entities)\n  const typeNames = [...new Set(entities.map((entity) => entity.type))]\n  const counts = new Map<string, number>()\n  for (const entity of entities) counts.set(entity.type, (counts.get(entity.type) ?? 0) + 1)\n\n  return (\n    <TooltipProvider>\n      <div className={cn(\"flex flex-col gap-3 text-sm leading-6\", className)}>\n        <p>\n          {segments.map((segment, index) => {\n            if (segment.kind === \"text\") return <span key={index}>{segment.value}</span>\n            const label = types?.[segment.entity.type]?.label ?? segment.entity.type\n            const color = types?.[segment.entity.type]?.color ?? chartFor(segment.entity.type, typeNames)\n            const hidden = mode === \"redact\" || (mode === \"mask\" && maskedTypes.includes(segment.entity.type))\n            const spoken = hidden ? label : `${label}: ${segment.value}`\n            return (\n              <Tooltip key={index}>\n                <TooltipTrigger asChild>\n                  <mark\n                    aria-label={spoken}\n                    className=\"rounded-sm px-0.5 underline decoration-2\"\n                    style={{\n                      backgroundColor: hidden ? \"var(--muted)\" : `color-mix(in oklab, ${color} 18%, var(--background))`,\n                      textDecorationColor: color,\n                    }}\n                  >\n                    {hidden ? `[${label}]` : segment.value}\n                  </mark>\n                </TooltipTrigger>\n                <TooltipContent>\n                  {label}\n                  {segment.entity.score != null ? ` · ${Math.round(segment.entity.score * 100)}%` : \"\"}\n                </TooltipContent>\n              </Tooltip>\n            )\n          })}\n        </p>\n        <ul className=\"flex flex-wrap gap-1.5\">\n          {typeNames.map((type) => {\n            const label = types?.[type]?.label ?? type\n            const active = !maskedTypes.includes(type)\n            return (\n              <li key={type}>\n                <button\n                  type=\"button\"\n                  aria-pressed={active}\n                  className=\"rounded-full border border-border px-2 py-0.5 text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n                  onClick={() => {\n                    if (!onMaskedTypesChange) return\n                    onMaskedTypesChange(active ? [...maskedTypes, type] : maskedTypes.filter((item) => item !== type))\n                  }}\n                >\n                  {label} {counts.get(type)}\n                </button>\n              </li>\n            )\n          })}\n        </ul>\n      </div>\n    </TooltipProvider>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/entity-text.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Texto con entidades",
+    "descriptionEs": "Resaltes, máscaras o fichas de redacción para tramos anotados.",
+    "preview": "app/examples/entity-text/preview.tsx",
+    "previewHref": "/examples/entity-text",
+    "examples": [
+      {
+        "title": "Texto con entidades",
+        "href": "/examples/entity-text",
+        "description": "Resaltes, máscaras o fichas de redacción para tramos anotados."
+      }
+    ],
+    "usage": "<EntityText text={note} entities={spans} mode=\"highlight\" />",
+    "api": [
+      {
+        "name": "text",
+        "type": "string",
+        "description": "Source text."
+      },
+      {
+        "name": "entities",
+        "type": "EntitySpan[]",
+        "description": "start, end, type, score."
+      },
+      {
+        "name": "mode",
+        "type": "\"highlight\" | \"redact\" | \"mask\"",
+        "description": "How spans render."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "content"
+  ],
+  "type": "registry:ui"
+}

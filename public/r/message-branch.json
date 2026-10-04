@@ -1,0 +1,63 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "message-branch",
+  "title": "Message branch",
+  "author": "Eduardo Retana",
+  "description": "Page between regenerated variants of one reply.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/message-branch.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/conversation/branch/branch.tsx\n\nimport * as React from \"react\"\nimport { ChevronLeft, ChevronRight } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\n\nexport type MessageBranchClassNames = {\n  root?: string\n  content?: string\n  selector?: string\n  page?: string\n}\n\nexport type MessageBranchProps = {\n  count: number\n  index?: number\n  defaultIndex?: number\n  onIndexChange?: (index: number) => void\n  followNewest?: boolean\n  hideWhenSingle?: boolean\n  children?: React.ReactNode\n  label?: string\n  className?: string\n  classNames?: MessageBranchClassNames\n}\n\nfunction clamp(index: number, count: number) {\n  if (count <= 0) return 0\n  return Math.min(Math.max(index, 0), count - 1)\n}\n\nexport function MessageBranch({\n  count,\n  index,\n  defaultIndex = 0,\n  onIndexChange,\n  followNewest = true,\n  hideWhenSingle = true,\n  children,\n  label = \"Response versions\",\n  className,\n  classNames,\n}: MessageBranchProps) {\n  const [internal, setInternal] = React.useState(() => clamp(defaultIndex, count))\n  const [seenCount, setSeenCount] = React.useState(count)\n  if (count !== seenCount) {\n    setSeenCount(count)\n    if (index === undefined) {\n      const next = count > seenCount && followNewest ? Math.max(0, count - 1) : clamp(internal, count)\n      if (next !== internal) setInternal(next)\n    }\n  }\n  const current = clamp(index ?? internal, count)\n  const items = React.Children.toArray(children)\n\n  const go = (next: number) => {\n    const clamped = clamp(next, count)\n    if (index === undefined) setInternal(clamped)\n    onIndexChange?.(clamped)\n  }\n\n  const showSelector = !(hideWhenSingle && count <= 1)\n\n  return (\n    <div className={cn(\"flex min-w-0 flex-col gap-2\", className, classNames?.root)}>\n      <div className={cn(\"min-w-0\", classNames?.content)}>{items[current] ?? null}</div>\n      {showSelector ? (\n        <div\n          role=\"group\"\n          aria-label={label}\n          className={cn(\"flex items-center gap-1\", classNames?.selector)}\n          onKeyDown={(event) => {\n            if (event.key === \"ArrowLeft\") {\n              event.preventDefault()\n              go(current - 1)\n            }\n            if (event.key === \"ArrowRight\") {\n              event.preventDefault()\n              go(current + 1)\n            }\n          }}\n        >\n          <Button type=\"button\" variant=\"outline\" size=\"icon-sm\" aria-label=\"Previous version\" disabled={current <= 0} onClick={() => go(current - 1)}>\n            <ChevronLeft data-icon=\"inline-start\" />\n          </Button>\n          <span aria-live=\"polite\" className={cn(\"min-w-16 text-center text-xs text-muted-foreground tabular-nums\", classNames?.page)}>\n            Version {current + 1} of {count}\n          </span>\n          <Button\n            type=\"button\"\n            variant=\"outline\"\n            size=\"icon-sm\"\n            aria-label=\"Next version\"\n            disabled={current >= count - 1}\n            onClick={() => go(current + 1)}\n          >\n            <ChevronRight data-icon=\"inline-start\" />\n          </Button>\n        </div>\n      ) : null}\n    </div>\n  )\n}\n\nexport function MessageBranchContent({ children, className }: { children?: React.ReactNode; className?: string }) {\n  return <div className={className}>{children}</div>\n}\n\nexport function MessageBranchSelector(props: Omit<MessageBranchProps, \"children\">) {\n  return <MessageBranch {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/message-branch.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Variantes de respuesta",
+    "descriptionEs": "Pasa entre las variantes regeneradas de una misma respuesta.",
+    "preview": "app/examples/message-branch/preview.tsx",
+    "previewHref": "/examples/message-branch",
+    "examples": [
+      {
+        "title": "Variantes de respuesta",
+        "href": "/examples/message-branch",
+        "description": "Pasa entre las variantes regeneradas de una misma respuesta."
+      }
+    ],
+    "usage": "<MessageBranch count={3}>{variants}</MessageBranch>",
+    "api": [
+      {
+        "name": "count",
+        "type": "number",
+        "description": "How many variants exist."
+      },
+      {
+        "name": "index",
+        "type": "number",
+        "description": "Controlled variant index."
+      },
+      {
+        "name": "followNewest",
+        "type": "boolean",
+        "description": "Jump to the newest variant when count grows."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "chat"
+  ],
+  "type": "registry:ui"
+}

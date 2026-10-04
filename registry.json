@@ -10652,6 +10652,2359 @@
           "target": "@ui/notification-stack.tsx"
         }
       ]
+    },
+    {
+      "name": "tool-call",
+      "type": "registry:ui",
+      "title": "Tool call",
+      "description": "One tool invocation with status, parameters, and a result or error.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "badge",
+        "collapsible"
+      ],
+      "categories": [
+        "agents",
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Llamada de herramienta",
+        "descriptionEs": "Una invocación de herramienta con estado, parámetros y resultado o error.",
+        "preview": "app/examples/tool-call/preview.tsx",
+        "previewHref": "/examples/tool-call",
+        "examples": [
+          {
+            "title": "Llamada de herramienta",
+            "href": "/examples/tool-call",
+            "description": "Una invocación de herramienta con estado, parámetros y resultado o error."
+          }
+        ],
+        "usage": "<ToolCall call={call} />",
+        "api": [
+          {
+            "name": "call",
+            "type": "ToolCallData",
+            "description": "id, name, input, output, error, status, timestamps."
+          },
+          {
+            "name": "renderers",
+            "type": "Record<string, (call) => ReactNode>",
+            "description": "Custom body per tool name."
+          },
+          {
+            "name": "open",
+            "type": "boolean",
+            "description": "Controlled disclosure."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/tool-call.tsx",
+          "type": "registry:component",
+          "target": "@ui/tool-call.tsx"
+        },
+        {
+          "path": "registry/ui/copy-button.tsx",
+          "type": "registry:component",
+          "target": "@ui/copy-button.tsx"
+        },
+        {
+          "path": "registry/hooks/use-copy-feedback.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-copy-feedback.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "tool-approval",
+      "type": "registry:ui",
+      "title": "Tool approval",
+      "description": "A human gate before a tool runs, then a compact receipt.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "checkbox"
+      ],
+      "categories": [
+        "agents",
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Aprobación de herramienta",
+        "descriptionEs": "Una puerta humana antes de ejecutar una herramienta, y luego un recibo breve.",
+        "preview": "app/examples/tool-approval/preview.tsx",
+        "previewHref": "/examples/tool-approval",
+        "examples": [
+          {
+            "title": "Aprobación de herramienta",
+            "href": "/examples/tool-approval",
+            "description": "Una puerta humana antes de ejecutar una herramienta, y luego un recibo breve."
+          }
+        ],
+        "usage": "<ToolApproval toolName=\"archive_shelf\" args={{ shelf: \"north\" }} onApprove={approve} />",
+        "api": [
+          {
+            "name": "toolName",
+            "type": "string",
+            "description": "Tool waiting for a decision."
+          },
+          {
+            "name": "risk",
+            "type": "\"low\" | \"medium\" | \"high\"",
+            "description": "Shown as text and an icon."
+          },
+          {
+            "name": "onApprove",
+            "type": "() => void",
+            "description": "Runs when the person approves."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/tool-approval.tsx",
+          "type": "registry:component",
+          "target": "@ui/tool-approval.tsx"
+        }
+      ]
+    },
+    {
+      "name": "message-branch",
+      "type": "registry:ui",
+      "title": "Message branch",
+      "description": "Page between regenerated variants of one reply.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "agents",
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Variantes de respuesta",
+        "descriptionEs": "Pasa entre las variantes regeneradas de una misma respuesta.",
+        "preview": "app/examples/message-branch/preview.tsx",
+        "previewHref": "/examples/message-branch",
+        "examples": [
+          {
+            "title": "Variantes de respuesta",
+            "href": "/examples/message-branch",
+            "description": "Pasa entre las variantes regeneradas de una misma respuesta."
+          }
+        ],
+        "usage": "<MessageBranch count={3}>{variants}</MessageBranch>",
+        "api": [
+          {
+            "name": "count",
+            "type": "number",
+            "description": "How many variants exist."
+          },
+          {
+            "name": "index",
+            "type": "number",
+            "description": "Controlled variant index."
+          },
+          {
+            "name": "followNewest",
+            "type": "boolean",
+            "description": "Jump to the newest variant when count grows."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/message-branch.tsx",
+          "type": "registry:component",
+          "target": "@ui/message-branch.tsx"
+        }
+      ]
+    },
+    {
+      "name": "context-meter",
+      "type": "registry:ui",
+      "title": "Context meter",
+      "description": "A compact ring for a context window, with a breakdown on click.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "popover"
+      ],
+      "categories": [
+        "agents",
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Medidor de contexto",
+        "descriptionEs": "Un anillo compacto del cupo de contexto, con el desglose al pulsarlo.",
+        "preview": "app/examples/context-meter/preview.tsx",
+        "previewHref": "/examples/context-meter",
+        "examples": [
+          {
+            "title": "Medidor de contexto",
+            "href": "/examples/context-meter",
+            "description": "Un anillo compacto del cupo de contexto, con el desglose al pulsarlo."
+          }
+        ],
+        "usage": "<ContextMeter used={12400} contextWindow={32000} usage={{ input: 8000, output: 4400 }} />",
+        "api": [
+          {
+            "name": "used",
+            "type": "number",
+            "description": "Tokens already used."
+          },
+          {
+            "name": "contextWindow",
+            "type": "number",
+            "description": "Window size."
+          },
+          {
+            "name": "warnThreshold",
+            "type": "number",
+            "description": "Fraction that switches the ring to a warning."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/context-meter.tsx",
+          "type": "registry:component",
+          "target": "@ui/context-meter.tsx"
+        }
+      ]
+    },
+    {
+      "name": "prompt-suggestions",
+      "type": "registry:ui",
+      "title": "Prompt suggestions",
+      "description": "A chip row that seeds a composer.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "skeleton"
+      ],
+      "categories": [
+        "agents",
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Sugerencias",
+        "descriptionEs": "Una fila de fichas que rellena el compositor.",
+        "preview": "app/examples/prompt-suggestions/preview.tsx",
+        "previewHref": "/examples/prompt-suggestions",
+        "examples": [
+          {
+            "title": "Sugerencias",
+            "href": "/examples/prompt-suggestions",
+            "description": "Una fila de fichas que rellena el compositor."
+          }
+        ],
+        "usage": "<PromptSuggestions items={[\"Resume the kiln log\"]} onSelect={fill} />",
+        "api": [
+          {
+            "name": "items",
+            "type": "PromptSuggestion[]",
+            "description": "Labels, or objects with label and value."
+          },
+          {
+            "name": "layout",
+            "type": "\"scroll\" | \"wrap\"",
+            "description": "Single scrolling row or a wrap."
+          },
+          {
+            "name": "onSelect",
+            "type": "(value: string) => void",
+            "description": "Chosen suggestion."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/prompt-suggestions.tsx",
+          "type": "registry:component",
+          "target": "@ui/prompt-suggestions.tsx"
+        }
+      ]
+    },
+    {
+      "name": "source-list",
+      "type": "registry:ui",
+      "title": "Source list",
+      "description": "A collapsible list of numbered sources with excerpts.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "collapsible",
+        "tabs"
+      ],
+      "categories": [
+        "agents",
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Lista de fuentes",
+        "descriptionEs": "Una lista plegable de fuentes numeradas, con extracto.",
+        "preview": "app/examples/source-list/preview.tsx",
+        "previewHref": "/examples/source-list",
+        "examples": [
+          {
+            "title": "Lista de fuentes",
+            "href": "/examples/source-list",
+            "description": "Una lista plegable de fuentes numeradas, con extracto."
+          }
+        ],
+        "usage": "<SourceList sources={sources} />",
+        "api": [
+          {
+            "name": "sources",
+            "type": "SourceItem[]",
+            "description": "id, title, url, excerpt, score, type."
+          },
+          {
+            "name": "highlightId",
+            "type": "string",
+            "description": "Row to emphasize."
+          },
+          {
+            "name": "target",
+            "type": "string",
+            "description": "Link target."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/source-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/source-list.tsx"
+        },
+        {
+          "path": "registry/ui/confidence-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/confidence-badge.tsx"
+        }
+      ]
+    },
+    {
+      "name": "message-error",
+      "type": "registry:ui",
+      "title": "Message error",
+      "description": "An inline failure under an assistant message, with retry.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "agents",
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Error en el mensaje",
+        "descriptionEs": "Un fallo en línea bajo el mensaje, con reintento.",
+        "preview": "app/examples/message-error/preview.tsx",
+        "previewHref": "/examples/message-error",
+        "examples": [
+          {
+            "title": "Error en el mensaje",
+            "href": "/examples/message-error",
+            "description": "Un fallo en línea bajo el mensaje, con reintento."
+          }
+        ],
+        "usage": "<MessageError error={error} onRetry={retry} />",
+        "api": [
+          {
+            "name": "error",
+            "type": "unknown",
+            "description": "Error, string, or { message }."
+          },
+          {
+            "name": "details",
+            "type": "string",
+            "description": "Optional stack or JSON."
+          },
+          {
+            "name": "onRetry",
+            "type": "() => void",
+            "description": "Retry action."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/message-error.tsx",
+          "type": "registry:component",
+          "target": "@ui/message-error.tsx"
+        }
+      ]
+    },
+    {
+      "name": "system-notice",
+      "type": "registry:ui",
+      "title": "System notice",
+      "description": "A slim in-thread status line, not a message bubble.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "agents",
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Aviso del hilo",
+        "descriptionEs": "Una línea breve de estado dentro del hilo, no una burbuja.",
+        "preview": "app/examples/system-notice/preview.tsx",
+        "previewHref": "/examples/system-notice",
+        "examples": [
+          {
+            "title": "Aviso del hilo",
+            "href": "/examples/system-notice",
+            "description": "Una línea breve de estado dentro del hilo, no una burbuja."
+          }
+        ],
+        "usage": "<SystemNotice kind=\"offline\" />",
+        "api": [
+          {
+            "name": "kind",
+            "type": "SystemNoticeKind",
+            "description": "info, warning, offline, online, or switched."
+          },
+          {
+            "name": "tone",
+            "type": "\"info\" | \"warning\" | \"error\"",
+            "description": "Overrides the preset tone."
+          },
+          {
+            "name": "onDismiss",
+            "type": "() => void",
+            "description": "Shows a dismiss control."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/system-notice.tsx",
+          "type": "registry:component",
+          "target": "@ui/system-notice.tsx"
+        }
+      ]
+    },
+    {
+      "name": "slash-menu",
+      "type": "registry:ui",
+      "title": "Slash menu",
+      "description": "A slash command menu anchored to a textarea.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "cmdk"
+      ],
+      "registryDependencies": [
+        "command"
+      ],
+      "categories": [
+        "agents",
+        "input"
+      ],
+      "meta": {
+        "titleEs": "Menú de barras",
+        "descriptionEs": "Un menú de comandos con barra, anclado a un área de texto.",
+        "preview": "app/examples/slash-menu/preview.tsx",
+        "previewHref": "/examples/slash-menu",
+        "examples": [
+          {
+            "title": "Menú de barras",
+            "href": "/examples/slash-menu",
+            "description": "Un menú de comandos con barra, anclado a un área de texto."
+          }
+        ],
+        "usage": "const slash = useSlashTrigger(ref); <SlashMenu commands={commands} open={slash.open} query={slash.query} onSelect={pick} onDismiss={slash.close} />",
+        "api": [
+          {
+            "name": "commands",
+            "type": "SlashCommand[]",
+            "description": "id, name, description, category."
+          },
+          {
+            "name": "query",
+            "type": "string",
+            "description": "Text after the slash."
+          },
+          {
+            "name": "onSelect",
+            "type": "(command) => void",
+            "description": "Chosen command."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/slash-menu.tsx",
+          "type": "registry:component",
+          "target": "@ui/slash-menu.tsx"
+        }
+      ]
+    },
+    {
+      "name": "char-limit",
+      "type": "registry:ui",
+      "title": "Character limit",
+      "description": "A ring and counter that appears as an input nears its limit.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "agents",
+        "input"
+      ],
+      "meta": {
+        "titleEs": "Límite de caracteres",
+        "descriptionEs": "Un anillo y un contador que aparecen cuando el texto se acerca al límite.",
+        "preview": "app/examples/char-limit/preview.tsx",
+        "previewHref": "/examples/char-limit",
+        "examples": [
+          {
+            "title": "Límite de caracteres",
+            "href": "/examples/char-limit",
+            "description": "Un anillo y un contador que aparecen cuando el texto se acerca al límite."
+          }
+        ],
+        "usage": "<CharLimit value={text} max={280} />",
+        "api": [
+          {
+            "name": "value",
+            "type": "string",
+            "description": "Text to measure."
+          },
+          {
+            "name": "max",
+            "type": "number",
+            "description": "Limit."
+          },
+          {
+            "name": "showAt",
+            "type": "number",
+            "description": "Count at which the ring appears."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/char-limit.tsx",
+          "type": "registry:component",
+          "target": "@ui/char-limit.tsx"
+        }
+      ]
+    },
+    {
+      "name": "parameter-slider",
+      "type": "registry:ui",
+      "title": "Parameter slider",
+      "description": "A labelled slider with a live value and a reset.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "slider",
+        "tooltip"
+      ],
+      "categories": [
+        "agents",
+        "input"
+      ],
+      "meta": {
+        "titleEs": "Deslizador",
+        "descriptionEs": "Un deslizador con etiqueta, valor en vivo y reinicio.",
+        "preview": "app/examples/parameter-slider/preview.tsx",
+        "previewHref": "/examples/parameter-slider",
+        "examples": [
+          {
+            "title": "Deslizador",
+            "href": "/examples/parameter-slider",
+            "description": "Un deslizador con etiqueta, valor en vivo y reinicio."
+          }
+        ],
+        "usage": "<ParameterSlider label=\"Temperature\" min={0} max={1} step={0.05} defaultValue={0.4} />",
+        "api": [
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Accessible name."
+          },
+          {
+            "name": "min",
+            "type": "number",
+            "description": "Lower bound."
+          },
+          {
+            "name": "marks",
+            "type": "ParameterMark[]",
+            "description": "Optional captions."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/parameter-slider.tsx",
+          "type": "registry:component",
+          "target": "@ui/parameter-slider.tsx"
+        }
+      ]
+    },
+    {
+      "name": "confidence-badge",
+      "type": "registry:ui",
+      "title": "Confidence badge",
+      "description": "A 0–1 score as a badge, dial, or bar, with a text tier.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "agents",
+        "feedback"
+      ],
+      "meta": {
+        "titleEs": "Insignia de confianza",
+        "descriptionEs": "Una puntuación de 0 a 1 como insignia, dial o barra, con el nivel en texto.",
+        "preview": "app/examples/confidence-badge/preview.tsx",
+        "previewHref": "/examples/confidence-badge",
+        "examples": [
+          {
+            "title": "Insignia de confianza",
+            "href": "/examples/confidence-badge",
+            "description": "Una puntuación de 0 a 1 como insignia, dial o barra, con el nivel en texto."
+          }
+        ],
+        "usage": "<ConfidenceBadge score={0.87} />",
+        "api": [
+          {
+            "name": "score",
+            "type": "number",
+            "description": "0 to 1."
+          },
+          {
+            "name": "variant",
+            "type": "\"badge\" | \"dial\" | \"bar\"",
+            "description": "Visual form."
+          },
+          {
+            "name": "thresholds",
+            "type": "{ high, medium }",
+            "description": "Tier cutoffs."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/confidence-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/confidence-badge.tsx"
+        }
+      ]
+    },
+    {
+      "name": "voice-orb",
+      "type": "registry:ui",
+      "title": "Voice orb",
+      "description": "A state-driven voice visual that pauses when motion is reduced.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "agents",
+        "media"
+      ],
+      "meta": {
+        "titleEs": "Orbe de voz",
+        "descriptionEs": "Un visual de voz según el estado, que se detiene si se reduce el movimiento.",
+        "preview": "app/examples/voice-orb/preview.tsx",
+        "previewHref": "/examples/voice-orb",
+        "examples": [
+          {
+            "title": "Orbe de voz",
+            "href": "/examples/voice-orb",
+            "description": "Un visual de voz según el estado, que se detiene si se reduce el movimiento."
+          }
+        ],
+        "usage": "<VoiceOrb state=\"listening\" getInputVolume={() => 0.4} />",
+        "api": [
+          {
+            "name": "state",
+            "type": "VoiceOrbState",
+            "description": "idle, connecting, listening, thinking, speaking, or muted."
+          },
+          {
+            "name": "getInputVolume",
+            "type": "() => number",
+            "description": "0 to 1, read each frame."
+          },
+          {
+            "name": "size",
+            "type": "number",
+            "description": "Diameter in pixels."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/voice-orb.tsx",
+          "type": "registry:component",
+          "target": "@ui/voice-orb.tsx"
+        }
+      ]
+    },
+    {
+      "name": "push-to-talk",
+      "type": "registry:ui",
+      "title": "Push to talk",
+      "description": "Hold to record and release to send, with a toggle mode.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "agents",
+        "media"
+      ],
+      "meta": {
+        "titleEs": "Pulsar para hablar",
+        "descriptionEs": "Mantén para grabar y suelta para enviar, con un modo de alternar.",
+        "preview": "app/examples/push-to-talk/preview.tsx",
+        "previewHref": "/examples/push-to-talk",
+        "examples": [
+          {
+            "title": "Pulsar para hablar",
+            "href": "/examples/push-to-talk",
+            "description": "Mantén para grabar y suelta para enviar, con un modo de alternar."
+          }
+        ],
+        "usage": "<PushToTalk mode=\"toggle\" onStart={start} onStop={stop} />",
+        "api": [
+          {
+            "name": "mode",
+            "type": "\"hold\" | \"toggle\"",
+            "description": "Hold is the default. Toggle is the click alternative."
+          },
+          {
+            "name": "onStart",
+            "type": "() => void",
+            "description": "Recording began."
+          },
+          {
+            "name": "onStop",
+            "type": "(blob?) => void",
+            "description": "Recording ended."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/push-to-talk.tsx",
+          "type": "registry:component",
+          "target": "@ui/push-to-talk.tsx"
+        }
+      ]
+    },
+    {
+      "name": "audio-bars",
+      "type": "registry:ui",
+      "title": "Audio bars",
+      "description": "A row of activity bars driven by levels or an idle pulse.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "agents",
+        "media"
+      ],
+      "meta": {
+        "titleEs": "Barras de audio",
+        "descriptionEs": "Una fila de barras de actividad, por niveles o en reposo.",
+        "preview": "app/examples/audio-bars/preview.tsx",
+        "previewHref": "/examples/audio-bars",
+        "examples": [
+          {
+            "title": "Barras de audio",
+            "href": "/examples/audio-bars",
+            "description": "Una fila de barras de actividad, por niveles o en reposo."
+          }
+        ],
+        "usage": "<AudioBars levels={[0.2, 0.8, 0.4]} label=\"Level\" />",
+        "api": [
+          {
+            "name": "levels",
+            "type": "number[]",
+            "description": "0 to 1 bar heights."
+          },
+          {
+            "name": "active",
+            "type": "boolean",
+            "description": "CSS pulse when levels are omitted."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Accessible name."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/audio-bars.tsx",
+          "type": "registry:component",
+          "target": "@ui/audio-bars.tsx"
+        }
+      ]
+    },
+    {
+      "name": "audio-player",
+      "type": "registry:ui",
+      "title": "Audio player",
+      "description": "A compact player with a keyboard scrub bar.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "dropdown-menu"
+      ],
+      "categories": [
+        "agents",
+        "media"
+      ],
+      "meta": {
+        "titleEs": "Reproductor de audio",
+        "descriptionEs": "Un reproductor compacto con una barra que se recorre con el teclado.",
+        "preview": "app/examples/audio-player/preview.tsx",
+        "previewHref": "/examples/audio-player",
+        "examples": [
+          {
+            "title": "Reproductor de audio",
+            "href": "/examples/audio-player",
+            "description": "Un reproductor compacto con una barra que se recorre con el teclado."
+          }
+        ],
+        "usage": "<AudioPlayer src={url} onTimeUpdate={setTime} />",
+        "api": [
+          {
+            "name": "src",
+            "type": "string",
+            "description": "Audio URL."
+          },
+          {
+            "name": "blob",
+            "type": "Blob",
+            "description": "Object URL is revoked on change."
+          },
+          {
+            "name": "peaks",
+            "type": "number[]",
+            "description": "Optional waveform."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/audio-player.tsx",
+          "type": "registry:component",
+          "target": "@ui/audio-player.tsx"
+        }
+      ]
+    },
+    {
+      "name": "synced-transcript",
+      "type": "registry:ui",
+      "title": "Synced transcript",
+      "description": "A transcript that highlights the word at the current time.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "agents",
+        "media"
+      ],
+      "meta": {
+        "titleEs": "Transcripción sincronizada",
+        "descriptionEs": "Una transcripción que resalta la palabra del instante actual.",
+        "preview": "app/examples/synced-transcript/preview.tsx",
+        "previewHref": "/examples/synced-transcript",
+        "examples": [
+          {
+            "title": "Transcripción sincronizada",
+            "href": "/examples/synced-transcript",
+            "description": "Una transcripción que resalta la palabra del instante actual."
+          }
+        ],
+        "usage": "<SyncedTranscript words={words} currentTime={time} onSeek={seek} />",
+        "api": [
+          {
+            "name": "words",
+            "type": "TranscriptWord[]",
+            "description": "text, start, end."
+          },
+          {
+            "name": "currentTime",
+            "type": "number",
+            "description": "Playback time in seconds."
+          },
+          {
+            "name": "onSeek",
+            "type": "(seconds) => void",
+            "description": "Called when a word is chosen."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/synced-transcript.tsx",
+          "type": "registry:component",
+          "target": "@ui/synced-transcript.tsx"
+        }
+      ]
+    },
+    {
+      "name": "mic-select",
+      "type": "registry:ui",
+      "title": "Microphone select",
+      "description": "A microphone or camera picker with permission states.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "select"
+      ],
+      "categories": [
+        "agents",
+        "media"
+      ],
+      "meta": {
+        "titleEs": "Selector de micrófono",
+        "descriptionEs": "Un selector de micrófono o cámara, con los estados de permiso.",
+        "preview": "app/examples/mic-select/preview.tsx",
+        "previewHref": "/examples/mic-select",
+        "examples": [
+          {
+            "title": "Selector de micrófono",
+            "href": "/examples/mic-select",
+            "description": "Un selector de micrófono o cámara, con los estados de permiso."
+          }
+        ],
+        "usage": "<MicSelect kind=\"audioinput\" onValueChange={setDevice} />",
+        "api": [
+          {
+            "name": "kind",
+            "type": "\"audioinput\" | \"videoinput\"",
+            "description": "Device kind."
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "description": "Selected device id."
+          },
+          {
+            "name": "showLevel",
+            "type": "boolean",
+            "description": "Shows a level preview."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/mic-select.tsx",
+          "type": "registry:component",
+          "target": "@ui/mic-select.tsx"
+        },
+        {
+          "path": "registry/ui/audio-bars.tsx",
+          "type": "registry:component",
+          "target": "@ui/audio-bars.tsx"
+        }
+      ]
+    },
+    {
+      "name": "use-device-capabilities",
+      "type": "registry:hook",
+      "title": "Device capabilities",
+      "description": "Browser capability, storage, and network hooks. Nothing is prompted or uploaded.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "agents",
+        "hook"
+      ],
+      "meta": {
+        "titleEs": "Capacidades del dispositivo",
+        "descriptionEs": "Hooks de capacidad, almacenamiento y red. No piden permiso ni envían nada.",
+        "preview": "app/examples/use-device-capabilities/preview.tsx",
+        "previewHref": "/examples/use-device-capabilities",
+        "examples": [
+          {
+            "title": "Capacidades del dispositivo",
+            "href": "/examples/use-device-capabilities",
+            "description": "Hooks de capacidad, almacenamiento y red. No piden permiso ni envían nada."
+          }
+        ],
+        "usage": "const { capabilities, loading } = useCapabilities()",
+        "api": [
+          {
+            "name": "capabilities",
+            "type": "DeviceCapabilities | null",
+            "description": "Null until detection finishes."
+          },
+          {
+            "name": "loading",
+            "type": "boolean",
+            "description": "True on the server and during detection."
+          },
+          {
+            "name": "refresh",
+            "type": "() => Promise<void>",
+            "description": "Clears the shared cache and detects again."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/hooks/use-device-capabilities.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-device-capabilities.ts"
+        }
+      ]
+    },
+    {
+      "name": "capability-gate",
+      "type": "registry:ui",
+      "title": "Capability gate",
+      "description": "Renders children only after a feature check, without flashing the fallback.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "skeleton"
+      ],
+      "categories": [
+        "agents",
+        "feedback"
+      ],
+      "meta": {
+        "titleEs": "Compuerta de capacidad",
+        "descriptionEs": "Muestra el contenido solo tras comprobar la función, sin un destello del aviso.",
+        "preview": "app/examples/capability-gate/preview.tsx",
+        "previewHref": "/examples/capability-gate",
+        "examples": [
+          {
+            "title": "Compuerta de capacidad",
+            "href": "/examples/capability-gate",
+            "description": "Muestra el contenido solo tras comprobar la función, sin un destello del aviso."
+          }
+        ],
+        "usage": "<CapabilityGate requires=\"webgpu\" fallback={<p>Needs WebGPU</p>}>…</CapabilityGate>",
+        "api": [
+          {
+            "name": "requires",
+            "type": "string | string[]",
+            "description": "Feature keys that must be true."
+          },
+          {
+            "name": "test",
+            "type": "(caps) => boolean",
+            "description": "Custom check."
+          },
+          {
+            "name": "fallback",
+            "type": "ReactNode",
+            "description": "Shown when the check fails."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/capability-gate.tsx",
+          "type": "registry:component",
+          "target": "@ui/capability-gate.tsx"
+        },
+        {
+          "path": "registry/hooks/use-device-capabilities.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-device-capabilities.ts"
+        }
+      ]
+    },
+    {
+      "name": "capability-grid",
+      "type": "registry:ui",
+      "title": "Capability grid",
+      "description": "A local report of what this browser can do.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "tooltip"
+      ],
+      "categories": [
+        "agents",
+        "feedback"
+      ],
+      "meta": {
+        "titleEs": "Rejilla de capacidades",
+        "descriptionEs": "Un informe local de lo que este navegador puede hacer.",
+        "preview": "app/examples/capability-grid/preview.tsx",
+        "previewHref": "/examples/capability-grid",
+        "examples": [
+          {
+            "title": "Rejilla de capacidades",
+            "href": "/examples/capability-grid",
+            "description": "Un informe local de lo que este navegador puede hacer."
+          }
+        ],
+        "usage": "<CapabilityGrid />",
+        "api": [
+          {
+            "name": "features",
+            "type": "Feature[]",
+            "description": "Optional subset and labels."
+          },
+          {
+            "name": "footnote",
+            "type": "string",
+            "description": "Line under the grid."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/capability-grid.tsx",
+          "type": "registry:component",
+          "target": "@ui/capability-grid.tsx"
+        },
+        {
+          "path": "registry/hooks/use-device-capabilities.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-device-capabilities.ts"
+        }
+      ]
+    },
+    {
+      "name": "storage-meter",
+      "type": "registry:ui",
+      "title": "Storage meter",
+      "description": "Origin storage used, with a persistence request.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "agents",
+        "feedback"
+      ],
+      "meta": {
+        "titleEs": "Medidor de almacenamiento",
+        "descriptionEs": "El almacenamiento del origen, con una petición de persistencia.",
+        "preview": "app/examples/storage-meter/preview.tsx",
+        "previewHref": "/examples/storage-meter",
+        "examples": [
+          {
+            "title": "Medidor de almacenamiento",
+            "href": "/examples/storage-meter",
+            "description": "El almacenamiento del origen, con una petición de persistencia."
+          }
+        ],
+        "usage": "<StorageMeter />",
+        "api": [
+          {
+            "name": "warnThreshold",
+            "type": "number",
+            "description": "Fraction that switches the bar to a warning."
+          },
+          {
+            "name": "locale",
+            "type": "string",
+            "description": "Number locale."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/storage-meter.tsx",
+          "type": "registry:component",
+          "target": "@ui/storage-meter.tsx"
+        },
+        {
+          "path": "registry/hooks/use-device-capabilities.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-device-capabilities.ts"
+        }
+      ]
+    },
+    {
+      "name": "network-status",
+      "type": "registry:ui",
+      "title": "Network status",
+      "description": "An online or offline indicator, with an optional banner.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "agents",
+        "feedback"
+      ],
+      "meta": {
+        "titleEs": "Estado de la red",
+        "descriptionEs": "Un indicador de en línea o sin conexión, con un aviso opcional.",
+        "preview": "app/examples/network-status/preview.tsx",
+        "previewHref": "/examples/network-status",
+        "examples": [
+          {
+            "title": "Estado de la red",
+            "href": "/examples/network-status",
+            "description": "Un indicador de en línea o sin conexión, con un aviso opcional."
+          }
+        ],
+        "usage": "<NetworkStatus offlineReady variant=\"badge\" />",
+        "api": [
+          {
+            "name": "variant",
+            "type": "\"badge\" | \"banner\"",
+            "description": "Badge, or a banner that shows while offline."
+          },
+          {
+            "name": "offlineReady",
+            "type": "boolean",
+            "description": "Adds a works-offline chip."
+          },
+          {
+            "name": "onRetry",
+            "type": "() => void",
+            "description": "Retry control on the banner."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/network-status.tsx",
+          "type": "registry:component",
+          "target": "@ui/network-status.tsx"
+        },
+        {
+          "path": "registry/hooks/use-device-capabilities.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-device-capabilities.ts"
+        }
+      ]
+    },
+    {
+      "name": "download-progress",
+      "type": "registry:ui",
+      "title": "Download progress",
+      "description": "A card for a large asset download, with speed and ETA.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "agents",
+        "feedback"
+      ],
+      "meta": {
+        "titleEs": "Progreso de descarga",
+        "descriptionEs": "Una tarjeta para una descarga grande, con velocidad y tiempo restante.",
+        "preview": "app/examples/download-progress/preview.tsx",
+        "previewHref": "/examples/download-progress",
+        "examples": [
+          {
+            "title": "Progreso de descarga",
+            "href": "/examples/download-progress",
+            "description": "Una tarjeta para una descarga grande, con velocidad y tiempo restante."
+          }
+        ],
+        "usage": "<DownloadProgress title=\"Atlas pack\" state=\"downloading\" loaded={2.1e8} total={4.7e8} />",
+        "api": [
+          {
+            "name": "state",
+            "type": "DownloadState",
+            "description": "idle, downloading, paused, cached, ready, or error."
+          },
+          {
+            "name": "loaded",
+            "type": "number",
+            "description": "Bytes received."
+          },
+          {
+            "name": "total",
+            "type": "number",
+            "description": "Bytes expected."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/download-progress.tsx",
+          "type": "registry:component",
+          "target": "@ui/download-progress.tsx"
+        },
+        {
+          "path": "registry/hooks/use-device-capabilities.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-device-capabilities.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-webcam",
+      "type": "registry:hook",
+      "title": "Webcam hook",
+      "description": "Start, stop, and switch a camera stream. Tracks stop on unmount.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "agents",
+        "hook"
+      ],
+      "meta": {
+        "titleEs": "Hook de cámara",
+        "descriptionEs": "Arranca, detiene y cambia la cámara. Los tracks se cierran al desmontar.",
+        "preview": "app/examples/use-webcam/preview.tsx",
+        "previewHref": "/examples/use-webcam",
+        "examples": [
+          {
+            "title": "Hook de cámara",
+            "href": "/examples/use-webcam",
+            "description": "Arranca, detiene y cambia la cámara. Los tracks se cierran al desmontar."
+          }
+        ],
+        "usage": "const { videoRef, status, start, stop } = useWebcam()",
+        "api": [
+          {
+            "name": "facingMode",
+            "type": "\"user\" | \"environment\"",
+            "description": "Camera facing."
+          },
+          {
+            "name": "status",
+            "type": "WebcamStatus",
+            "description": "idle, starting, active, or error."
+          },
+          {
+            "name": "start",
+            "type": "() => Promise<void>",
+            "description": "Requests the camera."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/hooks/use-webcam.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-webcam.ts"
+        }
+      ]
+    },
+    {
+      "name": "webcam-canvas",
+      "type": "registry:ui",
+      "title": "Webcam canvas",
+      "description": "A camera preview with a frame callback. The loop pauses offscreen.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "agents",
+        "media"
+      ],
+      "meta": {
+        "titleEs": "Lienzo de cámara",
+        "descriptionEs": "Una vista de cámara con un callback por cuadro. El bucle se pausa fuera de pantalla.",
+        "preview": "app/examples/webcam-canvas/preview.tsx",
+        "previewHref": "/examples/webcam-canvas",
+        "examples": [
+          {
+            "title": "Lienzo de cámara",
+            "href": "/examples/webcam-canvas",
+            "description": "Una vista de cámara con un callback por cuadro. El bucle se pausa fuera de pantalla."
+          }
+        ],
+        "usage": "<WebcamCanvas />",
+        "api": [
+          {
+            "name": "onFrame",
+            "type": "(ctx, video) => void",
+            "description": "Called each animation frame."
+          },
+          {
+            "name": "mirror",
+            "type": "boolean",
+            "description": "Flips the preview."
+          },
+          {
+            "name": "aspectRatio",
+            "type": "number",
+            "description": "Box ratio. Defaults to 16/9."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/webcam-canvas.tsx",
+          "type": "registry:component",
+          "target": "@ui/webcam-canvas.tsx"
+        },
+        {
+          "path": "registry/hooks/use-webcam.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-webcam.ts"
+        }
+      ]
+    },
+    {
+      "name": "detection-overlay",
+      "type": "registry:ui",
+      "title": "Detection overlay",
+      "description": "Labelled boxes over an image, with a legend.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "agents",
+        "media"
+      ],
+      "meta": {
+        "titleEs": "Cajas de detección",
+        "descriptionEs": "Cajas con etiqueta sobre una imagen, y una leyenda.",
+        "preview": "app/examples/detection-overlay/preview.tsx",
+        "previewHref": "/examples/detection-overlay",
+        "examples": [
+          {
+            "title": "Cajas de detección",
+            "href": "/examples/detection-overlay",
+            "description": "Cajas con etiqueta sobre una imagen, y una leyenda."
+          }
+        ],
+        "usage": "<DetectionOverlay detections={boxes} naturalWidth={800} naturalHeight={600}>{image}</DetectionOverlay>",
+        "api": [
+          {
+            "name": "detections",
+            "type": "Detection[]",
+            "description": "label, score, and box."
+          },
+          {
+            "name": "naturalWidth",
+            "type": "number",
+            "description": "Source width used to place boxes."
+          },
+          {
+            "name": "minScore",
+            "type": "number",
+            "description": "Hides weaker boxes."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/detection-overlay.tsx",
+          "type": "registry:component",
+          "target": "@ui/detection-overlay.tsx"
+        }
+      ]
+    },
+    {
+      "name": "scan-overlay",
+      "type": "registry:ui",
+      "title": "Scan overlay",
+      "description": "A processing veil over an image, still when motion is reduced.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "agents",
+        "media"
+      ],
+      "meta": {
+        "titleEs": "Capa de proceso",
+        "descriptionEs": "Un velo de proceso sobre una imagen, quieto si se reduce el movimiento.",
+        "preview": "app/examples/scan-overlay/preview.tsx",
+        "previewHref": "/examples/scan-overlay",
+        "examples": [
+          {
+            "title": "Capa de proceso",
+            "href": "/examples/scan-overlay",
+            "description": "Un velo de proceso sobre una imagen, quieto si se reduce el movimiento."
+          }
+        ],
+        "usage": "<ScanOverlay status=\"Reading the plate…\" onCancel={cancel}>{image}</ScanOverlay>",
+        "api": [
+          {
+            "name": "active",
+            "type": "boolean",
+            "description": "Shows the veil."
+          },
+          {
+            "name": "variant",
+            "type": "\"spinner\" | \"scan\"",
+            "description": "Spinner or a still grid."
+          },
+          {
+            "name": "onCancel",
+            "type": "() => void",
+            "description": "Optional cancel."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/scan-overlay.tsx",
+          "type": "registry:component",
+          "target": "@ui/scan-overlay.tsx"
+        }
+      ]
+    },
+    {
+      "name": "entity-text",
+      "type": "registry:ui",
+      "title": "Entity text",
+      "description": "Inline highlights, masks, or redaction tokens for annotated spans.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "tooltip"
+      ],
+      "categories": [
+        "agents",
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Texto con entidades",
+        "descriptionEs": "Resaltes, máscaras o fichas de redacción para tramos anotados.",
+        "preview": "app/examples/entity-text/preview.tsx",
+        "previewHref": "/examples/entity-text",
+        "examples": [
+          {
+            "title": "Texto con entidades",
+            "href": "/examples/entity-text",
+            "description": "Resaltes, máscaras o fichas de redacción para tramos anotados."
+          }
+        ],
+        "usage": "<EntityText text={note} entities={spans} mode=\"highlight\" />",
+        "api": [
+          {
+            "name": "text",
+            "type": "string",
+            "description": "Source text."
+          },
+          {
+            "name": "entities",
+            "type": "EntitySpan[]",
+            "description": "start, end, type, score."
+          },
+          {
+            "name": "mode",
+            "type": "\"highlight\" | \"redact\" | \"mask\"",
+            "description": "How spans render."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/entity-text.tsx",
+          "type": "registry:component",
+          "target": "@ui/entity-text.tsx"
+        }
+      ]
+    },
+    {
+      "name": "force-graph",
+      "type": "registry:ui",
+      "title": "Force graph",
+      "description": "An SVG node-link graph with a list fallback.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "agents",
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Grafo de fuerzas",
+        "descriptionEs": "Un grafo de nodos en SVG, con una lista accesible.",
+        "preview": "app/examples/force-graph/preview.tsx",
+        "previewHref": "/examples/force-graph",
+        "examples": [
+          {
+            "title": "Grafo de fuerzas",
+            "href": "/examples/force-graph",
+            "description": "Un grafo de nodos en SVG, con una lista accesible."
+          }
+        ],
+        "usage": "<ForceGraph nodes={nodes} edges={edges} onNodeClick={open} />",
+        "api": [
+          {
+            "name": "nodes",
+            "type": "GraphNode[]",
+            "description": "id, label, type, weight."
+          },
+          {
+            "name": "edges",
+            "type": "GraphEdge[]",
+            "description": "source, target, label."
+          },
+          {
+            "name": "onNodeClick",
+            "type": "(node) => void",
+            "description": "Node activation."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/force-graph.tsx",
+          "type": "registry:component",
+          "target": "@ui/force-graph.tsx"
+        }
+      ]
+    },
+    {
+      "name": "confusion-matrix",
+      "type": "registry:ui",
+      "title": "Confusion matrix",
+      "description": "An N by N heat grid with counts or percents and a table fallback.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "agents",
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Matriz de confusión",
+        "descriptionEs": "Una rejilla de calor, con conteos o porcentajes y una tabla de respaldo.",
+        "preview": "app/examples/confusion-matrix/preview.tsx",
+        "previewHref": "/examples/confusion-matrix",
+        "examples": [
+          {
+            "title": "Matriz de confusión",
+            "href": "/examples/confusion-matrix",
+            "description": "Una rejilla de calor, con conteos o porcentajes y una tabla de respaldo."
+          }
+        ],
+        "usage": "<ConfusionMatrix labels={labels} counts={counts} />",
+        "api": [
+          {
+            "name": "labels",
+            "type": "string[]",
+            "description": "Row and column names."
+          },
+          {
+            "name": "counts",
+            "type": "number[][]",
+            "description": "Row-major counts."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/confusion-matrix.tsx",
+          "type": "registry:component",
+          "target": "@ui/confusion-matrix.tsx"
+        }
+      ]
+    },
+    {
+      "name": "event-log",
+      "type": "registry:ui",
+      "title": "Event log",
+      "description": "A newest-first log with filters, pause, and expandable payloads.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "input"
+      ],
+      "categories": [
+        "agents",
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Registro de eventos",
+        "descriptionEs": "Un registro de lo más nuevo a lo más viejo, con filtros, pausa y cargas expandibles.",
+        "preview": "app/examples/event-log/preview.tsx",
+        "previewHref": "/examples/event-log",
+        "examples": [
+          {
+            "title": "Registro de eventos",
+            "href": "/examples/event-log",
+            "description": "Un registro de lo más nuevo a lo más viejo, con filtros, pausa y cargas expandibles."
+          }
+        ],
+        "usage": "<EventLog entries={entries} onClear={clear} />",
+        "api": [
+          {
+            "name": "entries",
+            "type": "EventLogEntry[]",
+            "description": "id, time, type, message, payload."
+          },
+          {
+            "name": "paused",
+            "type": "boolean",
+            "description": "Turns the live region off."
+          },
+          {
+            "name": "maxVisible",
+            "type": "number",
+            "description": "Page size before Show more."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/event-log.tsx",
+          "type": "registry:component",
+          "target": "@ui/event-log.tsx"
+        }
+      ]
+    },
+    {
+      "name": "error-boundary",
+      "type": "registry:ui",
+      "title": "Error boundary",
+      "description": "Catches a section error and offers try again.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "agents",
+        "feedback"
+      ],
+      "meta": {
+        "titleEs": "Límite de error",
+        "descriptionEs": "Atrapa el error de una sección y ofrece intentarlo de nuevo.",
+        "preview": "app/examples/error-boundary/preview.tsx",
+        "previewHref": "/examples/error-boundary",
+        "examples": [
+          {
+            "title": "Límite de error",
+            "href": "/examples/error-boundary",
+            "description": "Atrapa el error de una sección y ofrece intentarlo de nuevo."
+          }
+        ],
+        "usage": "<ErrorBoundary><Panel /></ErrorBoundary>",
+        "api": [
+          {
+            "name": "fallback",
+            "type": "ReactNode | function",
+            "description": "Custom fallback. Receives error and reset."
+          },
+          {
+            "name": "resetKeys",
+            "type": "unknown[]",
+            "description": "Clears the error when a key changes."
+          },
+          {
+            "name": "onError",
+            "type": "(error) => void",
+            "description": "Report hook."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/error-boundary.tsx",
+          "type": "registry:component",
+          "target": "@ui/error-boundary.tsx"
+        }
+      ]
+    },
+    {
+      "name": "passphrase-gate",
+      "type": "registry:ui",
+      "title": "Passphrase gate",
+      "description": "Create or unlock with a passphrase. The value is not stored.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "button",
+        "input",
+        "label"
+      ],
+      "categories": [
+        "agents",
+        "form"
+      ],
+      "meta": {
+        "titleEs": "Puerta de frase",
+        "descriptionEs": "Crea o abre con una frase. El valor no se guarda.",
+        "preview": "app/examples/passphrase-gate/preview.tsx",
+        "previewHref": "/examples/passphrase-gate",
+        "examples": [
+          {
+            "title": "Puerta de frase",
+            "href": "/examples/passphrase-gate",
+            "description": "Crea o abre con una frase. El valor no se guarda."
+          }
+        ],
+        "usage": "<PassphraseGate mode=\"create\" onSubmit={save} />",
+        "api": [
+          {
+            "name": "mode",
+            "type": "\"create\" | \"unlock\"",
+            "description": "Two fields, or one."
+          },
+          {
+            "name": "minLength",
+            "type": "number",
+            "description": "Create mode minimum."
+          },
+          {
+            "name": "onSubmit",
+            "type": "(passphrase) => void",
+            "description": "Called with the value. It is not logged."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/passphrase-gate.tsx",
+          "type": "registry:component",
+          "target": "@ui/passphrase-gate.tsx"
+        },
+        {
+          "path": "registry/ui/password-field.tsx",
+          "type": "registry:component",
+          "target": "@ui/password-field.tsx"
+        },
+        {
+          "path": "registry/ui/password-strength.tsx",
+          "type": "registry:component",
+          "target": "@ui/password-strength.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "artifact-panel",
+      "type": "registry:ui",
+      "title": "Artifact panel",
+      "description": "A docked canvas for generated content, with copy and download.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "button",
+        "sheet"
+      ],
+      "categories": [
+        "agents",
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Panel de artefacto",
+        "descriptionEs": "Un lienzo acoplado para contenido generado, con copiar y descargar.",
+        "preview": "app/examples/artifact-panel/preview.tsx",
+        "previewHref": "/examples/artifact-panel",
+        "examples": [
+          {
+            "title": "Panel de artefacto",
+            "href": "/examples/artifact-panel",
+            "description": "Un lienzo acoplado para contenido generado, con copiar y descargar."
+          }
+        ],
+        "usage": "<ArtifactPanel open title=\"Shelf note\" content={text} fileName=\"note.txt\" />",
+        "api": [
+          {
+            "name": "title",
+            "type": "string",
+            "description": "Panel title."
+          },
+          {
+            "name": "content",
+            "type": "string",
+            "description": "Text used by copy and download."
+          },
+          {
+            "name": "open",
+            "type": "boolean",
+            "description": "Controlled visibility."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/artifact-panel.tsx",
+          "type": "registry:component",
+          "target": "@ui/artifact-panel.tsx"
+        },
+        {
+          "path": "registry/ui/copy-button.tsx",
+          "type": "registry:component",
+          "target": "@ui/copy-button.tsx"
+        },
+        {
+          "path": "registry/hooks/use-copy-feedback.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-copy-feedback.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "language-pair",
+      "type": "registry:ui",
+      "title": "Language pair",
+      "description": "From and to language pickers with a swap.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "select"
+      ],
+      "categories": [
+        "agents",
+        "input"
+      ],
+      "meta": {
+        "titleEs": "Par de idiomas",
+        "descriptionEs": "Selectores de idioma de origen y destino, con intercambio.",
+        "preview": "app/examples/language-pair/preview.tsx",
+        "previewHref": "/examples/language-pair",
+        "examples": [
+          {
+            "title": "Par de idiomas",
+            "href": "/examples/language-pair",
+            "description": "Selectores de idioma de origen y destino, con intercambio."
+          }
+        ],
+        "usage": "<LanguagePair defaultFrom=\"es\" defaultTo=\"en\" />",
+        "api": [
+          {
+            "name": "from",
+            "type": "string",
+            "description": "Source language code."
+          },
+          {
+            "name": "to",
+            "type": "string",
+            "description": "Target language code."
+          },
+          {
+            "name": "options",
+            "type": "LanguageOption[]",
+            "description": "Custom language list."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/language-pair.tsx",
+          "type": "registry:component",
+          "target": "@ui/language-pair.tsx"
+        }
+      ]
+    },
+    {
+      "name": "install-command",
+      "type": "registry:ui",
+      "title": "Install command",
+      "description": "Package-manager tabs that rewrite one install command and copy it.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "tabs"
+      ],
+      "categories": [
+        "agents",
+        "input"
+      ],
+      "meta": {
+        "titleEs": "Comando de instalación",
+        "descriptionEs": "Pestañas de gestor que reescriben un comando y lo copian.",
+        "preview": "app/examples/install-command/preview.tsx",
+        "previewHref": "/examples/install-command",
+        "examples": [
+          {
+            "title": "Comando de instalación",
+            "href": "/examples/install-command",
+            "description": "Pestañas de gestor que reescriben un comando y lo copian."
+          }
+        ],
+        "usage": "<InstallCommand command=\"npx shadcn@latest add @retana/tool-call\" />",
+        "api": [
+          {
+            "name": "command",
+            "type": "string",
+            "description": "npm-form command. Other tabs rewrite the runner."
+          },
+          {
+            "name": "storageKey",
+            "type": "string",
+            "description": "localStorage key for the last manager."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/install-command.tsx",
+          "type": "registry:component",
+          "target": "@ui/install-command.tsx"
+        },
+        {
+          "path": "registry/ui/copy-button.tsx",
+          "type": "registry:component",
+          "target": "@ui/copy-button.tsx"
+        },
+        {
+          "path": "registry/hooks/use-copy-feedback.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-copy-feedback.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "demo-collage",
+      "type": "registry:block",
+      "title": "Demo collage",
+      "description": "A grid of live mini demos that render when they scroll into view.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "agents",
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Collage de demos",
+        "descriptionEs": "Una rejilla de minidemos que se dibujan al entrar en pantalla.",
+        "preview": "app/examples/demo-collage/preview.tsx",
+        "previewHref": "/examples/demo-collage",
+        "examples": [
+          {
+            "title": "Collage de demos",
+            "href": "/examples/demo-collage",
+            "description": "Una rejilla de minidemos que se dibujan al entrar en pantalla."
+          }
+        ],
+        "usage": "<DemoCollage items={items} />",
+        "api": [
+          {
+            "name": "items",
+            "type": "DemoCollageItem[]",
+            "description": "name, href, and render."
+          },
+          {
+            "name": "linkComponent",
+            "type": "ElementType",
+            "description": "Router link. Defaults to an anchor."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/demo-collage.tsx",
+          "type": "registry:component",
+          "target": "@ui/demo-collage.tsx"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "synced-transcript",
+  "title": "Synced transcript",
+  "author": "Eduardo Retana",
+  "description": "A transcript that highlights the word at the current time.",
+  "dependencies": [],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/synced-transcript.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/audio/synced-transcript-viewer/synced-transcript-viewer.tsx\n\nimport * as React from \"react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\n\nexport type TranscriptWord = { text: string; start: number; end: number }\nexport type TranscriptSegment = { speaker?: string; words: TranscriptWord[] }\n\nexport type SyncedTranscriptProps = {\n  words?: TranscriptWord[]\n  segments?: TranscriptSegment[]\n  currentTime?: number\n  onSeek?: (seconds: number) => void\n  seekable?: boolean\n  className?: string\n}\n\nexport function activeWordIndex(words: TranscriptWord[], time: number) {\n  let low = 0\n  let high = words.length - 1\n  let found = -1\n  while (low <= high) {\n    const mid = Math.floor((low + high) / 2)\n    if (words[mid].start <= time) {\n      found = mid\n      low = mid + 1\n    } else high = mid - 1\n  }\n  if (found >= 0 && time > words[found].end && found < words.length - 1 && words[found + 1].start > time) return found\n  return found\n}\n\nexport function SyncedTranscript({ words, segments, currentTime = 0, onSeek, seekable = true, className }: SyncedTranscriptProps) {\n  const groups = segments ?? (words ? [{ words }] : [])\n  const flat = groups.flatMap((group) => group.words)\n  const active = activeWordIndex(flat, currentTime)\n  const scroller = React.useRef<HTMLDivElement>(null)\n  const userScrolled = React.useRef(0)\n  const [paused, setPaused] = React.useState(false)\n\n  React.useEffect(() => {\n    if (paused || active < 0) return\n    const node = scroller.current?.querySelector<HTMLElement>(`[data-word=\"${active}\"]`)\n    node?.scrollIntoView({ block: \"nearest\", behavior: window.matchMedia(\"(prefers-reduced-motion: reduce)\").matches ? \"auto\" : \"auto\" })\n  }, [active, paused])\n\n  return (\n    <div className={cn(\"relative flex max-h-64 flex-col gap-2\", className)}>\n      <div\n        ref={scroller}\n        aria-label=\"Transcript\"\n        className=\"flex flex-col gap-3 overflow-auto\"\n        onScroll={() => {\n          userScrolled.current = Date.now()\n          setPaused(true)\n          window.setTimeout(() => {\n            if (Date.now() - userScrolled.current >= 3000) setPaused(false)\n          }, 3000)\n        }}\n      >\n        {groups.map((group, groupIndex) => (\n          <p key={groupIndex} className=\"text-sm leading-6\">\n            {group.speaker ? <span className=\"mr-2 font-medium text-foreground\">{group.speaker}</span> : null}\n            {group.words.map((word) => {\n              const index = flat.indexOf(word)\n              const state = index < active ? \"past\" : index === active ? \"active\" : \"future\"\n              const className = cn(\n                \"rounded px-0.5\",\n                state === \"active\" && \"bg-primary/15 text-foreground\",\n                state === \"past\" && \"text-foreground\",\n                state === \"future\" && \"text-muted-foreground\",\n              )\n              if (!seekable) return <span key={`${word.start}-${word.text}`} data-word={index} className={className}>{word.text} </span>\n              return (\n                <button\n                  key={`${word.start}-${word.text}`}\n                  type=\"button\"\n                  data-word={index}\n                  className={cn(className, \"focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\")}\n                  onClick={() => onSeek?.(word.start)}\n                >\n                  {word.text}{\" \"}\n                </button>\n              )\n            })}\n          </p>\n        ))}\n      </div>\n      {paused ? (\n        <Button type=\"button\" size=\"sm\" variant=\"outline\" className=\"self-center\" onClick={() => setPaused(false)}>\n          Resume follow\n        </Button>\n      ) : null}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/synced-transcript.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Transcripción sincronizada",
+    "descriptionEs": "Una transcripción que resalta la palabra del instante actual.",
+    "preview": "app/examples/synced-transcript/preview.tsx",
+    "previewHref": "/examples/synced-transcript",
+    "examples": [
+      {
+        "title": "Transcripción sincronizada",
+        "href": "/examples/synced-transcript",
+        "description": "Una transcripción que resalta la palabra del instante actual."
+      }
+    ],
+    "usage": "<SyncedTranscript words={words} currentTime={time} onSeek={seek} />",
+    "api": [
+      {
+        "name": "words",
+        "type": "TranscriptWord[]",
+        "description": "text, start, end."
+      },
+      {
+        "name": "currentTime",
+        "type": "number",
+        "description": "Playback time in seconds."
+      },
+      {
+        "name": "onSeek",
+        "type": "(seconds) => void",
+        "description": "Called when a word is chosen."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "media"
+  ],
+  "type": "registry:ui"
+}

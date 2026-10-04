@@ -1,0 +1,62 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "prompt-suggestions",
+  "title": "Prompt suggestions",
+  "author": "Eduardo Retana",
+  "description": "A chip row that seeds a composer.",
+  "dependencies": [],
+  "registryDependencies": [
+    "button",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/prompt-suggestions.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/conversation/suggestions/suggestions.tsx\n\nimport * as React from \"react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport type PromptSuggestion = string | { label: string; value?: string; icon?: React.ReactNode }\n\nexport type PromptSuggestionsClassNames = {\n  root?: string\n  item?: string\n}\n\nexport type PromptSuggestionsProps = {\n  items: PromptSuggestion[]\n  onSelect?: (value: string) => void\n  layout?: \"scroll\" | \"wrap\"\n  loading?: boolean\n  label?: string\n  className?: string\n  classNames?: PromptSuggestionsClassNames\n}\n\nfunction normalize(item: PromptSuggestion) {\n  if (typeof item === \"string\") return { label: item, value: item, icon: null }\n  return { label: item.label, value: item.value ?? item.label, icon: item.icon ?? null }\n}\n\nexport function PromptSuggestions({\n  items,\n  onSelect,\n  layout = \"wrap\",\n  loading = false,\n  label = \"Suggestions\",\n  className,\n  classNames,\n}: PromptSuggestionsProps) {\n  const normalized = items.map(normalize)\n  const [active, setActive] = React.useState(0)\n\n  if (loading) {\n    return (\n      <div className={cn(\"flex gap-2\", className)} aria-hidden=\"true\">\n        <Skeleton className=\"h-7 w-24 rounded-full\" />\n        <Skeleton className=\"h-7 w-28 rounded-full\" />\n        <Skeleton className=\"h-7 w-20 rounded-full\" />\n      </div>\n    )\n  }\n\n  if (normalized.length === 0) return null\n\n  return (\n    <div\n      role=\"list\"\n      aria-label={label}\n      className={cn(\n        layout === \"scroll\"\n          ? \"flex snap-x gap-2 overflow-x-auto [mask-image:linear-gradient(to_right,transparent,black_12px,black_calc(100%-12px),transparent)]\"\n          : \"flex flex-wrap gap-2\",\n        className,\n        classNames?.root,\n      )}\n      onKeyDown={(event) => {\n        if (layout !== \"scroll\") return\n        if (event.key !== \"ArrowRight\" && event.key !== \"ArrowLeft\") return\n        event.preventDefault()\n        const delta = event.key === \"ArrowRight\" ? 1 : -1\n        const next = (active + delta + normalized.length) % normalized.length\n        setActive(next)\n        document.getElementById(`suggestion-${next}`)?.focus()\n      }}\n    >\n      {normalized.map((item, index) => (\n        <div role=\"listitem\" key={`${item.value}-${index}`} className=\"snap-start\">\n          <Button\n            id={layout === \"scroll\" ? `suggestion-${index}` : undefined}\n            type=\"button\"\n            variant=\"outline\"\n            size=\"sm\"\n            tabIndex={layout === \"scroll\" ? (index === active ? 0 : -1) : 0}\n            className={cn(\"max-w-[240px] rounded-full\", classNames?.item)}\n            onClick={() => onSelect?.(item.value)}\n            onFocus={() => setActive(index)}\n          >\n            {item.icon}\n            <span className=\"truncate\">{item.label}</span>\n          </Button>\n        </div>\n      ))}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/prompt-suggestions.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Sugerencias",
+    "descriptionEs": "Una fila de fichas que rellena el compositor.",
+    "preview": "app/examples/prompt-suggestions/preview.tsx",
+    "previewHref": "/examples/prompt-suggestions",
+    "examples": [
+      {
+        "title": "Sugerencias",
+        "href": "/examples/prompt-suggestions",
+        "description": "Una fila de fichas que rellena el compositor."
+      }
+    ],
+    "usage": "<PromptSuggestions items={[\"Resume the kiln log\"]} onSelect={fill} />",
+    "api": [
+      {
+        "name": "items",
+        "type": "PromptSuggestion[]",
+        "description": "Labels, or objects with label and value."
+      },
+      {
+        "name": "layout",
+        "type": "\"scroll\" | \"wrap\"",
+        "description": "Single scrolling row or a wrap."
+      },
+      {
+        "name": "onSelect",
+        "type": "(value: string) => void",
+        "description": "Chosen suggestion."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "chat"
+  ],
+  "type": "registry:ui"
+}

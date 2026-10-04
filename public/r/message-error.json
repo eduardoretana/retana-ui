@@ -1,0 +1,63 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "message-error",
+  "title": "Message error",
+  "author": "Eduardo Retana",
+  "description": "An inline failure under an assistant message, with retry.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/message-error.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/conversation/in-message-error/in-message-error.tsx\n\nimport * as React from \"react\"\nimport { AlertCircle, ChevronDown, Loader2 } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\n\nexport function extractErrorMessage(error: unknown, fallback = \"Something went wrong.\") {\n  if (error == null) return fallback\n  if (typeof error === \"string\") return error || fallback\n  if (error instanceof Error) return error.message || fallback\n  if (typeof error === \"object\" && \"message\" in error && typeof error.message === \"string\" && error.message) {\n    return error.message\n  }\n  return fallback\n}\n\nexport type MessageErrorClassNames = {\n  root?: string\n  title?: string\n  details?: string\n}\n\nexport type MessageErrorProps = {\n  error: unknown\n  details?: string\n  onRetry?: () => void\n  retrying?: boolean\n  title?: string\n  retryLabel?: string\n  className?: string\n  classNames?: MessageErrorClassNames\n}\n\nexport function MessageError({\n  error,\n  details,\n  onRetry,\n  retrying = false,\n  title,\n  retryLabel = \"Retry\",\n  className,\n  classNames,\n}: MessageErrorProps) {\n  const message = title ?? extractErrorMessage(error)\n  const alertRef = React.useRef(true)\n  const [alert, setAlert] = React.useState(true)\n  const [open, setOpen] = React.useState(false)\n\n  React.useEffect(() => {\n    if (!alertRef.current) return\n    alertRef.current = false\n    const timer = window.setTimeout(() => setAlert(false), 1000)\n    return () => window.clearTimeout(timer)\n  }, [])\n\n  return (\n    <div\n      role={alert ? \"alert\" : \"group\"}\n      className={cn(\"flex flex-col gap-2 rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-sm\", className, classNames?.root)}\n    >\n      <div className=\"flex items-start gap-2\">\n        <AlertCircle aria-hidden=\"true\" className=\"mt-0.5 size-4 shrink-0 text-destructive\" />\n        <p className={cn(\"min-w-0 flex-1 text-foreground\", classNames?.title)}>\n          <span className=\"font-medium text-destructive\">{message}</span>\n        </p>\n        {onRetry ? (\n          <Button type=\"button\" size=\"sm\" variant=\"outline\" disabled={retrying} onClick={onRetry}>\n            {retrying ? <Loader2 data-icon=\"inline-start\" className=\"animate-spin motion-reduce:animate-none\" /> : null}\n            {retryLabel}\n          </Button>\n        ) : null}\n      </div>\n      {details ? (\n        <div className={classNames?.details}>\n          <button\n            type=\"button\"\n            className=\"inline-flex items-center gap-1 text-xs text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n            aria-expanded={open}\n            onClick={() => setOpen((value) => !value)}\n          >\n            <ChevronDown aria-hidden=\"true\" className={cn(\"size-3\", open && \"rotate-180\")} />\n            Details\n          </button>\n          {open ? <pre className=\"mt-2 max-h-32 overflow-auto rounded-md bg-muted p-2 font-mono text-xs text-foreground\">{details}</pre> : null}\n        </div>\n      ) : null}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/message-error.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Error en el mensaje",
+    "descriptionEs": "Un fallo en línea bajo el mensaje, con reintento.",
+    "preview": "app/examples/message-error/preview.tsx",
+    "previewHref": "/examples/message-error",
+    "examples": [
+      {
+        "title": "Error en el mensaje",
+        "href": "/examples/message-error",
+        "description": "Un fallo en línea bajo el mensaje, con reintento."
+      }
+    ],
+    "usage": "<MessageError error={error} onRetry={retry} />",
+    "api": [
+      {
+        "name": "error",
+        "type": "unknown",
+        "description": "Error, string, or { message }."
+      },
+      {
+        "name": "details",
+        "type": "string",
+        "description": "Optional stack or JSON."
+      },
+      {
+        "name": "onRetry",
+        "type": "() => void",
+        "description": "Retry action."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Adapted from LocalMode UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Decorative motion stops when the reader prefers reduced motion.",
+  "categories": [
+    "agents",
+    "chat"
+  ],
+  "type": "registry:ui"
+}
