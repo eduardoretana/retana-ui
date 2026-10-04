@@ -183,6 +183,21 @@ import Preview178 from "@/app/examples/artifact-panel/preview"
 import Preview179 from "@/app/examples/language-pair/preview"
 import Preview180 from "@/app/examples/install-command/preview"
 import Preview181 from "@/app/examples/demo-collage/preview"
+import Preview182 from "@/app/examples/well-card/preview"
+import Preview183 from "@/app/examples/stat-strip/preview"
+import Preview184 from "@/app/examples/priority-badge/preview"
+import Preview185 from "@/app/examples/attention-list/preview"
+import Preview186 from "@/app/examples/annotated-trend-chart/preview"
+import Preview187 from "@/app/examples/ranked-bars/preview"
+import Preview188 from "@/app/examples/breakdown-bar/preview"
+import Preview189 from "@/app/examples/record-timeline/preview"
+import Preview190 from "@/app/examples/suggestion-card/preview"
+import Preview191 from "@/app/examples/suggested-choice-dialog/preview"
+import Preview192 from "@/app/examples/record-header/preview"
+import Preview193 from "@/app/examples/radial-gauge/preview"
+import Preview194 from "@/app/examples/tier-distribution/preview"
+import Preview195 from "@/app/examples/triage-dashboard/preview"
+import Preview196 from "@/app/examples/case-review/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -367,4 +382,19 @@ export const previewMap = {
   "language-pair": Preview179,
   "install-command": Preview180,
   "demo-collage": Preview181,
+  "well-card": Preview182,
+  "stat-strip": Preview183,
+  "priority-badge": Preview184,
+  "attention-list": Preview185,
+  "annotated-trend-chart": Preview186,
+  "ranked-bars": Preview187,
+  "breakdown-bar": Preview188,
+  "record-timeline": Preview189,
+  "suggestion-card": Preview190,
+  "suggested-choice-dialog": Preview191,
+  "record-header": Preview192,
+  "radial-gauge": Preview193,
+  "tier-distribution": Preview194,
+  "triage-dashboard": Preview195,
+  "case-review": Preview196,
 }

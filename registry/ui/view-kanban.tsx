@@ -43,6 +43,7 @@ import {
   type MultiRecord,
   type ViewConfig,
 } from "@/registry/retana/lib/multi-view"
+import { PriorityBadge, PRIORITY_LEVELS, type PriorityLevel } from "@/registry/retana/ui/priority-badge"
 import {
   FieldDisplay,
   FieldIcon,
@@ -63,8 +64,16 @@ export type ViewKanbanProps = {
   onMove?: (id: string, patch: Record<string, unknown>) => Promise<void> | void
   onCreateRequest?: (seed: Record<string, unknown>) => void
   emptyLabel?: string
+  emptyHint?: string
   addLabel?: string
   moveLabel?: string
+  /** Collapse a column after this many cards and offer the rest behind a button. */
+  maxVisible?: number
+  moreLabel?: (hidden: number) => string
+  /** Cards that should wear a highlight ring for a short time. */
+  highlightedIds?: readonly string[]
+  /** Summary cards read priority, due, amount, and progress when those keys exist. */
+  cardLayout?: "fields" | "summary"
   className?: string
   columnClassName?: string
   cardClassName?: string
@@ -82,8 +91,13 @@ export function ViewKanban({
   onMove,
   onCreateRequest,
   emptyLabel = "No items",
+  emptyHint,
   addLabel = "Add item",
   moveLabel = "Move to…",
+  maxVisible,
+  moreLabel = (hidden) => `${hidden} more`,
+  highlightedIds,
+  cardLayout = "fields",
   className,
   columnClassName,
   cardClassName,
@@ -111,6 +125,7 @@ export function ViewKanban({
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   )
   const [activeId, setActiveId] = React.useState<string | null>(null)
+  const [expanded, setExpanded] = React.useState<Record<string, boolean>>({})
   const active = records.find((record) => record.id === activeId) ?? null
 
   function labelFor(id: string) {
@@ -194,7 +209,7 @@ export function ViewKanban({
               ) : (
                 <span className="text-sm font-medium">{group.label}</span>
               )}
-              <span className="text-xs text-muted-foreground">{group.records.length}</span>
+              <span className="rounded-full bg-background px-2 py-0.5 text-xs tabular-nums text-muted-foreground">{group.records.length}</span>
               {group.sum != null && sum ? (
                 <span className="ml-auto text-xs text-muted-foreground">
                   {sum.type === "currency"
@@ -206,11 +221,17 @@ export function ViewKanban({
             <SortableContext items={group.records.map((record) => record.id)} strategy={verticalListSortingStrategy}>
               <div className="flex min-h-24 flex-col gap-2">
                 {group.records.length === 0 ? (
-                  <p className="rounded-lg border border-dashed border-border px-3 py-6 text-center text-sm text-muted-foreground">
-                    {emptyLabel}
-                  </p>
+                  <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed border-border px-3 py-6 text-center">
+                    <div className="flex items-end gap-1" aria-hidden>
+                      <span className="h-5 w-7 rounded-md bg-muted" />
+                      <span className="h-8 w-7 rounded-md bg-muted" />
+                      <span className="h-6 w-7 rounded-md bg-background" />
+                    </div>
+                    <p className="text-sm font-medium">{emptyLabel}</p>
+                    {emptyHint ? <p className="text-xs text-muted-foreground">{emptyHint}</p> : null}
+                  </div>
                 ) : (
-                  group.records.map((record) => (
+                  (maxVisible != null && !expanded[group.key] ? group.records.slice(0, maxVisible) : group.records).map((record) => (
                     <Card
                       key={record.id}
                       record={record}
@@ -228,11 +249,18 @@ export function ViewKanban({
                       moveLabel={moveLabel}
                       groups={groups.map((item) => ({ key: item.key, label: item.label }))}
                       onMoveTo={(key) => moveTo(record.id, key)}
+                      highlighted={highlightedIds?.includes(record.id)}
+                      layout={cardLayout}
                     />
                   ))
                 )}
               </div>
             </SortableContext>
+            {maxVisible != null && !expanded[group.key] && group.records.length > maxVisible ? (
+              <Button type="button" variant="ghost" size="sm" className="justify-start" onClick={() => setExpanded((current) => ({ ...current, [group.key]: true }))}>
+                {moreLabel(group.records.length - maxVisible)}
+              </Button>
+            ) : null}
             <Button
               type="button"
               variant="ghost"
@@ -256,6 +284,39 @@ export function ViewKanban({
         ) : null}
       </DragOverlay>
     </DndContext>
+  )
+}
+
+function isPriority(value: unknown): value is PriorityLevel {
+  return typeof value === "string" && (PRIORITY_LEVELS as readonly string[]).includes(value)
+}
+
+function SummaryChips({ record }: { record: MultiRecord }) {
+  const priority = isPriority(record.priority) ? record.priority : null
+  const due = typeof record.due === "string" ? record.due : null
+  const amount = typeof record.amount === "string" || typeof record.amount === "number" ? String(record.amount) : null
+  const subtitle = typeof record.subtitle === "string" ? record.subtitle : null
+  const progress =
+    record.progress && typeof record.progress === "object"
+      ? (record.progress as { done?: number; total?: number })
+      : null
+  return (
+    <div className="mt-2 flex flex-col gap-2">
+      <div className="flex flex-wrap gap-1">
+        {priority ? <PriorityBadge level={priority} /> : null}
+        {due ? <span className="inline-flex h-6 items-center rounded-full bg-muted px-2 text-xs">{due}</span> : null}
+        {amount ? <span className="inline-flex h-6 items-center rounded-full bg-chart-2/20 px-2 text-xs tabular-nums">{amount}</span> : null}
+      </div>
+      {subtitle ? <p className="truncate text-xs text-muted-foreground">{subtitle}</p> : null}
+      {progress && typeof progress.done === "number" && typeof progress.total === "number" ? (
+        <div>
+          <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+            <div className="h-full rounded-full bg-primary" style={{ width: `${progress.total ? (progress.done / progress.total) * 100 : 0}%` }} />
+          </div>
+          <p className="mt-1 text-xs text-muted-foreground">{progress.done} of {progress.total}</p>
+        </div>
+      ) : null}
+    </div>
   )
 }
 
@@ -305,6 +366,8 @@ function Card({
   moveLabel,
   groups,
   onMoveTo,
+  highlighted = false,
+  layout = "fields",
 }: {
   record: MultiRecord
   fields: readonly FieldDef[]
@@ -321,11 +384,24 @@ function Card({
   moveLabel: string
   groups: readonly { key: string; label: string }[]
   onMoveTo: (key: string) => void
+  highlighted?: boolean
+  layout?: "fields" | "summary"
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: record.id,
   })
   const title = recordTitle(record, fields, titleField)
+  const [ring, setRing] = React.useState(highlighted)
+  const [tracked, setTracked] = React.useState(highlighted)
+  if (highlighted !== tracked) {
+    setTracked(highlighted)
+    setRing(highlighted)
+  }
+  React.useEffect(() => {
+    if (!ring) return
+    const timer = window.setTimeout(() => setRing(false), 2000)
+    return () => window.clearTimeout(timer)
+  }, [ring])
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
     transition: reduced ? undefined : transition,
@@ -334,9 +410,11 @@ function Card({
     <article
       ref={setNodeRef}
       style={style}
+      data-highlight={ring ? "true" : undefined}
       className={cn(
         "rounded-lg border border-border bg-card p-2",
         isDragging && "opacity-50",
+        ring && "ring-2 ring-primary transition-opacity motion-reduce:transition-none",
         className,
       )}
     >
@@ -395,6 +473,7 @@ function Card({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+      {layout === "summary" ? <SummaryChips record={record} /> : (
       <dl className="mt-2 grid gap-1">
         {cardFields.map((field) => (
           <div key={field.id} className="flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">
@@ -403,6 +482,7 @@ function Card({
           </div>
         ))}
       </dl>
+      )}
     </article>
   )
 }

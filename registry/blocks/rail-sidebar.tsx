@@ -59,6 +59,8 @@ export type RailLink = {
   href?: string
   icon?: React.ReactNode
   badge?: string | number
+  /** Alert counts use the destructive tone. */
+  badgeTone?: "default" | "alert"
   dot?: RailDot
   disabled?: boolean
   /** Single element, such as a Next.js or React Router link. */
@@ -69,6 +71,22 @@ export type RailEntry = RailLink & {
   /** When set, the entry is a collapsible group of sub-items. */
   items?: readonly RailLink[]
   defaultOpen?: boolean
+}
+
+export type RailScope = {
+  label: string
+  options: readonly { value: string; label: string }[]
+  value?: string
+  defaultValue?: string
+  onValueChange?: (value: string) => void
+}
+
+export type RailFooterLink = {
+  id: string
+  label: string
+  href?: string
+  count?: number
+  onSelect?: () => void
 }
 
 export type RailNavGroup = {
@@ -86,6 +104,10 @@ export type RailSection = {
   /** Secondary sections sit above the avatar. */
   placement?: "primary" | "secondary"
   nav: readonly RailNavGroup[]
+  /** Extra control beside the section title, such as add or a menu. */
+  action?: React.ReactNode
+  /** Optional leading row, for example every open record and its count. */
+  all?: { label: string; href?: string; count?: number }
 }
 
 export type RailWorkspaceOption = {
@@ -103,6 +125,7 @@ export type RailWorkspace = {
   value?: string
   defaultValue?: string
   onValueChange?: (id: string) => void
+  status?: "online" | "away" | "offline"
 }
 
 export type RailUser = {
@@ -151,6 +174,8 @@ export type RailSidebarProps = {
   commandLabel?: string
   collapseLabel?: string
   expandLabel?: string
+  scope?: RailScope
+  footerLinks?: readonly RailFooterLink[]
 }
 
 const DOT_CLASS: Record<RailDot, string> = {
@@ -198,7 +223,10 @@ function ItemBody({ item, className }: { item: RailLink; className?: string }) {
       ) : null}
       <span className={cn("min-w-0 flex-1 truncate text-start", className)}>{item.label}</span>
       {item.badge != null && item.badge !== "" ? (
-        <Badge variant="secondary" className="ms-auto tabular-nums">
+        <Badge
+          variant="secondary"
+          className={cn("ms-auto tabular-nums", item.badgeTone === "alert" && "bg-destructive/10 text-destructive")}
+        >
           {item.badge}
         </Badge>
       ) : null}
@@ -312,6 +340,8 @@ function RailColumns({
   collapseLabel,
   expandLabel,
   showCollapse,
+  scope,
+  footerLinks,
 }: {
   sections: readonly RailSection[]
   sectionId: string
@@ -347,6 +377,8 @@ function RailColumns({
   | "commandLabel"
   | "collapseLabel"
   | "expandLabel"
+  | "scope"
+  | "footerLinks"
 >) {
   const accordion = type ?? "single"
   const railRef = React.useRef<HTMLElement>(null)
@@ -420,7 +452,7 @@ function RailColumns({
   }
 
   const itemClass = cn(
-    "flex w-full min-w-0 items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-accent aria-[current=page]:font-medium",
+    "flex w-full min-w-0 items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-card aria-[current=page]:font-medium aria-[current=page]:shadow-sm",
     itemClassName,
   )
 
@@ -446,8 +478,11 @@ function RailColumns({
             railClassName,
           )}
         >
-          <div className="mb-1 grid size-8 place-items-center rounded-lg bg-primary text-xs font-semibold text-primary-foreground">
-            {mark ?? (markLabel ?? "A").slice(0, 1)}
+          <div className="relative mb-1">
+            <div className="grid size-8 place-items-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
+              {mark ?? (markLabel ?? workspace?.name ?? "A").slice(0, 1)}
+            </div>
+            {workspace?.status ? <StatusDot status={workspace.status} /> : null}
           </div>
           <div className="flex w-full flex-col items-center gap-1">
             {primary.map((item) => (
@@ -529,7 +564,7 @@ function RailColumns({
                     <DropdownMenuTrigger
                       className="flex w-full items-center gap-2 rounded-lg bg-muted px-2 py-2 text-start hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
-                      <WorkspaceMark logo={activeWorkspace.logo} name={activeWorkspace.name} />
+                      <WorkspaceMark logo={activeWorkspace.logo} name={activeWorkspace.name} status={workspace.status} />
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-sm font-medium">{activeWorkspace.name}</span>
                         {activeWorkspace.subtitle ? (
@@ -553,8 +588,8 @@ function RailColumns({
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
-                  <div className="flex items-center gap-2 rounded-lg bg-muted px-2 py-2">
-                    <WorkspaceMark logo={workspace.logo} name={workspace.name} />
+                  <div className="relative flex items-center gap-2 rounded-lg bg-muted px-2 py-2">
+                    <WorkspaceMark logo={workspace.logo} name={workspace.name} status={workspace.status} />
                     <span className="min-w-0">
                       <span className="block truncate text-sm font-medium">{workspace.name}</span>
                       {workspace.subtitle ? (
@@ -564,6 +599,12 @@ function RailColumns({
                   </div>
                 )
               ) : null}
+
+              <div className="flex items-center justify-between gap-2 px-1">
+                <h2 className="min-w-0 truncate text-sm font-medium">{section?.label}</h2>
+                {section?.action}
+              </div>
+              {scope ? <ScopeToggle scope={scope} /> : null}
 
               <div className={cn("relative", searchClassName)}>
                 <Search className="pointer-events-none absolute start-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -593,6 +634,15 @@ function RailColumns({
             </div>
 
             <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-2">
+              {section?.all ? (
+                <RailAnchor
+                  item={{ id: `${section.id}-all`, label: section.all.label, href: section.all.href ?? "#", badge: section.all.count }}
+                  active={Boolean(section.all.href && section.all.href === activeHref)}
+                  className={cn(itemClass, "mb-1")}
+                  renderLink={renderLink}
+                  onNavigate={onNavigate}
+                />
+              ) : null}
               {section?.nav.map((group) => (
                 <div key={group.id} className={cn("mb-2", groupClassName)}>
                   {group.label ? (
@@ -639,9 +689,9 @@ function RailColumns({
                               inert={open ? undefined : true}
                             >
                               <div className="overflow-hidden">
-                                <ul className="ms-4 flex flex-col gap-0.5 border-s border-border py-0.5 ps-2">
+                                <ul className="relative ms-4 flex flex-col gap-0.5 border-s border-border py-0.5 ps-2">
                                   {nested.map((child) => (
-                                    <li key={child.id}>
+                                    <li key={child.id} className="relative before:absolute before:-start-2 before:top-1/2 before:h-px before:w-2 before:bg-border">
                                       <RailAnchor
                                         item={child}
                                         active={Boolean(child.href && child.href === activeHref)}
@@ -666,6 +716,24 @@ function RailColumns({
               ) : null}
             </div>
 
+            {footerLinks?.length ? (
+              <ul className="border-t border-border px-2 py-2">
+                {footerLinks.map((link) => (
+                  <li key={link.id}>
+                    <RailAnchor
+                      item={{ id: link.id, label: link.label, href: link.href ?? "#", badge: link.count }}
+                      active={Boolean(link.href && link.href === activeHref)}
+                      className={itemClass}
+                      renderLink={renderLink}
+                      onNavigate={(href) => {
+                        link.onSelect?.()
+                        onNavigate?.(href)
+                      }}
+                    />
+                  </li>
+                ))}
+              </ul>
+            ) : null}
             {user ? (
               <div className={cn("border-t border-border p-2", footerClassName)}>
                 <DropdownMenu>
@@ -693,11 +761,67 @@ function RailColumns({
   )
 }
 
-function WorkspaceMark({ logo, name }: { logo?: React.ReactNode; name: string }) {
+function WorkspaceMark({ logo, name, status }: { logo?: React.ReactNode; name: string; status?: RailWorkspace["status"] }) {
   return (
-    <span className="grid size-8 shrink-0 place-items-center rounded-md bg-background text-xs font-semibold">
+    <span className="relative grid size-8 shrink-0 place-items-center rounded-full bg-background text-xs font-semibold">
       {logo ?? initials(name).slice(0, 1)}
+      {status ? <StatusDot status={status} /> : null}
     </span>
+  )
+}
+
+function StatusDot({ status }: { status: NonNullable<RailWorkspace["status"]> }) {
+  return (
+    <span
+      data-status={status}
+      className={cn(
+        "absolute end-0 bottom-0 size-2 rounded-full ring-2 ring-background",
+        status === "online" && "bg-chart-2",
+        status === "away" && "bg-chart-4",
+        status === "offline" && "bg-muted-foreground",
+      )}
+      aria-hidden
+    />
+  )
+}
+
+function ScopeToggle({ scope }: { scope: RailScope }) {
+  const [internal, setInternal] = React.useState(scope.defaultValue ?? scope.options[0]?.value ?? "")
+  const selected = scope.value ?? internal
+  function choose(value: string) {
+    if (scope.value === undefined) setInternal(value)
+    scope.onValueChange?.(value)
+  }
+  function onKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (!["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp"].includes(event.key)) return
+    event.preventDefault()
+    const index = Math.max(0, scope.options.findIndex((option) => option.value === selected))
+    const delta = event.key === "ArrowRight" || event.key === "ArrowDown" ? 1 : -1
+    const next = scope.options[(index + delta + scope.options.length) % scope.options.length]
+    if (!next) return
+    choose(next.value)
+    event.currentTarget.querySelector<HTMLElement>(`[data-value="${next.value}"]`)?.focus()
+  }
+  return (
+    <div role="radiogroup" aria-label={scope.label} onKeyDown={onKeyDown} className="flex gap-0.5 rounded-full bg-muted p-0.5">
+      {scope.options.map((option) => {
+        const checked = option.value === selected
+        return (
+          <button
+            key={option.value}
+            type="button"
+            role="radio"
+            aria-checked={checked}
+            tabIndex={checked ? 0 : -1}
+            onClick={() => choose(option.value)}
+            data-value={option.value}
+            className={cn("min-w-0 flex-1 rounded-full px-2 py-1 text-xs", checked ? "bg-card text-foreground shadow-sm" : "text-muted-foreground")}
+          >
+            {option.label}
+          </button>
+        )
+      })}
+    </div>
   )
 }
 
@@ -722,13 +846,13 @@ function RailSectionButton({
           tabIndex={pressed ? 0 : -1}
           onClick={() => onSelect(item.id)}
           className={cn(
-            "relative grid size-8 place-items-center rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-            pressed && "bg-accent text-accent-foreground",
+            "relative grid size-8 place-items-center rounded-full text-muted-foreground hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+            pressed && "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground",
           )}
         >
           <span className="[&_svg]:size-4">{item.icon}</span>
           {item.badge != null && item.badge !== "" ? (
-            <span className="absolute end-1 top-1 size-1.5 rounded-full bg-primary" aria-hidden />
+            <span className="absolute end-0.5 top-0.5 size-1.5 rounded-full bg-destructive" aria-hidden />
           ) : null}
         </button>
       </TooltipTrigger>
@@ -767,6 +891,8 @@ function columnProps(props: RailSidebarProps, sectionId: string, onSectionChange
     commandLabel: props.commandLabel,
     collapseLabel: props.collapseLabel,
     expandLabel: props.expandLabel,
+    scope: props.scope,
+    footerLinks: props.footerLinks,
     panelVisible,
     onTogglePanel,
     showCollapse,

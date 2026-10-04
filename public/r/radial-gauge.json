@@ -1,0 +1,65 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "radial-gauge",
+  "title": "Radial gauge",
+  "author": "Eduardo Retana",
+  "description": "A half-circle meter with ticks and a needle. Values above max are labelled over budget and the needle stops at the end. gauge remains the filled arc.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/radial-gauge.tsx",
+      "content": "\"use client\"\n\n/** Independent implementation of a common dashboard pattern. */\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { clampRatio, formatDashboardValue, type DashboardFormat } from \"@/lib/dashboard-format\"\n\nexport type RadialGaugeTone = \"primary\" | \"neutral\" | \"destructive\"\n\nexport type RadialGaugeClassNames = {\n  root?: string\n  value?: string\n  label?: string\n  over?: string\n  ticks?: string\n}\n\nexport type RadialGaugeProps = {\n  value: number\n  min?: number\n  max?: number\n  /** Accessible name for the meter. */\n  label: string\n  ticks?: number\n  format?: DashboardFormat\n  formatter?: (value: number) => string\n  locale?: string\n  currency?: string\n  overLabel?: string\n  tone?: RadialGaugeTone\n  className?: string\n  classNames?: RadialGaugeClassNames\n}\n\nconst CX = 100\nconst CY = 96\nconst RADIUS = 74\n\nfunction point(angle: number, radius: number) {\n  return {\n    x: CX + Math.cos(angle) * radius,\n    y: CY - Math.sin(angle) * radius,\n  }\n}\n\nfunction arcPath(radius: number) {\n  const start = point(Math.PI, radius)\n  const end = point(0, radius)\n  return `M ${start.x.toFixed(2)} ${start.y.toFixed(2)} A ${radius} ${radius} 0 0 1 ${end.x.toFixed(2)} ${end.y.toFixed(2)}`\n}\n\nconst toneClass: Record<RadialGaugeTone, string> = {\n  primary: \"stroke-primary text-primary\",\n  neutral: \"stroke-muted-foreground text-muted-foreground\",\n  destructive: \"stroke-destructive text-destructive\",\n}\n\nexport function RadialGauge({\n  value,\n  min = 0,\n  max = 100,\n  label,\n  ticks = 5,\n  format = \"number\",\n  formatter,\n  locale = \"en-US\",\n  currency = \"USD\",\n  overLabel = \"Over budget\",\n  tone = \"primary\",\n  className,\n  classNames,\n}: RadialGaugeProps) {\n  const safeMax = max > min ? max : min + 1\n  const over = value > max\n  const ratio = clampRatio(value, min, safeMax)\n  const clamped = value < min || value > max\n  const angle = Math.PI * (1 - ratio)\n  const needle = point(angle, RADIUS - 10)\n  const hub = point(angle, 8)\n  const text = formatter ? formatter(value) : formatDashboardValue(value, format, locale, currency)\n  const tickCount = Math.max(2, Math.min(9, Math.round(ticks)))\n  const marks = Array.from({ length: tickCount }, (_, index) => {\n    const at = Math.PI * (1 - index / (tickCount - 1))\n    const outer = point(at, RADIUS + 2)\n    const inner = point(at, RADIUS - 8)\n    return { outer, inner, key: index }\n  })\n  const valuetext = over ? `${text}, ${overLabel}` : text\n\n  return (\n    <div\n      data-slot=\"radial-gauge\"\n      data-state={over ? \"over\" : \"ok\"}\n      data-tone={over ? \"destructive\" : tone}\n      role=\"meter\"\n      aria-label={label}\n      aria-valuenow={value}\n      aria-valuemin={min}\n      aria-valuemax={max}\n      aria-valuetext={valuetext}\n      className={cn(\"@container flex min-w-0 flex-col items-center gap-1 text-foreground\", className, classNames?.root)}\n    >\n      <svg viewBox=\"0 0 200 118\" className=\"h-auto w-full max-w-xs\" aria-hidden>\n        <path d={arcPath(RADIUS)} className=\"fill-none stroke-muted\" strokeWidth=\"8\" strokeLinecap=\"round\" />\n        <path\n          d={arcPath(RADIUS)}\n          pathLength={100}\n          className={cn(\"fill-none\", over ? \"stroke-destructive\" : toneClass[tone])}\n          strokeWidth=\"8\"\n          strokeLinecap=\"round\"\n          strokeDasharray={`${ratio * 100} 100`}\n        />\n        <g className={classNames?.ticks}>\n          {marks.map((mark) => (\n            <line\n              key={mark.key}\n              x1={mark.inner.x}\n              y1={mark.inner.y}\n              x2={mark.outer.x}\n              y2={mark.outer.y}\n              className=\"stroke-muted-foreground\"\n              strokeWidth=\"1.5\"\n              strokeLinecap=\"round\"\n            />\n          ))}\n        </g>\n        <line\n          data-slot=\"radial-gauge-needle\"\n          data-clamped={clamped ? \"true\" : \"false\"}\n          x1={hub.x}\n          y1={hub.y}\n          x2={needle.x}\n          y2={needle.y}\n          className={over ? \"stroke-destructive\" : \"stroke-foreground\"}\n          strokeWidth=\"2.5\"\n          strokeLinecap=\"round\"\n        />\n        <circle cx={CX} cy={CY} r=\"4\" className={over ? \"fill-destructive\" : \"fill-foreground\"} />\n      </svg>\n      <p className={cn(\"text-3xl font-normal tabular-nums tracking-tight\", over && \"text-destructive\", classNames?.value)}>{text}</p>\n      <p className={cn(\"text-xs text-muted-foreground\", classNames?.label)}>{label}</p>\n      {over ? <p className={cn(\"text-xs font-medium text-destructive\", classNames?.over)}>{overLabel}</p> : null}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/radial-gauge.tsx"
+    },
+    {
+      "path": "registry/lib/dashboard-format.ts",
+      "content": "/** Number, date, and greeting helpers for dashboard pieces. No theme tokens. */\n\nexport type DashboardFormat = \"number\" | \"currency\" | \"percent\" | \"compact\" | \"text\" | \"points\"\n\nexport function formatDashboardValue(\n  value: number | string,\n  format: DashboardFormat = \"text\",\n  locale = \"en-US\",\n  currency = \"USD\",\n): string {\n  if (typeof value !== \"number\" || !Number.isFinite(value) || format === \"text\") return String(value)\n  if (format === \"currency\") {\n    return new Intl.NumberFormat(locale, {\n      style: \"currency\",\n      currency,\n      notation: Math.abs(value) >= 10000 ? \"compact\" : \"standard\",\n      maximumFractionDigits: Math.abs(value) >= 10000 ? 1 : 0,\n    }).format(value)\n  }\n  if (format === \"percent\") {\n    return new Intl.NumberFormat(locale, {\n      style: \"percent\",\n      maximumFractionDigits: 1,\n    }).format(value)\n  }\n  if (format === \"compact\") {\n    return new Intl.NumberFormat(locale, { notation: \"compact\", maximumFractionDigits: 1 }).format(value)\n  }\n  if (format === \"points\") {\n    const formatted = new Intl.NumberFormat(locale, {\n      signDisplay: \"exceptZero\",\n      maximumFractionDigits: 1,\n    }).format(value)\n    return `${formatted} pts`\n  }\n  return new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(value)\n}\n\nexport function formatDashboardDate(\n  value: string | number | Date,\n  locale = \"en-US\",\n  options: Intl.DateTimeFormatOptions = { month: \"short\", day: \"numeric\" },\n): string {\n  const date = value instanceof Date ? value : new Date(value)\n  if (Number.isNaN(date.getTime())) return String(value)\n  return new Intl.DateTimeFormat(locale, options).format(date)\n}\n\nexport function joinMeta(parts: Array<string | number | null | undefined | false>): string {\n  return parts.filter((part) => part != null && part !== false && part !== \"\").map(String).join(\" · \")\n}\n\nconst DAY_PART = {\n  en: { morning: \"Good morning\", afternoon: \"Good afternoon\", evening: \"Good evening\" },\n  es: { morning: \"Buenos días\", afternoon: \"Buenas tardes\", evening: \"Buenas noches\" },\n} as const\n\n/** Time-of-day greeting. Spanish locales use es; everything else uses en. */\nexport function greeting(date: Date, locale: string, name: string): string {\n  const hour = date.getHours()\n  const part = hour < 12 ? \"morning\" : hour < 18 ? \"afternoon\" : \"evening\"\n  const table = locale.toLowerCase().startsWith(\"es\") ? DAY_PART.es : DAY_PART.en\n  return `${table[part]}, ${name}`\n}\n\nexport function shareOf(value: number, total: number): number {\n  if (!Number.isFinite(value) || !Number.isFinite(total) || total <= 0) return 0\n  return value / total\n}\n\nexport function clampRatio(value: number, min: number, max: number): number {\n  const span = max - min\n  if (!Number.isFinite(span) || span <= 0) return 0\n  return Math.min(1, Math.max(0, (value - min) / span))\n}\n\nexport type RankedInput = { id: string; value: number; share?: number }\n\nexport function orderRanked<T extends RankedInput>(items: readonly T[], sort: \"asc\" | \"desc\" | \"none\" = \"desc\"): T[] {\n  const copy = items.map((item) => ({ ...item }))\n  if (sort === \"asc\") copy.sort((a, b) => a.value - b.value || a.id.localeCompare(b.id))\n  if (sort === \"desc\") copy.sort((a, b) => b.value - a.value || a.id.localeCompare(b.id))\n  const total = copy.reduce((sum, item) => sum + (Number.isFinite(item.value) ? item.value : 0), 0)\n  return copy.map((item) => ({ ...item, share: item.share ?? shareOf(item.value, total) }))\n}\n\n/** Delay in seconds for a short opacity stagger. Zero when motion is reduced. */\nexport function staggerDelay(index: number, reduced: boolean, step = 0.04): number {\n  if (reduced || index <= 0) return 0\n  return index * step\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/dashboard-format.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Medidor radial",
+    "descriptionEs": "Un semicírculo con marcas y aguja. Si el valor pasa el máximo, lo dice y la aguja se detiene.",
+    "preview": "app/examples/radial-gauge/preview.tsx",
+    "previewHref": "/examples/radial-gauge",
+    "examples": [
+      {
+        "title": "Medidor radial",
+        "href": "/examples/radial-gauge",
+        "description": "Dentro del tope y por encima."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/radial-gauge/stress",
+        "description": "320px y varios valores."
+      }
+    ],
+    "usage": "<RadialGauge value={128} max={100} label=\"Spend\" overLabel=\"Over budget\" />",
+    "api": [
+      {
+        "name": "value / min / max",
+        "type": "number",
+        "description": "aria-valuenow keeps the real value."
+      },
+      {
+        "name": "ticks",
+        "type": "number",
+        "description": "Tick marks along the arc. Default 5."
+      },
+      {
+        "name": "formatter / overLabel / tone",
+        "type": "display",
+        "description": "Value text, the over-budget label, and the stroke tone."
+      }
+    ]
+  },
+  "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+  "categories": [
+    "chart",
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}

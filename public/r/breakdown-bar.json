@@ -1,0 +1,65 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "breakdown-bar",
+  "title": "Breakdown bar",
+  "author": "Eduardo Retana",
+  "description": "A total, a segmented bar, and a legend. Unlike usage-meter, there is no limit.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/breakdown-bar.tsx",
+      "content": "\"use client\"\n\n/** Independent implementation of a common dashboard pattern. */\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { formatDashboardValue, shareOf, type DashboardFormat } from \"@/lib/dashboard-format\"\n\nexport type BreakdownSegment = {\n  id: string\n  label: string\n  value: number\n}\n\nexport type BreakdownBarClassNames = {\n  root?: string\n  total?: string\n  track?: string\n  legend?: string\n}\n\nexport type BreakdownBarProps = {\n  total: number\n  segments: readonly BreakdownSegment[]\n  label?: string\n  format?: DashboardFormat\n  locale?: string\n  currency?: string\n  className?: string\n  classNames?: BreakdownBarClassNames\n}\n\nconst segmentClass = [\"bg-primary\", \"bg-chart-2\", \"bg-chart-3\", \"bg-chart-4\", \"bg-chart-5\"]\n\nexport function BreakdownBar({\n  total,\n  segments,\n  label = \"Breakdown\",\n  format = \"currency\",\n  locale = \"en-US\",\n  currency = \"USD\",\n  className,\n  classNames,\n}: BreakdownBarProps) {\n  const [active, setActive] = React.useState<string | null>(null)\n  const sum = segments.reduce((acc, segment) => acc + Math.max(0, segment.value), 0)\n  const basis = sum > 0 ? sum : Math.max(total, 0)\n  const summary = segments\n    .map((segment) => `${segment.label} ${formatDashboardValue(segment.value, format, locale, currency)}`)\n    .join(\", \")\n\n  return (\n    <div data-slot=\"breakdown-bar\" className={cn(\"flex min-w-0 flex-col gap-3\", className, classNames?.root)}>\n      <p className={cn(\"text-4xl font-normal tabular-nums tracking-tight break-words\", classNames?.total)}>\n        {formatDashboardValue(total, format, locale, currency)}\n      </p>\n      <div\n        data-slot=\"breakdown-track\"\n        role=\"img\"\n        aria-label={`${label}: ${summary}`}\n        className={cn(\"flex h-2.5 gap-0.5 overflow-hidden rounded-full bg-muted\", classNames?.track)}\n      >\n        {segments.map((segment, index) => {\n          const share = shareOf(Math.max(0, segment.value), basis)\n          const dim = active != null && active !== segment.id\n          return (\n            <span\n              key={segment.id}\n              data-segment={segment.id}\n              data-dim={dim ? \"true\" : undefined}\n              className={cn(\"h-full min-w-1 rounded-full transition-opacity motion-reduce:transition-none data-[dim=true]:opacity-40\", segmentClass[index % segmentClass.length])}\n              style={{ width: `${Math.max(share * 100, share > 0 ? 4 : 0)}%` }}\n            />\n          )\n        })}\n      </div>\n      <ul className={cn(\"flex flex-col\", classNames?.legend)}>\n        {segments.map((segment, index) => {\n          const share = shareOf(Math.max(0, segment.value), basis)\n          const dim = active != null && active !== segment.id\n          return (\n            <li key={segment.id}>\n              <button\n                type=\"button\"\n                className=\"flex w-full items-center gap-2 rounded-md py-1.5 text-start text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\"\n                aria-pressed={active === segment.id}\n                onMouseEnter={() => setActive(segment.id)}\n                onMouseLeave={() => setActive(null)}\n                onFocus={() => setActive(segment.id)}\n                onBlur={() => setActive(null)}\n              >\n                <span className={cn(\"size-2 shrink-0 rounded-full\", segmentClass[index % segmentClass.length])} aria-hidden />\n                <span className={cn(\"min-w-0 flex-1 truncate\", dim && \"opacity-40\")}>{segment.label}</span>\n                <span className=\"shrink-0 tabular-nums\">\n                  {formatDashboardValue(segment.value, format, locale, currency)}\n                  <span className=\"ms-2 text-muted-foreground\">{formatDashboardValue(share, \"percent\", locale)}</span>\n                </span>\n              </button>\n            </li>\n          )\n        })}\n      </ul>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/breakdown-bar.tsx"
+    },
+    {
+      "path": "registry/lib/dashboard-format.ts",
+      "content": "/** Number, date, and greeting helpers for dashboard pieces. No theme tokens. */\n\nexport type DashboardFormat = \"number\" | \"currency\" | \"percent\" | \"compact\" | \"text\" | \"points\"\n\nexport function formatDashboardValue(\n  value: number | string,\n  format: DashboardFormat = \"text\",\n  locale = \"en-US\",\n  currency = \"USD\",\n): string {\n  if (typeof value !== \"number\" || !Number.isFinite(value) || format === \"text\") return String(value)\n  if (format === \"currency\") {\n    return new Intl.NumberFormat(locale, {\n      style: \"currency\",\n      currency,\n      notation: Math.abs(value) >= 10000 ? \"compact\" : \"standard\",\n      maximumFractionDigits: Math.abs(value) >= 10000 ? 1 : 0,\n    }).format(value)\n  }\n  if (format === \"percent\") {\n    return new Intl.NumberFormat(locale, {\n      style: \"percent\",\n      maximumFractionDigits: 1,\n    }).format(value)\n  }\n  if (format === \"compact\") {\n    return new Intl.NumberFormat(locale, { notation: \"compact\", maximumFractionDigits: 1 }).format(value)\n  }\n  if (format === \"points\") {\n    const formatted = new Intl.NumberFormat(locale, {\n      signDisplay: \"exceptZero\",\n      maximumFractionDigits: 1,\n    }).format(value)\n    return `${formatted} pts`\n  }\n  return new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(value)\n}\n\nexport function formatDashboardDate(\n  value: string | number | Date,\n  locale = \"en-US\",\n  options: Intl.DateTimeFormatOptions = { month: \"short\", day: \"numeric\" },\n): string {\n  const date = value instanceof Date ? value : new Date(value)\n  if (Number.isNaN(date.getTime())) return String(value)\n  return new Intl.DateTimeFormat(locale, options).format(date)\n}\n\nexport function joinMeta(parts: Array<string | number | null | undefined | false>): string {\n  return parts.filter((part) => part != null && part !== false && part !== \"\").map(String).join(\" · \")\n}\n\nconst DAY_PART = {\n  en: { morning: \"Good morning\", afternoon: \"Good afternoon\", evening: \"Good evening\" },\n  es: { morning: \"Buenos días\", afternoon: \"Buenas tardes\", evening: \"Buenas noches\" },\n} as const\n\n/** Time-of-day greeting. Spanish locales use es; everything else uses en. */\nexport function greeting(date: Date, locale: string, name: string): string {\n  const hour = date.getHours()\n  const part = hour < 12 ? \"morning\" : hour < 18 ? \"afternoon\" : \"evening\"\n  const table = locale.toLowerCase().startsWith(\"es\") ? DAY_PART.es : DAY_PART.en\n  return `${table[part]}, ${name}`\n}\n\nexport function shareOf(value: number, total: number): number {\n  if (!Number.isFinite(value) || !Number.isFinite(total) || total <= 0) return 0\n  return value / total\n}\n\nexport function clampRatio(value: number, min: number, max: number): number {\n  const span = max - min\n  if (!Number.isFinite(span) || span <= 0) return 0\n  return Math.min(1, Math.max(0, (value - min) / span))\n}\n\nexport type RankedInput = { id: string; value: number; share?: number }\n\nexport function orderRanked<T extends RankedInput>(items: readonly T[], sort: \"asc\" | \"desc\" | \"none\" = \"desc\"): T[] {\n  const copy = items.map((item) => ({ ...item }))\n  if (sort === \"asc\") copy.sort((a, b) => a.value - b.value || a.id.localeCompare(b.id))\n  if (sort === \"desc\") copy.sort((a, b) => b.value - a.value || a.id.localeCompare(b.id))\n  const total = copy.reduce((sum, item) => sum + (Number.isFinite(item.value) ? item.value : 0), 0)\n  return copy.map((item) => ({ ...item, share: item.share ?? shareOf(item.value, total) }))\n}\n\n/** Delay in seconds for a short opacity stagger. Zero when motion is reduced. */\nexport function staggerDelay(index: number, reduced: boolean, step = 0.04): number {\n  if (reduced || index <= 0) return 0\n  return index * step\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/dashboard-format.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Barra de desglose",
+    "descriptionEs": "Un total, una barra segmentada y una leyenda. No hay tope, a diferencia de usage-meter.",
+    "preview": "app/examples/breakdown-bar/preview.tsx",
+    "previewHref": "/examples/breakdown-bar",
+    "examples": [
+      {
+        "title": "Barra de desglose",
+        "href": "/examples/breakdown-bar",
+        "description": "Costo abierto ficticio."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/breakdown-bar/stress",
+        "description": "320px."
+      }
+    ],
+    "usage": "<BreakdownBar total={3570} segments={segments} locale=\"es-MX\" currency=\"USD\" />",
+    "api": [
+      {
+        "name": "total",
+        "type": "number",
+        "description": "The large figure."
+      },
+      {
+        "name": "segments",
+        "type": "BreakdownSegment[]",
+        "description": "Label and value. Colors cycle chart tokens, starting with primary."
+      },
+      {
+        "name": "format / locale / currency",
+        "type": "Intl",
+        "description": "How values are written."
+      }
+    ]
+  },
+  "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+  "categories": [
+    "chart",
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}
