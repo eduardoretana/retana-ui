@@ -30,6 +30,8 @@ The index at the bottom is generated from `registry.json`. These three groups ar
 
 **Layouts.** [`magnetic-bento`](registry/ui/magnetic-bento.tsx) is a bento grid with one shared highlight. The active card sets `anchor-name` and the highlight uses `position-anchor` with `inset: anchor(inside)`, so the four edges stretch between cards of different sizes. Browsers where `CSS.supports("anchor-name: --x")` is false measure the active card instead. The technique idea is from [jh3yy](https://x.com/jh3yy/status/2105823926978814273). The cards in this registry are original.
 
+**Verification and notices.** [`two-factor-card`](registry/ui/two-factor-card.tsx) is a one-time-code card on the `input-otp` primitive: countdown, verify, alternate methods, and a success handoff. [`otp-field`](registry/ui/otp-field.tsx) is the field alone when the screen already has its own frame. [`notification-stack`](registry/ui/notification-stack.tsx) is a depth stack that advances when the front card is dismissed. [`toast-stack`](registry/ui/toast-stack.tsx) is for short results at the edge, [`notification-center`](registry/blocks/notification-center.tsx) keeps a grouped list with read state, and [`card-stack`](registry/ui/card-stack.tsx) is a left-or-right triage deck. The two new cards take visual inspiration from Design & Code With AV Facebook reels. No code from those reels was used.
+
 ## How a piece stays on the host theme
 
 <p align="center">
@@ -92,9 +94,25 @@ Names that sit near each other do different jobs. Install the row that matches t
 | --- | --- |
 | [`magnetic-bento`](registry/ui/magnetic-bento.tsx) | Mixed column and row spans with one highlight that glides between cards. Hover, focus, and tap move it, and it stays on the last card. |
 | [`blog-grid`](registry/blocks/blog-grid.tsx) | A page of posts. |
-| [`card-stack`](registry/ui/card-stack.tsx) | A pile of cards you move through. |
+| [`card-stack`](registry/ui/card-stack.tsx) | A triage deck you flick left or right. For notices in a depth stack, use `notification-stack`. |
 | [`radio-cards`](registry/ui/radio-cards.tsx) | One choice among option cards, with arrow keys. |
 | [`view-gallery`](registry/ui/view-gallery.tsx) | Schema records as cards, inside multi-view. |
+
+### Verification
+
+| Piece | Use it for |
+| --- | --- |
+| [`otp-field`](registry/ui/otp-field.tsx) | The code field alone: digits, an error, a success line, and a resend cooldown. |
+| [`two-factor-card`](registry/ui/two-factor-card.tsx) | The whole verification card: countdown, verify, alternate methods, and a success handoff. Same `input-otp` primitive. |
+
+### Notices
+
+| Piece | Use it for |
+| --- | --- |
+| [`toast-stack`](registry/ui/toast-stack.tsx) | Short results at the edge of the screen. |
+| [`notification-center`](registry/blocks/notification-center.tsx) | A grouped list that keeps read state. |
+| [`notification-stack`](registry/ui/notification-stack.tsx) | A depth stack. Dismiss the front card and the next one steps forward. |
+| [`card-stack`](registry/ui/card-stack.tsx) | A triage deck you flick left or right, one decision at a time. |
 
 `admin-shell` is the collapsible admin sidebar with breadcrumbs and a command palette. `rail-sidebar` is the two-layer app sidebar: an icon rail for sections and a panel for that section's links. `multi-view` is the block that switches the six views and opens the record panel.
 
@@ -198,7 +216,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`142` items are in `registry.json` on this branch: `113` components, `22` blocks, `1` hook, and `6` libraries. A name links to its source file.
+`144` items are in `registry.json` on this branch: `115` components, `22` blocks, `1` hook, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -250,6 +268,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`rich-text-editor`](registry/ui/rich-text-editor.tsx) · ui — A lightweight editor with markdown shortcuts, a floating toolbar, a slash menu, and HTML and markdown output. Install: `npx shadcn@latest add @retana/rich-text-editor`.
 - [`billing-toggle`](registry/ui/billing-toggle.tsx) · ui — A monthly and yearly switch with a savings badge and prices that roll. Install: `npx shadcn@latest add @retana/billing-toggle`.
 - [`radio-cards`](registry/ui/radio-cards.tsx) · ui — Selectable option cards with one tab stop and arrow-key behavior. Install: `npx shadcn@latest add @retana/radio-cards`.
+- [`two-factor-card`](registry/ui/two-factor-card.tsx) · ui — Verification card for a one-time code, with a countdown, alternate methods, and a success handoff. Install: `npx shadcn@latest add @retana/two-factor-card`.
 
 ### Media and content
 
@@ -362,6 +381,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`stepper`](registry/ui/stepper.tsx) · ui — Shows where a person is in a multi-step flow and what is done. Install: `npx shadcn@latest add @retana/stepper`.
 - [`announcement-bar`](registry/ui/announcement-bar.tsx) · ui — A top banner that rotates messages and collapses when dismissed. Install: `npx shadcn@latest add @retana/announcement-bar`.
 - [`bottom-sheet`](registry/ui/bottom-sheet.tsx) · ui — A sheet that rests at a peek or full height. Install: `npx shadcn@latest add @retana/bottom-sheet`.
+- [`notification-stack`](registry/ui/notification-stack.tsx) · ui — A depth stack of notices. Dismiss the front card and the next one steps forward. Install: `npx shadcn@latest add @retana/notification-stack`.
 
 ### Admin
 

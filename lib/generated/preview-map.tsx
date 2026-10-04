@@ -143,6 +143,8 @@ import Preview138 from "@/app/examples/view-gallery/preview"
 import Preview139 from "@/app/examples/record-properties/preview"
 import Preview140 from "@/app/examples/multi-view/preview"
 import Preview141 from "@/app/examples/magnetic-bento/preview"
+import Preview142 from "@/app/examples/two-factor-card/preview"
+import Preview143 from "@/app/examples/notification-stack/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -287,4 +289,6 @@ export const previewMap = {
   "record-properties": Preview139,
   "multi-view": Preview140,
   "magnetic-bento": Preview141,
+  "two-factor-card": Preview142,
+  "notification-stack": Preview143,
 }
