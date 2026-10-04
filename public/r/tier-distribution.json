@@ -1,0 +1,65 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tier-distribution",
+  "title": "Tier distribution",
+  "author": "Eduardo Retana",
+  "description": "Two to four tiers. Each shows its count and a block sized by share, and the row is a radio group.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/tier-distribution.tsx",
+      "content": "\"use client\"\n\n/** Independent implementation of a common dashboard pattern. */\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { formatDashboardValue, shareOf } from \"@/lib/dashboard-format\"\n\nexport type TierTone = \"chart-1\" | \"chart-2\" | \"chart-3\" | \"chart-4\" | \"chart-5\" | \"primary\" | \"destructive\"\n\nexport type TierDistributionTier = {\n  id: string\n  label: string\n  value: number\n  tone?: TierTone\n}\n\nexport type TierDistributionClassNames = {\n  root?: string\n  option?: string\n  block?: string\n  label?: string\n  value?: string\n}\n\nexport type TierDistributionProps = {\n  tiers: readonly TierDistributionTier[]\n  value?: string\n  defaultValue?: string\n  onValueChange?: (id: string) => void\n  label?: string\n  locale?: string\n  className?: string\n  classNames?: TierDistributionClassNames\n}\n\nconst toneClass: Record<TierTone, string> = {\n  \"chart-1\": \"bg-chart-1\",\n  \"chart-2\": \"bg-chart-2\",\n  \"chart-3\": \"bg-chart-3\",\n  \"chart-4\": \"bg-chart-4\",\n  \"chart-5\": \"bg-chart-5\",\n  primary: \"bg-primary\",\n  destructive: \"bg-destructive\",\n}\n\nconst fallbackTone: TierTone[] = [\"chart-1\", \"chart-2\", \"chart-3\", \"chart-4\"]\n\nexport function TierDistribution({\n  tiers,\n  value,\n  defaultValue,\n  onValueChange,\n  label = \"Distribution\",\n  locale = \"en-US\",\n  className,\n  classNames,\n}: TierDistributionProps) {\n  const list = tiers.slice(0, 4)\n  const total = list.reduce((sum, tier) => sum + (Number.isFinite(tier.value) ? Math.max(0, tier.value) : 0), 0)\n  const [internal, setInternal] = React.useState(defaultValue ?? list[0]?.id ?? \"\")\n  const selected = value ?? internal\n  const active = list.some((tier) => tier.id === selected) ? selected : list[0]?.id ?? \"\"\n\n  function select(id: string) {\n    if (value === undefined) setInternal(id)\n    onValueChange?.(id)\n  }\n\n  function onKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {\n    const keys = [\"ArrowRight\", \"ArrowDown\", \"ArrowLeft\", \"ArrowUp\", \"Home\", \"End\"]\n    if (!keys.includes(event.key)) return\n    if (!list.length) return\n    event.preventDefault()\n    const index = Math.max(0, list.findIndex((tier) => tier.id === active))\n    const next =\n      event.key === \"Home\"\n        ? 0\n        : event.key === \"End\"\n          ? list.length - 1\n          : event.key === \"ArrowRight\" || event.key === \"ArrowDown\"\n            ? (index + 1) % list.length\n            : (index - 1 + list.length) % list.length\n    const id = list[next]?.id\n    if (!id) return\n    select(id)\n    const node = event.currentTarget.querySelector<HTMLElement>(`[data-tier-id=\"${CSS.escape(id)}\"]`)\n    node?.focus()\n  }\n\n  return (\n    <div\n      data-slot=\"tier-distribution\"\n      role=\"radiogroup\"\n      aria-label={label}\n      onKeyDown={onKeyDown}\n      className={cn(\"@container flex min-w-0 flex-wrap items-end gap-2\", className, classNames?.root)}\n    >\n      {list.length === 0 ? <p className=\"text-sm text-muted-foreground\">No tiers</p> : null}\n      {list.map((tier, index) => {\n        const share = shareOf(Math.max(0, tier.value), total)\n        const tone = tier.tone ?? fallbackTone[index % fallbackTone.length]\n        const checked = tier.id === active\n        const count = formatDashboardValue(tier.value, \"number\", locale)\n        const percent = formatDashboardValue(share, \"percent\", locale)\n        return (\n          <button\n            key={tier.id}\n            type=\"button\"\n            role=\"radio\"\n            data-tier-id={tier.id}\n            aria-checked={checked}\n            tabIndex={checked ? 0 : -1}\n            onClick={() => select(tier.id)}\n            style={{ flexGrow: Math.max(share, 0.2), flexBasis: \"6.5rem\" }}\n            className={cn(\n              \"flex min-w-[6.5rem] flex-col gap-2 rounded-xl p-2 text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\",\n              checked ? \"bg-muted\" : \"hover:bg-muted/60\",\n              classNames?.option,\n            )}\n          >\n            <span className=\"flex items-baseline justify-between gap-2\">\n              <span className={cn(\"text-sm font-medium break-words\", classNames?.label)}>{tier.label}</span>\n              <span className={cn(\"text-sm tabular-nums\", classNames?.value)}>{count}</span>\n            </span>\n            <span\n              data-slot=\"tier-distribution-block\"\n              className={cn(\n                \"block h-12 w-full min-w-2 rounded-md bg-gradient-to-t from-background/40 to-transparent\",\n                toneClass[tone],\n                classNames?.block,\n              )}\n              aria-hidden\n            />\n            <span className=\"text-xs text-muted-foreground tabular-nums\">{percent}</span>\n          </button>\n        )\n      })}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/tier-distribution.tsx"
+    },
+    {
+      "path": "registry/lib/dashboard-format.ts",
+      "content": "/** Number, date, and greeting helpers for dashboard pieces. No theme tokens. */\n\nexport type DashboardFormat = \"number\" | \"currency\" | \"percent\" | \"compact\" | \"text\" | \"points\"\n\nexport function formatDashboardValue(\n  value: number | string,\n  format: DashboardFormat = \"text\",\n  locale = \"en-US\",\n  currency = \"USD\",\n): string {\n  if (typeof value !== \"number\" || !Number.isFinite(value) || format === \"text\") return String(value)\n  if (format === \"currency\") {\n    return new Intl.NumberFormat(locale, {\n      style: \"currency\",\n      currency,\n      notation: Math.abs(value) >= 10000 ? \"compact\" : \"standard\",\n      maximumFractionDigits: Math.abs(value) >= 10000 ? 1 : 0,\n    }).format(value)\n  }\n  if (format === \"percent\") {\n    return new Intl.NumberFormat(locale, {\n      style: \"percent\",\n      maximumFractionDigits: 1,\n    }).format(value)\n  }\n  if (format === \"compact\") {\n    return new Intl.NumberFormat(locale, { notation: \"compact\", maximumFractionDigits: 1 }).format(value)\n  }\n  if (format === \"points\") {\n    const formatted = new Intl.NumberFormat(locale, {\n      signDisplay: \"exceptZero\",\n      maximumFractionDigits: 1,\n    }).format(value)\n    return `${formatted} pts`\n  }\n  return new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(value)\n}\n\nexport function formatDashboardDate(\n  value: string | number | Date,\n  locale = \"en-US\",\n  options: Intl.DateTimeFormatOptions = { month: \"short\", day: \"numeric\" },\n): string {\n  const date = value instanceof Date ? value : new Date(value)\n  if (Number.isNaN(date.getTime())) return String(value)\n  return new Intl.DateTimeFormat(locale, options).format(date)\n}\n\nexport function joinMeta(parts: Array<string | number | null | undefined | false>): string {\n  return parts.filter((part) => part != null && part !== false && part !== \"\").map(String).join(\" · \")\n}\n\nconst DAY_PART = {\n  en: { morning: \"Good morning\", afternoon: \"Good afternoon\", evening: \"Good evening\" },\n  es: { morning: \"Buenos días\", afternoon: \"Buenas tardes\", evening: \"Buenas noches\" },\n} as const\n\n/** Time-of-day greeting. Spanish locales use es; everything else uses en. */\nexport function greeting(date: Date, locale: string, name: string): string {\n  const hour = date.getHours()\n  const part = hour < 12 ? \"morning\" : hour < 18 ? \"afternoon\" : \"evening\"\n  const table = locale.toLowerCase().startsWith(\"es\") ? DAY_PART.es : DAY_PART.en\n  return `${table[part]}, ${name}`\n}\n\nexport function shareOf(value: number, total: number): number {\n  if (!Number.isFinite(value) || !Number.isFinite(total) || total <= 0) return 0\n  return value / total\n}\n\nexport function clampRatio(value: number, min: number, max: number): number {\n  const span = max - min\n  if (!Number.isFinite(span) || span <= 0) return 0\n  return Math.min(1, Math.max(0, (value - min) / span))\n}\n\nexport type RankedInput = { id: string; value: number; share?: number }\n\nexport function orderRanked<T extends RankedInput>(items: readonly T[], sort: \"asc\" | \"desc\" | \"none\" = \"desc\"): T[] {\n  const copy = items.map((item) => ({ ...item }))\n  if (sort === \"asc\") copy.sort((a, b) => a.value - b.value || a.id.localeCompare(b.id))\n  if (sort === \"desc\") copy.sort((a, b) => b.value - a.value || a.id.localeCompare(b.id))\n  const total = copy.reduce((sum, item) => sum + (Number.isFinite(item.value) ? item.value : 0), 0)\n  return copy.map((item) => ({ ...item, share: item.share ?? shareOf(item.value, total) }))\n}\n\n/** Delay in seconds for a short opacity stagger. Zero when motion is reduced. */\nexport function staggerDelay(index: number, reduced: boolean, step = 0.04): number {\n  if (reduced || index <= 0) return 0\n  return index * step\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/dashboard-format.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Distribución por tramos",
+    "descriptionEs": "De dos a cuatro tramos. Cada uno muestra su conteo y un bloque según su parte, y la fila es un grupo de radio.",
+    "preview": "app/examples/tier-distribution/preview.tsx",
+    "previewHref": "/examples/tier-distribution",
+    "examples": [
+      {
+        "title": "Distribución por tramos",
+        "href": "/examples/tier-distribution",
+        "description": "Severidad de defectos ficticios."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/tier-distribution/stress",
+        "description": "320px, dos, vacío y RTL."
+      }
+    ],
+    "usage": "<TierDistribution label=\"Severity\" tiers={tiers} value={tier} onValueChange={setTier} />",
+    "api": [
+      {
+        "name": "tiers",
+        "type": "TierDistributionTier[]",
+        "description": "id, label, value, and an optional chart tone. Only the first four render."
+      },
+      {
+        "name": "value / onValueChange",
+        "type": "string",
+        "description": "Controlled selection. Arrow keys move it."
+      },
+      {
+        "name": "locale",
+        "type": "string",
+        "description": "Count and percent formatting."
+      }
+    ]
+  },
+  "docs": "Independent implementation of a common dashboard pattern. Answer no if the CLI asks to overwrite a primitive the host already has.",
+  "categories": [
+    "chart",
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}
