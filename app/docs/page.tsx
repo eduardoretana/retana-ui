@@ -57,6 +57,20 @@ const notices = [
   ["card-stack", "A triage deck you flick left or right."],
 ] as const
 
+const navigation = [
+  ["dock-nav", "Floating pill of icons, with magnification and a search field."],
+  ["mega-menu", "Wide store panel under a bar. Narrow containers turn it into an accordion."],
+  ["site-header", "Sticky marketing header that turns solid on scroll, with a mobile sheet."],
+  ["tree-nav", "Sidebar card: person header, nested rows, counts, and a guide line."],
+  ["tree-view", "File tree for nested documents, without the card chrome."],
+] as const
+
+const forms = [
+  ["bug-report-form", "Bug report card: type, priority, environment, and a screenshot."],
+  ["contact-section", "Contact block with name, email, and a message."],
+  ["entity-form", "Schema-driven record form, including inside layered-panel."],
+] as const
+
 export default function DocsPage() {
   const count = getCatalog().length
 
@@ -165,6 +179,8 @@ export default function DocsPage() {
           <ChoiceTable title="Layouts" rows={layouts} />
           <ChoiceTable title="Verification" rows={verification} />
           <ChoiceTable title="Notices" rows={notices} />
+          <ChoiceTable title="Navigation" rows={navigation} />
+          <ChoiceTable title="Forms" rows={forms} />
           <p className="text-muted-foreground">
             <ItemLink name="view-calendar" /> is a month grid. <ItemLink name="view-grouped-list" />{" "}
             is collapsible groups of compact rows. <ItemLink name="view-gallery" /> is cards.{" "}
@@ -264,6 +280,11 @@ npx shadcn@latest add @retana/presence-outline`}</pre>
             </li>
             <li>
               <code>adaptive-table</code> and the multi-view pieces are clean-room implementations.
+            </li>
+            <li>
+              <code>bug-report-form</code>, <code>tree-nav</code>, and <code>mega-menu</code> take
+              visual inspiration from Design &amp; Code With AV reels. No premium code, class names,
+              colors, images, or Bootstrap Icons were copied.
             </li>
             <li>
               <code>magnetic-bento</code> takes the anchor-positioning idea from{" "}

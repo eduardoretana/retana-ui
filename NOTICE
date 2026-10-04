@@ -270,3 +270,15 @@ reels by Design & Code With AV ("2FA UI Upgrade" and "Notification Stack UI
 Upgrade"). No code, class names, icons, or assets from those reels were used.
 Both pieces are clean-room implementations of the observed behavior, styled
 only with the host shadcn tokens.
+
+bug-report-form, tree-nav, and mega-menu take visual inspiration from
+Facebook reels published by "Design & Code With AV":
+
+  Bug Report Form UI Upgrade | Basic vs Premium
+  Tree Navigation UI Upgrade | Basic vs Premium
+  Mega Menu UI Upgrade | Basic vs Premium
+
+The premium source is sold and is not included. No code, class names, hex
+colors, images, or Bootstrap Icons were copied. Each piece is an independent
+implementation of the described behavior, using the host shadcn tokens and
+lucide-react.

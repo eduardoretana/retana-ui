@@ -216,7 +216,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`144` items are in `registry.json` on this branch: `115` components, `22` blocks, `1` hook, and `6` libraries. A name links to its source file.
+`147` items are in `registry.json` on this branch: `118` components, `22` blocks, `1` hook, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -269,6 +269,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`billing-toggle`](registry/ui/billing-toggle.tsx) · ui — A monthly and yearly switch with a savings badge and prices that roll. Install: `npx shadcn@latest add @retana/billing-toggle`.
 - [`radio-cards`](registry/ui/radio-cards.tsx) · ui — Selectable option cards with one tab stop and arrow-key behavior. Install: `npx shadcn@latest add @retana/radio-cards`.
 - [`two-factor-card`](registry/ui/two-factor-card.tsx) · ui — Verification card for a one-time code, with a countdown, alternate methods, and a success handoff. Install: `npx shadcn@latest add @retana/two-factor-card`.
+- [`bug-report-form`](registry/ui/bug-report-form.tsx) · ui — Card form for a bug report: title, description, type chips, priority, environment, and a screenshot dropzone, with validation and submit states. Install: `npx shadcn@latest add @retana/bug-report-form`.
 
 ### Media and content
 
@@ -343,6 +344,8 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`dock-nav`](registry/ui/dock-nav.tsx) · ui — Floating pill navigation with pointer magnification, tooltips, an active-route dot, grouped items, and a search item that morphs into a field under the bar. Install: `npx shadcn@latest add @retana/dock-nav`.
 - [`command-palette`](registry/ui/command-palette.tsx) · ui — Searchable command list on the host command primitive. Admin shell keeps its own nav palette. Install: `npx shadcn@latest add @retana/command-palette`.
 - [`rail-sidebar`](registry/blocks/rail-sidebar.tsx) · block — Two-layer app sidebar: an icon rail for sections and a panel for that section's navigation. Built on the host shadcn sidebar, including its mobile sheet. Install: `npx shadcn@latest add @retana/rail-sidebar`.
+- [`tree-nav`](registry/ui/tree-nav.tsx) · ui — Navigation card with a person header, nested rows, counts, a guide line, and a keyboard tree. Install: `npx shadcn@latest add @retana/tree-nav`.
+- [`mega-menu`](registry/ui/mega-menu.tsx) · ui — Navigation bar whose triggers open a wide panel. A container under 768px stacks the same panel as an accordion. Install: `npx shadcn@latest add @retana/mega-menu`.
 
 ### Page blocks
 
