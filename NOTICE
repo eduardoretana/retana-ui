@@ -302,6 +302,20 @@ lucide-react.
 
 ---
 
+Proposal builder
+
+proposal-shell, proposal-dashboard, proposal-opportunity, proposal-analyze,
+proposal-workspace, proposal-discovery, proposal-clarify, proposal-scope,
+proposal-similar, proposal-estimate, proposal-risks, proposal-document,
+proposal-sow, proposal-activity, proposal-send, and proposal-builder are a
+clean-room implementation of a discovery-to-statement-of-work flow. The
+behavior was observed in an unlicensed design demonstration. No source,
+product names, sample copy, icons, or assets from that demonstration were
+copied. Catalog labels are fictional Spanish. The pieces use the host shadcn
+tokens and reuse pieces already in this registry.
+
+---
+
 LocalMode UI
 
 Retana UI includes pieces adapted from LocalMode UI (MIT):

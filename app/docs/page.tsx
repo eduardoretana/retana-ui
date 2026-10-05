@@ -39,6 +39,21 @@ const dashboards = [
   ["stats-band", "A marketing band of figures."],
 ] as const
 
+const proposals = [
+  ["proposal-builder", "The whole flow, from the dashboard through send. Pass records in."],
+  ["proposal-shell", "Grouped sidebar, command search, unread bell, period, and a step action."],
+  ["proposal-dashboard", "Metric cards, action rows, quoted-versus-delivered hours, a gauge, and activity."],
+  ["proposal-workspace", "Breadcrumbs and tabs with a sliding underline and a crossfade."],
+  ["proposal-discovery", "Notes with timestamps, quotes, and a scrubbable waveform."],
+  ["proposal-clarify", "Segmented answers with a live hours and price impact."],
+  ["proposal-scope", "Phase checklist, origin tags, and an effort donut."],
+  ["proposal-similar", "Selectable past work, phase bars, and a three-column comparison."],
+  ["proposal-estimate", "Phase table, two-week capacity, price slider, and a receipt."],
+  ["proposal-risks", "Timeline risk, a choice that gains a check, and scope approval."],
+  ["proposal-document", "Draggable sections, a paper preview, and a pre-flight list."],
+  ["proposal-send", "Recipient, summary, a read-only link, and a send callback."],
+] as const
+
 const meters = [
   ["gauge", "A filled arc that names the threshold the value has reached."],
   ["radial-gauge", "A half-circle needle meter with an explicit over-budget state."],
@@ -220,6 +235,7 @@ export default function DocsPage() {
           <ChoiceTable title="Boards" rows={boards} />
           <ChoiceTable title="Time" rows={time} />
           <ChoiceTable title="Dashboards" rows={dashboards} />
+          <ChoiceTable title="Proposals" rows={proposals} />
           <ChoiceTable title="Meters and trends" rows={meters} />
           <ChoiceTable title="Editing a record" rows={editing} />
           <ChoiceTable title="People" rows={people} />
@@ -342,6 +358,11 @@ npx shadcn@latest add @retana/presence-outline`}</pre>
             <li>
               Dashboard wells, triage, case review, the radial gauge, and the tier meter are an
               independent implementation of common dashboard patterns.
+            </li>
+            <li>
+              The proposal family (<code>proposal-builder</code> and the steps beside it) is a
+              clean-room reading of an unlicensed discovery-to-statement-of-work demonstration. No
+              product names, sample copy, or assets were copied.
             </li>
             <li>
               <code>bug-report-form</code>, <code>tree-nav</code>, and <code>mega-menu</code> take

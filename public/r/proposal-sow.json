@@ -1,0 +1,55 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "proposal-sow",
+  "title": "Statement of work",
+  "author": "Eduardo Retana",
+  "description": "Parties, numbered clauses, and an acknowledgement for a statement of work.",
+  "dependencies": [],
+  "registryDependencies": [
+    "checkbox"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/proposal-sow.tsx",
+      "content": "\"use client\"\n\n/** Clean-room statement of work. Parties, clauses, and an acknowledgement. */\n\nimport { Checkbox } from \"@/components/ui/checkbox\"\nimport { cn } from \"@/lib/utils\"\n\nexport type SowClause = {\n  id: string\n  title: string\n  body: string\n}\n\nexport type ProposalSowProps = {\n  title: string\n  client: string\n  studio: string\n  partiesLabel?: string\n  clientLabel?: string\n  studioLabel?: string\n  clauses: readonly SowClause[]\n  acknowledgeLabel: string\n  acknowledged?: boolean\n  onAcknowledge?: (value: boolean) => void\n  className?: string\n}\n\nexport function ProposalSow({\n  title,\n  client,\n  studio,\n  partiesLabel = \"Parties\",\n  clientLabel = \"Client\",\n  studioLabel = \"Studio\",\n  clauses,\n  acknowledgeLabel,\n  acknowledged = false,\n  onAcknowledge,\n  className,\n}: ProposalSowProps) {\n  return (\n    <article data-slot=\"proposal-sow\" className={cn(\"min-w-0 rounded-xl border border-border bg-card p-4 sm:p-6\", className)}>\n      <h2 className=\"text-lg font-medium wrap-break-word\">{title}</h2>\n      <section className=\"mt-4\" aria-label={partiesLabel}>\n        <h3 className=\"text-sm font-medium\">{partiesLabel}</h3>\n        <dl className=\"mt-2 grid gap-2 text-sm sm:grid-cols-2\">\n          <div>\n            <dt className=\"text-muted-foreground\">{clientLabel}</dt>\n            <dd>{client}</dd>\n          </div>\n          <div>\n            <dt className=\"text-muted-foreground\">{studioLabel}</dt>\n            <dd>{studio}</dd>\n          </div>\n        </dl>\n      </section>\n      <ol className=\"mt-4 flex flex-col gap-4\">\n        {clauses.map((clause, index) => (\n          <li key={clause.id}>\n            <h3 className=\"text-sm font-medium\">\n              {index + 1}. {clause.title}\n            </h3>\n            <p className=\"mt-1 text-sm leading-6 text-muted-foreground wrap-break-word\">{clause.body}</p>\n          </li>\n        ))}\n      </ol>\n      <label className=\"mt-4 flex items-start gap-2 text-sm\">\n        <Checkbox\n          className=\"mt-0.5\"\n          checked={acknowledged}\n          onCheckedChange={(checked) => onAcknowledge?.(checked === true)}\n        />\n        <span>{acknowledgeLabel}</span>\n      </label>\n    </article>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/proposal-sow.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Orden de trabajo",
+    "descriptionEs": "Partes, cláusulas y acuse.",
+    "preview": "app/examples/proposal-sow/preview.tsx",
+    "previewHref": "/examples/proposal-sow",
+    "examples": [
+      {
+        "title": "Orden de trabajo",
+        "href": "/examples/proposal-sow",
+        "description": "Partes, cláusulas y acuse."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/proposal-sow/stress",
+        "description": "320px y lectura de derecha a izquierda."
+      }
+    ],
+    "usage": "<ProposalSow title={title} client={client} studio={studio} clauses={clauses} acknowledgeLabel={label} acknowledged={ack} onAcknowledge={setAck} />",
+    "api": [
+      {
+        "name": "clauses",
+        "type": "SowClause[]",
+        "description": "Title and body, numbered in order."
+      },
+      {
+        "name": "acknowledged",
+        "type": "boolean",
+        "description": "The reader confirms they read the scope and the timeline."
+      }
+    ]
+  },
+  "docs": "Clean-room proposal workflow. The behavior was observed in an unlicensed design demonstration of a discovery-to-statement-of-work product. No source, product names, sample copy, icons, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+  "categories": [
+    "form"
+  ],
+  "type": "registry:ui"
+}

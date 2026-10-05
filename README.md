@@ -116,6 +116,20 @@ Names that sit near each other do different jobs. Install the row that matches t
 | [`notification-stack`](registry/ui/notification-stack.tsx) | A depth stack. Dismiss the front card and the next one steps forward. |
 | [`card-stack`](registry/ui/card-stack.tsx) | A triage deck you flick left or right, one decision at a time. |
 
+### Proposals
+
+| Piece | Use it for |
+| --- | --- |
+| [`proposal-builder`](registry/blocks/proposal-builder.tsx) | The whole flow: shell, dashboard, intake, deal tabs, and send. |
+| [`proposal-shell`](registry/blocks/proposal-shell.tsx) | Grouped sidebar, search, unread bell, period, and the step's primary action. |
+| [`proposal-dashboard`](registry/blocks/proposal-dashboard.tsx) | Greeting, metric cards, action rows, hours chart, confidence gauge, and activity. |
+| [`proposal-workspace`](registry/ui/proposal-workspace.tsx) | Deal header and a tab bar whose underline slides. |
+| [`proposal-discovery`](registry/ui/proposal-discovery.tsx) | Call notes, timestamps, quotes, and a waveform. |
+| [`proposal-estimate`](registry/ui/proposal-estimate.tsx) | Phase hours against history, a two-week load, and a price receipt. |
+| [`proposal-document`](registry/ui/proposal-document.tsx) | Reorderable sections, a paper preview, and a pre-flight list. |
+
+The other steps are `proposal-opportunity`, `proposal-analyze`, `proposal-clarify`, `proposal-scope`, `proposal-similar`, `proposal-risks`, `proposal-sow`, `proposal-activity`, and `proposal-send`. They are a clean-room reading of a discovery-to-statement-of-work demo. No product names or sample copy were copied. The live walkthrough is [`/examples/proposal-builder`](/examples/proposal-builder).
+
 `admin-shell` is the collapsible admin sidebar with breadcrumbs and a command palette. `rail-sidebar` is the two-layer app sidebar: an icon rail for sections and a panel for that section's links. `multi-view` is the block that switches the six views and opens the record panel.
 
 ### Sales CRM
@@ -232,7 +246,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`210` items are in `registry.json` on this branch: `173` components, `28` blocks, `3` hooks, and `6` libraries. A name links to its source file.
+`226` items are in `registry.json` on this branch: `186` components, `31` blocks, `3` hooks, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -328,6 +342,13 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`radio-cards`](registry/ui/radio-cards.tsx) · ui — Selectable option cards with one tab stop and arrow-key behavior. Install: `npx shadcn@latest add @retana/radio-cards`.
 - [`two-factor-card`](registry/ui/two-factor-card.tsx) · ui — Verification card for a one-time code, with a countdown, alternate methods, and a success handoff. Install: `npx shadcn@latest add @retana/two-factor-card`.
 - [`bug-report-form`](registry/ui/bug-report-form.tsx) · ui — Card form for a bug report: title, description, type chips, priority, environment, and a screenshot dropzone, with validation and submit states. Install: `npx shadcn@latest add @retana/bug-report-form`.
+- [`proposal-opportunity`](registry/ui/proposal-opportunity.tsx) · ui — Client and project type, a pill source switch, an audio drop with duration, and an analyze action. The dialog scales from 0.95 with a fading overlay. Install: `npx shadcn@latest add @retana/proposal-opportunity`.
+- [`proposal-clarify`](registry/ui/proposal-clarify.tsx) · ui — Question cards with segmented answers and a live impact: previous hours struck through, new hours, a delta, reasons, and price and timeline ranges. Install: `npx shadcn@latest add @retana/proposal-clarify`.
+- [`proposal-scope`](registry/ui/proposal-scope.tsx) · ui — Phase accordions, circular task rows with hours and origin tags, a staggered entrance, an effort donut, and an exclusions list. Install: `npx shadcn@latest add @retana/proposal-scope`.
+- [`proposal-estimate`](registry/ui/proposal-estimate.tsx) · ui — Phase table with hours, money, and a bar against the historical average, a two-week capacity grid, and a price slider with a suggested price, confidence, and receipt. Install: `npx shadcn@latest add @retana/proposal-estimate`.
+- [`proposal-document`](registry/ui/proposal-document.tsx) · ui — A grip list you can drag or reorder with the keyboard, a paper preview with variables and a phase grid, a pre-flight checklist, a contact card, and a timeline. Install: `npx shadcn@latest add @retana/proposal-document`.
+- [`proposal-sow`](registry/ui/proposal-sow.tsx) · ui — Parties, numbered clauses, and an acknowledgement for a statement of work. Install: `npx shadcn@latest add @retana/proposal-sow`.
+- [`proposal-send`](registry/ui/proposal-send.tsx) · ui — Recipient, a project price and weeks summary, a read-only link with copy, and a send action. Install: `npx shadcn@latest add @retana/proposal-send`.
 
 ### Media and content
 
@@ -378,6 +399,10 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`record-timeline`](registry/ui/record-timeline.tsx) · ui — The lifecycle of one record, oldest first, with status marks. timeline stays the newest-first activity feed. Install: `npx shadcn@latest add @retana/record-timeline`.
 - [`suggested-choice-dialog`](registry/ui/suggested-choice-dialog.tsx) · ui — A confirm dialog whose suggested radio starts selected. radio-cards remains the large option cards. Install: `npx shadcn@latest add @retana/suggested-choice-dialog`.
 - [`record-header`](registry/ui/record-header.tsx) · ui — Breadcrumb, title, status, meta, people, and actions for one record. page-header remains the scrolling page fold. Install: `npx shadcn@latest add @retana/record-header`.
+- [`proposal-discovery`](registry/ui/proposal-discovery.tsx) · ui — Goal, pain, request, and constraint notes with timestamp jumps, open questions, playable quotes, a scrubbable waveform, and a conflict alert. Install: `npx shadcn@latest add @retana/proposal-discovery`.
+- [`proposal-similar`](registry/ui/proposal-similar.tsx) · ui — Selectable past projects with revenue, duration, hours, and a match bar. The detail compares quoted and actual hours, then a three-column overlap. Install: `npx shadcn@latest add @retana/proposal-similar`.
+- [`proposal-risks`](registry/ui/proposal-risks.tsx) · ui — A resolved note, an open timeline risk with the request in the destructive token, actions whose chosen button gains a check, a client-asked table, and scope approval. Install: `npx shadcn@latest add @retana/proposal-risks`.
+- [`proposal-activity`](registry/ui/proposal-activity.tsx) · ui — A deal's activity feed, newest first, using the shared timeline. Install: `npx shadcn@latest add @retana/proposal-activity`.
 
 ### Charts
 
@@ -419,6 +444,8 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`rail-sidebar`](registry/blocks/rail-sidebar.tsx) · block — Two-layer app sidebar: circular section buttons on an icon rail and a panel for that section's navigation, with an optional scope toggle, alert counts, and footer links. Built on the host shadcn sidebar, including its mobile sheet. Install: `npx shadcn@latest add @retana/rail-sidebar`.
 - [`tree-nav`](registry/ui/tree-nav.tsx) · ui — Navigation card with a person header, nested rows, counts, a guide line, and a keyboard tree. Install: `npx shadcn@latest add @retana/tree-nav`.
 - [`mega-menu`](registry/ui/mega-menu.tsx) · ui — Navigation bar whose triggers open a wide panel. A container under 768px stacks the same panel as an accordion. Install: `npx shadcn@latest add @retana/mega-menu`.
+- [`proposal-shell`](registry/blocks/proposal-shell.tsx) · block — Grouped app sidebar, command search, unread bell, people, a period menu, and a primary action that the screen can change. Install: `npx shadcn@latest add @retana/proposal-shell`.
+- [`proposal-workspace`](registry/ui/proposal-workspace.tsx) · ui — Breadcrumb header and a tab bar whose underline slides. The panel crossfades. Install: `npx shadcn@latest add @retana/proposal-workspace`.
 
 ### Page blocks
 
@@ -442,6 +469,8 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`newsletter-signup`](registry/blocks/newsletter-signup.tsx) · block — An email signup framed by a stack of past issues. Install: `npx shadcn@latest add @retana/newsletter-signup`.
 - [`triage-dashboard`](registry/blocks/triage-dashboard.tsx) · block — Greeting, stat strip, annotated trend, attention list, ranked bars, and a period card. Pass shell to wrap it in the rail sidebar. Install: `npx shadcn@latest add @retana/triage-dashboard`.
 - [`case-review`](registry/blocks/case-review.tsx) · block — One record: header, tabs and timeline, suggestion, cost breakdown, confirm dialog, and an undo toast. Install: `npx shadcn@latest add @retana/case-review`.
+- [`proposal-dashboard`](registry/blocks/proposal-dashboard.tsx) · block — Greeting, four metric cards, action rows, a quoted-versus-delivered hours chart, a confidence gauge, and recent activity. Install: `npx shadcn@latest add @retana/proposal-dashboard`.
+- [`proposal-builder`](registry/blocks/proposal-builder.tsx) · block — The composed flow: dashboard, pipeline board, new opportunity, analyze, deal tabs, clarify, and send with a toast. Install: `npx shadcn@latest add @retana/proposal-builder`.
 
 ### Actions and overlays
 
@@ -460,6 +489,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`announcement-bar`](registry/ui/announcement-bar.tsx) · ui — A top banner that rotates messages and collapses when dismissed. Install: `npx shadcn@latest add @retana/announcement-bar`.
 - [`bottom-sheet`](registry/ui/bottom-sheet.tsx) · ui — A sheet that rests at a peek or full height. Install: `npx shadcn@latest add @retana/bottom-sheet`.
 - [`notification-stack`](registry/ui/notification-stack.tsx) · ui — A depth stack of notices. Dismiss the front card and the next one steps forward. Install: `npx shadcn@latest add @retana/notification-stack`.
+- [`proposal-analyze`](registry/ui/proposal-analyze.tsx) · ui — Shimmer status and skeleton blocks while a draft is prepared. Install: `npx shadcn@latest add @retana/proposal-analyze`.
 
 ### Admin
 

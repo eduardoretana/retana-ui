@@ -211,6 +211,22 @@ import Preview206 from "@/app/examples/crm-dashboard/preview"
 import Preview207 from "@/app/examples/gauge-kit/preview"
 import Preview208 from "@/app/examples/gauge-scenes/preview"
 import Preview209 from "@/app/examples/gauge-studio/preview"
+import Preview210 from "@/app/examples/proposal-shell/preview"
+import Preview211 from "@/app/examples/proposal-dashboard/preview"
+import Preview212 from "@/app/examples/proposal-opportunity/preview"
+import Preview213 from "@/app/examples/proposal-analyze/preview"
+import Preview214 from "@/app/examples/proposal-workspace/preview"
+import Preview215 from "@/app/examples/proposal-discovery/preview"
+import Preview216 from "@/app/examples/proposal-clarify/preview"
+import Preview217 from "@/app/examples/proposal-scope/preview"
+import Preview218 from "@/app/examples/proposal-similar/preview"
+import Preview219 from "@/app/examples/proposal-estimate/preview"
+import Preview220 from "@/app/examples/proposal-risks/preview"
+import Preview221 from "@/app/examples/proposal-document/preview"
+import Preview222 from "@/app/examples/proposal-sow/preview"
+import Preview223 from "@/app/examples/proposal-activity/preview"
+import Preview224 from "@/app/examples/proposal-send/preview"
+import Preview225 from "@/app/examples/proposal-builder/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -423,4 +439,20 @@ export const previewMap = {
   "gauge-kit": Preview207,
   "gauge-scenes": Preview208,
   "gauge-studio": Preview209,
+  "proposal-shell": Preview210,
+  "proposal-dashboard": Preview211,
+  "proposal-opportunity": Preview212,
+  "proposal-analyze": Preview213,
+  "proposal-workspace": Preview214,
+  "proposal-discovery": Preview215,
+  "proposal-clarify": Preview216,
+  "proposal-scope": Preview217,
+  "proposal-similar": Preview218,
+  "proposal-estimate": Preview219,
+  "proposal-risks": Preview220,
+  "proposal-document": Preview221,
+  "proposal-sow": Preview222,
+  "proposal-activity": Preview223,
+  "proposal-send": Preview224,
+  "proposal-builder": Preview225,
 }
