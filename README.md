@@ -232,7 +232,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`207` items are in `registry.json` on this branch: `172` components, `26` blocks, `3` hooks, and `6` libraries. A name links to its source file.
+`210` items are in `registry.json` on this branch: `173` components, `28` blocks, `3` hooks, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -398,6 +398,9 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`breakdown-bar`](registry/ui/breakdown-bar.tsx) · ui — A total, a segmented bar, and a legend. Unlike usage-meter, there is no limit. Install: `npx shadcn@latest add @retana/breakdown-bar`.
 - [`radial-gauge`](registry/ui/radial-gauge.tsx) · ui — A half-circle meter with ticks and a needle. Values above max are labelled over budget and the needle stops at the end. gauge remains the filled arc. Install: `npx shadcn@latest add @retana/radial-gauge`.
 - [`tier-distribution`](registry/ui/tier-distribution.tsx) · ui — Two to four tiers. Each shows its count and a block sized by share, and the row is a radio group. Install: `npx shadcn@latest add @retana/tier-distribution`.
+- [`gauge-kit`](registry/ui/gauge-kit/animated.tsx) · ui — Composable SVG gauge primitives: track, arc, stack, zones, ticks, marks, labels, needle, hub, dot, and value, with spring or tween motion, nested dials, and a keyboard slider. Install: `npx shadcn@latest add @retana/gauge-kit`.
+- [`gauge-scenes`](registry/blocks/gauge-scenes/car-dashboard.tsx) · block — Seven dashboard scenes built from the composable gauge: a car cluster, aircraft cockpit, health day, server monitor, smart home, clocks, and a coastal weather board. Install: `npx shadcn@latest add @retana/gauge-scenes`.
+- [`gauge-studio`](registry/blocks/gauge-studio/code-drawer.tsx) · block — Live studio for the composable gauge: template grid, undo and redo, copyable code, nested gauges, play modes, and the control accordion. Install: `npx shadcn@latest add @retana/gauge-studio`.
 
 ### Collaboration
 

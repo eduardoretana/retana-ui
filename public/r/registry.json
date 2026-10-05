@@ -7,7 +7,7 @@
       "name": "layered-panel",
       "type": "registry:block",
       "title": "Layered Panel",
-      "description": "Right-hand peek panel that expands in place to a two-column detail view. No route change. Optional Next.js URL sync keeps Back working: full collapses to peek, then closes. Ships no theme, cssVars, or global CSS \u2014 it uses the host project's shadcn tokens and primitives.",
+      "description": "Right-hand peek panel that expands in place to a two-column detail view. No route change. Optional Next.js URL sync keeps Back working: full collapses to peek, then closes. Ships no theme, cssVars, or global CSS — it uses the host project's shadcn tokens and primitives.",
       "author": "Eduardo Retana",
       "dependencies": [
         "radix-ui",
@@ -25,7 +25,7 @@
       ],
       "meta": {
         "titleEs": "Panel en capas",
-        "descriptionEs": "Panel de detalle que se abre a la derecha y crece en el mismo lugar hasta dos columnas. La ruta no cambia, as\u00ed que la tabla conserva el scroll.",
+        "descriptionEs": "Panel de detalle que se abre a la derecha y crece en el mismo lugar hasta dos columnas. La ruta no cambia, así que la tabla conserva el scroll.",
         "preview": "app/examples/layered-panel/preview.tsx",
         "previewHref": "/examples/layered-panel/team",
         "examples": [
@@ -37,7 +37,7 @@
           {
             "title": "Lead de CRM",
             "href": "/examples/layered-panel/lead",
-            "description": "La misma pieza con etiquetas en espa\u00f1ol."
+            "description": "La misma pieza con etiquetas en español."
           }
         ],
         "usage": "<LayeredPanel\n  open={panel.open}\n  onOpenChange={panel.onOpenChange}\n  mode={panel.mode}\n  onModeChange={panel.onModeChange}\n  title=\"Details\"\n>\n  <LayeredPanel.Header>\n    <h2>Record</h2>\n  </LayeredPanel.Header>\n  <LayeredPanel.ExpandToggle\n    expandLabel=\"View full profile\"\n    collapseLabel=\"Close profile\"\n  />\n  <LayeredPanel.Peek>Summary</LayeredPanel.Peek>\n  <LayeredPanel.Full>Full record</LayeredPanel.Full>\n</LayeredPanel>",
@@ -194,17 +194,17 @@
       ],
       "meta": {
         "titleEs": "Utilidades de admin",
-        "descriptionEs": "Slug \u00fanico, reordenaci\u00f3n, CSV, rango de fechas y resumen de anal\u00edtica. Sin router ni base de datos.",
+        "descriptionEs": "Slug único, reordenación, CSV, rango de fechas y resumen de analítica. Sin router ni base de datos.",
         "preview": "app/examples/admin-utils/preview.tsx",
         "previewHref": "/examples/admin-utils",
         "examples": [
           {
             "title": "Slug y orden",
             "href": "/examples/admin-utils",
-            "description": "Un t\u00edtulo en espa\u00f1ol se vuelve slug, y tres filas suben o bajan."
+            "description": "Un título en español se vuelve slug, y tres filas suben o bajan."
           }
         ],
-        "usage": "import { slugify, uniqueSlug } from \"@/lib/slug\"\nimport { reorderVisible, keepPosition } from \"@/lib/reorder\"\n\nconst slug = uniqueSlug(\"Dise\u00f1o de producto\", existing)\nconst next = reorderVisible(order, visibleIds, activeId, overId)",
+        "usage": "import { slugify, uniqueSlug } from \"@/lib/slug\"\nimport { reorderVisible, keepPosition } from \"@/lib/reorder\"\n\nconst slug = uniqueSlug(\"Diseño de producto\", existing)\nconst next = reorderVisible(order, visibleIds, activeId, overId)",
         "api": [
           {
             "name": "slugify / uniqueSlug",
@@ -293,8 +293,8 @@
         }
       ],
       "meta": {
-        "titleEs": "Cascar\u00f3n de admin",
-        "descriptionEs": "Barra lateral que se pliega a iconos, migas de pan, paleta de comandos y tema. Los enlaces los pone el anfitri\u00f3n.",
+        "titleEs": "Cascarón de admin",
+        "descriptionEs": "Barra lateral que se pliega a iconos, migas de pan, paleta de comandos y tema. Los enlaces los pone el anfitrión.",
         "preview": "app/examples/admin-shell/preview.tsx",
         "previewHref": "/examples/admin-shell",
         "examples": [
@@ -389,14 +389,14 @@
       ],
       "meta": {
         "titleEs": "Lista ordenable",
-        "descriptionEs": "Arrastre con rat\u00f3n y teclado, anuncios para lector de pantalla, botones de mover y reordenaci\u00f3n optimista con deshacer.",
+        "descriptionEs": "Arrastre con ratón y teclado, anuncios para lector de pantalla, botones de mover y reordenación optimista con deshacer.",
         "preview": "app/examples/sortable-list/preview.tsx",
         "previewHref": "/examples/sortable-list",
         "examples": [
           {
             "title": "Cuatro proyectos",
             "href": "/examples/sortable-list",
-            "description": "Marca la casilla para ver c\u00f3mo el orden vuelve atr\u00e1s si el guardado falla."
+            "description": "Marca la casilla para ver cómo el orden vuelve atrás si el guardado falla."
           }
         ],
         "usage": "<SortableList\n  items={items}\n  visibleIds={visibleIds}\n  onReorder={(ids) => saveOrder(ids)}\n  onEdit={openEditor}\n/>",
@@ -483,14 +483,14 @@
       ],
       "meta": {
         "titleEs": "Tablero ordenable",
-        "descriptionEs": "Proyectos con pesta\u00f1as de categor\u00eda, b\u00fasqueda, lista o cuadr\u00edcula, interruptor de portada y editar.",
+        "descriptionEs": "Proyectos con pestañas de categoría, búsqueda, lista o cuadrícula, interruptor de portada y editar.",
         "preview": "app/examples/sortable-board/preview.tsx",
         "previewHref": "/examples/sortable-board",
         "examples": [
           {
             "title": "Proyectos de Acme",
             "href": "/examples/sortable-board",
-            "description": "Cinco trabajos ficticios. La portada y el orden viven en el estado de la p\u00e1gina."
+            "description": "Cinco trabajos ficticios. La portada y el orden viven en el estado de la página."
           }
         ],
         "usage": "<SortableBoard\n  items={projects}\n  categories={categories}\n  onReorder={reorder}\n  onToggleHomepage={toggle}\n  onEdit={edit}\n  homepageLabel=\"Portada\"\n/>",
@@ -549,14 +549,14 @@
       ],
       "meta": {
         "titleEs": "Ficha de entidad",
-        "descriptionEs": "Di\u00e1logo o panel para crear y editar, con confirmaci\u00f3n al borrar, estado vac\u00edo y secci\u00f3n plegable.",
+        "descriptionEs": "Diálogo o panel para crear y editar, con confirmación al borrar, estado vacío y sección plegable.",
         "preview": "app/examples/entity-form/preview.tsx",
         "previewHref": "/examples/entity-form",
         "examples": [
           {
-            "title": "Alta y edici\u00f3n",
+            "title": "Alta y edición",
             "href": "/examples/entity-form",
-            "description": "Guardar conserva la posici\u00f3n. Borrar pide confirmaci\u00f3n."
+            "description": "Guardar conserva la posición. Borrar pide confirmación."
           }
         ],
         "usage": "<EntityForm open={open} onOpenChange={setOpen} title=\"Editar\" onSubmit={save} onDelete={remove}>\n  <input name=\"title\" />\n</EntityForm>",
@@ -619,7 +619,7 @@
       ],
       "meta": {
         "titleEs": "Formulario de textos",
-        "descriptionEs": "Tarjetas agrupadas sobre un mapa clave-valor, barra fija, descartar y aviso al cerrar la pesta\u00f1a.",
+        "descriptionEs": "Tarjetas agrupadas sobre un mapa clave-valor, barra fija, descartar y aviso al cerrar la pestaña.",
         "preview": "app/examples/settings-form/preview.tsx",
         "previewHref": "/examples/settings-form",
         "examples": [
@@ -704,14 +704,14 @@
       ],
       "meta": {
         "titleEs": "Biblioteca de medios",
-        "descriptionEs": "Arrastrar un archivo, vista previa, elegir de la biblioteca y ordenar la cuadr\u00edcula o la tabla. La subida la hace el anfitri\u00f3n.",
+        "descriptionEs": "Arrastrar un archivo, vista previa, elegir de la biblioteca y ordenar la cuadrícula o la tabla. La subida la hace el anfitrión.",
         "preview": "app/examples/media-library/preview.tsx",
         "previewHref": "/examples/media-library",
         "examples": [
           {
             "title": "Subida local",
             "href": "/examples/media-library",
-            "description": "Los archivos se quedan en el navegador. El bot\u00f3n guardar espera a que termine la subida."
+            "description": "Los archivos se quedan en el navegador. El botón guardar espera a que termine la subida."
           }
         ],
         "usage": "<MediaField\n  label=\"Portada\"\n  value={url}\n  onChange={setUrl}\n  assets={assets}\n  onUpload={upload}\n  onBusyChange={setBusy}\n/>",
@@ -784,7 +784,7 @@
       ],
       "meta": {
         "titleEs": "Tabla de datos",
-        "descriptionEs": "Pesta\u00f1as, b\u00fasqueda, filtros, orden, columnas, selecci\u00f3n m\u00faltiple, CSV y ficha lateral.",
+        "descriptionEs": "Pestañas, búsqueda, filtros, orden, columnas, selección múltiple, CSV y ficha lateral.",
         "preview": "app/examples/data-table/preview.tsx",
         "previewHref": "/examples/data-table",
         "examples": [
@@ -825,7 +825,7 @@
       "name": "admin-charts",
       "type": "registry:ui",
       "title": "Admin charts",
-      "description": "KPI card with delta and sparkline, area trend with a range control, funnel, ranked bars, a day-by-hour heatmap, and a scroll-depth chart. Accent colors come from a tone mapped to chart-1\u20265.",
+      "description": "KPI card with delta and sparkline, area trend with a range control, funnel, ranked bars, a day-by-hour heatmap, and a scroll-depth chart. Accent colors come from a tone mapped to chart-1…5.",
       "dependencies": [
         "recharts"
       ],
@@ -856,8 +856,8 @@
         }
       ],
       "meta": {
-        "titleEs": "Gr\u00e1ficos de admin",
-        "descriptionEs": "Tarjeta con tendencia, \u00e1rea, embudo, barras, mapa de calor y profundidad de scroll. El acento es un tono chart-N.",
+        "titleEs": "Gráficos de admin",
+        "descriptionEs": "Tarjeta con tendencia, área, embudo, barras, mapa de calor y profundidad de scroll. El acento es un tono chart-N.",
         "preview": "app/examples/admin-charts/preview.tsx",
         "previewHref": "/examples/admin-charts",
         "examples": [
@@ -892,7 +892,7 @@
           {
             "name": "Heatmap",
             "type": "component",
-            "description": "7\u00d724 grid, Monday first. dayLabels overrides Mon\u2013Sun."
+            "description": "7×24 grid, Monday first. dayLabels overrides Mon–Sun."
           },
           {
             "name": "ScrollDepthChart",
@@ -945,7 +945,7 @@
       ],
       "meta": {
         "titleEs": "Panel de resumen",
-        "descriptionEs": "Compone tarjetas, la tendencia, las pr\u00f3ximas llamadas y los conteos del sitio.",
+        "descriptionEs": "Compone tarjetas, la tendencia, las próximas llamadas y los conteos del sitio.",
         "preview": "app/examples/overview-dashboard/preview.tsx",
         "previewHref": "/examples/overview-dashboard",
         "examples": [
@@ -1173,7 +1173,7 @@
       ],
       "meta": {
         "titleEs": "Kit de admin",
-        "descriptionEs": "Administraci\u00f3n completa de demostraci\u00f3n: proyectos, textos, medios, reservas y anal\u00edtica, con datos ficticios en espa\u00f1ol.",
+        "descriptionEs": "Administración completa de demostración: proyectos, textos, medios, reservas y analítica, con datos ficticios en español.",
         "preview": "app/examples/admin-kit/preview.tsx",
         "previewHref": "/examples/admin-kit",
         "examples": [
@@ -1247,14 +1247,14 @@
       ],
       "meta": {
         "titleEs": "Adaptador Supabase",
-        "descriptionEs": "Listar, reordenar, guardar, borrar, subir a Storage y leer textos. El cliente lo crea el anfitri\u00f3n. Incluye la migraci\u00f3n SQL.",
+        "descriptionEs": "Listar, reordenar, guardar, borrar, subir a Storage y leer textos. El cliente lo crea el anfitrión. Incluye la migración SQL.",
         "preview": "app/examples/supabase-admin/preview.tsx",
         "previewHref": "/examples/supabase-admin",
         "examples": [
           {
-            "title": "C\u00f3mo conectarlo",
+            "title": "Cómo conectarlo",
             "href": "/examples/supabase-admin",
-            "description": "Instalaci\u00f3n, Next.js, Vite y las pol\u00edticas. Sin base de datos en este repo."
+            "description": "Instalación, Next.js, Vite y las políticas. Sin base de datos en este repo."
           }
         ],
         "usage": "import { createSupabaseAdmin } from \"@/lib/supabase-admin\"\n\n// Pass the host client that already holds the signed-in session.\nconst admin = createSupabaseAdmin(supabase)",
@@ -1296,14 +1296,14 @@
       ],
       "meta": {
         "titleEs": "Mensaje de chat",
-        "descriptionEs": "Burbuja de mensaje para la persona o el asistente, con avatar, hora, estados de env\u00edo y error, y acciones de copiar, reintentar y regenerar.",
+        "descriptionEs": "Burbuja de mensaje para la persona o el asistente, con avatar, hora, estados de envío y error, y acciones de copiar, reintentar y regenerar.",
         "preview": "app/examples/chat-message/preview.tsx",
         "previewHref": "/examples/chat-message",
         "examples": [
           {
             "title": "Mensaje de chat",
             "href": "/examples/chat-message",
-            "description": "Burbuja de mensaje para la persona o el asistente, con avatar, hora, estados de env\u00edo y error, y acciones de copiar, reintentar y regenerar."
+            "description": "Burbuja de mensaje para la persona o el asistente, con avatar, hora, estados de envío y error, y acciones de copiar, reintentar y regenerar."
           }
         ],
         "usage": "<ChatMessage role=\"assistant\" name=\"Assistant\" time=\"09:41\" onRegenerate={regenerate}>\n  Hello\n</ChatMessage>",
@@ -1419,14 +1419,14 @@
       ],
       "meta": {
         "titleEs": "Compositor de chat",
-        "descriptionEs": "\u00c1rea de texto que crece, env\u00eda con Enter, inserta un salto con May\u00fas+Enter, admite adjuntos, muestra detener mientras se genera y reserva un hueco para el modelo.",
+        "descriptionEs": "Área de texto que crece, envía con Enter, inserta un salto con Mayús+Enter, admite adjuntos, muestra detener mientras se genera y reserva un hueco para el modelo.",
         "preview": "app/examples/chat-composer/preview.tsx",
         "previewHref": "/examples/chat-composer",
         "examples": [
           {
             "title": "Compositor de chat",
             "href": "/examples/chat-composer",
-            "description": "\u00c1rea de texto que crece, env\u00eda con Enter, inserta un salto con May\u00fas+Enter, admite adjuntos, muestra detener mientras se genera y reserva un hueco para el modelo."
+            "description": "Área de texto que crece, envía con Enter, inserta un salto con Mayús+Enter, admite adjuntos, muestra detener mientras se genera y reserva un hueco para el modelo."
           }
         ],
         "usage": "<ChatComposer\n  modelSlot={<ModelSelect />}\n  generating={busy}\n  onSubmit={send}\n  onStop={stop}\n/>",
@@ -1476,14 +1476,14 @@
       ],
       "meta": {
         "titleEs": "Texto en streaming",
-        "descriptionEs": "Pinta el texto a medida que llega, con cursor y una aparici\u00f3n breve, y entiende markdown b\u00e1sico.",
+        "descriptionEs": "Pinta el texto a medida que llega, con cursor y una aparición breve, y entiende markdown básico.",
         "preview": "app/examples/streaming-text/preview.tsx",
         "previewHref": "/examples/streaming-text",
         "examples": [
           {
             "title": "Texto en streaming",
             "href": "/examples/streaming-text",
-            "description": "Pinta el texto a medida que llega, con cursor y una aparici\u00f3n breve, y entiende markdown b\u00e1sico."
+            "description": "Pinta el texto a medida que llega, con cursor y una aparición breve, y entiende markdown básico."
           }
         ],
         "usage": "<StreamingText text={text} streaming />",
@@ -1535,14 +1535,14 @@
       ],
       "meta": {
         "titleEs": "Pasos de razonamiento",
-        "descriptionEs": "Lista colapsable de pasos de razonamiento o herramientas, con estado pendiente, en curso, hecho o error, y duraci\u00f3n.",
+        "descriptionEs": "Lista colapsable de pasos de razonamiento o herramientas, con estado pendiente, en curso, hecho o error, y duración.",
         "preview": "app/examples/reasoning-steps/preview.tsx",
         "previewHref": "/examples/reasoning-steps",
         "examples": [
           {
             "title": "Pasos de razonamiento",
             "href": "/examples/reasoning-steps",
-            "description": "Lista colapsable de pasos de razonamiento o herramientas, con estado pendiente, en curso, hecho o error, y duraci\u00f3n."
+            "description": "Lista colapsable de pasos de razonamiento o herramientas, con estado pendiente, en curso, hecho o error, y duración."
           }
         ],
         "usage": "<ReasoningSteps steps={[{ id: \"1\", title: \"Read\", status: \"done\", durationMs: 400 }]} />",
@@ -1761,15 +1761,15 @@
         "ai"
       ],
       "meta": {
-        "titleEs": "Cita en l\u00ednea",
-        "descriptionEs": "Marcador num\u00e9rico que, al pasar el cursor o enfocar, muestra t\u00edtulo, dominio y extracto de la fuente.",
+        "titleEs": "Cita en línea",
+        "descriptionEs": "Marcador numérico que, al pasar el cursor o enfocar, muestra título, dominio y extracto de la fuente.",
         "preview": "app/examples/inline-citation/preview.tsx",
         "previewHref": "/examples/inline-citation",
         "examples": [
           {
-            "title": "Cita en l\u00ednea",
+            "title": "Cita en línea",
             "href": "/examples/inline-citation",
-            "description": "Marcador num\u00e9rico que, al pasar el cursor o enfocar, muestra t\u00edtulo, dominio y extracto de la fuente."
+            "description": "Marcador numérico que, al pasar el cursor o enfocar, muestra título, dominio y extracto de la fuente."
           }
         ],
         "usage": "<InlineCitation index={1} source={{ title, domain, excerpt, href }} />",
@@ -1817,15 +1817,15 @@
         "content"
       ],
       "meta": {
-        "titleEs": "Bloque de c\u00f3digo",
-        "descriptionEs": "Bloque de c\u00f3digo con resaltado, nombre de archivo, copiar y n\u00fameros de l\u00ednea.",
+        "titleEs": "Bloque de código",
+        "descriptionEs": "Bloque de código con resaltado, nombre de archivo, copiar y números de línea.",
         "preview": "app/examples/code-block/preview.tsx",
         "previewHref": "/examples/code-block",
         "examples": [
           {
-            "title": "Bloque de c\u00f3digo",
+            "title": "Bloque de código",
             "href": "/examples/code-block",
-            "description": "Bloque de c\u00f3digo con resaltado, nombre de archivo, copiar y n\u00fameros de l\u00ednea."
+            "description": "Bloque de código con resaltado, nombre de archivo, copiar y números de línea."
           }
         ],
         "usage": "<CodeBlock code={source} filename=\"note.ts\" language=\"ts\" />",
@@ -1882,14 +1882,14 @@
       ],
       "meta": {
         "titleEs": "Vista de diff",
-        "descriptionEs": "Diff unificado con l\u00edneas agregadas y eliminadas, y bloques sin cambios que se pueden colapsar.",
+        "descriptionEs": "Diff unificado con líneas agregadas y eliminadas, y bloques sin cambios que se pueden colapsar.",
         "preview": "app/examples/file-diff/preview.tsx",
         "previewHref": "/examples/file-diff",
         "examples": [
           {
             "title": "Vista de diff",
             "href": "/examples/file-diff",
-            "description": "Diff unificado con l\u00edneas agregadas y eliminadas, y bloques sin cambios que se pueden colapsar."
+            "description": "Diff unificado con líneas agregadas y eliminadas, y bloques sin cambios que se pueden colapsar."
           }
         ],
         "usage": "<FileDiff patch={patch} filename=\"note.md\" />",
@@ -1940,13 +1940,13 @@
         "media"
       ],
       "meta": {
-        "titleEs": "Generaci\u00f3n de imagen",
+        "titleEs": "Generación de imagen",
         "descriptionEs": "Marco de imagen que muestra progreso y un velo mientras se genera, y luego revela el resultado.",
         "preview": "app/examples/image-generation/preview.tsx",
         "previewHref": "/examples/image-generation",
         "examples": [
           {
-            "title": "Generaci\u00f3n de imagen",
+            "title": "Generación de imagen",
             "href": "/examples/image-generation",
             "description": "Marco de imagen que muestra progreso y un velo mientras se genera, y luego revela el resultado."
           }
@@ -2057,14 +2057,14 @@
       ],
       "meta": {
         "titleEs": "Campo OTP",
-        "descriptionEs": "C\u00f3digo de un solo uso sobre la primitiva input-otp, con \u00e9xito y error animados y reenv\u00edo con cuenta regresiva.",
+        "descriptionEs": "Código de un solo uso sobre la primitiva input-otp, con éxito y error animados y reenvío con cuenta regresiva.",
         "preview": "app/examples/otp-field/preview.tsx",
         "previewHref": "/examples/otp-field",
         "examples": [
           {
             "title": "Campo OTP",
             "href": "/examples/otp-field",
-            "description": "C\u00f3digo de un solo uso sobre la primitiva input-otp, con \u00e9xito y error animados y reenv\u00edo con cuenta regresiva."
+            "description": "Código de un solo uso sobre la primitiva input-otp, con éxito y error animados y reenvío con cuenta regresiva."
           }
         ],
         "usage": "<OtpField length={6} state={state} onComplete={check} onResend={resend} />",
@@ -2121,14 +2121,14 @@
       ],
       "meta": {
         "titleEs": "Campo que se desvanece",
-        "descriptionEs": "Campo cuyo texto se deshace en part\u00edculas al enviarlo o limpiarlo.",
+        "descriptionEs": "Campo cuyo texto se deshace en partículas al enviarlo o limpiarlo.",
         "preview": "app/examples/dissolve-input/preview.tsx",
         "previewHref": "/examples/dissolve-input",
         "examples": [
           {
             "title": "Campo que se desvanece",
             "href": "/examples/dissolve-input",
-            "description": "Campo cuyo texto se deshace en part\u00edculas al enviarlo o limpiarlo."
+            "description": "Campo cuyo texto se deshace en partículas al enviarlo o limpiarlo."
           }
         ],
         "usage": "<DissolveInput aria-label=\"Note\" onDissolve={save} clearLabel=\"Clear\" />",
@@ -2174,15 +2174,15 @@
         "input"
       ],
       "meta": {
-        "titleEs": "Selecci\u00f3n m\u00faltiple",
-        "descriptionEs": "Selector m\u00faltiple con b\u00fasqueda, chips que se quitan y creaci\u00f3n de una opci\u00f3n nueva.",
+        "titleEs": "Selección múltiple",
+        "descriptionEs": "Selector múltiple con búsqueda, chips que se quitan y creación de una opción nueva.",
         "preview": "app/examples/multi-select/preview.tsx",
         "previewHref": "/examples/multi-select",
         "examples": [
           {
-            "title": "Selecci\u00f3n m\u00faltiple",
+            "title": "Selección múltiple",
             "href": "/examples/multi-select",
-            "description": "Selector m\u00faltiple con b\u00fasqueda, chips que se quitan y creaci\u00f3n de una opci\u00f3n nueva."
+            "description": "Selector múltiple con búsqueda, chips que se quitan y creación de una opción nueva."
           }
         ],
         "usage": "<MultiSelect options={options} value={value} onValueChange={setValue} creatable />",
@@ -2238,14 +2238,14 @@
       ],
       "meta": {
         "titleEs": "Selector de color",
-        "descriptionEs": "Selector de color accesible con \u00e1rea de saturaci\u00f3n y brillo, tono, alfa y un campo hexadecimal.",
+        "descriptionEs": "Selector de color accesible con área de saturación y brillo, tono, alfa y un campo hexadecimal.",
         "preview": "app/examples/color-picker/preview.tsx",
         "previewHref": "/examples/color-picker",
         "examples": [
           {
             "title": "Selector de color",
             "href": "/examples/color-picker",
-            "description": "Selector de color accesible con \u00e1rea de saturaci\u00f3n y brillo, tono, alfa y un campo hexadecimal."
+            "description": "Selector de color accesible con área de saturación y brillo, tono, alfa y un campo hexadecimal."
           }
         ],
         "usage": "<ColorPicker value={color} onValueChange={setColor} />",
@@ -2352,15 +2352,15 @@
         "media"
       ],
       "meta": {
-        "titleEs": "Zona magn\u00e9tica",
-        "descriptionEs": "Zona para soltar archivos que se inclina hacia el cursor, con lista, progreso y validaci\u00f3n de tipo y tama\u00f1o.",
+        "titleEs": "Zona magnética",
+        "descriptionEs": "Zona para soltar archivos que se inclina hacia el cursor, con lista, progreso y validación de tipo y tamaño.",
         "preview": "app/examples/magnetic-dropzone/preview.tsx",
         "previewHref": "/examples/magnetic-dropzone",
         "examples": [
           {
-            "title": "Zona magn\u00e9tica",
+            "title": "Zona magnética",
             "href": "/examples/magnetic-dropzone",
-            "description": "Zona para soltar archivos que se inclina hacia el cursor, con lista, progreso y validaci\u00f3n de tipo y tama\u00f1o."
+            "description": "Zona para soltar archivos que se inclina hacia el cursor, con lista, progreso y validación de tipo y tamaño."
           }
         ],
         "usage": "<MagneticDropzone accept=\"image/*,.pdf\" maxSize={2_000_000} onFiles={upload} />",
@@ -2417,14 +2417,14 @@
       ],
       "meta": {
         "titleEs": "Control viscoso",
-        "descriptionEs": "Control deslizante con un rastro org\u00e1nico al arrastrar, construido sobre la primitiva slider.",
+        "descriptionEs": "Control deslizante con un rastro orgánico al arrastrar, construido sobre la primitiva slider.",
         "preview": "app/examples/gooey-slider/preview.tsx",
         "previewHref": "/examples/gooey-slider",
         "examples": [
           {
             "title": "Control viscoso",
             "href": "/examples/gooey-slider",
-            "description": "Control deslizante con un rastro org\u00e1nico al arrastrar, construido sobre la primitiva slider."
+            "description": "Control deslizante con un rastro orgánico al arrastrar, construido sobre la primitiva slider."
           }
         ],
         "usage": "<GooeySlider value={value} onValueChange={setValue} label=\"Intensity\" />",
@@ -2472,14 +2472,14 @@
       ],
       "meta": {
         "titleEs": "Reproductor de video",
-        "descriptionEs": "Reproductor con controles propios de reproducci\u00f3n, barra, volumen, velocidad y pantalla completa, y atajos de teclado.",
+        "descriptionEs": "Reproductor con controles propios de reproducción, barra, volumen, velocidad y pantalla completa, y atajos de teclado.",
         "preview": "app/examples/video-player/preview.tsx",
         "previewHref": "/examples/video-player",
         "examples": [
           {
             "title": "Reproductor de video",
             "href": "/examples/video-player",
-            "description": "Reproductor con controles propios de reproducci\u00f3n, barra, volumen, velocidad y pantalla completa, y atajos de teclado."
+            "description": "Reproductor con controles propios de reproducción, barra, volumen, velocidad y pantalla completa, y atajos de teclado."
           }
         ],
         "usage": "<VideoPlayer src={src} label=\"Clip\" />",
@@ -2533,15 +2533,15 @@
         "overlay"
       ],
       "meta": {
-        "titleEs": "Visor de im\u00e1genes",
-        "descriptionEs": "Visor de im\u00e1genes a pantalla completa con navegaci\u00f3n, zoom y teclado.",
+        "titleEs": "Visor de imágenes",
+        "descriptionEs": "Visor de imágenes a pantalla completa con navegación, zoom y teclado.",
         "preview": "app/examples/lightbox/preview.tsx",
         "previewHref": "/examples/lightbox",
         "examples": [
           {
-            "title": "Visor de im\u00e1genes",
+            "title": "Visor de imágenes",
             "href": "/examples/lightbox",
-            "description": "Visor de im\u00e1genes a pantalla completa con navegaci\u00f3n, zoom y teclado."
+            "description": "Visor de imágenes a pantalla completa con navegación, zoom y teclado."
           }
         ],
         "usage": "<Lightbox items={items} open={open} onOpenChange={setOpen} index={index} onIndexChange={setIndex} />",
@@ -2712,14 +2712,14 @@
       ],
       "meta": {
         "titleEs": "Chip de adjunto",
-        "descriptionEs": "Chip de archivo adjunto con icono seg\u00fan el tipo, tama\u00f1o, vista previa y quitar.",
+        "descriptionEs": "Chip de archivo adjunto con icono según el tipo, tamaño, vista previa y quitar.",
         "preview": "app/examples/attachment-chip/preview.tsx",
         "previewHref": "/examples/attachment-chip",
         "examples": [
           {
             "title": "Chip de adjunto",
             "href": "/examples/attachment-chip",
-            "description": "Chip de archivo adjunto con icono seg\u00fan el tipo, tama\u00f1o, vista previa y quitar."
+            "description": "Chip de archivo adjunto con icono según el tipo, tamaño, vista previa y quitar."
           }
         ],
         "usage": "<AttachmentChip name=\"notes.pdf\" size={24000} type=\"application/pdf\" onRemove={remove} />",
@@ -2763,14 +2763,14 @@
       ],
       "meta": {
         "titleEs": "Marcador",
-        "descriptionEs": "Resaltado animado detr\u00e1s de un tramo de texto, al estilo de un marcador.",
+        "descriptionEs": "Resaltado animado detrás de un tramo de texto, al estilo de un marcador.",
         "preview": "app/examples/marker/preview.tsx",
         "previewHref": "/examples/marker",
         "examples": [
           {
             "title": "Marcador",
             "href": "/examples/marker",
-            "description": "Resaltado animado detr\u00e1s de un tramo de texto, al estilo de un marcador."
+            "description": "Resaltado animado detrás de un tramo de texto, al estilo de un marcador."
           }
         ],
         "usage": "<Marker>forty-five days</Marker>",
@@ -2876,14 +2876,14 @@
       ],
       "meta": {
         "titleEs": "Tabla CRM",
-        "descriptionEs": "Tabla de CRM con avatar y nombre, estado en una insignia, etapa, due\u00f1o y \u00faltima actividad. Las columnas encajan en AdminDataTable cuando esa pieza est\u00e1 instalada, y tambi\u00e9n se renderizan solas.",
+        "descriptionEs": "Tabla de CRM con avatar y nombre, estado en una insignia, etapa, dueño y última actividad. Las columnas encajan en AdminDataTable cuando esa pieza está instalada, y también se renderizan solas.",
         "preview": "app/examples/crm-table/preview.tsx",
         "previewHref": "/examples/crm-table",
         "examples": [
           {
             "title": "Tabla CRM",
             "href": "/examples/crm-table",
-            "description": "Tabla de CRM con avatar y nombre, estado en una insignia, etapa, due\u00f1o y \u00faltima actividad. Las columnas encajan en AdminDataTable cuando esa pieza est\u00e1 instalada, y tambi\u00e9n se renderizan solas."
+            "description": "Tabla de CRM con avatar y nombre, estado en una insignia, etapa, dueño y última actividad. Las columnas encajan en AdminDataTable cuando esa pieza está instalada, y también se renderizan solas."
           }
         ],
         "usage": "<CrmTable rows={rows} onRowClick={open} />",
@@ -2940,15 +2940,15 @@
         "navigation"
       ],
       "meta": {
-        "titleEs": "Dock de navegaci\u00f3n",
-        "descriptionEs": "Barra flotante en forma de p\u00edldora. El cursor ampl\u00eda los iconos, cada uno tiene tooltip, la ruta activa muestra un punto, y Buscar se convierte en un campo bajo la barra.",
+        "titleEs": "Dock de navegación",
+        "descriptionEs": "Barra flotante en forma de píldora. El cursor amplía los iconos, cada uno tiene tooltip, la ruta activa muestra un punto, y Buscar se convierte en un campo bajo la barra.",
         "preview": "app/examples/dock-nav/preview.tsx",
         "previewHref": "/examples/dock-nav",
         "examples": [
           {
-            "title": "Dock de navegaci\u00f3n",
+            "title": "Dock de navegación",
             "href": "/examples/dock-nav",
-            "description": "Iconos con aumento, tooltip con insignia, punto de ruta activa y b\u00fasqueda que se despliega."
+            "description": "Iconos con aumento, tooltip con insignia, punto de ruta activa y búsqueda que se despliega."
           }
         ],
         "usage": "<DockNav\n  label=\"Primary\"\n  items={items}\n  value={value}\n  onValueChange={setValue}\n  position=\"bottom\"\n  search={{ placeholder: \"Search\", onSearch }}\n/>",
@@ -3084,15 +3084,15 @@
         "input"
       ],
       "meta": {
-        "titleEs": "Campo de contrase\u00f1a",
-        "descriptionEs": "Campo de contrase\u00f1a con un control para mostrarla. El corte del ojo se dibuja sobre el mismo icono.",
+        "titleEs": "Campo de contraseña",
+        "descriptionEs": "Campo de contraseña con un control para mostrarla. El corte del ojo se dibuja sobre el mismo icono.",
         "preview": "app/examples/password-field/preview.tsx",
         "previewHref": "/examples/password-field",
         "examples": [
           {
-            "title": "Campo de contrase\u00f1a",
+            "title": "Campo de contraseña",
             "href": "/examples/password-field",
-            "description": "Campo de contrase\u00f1a con un control para mostrarla. El corte del ojo se dibuja sobre el mismo icono."
+            "description": "Campo de contraseña con un control para mostrarla. El corte del ojo se dibuja sobre el mismo icono."
           }
         ],
         "usage": "<PasswordField label=\"Password\" description=\"At least 8 characters.\" />",
@@ -3147,15 +3147,15 @@
         "input"
       ],
       "meta": {
-        "titleEs": "Campo de b\u00fasqueda",
-        "descriptionEs": "Campo de b\u00fasqueda con un control para limpiar que devuelve el foco al texto.",
+        "titleEs": "Campo de búsqueda",
+        "descriptionEs": "Campo de búsqueda con un control para limpiar que devuelve el foco al texto.",
         "preview": "app/examples/search-field/preview.tsx",
         "previewHref": "/examples/search-field",
         "examples": [
           {
-            "title": "Campo de b\u00fasqueda",
+            "title": "Campo de búsqueda",
             "href": "/examples/search-field",
-            "description": "Campo de b\u00fasqueda con un control para limpiar que devuelve el foco al texto."
+            "description": "Campo de búsqueda con un control para limpiar que devuelve el foco al texto."
           }
         ],
         "usage": "<SearchField label=\"Search\" value={query} onValueChange={setQuery} />",
@@ -3206,15 +3206,15 @@
         "action"
       ],
       "meta": {
-        "titleEs": "Bot\u00f3n copiar",
-        "descriptionEs": "Copia un valor y lo confirma en el mismo bot\u00f3n, con un check dibujado y un anuncio para el lector de pantalla.",
+        "titleEs": "Botón copiar",
+        "descriptionEs": "Copia un valor y lo confirma en el mismo botón, con un check dibujado y un anuncio para el lector de pantalla.",
         "preview": "app/examples/copy-button/preview.tsx",
         "previewHref": "/examples/copy-button",
         "examples": [
           {
-            "title": "Bot\u00f3n copiar",
+            "title": "Botón copiar",
             "href": "/examples/copy-button",
-            "description": "Copia un valor y lo confirma en el mismo bot\u00f3n, con un check dibujado y un anuncio para el lector de pantalla."
+            "description": "Copia un valor y lo confirma en el mismo botón, con un check dibujado y un anuncio para el lector de pantalla."
           }
         ],
         "usage": "<CopyButton value={email} label=\"Copy email\" onCopied={done} />",
@@ -3275,14 +3275,14 @@
       ],
       "meta": {
         "titleEs": "Control segmentado",
-        "descriptionEs": "Un conjunto peque\u00f1o de opciones. Las flechas mueven la selecci\u00f3n y el resalte se desliza.",
+        "descriptionEs": "Un conjunto pequeño de opciones. Las flechas mueven la selección y el resalte se desliza.",
         "preview": "app/examples/segmented-control/preview.tsx",
         "previewHref": "/examples/segmented-control",
         "examples": [
           {
             "title": "Control segmentado",
             "href": "/examples/segmented-control",
-            "description": "Un conjunto peque\u00f1o de opciones. Las flechas mueven la selecci\u00f3n y el resalte se desliza."
+            "description": "Un conjunto pequeño de opciones. Las flechas mueven la selección y el resalte se desliza."
           }
         ],
         "usage": "<SegmentedControl label=\"Range\" options={options} value={value} onValueChange={setValue} />",
@@ -3336,14 +3336,14 @@
       ],
       "meta": {
         "titleEs": "Texto que aparece",
-        "descriptionEs": "Revela una frase corta palabra por palabra. Con movimiento reducido el texto est\u00e1 visible desde el inicio.",
+        "descriptionEs": "Revela una frase corta palabra por palabra. Con movimiento reducido el texto está visible desde el inicio.",
         "preview": "app/examples/text-reveal/preview.tsx",
         "previewHref": "/examples/text-reveal",
         "examples": [
           {
             "title": "Texto que aparece",
             "href": "/examples/text-reveal",
-            "description": "Revela una frase corta palabra por palabra. Con movimiento reducido el texto est\u00e1 visible desde el inicio."
+            "description": "Revela una frase corta palabra por palabra. Con movimiento reducido el texto está visible desde el inicio."
           }
         ],
         "usage": "<TextReveal as=\"h2\" text={\"Kiln open\\nSaturday\"} />",
@@ -3394,14 +3394,14 @@
       ],
       "meta": {
         "titleEs": "Texto que se transforma",
-        "descriptionEs": "Pasa de un r\u00f3tulo corto al siguiente. Las letras compartidas se deslizan y el ancho las sigue.",
+        "descriptionEs": "Pasa de un rótulo corto al siguiente. Las letras compartidas se deslizan y el ancho las sigue.",
         "preview": "app/examples/text-morph/preview.tsx",
         "previewHref": "/examples/text-morph",
         "examples": [
           {
             "title": "Texto que se transforma",
             "href": "/examples/text-morph",
-            "description": "Pasa de un r\u00f3tulo corto al siguiente. Las letras compartidas se deslizan y el ancho las sigue."
+            "description": "Pasa de un rótulo corto al siguiente. Las letras compartidas se deslizan y el ancho las sigue."
           }
         ],
         "usage": "<TextMorph>Publishing</TextMorph>",
@@ -3447,14 +3447,14 @@
       ],
       "meta": {
         "titleEs": "Texto con brillo",
-        "descriptionEs": "Una luz recorre una l\u00ednea corta de estado mientras el trabajo sigue. Marca aria-busy.",
+        "descriptionEs": "Una luz recorre una línea corta de estado mientras el trabajo sigue. Marca aria-busy.",
         "preview": "app/examples/text-shimmer/preview.tsx",
         "previewHref": "/examples/text-shimmer",
         "examples": [
           {
             "title": "Texto con brillo",
             "href": "/examples/text-shimmer",
-            "description": "Una luz recorre una l\u00ednea corta de estado mientras el trabajo sigue. Marca aria-busy."
+            "description": "Una luz recorre una línea corta de estado mientras el trabajo sigue. Marca aria-busy."
           }
         ],
         "usage": "<TextShimmer active={busy}>Firing the kiln</TextShimmer>",
@@ -3504,15 +3504,15 @@
         "content"
       ],
       "meta": {
-        "titleEs": "T\u00edtulo al entrar",
-        "descriptionEs": "Un t\u00edtulo de secci\u00f3n que se revela al entrar en la vista: desenfoque, palabra, l\u00ednea, tracking o barrido.",
+        "titleEs": "Título al entrar",
+        "descriptionEs": "Un título de sección que se revela al entrar en la vista: desenfoque, palabra, línea, tracking o barrido.",
         "preview": "app/examples/in-view-title/preview.tsx",
         "previewHref": "/examples/in-view-title",
         "examples": [
           {
-            "title": "T\u00edtulo al entrar",
+            "title": "Título al entrar",
             "href": "/examples/in-view-title",
-            "description": "Un t\u00edtulo de secci\u00f3n que se revela al entrar en la vista: desenfoque, palabra, l\u00ednea, tracking o barrido."
+            "description": "Un título de sección que se revela al entrar en la vista: desenfoque, palabra, línea, tracking o barrido."
           }
         ],
         "usage": "<InViewTitle text=\"Coastal clay\" variant=\"blur\" />",
@@ -3568,14 +3568,14 @@
       ],
       "meta": {
         "titleEs": "Texto de rodillo",
-        "descriptionEs": "Texto y cifras que giran hasta el nuevo valor, un rodillo por car\u00e1cter.",
+        "descriptionEs": "Texto y cifras que giran hasta el nuevo valor, un rodillo por carácter.",
         "preview": "app/examples/slot-text/preview.tsx",
         "previewHref": "/examples/slot-text",
         "examples": [
           {
             "title": "Texto de rodillo",
             "href": "/examples/slot-text",
-            "description": "Texto y cifras que giran hasta el nuevo valor, un rodillo por car\u00e1cter."
+            "description": "Texto y cifras que giran hasta el nuevo valor, un rodillo por carácter."
           }
         ],
         "usage": "<SlotText value={orders} announce />",
@@ -3695,15 +3695,15 @@
         "action"
       ],
       "meta": {
-        "titleEs": "Bot\u00f3n de acci\u00f3n",
-        "descriptionEs": "Un bot\u00f3n compacto que pasa por pendiente y \u00e9xito despu\u00e9s de una acci\u00f3n.",
+        "titleEs": "Botón de acción",
+        "descriptionEs": "Un botón compacto que pasa por pendiente y éxito después de una acción.",
         "preview": "app/examples/action-button/preview.tsx",
         "previewHref": "/examples/action-button",
         "examples": [
           {
-            "title": "Bot\u00f3n de acci\u00f3n",
+            "title": "Botón de acción",
             "href": "/examples/action-button",
-            "description": "Un bot\u00f3n compacto que pasa por pendiente y \u00e9xito despu\u00e9s de una acci\u00f3n."
+            "description": "Un botón compacto que pasa por pendiente y éxito después de una acción."
           }
         ],
         "usage": "<ActionButton label=\"Save\" onAction={save} />",
@@ -3766,15 +3766,15 @@
         "action"
       ],
       "meta": {
-        "titleEs": "Bot\u00f3n dividido",
-        "descriptionEs": "Una acci\u00f3n principal con un men\u00fa de alternativas cercanas.",
+        "titleEs": "Botón dividido",
+        "descriptionEs": "Una acción principal con un menú de alternativas cercanas.",
         "preview": "app/examples/split-button/preview.tsx",
         "previewHref": "/examples/split-button",
         "examples": [
           {
-            "title": "Bot\u00f3n dividido",
+            "title": "Botón dividido",
             "href": "/examples/split-button",
-            "description": "Una acci\u00f3n principal con un men\u00fa de alternativas cercanas."
+            "description": "Una acción principal con un menú de alternativas cercanas."
           }
         ],
         "usage": "<SplitButton label=\"Publish\" actions={actions} onClick={publish} />",
@@ -3841,14 +3841,14 @@
       ],
       "meta": {
         "titleEs": "Mantener para confirmar",
-        "descriptionEs": "Confirma una acci\u00f3n destructiva al mantener pulsado, no con un toque.",
+        "descriptionEs": "Confirma una acción destructiva al mantener pulsado, no con un toque.",
         "preview": "app/examples/hold-to-confirm/preview.tsx",
         "previewHref": "/examples/hold-to-confirm",
         "examples": [
           {
             "title": "Mantener para confirmar",
             "href": "/examples/hold-to-confirm",
-            "description": "Confirma una acci\u00f3n destructiva al mantener pulsado, no con un toque."
+            "description": "Confirma una acción destructiva al mantener pulsado, no con un toque."
           }
         ],
         "usage": "<HoldToConfirm label=\"Delete kiln\" onConfirm={remove} />",
@@ -3913,14 +3913,14 @@
       ],
       "meta": {
         "titleEs": "Acciones al deslizar",
-        "descriptionEs": "Muestra acciones de la fila al deslizar, y las mismas desde un men\u00fa.",
+        "descriptionEs": "Muestra acciones de la fila al deslizar, y las mismas desde un menú.",
         "preview": "app/examples/swipe-actions/preview.tsx",
         "previewHref": "/examples/swipe-actions",
         "examples": [
           {
             "title": "Acciones al deslizar",
             "href": "/examples/swipe-actions",
-            "description": "Muestra acciones de la fila al deslizar, y las mismas desde un men\u00fa."
+            "description": "Muestra acciones de la fila al deslizar, y las mismas desde un menú."
           }
         ],
         "usage": "<SwipeActions actions={actions}>{row}</SwipeActions>",
@@ -3975,15 +3975,15 @@
         "action"
       ],
       "meta": {
-        "titleEs": "Men\u00fa de cuenta",
-        "descriptionEs": "Cuenta, ajustes, tema y salir detr\u00e1s del avatar. En pantallas estrechas, una hoja.",
+        "titleEs": "Menú de cuenta",
+        "descriptionEs": "Cuenta, ajustes, tema y salir detrás del avatar. En pantallas estrechas, una hoja.",
         "preview": "app/examples/user-menu/preview.tsx",
         "previewHref": "/examples/user-menu",
         "examples": [
           {
-            "title": "Men\u00fa de cuenta",
+            "title": "Menú de cuenta",
             "href": "/examples/user-menu",
-            "description": "Cuenta, ajustes, tema y salir detr\u00e1s del avatar. En pantallas estrechas, una hoja."
+            "description": "Cuenta, ajustes, tema y salir detrás del avatar. En pantallas estrechas, una hoja."
           }
         ],
         "usage": "<UserMenu name={name} items={items} />",
@@ -4049,15 +4049,15 @@
         "action"
       ],
       "meta": {
-        "titleEs": "Confirmaci\u00f3n que se transforma",
-        "descriptionEs": "Un bot\u00f3n destructivo que pasa a confirmaci\u00f3n, espera y resultado con deshacer.",
+        "titleEs": "Confirmación que se transforma",
+        "descriptionEs": "Un botón destructivo que pasa a confirmación, espera y resultado con deshacer.",
         "preview": "app/examples/confirm-morph/preview.tsx",
         "previewHref": "/examples/confirm-morph",
         "examples": [
           {
-            "title": "Confirmaci\u00f3n que se transforma",
+            "title": "Confirmación que se transforma",
             "href": "/examples/confirm-morph",
-            "description": "Un bot\u00f3n destructivo que pasa a confirmaci\u00f3n, espera y resultado con deshacer."
+            "description": "Un botón destructivo que pasa a confirmación, espera y resultado con deshacer."
           }
         ],
         "usage": "<ConfirmMorph label=\"Delete\" onConfirm={remove} />",
@@ -4128,15 +4128,15 @@
         "input"
       ],
       "meta": {
-        "titleEs": "Campo num\u00e9rico",
-        "descriptionEs": "Un n\u00famero acotado con botones de paso, teclado y un arrastre opcional.",
+        "titleEs": "Campo numérico",
+        "descriptionEs": "Un número acotado con botones de paso, teclado y un arrastre opcional.",
         "preview": "app/examples/number-field/preview.tsx",
         "previewHref": "/examples/number-field",
         "examples": [
           {
-            "title": "Campo num\u00e9rico",
+            "title": "Campo numérico",
             "href": "/examples/number-field",
-            "description": "Un n\u00famero acotado con botones de paso, teclado y un arrastre opcional."
+            "description": "Un número acotado con botones de paso, teclado y un arrastre opcional."
           }
         ],
         "usage": "<NumberField label=\"Seats\" value={seats} onValueChange={setSeats} min={1} max={12} />",
@@ -4363,13 +4363,13 @@
         "input"
       ],
       "meta": {
-        "titleEs": "Edici\u00f3n en l\u00ednea",
+        "titleEs": "Edición en línea",
         "descriptionEs": "Renombra en el sitio: el texto se vuelve un campo sin moverse.",
         "preview": "app/examples/inline-edit/preview.tsx",
         "previewHref": "/examples/inline-edit",
         "examples": [
           {
-            "title": "Edici\u00f3n en l\u00ednea",
+            "title": "Edición en línea",
             "href": "/examples/inline-edit",
             "description": "Renombra en el sitio: el texto se vuelve un campo sin moverse."
           }
@@ -4441,15 +4441,15 @@
         "input"
       ],
       "meta": {
-        "titleEs": "B\u00fasqueda que se abre",
-        "descriptionEs": "Un icono que se abre en un campo de b\u00fasqueda con resultados debajo.",
+        "titleEs": "Búsqueda que se abre",
+        "descriptionEs": "Un icono que se abre en un campo de búsqueda con resultados debajo.",
         "preview": "app/examples/expanding-search/preview.tsx",
         "previewHref": "/examples/expanding-search",
         "examples": [
           {
-            "title": "B\u00fasqueda que se abre",
+            "title": "Búsqueda que se abre",
             "href": "/examples/expanding-search",
-            "description": "Un icono que se abre en un campo de b\u00fasqueda con resultados debajo."
+            "description": "Un icono que se abre en un campo de búsqueda con resultados debajo."
           }
         ],
         "usage": "<ExpandingSearch label=\"Search\" items={items} onSelect={open} />",
@@ -4516,14 +4516,14 @@
       ],
       "meta": {
         "titleEs": "Grupo de chips",
-        "descriptionEs": "Filtra unas pocas facetas con chips que muestran la elecci\u00f3n.",
+        "descriptionEs": "Filtra unas pocas facetas con chips que muestran la elección.",
         "preview": "app/examples/chip-group/preview.tsx",
         "previewHref": "/examples/chip-group",
         "examples": [
           {
             "title": "Grupo de chips",
             "href": "/examples/chip-group",
-            "description": "Filtra unas pocas facetas con chips que muestran la elecci\u00f3n."
+            "description": "Filtra unas pocas facetas con chips que muestran la elección."
           }
         ],
         "usage": "<ChipGroup label=\"Clay\" options={options} value={value} onValueChange={setValue} />",
@@ -4593,15 +4593,15 @@
         "input"
       ],
       "meta": {
-        "titleEs": "Fortaleza de contrase\u00f1a",
-        "descriptionEs": "Muestra qu\u00e9 tan fuerte es una contrase\u00f1a nueva mientras se escribe.",
+        "titleEs": "Fortaleza de contraseña",
+        "descriptionEs": "Muestra qué tan fuerte es una contraseña nueva mientras se escribe.",
         "preview": "app/examples/password-strength/preview.tsx",
         "previewHref": "/examples/password-strength",
         "examples": [
           {
-            "title": "Fortaleza de contrase\u00f1a",
+            "title": "Fortaleza de contraseña",
             "href": "/examples/password-strength",
-            "description": "Muestra qu\u00e9 tan fuerte es una contrase\u00f1a nueva mientras se escribe."
+            "description": "Muestra qué tan fuerte es una contraseña nueva mientras se escribe."
           }
         ],
         "usage": "<PasswordStrength label=\"Password\" value={password} onValueChange={setPassword} />",
@@ -4666,14 +4666,14 @@
       ],
       "meta": {
         "titleEs": "Panel de firma",
-        "descriptionEs": "Tinta que se afina con la velocidad, con deshacer, repetici\u00f3n y exportaci\u00f3n PNG o SVG.",
+        "descriptionEs": "Tinta que se afina con la velocidad, con deshacer, repetición y exportación PNG o SVG.",
         "preview": "app/examples/signature-pad/preview.tsx",
         "previewHref": "/examples/signature-pad",
         "examples": [
           {
             "title": "Panel de firma",
             "href": "/examples/signature-pad",
-            "description": "Tinta que se afina con la velocidad, con deshacer, repetici\u00f3n y exportaci\u00f3n PNG o SVG."
+            "description": "Tinta que se afina con la velocidad, con deshacer, repetición y exportación PNG o SVG."
           }
         ],
         "usage": "<SignaturePad label=\"Sign\" onChange={setSignature} />",
@@ -4743,14 +4743,14 @@
       ],
       "meta": {
         "titleEs": "Rango de fechas",
-        "descriptionEs": "Un selector de rango con dos meses, atajos y selecci\u00f3n por teclado.",
+        "descriptionEs": "Un selector de rango con dos meses, atajos y selección por teclado.",
         "preview": "app/examples/date-range-picker/preview.tsx",
         "previewHref": "/examples/date-range-picker",
         "examples": [
           {
             "title": "Rango de fechas",
             "href": "/examples/date-range-picker",
-            "description": "Un selector de rango con dos meses, atajos y selecci\u00f3n por teclado."
+            "description": "Un selector de rango con dos meses, atajos y selección por teclado."
           }
         ],
         "usage": "<DateRangePicker label=\"Dates\" value={range} onValueChange={setRange} />",
@@ -4820,15 +4820,15 @@
         "input"
       ],
       "meta": {
-        "titleEs": "Tel\u00e9fono",
-        "descriptionEs": "Un tel\u00e9fono con pa\u00eds, formato al escribir y salida E.164.",
+        "titleEs": "Teléfono",
+        "descriptionEs": "Un teléfono con país, formato al escribir y salida E.164.",
         "preview": "app/examples/phone-input/preview.tsx",
         "previewHref": "/examples/phone-input",
         "examples": [
           {
-            "title": "Tel\u00e9fono",
+            "title": "Teléfono",
             "href": "/examples/phone-input",
-            "description": "Un tel\u00e9fono con pa\u00eds, formato al escribir y salida E.164."
+            "description": "Un teléfono con país, formato al escribir y salida E.164."
           }
         ],
         "usage": "<PhoneInput label=\"Phone\" value={phone} onValueChange={setPhone} />",
@@ -4967,14 +4967,14 @@
       ],
       "meta": {
         "titleEs": "Campo de menciones",
-        "descriptionEs": "Un \u00e1rea de texto donde @personas y #canales son un solo token.",
+        "descriptionEs": "Un área de texto donde @personas y #canales son un solo token.",
         "preview": "app/examples/mention-input/preview.tsx",
         "previewHref": "/examples/mention-input",
         "examples": [
           {
             "title": "Campo de menciones",
             "href": "/examples/mention-input",
-            "description": "Un \u00e1rea de texto donde @personas y #canales son un solo token."
+            "description": "Un área de texto donde @personas y #canales son un solo token."
           }
         ],
         "usage": "<MentionInput label=\"Note\" people={people} channels={channels} />",
@@ -5045,14 +5045,14 @@
       ],
       "meta": {
         "titleEs": "Editor de texto",
-        "descriptionEs": "Un editor ligero con atajos markdown, barra flotante, men\u00fa de barra y salida HTML y markdown.",
+        "descriptionEs": "Un editor ligero con atajos markdown, barra flotante, menú de barra y salida HTML y markdown.",
         "preview": "app/examples/rich-text-editor/preview.tsx",
         "previewHref": "/examples/rich-text-editor",
         "examples": [
           {
             "title": "Editor de texto",
             "href": "/examples/rich-text-editor",
-            "description": "Un editor ligero con atajos markdown, barra flotante, men\u00fa de barra y salida HTML y markdown."
+            "description": "Un editor ligero con atajos markdown, barra flotante, menú de barra y salida HTML y markdown."
           }
         ],
         "usage": "<RichTextEditor label=\"Notes\" onChange={setDoc} />",
@@ -5118,13 +5118,13 @@
         "input"
       ],
       "meta": {
-        "titleEs": "Cambio de facturaci\u00f3n",
+        "titleEs": "Cambio de facturación",
         "descriptionEs": "Un cambio mensual y anual con el ahorro y precios que giran.",
         "preview": "app/examples/billing-toggle/preview.tsx",
         "previewHref": "/examples/billing-toggle",
         "examples": [
           {
-            "title": "Cambio de facturaci\u00f3n",
+            "title": "Cambio de facturación",
             "href": "/examples/billing-toggle",
             "description": "Un cambio mensual y anual con el ahorro y precios que giran."
           }
@@ -5192,13 +5192,13 @@
         "input"
       ],
       "meta": {
-        "titleEs": "Tarjetas de opci\u00f3n",
+        "titleEs": "Tarjetas de opción",
         "descriptionEs": "Tarjetas seleccionables con un solo tabulador y flechas.",
         "preview": "app/examples/radio-cards/preview.tsx",
         "previewHref": "/examples/radio-cards",
         "examples": [
           {
-            "title": "Tarjetas de opci\u00f3n",
+            "title": "Tarjetas de opción",
             "href": "/examples/radio-cards",
             "description": "Tarjetas seleccionables con un solo tabulador y flechas."
           }
@@ -5263,14 +5263,14 @@
       ],
       "meta": {
         "titleEs": "Grupo de avatares",
-        "descriptionEs": "Muestra un equipo en una pila peque\u00f1a, con un recuento del resto.",
+        "descriptionEs": "Muestra un equipo en una pila pequeña, con un recuento del resto.",
         "preview": "app/examples/avatar-group/preview.tsx",
         "previewHref": "/examples/avatar-group",
         "examples": [
           {
             "title": "Grupo de avatares",
             "href": "/examples/avatar-group",
-            "description": "Muestra un equipo en una pila peque\u00f1a, con un recuento del resto."
+            "description": "Muestra un equipo en una pila pequeña, con un recuento del resto."
           }
         ],
         "usage": "<AvatarGroup members={members} max={4} />",
@@ -5333,15 +5333,15 @@
         "dashboard"
       ],
       "meta": {
-        "titleEs": "Tarjeta de m\u00e9trica",
-        "descriptionEs": "Un resumen compacto de un n\u00famero, con etiqueta y contexto.",
+        "titleEs": "Tarjeta de métrica",
+        "descriptionEs": "Un resumen compacto de un número, con etiqueta y contexto.",
         "preview": "app/examples/metric-card/preview.tsx",
         "previewHref": "/examples/metric-card",
         "examples": [
           {
-            "title": "Tarjeta de m\u00e9trica",
+            "title": "Tarjeta de métrica",
             "href": "/examples/metric-card",
-            "description": "Un resumen compacto de un n\u00famero, con etiqueta y contexto."
+            "description": "Un resumen compacto de un número, con etiqueta y contexto."
           }
         ],
         "usage": "<MetricCard label=\"Orders\" value={128} context=\"This week\" change=\"+12\" />",
@@ -5412,15 +5412,15 @@
         "content"
       ],
       "meta": {
-        "titleEs": "Estado vac\u00edo",
-        "descriptionEs": "Un siguiente paso \u00fatil cuando todav\u00eda no hay nada que mostrar.",
+        "titleEs": "Estado vacío",
+        "descriptionEs": "Un siguiente paso útil cuando todavía no hay nada que mostrar.",
         "preview": "app/examples/empty-state/preview.tsx",
         "previewHref": "/examples/empty-state",
         "examples": [
           {
-            "title": "Estado vac\u00edo",
+            "title": "Estado vacío",
             "href": "/examples/empty-state",
-            "description": "Un siguiente paso \u00fatil cuando todav\u00eda no hay nada que mostrar."
+            "description": "Un siguiente paso útil cuando todavía no hay nada que mostrar."
           }
         ],
         "usage": "<EmptyState title=\"No firings\" description=\"Schedule the next kiln.\" action={action} />",
@@ -5486,13 +5486,13 @@
         "content"
       ],
       "meta": {
-        "titleEs": "\u00c1rbol",
+        "titleEs": "Árbol",
         "descriptionEs": "Navega carpetas y contenido anidado con el teclado.",
         "preview": "app/examples/tree-view/preview.tsx",
         "previewHref": "/examples/tree-view",
         "examples": [
           {
-            "title": "\u00c1rbol",
+            "title": "Árbol",
             "href": "/examples/tree-view",
             "description": "Navega carpetas y contenido anidado con el teclado."
           }
@@ -5563,14 +5563,14 @@
       ],
       "meta": {
         "titleEs": "Barra de filtros",
-        "descriptionEs": "Deja los filtros de una colecci\u00f3n a mano y f\u00e1ciles de quitar.",
+        "descriptionEs": "Deja los filtros de una colección a mano y fáciles de quitar.",
         "preview": "app/examples/filter-toolbar/preview.tsx",
         "previewHref": "/examples/filter-toolbar",
         "examples": [
           {
             "title": "Barra de filtros",
             "href": "/examples/filter-toolbar",
-            "description": "Deja los filtros de una colecci\u00f3n a mano y f\u00e1ciles de quitar."
+            "description": "Deja los filtros de una colección a mano y fáciles de quitar."
           }
         ],
         "usage": "<FilterToolbar filters={filters} onChange={setFilters} />",
@@ -5635,13 +5635,13 @@
         "chart"
       ],
       "meta": {
-        "titleEs": "Minigr\u00e1fico",
+        "titleEs": "Minigráfico",
         "descriptionEs": "Una tendencia compacta junto a un valor.",
         "preview": "app/examples/sparkline/preview.tsx",
         "previewHref": "/examples/sparkline",
         "examples": [
           {
-            "title": "Minigr\u00e1fico",
+            "title": "Minigráfico",
             "href": "/examples/sparkline",
             "description": "Una tendencia compacta junto a un valor."
           }
@@ -5782,14 +5782,14 @@
       ],
       "meta": {
         "titleEs": "Contador animado",
-        "descriptionEs": "Da a un total que cambia una sensaci\u00f3n clara de movimiento.",
+        "descriptionEs": "Da a un total que cambia una sensación clara de movimiento.",
         "preview": "app/examples/animated-counter/preview.tsx",
         "previewHref": "/examples/animated-counter",
         "examples": [
           {
             "title": "Contador animado",
             "href": "/examples/animated-counter",
-            "description": "Da a un total que cambia una sensaci\u00f3n clara de movimiento."
+            "description": "Da a un total que cambia una sensación clara de movimiento."
           }
         ],
         "usage": "<AnimatedCounter value={orders} />",
@@ -5857,15 +5857,15 @@
         "media"
       ],
       "meta": {
-        "titleEs": "Comparar im\u00e1genes",
-        "descriptionEs": "Arrastra un divisor sobre dos im\u00e1genes para ver el cambio.",
+        "titleEs": "Comparar imágenes",
+        "descriptionEs": "Arrastra un divisor sobre dos imágenes para ver el cambio.",
         "preview": "app/examples/image-compare/preview.tsx",
         "previewHref": "/examples/image-compare",
         "examples": [
           {
-            "title": "Comparar im\u00e1genes",
+            "title": "Comparar imágenes",
             "href": "/examples/image-compare",
-            "description": "Arrastra un divisor sobre dos im\u00e1genes para ver el cambio."
+            "description": "Arrastra un divisor sobre dos imágenes para ver el cambio."
           }
         ],
         "usage": "<ImageCompare before={before} after={after} altBefore=\"Before\" altAfter=\"After\" />",
@@ -5934,14 +5934,14 @@
       ],
       "meta": {
         "titleEs": "Carrusel",
-        "descriptionEs": "Recorre una fila de diapositivas con controles, pesta\u00f1as y flechas.",
+        "descriptionEs": "Recorre una fila de diapositivas con controles, pestañas y flechas.",
         "preview": "app/examples/carousel/preview.tsx",
         "previewHref": "/examples/carousel",
         "examples": [
           {
             "title": "Carrusel",
             "href": "/examples/carousel",
-            "description": "Recorre una fila de diapositivas con controles, pesta\u00f1as y flechas."
+            "description": "Recorre una fila de diapositivas con controles, pestañas y flechas."
           }
         ],
         "usage": "<Carousel label=\"Shelves\">{slides}</Carousel>",
@@ -6086,14 +6086,14 @@
       ],
       "meta": {
         "titleEs": "Mapa de actividad",
-        "descriptionEs": "Un a\u00f1o de actividad, una celda por d\u00eda.",
+        "descriptionEs": "Un año de actividad, una celda por día.",
         "preview": "app/examples/activity-heatmap/preview.tsx",
         "previewHref": "/examples/activity-heatmap",
         "examples": [
           {
             "title": "Mapa de actividad",
             "href": "/examples/activity-heatmap",
-            "description": "Un a\u00f1o de actividad, una celda por d\u00eda."
+            "description": "Un año de actividad, una celda por día."
           }
         ],
         "usage": "<ActivityHeatmap values={days} label=\"Firings\" />",
@@ -6159,15 +6159,15 @@
         "content"
       ],
       "meta": {
-        "titleEs": "L\u00ednea de tiempo",
-        "descriptionEs": "Sigue lo que pas\u00f3, lo m\u00e1s nuevo primero, agrupado por d\u00eda.",
+        "titleEs": "Línea de tiempo",
+        "descriptionEs": "Sigue lo que pasó, lo más nuevo primero, agrupado por día.",
         "preview": "app/examples/timeline/preview.tsx",
         "previewHref": "/examples/timeline",
         "examples": [
           {
-            "title": "L\u00ednea de tiempo",
+            "title": "Línea de tiempo",
             "href": "/examples/timeline",
-            "description": "Sigue lo que pas\u00f3, lo m\u00e1s nuevo primero, agrupado por d\u00eda."
+            "description": "Sigue lo que pasó, lo más nuevo primero, agrupado por día."
           }
         ],
         "usage": "<Timeline items={events} />",
@@ -6302,14 +6302,14 @@
       ],
       "meta": {
         "titleEs": "Medidor de uso",
-        "descriptionEs": "Muestra qu\u00e9 ocupa un cupo y qu\u00e9 tan cerca est\u00e1 del l\u00edmite.",
+        "descriptionEs": "Muestra qué ocupa un cupo y qué tan cerca está del límite.",
         "preview": "app/examples/usage-meter/preview.tsx",
         "previewHref": "/examples/usage-meter",
         "examples": [
           {
             "title": "Medidor de uso",
             "href": "/examples/usage-meter",
-            "description": "Muestra qu\u00e9 ocupa un cupo y qu\u00e9 tan cerca est\u00e1 del l\u00edmite."
+            "description": "Muestra qué ocupa un cupo y qué tan cerca está del límite."
           }
         ],
         "usage": "<UsageMeter label=\"Storage\" value={640} max={1000} unit=\"MB\" />",
@@ -6375,14 +6375,14 @@
       ],
       "meta": {
         "titleEs": "Pasos",
-        "descriptionEs": "Muestra en qu\u00e9 paso est\u00e1 una persona y qu\u00e9 ya qued\u00f3 hecho.",
+        "descriptionEs": "Muestra en qué paso está una persona y qué ya quedó hecho.",
         "preview": "app/examples/stepper/preview.tsx",
         "previewHref": "/examples/stepper",
         "examples": [
           {
             "title": "Pasos",
             "href": "/examples/stepper",
-            "description": "Muestra en qu\u00e9 paso est\u00e1 una persona y qu\u00e9 ya qued\u00f3 hecho."
+            "description": "Muestra en qué paso está una persona y qué ya quedó hecho."
           }
         ],
         "usage": "<Stepper steps={steps} value={step} onValueChange={setStep} />",
@@ -6527,7 +6527,7 @@
       ],
       "meta": {
         "titleEs": "Paleta de comandos",
-        "descriptionEs": "Lista de comandos que se filtra al escribir, sobre la primitiva command del anfitri\u00f3n.",
+        "descriptionEs": "Lista de comandos que se filtra al escribir, sobre la primitiva command del anfitrión.",
         "preview": "app/examples/command-palette/preview.tsx",
         "previewHref": "/examples/command-palette",
         "examples": [
@@ -6579,15 +6579,15 @@
         "chart"
       ],
       "meta": {
-        "titleEs": "Gr\u00e1fico de barras",
-        "descriptionEs": "Compara una medida entre categor\u00edas y lee el valor de una barra.",
+        "titleEs": "Gráfico de barras",
+        "descriptionEs": "Compara una medida entre categorías y lee el valor de una barra.",
         "preview": "app/examples/bar-chart/preview.tsx",
         "previewHref": "/examples/bar-chart",
         "examples": [
           {
-            "title": "Gr\u00e1fico de barras",
+            "title": "Gráfico de barras",
             "href": "/examples/bar-chart",
-            "description": "Compara una medida entre categor\u00edas y lee el valor de una barra."
+            "description": "Compara una medida entre categorías y lee el valor de una barra."
           }
         ],
         "usage": "<BarChart />",
@@ -6647,15 +6647,15 @@
         "chart"
       ],
       "meta": {
-        "titleEs": "Gr\u00e1fico de l\u00edneas",
-        "descriptionEs": "Un gr\u00e1fico de varias series con cruz y leyenda que se puede apagar.",
+        "titleEs": "Gráfico de líneas",
+        "descriptionEs": "Un gráfico de varias series con cruz y leyenda que se puede apagar.",
         "preview": "app/examples/line-chart/preview.tsx",
         "previewHref": "/examples/line-chart",
         "examples": [
           {
-            "title": "Gr\u00e1fico de l\u00edneas",
+            "title": "Gráfico de líneas",
             "href": "/examples/line-chart",
-            "description": "Un gr\u00e1fico de varias series con cruz y leyenda que se puede apagar."
+            "description": "Un gráfico de varias series con cruz y leyenda que se puede apagar."
           }
         ],
         "usage": "<LineChart />",
@@ -6720,13 +6720,13 @@
         "chart"
       ],
       "meta": {
-        "titleEs": "Gr\u00e1fico de dona",
+        "titleEs": "Gráfico de dona",
         "descriptionEs": "Una dona cuyas porciones muestran el reparto, con el valor activo en el centro.",
         "preview": "app/examples/donut-chart/preview.tsx",
         "previewHref": "/examples/donut-chart",
         "examples": [
           {
-            "title": "Gr\u00e1fico de dona",
+            "title": "Gráfico de dona",
             "href": "/examples/donut-chart",
             "description": "Una dona cuyas porciones muestran el reparto, con el valor activo en el centro."
           }
@@ -6793,13 +6793,13 @@
         "chart"
       ],
       "meta": {
-        "titleEs": "Gr\u00e1fico de flujos",
+        "titleEs": "Gráfico de flujos",
         "descriptionEs": "Flujos apilados con una capa que se puede aislar.",
         "preview": "app/examples/streamgraph/preview.tsx",
         "previewHref": "/examples/streamgraph",
         "examples": [
           {
-            "title": "Gr\u00e1fico de flujos",
+            "title": "Gráfico de flujos",
             "href": "/examples/streamgraph",
             "description": "Flujos apilados con una capa que se puede aislar."
           }
@@ -6866,13 +6866,13 @@
         "chart"
       ],
       "meta": {
-        "titleEs": "Gr\u00e1fico con cepillo",
+        "titleEs": "Gráfico con cepillo",
         "descriptionEs": "Una serie densa con una franja que se arrastra para acercar.",
         "preview": "app/examples/brush-chart/preview.tsx",
         "previewHref": "/examples/brush-chart",
         "examples": [
           {
-            "title": "Gr\u00e1fico con cepillo",
+            "title": "Gráfico con cepillo",
             "href": "/examples/brush-chart",
             "description": "Una serie densa con una franja que se arrastra para acercar."
           }
@@ -7002,15 +7002,15 @@
         "chart"
       ],
       "meta": {
-        "titleEs": "Mapa de \u00e1rbol",
-        "descriptionEs": "Un mapa de rect\u00e1ngulos que entra en un grupo y vuelve con la ruta.",
+        "titleEs": "Mapa de árbol",
+        "descriptionEs": "Un mapa de rectángulos que entra en un grupo y vuelve con la ruta.",
         "preview": "app/examples/treemap/preview.tsx",
         "previewHref": "/examples/treemap",
         "examples": [
           {
-            "title": "Mapa de \u00e1rbol",
+            "title": "Mapa de árbol",
             "href": "/examples/treemap",
-            "description": "Un mapa de rect\u00e1ngulos que entra en un grupo y vuelve con la ruta."
+            "description": "Un mapa de rectángulos que entra en un grupo y vuelve con la ruta."
           }
         ],
         "usage": "<Treemap />",
@@ -7070,13 +7070,13 @@
         "chart"
       ],
       "meta": {
-        "titleEs": "Gr\u00e1fico de celdas",
+        "titleEs": "Gráfico de celdas",
         "descriptionEs": "Un cuadro de diez por diez donde cada celda es un uno por ciento.",
         "preview": "app/examples/waffle-chart/preview.tsx",
         "previewHref": "/examples/waffle-chart",
         "examples": [
           {
-            "title": "Gr\u00e1fico de celdas",
+            "title": "Gráfico de celdas",
             "href": "/examples/waffle-chart",
             "description": "Un cuadro de diez por diez donde cada celda es un uno por ciento."
           }
@@ -7138,15 +7138,15 @@
         "chart"
       ],
       "meta": {
-        "titleEs": "Gr\u00e1fico de pendientes",
-        "descriptionEs": "Antes y despu\u00e9s en dos ejes, con el cambio de puesto junto a cada valor.",
+        "titleEs": "Gráfico de pendientes",
+        "descriptionEs": "Antes y después en dos ejes, con el cambio de puesto junto a cada valor.",
         "preview": "app/examples/slope-chart/preview.tsx",
         "previewHref": "/examples/slope-chart",
         "examples": [
           {
-            "title": "Gr\u00e1fico de pendientes",
+            "title": "Gráfico de pendientes",
             "href": "/examples/slope-chart",
-            "description": "Antes y despu\u00e9s en dos ejes, con el cambio de puesto junto a cada valor."
+            "description": "Antes y después en dos ejes, con el cambio de puesto junto a cada valor."
           }
         ],
         "usage": "<SlopeChart />",
@@ -7281,14 +7281,14 @@
       ],
       "meta": {
         "titleEs": "Visor JSON",
-        "descriptionEs": "Un \u00e1rbol JSON que se pliega, se busca y copia un valor o su ruta.",
+        "descriptionEs": "Un árbol JSON que se pliega, se busca y copia un valor o su ruta.",
         "preview": "app/examples/json-viewer/preview.tsx",
         "previewHref": "/examples/json-viewer",
         "examples": [
           {
             "title": "Visor JSON",
             "href": "/examples/json-viewer",
-            "description": "Un \u00e1rbol JSON que se pliega, se busca y copia un valor o su ruta."
+            "description": "Un árbol JSON que se pliega, se busca y copia un valor o su ruta."
           }
         ],
         "usage": "<JsonViewer />",
@@ -7354,14 +7354,14 @@
       ],
       "meta": {
         "titleEs": "Hilo de comentarios",
-        "descriptionEs": "Comentarios con respuestas, reacciones y resoluci\u00f3n.",
+        "descriptionEs": "Comentarios con respuestas, reacciones y resolución.",
         "preview": "app/examples/comment-thread/preview.tsx",
         "previewHref": "/examples/comment-thread",
         "examples": [
           {
             "title": "Hilo de comentarios",
             "href": "/examples/comment-thread",
-            "description": "Comentarios con respuestas, reacciones y resoluci\u00f3n."
+            "description": "Comentarios con respuestas, reacciones y resolución."
           }
         ],
         "usage": "<CommentThread />",
@@ -7429,14 +7429,14 @@
       ],
       "meta": {
         "titleEs": "Formulario de registro",
-        "descriptionEs": "Alta de cuenta con validaci\u00f3n y fortaleza de la contrase\u00f1a.",
+        "descriptionEs": "Alta de cuenta con validación y fortaleza de la contraseña.",
         "preview": "app/examples/signup-form/preview.tsx",
         "previewHref": "/examples/signup-form",
         "examples": [
           {
             "title": "Formulario de registro",
             "href": "/examples/signup-form",
-            "description": "Alta de cuenta con validaci\u00f3n y fortaleza de la contrase\u00f1a."
+            "description": "Alta de cuenta con validación y fortaleza de la contraseña."
           }
         ],
         "usage": "<SignupForm />",
@@ -7507,13 +7507,13 @@
         "block"
       ],
       "meta": {
-        "titleEs": "Comparaci\u00f3n de planes",
+        "titleEs": "Comparación de planes",
         "descriptionEs": "Compara las diferencias entre planes y periodos de pago.",
         "preview": "app/examples/plan-comparison/preview.tsx",
         "previewHref": "/examples/plan-comparison",
         "examples": [
           {
-            "title": "Comparaci\u00f3n de planes",
+            "title": "Comparación de planes",
             "href": "/examples/plan-comparison",
             "description": "Compara las diferencias entre planes y periodos de pago."
           }
@@ -7586,14 +7586,14 @@
       ],
       "meta": {
         "titleEs": "Centro de avisos",
-        "descriptionEs": "Un lugar para avisos, con le\u00eddo y grupos que se abren.",
+        "descriptionEs": "Un lugar para avisos, con leído y grupos que se abren.",
         "preview": "app/examples/notification-center/preview.tsx",
         "previewHref": "/examples/notification-center",
         "examples": [
           {
             "title": "Centro de avisos",
             "href": "/examples/notification-center",
-            "description": "Un lugar para avisos, con le\u00eddo y grupos que se abren."
+            "description": "Un lugar para avisos, con leído y grupos que se abren."
           }
         ],
         "usage": "<NotificationCenter />",
@@ -7658,14 +7658,14 @@
       ],
       "meta": {
         "titleEs": "Novedades",
-        "descriptionEs": "Notas de versi\u00f3n que se filtran y se abren en el sitio.",
+        "descriptionEs": "Notas de versión que se filtran y se abren en el sitio.",
         "preview": "app/examples/changelog-feed/preview.tsx",
         "previewHref": "/examples/changelog-feed",
         "examples": [
           {
             "title": "Novedades",
             "href": "/examples/changelog-feed",
-            "description": "Notas de versi\u00f3n que se filtran y se abren en el sitio."
+            "description": "Notas de versión que se filtran y se abren en el sitio."
           }
         ],
         "usage": "<ChangelogFeed />",
@@ -7750,14 +7750,14 @@
       ],
       "meta": {
         "titleEs": "Entrar",
-        "descriptionEs": "Una tarjeta de acceso que pasa del correo a un c\u00f3digo.",
+        "descriptionEs": "Una tarjeta de acceso que pasa del correo a un código.",
         "preview": "app/examples/sign-in/preview.tsx",
         "previewHref": "/examples/sign-in",
         "examples": [
           {
             "title": "Entrar",
             "href": "/examples/sign-in",
-            "description": "Una tarjeta de acceso que pasa del correo a un c\u00f3digo."
+            "description": "Una tarjeta de acceso que pasa del correo a un código."
           }
         ],
         "usage": "<SignIn />",
@@ -7830,13 +7830,13 @@
         "block"
       ],
       "meta": {
-        "titleEs": "Encabezado de p\u00e1gina",
+        "titleEs": "Encabezado de página",
         "descriptionEs": "Un encabezado de proyecto que se pliega al hacer scroll.",
         "preview": "app/examples/page-header/preview.tsx",
         "previewHref": "/examples/page-header",
         "examples": [
           {
-            "title": "Encabezado de p\u00e1gina",
+            "title": "Encabezado de página",
             "href": "/examples/page-header",
             "description": "Un encabezado de proyecto que se pliega al hacer scroll."
           }
@@ -7915,15 +7915,15 @@
         "block"
       ],
       "meta": {
-        "titleEs": "Estados vac\u00edos",
-        "descriptionEs": "Varios estados vac\u00edos en un mismo conjunto que se cambia.",
+        "titleEs": "Estados vacíos",
+        "descriptionEs": "Varios estados vacíos en un mismo conjunto que se cambia.",
         "preview": "app/examples/empty-states/preview.tsx",
         "previewHref": "/examples/empty-states",
         "examples": [
           {
-            "title": "Estados vac\u00edos",
+            "title": "Estados vacíos",
             "href": "/examples/empty-states",
-            "description": "Varios estados vac\u00edos en un mismo conjunto que se cambia."
+            "description": "Varios estados vacíos en un mismo conjunto que se cambia."
           }
         ],
         "usage": "<EmptyStates />",
@@ -7990,14 +7990,14 @@
       ],
       "meta": {
         "titleEs": "Acceso centrado",
-        "descriptionEs": "Un acceso que empieza por llave de paso y sigue con correo y c\u00f3digo.",
+        "descriptionEs": "Un acceso que empieza por llave de paso y sigue con correo y código.",
         "preview": "app/examples/login-centered/preview.tsx",
         "previewHref": "/examples/login-centered",
         "examples": [
           {
             "title": "Acceso centrado",
             "href": "/examples/login-centered",
-            "description": "Un acceso que empieza por llave de paso y sigue con correo y c\u00f3digo."
+            "description": "Un acceso que empieza por llave de paso y sigue con correo y código."
           }
         ],
         "usage": "<LoginCentered />",
@@ -8066,14 +8066,14 @@
       ],
       "meta": {
         "titleEs": "Encabezado del sitio",
-        "descriptionEs": "Un encabezado fijo que se vuelve s\u00f3lido al bajar, con una hoja en el tel\u00e9fono.",
+        "descriptionEs": "Un encabezado fijo que se vuelve sólido al bajar, con una hoja en el teléfono.",
         "preview": "app/examples/site-header/preview.tsx",
         "previewHref": "/examples/site-header",
         "examples": [
           {
             "title": "Encabezado del sitio",
             "href": "/examples/site-header",
-            "description": "Un encabezado fijo que se vuelve s\u00f3lido al bajar, con una hoja en el tel\u00e9fono."
+            "description": "Un encabezado fijo que se vuelve sólido al bajar, con una hoja en el teléfono."
           }
         ],
         "usage": "<SiteHeader />",
@@ -8139,14 +8139,14 @@
       ],
       "meta": {
         "titleEs": "Pie del sitio",
-        "descriptionEs": "Un pie con columnas de enlaces y un campo de bolet\u00edn.",
+        "descriptionEs": "Un pie con columnas de enlaces y un campo de boletín.",
         "preview": "app/examples/site-footer/preview.tsx",
         "previewHref": "/examples/site-footer",
         "examples": [
           {
             "title": "Pie del sitio",
             "href": "/examples/site-footer",
-            "description": "Un pie con columnas de enlaces y un campo de bolet\u00edn."
+            "description": "Un pie con columnas de enlaces y un campo de boletín."
           }
         ],
         "usage": "<SiteFooter />",
@@ -8210,13 +8210,13 @@
         "block"
       ],
       "meta": {
-        "titleEs": "Secci\u00f3n principal",
+        "titleEs": "Sección principal",
         "descriptionEs": "Tres aperturas: tablero, flujo y editorial.",
         "preview": "app/examples/hero-section/preview.tsx",
         "previewHref": "/examples/hero-section",
         "examples": [
           {
-            "title": "Secci\u00f3n principal",
+            "title": "Sección principal",
             "href": "/examples/hero-section",
             "description": "Tres aperturas: tablero, flujo y editorial."
           }
@@ -8308,14 +8308,14 @@
       ],
       "meta": {
         "titleEs": "Preguntas frecuentes",
-        "descriptionEs": "Preguntas como acorde\u00f3n, riel de temas o lista con b\u00fasqueda.",
+        "descriptionEs": "Preguntas como acordeón, riel de temas o lista con búsqueda.",
         "preview": "app/examples/faq-section/preview.tsx",
         "previewHref": "/examples/faq-section",
         "examples": [
           {
             "title": "Preguntas frecuentes",
             "href": "/examples/faq-section",
-            "description": "Preguntas como acorde\u00f3n, riel de temas o lista con b\u00fasqueda."
+            "description": "Preguntas como acordeón, riel de temas o lista con búsqueda."
           }
         ],
         "usage": "<FaqSection />",
@@ -8383,14 +8383,14 @@
       ],
       "meta": {
         "titleEs": "Contacto",
-        "descriptionEs": "Un formulario de contacto que pasa a confirmaci\u00f3n, con canales de ayuda.",
+        "descriptionEs": "Un formulario de contacto que pasa a confirmación, con canales de ayuda.",
         "preview": "app/examples/contact-section/preview.tsx",
         "previewHref": "/examples/contact-section",
         "examples": [
           {
             "title": "Contacto",
             "href": "/examples/contact-section",
-            "description": "Un formulario de contacto que pasa a confirmaci\u00f3n, con canales de ayuda."
+            "description": "Un formulario de contacto que pasa a confirmación, con canales de ayuda."
           }
         ],
         "usage": "<ContactSection />",
@@ -8454,14 +8454,14 @@
       ],
       "meta": {
         "titleEs": "Rejilla de blog",
-        "descriptionEs": "Un \u00edndice con destacado, filtros y lectura en el sitio.",
+        "descriptionEs": "Un índice con destacado, filtros y lectura en el sitio.",
         "preview": "app/examples/blog-grid/preview.tsx",
         "previewHref": "/examples/blog-grid",
         "examples": [
           {
             "title": "Rejilla de blog",
             "href": "/examples/blog-grid",
-            "description": "Un \u00edndice con destacado, filtros y lectura en el sitio."
+            "description": "Un índice con destacado, filtros y lectura en el sitio."
           }
         ],
         "usage": "<BlogGrid />",
@@ -8530,14 +8530,14 @@
       ],
       "meta": {
         "titleEs": "Tabla comparativa",
-        "descriptionEs": "Una tabla de nosotros y ellos que se apila en el tel\u00e9fono.",
+        "descriptionEs": "Una tabla de nosotros y ellos que se apila en el teléfono.",
         "preview": "app/examples/comparison-table/preview.tsx",
         "previewHref": "/examples/comparison-table",
         "examples": [
           {
             "title": "Tabla comparativa",
             "href": "/examples/comparison-table",
-            "description": "Una tabla de nosotros y ellos que se apila en el tel\u00e9fono."
+            "description": "Una tabla de nosotros y ellos que se apila en el teléfono."
           }
         ],
         "usage": "<ComparisonTable />",
@@ -8679,13 +8679,13 @@
         "block"
       ],
       "meta": {
-        "titleEs": "Llamada a la acci\u00f3n",
+        "titleEs": "Llamada a la acción",
         "descriptionEs": "Un cierre, un bloque partido o una banda que se puede descartar.",
         "preview": "app/examples/cta-section/preview.tsx",
         "previewHref": "/examples/cta-section",
         "examples": [
           {
-            "title": "Llamada a la acci\u00f3n",
+            "title": "Llamada a la acción",
             "href": "/examples/cta-section",
             "description": "Un cierre, un bloque partido o una banda que se puede descartar."
           }
@@ -8757,15 +8757,15 @@
         "block"
       ],
       "meta": {
-        "titleEs": "Bolet\u00edn",
-        "descriptionEs": "Un alta de correo enmarcada por n\u00fameros anteriores.",
+        "titleEs": "Boletín",
+        "descriptionEs": "Un alta de correo enmarcada por números anteriores.",
         "preview": "app/examples/newsletter-signup/preview.tsx",
         "previewHref": "/examples/newsletter-signup",
         "examples": [
           {
-            "title": "Bolet\u00edn",
+            "title": "Boletín",
             "href": "/examples/newsletter-signup",
-            "description": "Un alta de correo enmarcada por n\u00fameros anteriores."
+            "description": "Un alta de correo enmarcada por números anteriores."
           }
         ],
         "usage": "<NewsletterSignup />",
@@ -15002,6 +15002,431 @@
           "type": "registry:component",
           "target": "@ui/rail-sidebar.tsx"
         }
+      ]
+    },
+    {
+      "name": "gauge-kit",
+      "type": "registry:ui",
+      "title": "Composable gauge",
+      "description": "Composable SVG gauge primitives: track, arc, stack, zones, ticks, marks, labels, needle, hub, dot, and value, with spring or tween motion, nested dials, and a keyboard slider.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Medidor componible",
+        "descriptionEs": "Primitivas SVG para armar medidores: pista, arco, zonas, marcas, etiquetas, aguja, centro y valor, con resorte o interpolación, diales anidados y un control por teclado.",
+        "source": "Adapted from Gauge UI (MIT), Copyright (c) 2026 Thordur. https://github.com/thordursk/gauge-ui",
+        "preview": "app/examples/gauge-kit/preview.tsx",
+        "previewHref": "/examples/gauge-kit",
+        "examples": [
+          {
+            "title": "Galería",
+            "href": "/examples/gauge-kit",
+            "description": "Velocímetro, perilla y las plantillas del estudio."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/gauge-kit/stress",
+            "description": "320px, vacío, diez diales, RTL y un control deshabilitado."
+          }
+        ],
+        "usage": "<Gauge value={86} min={0} max={180} label=\"Velocidad\">\n  <GaugeTrack />\n  <GaugeArc />\n  <GaugeNeedle style=\"pointer\" />\n  <GaugeValue />\n</Gauge>",
+        "api": [
+          {
+            "name": "value / min / max",
+            "type": "number",
+            "description": "Domain value. Defaults 0 and 100."
+          },
+          {
+            "name": "startAngle / endAngle",
+            "type": "number",
+            "description": "Sweep in degrees, clockwise from six o'clock."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Accessible name. The root is role=meter with aria-valuenow, aria-valuemin and aria-valuemax."
+          },
+          {
+            "name": "transition",
+            "type": "boolean | GaugeTransition",
+            "description": "true uses a spring. Or { type: \"spring\", visualDuration, bounce } or { type: \"tween\", duration, ease }. Snaps when prefers-reduced-motion is set."
+          },
+          {
+            "name": "wrap / rotate",
+            "type": "boolean / number",
+            "description": "wrap follows the short way around a circular domain. rotate turns the scale under a fixed pointer."
+          },
+          {
+            "name": "children",
+            "type": "GaugeTrack, GaugeArc, GaugeStack, GaugeZones, GaugeTicks, GaugeMarks, GaugeTickLabels, GaugeNeedle, GaugeHub, GaugeDot, GaugeValue, GaugeText, GaugeInset",
+            "description": "Parts read the value from context and can be reordered."
+          },
+          {
+            "name": "GaugeControl",
+            "type": "slider",
+            "description": "Drag the ring, or turn the face with knob. Arrow keys, Page Up and Down, Home and End. Enter or Space calls onPress."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class. Width follows the parent."
+          }
+        ]
+      },
+      "docs": "Adapted from Gauge UI by Thordur (MIT): https://github.com/thordursk/gauge-ui. See NOTICE. The catalog item named gauge stays the Arc filled arc and is not replaced. Import the kit from the installed gauge-kit folder. font \"rounded\" uses the host sans; the item ships no typeface, hex, or cssVars. Motion snaps when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/ui/gauge-kit/animated.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-kit/animated.tsx"
+        },
+        {
+          "path": "registry/ui/gauge-kit/arcs.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-kit/arcs.tsx"
+        },
+        {
+          "path": "registry/ui/gauge-kit/composition.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-kit/composition.tsx"
+        },
+        {
+          "path": "registry/ui/gauge-kit/context.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-kit/context.tsx"
+        },
+        {
+          "path": "registry/ui/gauge-kit/control.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-kit/control.tsx"
+        },
+        {
+          "path": "registry/ui/gauge-kit/dot.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-kit/dot.tsx"
+        },
+        {
+          "path": "registry/ui/gauge-kit/gauge.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-kit/gauge.tsx"
+        },
+        {
+          "path": "registry/ui/gauge-kit/index.ts",
+          "type": "registry:component",
+          "target": "@ui/gauge-kit/index.ts"
+        },
+        {
+          "path": "registry/ui/gauge-kit/inset.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-kit/inset.tsx"
+        },
+        {
+          "path": "registry/ui/gauge-kit/math.ts",
+          "type": "registry:component",
+          "target": "@ui/gauge-kit/math.ts"
+        },
+        {
+          "path": "registry/ui/gauge-kit/needle.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-kit/needle.tsx"
+        },
+        {
+          "path": "registry/ui/gauge-kit/text.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-kit/text.tsx"
+        },
+        {
+          "path": "registry/ui/gauge-kit/ticks.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-kit/ticks.tsx"
+        },
+        {
+          "path": "registry/ui/gauge-kit/transition.ts",
+          "type": "registry:component",
+          "target": "@ui/gauge-kit/transition.ts"
+        },
+        {
+          "path": "registry/ui/gauge-kit/use-animated-value.ts",
+          "type": "registry:component",
+          "target": "@ui/gauge-kit/use-animated-value.ts"
+        },
+        {
+          "path": "registry/ui/gauge-kit/utils.ts",
+          "type": "registry:component",
+          "target": "@ui/gauge-kit/utils.ts"
+        },
+        {
+          "path": "registry/lib/gauge-kit/code.ts",
+          "type": "registry:lib",
+          "target": "@lib/gauge-kit/code.ts"
+        },
+        {
+          "path": "registry/lib/gauge-kit/controls.ts",
+          "type": "registry:lib",
+          "target": "@lib/gauge-kit/controls.ts"
+        },
+        {
+          "path": "registry/lib/gauge-kit/layers.ts",
+          "type": "registry:lib",
+          "target": "@lib/gauge-kit/layers.ts"
+        },
+        {
+          "path": "registry/lib/gauge-kit/panels.ts",
+          "type": "registry:lib",
+          "target": "@lib/gauge-kit/panels.ts"
+        },
+        {
+          "path": "registry/lib/gauge-kit/spec.ts",
+          "type": "registry:lib",
+          "target": "@lib/gauge-kit/spec.ts"
+        },
+        {
+          "path": "registry/lib/gauge-kit/storage.ts",
+          "type": "registry:lib",
+          "target": "@lib/gauge-kit/storage.ts"
+        },
+        {
+          "path": "registry/lib/gauge-kit/templates.ts",
+          "type": "registry:lib",
+          "target": "@lib/gauge-kit/templates.ts"
+        },
+        {
+          "path": "registry/hooks/use-control-panel.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-control-panel.ts"
+        },
+        {
+          "path": "registry/hooks/use-gauge-controllers.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-gauge-controllers.ts"
+        },
+        {
+          "path": "registry/hooks/use-media-query.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-media-query.ts"
+        },
+        {
+          "path": "registry/hooks/use-stored-value.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-stored-value.ts"
+        }
+      ]
+    },
+    {
+      "name": "gauge-scenes",
+      "type": "registry:block",
+      "title": "Gauge scenes",
+      "description": "Seven dashboard scenes built from the composable gauge: a car cluster, aircraft cockpit, health day, server monitor, smart home, clocks, and a coastal weather board.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "recharts"
+      ],
+      "registryDependencies": [
+        "gauge-kit",
+        "button",
+        "card",
+        "chart",
+        "switch"
+      ],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Escenas de medidores",
+        "descriptionEs": "Siete escenas con el medidor componible: tablero, cabina, día de salud, monitor, casa, relojes y un clima de costa.",
+        "source": "Adapted from Gauge UI (MIT), Copyright (c) 2026 Thordur. https://github.com/thordursk/gauge-ui",
+        "preview": "app/examples/gauge-scenes/preview.tsx",
+        "previewHref": "/examples/gauge-scenes",
+        "examples": [
+          {
+            "title": "Tablero",
+            "href": "/examples/gauge-scenes/car",
+            "description": "Tacómetro y velocímetro con el combustible en el mismo aro."
+          },
+          {
+            "title": "Cabina",
+            "href": "/examples/gauge-scenes/cockpit",
+            "description": "Los seis instrumentos, con un piloto de juguete."
+          },
+          {
+            "title": "Salud",
+            "href": "/examples/gauge-scenes/health",
+            "description": "Anillos, pulso, sueño, pasos y agua."
+          },
+          {
+            "title": "Monitor",
+            "href": "/examples/gauge-scenes/monitor",
+            "description": "Carga, temperatura, memoria, red y discos."
+          },
+          {
+            "title": "Casa",
+            "href": "/examples/gauge-scenes/smart-home",
+            "description": "Termostato, luces, volumen y carga. Se giran con el puntero o el teclado."
+          },
+          {
+            "title": "Relojes",
+            "href": "/examples/gauge-scenes/time",
+            "description": "Husos, cronógrafo, alarmas y cuentas atrás."
+          },
+          {
+            "title": "Clima",
+            "href": "/examples/gauge-scenes/weather",
+            "description": "Una tarde ficticia en Puerto Bruma."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/gauge-scenes/stress",
+            "description": "320px, vacío y la cabina apretada."
+          }
+        ],
+        "usage": "<CarDashboard />\n<SmartHomeDashboard />",
+        "api": [
+          {
+            "name": "CarDashboard",
+            "type": "component",
+            "description": "Twin dial cluster driven by a toy drivetrain. Parks when reduced motion is set."
+          },
+          {
+            "name": "Cockpit",
+            "type": "component",
+            "description": "Airspeed, attitude, altitude, turn, heading, and vertical speed."
+          },
+          {
+            "name": "HealthDashboard",
+            "type": "component",
+            "description": "Activity rings, heart rate, sleep, steps, water, and vitals. Fictional day."
+          },
+          {
+            "name": "MonitorDashboard",
+            "type": "component",
+            "description": "Load, temperature, per-core rings, memory, network, and disks."
+          },
+          {
+            "name": "SmartHomeDashboard",
+            "type": "component",
+            "description": "Thermostats, dimmers, volume, charging, and the grid. Knobs are sliders."
+          },
+          {
+            "name": "TimeDashboard",
+            "type": "component",
+            "description": "World clocks, chronograph, alarms, and countdown timers."
+          },
+          {
+            "name": "WeatherDashboard",
+            "type": "component",
+            "description": "Temperature, wind, sun path, barometer, and air, set in fictional Puerto Bruma."
+          }
+        ]
+      },
+      "docs": "Adapted from Gauge UI by Thordur (MIT): https://github.com/thordursk/gauge-ui. See NOTICE. Scenes import gauge-kit; answer no if the CLI asks to overwrite gauge-kit, button, card, chart, or switch. Icons are lucide, not the upstream icon set. Demo numbers are fictional. No theme and no hex colors. Loops pause off screen and when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/blocks/gauge-scenes/car-dashboard.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-scenes/car-dashboard.tsx"
+        },
+        {
+          "path": "registry/blocks/gauge-scenes/cockpit.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-scenes/cockpit.tsx"
+        },
+        {
+          "path": "registry/blocks/gauge-scenes/drive-simulation.ts",
+          "type": "registry:component",
+          "target": "@ui/gauge-scenes/drive-simulation.ts"
+        },
+        {
+          "path": "registry/blocks/gauge-scenes/flight-simulation.ts",
+          "type": "registry:component",
+          "target": "@ui/gauge-scenes/flight-simulation.ts"
+        },
+        {
+          "path": "registry/blocks/gauge-scenes/health-dashboard.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-scenes/health-dashboard.tsx"
+        },
+        {
+          "path": "registry/blocks/gauge-scenes/icons.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-scenes/icons.tsx"
+        },
+        {
+          "path": "registry/blocks/gauge-scenes/index.ts",
+          "type": "registry:component",
+          "target": "@ui/gauge-scenes/index.ts"
+        },
+        {
+          "path": "registry/blocks/gauge-scenes/monitor-dashboard.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-scenes/monitor-dashboard.tsx"
+        },
+        {
+          "path": "registry/blocks/gauge-scenes/smart-home-dashboard.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-scenes/smart-home-dashboard.tsx"
+        },
+        {
+          "path": "registry/blocks/gauge-scenes/time-dashboard.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-scenes/time-dashboard.tsx"
+        },
+        {
+          "path": "registry/blocks/gauge-scenes/weather-dashboard.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-scenes/weather-dashboard.tsx"
+        },
+        {
+          "path": "registry/hooks/use-in-view.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-in-view.ts"
+        }
+      ]
+    },
+    {
+      "name": "gauge-studio",
+      "type": "registry:block",
+      "title": "Gauge studio",
+      "description": "Live studio for the composable gauge: template grid, undo and redo, copyable code, nested gauges, play modes, and the control accordion.",
+      "author": "Eduardo Retana",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["gauge-kit", "button", "slider", "switch", "select", "popover", "tooltip", "sheet"],
+      "categories": ["chart"],
+      "meta": {
+        "titleEs": "Estudio de medidores",
+        "descriptionEs": "El estudio en vivo: plantillas, deshacer, código, diales anidados, reproducción y el acordeón de controles.",
+        "source": "Adapted from Gauge UI (MIT), Copyright (c) 2026 Thordur. https://github.com/thordursk/gauge-ui",
+        "preview": "app/examples/gauge-studio/preview.tsx",
+        "previewHref": "/examples/gauge-studio",
+        "examples": [
+          { "title": "Estudio", "href": "/examples/gauge-studio", "description": "Lienzo, plantillas, capas y controles." },
+          { "title": "Estrés", "href": "/examples/gauge-studio/stress", "description": "320px, deshacer deshabilitado y un hermano en flex." }
+        ],
+        "usage": "<GaugeStudio />",
+        "api": [
+          { "name": "className", "type": "string", "description": "Classes on the outer frame." },
+          { "name": "fill", "type": "boolean", "description": "Fill the parent height. Otherwise the stage is 40rem." }
+        ]
+      },
+      "docs": "Adapted from Gauge UI by Thordur (MIT): https://github.com/thordursk/gauge-ui. See NOTICE. Answer no if the CLI asks to overwrite gauge-kit, button, slider, switch, select, popover, tooltip, or sheet. Stage colors are primary, foreground, muted, background, destructive, and chart-1 through chart-5, plus a custom colour. Spring motion keeps the readout and the needle on the same value. Motion snaps when reduced motion is set. Undo and redo are Control or Command Z.",
+      "files": [
+        { "path": "registry/blocks/gauge-studio/code-drawer.tsx", "type": "registry:component", "target": "@ui/gauge-studio/code-drawer.tsx" },
+        { "path": "registry/blocks/gauge-studio/control-bar.tsx", "type": "registry:component", "target": "@ui/gauge-studio/control-bar.tsx" },
+        { "path": "registry/blocks/gauge-studio/controls-root.tsx", "type": "registry:component", "target": "@ui/gauge-studio/controls-root.tsx" },
+        { "path": "registry/blocks/gauge-studio/copy-values.tsx", "type": "registry:component", "target": "@ui/gauge-studio/copy-values.tsx" },
+        { "path": "registry/blocks/gauge-studio/field-controls.tsx", "type": "registry:component", "target": "@ui/gauge-studio/field-controls.tsx" },
+        { "path": "registry/blocks/gauge-studio/index.ts", "type": "registry:component", "target": "@ui/gauge-studio/index.ts" },
+        { "path": "registry/blocks/gauge-studio/layer-picker.tsx", "type": "registry:component", "target": "@ui/gauge-studio/layer-picker.tsx" },
+        { "path": "registry/blocks/gauge-studio/pad-control.tsx", "type": "registry:component", "target": "@ui/gauge-studio/pad-control.tsx" },
+        { "path": "registry/blocks/gauge-studio/play-mode-picker.tsx", "type": "registry:component", "target": "@ui/gauge-studio/play-mode-picker.tsx" },
+        { "path": "registry/blocks/gauge-studio/slider-control.tsx", "type": "registry:component", "target": "@ui/gauge-studio/slider-control.tsx" },
+        { "path": "registry/blocks/gauge-studio/studio.tsx", "type": "registry:component", "target": "@ui/gauge-studio/studio.tsx" },
+        { "path": "registry/blocks/gauge-studio/template-picker.tsx", "type": "registry:component", "target": "@ui/gauge-studio/template-picker.tsx" },
+        { "path": "registry/blocks/gauge-studio/transition-control.tsx", "type": "registry:component", "target": "@ui/gauge-studio/transition-control.tsx" }
       ]
     }
   ]
