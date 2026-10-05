@@ -327,7 +327,7 @@ export function AnnotatedTrendChart({
       <Button type="button" variant="ghost" size="sm" className="mt-2" aria-expanded={tableOpen} onClick={() => setTableOpen((open) => !open)}>
         {tableOpen ? "Hide data" : "View data"}
       </Button>
-      <table className={cn("mt-2 w-full text-left text-sm", tableOpen ? "" : "sr-only", classNames?.table)}>
+      <table className={cn("text-left text-sm", tableOpen ? "mt-2 w-full" : "sr-only", classNames?.table)}>
         <caption className="sr-only">{summary}</caption>
         <thead>
           <tr>

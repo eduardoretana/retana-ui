@@ -19,6 +19,8 @@ export type AudioPlayerProps = {
   src?: string
   blob?: Blob
   peaks?: number[]
+  /** Used when the file has no duration yet, so the waveform can still be scrubbed. */
+  duration?: number
   onTimeUpdate?: (seconds: number) => void
   downloadName?: string
   className?: string
@@ -45,7 +47,7 @@ function clock(seconds: number) {
 }
 
 export const AudioPlayer = React.forwardRef<AudioPlayerHandle, AudioPlayerProps>(function AudioPlayer(
-  { src, blob, peaks, onTimeUpdate, downloadName = "audio", className, classNames },
+  { src, blob, peaks, duration: durationHint = 0, onTimeUpdate, downloadName = "audio", className, classNames },
   ref,
 ) {
   const objectUrl = useObjectUrl(blob)
@@ -53,16 +55,20 @@ export const AudioPlayer = React.forwardRef<AudioPlayerHandle, AudioPlayerProps>
   const audioRef = React.useRef<HTMLAudioElement>(null)
   const [playing, setPlaying] = React.useState(false)
   const [time, setTime] = React.useState(0)
-  const [duration, setDuration] = React.useState(0)
+  const [mediaDuration, setMediaDuration] = React.useState(0)
   const [speed, setSpeed] = React.useState(1)
+  const duration = mediaDuration > 0 ? mediaDuration : durationHint
 
   React.useImperativeHandle(ref, () => ({
     play: () => void audioRef.current?.play(),
     pause: () => audioRef.current?.pause(),
     seek: (seconds: number) => {
-      if (!audioRef.current) return
-      audioRef.current.currentTime = seconds
-      setTime(seconds)
+      const audio = audioRef.current
+      if (!audio) return
+      const next = Math.min(Math.max(0, seconds), duration || seconds)
+      if (audio.duration > 0) audio.currentTime = next
+      setTime(next)
+      onTimeUpdate?.(next)
     },
   }))
 
@@ -70,7 +76,7 @@ export const AudioPlayer = React.forwardRef<AudioPlayerHandle, AudioPlayerProps>
     const audio = audioRef.current
     if (!audio) return
     const next = Math.min(Math.max(0, seconds), duration || seconds)
-    audio.currentTime = next
+    if (audio.duration > 0) audio.currentTime = next
     setTime(next)
     onTimeUpdate?.(next)
   }
@@ -94,10 +100,14 @@ export const AudioPlayer = React.forwardRef<AudioPlayerHandle, AudioPlayerProps>
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
         onTimeUpdate={(event) => {
+          if (!(event.currentTarget.duration > 0)) return
           setTime(event.currentTarget.currentTime)
           onTimeUpdate?.(event.currentTarget.currentTime)
         }}
-        onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
+        onLoadedMetadata={(event) => {
+          const next = event.currentTarget.duration
+          if (next > 0) setMediaDuration(next)
+        }}
       />
       <Button type="button" size="icon-sm" variant="outline" aria-label={playing ? "Pause" : "Play"} onClick={() => (playing ? audioRef.current?.pause() : void audioRef.current?.play())}>
         {playing ? <Pause data-icon="inline-start" /> : <Play data-icon="inline-start" />}

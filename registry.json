@@ -15393,9 +15393,22 @@
       "title": "Gauge studio",
       "description": "Live studio for the composable gauge: template grid, undo and redo, copyable code, nested gauges, play modes, and the control accordion.",
       "author": "Eduardo Retana",
-      "dependencies": ["lucide-react"],
-      "registryDependencies": ["gauge-kit", "button", "slider", "switch", "select", "popover", "tooltip", "sheet"],
-      "categories": ["chart"],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "gauge-kit",
+        "button",
+        "slider",
+        "switch",
+        "select",
+        "popover",
+        "tooltip",
+        "sheet"
+      ],
+      "categories": [
+        "chart"
+      ],
       "meta": {
         "titleEs": "Estudio de medidores",
         "descriptionEs": "El estudio en vivo: plantillas, deshacer, código, diales anidados, reproducción y el acordeón de controles.",
@@ -15403,31 +15416,1525 @@
         "preview": "app/examples/gauge-studio/preview.tsx",
         "previewHref": "/examples/gauge-studio",
         "examples": [
-          { "title": "Estudio", "href": "/examples/gauge-studio", "description": "Lienzo, plantillas, capas y controles." },
-          { "title": "Estrés", "href": "/examples/gauge-studio/stress", "description": "320px, deshacer deshabilitado y un hermano en flex." }
+          {
+            "title": "Estudio",
+            "href": "/examples/gauge-studio",
+            "description": "Lienzo, plantillas, capas y controles."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/gauge-studio/stress",
+            "description": "320px, deshacer deshabilitado y un hermano en flex."
+          }
         ],
         "usage": "<GaugeStudio />",
         "api": [
-          { "name": "className", "type": "string", "description": "Classes on the outer frame." },
-          { "name": "fill", "type": "boolean", "description": "Fill the parent height. Otherwise the stage is 40rem." }
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Classes on the outer frame."
+          },
+          {
+            "name": "fill",
+            "type": "boolean",
+            "description": "Fill the parent height. Otherwise the stage is 40rem."
+          }
         ]
       },
       "docs": "Adapted from Gauge UI by Thordur (MIT): https://github.com/thordursk/gauge-ui. See NOTICE. Answer no if the CLI asks to overwrite gauge-kit, button, slider, switch, select, popover, tooltip, or sheet. Stage colors are primary, foreground, muted, background, destructive, and chart-1 through chart-5, plus a custom colour. Spring motion keeps the readout and the needle on the same value. Motion snaps when reduced motion is set. Undo and redo are Control or Command Z.",
       "files": [
-        { "path": "registry/blocks/gauge-studio/code-drawer.tsx", "type": "registry:component", "target": "@ui/gauge-studio/code-drawer.tsx" },
-        { "path": "registry/blocks/gauge-studio/control-bar.tsx", "type": "registry:component", "target": "@ui/gauge-studio/control-bar.tsx" },
-        { "path": "registry/blocks/gauge-studio/controls-root.tsx", "type": "registry:component", "target": "@ui/gauge-studio/controls-root.tsx" },
-        { "path": "registry/blocks/gauge-studio/copy-values.tsx", "type": "registry:component", "target": "@ui/gauge-studio/copy-values.tsx" },
-        { "path": "registry/blocks/gauge-studio/field-controls.tsx", "type": "registry:component", "target": "@ui/gauge-studio/field-controls.tsx" },
-        { "path": "registry/blocks/gauge-studio/index.ts", "type": "registry:component", "target": "@ui/gauge-studio/index.ts" },
-        { "path": "registry/blocks/gauge-studio/layer-picker.tsx", "type": "registry:component", "target": "@ui/gauge-studio/layer-picker.tsx" },
-        { "path": "registry/blocks/gauge-studio/pad-control.tsx", "type": "registry:component", "target": "@ui/gauge-studio/pad-control.tsx" },
-        { "path": "registry/blocks/gauge-studio/play-mode-picker.tsx", "type": "registry:component", "target": "@ui/gauge-studio/play-mode-picker.tsx" },
-        { "path": "registry/blocks/gauge-studio/slider-control.tsx", "type": "registry:component", "target": "@ui/gauge-studio/slider-control.tsx" },
-        { "path": "registry/blocks/gauge-studio/studio.tsx", "type": "registry:component", "target": "@ui/gauge-studio/studio.tsx" },
-        { "path": "registry/blocks/gauge-studio/template-picker.tsx", "type": "registry:component", "target": "@ui/gauge-studio/template-picker.tsx" },
-        { "path": "registry/blocks/gauge-studio/transition-control.tsx", "type": "registry:component", "target": "@ui/gauge-studio/transition-control.tsx" }
+        {
+          "path": "registry/blocks/gauge-studio/code-drawer.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-studio/code-drawer.tsx"
+        },
+        {
+          "path": "registry/blocks/gauge-studio/control-bar.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-studio/control-bar.tsx"
+        },
+        {
+          "path": "registry/blocks/gauge-studio/controls-root.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-studio/controls-root.tsx"
+        },
+        {
+          "path": "registry/blocks/gauge-studio/copy-values.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-studio/copy-values.tsx"
+        },
+        {
+          "path": "registry/blocks/gauge-studio/field-controls.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-studio/field-controls.tsx"
+        },
+        {
+          "path": "registry/blocks/gauge-studio/index.ts",
+          "type": "registry:component",
+          "target": "@ui/gauge-studio/index.ts"
+        },
+        {
+          "path": "registry/blocks/gauge-studio/layer-picker.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-studio/layer-picker.tsx"
+        },
+        {
+          "path": "registry/blocks/gauge-studio/pad-control.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-studio/pad-control.tsx"
+        },
+        {
+          "path": "registry/blocks/gauge-studio/play-mode-picker.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-studio/play-mode-picker.tsx"
+        },
+        {
+          "path": "registry/blocks/gauge-studio/slider-control.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-studio/slider-control.tsx"
+        },
+        {
+          "path": "registry/blocks/gauge-studio/studio.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-studio/studio.tsx"
+        },
+        {
+          "path": "registry/blocks/gauge-studio/template-picker.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-studio/template-picker.tsx"
+        },
+        {
+          "path": "registry/blocks/gauge-studio/transition-control.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge-studio/transition-control.tsx"
+        }
       ]
+    },
+    {
+      "name": "proposal-shell",
+      "type": "registry:block",
+      "title": "Proposal shell",
+      "description": "Grouped app sidebar, command search, unread bell, people, a period menu, and a primary action that the screen can change.",
+      "dependencies": [
+        "lucide-react",
+        "motion",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "command",
+        "dialog",
+        "dropdown-menu",
+        "input",
+        "sidebar",
+        "tooltip"
+      ],
+      "categories": [
+        "dashboard",
+        "block",
+        "navigation"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/proposal-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-shell.tsx"
+        },
+        {
+          "path": "registry/ui/proposal-dialog.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-dialog.tsx"
+        },
+        {
+          "path": "registry/blocks/rail-sidebar.tsx",
+          "type": "registry:component",
+          "target": "@ui/rail-sidebar.tsx"
+        },
+        {
+          "path": "registry/ui/command-palette.tsx",
+          "type": "registry:component",
+          "target": "@ui/command-palette.tsx"
+        },
+        {
+          "path": "registry/ui/avatar-group.tsx",
+          "type": "registry:component",
+          "target": "@ui/avatar-group.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Cascarón de propuesta",
+        "descriptionEs": "Barra agrupada, búsqueda, campana y la acción del paso.",
+        "preview": "app/examples/proposal-shell/preview.tsx",
+        "previewHref": "/examples/proposal-shell",
+        "examples": [
+          {
+            "title": "Cascarón de propuesta",
+            "href": "/examples/proposal-shell",
+            "description": "Barra agrupada, búsqueda, campana y la acción del paso."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/proposal-shell/stress",
+            "description": "320px y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<ProposalShell sections={sections} user={user} periods={periods} period={period} primaryLabel=\"New opportunity\" commandItems={commands} />",
+        "api": [
+          {
+            "name": "sections / activeHref / user",
+            "type": "rail",
+            "description": "Passed to rail-sidebar. Groups such as Workspace, Library, and Account."
+          },
+          {
+            "name": "primaryLabel / onPrimary",
+            "type": "action",
+            "description": "The header action. Change the label as the step changes."
+          },
+          {
+            "name": "unread / commandItems",
+            "type": "header",
+            "description": "A dot on the bell, and the command menu opened from search or ⌘K."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room proposal workflow. The behavior was observed in an unlicensed design demonstration of a discovery-to-statement-of-work product. No source, product names, sample copy, icons, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme."
+    },
+    {
+      "name": "proposal-dashboard",
+      "type": "registry:block",
+      "title": "Proposal dashboard",
+      "description": "Greeting, four metric cards, action rows, a quoted-versus-delivered hours chart, a confidence gauge, and recent activity.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "card"
+      ],
+      "categories": [
+        "dashboard",
+        "block"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/proposal-dashboard.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-dashboard.tsx"
+        },
+        {
+          "path": "registry/lib/proposal.ts",
+          "type": "registry:lib",
+          "target": "@lib/proposal.ts"
+        },
+        {
+          "path": "registry/lib/reorder.ts",
+          "type": "registry:lib",
+          "target": "@lib/reorder.ts"
+        },
+        {
+          "path": "registry/ui/metric-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/metric-card.tsx"
+        },
+        {
+          "path": "registry/ui/animated-counter.tsx",
+          "type": "registry:component",
+          "target": "@ui/animated-counter.tsx"
+        },
+        {
+          "path": "registry/ui/sparkline.tsx",
+          "type": "registry:component",
+          "target": "@ui/sparkline.tsx"
+        },
+        {
+          "path": "registry/ui/annotated-trend-chart.tsx",
+          "type": "registry:component",
+          "target": "@ui/annotated-trend-chart.tsx"
+        },
+        {
+          "path": "registry/ui/radial-gauge.tsx",
+          "type": "registry:component",
+          "target": "@ui/radial-gauge.tsx"
+        },
+        {
+          "path": "registry/ui/timeline.tsx",
+          "type": "registry:component",
+          "target": "@ui/timeline.tsx"
+        },
+        {
+          "path": "registry/ui/well-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/well-card.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/dashboard-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboard-format.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tablero de propuestas",
+        "descriptionEs": "Cifras, pendientes, horas cotizadas y actividad.",
+        "preview": "app/examples/proposal-dashboard/preview.tsx",
+        "previewHref": "/examples/proposal-dashboard",
+        "examples": [
+          {
+            "title": "Tablero de propuestas",
+            "href": "/examples/proposal-dashboard",
+            "description": "Cifras, pendientes, horas cotizadas y actividad."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/proposal-dashboard/stress",
+            "description": "320px y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<ProposalDashboard name=\"Inés\" metrics={metrics} actions={actions} trend={trend} trendTitle=\"Hours\" gaugeValue={72} gaugeLabel=\"Confidence\" gaugeLowLabel=\"Too low\" gaugeTargetLabel=\"Target\" activity={events} activityNow={now} activityTitle=\"Activity\" />",
+        "api": [
+          {
+            "name": "metrics",
+            "type": "ProposalMetric[]",
+            "description": "Label, number, optional change badge, and an optional sparkline."
+          },
+          {
+            "name": "actions",
+            "type": "ProposalActionItem[]",
+            "description": "Icon by tone, title, description, badge, value, and a button."
+          },
+          {
+            "name": "trend / gauge / activity",
+            "type": "data",
+            "description": "Passed through to the chart, radial gauge, and timeline."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room proposal workflow. The behavior was observed in an unlicensed design demonstration of a discovery-to-statement-of-work product. No source, product names, sample copy, icons, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme."
+    },
+    {
+      "name": "proposal-opportunity",
+      "type": "registry:ui",
+      "title": "New opportunity",
+      "description": "Client and project type, a pill source switch, an audio drop with duration, and an analyze action. The dialog scales from 0.95 with a fading overlay.",
+      "dependencies": [
+        "lucide-react",
+        "motion",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "button",
+        "dialog",
+        "input",
+        "label",
+        "select",
+        "textarea"
+      ],
+      "categories": [
+        "form",
+        "overlay"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/proposal-opportunity.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-opportunity.tsx"
+        },
+        {
+          "path": "registry/ui/proposal-dialog.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-dialog.tsx"
+        },
+        {
+          "path": "registry/ui/magnetic-dropzone.tsx",
+          "type": "registry:component",
+          "target": "@ui/magnetic-dropzone.tsx"
+        },
+        {
+          "path": "registry/ui/segmented-control.tsx",
+          "type": "registry:component",
+          "target": "@ui/segmented-control.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Nueva oportunidad",
+        "descriptionEs": "Cliente, fuente y grabación antes de analizar.",
+        "preview": "app/examples/proposal-opportunity/preview.tsx",
+        "previewHref": "/examples/proposal-opportunity",
+        "examples": [
+          {
+            "title": "Nueva oportunidad",
+            "href": "/examples/proposal-opportunity",
+            "description": "Cliente, fuente y grabación antes de analizar."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/proposal-opportunity/stress",
+            "description": "320px y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<ProposalOpportunity open={open} onOpenChange={setOpen} clients={clients} types={types} onAnalyze={analyze} />",
+        "api": [
+          {
+            "name": "clients / types / source",
+            "type": "choices",
+            "description": "Selects and the recording, transcript, notes, or manual pill."
+          },
+          {
+            "name": "file",
+            "type": "{ name, duration } | null",
+            "description": "Uploaded audio row with a check and a duration."
+          },
+          {
+            "name": "inline",
+            "type": "boolean",
+            "description": "Renders the form in place instead of a dialog."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room proposal workflow. The behavior was observed in an unlicensed design demonstration of a discovery-to-statement-of-work product. No source, product names, sample copy, icons, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme."
+    },
+    {
+      "name": "proposal-analyze",
+      "type": "registry:ui",
+      "title": "Proposal analyze",
+      "description": "Shimmer status and skeleton blocks while a draft is prepared.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "skeleton"
+      ],
+      "categories": [
+        "feedback"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/proposal-analyze.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-analyze.tsx"
+        },
+        {
+          "path": "registry/ui/text-shimmer.tsx",
+          "type": "registry:component",
+          "target": "@ui/text-shimmer.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Lectura de la llamada",
+        "descriptionEs": "Esqueletos mientras el borrador no está listo.",
+        "preview": "app/examples/proposal-analyze/preview.tsx",
+        "previewHref": "/examples/proposal-analyze",
+        "examples": [
+          {
+            "title": "Lectura de la llamada",
+            "href": "/examples/proposal-analyze",
+            "description": "Esqueletos mientras el borrador no está listo."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/proposal-analyze/stress",
+            "description": "320px y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<ProposalAnalyze label=\"Reading the call\" />",
+        "api": [
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Status announced to assistive tech. The letters shimmer unless motion is reduced."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room proposal workflow. The behavior was observed in an unlicensed design demonstration of a discovery-to-statement-of-work product. No source, product names, sample copy, icons, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme."
+    },
+    {
+      "name": "proposal-workspace",
+      "type": "registry:ui",
+      "title": "Proposal workspace",
+      "description": "Breadcrumb header and a tab bar whose underline slides. The panel crossfades.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "breadcrumb",
+        "tabs"
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/proposal-workspace.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-workspace.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Espacio del trato",
+        "descriptionEs": "Migas, pestañas con subrayado móvil y cambio de panel.",
+        "preview": "app/examples/proposal-workspace/preview.tsx",
+        "previewHref": "/examples/proposal-workspace",
+        "examples": [
+          {
+            "title": "Espacio del trato",
+            "href": "/examples/proposal-workspace",
+            "description": "Migas, pestañas con subrayado móvil y cambio de panel."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/proposal-workspace/stress",
+            "description": "320px y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<ProposalWorkspace crumbs={crumbs} tabs={tabs} value={tab} onValueChange={setTab}>{panel}</ProposalWorkspace>",
+        "api": [
+          {
+            "name": "tabs / value",
+            "type": "tabs",
+            "description": "The active tab owns one sliding indicator."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "description": "The visible panel. It fades when value changes."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room proposal workflow. The behavior was observed in an unlicensed design demonstration of a discovery-to-statement-of-work product. No source, product names, sample copy, icons, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme."
+    },
+    {
+      "name": "proposal-discovery",
+      "type": "registry:ui",
+      "title": "Proposal discovery",
+      "description": "Goal, pain, request, and constraint notes with timestamp jumps, open questions, playable quotes, a scrubbable waveform, and a conflict alert.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "dropdown-menu"
+      ],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/proposal-discovery.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-discovery.tsx"
+        },
+        {
+          "path": "registry/ui/audio-player.tsx",
+          "type": "registry:component",
+          "target": "@ui/audio-player.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Descubrimiento",
+        "descriptionEs": "Notas con tiempo, citas y la forma de onda.",
+        "preview": "app/examples/proposal-discovery/preview.tsx",
+        "previewHref": "/examples/proposal-discovery",
+        "examples": [
+          {
+            "title": "Descubrimiento",
+            "href": "/examples/proposal-discovery",
+            "description": "Notas con tiempo, citas y la forma de onda."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/proposal-discovery/stress",
+            "description": "320px y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<ProposalDiscovery columns={columns} unknowns={unknowns} quotes={quotes} peaks={peaks} onClarify={clarify} />",
+        "api": [
+          {
+            "name": "columns",
+            "type": "DiscoveryColumn[]",
+            "description": "Each note can carry a timestamp that seeks the player."
+          },
+          {
+            "name": "peaks",
+            "type": "number[]",
+            "description": "Waveform passed to the shared audio player."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room proposal workflow. The behavior was observed in an unlicensed design demonstration of a discovery-to-statement-of-work product. No source, product names, sample copy, icons, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme."
+    },
+    {
+      "name": "proposal-clarify",
+      "type": "registry:ui",
+      "title": "Clarify questions",
+      "description": "Question cards with segmented answers and a live impact: previous hours struck through, new hours, a delta, reasons, and price and timeline ranges.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "badge"
+      ],
+      "categories": [
+        "form"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/proposal-clarify.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-clarify.tsx"
+        },
+        {
+          "path": "registry/lib/proposal.ts",
+          "type": "registry:lib",
+          "target": "@lib/proposal.ts"
+        },
+        {
+          "path": "registry/lib/reorder.ts",
+          "type": "registry:lib",
+          "target": "@lib/reorder.ts"
+        },
+        {
+          "path": "registry/ui/segmented-control.tsx",
+          "type": "registry:component",
+          "target": "@ui/segmented-control.tsx"
+        },
+        {
+          "path": "registry/ui/text-morph.tsx",
+          "type": "registry:component",
+          "target": "@ui/text-morph.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Preguntas de aclaración",
+        "descriptionEs": "Las respuestas mueven horas, precio y plazo.",
+        "preview": "app/examples/proposal-clarify/preview.tsx",
+        "previewHref": "/examples/proposal-clarify",
+        "examples": [
+          {
+            "title": "Preguntas de aclaración",
+            "href": "/examples/proposal-clarify",
+            "description": "Las respuestas mueven horas, precio y plazo."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/proposal-clarify/stress",
+            "description": "320px y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<ProposalClarify questions={questions} answers={answers} onAnswer={setAnswer} baseHours={66} rate={1400} />",
+        "api": [
+          {
+            "name": "questions / answers",
+            "type": "ClarifyQuestion[]",
+            "description": "Each option can add or remove hours and a reason."
+          },
+          {
+            "name": "baseHours / rate",
+            "type": "number",
+            "description": "Starting point for the impact panel."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room proposal workflow. The behavior was observed in an unlicensed design demonstration of a discovery-to-statement-of-work product. No source, product names, sample copy, icons, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme."
+    },
+    {
+      "name": "proposal-scope",
+      "type": "registry:ui",
+      "title": "Scope checklist",
+      "description": "Phase accordions, circular task rows with hours and origin tags, a staggered entrance, an effort donut, and an exclusions list.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "checkbox",
+        "collapsible"
+      ],
+      "categories": [
+        "form"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/proposal-scope.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-scope.tsx"
+        },
+        {
+          "path": "registry/lib/proposal.ts",
+          "type": "registry:lib",
+          "target": "@lib/proposal.ts"
+        },
+        {
+          "path": "registry/lib/reorder.ts",
+          "type": "registry:lib",
+          "target": "@lib/reorder.ts"
+        },
+        {
+          "path": "registry/ui/donut-chart.tsx",
+          "type": "registry:component",
+          "target": "@ui/donut-chart.tsx"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Lista de alcance",
+        "descriptionEs": "Fases, origen de cada fila y el esfuerzo.",
+        "preview": "app/examples/proposal-scope/preview.tsx",
+        "previewHref": "/examples/proposal-scope",
+        "examples": [
+          {
+            "title": "Lista de alcance",
+            "href": "/examples/proposal-scope",
+            "description": "Fases, origen de cada fila y el esfuerzo."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/proposal-scope/stress",
+            "description": "320px y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<ProposalScope phases={phases} exclusions={exclusions} onToggle={toggle} />",
+        "api": [
+          {
+            "name": "phases",
+            "type": "ScopePhase[]",
+            "description": "Tasks have hours, an included flag, and an optional origin."
+          },
+          {
+            "name": "originLabels",
+            "type": "labels",
+            "description": "Copy for adapted, edited, and added rows."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room proposal workflow. The behavior was observed in an unlicensed design demonstration of a discovery-to-statement-of-work product. No source, product names, sample copy, icons, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme."
+    },
+    {
+      "name": "proposal-similar",
+      "type": "registry:ui",
+      "title": "Similar projects",
+      "description": "Selectable past projects with revenue, duration, hours, and a match bar. The detail compares quoted and actual hours, then a three-column overlap.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/proposal-similar.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-similar.tsx"
+        },
+        {
+          "path": "registry/lib/proposal.ts",
+          "type": "registry:lib",
+          "target": "@lib/proposal.ts"
+        },
+        {
+          "path": "registry/lib/reorder.ts",
+          "type": "registry:lib",
+          "target": "@lib/reorder.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Proyectos similares",
+        "descriptionEs": "Coincidencia, horas reales y una comparación.",
+        "preview": "app/examples/proposal-similar/preview.tsx",
+        "previewHref": "/examples/proposal-similar",
+        "examples": [
+          {
+            "title": "Proyectos similares",
+            "href": "/examples/proposal-similar",
+            "description": "Coincidencia, horas reales y una comparación."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/proposal-similar/stress",
+            "description": "320px y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<ProposalSimilar projects={projects} value={id} onValueChange={setId} comparison={columns} />",
+        "api": [
+          {
+            "name": "projects",
+            "type": "SimilarProject[]",
+            "description": "Match is a ratio from 0 to 1. Phases carry quoted and actual hours."
+          },
+          {
+            "name": "comparison",
+            "type": "SimilarColumn[]",
+            "description": "Three lists: shared, additional, and excluded."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room proposal workflow. The behavior was observed in an unlicensed design demonstration of a discovery-to-statement-of-work product. No source, product names, sample copy, icons, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme."
+    },
+    {
+      "name": "proposal-estimate",
+      "type": "registry:ui",
+      "title": "Estimate and price",
+      "description": "Phase table with hours, money, and a bar against the historical average, a two-week capacity grid, and a price slider with a suggested price, confidence, and receipt.",
+      "dependencies": [],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "slider"
+      ],
+      "categories": [
+        "dashboard",
+        "form"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/proposal-estimate.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-estimate.tsx"
+        },
+        {
+          "path": "registry/lib/proposal.ts",
+          "type": "registry:lib",
+          "target": "@lib/proposal.ts"
+        },
+        {
+          "path": "registry/lib/reorder.ts",
+          "type": "registry:lib",
+          "target": "@lib/reorder.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Estimación y precio",
+        "descriptionEs": "Horas contra el histórico, capacidad y un desglose.",
+        "preview": "app/examples/proposal-estimate/preview.tsx",
+        "previewHref": "/examples/proposal-estimate",
+        "examples": [
+          {
+            "title": "Estimación y precio",
+            "href": "/examples/proposal-estimate",
+            "description": "Horas contra el histórico, capacidad y un desglose."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/proposal-estimate/stress",
+            "description": "320px y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<ProposalEstimate lines={lines} capacity={days} price={price} onPriceChange={setPrice} suggested={87000} confidence=\"Medium\" receipt={receipt} onUseSuggested={useSuggested} priceMin={70000} priceMax={120000} />",
+        "api": [
+          {
+            "name": "view",
+            "type": "\"effort\" | \"price\" | \"all\"",
+            "description": "Show the table, the price, or both."
+          },
+          {
+            "name": "onUseSuggested",
+            "type": "() => void",
+            "description": "The recommendation button. The parent sets the price."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room proposal workflow. The behavior was observed in an unlicensed design demonstration of a discovery-to-statement-of-work product. No source, product names, sample copy, icons, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme."
+    },
+    {
+      "name": "proposal-risks",
+      "type": "registry:ui",
+      "title": "Proposal risks",
+      "description": "A resolved note, an open timeline risk with the request in the destructive token, actions whose chosen button gains a check, a client-asked table, and scope approval.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/proposal-risks.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-risks.tsx"
+        },
+        {
+          "path": "registry/lib/proposal.ts",
+          "type": "registry:lib",
+          "target": "@lib/proposal.ts"
+        },
+        {
+          "path": "registry/lib/reorder.ts",
+          "type": "registry:lib",
+          "target": "@lib/reorder.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Riesgos",
+        "descriptionEs": "Plazo pedido contra el histórico y la aprobación.",
+        "preview": "app/examples/proposal-risks/preview.tsx",
+        "previewHref": "/examples/proposal-risks",
+        "examples": [
+          {
+            "title": "Riesgos",
+            "href": "/examples/proposal-risks",
+            "description": "Plazo pedido contra el histórico y la aprobación."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/proposal-risks/stress",
+            "description": "320px y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<ProposalRisks {...risk} selectedAction={action} onSelectAction={setAction} approved={approved} onApprove={approve} />",
+        "api": [
+          {
+            "name": "actions / selectedAction",
+            "type": "choice",
+            "description": "The pressed action shows a check."
+          },
+          {
+            "name": "rows",
+            "type": "ScopeRow[]",
+            "description": "Asked, proposed, and whether it was accepted."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room proposal workflow. The behavior was observed in an unlicensed design demonstration of a discovery-to-statement-of-work product. No source, product names, sample copy, icons, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme."
+    },
+    {
+      "name": "proposal-document",
+      "type": "registry:ui",
+      "title": "Proposal document",
+      "description": "A grip list you can drag or reorder with the keyboard, a paper preview with variables and a phase grid, a pre-flight checklist, a contact card, and a timeline.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "badge",
+        "checkbox"
+      ],
+      "categories": [
+        "form"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/proposal-document.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-document.tsx"
+        },
+        {
+          "path": "registry/lib/proposal.ts",
+          "type": "registry:lib",
+          "target": "@lib/proposal.ts"
+        },
+        {
+          "path": "registry/lib/reorder.ts",
+          "type": "registry:lib",
+          "target": "@lib/reorder.ts"
+        },
+        {
+          "path": "registry/ui/stepper.tsx",
+          "type": "registry:component",
+          "target": "@ui/stepper.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Editor de propuesta",
+        "descriptionEs": "Secciones, documento y lista previa al envío.",
+        "preview": "app/examples/proposal-document/preview.tsx",
+        "previewHref": "/examples/proposal-document",
+        "examples": [
+          {
+            "title": "Editor de propuesta",
+            "href": "/examples/proposal-document",
+            "description": "Secciones, documento y lista previa al envío."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/proposal-document/stress",
+            "description": "320px y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<ProposalDocument sections={sections} onSectionsChange={setSections} variables={variables} phases={phases} preflight={checks} onPreflight={setCheck} contact={contact} timeline={steps} />",
+        "api": [
+          {
+            "name": "sections",
+            "type": "ProposalSection[]",
+            "description": "Drag a row or press ArrowUp and ArrowDown on its grip."
+          },
+          {
+            "name": "preflight",
+            "type": "PreflightItem[]",
+            "description": "The ready badge appears when every row is done."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room proposal workflow. The behavior was observed in an unlicensed design demonstration of a discovery-to-statement-of-work product. No source, product names, sample copy, icons, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme."
+    },
+    {
+      "name": "proposal-sow",
+      "type": "registry:ui",
+      "title": "Statement of work",
+      "description": "Parties, numbered clauses, and an acknowledgement for a statement of work.",
+      "dependencies": [],
+      "registryDependencies": [
+        "checkbox"
+      ],
+      "categories": [
+        "form"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/proposal-sow.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-sow.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Orden de trabajo",
+        "descriptionEs": "Partes, cláusulas y acuse.",
+        "preview": "app/examples/proposal-sow/preview.tsx",
+        "previewHref": "/examples/proposal-sow",
+        "examples": [
+          {
+            "title": "Orden de trabajo",
+            "href": "/examples/proposal-sow",
+            "description": "Partes, cláusulas y acuse."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/proposal-sow/stress",
+            "description": "320px y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<ProposalSow title={title} client={client} studio={studio} clauses={clauses} acknowledgeLabel={label} acknowledged={ack} onAcknowledge={setAck} />",
+        "api": [
+          {
+            "name": "clauses",
+            "type": "SowClause[]",
+            "description": "Title and body, numbered in order."
+          },
+          {
+            "name": "acknowledged",
+            "type": "boolean",
+            "description": "The reader confirms they read the scope and the timeline."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room proposal workflow. The behavior was observed in an unlicensed design demonstration of a discovery-to-statement-of-work product. No source, product names, sample copy, icons, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme."
+    },
+    {
+      "name": "proposal-activity",
+      "type": "registry:ui",
+      "title": "Proposal activity",
+      "description": "A deal's activity feed, newest first, using the shared timeline.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/proposal-activity.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-activity.tsx"
+        },
+        {
+          "path": "registry/ui/timeline.tsx",
+          "type": "registry:component",
+          "target": "@ui/timeline.tsx"
+        },
+        {
+          "path": "registry/ui/well-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/well-card.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Actividad del trato",
+        "descriptionEs": "Lo que pasó, de lo nuevo a lo viejo.",
+        "preview": "app/examples/proposal-activity/preview.tsx",
+        "previewHref": "/examples/proposal-activity",
+        "examples": [
+          {
+            "title": "Actividad del trato",
+            "href": "/examples/proposal-activity",
+            "description": "Lo que pasó, de lo nuevo a lo viejo."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/proposal-activity/stress",
+            "description": "320px y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<ProposalActivity title=\"Activity\" events={events} now={now} />",
+        "api": [
+          {
+            "name": "events / now",
+            "type": "timeline",
+            "description": "Passed to the shared timeline. now is epoch milliseconds."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room proposal workflow. The behavior was observed in an unlicensed design demonstration of a discovery-to-statement-of-work product. No source, product names, sample copy, icons, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme."
+    },
+    {
+      "name": "proposal-send",
+      "type": "registry:ui",
+      "title": "Send proposal",
+      "description": "Recipient, a project price and weeks summary, a read-only link with copy, and a send action.",
+      "dependencies": [
+        "lucide-react",
+        "motion",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "button",
+        "dialog",
+        "input",
+        "label",
+        "select",
+        "textarea"
+      ],
+      "categories": [
+        "form",
+        "overlay"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/proposal-send.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-send.tsx"
+        },
+        {
+          "path": "registry/ui/proposal-dialog.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-dialog.tsx"
+        },
+        {
+          "path": "registry/ui/copy-button.tsx",
+          "type": "registry:component",
+          "target": "@ui/copy-button.tsx"
+        },
+        {
+          "path": "registry/hooks/use-copy-feedback.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-copy-feedback.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Enviar propuesta",
+        "descriptionEs": "Destino, resumen y enlace de solo lectura.",
+        "preview": "app/examples/proposal-send/preview.tsx",
+        "previewHref": "/examples/proposal-send",
+        "examples": [
+          {
+            "title": "Enviar propuesta",
+            "href": "/examples/proposal-send",
+            "description": "Destino, resumen y enlace de solo lectura."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/proposal-send/stress",
+            "description": "320px y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<ProposalSend open={open} onOpenChange={setOpen} recipients={people} recipient={id} project={name} price={price} weeks={weeks} link={link} onSend={send} />",
+        "api": [
+          {
+            "name": "link",
+            "type": "string",
+            "description": "Read-only. Copy uses the shared copy button."
+          },
+          {
+            "name": "onSend",
+            "type": "() => void",
+            "description": "The parent shows a toast. This dialog does not send mail."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room proposal workflow. The behavior was observed in an unlicensed design demonstration of a discovery-to-statement-of-work product. No source, product names, sample copy, icons, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme."
+    },
+    {
+      "name": "proposal-builder",
+      "type": "registry:block",
+      "title": "Proposal builder",
+      "description": "The composed flow: dashboard, pipeline board, new opportunity, analyze, deal tabs, clarify, and send with a toast.",
+      "dependencies": [
+        "lucide-react",
+        "motion",
+        "radix-ui",
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "card",
+        "checkbox",
+        "collapsible",
+        "command",
+        "dialog",
+        "dropdown-menu",
+        "input",
+        "label",
+        "select",
+        "sidebar",
+        "skeleton",
+        "slider",
+        "tabs",
+        "textarea",
+        "tooltip"
+      ],
+      "categories": [
+        "dashboard",
+        "block"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/proposal-builder.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-builder.tsx"
+        },
+        {
+          "path": "registry/blocks/proposal-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-shell.tsx"
+        },
+        {
+          "path": "registry/ui/proposal-dialog.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-dialog.tsx"
+        },
+        {
+          "path": "registry/blocks/rail-sidebar.tsx",
+          "type": "registry:component",
+          "target": "@ui/rail-sidebar.tsx"
+        },
+        {
+          "path": "registry/ui/command-palette.tsx",
+          "type": "registry:component",
+          "target": "@ui/command-palette.tsx"
+        },
+        {
+          "path": "registry/ui/avatar-group.tsx",
+          "type": "registry:component",
+          "target": "@ui/avatar-group.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/blocks/proposal-dashboard.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-dashboard.tsx"
+        },
+        {
+          "path": "registry/lib/proposal.ts",
+          "type": "registry:lib",
+          "target": "@lib/proposal.ts"
+        },
+        {
+          "path": "registry/lib/reorder.ts",
+          "type": "registry:lib",
+          "target": "@lib/reorder.ts"
+        },
+        {
+          "path": "registry/ui/metric-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/metric-card.tsx"
+        },
+        {
+          "path": "registry/ui/animated-counter.tsx",
+          "type": "registry:component",
+          "target": "@ui/animated-counter.tsx"
+        },
+        {
+          "path": "registry/ui/sparkline.tsx",
+          "type": "registry:component",
+          "target": "@ui/sparkline.tsx"
+        },
+        {
+          "path": "registry/ui/annotated-trend-chart.tsx",
+          "type": "registry:component",
+          "target": "@ui/annotated-trend-chart.tsx"
+        },
+        {
+          "path": "registry/ui/radial-gauge.tsx",
+          "type": "registry:component",
+          "target": "@ui/radial-gauge.tsx"
+        },
+        {
+          "path": "registry/ui/timeline.tsx",
+          "type": "registry:component",
+          "target": "@ui/timeline.tsx"
+        },
+        {
+          "path": "registry/ui/well-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/well-card.tsx"
+        },
+        {
+          "path": "registry/lib/dashboard-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboard-format.ts"
+        },
+        {
+          "path": "registry/ui/proposal-opportunity.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-opportunity.tsx"
+        },
+        {
+          "path": "registry/ui/magnetic-dropzone.tsx",
+          "type": "registry:component",
+          "target": "@ui/magnetic-dropzone.tsx"
+        },
+        {
+          "path": "registry/ui/segmented-control.tsx",
+          "type": "registry:component",
+          "target": "@ui/segmented-control.tsx"
+        },
+        {
+          "path": "registry/ui/proposal-analyze.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-analyze.tsx"
+        },
+        {
+          "path": "registry/ui/text-shimmer.tsx",
+          "type": "registry:component",
+          "target": "@ui/text-shimmer.tsx"
+        },
+        {
+          "path": "registry/ui/proposal-workspace.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-workspace.tsx"
+        },
+        {
+          "path": "registry/ui/proposal-discovery.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-discovery.tsx"
+        },
+        {
+          "path": "registry/ui/audio-player.tsx",
+          "type": "registry:component",
+          "target": "@ui/audio-player.tsx"
+        },
+        {
+          "path": "registry/ui/proposal-clarify.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-clarify.tsx"
+        },
+        {
+          "path": "registry/ui/text-morph.tsx",
+          "type": "registry:component",
+          "target": "@ui/text-morph.tsx"
+        },
+        {
+          "path": "registry/ui/proposal-scope.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-scope.tsx"
+        },
+        {
+          "path": "registry/ui/donut-chart.tsx",
+          "type": "registry:component",
+          "target": "@ui/donut-chart.tsx"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/ui/proposal-similar.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-similar.tsx"
+        },
+        {
+          "path": "registry/ui/proposal-estimate.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-estimate.tsx"
+        },
+        {
+          "path": "registry/ui/proposal-risks.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-risks.tsx"
+        },
+        {
+          "path": "registry/ui/proposal-document.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-document.tsx"
+        },
+        {
+          "path": "registry/ui/stepper.tsx",
+          "type": "registry:component",
+          "target": "@ui/stepper.tsx"
+        },
+        {
+          "path": "registry/ui/proposal-sow.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-sow.tsx"
+        },
+        {
+          "path": "registry/ui/proposal-activity.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-activity.tsx"
+        },
+        {
+          "path": "registry/ui/proposal-send.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-send.tsx"
+        },
+        {
+          "path": "registry/ui/copy-button.tsx",
+          "type": "registry:component",
+          "target": "@ui/copy-button.tsx"
+        },
+        {
+          "path": "registry/hooks/use-copy-feedback.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-copy-feedback.ts"
+        },
+        {
+          "path": "registry/ui/view-kanban.tsx",
+          "type": "registry:component",
+          "target": "@ui/view-kanban.tsx"
+        },
+        {
+          "path": "registry/ui/multi-view-fields.tsx",
+          "type": "registry:component",
+          "target": "@ui/multi-view-fields.tsx"
+        },
+        {
+          "path": "registry/ui/priority-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/priority-badge.tsx"
+        },
+        {
+          "path": "registry/lib/multi-view.ts",
+          "type": "registry:lib",
+          "target": "@lib/multi-view.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        },
+        {
+          "path": "registry/ui/toast-stack.tsx",
+          "type": "registry:component",
+          "target": "@ui/toast-stack.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Constructor de propuestas",
+        "descriptionEs": "Del tablero al envío, con los datos que le pases.",
+        "preview": "app/examples/proposal-builder/preview.tsx",
+        "previewHref": "/examples/proposal-builder",
+        "examples": [
+          {
+            "title": "Constructor de propuestas",
+            "href": "/examples/proposal-builder",
+            "description": "Del tablero al envío, con los datos que le pases."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/proposal-builder/stress",
+            "description": "320px y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<ProposalBuilder shell={shell} dashboard={dashboard} clients={clients} projectTypes={types} tabs={tabs} dealTitle={title} crumbs={crumbs} discovery={discovery} questions={questions} baseHours={66} rate={1400} phases={phases} exclusions={[]} similar={similar} lines={lines} capacity={days} priceMin={1} priceMax={2} suggested={1} confidence=\"Medium\" receipt={receipt} risks={risks} document={document} initialSections={sections} initialPreflight={checks} sow={sow} activity={activity} recipients={people} sendLink={link} pipeline={pipeline} />",
+        "api": [
+          {
+            "name": "shell / dashboard / pipeline",
+            "type": "data",
+            "description": "The home views. The pipeline reuses view-kanban."
+          },
+          {
+            "name": "tabs",
+            "type": "ProposalWorkspaceTab[]",
+            "description": "Summary through activity. The header action changes with the step."
+          },
+          {
+            "name": "copy",
+            "type": "Partial labels",
+            "description": "Override the English chrome. Record text stays in your props."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room proposal workflow. The behavior was observed in an unlicensed design demonstration of a discovery-to-statement-of-work product. No source, product names, sample copy, icons, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme."
     }
   ]
 }
