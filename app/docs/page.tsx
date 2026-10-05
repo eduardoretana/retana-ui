@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 const tables = [
   ["data-table", "Bookings-style admin list: tabs, search, filters, sorting, bulk actions, CSV, and a detail panel."],
   ["crm-table", "Fixed contact columns: avatar, name, status, stage, owner, and last activity."],
+  ["crm-companies-table", "Company book: logo, status, owner, pipeline, score, sparkline, selection, paging, and CSV."],
   ["adaptive-table", "Grouped table in a narrow panel. Columns drop, fold, and stretch to the container."],
   ["view-table", "Schema-driven rows that also appear in the other multi-view layouts."],
 ] as const
@@ -30,6 +31,7 @@ const time = [
 
 const dashboards = [
   ["overview-dashboard", "Admin KPIs, a trend, upcoming items, and content counts."],
+  ["crm-dashboard", "Sales CRM page: sidebar, company table, filters, detail, command menu, and notices."],
   ["triage-dashboard", "Greeting, a dense stat row, an annotated trend, and a needs-you list."],
   ["case-review", "One record: header, timeline, suggestion, cost breakdown, and an undo toast."],
   ["metric-card", "A single number with a count-up change."],
@@ -83,6 +85,7 @@ const verification = [
 const notices = [
   ["toast-stack", "Short results at the edge. The undo appearance is a dark pill that pauses on hover."],
   ["notification-center", "A grouped list that keeps read state."],
+  ["crm-notifications", "A short header popover of company notices."],
   ["notification-stack", "A depth stack. Dismiss the front card and the next one steps forward."],
   ["card-stack", "A triage deck you flick left or right."],
 ] as const
@@ -95,10 +98,21 @@ const navigation = [
   ["tree-view", "File tree for nested documents, without the card chrome."],
 ] as const
 
+const salesCrm = [
+  ["crm-dashboard", "The page: sidebar, header, and the pieces below. In-memory Spanish sample data."],
+  ["crm-companies-table", "Sortable company book with selection, a sticky header, paging, and CSV. crm-table is the fixed contact layout."],
+  ["crm-toolbar", "Search, segments, and multi-select facets. A narrow container opens the facets in a sheet."],
+  ["crm-company-detail", "Side panel with a score card, a health meter, an activity trend, and detail sections."],
+  ["crm-command-menu", "Cmd-K company search with a compact result table. command-palette is the command list."],
+  ["crm-new-company-dialog", "Create form with a logo upload, sections, and validation."],
+  ["crm-notifications", "Header popover of company notices. notification-center is the grouped inbox."],
+] as const
+
 const forms = [
   ["bug-report-form", "Bug report card: type, priority, environment, and a screenshot."],
   ["contact-section", "Contact block with name, email, and a message."],
   ["entity-form", "Schema-driven record form, including inside layered-panel."],
+  ["crm-new-company-dialog", "New company form: logo, sections, and validation."],
 ] as const
 
 export default function DocsPage() {
@@ -202,6 +216,7 @@ export default function DocsPage() {
             Nearby names do different jobs. Open the item page for the install command.
           </p>
           <ChoiceTable title="Tables" rows={tables} />
+          <ChoiceTable title="Sales CRM" rows={salesCrm} />
           <ChoiceTable title="Boards" rows={boards} />
           <ChoiceTable title="Time" rows={time} />
           <ChoiceTable title="Dashboards" rows={dashboards} />

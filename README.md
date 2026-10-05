@@ -55,6 +55,7 @@ Names that sit near each other do different jobs. Install the row that matches t
 | --- | --- |
 | [`data-table`](registry/ui/data-table.tsx) | A bookings-style admin list: tabs, search, filters, sorting, column visibility, multi-select bulk actions, CSV export, and a detail side panel. |
 | [`crm-table`](registry/ui/crm-table.tsx) | A fixed contact layout: avatar and name, status, stage, owner, and last activity. `crmColumnDefs()` can be passed to `AdminDataTable` when `data-table` is installed. |
+| [`crm-companies-table`](registry/ui/crm-companies-table.tsx) | A company book: logo, status, owner, pipeline value, score, and an activity sparkline. Sort, select, sticky header, paged footer, and CSV. |
 | [`adaptive-table`](registry/ui/adaptive-table.tsx) | A grouped table in a narrow panel. Columns declare a priority, drop when the container is tight, and fold into a neighbor. |
 | [`view-table`](registry/ui/view-table.tsx) | Rows from a field schema, with checkbox selection and per-type cells, when those same rows also appear in the other views. |
 
@@ -111,10 +112,25 @@ Names that sit near each other do different jobs. Install the row that matches t
 | --- | --- |
 | [`toast-stack`](registry/ui/toast-stack.tsx) | Short results at the edge of the screen. |
 | [`notification-center`](registry/blocks/notification-center.tsx) | A grouped list that keeps read state. |
+| [`crm-notifications`](registry/ui/crm-notifications.tsx) | A short header popover of company notices. |
 | [`notification-stack`](registry/ui/notification-stack.tsx) | A depth stack. Dismiss the front card and the next one steps forward. |
 | [`card-stack`](registry/ui/card-stack.tsx) | A triage deck you flick left or right, one decision at a time. |
 
 `admin-shell` is the collapsible admin sidebar with breadcrumbs and a command palette. `rail-sidebar` is the two-layer app sidebar: an icon rail for sections and a panel for that section's links. `multi-view` is the block that switches the six views and opens the record panel.
+
+### Sales CRM
+
+Clean-room company book. The reference has no license, so nothing was copied. Install [`crm-dashboard`](registry/blocks/crm-dashboard.tsx) for the page, or one piece:
+
+| Piece | Use it for |
+| --- | --- |
+| [`crm-dashboard`](registry/blocks/crm-dashboard.tsx) | The page: sidebar, header, and the pieces below, with in-memory Spanish sample data. |
+| [`crm-companies-table`](registry/ui/crm-companies-table.tsx) | The company table. `crm-table` stays the fixed contact layout. |
+| [`crm-toolbar`](registry/ui/crm-toolbar.tsx) | Search, segments, and multi-select facets. Narrow containers use a sheet. |
+| [`crm-company-detail`](registry/ui/crm-company-detail.tsx) | The side panel: score, health meter, activity trend, and sections. |
+| [`crm-command-menu`](registry/ui/crm-command-menu.tsx) | Cmd-K search with a compact result table. `command-palette` stays the command list. |
+| [`crm-new-company-dialog`](registry/ui/crm-new-company-dialog.tsx) | Create form with a logo, sections, and validation. |
+| [`crm-notifications`](registry/ui/crm-notifications.tsx) | Header popover. `notification-center` is the fuller inbox. |
 
 ## Install
 
@@ -216,7 +232,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`200` items are in `registry.json` on this branch: `166` components, `25` blocks, `3` hooks, and `6` libraries. A name links to its source file.
+`207` items are in `registry.json` on this branch: `172` components, `26` blocks, `3` hooks, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -456,6 +472,13 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`overview-dashboard`](registry/ui/overview-dashboard.tsx) · ui — Composes KPI cards, a trend chart, an upcoming list, and content counts into one overview. Install: `npx shadcn@latest add @retana/overview-dashboard`.
 - [`admin-kit`](registry/blocks/admin-kit.tsx) · block — Working admin demo: shell, projects, content lists, settings, media, bookings, and analytics, backed by an in-memory adapter and Spanish sample data. Install: `npx shadcn@latest add @retana/admin-kit`.
 - [`supabase-admin`](registry/lib/supabase-admin.ts) · lib — Typed adapter for the admin ports. The host passes in @supabase/supabase-js. Includes SQL for content tables, RLS, and a media bucket. This item does not connect to a database. Install: `npx shadcn@latest add @retana/supabase-admin`.
+- [`crm-companies-table`](registry/ui/crm-companies-table.tsx) · ui — Sortable, selectable company table with a logo, status, owner, pipeline value, score, and an activity sparkline. Sticky header, paged footer, and a CSV helper. Install: `npx shadcn@latest add @retana/crm-companies-table`.
+- [`crm-toolbar`](registry/ui/crm-toolbar.tsx) · ui — Search, a segment bar, and a multi-select facet menu. A toolbar under 640px opens the same facets in a sheet. Install: `npx shadcn@latest add @retana/crm-toolbar`.
+- [`crm-company-detail`](registry/ui/crm-company-detail.tsx) · ui — Side panel with a score card, a pipeline health meter, an activity trend, and detail sections. Install: `npx shadcn@latest add @retana/crm-company-detail`.
+- [`crm-command-menu`](registry/ui/crm-command-menu.tsx) · ui — Command palette that searches companies and lists matches as a compact result table. Optional actions sit above the results. Install: `npx shadcn@latest add @retana/crm-command-menu`.
+- [`crm-new-company-dialog`](registry/ui/crm-new-company-dialog.tsx) · ui — Dialog form with a logo upload, identity, relationship, and commercial sections, and field validation. Install: `npx shadcn@latest add @retana/crm-new-company-dialog`.
+- [`crm-notifications`](registry/ui/crm-notifications.tsx) · ui — Header popover of company notices with an unread count, mark read, and mark all read. Install: `npx shadcn@latest add @retana/crm-notifications`.
+- [`crm-dashboard`](registry/blocks/crm-dashboard.tsx) · block — Companies page that composes the CRM table, toolbar, detail panel, command menu, create dialog, and notifications inside a sidebar shell. Spanish sample data and plain React state. Install: `npx shadcn@latest add @retana/crm-dashboard`.
 
 <!-- CATALOG:END -->
 

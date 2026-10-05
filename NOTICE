@@ -229,6 +229,23 @@ consulted.
 
 ---
 
+Sales CRM
+
+crm-companies-table, crm-toolbar, crm-company-detail, crm-command-menu,
+crm-new-company-dialog, crm-notifications, and crm-dashboard are a clean-room
+implementation of sales-CRM behavior. The reference repository publishes no
+license that allows reuse:
+
+  https://github.com/kargulstudio/sales-crm
+
+No source, class names, colors, copy, sample rows, icons, or assets were
+copied. The pieces are composed from this registry's existing sidebar, table
+cells, sparkline, gauge, line chart, command dialog, and form primitives, and
+they use only the host shadcn tokens. The Spanish companies in the demo are
+fictional.
+
+---
+
 Liveblocks
 
 presence-liveblocks uses @liveblocks/client and @liveblocks/react, both
