@@ -295,6 +295,97 @@ export const useGaugeControllers = () => {
     if (val.mode !== "manual") valCtl.setValue("mode", "manual")
   }
 
+  const setPeriod = (period: number) => {
+    valCtl.setValue("period", period)
+    setLayers((list) =>
+      list.map((layer) => ({
+        ...layer,
+        values: { ...layer.values, value: { ...layer.values.value, period } },
+      }))
+    )
+  }
+
+  const setAmplitude = (amplitude: number) => {
+    valCtl.setValue("amplitude", amplitude)
+    setLayers((list) =>
+      list.map((layer) => ({
+        ...layer,
+        values: {
+          ...layer.values,
+          value: { ...layer.values.value, amplitude },
+        },
+      }))
+    )
+  }
+
+  type Snap = {
+    layers: GaugeLayer[]
+    selected: number
+    template: string | null
+  }
+  const past = useRef<Snap[]>([])
+  const future = useRef<Snap[]>([])
+  const lastSnap = useRef("")
+  const skipHistory = useRef(false)
+  const [history, setHistory] = useState({ undo: 0, redo: 0 })
+
+  const restore = (snap: Snap) => {
+    skipHistory.current = true
+    const template = gaugeTemplates.find((item) => item.id === snap.template) ?? null
+    const index = Math.min(snap.selected, Math.max(0, snap.layers.length - 1))
+    setActiveTemplate(template)
+    setLayers(snap.layers)
+    setSelected(index)
+    load(snap.layers[index] ?? snap.layers[0])
+    if (template) writeStored(storageKeys.template, template.id)
+  }
+
+  useEffect(() => {
+    const snap = JSON.stringify({
+      layers: current,
+      selected,
+      template: activeTemplate?.id ?? null,
+    })
+    if (skipHistory.current) {
+      skipHistory.current = false
+      lastSnap.current = snap
+      return
+    }
+    if (!lastSnap.current) {
+      lastSnap.current = snap
+      return
+    }
+    if (snap === lastSnap.current) return
+    const previous = lastSnap.current
+    const timer = window.setTimeout(() => {
+      past.current.push(JSON.parse(previous) as Snap)
+      if (past.current.length > 40) past.current.shift()
+      future.current = []
+      lastSnap.current = snap
+      setHistory({ undo: past.current.length, redo: 0 })
+    }, 280)
+    return () => window.clearTimeout(timer)
+  }, [current, selected, activeTemplate])
+
+  const undo = () => {
+    const previous = past.current.pop()
+    if (!previous || !lastSnap.current) return
+    future.current.push(JSON.parse(lastSnap.current) as Snap)
+    restore(previous)
+    setHistory({ undo: past.current.length, redo: future.current.length })
+  }
+
+  const redo = () => {
+    const next = future.current.pop()
+    if (!next || !lastSnap.current) return
+    past.current.push(JSON.parse(lastSnap.current) as Snap)
+    restore(next)
+    setHistory({ undo: past.current.length, redo: future.current.length })
+  }
+
+  const canUndo = history.undo > 0
+  const canRedo = history.redo > 0
+
   /* The play mode drives the whole composition, so every layer is given it
      and not just the one in the panels. Without that, picking another layer
      would hand the panels that layer's own mode and quietly stop the run. */
@@ -322,9 +413,15 @@ export const useGaugeControllers = () => {
     value: val,
     domain: { min, max },
     setValue,
+    setPeriod,
+    setAmplitude,
     setMode,
     activeTemplate,
     selectTemplate,
     reset,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
   }
 }

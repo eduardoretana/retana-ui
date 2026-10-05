@@ -208,6 +208,9 @@ import Preview203 from "@/app/examples/crm-command-menu/preview"
 import Preview204 from "@/app/examples/crm-new-company-dialog/preview"
 import Preview205 from "@/app/examples/crm-notifications/preview"
 import Preview206 from "@/app/examples/crm-dashboard/preview"
+import Preview207 from "@/app/examples/gauge-kit/preview"
+import Preview208 from "@/app/examples/gauge-scenes/preview"
+import Preview209 from "@/app/examples/gauge-studio/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -417,4 +420,7 @@ export const previewMap = {
   "crm-new-company-dialog": Preview204,
   "crm-notifications": Preview205,
   "crm-dashboard": Preview206,
+  "gauge-kit": Preview207,
+  "gauge-scenes": Preview208,
+  "gauge-studio": Preview209,
 }

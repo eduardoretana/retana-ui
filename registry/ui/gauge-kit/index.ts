@@ -95,3 +95,37 @@ export {
   type GaugeTemplate,
   type TemplateInset,
 } from "@/registry/retana/lib/gauge-kit/templates"
+export { gaugeToCode } from "@/registry/retana/lib/gauge-kit/code"
+export {
+  ControlsStore,
+  formatLabel,
+  isHexColor,
+  isPadValue,
+  isTransitionConfig,
+  snapToStep,
+  stepDecimals,
+  type ControlMeta,
+  type ControlValue,
+  type EasingConfig,
+  type FlatValues,
+  type PadAxis,
+  type PadConfig,
+  type PadValue,
+  type PanelConfig,
+  type SelectOption,
+  type TransitionConfig,
+} from "@/registry/retana/lib/gauge-kit/controls"
+export type { GaugeLayer } from "@/registry/retana/lib/gauge-kit/layers"
+export {
+  buildSpec,
+  css,
+  palette,
+  playModes,
+  stepFor,
+  withoutMeta,
+  type PanelValues,
+  type PlayMode,
+} from "@/registry/retana/lib/gauge-kit/panels"
+export { storageKeys, writeStored } from "@/registry/retana/lib/gauge-kit/storage"
+export { useGaugeControllers } from "@/registry/retana/hooks/use-gauge-controllers"
+export { useStoredValue } from "@/registry/retana/hooks/use-stored-value"

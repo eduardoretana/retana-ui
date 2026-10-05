@@ -15386,6 +15386,48 @@
           "target": "@hooks/use-in-view.ts"
         }
       ]
+    },
+    {
+      "name": "gauge-studio",
+      "type": "registry:block",
+      "title": "Gauge studio",
+      "description": "Live studio for the composable gauge: template grid, undo and redo, copyable code, nested gauges, play modes, and the control accordion.",
+      "author": "Eduardo Retana",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["gauge-kit", "button", "slider", "switch", "select", "popover", "tooltip", "sheet"],
+      "categories": ["chart"],
+      "meta": {
+        "titleEs": "Estudio de medidores",
+        "descriptionEs": "El estudio en vivo: plantillas, deshacer, código, diales anidados, reproducción y el acordeón de controles.",
+        "source": "Adapted from Gauge UI (MIT), Copyright (c) 2026 Thordur. https://github.com/thordursk/gauge-ui",
+        "preview": "app/examples/gauge-studio/preview.tsx",
+        "previewHref": "/examples/gauge-studio",
+        "examples": [
+          { "title": "Estudio", "href": "/examples/gauge-studio", "description": "Lienzo, plantillas, capas y controles." },
+          { "title": "Estrés", "href": "/examples/gauge-studio/stress", "description": "320px, deshacer deshabilitado y un hermano en flex." }
+        ],
+        "usage": "<GaugeStudio />",
+        "api": [
+          { "name": "className", "type": "string", "description": "Classes on the outer frame." },
+          { "name": "fill", "type": "boolean", "description": "Fill the parent height. Otherwise the stage is 40rem." }
+        ]
+      },
+      "docs": "Adapted from Gauge UI by Thordur (MIT): https://github.com/thordursk/gauge-ui. See NOTICE. Answer no if the CLI asks to overwrite gauge-kit, button, slider, switch, select, popover, tooltip, or sheet. Stage colors are primary, foreground, muted, background, destructive, and chart-1 through chart-5, plus a custom colour. Spring motion keeps the readout and the needle on the same value. Motion snaps when reduced motion is set. Undo and redo are Control or Command Z.",
+      "files": [
+        { "path": "registry/blocks/gauge-studio/code-drawer.tsx", "type": "registry:component", "target": "@ui/gauge-studio/code-drawer.tsx" },
+        { "path": "registry/blocks/gauge-studio/control-bar.tsx", "type": "registry:component", "target": "@ui/gauge-studio/control-bar.tsx" },
+        { "path": "registry/blocks/gauge-studio/controls-root.tsx", "type": "registry:component", "target": "@ui/gauge-studio/controls-root.tsx" },
+        { "path": "registry/blocks/gauge-studio/copy-values.tsx", "type": "registry:component", "target": "@ui/gauge-studio/copy-values.tsx" },
+        { "path": "registry/blocks/gauge-studio/field-controls.tsx", "type": "registry:component", "target": "@ui/gauge-studio/field-controls.tsx" },
+        { "path": "registry/blocks/gauge-studio/index.ts", "type": "registry:component", "target": "@ui/gauge-studio/index.ts" },
+        { "path": "registry/blocks/gauge-studio/layer-picker.tsx", "type": "registry:component", "target": "@ui/gauge-studio/layer-picker.tsx" },
+        { "path": "registry/blocks/gauge-studio/pad-control.tsx", "type": "registry:component", "target": "@ui/gauge-studio/pad-control.tsx" },
+        { "path": "registry/blocks/gauge-studio/play-mode-picker.tsx", "type": "registry:component", "target": "@ui/gauge-studio/play-mode-picker.tsx" },
+        { "path": "registry/blocks/gauge-studio/slider-control.tsx", "type": "registry:component", "target": "@ui/gauge-studio/slider-control.tsx" },
+        { "path": "registry/blocks/gauge-studio/studio.tsx", "type": "registry:component", "target": "@ui/gauge-studio/studio.tsx" },
+        { "path": "registry/blocks/gauge-studio/template-picker.tsx", "type": "registry:component", "target": "@ui/gauge-studio/template-picker.tsx" },
+        { "path": "registry/blocks/gauge-studio/transition-control.tsx", "type": "registry:component", "target": "@ui/gauge-studio/transition-control.tsx" }
+      ]
     }
   ]
 }

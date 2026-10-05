@@ -67,17 +67,19 @@ const position = (x: number, y: number): Pad => ({
 export const palette = [
   { value: "primary", label: "Primary", css: "var(--primary)" },
   { value: "foreground", label: "Foreground", css: "var(--foreground)" },
+  { value: "muted", label: "Muted", css: "var(--muted)" },
   {
     value: "muted-foreground",
     label: "Subtle",
     css: "var(--muted-foreground)",
   },
-  { value: "muted", label: "Muted", css: "var(--muted)" },
   { value: "background", label: "Background", css: "var(--background)" },
-  { value: "destructive", label: "Red", css: "var(--destructive)" },
-  { value: "green", label: "Green", css: "var(--chart-2)" },
-  { value: "amber", label: "Amber", css: "var(--chart-4)" },
-  { value: "blue", label: "Blue", css: "var(--chart-1)" },
+  { value: "destructive", label: "Destructive", css: "var(--destructive)" },
+  { value: "chart-1", label: "Chart 1", css: "var(--chart-1)" },
+  { value: "chart-2", label: "Chart 2", css: "var(--chart-2)" },
+  { value: "chart-3", label: "Chart 3", css: "var(--chart-3)" },
+  { value: "chart-4", label: "Chart 4", css: "var(--chart-4)" },
+  { value: "chart-5", label: "Chart 5", css: "var(--chart-5)" },
 ] as const
 
 export type Token = (typeof palette)[number]["value"]
@@ -85,6 +87,10 @@ export type Token = (typeof palette)[number]["value"]
 const paletteCss = new Map<string, string>(
   palette.map((entry) => [entry.value, entry.css])
 )
+/* Older studio saves used these names for the same chart tokens. */
+paletteCss.set("green", "var(--chart-2)")
+paletteCss.set("amber", "var(--chart-4)")
+paletteCss.set("blue", "var(--chart-1)")
 
 const DEFAULT_CUSTOM = "var(--chart-1)"
 

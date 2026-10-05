@@ -22,6 +22,7 @@ import { SceneIcon as HugeiconsIcon } from "./icons"
 import {
   Gauge,
   GaugeArc,
+  GaugeControl,
   GaugeDot,
   GaugeHub,
   GaugeInset,
@@ -639,28 +640,53 @@ const Alarms = ({ now }: { now: number | null }) => {
           .filter((a) => Number.isFinite(a.minutes))
           .sort((a, b) => a.minutes - b.minutes)[0] ?? null)
 
+  const [activeId, setActiveId] = useState(ALARMS[0].id)
+  const active = alarms.find((alarm) => alarm.id === activeId) ?? alarms[0]
   const toggle = (id: string, on: boolean) =>
     setAlarms((list) => list.map((a) => (a.id === id ? { ...a, on } : a)))
+  const move = (at: number) =>
+    setAlarms((list) =>
+      list.map((alarm) => (alarm.id === active.id ? { ...alarm, at, on: true } : alarm))
+    )
 
   return (
     <Panel title="Alarms">
       <div className="mx-auto w-full max-w-56">
-        <AlarmDial hour={hour} alarms={alarms} next={next} />
+        <GaugeControl
+          value={active.at}
+          onChange={move}
+          min={0}
+          max={24}
+          step={0.25}
+          startAngle={ring.startAngle}
+          endAngle={ring.endAngle}
+          knob
+          label={`Mover ${active.label}`}
+          valueText={clockTime(active.at)}
+        >
+          <AlarmDial hour={hour} alarms={alarms} next={next} />
+        </GaugeControl>
       </div>
       <ul className="flex flex-col">
         {alarms.map((alarm) => (
           <li
             key={alarm.id}
-            className="flex items-center gap-3 border-t py-1.5 first:border-t-0"
+            className={cn(
+              "flex items-center gap-3 border-t py-1.5 first:border-t-0",
+              alarm.id === active.id && "bg-accent/60"
+            )}
           >
-            <span
+            <button
+              type="button"
+              aria-pressed={alarm.id === active.id}
+              onClick={() => setActiveId(alarm.id)}
               className={cn(
-                "w-12 text-base font-medium tabular-nums transition-colors",
+                "w-12 text-left text-base font-medium tabular-nums transition-colors",
                 !alarm.on && "text-muted-foreground"
               )}
             >
               {clockTime(alarm.at)}
-            </span>
+            </button>
             <span className="flex min-w-0 flex-1 flex-col">
               <span className="truncate text-xs font-medium">
                 {alarm.label}

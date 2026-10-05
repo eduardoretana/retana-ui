@@ -357,7 +357,8 @@ The catalog item named gauge stays the Arc filled arc. gauge-kit is the
 Gauge UI primitive set (arcs, ticks, zones, needles, labels, value readouts,
 nested dials, spring and tween motion, and the keyboard slider). gauge-scenes
 is the car cluster, cockpit, health day, server monitor, smart home, clocks,
-and weather board. Palette colors in the upstream studio were replaced with
+and weather board. gauge-studio is the live editor: template grid, undo and
+redo, generated code, nested gauges, play modes, and the control accordion. Palette colors in the upstream studio were replaced with
 the host's semantic tokens. The upstream icon package was not added; scenes
 use lucide-react. The kit ships no typeface: the rounded font option uses the
 host sans. Motion snaps when the reader prefers reduced motion.

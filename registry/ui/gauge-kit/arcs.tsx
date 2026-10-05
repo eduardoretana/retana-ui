@@ -14,6 +14,8 @@ type ArcStyleProps = {
   cap?: StrokeCap
   /** Radial offset from the reference radius. Positive moves outward. */
   offset?: number
+  /** SVG dash pattern, for a broken ring. */
+  dash?: string
 }
 
 /** The full background arc from `startAngle` to `endAngle`. */
@@ -23,6 +25,7 @@ export const GaugeTrack = ({
   opacity = 0.15,
   cap = "round",
   offset = 0,
+  dash,
 }: ArcStyleProps) => {
   const { radius, startAngle, endAngle } = useGauge()
   return (
@@ -33,6 +36,7 @@ export const GaugeTrack = ({
       strokeOpacity={opacity}
       strokeWidth={width}
       strokeLinecap={cap}
+      strokeDasharray={dash}
     />
   )
 }
@@ -72,6 +76,7 @@ export const GaugeArc = ({
   to,
   reverse = false,
   wrap = false,
+  dash,
 }: GaugeArcProps) => {
   const { radius, min, max, value, startAngle, endAngle, angleOf } = useGauge()
   const tail = from ?? min
@@ -102,6 +107,7 @@ export const GaugeArc = ({
       strokeOpacity={opacity}
       strokeWidth={width}
       strokeLinecap={cap}
+      strokeDasharray={dash}
     />
   )
 }

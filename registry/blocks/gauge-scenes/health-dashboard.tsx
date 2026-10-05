@@ -27,7 +27,9 @@ import {
   Gauge,
   GaugeArc,
   GaugeDot,
+  GaugeHub,
   GaugeInset,
+  GaugeNeedle,
   GaugeMarks,
   GaugeStack,
   GaugeText,
@@ -265,12 +267,16 @@ const ActivityRings = ({
           width={width}
           offset={-i * (width + gap)}
           color={INK}
-          opacity={0.1}
+          opacity={0.28}
+          cap="butt"
+          dash="7 9"
         />
         <GaugeArc
           width={width}
           offset={-i * (width + gap)}
           color={RING_TONE[key]}
+          cap="butt"
+          dash="14 8"
         />
       </GaugeInset>
     ))}
@@ -312,6 +318,8 @@ const HeartDial = ({ bpm }: { bpm: number }) => (
       gap={1.5}
       endCap="round"
     />
+    <GaugeNeedle style="line" length={0.78} width={5} tail={18} color={INK} />
+    <GaugeHub radius={8} color={INK} />
     <GaugeDot radius={11} color={INK} halo={5} haloColor={CUT} />
     <GaugeValue y={-8} fontSize={96} font="rounded" weight="bold" />
     <GaugeText y={58} fontSize={24} font="rounded" weight="bold" color={MUTED}>
