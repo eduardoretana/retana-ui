@@ -201,6 +201,13 @@ import Preview196 from "@/app/examples/case-review/preview"
 import Preview197 from "@/app/examples/bug-report-form/preview"
 import Preview198 from "@/app/examples/tree-nav/preview"
 import Preview199 from "@/app/examples/mega-menu/preview"
+import Preview200 from "@/app/examples/crm-companies-table/preview"
+import Preview201 from "@/app/examples/crm-toolbar/preview"
+import Preview202 from "@/app/examples/crm-company-detail/preview"
+import Preview203 from "@/app/examples/crm-command-menu/preview"
+import Preview204 from "@/app/examples/crm-new-company-dialog/preview"
+import Preview205 from "@/app/examples/crm-notifications/preview"
+import Preview206 from "@/app/examples/crm-dashboard/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -403,4 +410,11 @@ export const previewMap = {
   "bug-report-form": Preview197,
   "tree-nav": Preview198,
   "mega-menu": Preview199,
+  "crm-companies-table": Preview200,
+  "crm-toolbar": Preview201,
+  "crm-company-detail": Preview202,
+  "crm-command-menu": Preview203,
+  "crm-new-company-dialog": Preview204,
+  "crm-notifications": Preview205,
+  "crm-dashboard": Preview206,
 }

@@ -14314,6 +14314,695 @@
           "target": "@ui/mega-menu.tsx"
         }
       ]
+    },
+    {
+      "name": "crm-companies-table",
+      "type": "registry:ui",
+      "title": "Company table",
+      "description": "Sortable, selectable company table with a logo, status, owner, pipeline value, score, and an activity sparkline. Sticky header, paged footer, and a CSV helper.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "checkbox",
+        "table"
+      ],
+      "categories": [
+        "admin",
+        "table"
+      ],
+      "meta": {
+        "titleEs": "Tabla de empresas",
+        "descriptionEs": "Tabla ordenable y seleccionable con logo, estado, responsable, valor, puntuación y una chispa de actividad. Encabezado fijo, pie con conteo y CSV.",
+        "preview": "app/examples/crm-companies-table/preview.tsx",
+        "previewHref": "/examples/crm-companies-table",
+        "examples": [
+          {
+            "title": "Cartera",
+            "href": "/examples/crm-companies-table",
+            "description": "Doce empresas ficticias de Estudio Nube."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/crm-companies-table/stress",
+            "description": "320px, vacío, cuarenta filas y un nombre sin espacios."
+          }
+        ],
+        "usage": "<CrmCompaniesTable\n  rows={companies}\n  sort={sort}\n  onSortChange={setSort}\n  selectedIds={selectedIds}\n  onSelectedIdsChange={setSelectedIds}\n  onRowOpen={setCompany}\n  formatValue={(value) => money.format(value)}\n/>",
+        "api": [
+          {
+            "name": "rows",
+            "type": "CrmCompany[]",
+            "description": "Companies to sort and page. The host owns the data."
+          },
+          {
+            "name": "sort / page / selectedIds",
+            "type": "controlled state",
+            "description": "Omit them for internal state. Page size defaults to 8."
+          },
+          {
+            "name": "onExport",
+            "type": "(rows) => void",
+            "description": "Receives the selection, or every sorted row when nothing is selected. Without it, the footer downloads companiesToCsv()."
+          },
+          {
+            "name": "formatValue / csvLabels / labels",
+            "type": "functions and strings",
+            "description": "Locale and copy stay in the host. Defaults are English."
+          },
+          {
+            "name": "loading",
+            "type": "boolean",
+            "description": "Replaces the body with the loading label and disables the footer."
+          }
+        ]
+      },
+      "docs": "Clean-room behavior inspired by github.com/kargulstudio/sales-crm, which publishes no license. No source, class names, colors, copy, or assets were copied. crm-table remains the fixed contact layout; this table is the company book and reuses Sparkline plus the CSV helper. Answer no if the CLI asks to overwrite avatar, badge, button, checkbox, or table. The item ships no theme. Column headers are buttons with aria-sort. The name stays sticky while the other columns scroll. With reduced motion the sparkline does not animate.",
+      "files": [
+        {
+          "path": "registry/ui/crm-companies-table.tsx",
+          "type": "registry:component",
+          "target": "@ui/crm-companies-table.tsx"
+        },
+        {
+          "path": "registry/lib/crm-companies.ts",
+          "type": "registry:lib",
+          "target": "@lib/crm-companies.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        },
+        {
+          "path": "registry/ui/sparkline.tsx",
+          "type": "registry:component",
+          "target": "@ui/sparkline.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "crm-toolbar",
+      "type": "registry:ui",
+      "title": "Company toolbar",
+      "description": "Search, a segment bar, and a multi-select facet menu. A toolbar under 640px opens the same facets in a sheet.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "checkbox",
+        "dropdown-menu",
+        "input",
+        "sheet"
+      ],
+      "categories": [
+        "admin"
+      ],
+      "meta": {
+        "titleEs": "Barra de empresas",
+        "descriptionEs": "Búsqueda, segmentos y un menú de facetas con selección múltiple. En un contenedor estrecho las facetas van a un panel.",
+        "preview": "app/examples/crm-toolbar/preview.tsx",
+        "previewHref": "/examples/crm-toolbar",
+        "examples": [
+          {
+            "title": "Segmentos",
+            "href": "/examples/crm-toolbar",
+            "description": "Todas, Activas, Prospectos e Inactivas, más dos facetas."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/crm-toolbar/stress",
+            "description": "320px abre el panel. También un rótulo sin espacios."
+          }
+        ],
+        "usage": "<CrmToolbar\n  query={query}\n  onQueryChange={setQuery}\n  segment={segment}\n  onSegmentChange={setSegment}\n  segments={segments}\n  facets={facets}\n  selection={selection}\n  onSelectionChange={setSelection}\n/>",
+        "api": [
+          {
+            "name": "query / segment",
+            "type": "string",
+            "description": "Controlled search and segment. Segments default to All, Active, Lead, and Churned."
+          },
+          {
+            "name": "facets / selection",
+            "type": "CrmToolbarFacet[] / record",
+            "description": "Each facet is multi-select. Values inside one facet match with OR. Facets match with AND."
+          },
+          {
+            "name": "layout",
+            "type": "\"auto\" | \"menu\" | \"sheet\"",
+            "description": "auto uses the toolbar width. Under 640px the facets open in a sheet."
+          },
+          {
+            "name": "labels",
+            "type": "strings",
+            "description": "Search, segment group, filter button, sheet, and clear. Defaults are English."
+          }
+        ]
+      },
+      "docs": "Clean-room behavior inspired by github.com/kargulstudio/sales-crm, which publishes no license. No source, class names, colors, copy, or assets were copied. Search uses search-field. Segments use segmented-control. filter-toolbar remains the single-value chip bar. Answer no if the CLI asks to overwrite badge, button, checkbox, dropdown-menu, input, or sheet. The item ships no theme. The segment bar is a group of pressed buttons. Facet choices are checkboxes.",
+      "files": [
+        {
+          "path": "registry/ui/crm-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@ui/crm-toolbar.tsx"
+        },
+        {
+          "path": "registry/lib/crm-companies.ts",
+          "type": "registry:lib",
+          "target": "@lib/crm-companies.ts"
+        },
+        {
+          "path": "registry/ui/search-field.tsx",
+          "type": "registry:component",
+          "target": "@ui/search-field.tsx"
+        },
+        {
+          "path": "registry/ui/segmented-control.tsx",
+          "type": "registry:component",
+          "target": "@ui/segmented-control.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "crm-company-detail",
+      "type": "registry:ui",
+      "title": "Company detail",
+      "description": "Side panel with a score card, a pipeline health meter, an activity trend, and detail sections.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "card",
+        "scroll-area",
+        "separator"
+      ],
+      "categories": [
+        "admin",
+        "panel"
+      ],
+      "meta": {
+        "titleEs": "Ficha de empresa",
+        "descriptionEs": "Panel lateral con tarjeta de puntuación, salud del pipeline, tendencia de actividad y secciones de detalle.",
+        "preview": "app/examples/crm-company-detail/preview.tsx",
+        "previewHref": "/examples/crm-company-detail",
+        "examples": [
+          {
+            "title": "Hornos del Valle",
+            "href": "/examples/crm-company-detail",
+            "description": "La ficha se abre al lado, sin cambiar de ruta."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/crm-company-detail/stress",
+            "description": "Nombre sin espacios y una tendencia vacía."
+          }
+        ],
+        "usage": "<CrmCompanyDetail\n  company={company}\n  open={open}\n  onOpenChange={setOpen}\n  formatValue={(value) => money.format(value)}\n/>",
+        "api": [
+          {
+            "name": "company",
+            "type": "CrmCompany | null",
+            "description": "The open record. Pass null when nothing is selected."
+          },
+          {
+            "name": "open / onOpenChange",
+            "type": "boolean",
+            "description": "Controlled panel. Escape and the close button dismiss it."
+          },
+          {
+            "name": "formatValue",
+            "type": "(value: number) => string",
+            "description": "Pipeline amount. The score stays a 0–100 number."
+          },
+          {
+            "name": "labels",
+            "type": "strings",
+            "description": "Score, health bands, trend, and the detail fields. Defaults are English."
+          }
+        ]
+      },
+      "docs": "Clean-room behavior inspired by github.com/kargulstudio/sales-crm, which publishes no license. No source, class names, colors, copy, or assets were copied. The surface is layered-panel. The score is metric-card, the meter is gauge, and the trend is line-chart. Answer no if the CLI asks to overwrite a primitive the host already has, including layered-panel, gauge, line-chart, or metric-card if they are already installed. The item ships no theme. The dialog title is the company name. With reduced motion the meter and the trend do not travel.",
+      "files": [
+        {
+          "path": "registry/ui/crm-company-detail.tsx",
+          "type": "registry:component",
+          "target": "@ui/crm-company-detail.tsx"
+        },
+        {
+          "path": "registry/lib/crm-companies.ts",
+          "type": "registry:lib",
+          "target": "@lib/crm-companies.ts"
+        },
+        {
+          "path": "registry/ui/layered-panel.tsx",
+          "type": "registry:component",
+          "target": "@ui/layered-panel.tsx"
+        },
+        {
+          "path": "registry/ui/gauge.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge.tsx"
+        },
+        {
+          "path": "registry/ui/line-chart.tsx",
+          "type": "registry:component",
+          "target": "@ui/line-chart.tsx"
+        },
+        {
+          "path": "registry/ui/metric-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/metric-card.tsx"
+        },
+        {
+          "path": "registry/ui/animated-counter.tsx",
+          "type": "registry:component",
+          "target": "@ui/animated-counter.tsx"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "crm-command-menu",
+      "type": "registry:ui",
+      "title": "Company command menu",
+      "description": "Command palette that searches companies and lists matches as a compact result table. Optional actions sit above the results.",
+      "author": "Eduardo Retana",
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "command"
+      ],
+      "categories": [
+        "admin"
+      ],
+      "meta": {
+        "titleEs": "Menú de comandos",
+        "descriptionEs": "Paleta que busca empresas y muestra las coincidencias en una tabla compacta.",
+        "preview": "app/examples/crm-command-menu/preview.tsx",
+        "previewHref": "/examples/crm-command-menu",
+        "examples": [
+          {
+            "title": "Búsqueda",
+            "href": "/examples/crm-command-menu",
+            "description": "⌘K filtra la cartera ficticia."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/crm-command-menu/stress",
+            "description": "Vacío, treinta filas y un nombre sin espacios."
+          }
+        ],
+        "usage": "<CrmCommandMenu\n  companies={companies}\n  open={open}\n  onOpenChange={setOpen}\n  onSelectCompany={openCompany}\n  actions={[{ id: \"create\", label: \"New company\" }]}\n  onSelectAction={runAction}\n/>",
+        "api": [
+          {
+            "name": "companies",
+            "type": "CrmCompany[]",
+            "description": "Searched by name, owner, status, industry, region, and email."
+          },
+          {
+            "name": "open / onOpenChange",
+            "type": "boolean",
+            "description": "Controlled dialog. hotkey listens for Cmd-K or Ctrl-K unless you pass false."
+          },
+          {
+            "name": "actions / onSelectAction",
+            "type": "CrmCommandAction[]",
+            "description": "Commands shown above the company table."
+          },
+          {
+            "name": "formatValue / labels",
+            "type": "function / strings",
+            "description": "Pipeline text and the palette copy. Defaults are English."
+          }
+        ]
+      },
+      "docs": "Clean-room behavior inspired by github.com/kargulstudio/sales-crm, which publishes no license. No source, class names, colors, copy, or assets were copied. It uses the host command dialog. command-palette remains the grouped command list and does not search records. Answer no if the CLI asks to overwrite avatar, badge, command, or dialog. The item ships no theme. Each result is an option whose name includes the status, owner, and value. The list stops at 20 matches.",
+      "files": [
+        {
+          "path": "registry/ui/crm-command-menu.tsx",
+          "type": "registry:component",
+          "target": "@ui/crm-command-menu.tsx"
+        },
+        {
+          "path": "registry/lib/crm-companies.ts",
+          "type": "registry:lib",
+          "target": "@lib/crm-companies.ts"
+        }
+      ]
+    },
+    {
+      "name": "crm-new-company-dialog",
+      "type": "registry:ui",
+      "title": "New company dialog",
+      "description": "Dialog form with a logo upload, identity, relationship, and commercial sections, and field validation.",
+      "author": "Eduardo Retana",
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "dialog",
+        "input",
+        "label",
+        "select",
+        "textarea"
+      ],
+      "categories": [
+        "admin",
+        "form"
+      ],
+      "meta": {
+        "titleEs": "Diálogo de empresa nueva",
+        "descriptionEs": "Formulario en un diálogo con logo, secciones y validación.",
+        "preview": "app/examples/crm-new-company-dialog/preview.tsx",
+        "previewHref": "/examples/crm-new-company-dialog",
+        "examples": [
+          {
+            "title": "Alta",
+            "href": "/examples/crm-new-company-dialog",
+            "description": "Nombre, estado, responsable y valor son obligatorios."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/crm-new-company-dialog/stress",
+            "description": "El diálogo cabe en 320px."
+          }
+        ],
+        "usage": "<CrmNewCompanyDialog\n  open={open}\n  onOpenChange={setOpen}\n  statuses={statuses}\n  owners={owners}\n  onSubmit={(draft) => addCompany(draft)}\n/>",
+        "api": [
+          {
+            "name": "statuses / owners",
+            "type": "{ value, label }[]",
+            "description": "Options for the two required choices. Values are ids."
+          },
+          {
+            "name": "onSubmit",
+            "type": "(draft) => void",
+            "description": "Called only when companyDraftIssues() is empty. Includes logoUrl when a file was accepted."
+          },
+          {
+            "name": "labels.issues",
+            "type": "partial record",
+            "description": "Replace the English validation sentences. Codes stay stable."
+          }
+        ]
+      },
+      "docs": "Clean-room behavior inspired by github.com/kargulstudio/sales-crm, which publishes no license. No source, class names, colors, copy, or assets were copied. Validation lives in companyDraftIssues(). A logo must be PNG, JPEG, WebP, or GIF and at most 2 MB. Answer no if the CLI asks to overwrite avatar, button, dialog, input, label, select, or textarea. The item ships no theme. Errors use aria-invalid and move focus to the first invalid field. Required names are marked in the label.",
+      "files": [
+        {
+          "path": "registry/ui/crm-new-company-dialog.tsx",
+          "type": "registry:component",
+          "target": "@ui/crm-new-company-dialog.tsx"
+        },
+        {
+          "path": "registry/lib/crm-companies.ts",
+          "type": "registry:lib",
+          "target": "@lib/crm-companies.ts"
+        }
+      ]
+    },
+    {
+      "name": "crm-notifications",
+      "type": "registry:ui",
+      "title": "Company notifications",
+      "description": "Header popover of company notices with an unread count, mark read, and mark all read.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "popover"
+      ],
+      "categories": [
+        "admin"
+      ],
+      "meta": {
+        "titleEs": "Avisos del CRM",
+        "descriptionEs": "Popover de cabecera con avisos de empresas, un conteo de no leídos y marcar como leído.",
+        "preview": "app/examples/crm-notifications/preview.tsx",
+        "previewHref": "/examples/crm-notifications",
+        "examples": [
+          {
+            "title": "Avisos",
+            "href": "/examples/crm-notifications",
+            "description": "Cuatro avisos ficticios. Dos siguen sin leer."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/crm-notifications/stress",
+            "description": "Vacío, veinte avisos y un título sin espacios."
+          }
+        ],
+        "usage": "<CrmNotifications\n  items={notices}\n  onItemsChange={setNotices}\n  onSelect={(notice) => openCompany(notice.companyId)}\n/>",
+        "api": [
+          {
+            "name": "items / defaultItems",
+            "type": "CrmNotice[]",
+            "description": "Pass items to control read state. defaultItems keeps it inside the popover."
+          },
+          {
+            "name": "onSelect",
+            "type": "(notice) => void",
+            "description": "Fires when a row is chosen, after that row is marked read."
+          },
+          {
+            "name": "labels",
+            "type": "strings",
+            "description": "Trigger, empty state, and mark-all. The unread count is part of the trigger name."
+          }
+        ]
+      },
+      "docs": "Clean-room behavior inspired by github.com/kargulstudio/sales-crm, which publishes no license. No source, class names, colors, copy, or assets were copied. notification-center is the grouped inbox with read state. notification-stack is the depth stack. This popover is the short company list. Answer no if the CLI asks to overwrite button or popover. The item ships no theme. Arrow keys move between notices. It does not animate.",
+      "files": [
+        {
+          "path": "registry/ui/crm-notifications.tsx",
+          "type": "registry:component",
+          "target": "@ui/crm-notifications.tsx"
+        },
+        {
+          "path": "registry/lib/crm-companies.ts",
+          "type": "registry:lib",
+          "target": "@lib/crm-companies.ts"
+        }
+      ]
+    },
+    {
+      "name": "crm-dashboard",
+      "type": "registry:block",
+      "title": "Sales CRM",
+      "description": "Companies page that composes the CRM table, toolbar, detail panel, command menu, create dialog, and notifications inside a sidebar shell. Spanish sample data and plain React state.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "card",
+        "checkbox",
+        "command",
+        "dialog",
+        "dropdown-menu",
+        "input",
+        "label",
+        "popover",
+        "scroll-area",
+        "select",
+        "separator",
+        "sheet",
+        "sidebar",
+        "table",
+        "textarea",
+        "tooltip"
+      ],
+      "categories": [
+        "admin",
+        "block",
+        "dashboard"
+      ],
+      "meta": {
+        "titleEs": "CRM de ventas",
+        "descriptionEs": "Página de empresas que compone la tabla, la barra, la ficha, la paleta, el alta y los avisos dentro de una barra lateral. Datos ficticios en español y estado en memoria.",
+        "preview": "app/examples/crm-dashboard/preview.tsx",
+        "previewHref": "/examples/crm-dashboard",
+        "examples": [
+          {
+            "title": "Estudio Nube",
+            "href": "/examples/crm-dashboard",
+            "description": "Cartera ficticia. Nada aquí es un cliente real."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/crm-dashboard/stress",
+            "description": "320px, vacío, un nombre sin espacios y RTL."
+          }
+        ],
+        "usage": "<CrmDashboard />\n<CrmDashboard companies={companies} notices={notices} headerSlot={<ThemeToggle />} />",
+        "api": [
+          {
+            "name": "companies / notices",
+            "type": "arrays",
+            "description": "Initial rows. Omit them to use the fictional Spanish book."
+          },
+          {
+            "name": "headerSlot",
+            "type": "ReactNode",
+            "description": "Extra header controls. The catalog puts the theme switch here."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class. A container under 720px on a wide viewport stacks the page without the rail."
+          }
+        ]
+      },
+      "docs": "Clean-room behavior inspired by github.com/kargulstudio/sales-crm, which publishes no license. No source, class names, colors, copy, sample rows, or assets were copied. The block composes crm-companies-table, crm-toolbar, crm-company-detail, crm-command-menu, crm-new-company-dialog, crm-notifications, rail-sidebar, and toast-stack. It does not fetch. State is React useState. Answer no if the CLI asks to overwrite a primitive the host already has, including rail-sidebar or toast-stack if they are already installed. The item ships no theme. The sidebar command button and Cmd-K open the company palette. On a narrow viewport the host sidebar becomes its sheet. Sample companies are fictional and use the example domain.",
+      "files": [
+        {
+          "path": "registry/blocks/crm-dashboard.tsx",
+          "type": "registry:component",
+          "target": "@ui/crm-dashboard.tsx"
+        },
+        {
+          "path": "registry/lib/crm-companies.ts",
+          "type": "registry:lib",
+          "target": "@lib/crm-companies.ts"
+        },
+        {
+          "path": "registry/lib/crm-demo-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/crm-demo-data.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/ui/crm-companies-table.tsx",
+          "type": "registry:component",
+          "target": "@ui/crm-companies-table.tsx"
+        },
+        {
+          "path": "registry/ui/crm-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@ui/crm-toolbar.tsx"
+        },
+        {
+          "path": "registry/ui/crm-company-detail.tsx",
+          "type": "registry:component",
+          "target": "@ui/crm-company-detail.tsx"
+        },
+        {
+          "path": "registry/ui/crm-command-menu.tsx",
+          "type": "registry:component",
+          "target": "@ui/crm-command-menu.tsx"
+        },
+        {
+          "path": "registry/ui/crm-new-company-dialog.tsx",
+          "type": "registry:component",
+          "target": "@ui/crm-new-company-dialog.tsx"
+        },
+        {
+          "path": "registry/ui/crm-notifications.tsx",
+          "type": "registry:component",
+          "target": "@ui/crm-notifications.tsx"
+        },
+        {
+          "path": "registry/ui/sparkline.tsx",
+          "type": "registry:component",
+          "target": "@ui/sparkline.tsx"
+        },
+        {
+          "path": "registry/ui/search-field.tsx",
+          "type": "registry:component",
+          "target": "@ui/search-field.tsx"
+        },
+        {
+          "path": "registry/ui/segmented-control.tsx",
+          "type": "registry:component",
+          "target": "@ui/segmented-control.tsx"
+        },
+        {
+          "path": "registry/ui/layered-panel.tsx",
+          "type": "registry:component",
+          "target": "@ui/layered-panel.tsx"
+        },
+        {
+          "path": "registry/ui/gauge.tsx",
+          "type": "registry:component",
+          "target": "@ui/gauge.tsx"
+        },
+        {
+          "path": "registry/ui/line-chart.tsx",
+          "type": "registry:component",
+          "target": "@ui/line-chart.tsx"
+        },
+        {
+          "path": "registry/ui/metric-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/metric-card.tsx"
+        },
+        {
+          "path": "registry/ui/animated-counter.tsx",
+          "type": "registry:component",
+          "target": "@ui/animated-counter.tsx"
+        },
+        {
+          "path": "registry/ui/toast-stack.tsx",
+          "type": "registry:component",
+          "target": "@ui/toast-stack.tsx"
+        },
+        {
+          "path": "registry/blocks/rail-sidebar.tsx",
+          "type": "registry:component",
+          "target": "@ui/rail-sidebar.tsx"
+        }
+      ]
     }
   ]
 }
