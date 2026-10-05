@@ -181,7 +181,7 @@ export function CrmCompaniesTable({
 
   return (
     <div data-slot="crm-companies-table" className={cn("flex min-w-0 flex-col gap-3", className)}>
-      <div className="max-h-[28rem] min-w-0 overflow-auto rounded-xl border border-border">
+      <div className="max-h-[28rem] min-w-0 contain-paint overflow-auto rounded-xl border border-border">
         <table data-slot="table" className="w-full min-w-[44rem] caption-bottom text-sm" aria-busy={loading || undefined}>
           <caption className="sr-only">{copy.caption}</caption>
           <TableHeader className="sticky top-0 z-20 bg-background shadow-sm">
