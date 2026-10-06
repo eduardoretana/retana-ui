@@ -1329,13 +1329,28 @@
             "description": "sendingLabel, errorLabel, retryLabel, copyLabel, copiedLabel, and regenerateLabel default to English."
           },
           {
+            "name": "variant",
+            "type": "\"default\" | \"note\"",
+            "description": "note tints the bubble with the host accent and shows noteLabel. Existing roles are unchanged."
+          },
+          {
+            "name": "receipt",
+            "type": "\"seen\" | \"unseen\"",
+            "description": "Optional seen state under the bubble. seenLabel and unseenLabel default to English."
+          },
+          {
+            "name": "side",
+            "type": "\"incoming\" | \"outgoing\"",
+            "description": "Overrides the side implied by role. Omit it to keep the previous placement."
+          },
+          {
             "name": "reactions / onReact",
             "type": "{ emoji, count, mine? }[] / callback",
             "description": "Optional reaction chips. Adapted from Arc UI (MIT)."
           }
         ]
       },
-      "docs": "Import ChatMessage from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Adapted behaviors from Arc UI (MIT) are optional and do not change existing props.",
+      "docs": "Import ChatMessage from the installed UI file. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Adapted behaviors from Arc UI (MIT) are optional and do not change existing props. The internal-note variant and the seen state are original and optional.",
       "files": [
         {
           "path": "registry/ui/chat-message.tsx",
@@ -3290,7 +3305,7 @@
           {
             "name": "options",
             "type": "Segment[]",
-            "description": "value, label, and an optional accessory."
+            "description": "value, label, an optional icon, and an optional accessory. iconsOnly keeps the label for assistive tech."
           },
           {
             "name": "value / defaultValue / onValueChange",
@@ -9549,7 +9564,7 @@
       "name": "use-multi-view",
       "type": "registry:hook",
       "title": "useMultiView",
-      "description": "View, search, filter, sort, group, selection, and open-record state, controlled or uncontrolled, with an optional URL adapter.",
+      "description": "View, search, filter, sort, group, selection, and open-record state, controlled or uncontrolled, with an optional URL adapter and an optional saved set of enabled views.",
       "author": "Eduardo Retana",
       "categories": [
         "table"
@@ -9587,6 +9602,16 @@
             "name": "useOptimisticRecords",
             "type": "hook",
             "description": "Shows a patch immediately and restores the row if the callback rejects."
+          },
+          {
+            "name": "enabledViews / setEnabledViews",
+            "type": "string[] / callback",
+            "description": "Which views can be selected. Omitting them enables every view. An empty update keeps the previous set, so one view always stays on."
+          },
+          {
+            "name": "persistViews",
+            "type": "{ scope: \"global\" | \"project\", id, storage? }",
+            "description": "Reads and writes the enabled set under retana.views.<scope>.<id>. Pass storage in tests."
           }
         ]
       },
@@ -10218,6 +10243,7 @@
         "@dnd-kit/utilities",
         "@tanstack/react-table",
         "lucide-react",
+        "motion",
         "radix-ui",
         "sonner"
       ],
@@ -10263,7 +10289,17 @@
           {
             "name": "views",
             "type": "ViewConfig[]",
-            "description": "Which views are enabled, and their order."
+            "description": "Which views exist, and their order."
+          },
+          {
+            "name": "enabledViews / onEnabledViewsChange / persistViews",
+            "type": "string[] / callback / { scope, id }",
+            "description": "Optional. Limits the switcher and shows the view menu. persistViews stores the set for a project or globally. At least one view stays on."
+          },
+          {
+            "name": "customizeViews",
+            "type": "boolean",
+            "description": "Shows the animated switcher. Also turns on when enabled views are controlled."
           },
           {
             "name": "onRecordChange / onCreate / onDelete / onMove",
@@ -10368,6 +10404,21 @@
           "path": "registry/lib/multi-view/README.md",
           "type": "registry:file",
           "target": "lib/multi-view/README.md"
+        },
+        {
+          "path": "registry/ui/view-customizer.tsx",
+          "type": "registry:component",
+          "target": "@ui/view-customizer.tsx"
+        },
+        {
+          "path": "registry/ui/segmented-control.tsx",
+          "type": "registry:component",
+          "target": "@ui/segmented-control.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
         }
       ]
     },
@@ -16935,6 +16986,800 @@
       },
       "author": "Eduardo Retana",
       "docs": "Clean-room proposal workflow. The behavior was observed in an unlicensed design demonstration of a discovery-to-statement-of-work product. No source, product names, sample copy, icons, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme."
+    },
+    {
+      "name": "reply-composer",
+      "type": "registry:ui",
+      "title": "Reply composer",
+      "description": "A reply box with Reply and Note modes, suggestion chips, attachment, emoji, and snippet slots, and send on Cmd or Ctrl+Enter.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "dropdown-menu",
+        "popover",
+        "skeleton",
+        "textarea"
+      ],
+      "categories": [
+        "chat",
+        "form"
+      ],
+      "meta": {
+        "titleEs": "Compositor de respuesta",
+        "descriptionEs": "Caja de respuesta y nota interna, con sugerencias, adjuntos y envío con Cmd o Ctrl+Enter.",
+        "preview": "app/examples/reply-composer/preview.tsx",
+        "previewHref": "/examples/reply-composer",
+        "examples": [
+          {
+            "title": "Respuesta y nota",
+            "href": "/examples/reply-composer",
+            "description": "La nota usa el acento del anfitrión. Enter hace un salto de línea."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/reply-composer/stress",
+            "description": "320px y un texto largo."
+          }
+        ],
+        "usage": "<ReplyComposer suggestions={chips} snippets={snippets} onSubmit={(text, mode) => send(text, mode)} />",
+        "api": [
+          {
+            "name": "mode / onModeChange",
+            "type": "\"reply\" | \"note\"",
+            "description": "Note tints the box with the host accent. Omit mode to let the tabs own it."
+          },
+          {
+            "name": "onSubmit",
+            "type": "(text, mode, files) => void",
+            "description": "Cmd+Enter and Ctrl+Enter send. Enter inserts a newline."
+          },
+          {
+            "name": "suggestions / noteSuggestions",
+            "type": "PromptSuggestion[]",
+            "description": "Chips from prompt-suggestions. The list follows the active mode."
+          },
+          {
+            "name": "emojiSlot / snippetSlot / attachSlot",
+            "type": "ReactNode",
+            "description": "Replace the built-in emoji, snippet, or attach control."
+          }
+        ]
+      },
+      "docs": "Import ReplyComposer from the installed UI file. chat-composer still sends on Enter. This one is for a desk reply. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/reply-composer.tsx",
+          "type": "registry:component",
+          "target": "@ui/reply-composer.tsx"
+        },
+        {
+          "path": "registry/ui/prompt-suggestions.tsx",
+          "type": "registry:component",
+          "target": "@ui/prompt-suggestions.tsx"
+        }
+      ]
+    },
+    {
+      "name": "inbox-list",
+      "type": "registry:ui",
+      "title": "Inbox list",
+      "description": "A searchable list of conversations, tickets, or notifications, with presence, preview, time, unread count, and an empty state.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "input"
+      ],
+      "categories": [
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Lista de bandeja",
+        "descriptionEs": "Lista con búsqueda, presencia, vista previa, hora, no leídos y estado vacío.",
+        "preview": "app/examples/inbox-list/preview.tsx",
+        "previewHref": "/examples/inbox-list",
+        "examples": [
+          {
+            "title": "Lista de bandeja",
+            "href": "/examples/inbox-list",
+            "description": "Flechas recorren las filas. La búsqueda ignora acentos."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/inbox-list/stress",
+            "description": "320px, vacío y un nombre largo."
+          }
+        ],
+        "usage": "<InboxList label=\"Inbox\" title=\"Your inbox\" countLabel=\"4\" items={rows} selectedId={id} onSelect={setId} />",
+        "api": [
+          {
+            "name": "items",
+            "type": "InboxRow[]",
+            "description": "Title, subtitle, preview, time, unread, presence, and an optional meta slot."
+          },
+          {
+            "name": "query / onQueryChange",
+            "type": "string / callback",
+            "description": "Filters title, subtitle, and preview. Accents fold."
+          },
+          {
+            "name": "toolbar",
+            "type": "ReactNode",
+            "description": "Filter or sort controls beside the search field."
+          },
+          {
+            "name": "emptyTitle / emptyDescription",
+            "type": "string",
+            "description": "Shown when the filter matches nothing."
+          }
+        ]
+      },
+      "docs": "One list for conversations, tickets, and notifications. PresenceMark is exported from the same file. Arrow keys move the active row. Answer no if the CLI asks to overwrite input. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/inbox-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/inbox-list.tsx"
+        },
+        {
+          "path": "registry/lib/inbox.ts",
+          "type": "registry:lib",
+          "target": "@lib/inbox.ts"
+        }
+      ]
+    },
+    {
+      "name": "ticket-properties",
+      "type": "registry:ui",
+      "title": "Ticket properties",
+      "description": "Status, priority, type, assignee, an overdue due date, SLA, tags, and read-only channel and date rows.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "checkbox",
+        "dropdown-menu",
+        "input",
+        "label",
+        "popover"
+      ],
+      "categories": [
+        "form"
+      ],
+      "meta": {
+        "titleEs": "Propiedades del encargo",
+        "descriptionEs": "Estado, prioridad, fecha vencida, SLA, etiquetas y metadatos de solo lectura.",
+        "preview": "app/examples/ticket-properties/preview.tsx",
+        "previewHref": "/examples/ticket-properties",
+        "examples": [
+          {
+            "title": "Propiedades del encargo",
+            "href": "/examples/ticket-properties",
+            "description": "Una fecha anterior a hoy se pinta con el tono destructive."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/ticket-properties/stress",
+            "description": "320px y un valor largo."
+          }
+        ],
+        "usage": "<TicketProperties today=\"2026-10-06\" status={status} statusOptions={statuses} due={due} sla={sla} tags={tags} onTagsChange={setTags} />",
+        "api": [
+          {
+            "name": "today",
+            "type": "YYYY-MM-DD",
+            "description": "A due date before this day is overdue and uses text-destructive."
+          },
+          {
+            "name": "priority",
+            "type": "string",
+            "description": "low, medium, high, and critical use priority-badge. urgent maps to critical."
+          },
+          {
+            "name": "sla",
+            "type": "{ text, overdue? }",
+            "description": "A read-only row. overdue uses the destructive tone."
+          },
+          {
+            "name": "tags / onTagsChange",
+            "type": "string[] / callback",
+            "description": "Rendered with tag-input."
+          }
+        ]
+      },
+      "docs": "Composes record-properties, priority-badge, and tag-input. Channel, created, and updated stay read-only. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/ticket-properties.tsx",
+          "type": "registry:component",
+          "target": "@ui/ticket-properties.tsx"
+        },
+        {
+          "path": "registry/ui/priority-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/priority-badge.tsx"
+        },
+        {
+          "path": "registry/ui/record-properties.tsx",
+          "type": "registry:component",
+          "target": "@ui/record-properties.tsx"
+        },
+        {
+          "path": "registry/ui/multi-view-fields.tsx",
+          "type": "registry:component",
+          "target": "@ui/multi-view-fields.tsx"
+        },
+        {
+          "path": "registry/ui/tag-input.tsx",
+          "type": "registry:component",
+          "target": "@ui/tag-input.tsx"
+        },
+        {
+          "path": "registry/lib/inbox.ts",
+          "type": "registry:lib",
+          "target": "@lib/inbox.ts"
+        },
+        {
+          "path": "registry/lib/multi-view.ts",
+          "type": "registry:lib",
+          "target": "@lib/multi-view.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "contact-panel",
+      "type": "registry:ui",
+      "title": "Contact panel",
+      "description": "A side panel with Details and Copilot tabs, a contact card, editable fields, and collapsible sections.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "collapsible",
+        "separator"
+      ],
+      "categories": [
+        "panel"
+      ],
+      "meta": {
+        "titleEs": "Ficha de contacto",
+        "descriptionEs": "Pestañas Detalles y Copiloto, ficha del contacto y secciones plegables.",
+        "preview": "app/examples/contact-panel/preview.tsx",
+        "previewHref": "/examples/contact-panel",
+        "examples": [
+          {
+            "title": "Ficha de contacto",
+            "href": "/examples/contact-panel",
+            "description": "Copiloto es un hueco para tarjetas que ya tengas."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/contact-panel/stress",
+            "description": "320px y un valor vacío."
+          }
+        ],
+        "usage": "<ContactPanel contactName=\"Inés Soler\" fields={fields} sections={sections} copilot={slot} />",
+        "api": [
+          {
+            "name": "tab / onTabChange",
+            "type": "\"details\" | \"copilot\"",
+            "description": "Arrow keys move between the two tabs."
+          },
+          {
+            "name": "fields",
+            "type": "ContactField[]",
+            "description": "A select when options are set. Otherwise the value is read-only."
+          },
+          {
+            "name": "sections",
+            "type": "ContactSection[]",
+            "description": "Collapsible blocks under the fields."
+          },
+          {
+            "name": "copilot",
+            "type": "ReactNode",
+            "description": "Rendered on the Copilot tab. The panel does not fetch suggestions."
+          }
+        ]
+      },
+      "docs": "The Copilot tab is a slot, so hosts can drop in suggestion-card or tool-call without this item depending on them. Answer no if the CLI asks to overwrite button, collapsible, or separator. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/contact-panel.tsx",
+          "type": "registry:component",
+          "target": "@ui/contact-panel.tsx"
+        },
+        {
+          "path": "registry/lib/inbox.ts",
+          "type": "registry:lib",
+          "target": "@lib/inbox.ts"
+        }
+      ]
+    },
+    {
+      "name": "view-customizer",
+      "type": "registry:ui",
+      "title": "View customizer",
+      "description": "A popover of view tiles you can turn on and off, plus an animated switcher that appears once two views are enabled.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "button",
+        "popover"
+      ],
+      "categories": [
+        "table"
+      ],
+      "meta": {
+        "titleEs": "Personalizador de vistas",
+        "descriptionEs": "Baldosas para encender vistas y una pastilla que aparece cuando hay dos o más.",
+        "preview": "app/examples/view-customizer/preview.tsx",
+        "previewHref": "/examples/view-customizer",
+        "examples": [
+          {
+            "title": "Vistas de la colección",
+            "href": "/examples/view-customizer",
+            "description": "Ver todas desaparece cuando todas están encendidas."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/view-customizer/stress",
+            "description": "Una sola vista y un pie largo."
+          }
+        ],
+        "usage": "<ViewSwitcher views={enabled} value={viewId} onValueChange={setViewId} menu={<ViewCustomizer views={views} enabled={enabled} onEnabledChange={setEnabled}>{trigger}</ViewCustomizer>} />",
+        "api": [
+          {
+            "name": "views / enabled / onEnabledChange",
+            "type": "ViewOption[] / string[] / callback",
+            "description": "At least one view stays on. Show all hides when every view is on."
+          },
+          {
+            "name": "footer",
+            "type": "ReactNode",
+            "description": "Scope line under the tiles, such as where the choice is saved."
+          },
+          {
+            "name": "ViewSwitcher",
+            "type": "component",
+            "description": "Hides the pill at one view. At two or more it resizes and the add button slides."
+          }
+        ]
+      },
+      "docs": "ViewSwitcher is exported from this file and builds on segmented-control. The glide uses the host motion presets and respects reduced motion. Pair it with use-multi-view enabledViews and persistViews. Answer no if the CLI asks to overwrite button or popover. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/view-customizer.tsx",
+          "type": "registry:component",
+          "target": "@ui/view-customizer.tsx"
+        },
+        {
+          "path": "registry/ui/segmented-control.tsx",
+          "type": "registry:component",
+          "target": "@ui/segmented-control.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "support-inbox",
+      "type": "registry:block",
+      "title": "Support inbox",
+      "description": "A three-pane desk with folders, a conversation list, a reply thread, a contact panel, and a new-conversation form.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion",
+        "sonner"
+      ],
+      "registryDependencies": [
+        "alert-dialog",
+        "button",
+        "collapsible",
+        "dialog",
+        "dropdown-menu",
+        "input",
+        "label",
+        "popover",
+        "separator",
+        "sheet",
+        "skeleton",
+        "textarea"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Bandeja del taller",
+        "descriptionEs": "Carpetas, hilo y ficha del contacto, con nota interna y conversación nueva.",
+        "preview": "app/examples/support-inbox/preview.tsx",
+        "previewHref": "/examples/support-inbox",
+        "examples": [
+          {
+            "title": "Bandeja del taller",
+            "href": "/examples/support-inbox",
+            "description": "Estudio Bruma. El copiloto es un hueco."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/support-inbox/stress",
+            "description": "320px, vacío y un asunto largo."
+          }
+        ],
+        "usage": "<SupportInbox folders={folders} defaultConversations={threads} agentName=\"Mateo\" copilot={slot} />",
+        "api": [
+          {
+            "name": "folders / defaultConversations",
+            "type": "data",
+            "description": "Folders, views, and team inboxes. The block does not fetch."
+          },
+          {
+            "name": "copilot",
+            "type": "ReactNode",
+            "description": "Rendered in the contact panel Copilot tab."
+          },
+          {
+            "name": "copy",
+            "type": "Partial labels",
+            "description": "Override the English chrome. Record text stays in your props."
+          }
+        ]
+      },
+      "docs": "Clean-room support desk. Composes inbox-list, chat-message, reply-composer, contact-panel, tag-input, and entity-form. Pass conversations in. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/blocks/support-inbox.tsx",
+          "type": "registry:component",
+          "target": "@ui/support-inbox.tsx"
+        },
+        {
+          "path": "registry/ui/chat-message.tsx",
+          "type": "registry:component",
+          "target": "@ui/chat-message.tsx"
+        },
+        {
+          "path": "registry/ui/contact-panel.tsx",
+          "type": "registry:component",
+          "target": "@ui/contact-panel.tsx"
+        },
+        {
+          "path": "registry/ui/entity-form.tsx",
+          "type": "registry:component",
+          "target": "@ui/entity-form.tsx"
+        },
+        {
+          "path": "registry/ui/inbox-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/inbox-list.tsx"
+        },
+        {
+          "path": "registry/ui/reply-composer.tsx",
+          "type": "registry:component",
+          "target": "@ui/reply-composer.tsx"
+        },
+        {
+          "path": "registry/ui/prompt-suggestions.tsx",
+          "type": "registry:component",
+          "target": "@ui/prompt-suggestions.tsx"
+        },
+        {
+          "path": "registry/ui/tag-input.tsx",
+          "type": "registry:component",
+          "target": "@ui/tag-input.tsx"
+        },
+        {
+          "path": "registry/lib/inbox.ts",
+          "type": "registry:lib",
+          "target": "@lib/inbox.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "ticket-desk",
+      "type": "registry:block",
+      "title": "Ticket desk",
+      "description": "A ticket list with a status filter, a thread, a properties panel, and dialogs to create, edit, or delete a ticket.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion",
+        "sonner"
+      ],
+      "registryDependencies": [
+        "alert-dialog",
+        "avatar",
+        "badge",
+        "button",
+        "checkbox",
+        "collapsible",
+        "dialog",
+        "dropdown-menu",
+        "input",
+        "label",
+        "popover",
+        "sheet",
+        "skeleton",
+        "textarea"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Mesa de encargos",
+        "descriptionEs": "Lista, hilo, propiedades y alta o edición de un encargo.",
+        "preview": "app/examples/ticket-desk/preview.tsx",
+        "previewHref": "/examples/ticket-desk",
+        "examples": [
+          {
+            "title": "Mesa de encargos",
+            "href": "/examples/ticket-desk",
+            "description": "El filtro de estado usa filter-toolbar. Una fecha pasada queda vencida."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/ticket-desk/stress",
+            "description": "320px y un asunto largo."
+          }
+        ],
+        "usage": "<TicketDesk defaultTickets={tickets} agentName=\"Mateo\" today=\"2026-10-06\" statuses={statuses} priorities={priorities} types={types} channels={channels} assignees={people} />",
+        "api": [
+          {
+            "name": "today",
+            "type": "YYYY-MM-DD",
+            "description": "Passed to ticket-properties so a past due date reads as overdue."
+          },
+          {
+            "name": "statuses / priorities / types",
+            "type": "DeskOption[]",
+            "description": "Options for the filter, the form, and the properties panel."
+          },
+          {
+            "name": "copy",
+            "type": "Partial labels",
+            "description": "Override the English chrome. Ticket text stays in your props."
+          }
+        ]
+      },
+      "docs": "Clean-room ticket desk. Composes inbox-list, filter-toolbar, chat-message, reply-composer, ticket-properties, and entity-form. Pass tickets in. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/blocks/ticket-desk.tsx",
+          "type": "registry:component",
+          "target": "@ui/ticket-desk.tsx"
+        },
+        {
+          "path": "registry/ui/chat-message.tsx",
+          "type": "registry:component",
+          "target": "@ui/chat-message.tsx"
+        },
+        {
+          "path": "registry/ui/entity-form.tsx",
+          "type": "registry:component",
+          "target": "@ui/entity-form.tsx"
+        },
+        {
+          "path": "registry/ui/filter-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@ui/filter-toolbar.tsx"
+        },
+        {
+          "path": "registry/ui/inbox-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/inbox-list.tsx"
+        },
+        {
+          "path": "registry/ui/reply-composer.tsx",
+          "type": "registry:component",
+          "target": "@ui/reply-composer.tsx"
+        },
+        {
+          "path": "registry/ui/prompt-suggestions.tsx",
+          "type": "registry:component",
+          "target": "@ui/prompt-suggestions.tsx"
+        },
+        {
+          "path": "registry/ui/ticket-properties.tsx",
+          "type": "registry:component",
+          "target": "@ui/ticket-properties.tsx"
+        },
+        {
+          "path": "registry/ui/priority-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/priority-badge.tsx"
+        },
+        {
+          "path": "registry/ui/record-properties.tsx",
+          "type": "registry:component",
+          "target": "@ui/record-properties.tsx"
+        },
+        {
+          "path": "registry/ui/multi-view-fields.tsx",
+          "type": "registry:component",
+          "target": "@ui/multi-view-fields.tsx"
+        },
+        {
+          "path": "registry/ui/tag-input.tsx",
+          "type": "registry:component",
+          "target": "@ui/tag-input.tsx"
+        },
+        {
+          "path": "registry/lib/inbox.ts",
+          "type": "registry:lib",
+          "target": "@lib/inbox.ts"
+        },
+        {
+          "path": "registry/lib/multi-view.ts",
+          "type": "registry:lib",
+          "target": "@lib/multi-view.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "notification-inbox",
+      "type": "registry:block",
+      "title": "Notification inbox",
+      "description": "Notification tabs with counts, mark all read, snooze, archive, subscribe, a comment thread, and a properties column.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "checkbox",
+        "dropdown-menu",
+        "input",
+        "label",
+        "popover",
+        "textarea"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Bandeja de avisos",
+        "descriptionEs": "Pestañas con conteo, marcar leído, posponer, archivar y un hilo de comentarios.",
+        "preview": "app/examples/notification-inbox/preview.tsx",
+        "previewHref": "/examples/notification-inbox",
+        "examples": [
+          {
+            "title": "Bandeja de avisos",
+            "href": "/examples/notification-inbox",
+            "description": "Estudio Bruma. Archivar quita el aviso de la lista."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/notification-inbox/stress",
+            "description": "320px y un título largo."
+          }
+        ],
+        "usage": "<NotificationInbox defaultNotifications={items} currentUser={me} today=\"2026-10-06\" statuses={statuses} priorities={priorities} />",
+        "api": [
+          {
+            "name": "defaultNotifications",
+            "type": "DeskNotification[]",
+            "description": "All, unread, teams, and starred are derived. Archived rows stay hidden."
+          },
+          {
+            "name": "currentUser",
+            "type": "{ id, name }",
+            "description": "Author for new comments in comment-thread."
+          },
+          {
+            "name": "copy",
+            "type": "Partial labels",
+            "description": "Override the English chrome. Notice text stays in your props."
+          }
+        ]
+      },
+      "docs": "Clean-room notification desk. Composes inbox-list, comment-thread, and ticket-properties. Snoozed rows stay in All and leave Unread. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/blocks/notification-inbox.tsx",
+          "type": "registry:component",
+          "target": "@ui/notification-inbox.tsx"
+        },
+        {
+          "path": "registry/ui/comment-thread.tsx",
+          "type": "registry:component",
+          "target": "@ui/comment-thread.tsx"
+        },
+        {
+          "path": "registry/ui/inbox-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/inbox-list.tsx"
+        },
+        {
+          "path": "registry/ui/ticket-properties.tsx",
+          "type": "registry:component",
+          "target": "@ui/ticket-properties.tsx"
+        },
+        {
+          "path": "registry/ui/priority-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/priority-badge.tsx"
+        },
+        {
+          "path": "registry/ui/record-properties.tsx",
+          "type": "registry:component",
+          "target": "@ui/record-properties.tsx"
+        },
+        {
+          "path": "registry/ui/multi-view-fields.tsx",
+          "type": "registry:component",
+          "target": "@ui/multi-view-fields.tsx"
+        },
+        {
+          "path": "registry/ui/tag-input.tsx",
+          "type": "registry:component",
+          "target": "@ui/tag-input.tsx"
+        },
+        {
+          "path": "registry/lib/inbox.ts",
+          "type": "registry:lib",
+          "target": "@lib/inbox.ts"
+        },
+        {
+          "path": "registry/lib/multi-view.ts",
+          "type": "registry:lib",
+          "target": "@lib/multi-view.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
     }
   ]
 }

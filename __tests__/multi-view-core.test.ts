@@ -11,6 +11,7 @@ import {
   groupRecordsWithSum,
   monthGrid,
   moveRange,
+  coerceEnabledViews,
   recordsToCsv,
   resizeRange,
   searchRecords,
@@ -97,6 +98,12 @@ describe("multi-view helpers", () => {
     expect(csv).toContain("'=cmd")
     const filters = [{ id: "1", field: "stage", op: "is" as const, value: "new" }]
     expect(decodeFilters(encodeFilters(filters))[0]).toMatchObject({ field: "stage", op: "is", value: "new" })
+  })
+
+  it("keeps at least one enabled view", () => {
+    expect(coerceEnabledViews(["gallery", "table"], ["table", "board"])).toEqual(["table"])
+    expect(coerceEnabledViews([], ["table", "board"], ["board"])).toEqual(["board"])
+    expect(coerceEnabledViews(["missing"], ["table", "board"])).toEqual(["table"])
   })
 
   it("requires a title on create", () => {

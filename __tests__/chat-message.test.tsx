@@ -29,6 +29,20 @@ describe("ChatMessage", () => {
     expect(onRetry).toHaveBeenCalledOnce()
   })
 
+  it("marks an internal note and a seen receipt", () => {
+    render(
+      <ChatMessage role="user" side="incoming" variant="note" receipt="unseen" noteLabel="Internal note">
+        Solo el taller
+      </ChatMessage>,
+    )
+    const row = screen.getByText("Solo el taller").closest("[data-slot='chat-message']")
+    expect(row).toHaveAttribute("data-variant", "note")
+    expect(row).toHaveAttribute("data-side", "incoming")
+    expect(row).toHaveAttribute("data-receipt", "unseen")
+    expect(screen.getByText("Internal note")).toBeInTheDocument()
+    expect(screen.getByText("Not seen")).toBeInTheDocument()
+  })
+
   it("toggles a reaction", async () => {
     const user = userEvent.setup()
     const onReact = vi.fn()

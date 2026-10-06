@@ -70,6 +70,34 @@ describe("useNextMultiViewAdapter", () => {
   })
 })
 
+describe("enabled views", () => {
+  const storage = {
+    data: new Map<string, string>(),
+    getItem(key: string) {
+      return this.data.get(key) ?? null
+    },
+    setItem(key: string, value: string) {
+      this.data.set(key, value)
+    },
+  }
+  const persistViews = { scope: "project" as const, id: "niebla", storage }
+
+  it("keeps at least one view and remembers the set", async () => {
+    const first = renderHook(() => useMultiView({ views, persistViews }))
+    expect(first.result.current.enabledViews).toEqual(["table", "board"])
+    act(() => first.result.current.setEnabledViews(["board"]))
+    expect(first.result.current.enabledViews).toEqual(["board"])
+    expect(storage.getItem("retana.views.project.niebla")).toBe(JSON.stringify(["board"]))
+    act(() => first.result.current.setEnabledViews([]))
+    expect(first.result.current.enabledViews).toEqual(["board"])
+
+    const second = renderHook(() => useMultiView({ views, persistViews, defaultEnabledViews: ["table"] }))
+    await act(async () => {})
+    expect(second.result.current.enabledViews).toEqual(["board"])
+    expect(second.result.current.viewId).toBe("board")
+  })
+})
+
 describe("useOptimisticRecords", () => {
   it("rolls a patch back when the save rejects", async () => {
     const records = [{ id: "a", name: "Before" }]

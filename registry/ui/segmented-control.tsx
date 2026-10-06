@@ -12,6 +12,8 @@ export type Segment = {
   value: string
   label: string
   accessory?: React.ReactNode
+  /** Drawn before the label. With `iconsOnly`, the label stays available to assistive tech. */
+  icon?: React.ReactNode
 }
 
 export type SegmentedControlClassNames = {
@@ -29,6 +31,8 @@ export type SegmentedControlProps = {
   onValueChange?: (value: string) => void
   label?: string
   onOptionIntent?: (value: string) => void
+  /** Hides each label visually and keeps it in the accessible name. */
+  iconsOnly?: boolean
   className?: string
   classNames?: SegmentedControlClassNames
 }
@@ -40,6 +44,7 @@ export function SegmentedControl({
   onValueChange,
   label,
   onOptionIntent,
+  iconsOnly = false,
   className,
   classNames,
 }: SegmentedControlProps) {
@@ -160,7 +165,8 @@ export function SegmentedControl({
                   />
                 ) : null}
                 <span data-slot="segmented-control-label" className={cn("relative z-10 inline-flex items-center gap-1.5", classNames?.label)}>
-                  {option.label}
+                  {option.icon}
+                  {iconsOnly ? <span className="sr-only">{option.label}</span> : option.label}
                   {option.accessory}
                 </span>
               </button>

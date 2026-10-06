@@ -316,6 +316,19 @@ tokens and reuse pieces already in this registry.
 
 ---
 
+Inbox desks
+
+reply-composer, inbox-list, ticket-properties, contact-panel,
+view-customizer, support-inbox, ticket-desk, and notification-inbox are
+original clean-room works. The behavior was observed. No source, file
+structure, markup, copy, icons, or illustrations from those observations
+were copied. Demo records belong to Estudio Bruma, a fictional studio.
+The pieces use the host shadcn tokens and reuse pieces already in this
+registry. chat-message, segmented-control, use-multi-view, and multi-view
+gained optional fields and stay compatible when those fields are omitted.
+
+---
+
 LocalMode UI
 
 Retana UI includes pieces adapted from LocalMode UI (MIT):

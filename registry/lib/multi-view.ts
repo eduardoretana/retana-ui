@@ -906,3 +906,49 @@ export function validateDraft(
 export function createRecordId(prefix = "rec"): string {
   return `${prefix}_${Math.random().toString(36).slice(2, 10)}`
 }
+
+export const VIEW_PERSISTENCE_SCOPES = ["global", "project"] as const
+
+export type ViewPersistenceScope = (typeof VIEW_PERSISTENCE_SCOPES)[number]
+
+/** Storage key for which views are enabled. The id is the collection, not a record. */
+export function viewPersistenceKey(scope: ViewPersistenceScope, id: string): string {
+  const safe = id.replace(/[^a-zA-Z0-9._-]/g, "")
+  return `retana.views.${scope}.${safe || "default"}`
+}
+
+/**
+ * Keeps enabled view ids inside `allowed`, in that order.
+ * An empty result falls back to the previous set, then to the first allowed id.
+ */
+export function coerceEnabledViews(
+  next: readonly string[],
+  allowed: readonly string[],
+  previous?: readonly string[],
+): string[] {
+  const allow = new Set(allowed)
+  const picked = new Set(next.filter((id) => allow.has(id)))
+  const ordered = allowed.filter((id) => picked.has(id))
+  if (ordered.length > 0) return ordered
+  if (previous) {
+    const kept = allowed.filter((id) => previous.includes(id))
+    if (kept.length > 0) return kept
+  }
+  return allowed[0] ? [allowed[0]] : []
+}
+
+/** Parses a stored id list. `null` means the value is missing or unreadable. */
+export function readEnabledViews(
+  raw: string | null | undefined,
+  allowed: readonly string[],
+): string[] | null {
+  if (!raw) return null
+  try {
+    const parsed = JSON.parse(raw) as unknown
+    if (!Array.isArray(parsed) || !parsed.every((id) => typeof id === "string")) return null
+    const next = coerceEnabledViews(parsed, allowed)
+    return next.length > 0 ? next : null
+  } catch {
+    return null
+  }
+}

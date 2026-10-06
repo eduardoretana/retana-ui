@@ -28,7 +28,7 @@ export function UseMultiViewDemo() {
         ))}
       </div>
       <p className="text-sm text-muted-foreground">
-        {state.viewId} · {state.query || "empty query"} · {state.selectedIds.length} selected
+        {state.viewId} · {state.query || "empty query"} · {state.selectedIds.length} selected · {state.enabledViews.length} views on
       </p>
       <button type="button" className="text-sm underline" onClick={() => state.toggleSelected("op-bruma")}>
         Toggle Bruma
