@@ -1,0 +1,75 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "horizontal-scroll-rail",
+  "title": "Horizontal scroll rail",
+  "author": "Eduardo Retana",
+  "description": "A sticky section whose vertical scroll drives a horizontal rail. Narrow viewports and reduced motion use a native scroller.",
+  "dependencies": [
+    "motion",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button",
+    "use-scroll-progress",
+    "motion-preference"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/horizontal-scroll-rail.tsx",
+      "content": "\"use client\"\n\n/**\n * Vertical scroll drives a horizontal rail while the section is sticky.\n * The section is as tall as the pane plus the overflow of the track.\n * Clean-room. Reduced motion, and viewports under the breakpoint, use a native\n * horizontal scroller with scroll-snap instead. Focusable items scroll into view.\n */\n\nimport { Children, useLayoutEffect, useRef, useState, useSyncExternalStore, type KeyboardEvent, type ReactNode } from \"react\"\nimport { useMotionValueEvent } from \"motion/react\"\nimport { ChevronLeft, ChevronRight } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\nimport { clampUnit, useScrollProgress } from \"@/hooks/use-scroll-progress\"\nimport { useMotionPreference } from \"@/components/ui/motion-preference\"\n\nexport type RailRunway = {\n  /** Horizontal overflow, in pixels. */\n  distance: number\n  /** Pane height plus that overflow. */\n  height: number\n}\n\n/** Section height for a sticky rail: the visible pane plus the track's overflow. */\nexport function railRunway(paneHeight: number, trackWidth: number, paneWidth: number): RailRunway {\n  const pane = Number.isFinite(paneHeight) ? Math.max(0, paneHeight) : 0\n  const track = Number.isFinite(trackWidth) ? trackWidth : 0\n  const view = Number.isFinite(paneWidth) ? paneWidth : 0\n  const distance = Math.max(0, track - view)\n  return { distance, height: pane + distance }\n}\n\ntype Edges = { start: boolean; end: boolean }\n\nfunction useMinWidth(px: number) {\n  const query = `(min-width: ${px}px)`\n  return useSyncExternalStore(\n    (onChange) => {\n      const media = window.matchMedia(query)\n      media.addEventListener(\"change\", onChange)\n      return () => media.removeEventListener(\"change\", onChange)\n    },\n    () => window.matchMedia(query).matches,\n    () => false,\n  )\n}\n\nexport type HorizontalScrollRailProps = {\n  children: ReactNode\n  label?: string\n  previousLabel?: string\n  nextLabel?: string\n  className?: string\n  paneClassName?: string\n  trackClassName?: string\n  itemClassName?: string\n  /** Native scroller below this width. Default 768. */\n  minWidth?: number\n}\n\nexport function HorizontalScrollRail({\n  children,\n  label = \"Horizontal scroller\",\n  previousLabel = \"Previous\",\n  nextLabel = \"Next\",\n  className,\n  paneClassName,\n  trackClassName,\n  itemClassName,\n  minWidth = 768,\n}: HorizontalScrollRailProps) {\n  const reduced = useMotionPreference()\n  const wide = useMinWidth(minWidth)\n  const sectionRef = useRef<HTMLDivElement>(null)\n  const paneRef = useRef<HTMLDivElement>(null)\n  const trackRef = useRef<HTMLDivElement>(null)\n  const distanceRef = useRef(0)\n  const [runway, setRunway] = useState<RailRunway>({ distance: 0, height: 0 })\n  const [edges, setEdges] = useState<Edges>({ start: true, end: true })\n  const pinned = wide && !reduced && runway.distance > 1\n\n  const { progress } = useScrollProgress({\n    target: sectionRef,\n    offset: [\"start start\", \"end end\"],\n    trackContentSize: true,\n  })\n\n  function publishEdges(current: number, max: number) {\n    const next = { start: current <= 1, end: max <= 1 || current >= max - 1 }\n    setEdges((prev) => (prev.start === next.start && prev.end === next.end ? prev : next))\n  }\n\n  useLayoutEffect(() => {\n    const pane = paneRef.current\n    const track = trackRef.current\n    if (!pane || !track) return\n    const measure = () => {\n      const next = railRunway(pane.clientHeight, track.scrollWidth, pane.clientWidth)\n      distanceRef.current = next.distance\n      setRunway((prev) => (prev.distance === next.distance && prev.height === next.height ? prev : next))\n      const fraction = wide && !reduced ? clampUnit(progress.get()) : next.distance <= 0 ? 0 : pane.scrollLeft / next.distance\n      const edgeCurrent = fraction * next.distance\n      const edgeNext = { start: edgeCurrent <= 1, end: next.distance <= 1 || edgeCurrent >= next.distance - 1 }\n      setEdges((prev) => (prev.start === edgeNext.start && prev.end === edgeNext.end ? prev : edgeNext))\n      if (wide && !reduced && next.distance > 1) {\n        track.style.transform = `translate3d(${-clampUnit(progress.get()) * next.distance}px, 0, 0)`\n      } else {\n        track.style.transform = \"\"\n      }\n    }\n    measure()\n    const observer = new ResizeObserver(measure)\n    observer.observe(pane)\n    observer.observe(track)\n    return () => observer.disconnect()\n  }, [children, wide, reduced, progress])\n\n  useMotionValueEvent(progress, \"change\", (value) => {\n    if (!(wide && !reduced) || distanceRef.current <= 1) return\n    const current = clampUnit(value) * distanceRef.current\n    const track = trackRef.current\n    if (track) track.style.transform = `translate3d(${-current}px, 0, 0)`\n    publishEdges(current, distanceRef.current)\n  })\n\n  function scrollToDistance(next: number) {\n    const section = sectionRef.current\n    const pane = paneRef.current\n    if (!section || !pane) return\n    const max = distanceRef.current\n    const fraction = max <= 0 ? 0 : Math.min(1, Math.max(0, next / max))\n    const travel = Math.max(0, section.offsetHeight - pane.clientHeight)\n    const start = window.scrollY + section.getBoundingClientRect().top\n    window.scrollTo({ top: start + fraction * travel, behavior: \"auto\" })\n  }\n\n  function step(direction: number) {\n    const pane = paneRef.current\n    if (!pane) return\n    const amount = Math.max(160, pane.clientWidth * 0.8) * direction\n    if (!pinned) {\n      pane.scrollBy({ left: amount, behavior: reduced ? \"auto\" : \"smooth\" })\n      return\n    }\n    const max = distanceRef.current\n    const current = clampUnit(progress.get()) * max\n    scrollToDistance(Math.min(max, Math.max(0, current + amount)))\n  }\n\n  function revealItem(item: HTMLElement) {\n    const pane = paneRef.current\n    const track = trackRef.current\n    if (!pane || !track || item === pane) return\n    if (!pinned) {\n      item.scrollIntoView({ inline: \"nearest\", block: \"nearest\" })\n      return\n    }\n    const max = distanceRef.current\n    scrollToDistance(Math.min(max, Math.max(0, layoutLeft(item, track) - 24)))\n  }\n\n  function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {\n    if (event.key !== \"ArrowRight\" && event.key !== \"ArrowLeft\") return\n    const target = event.target\n    if (target instanceof HTMLElement && target.closest(\"input, textarea, select, [contenteditable='true']\")) return\n    event.preventDefault()\n    step(event.key === \"ArrowRight\" ? 1 : -1)\n  }\n\n  return (\n    <div data-slot=\"horizontal-scroll-rail\" data-mode={pinned ? \"pinned\" : \"native\"} className={cn(\"flex w-full min-w-0 flex-col gap-2\", className)}>\n      <div className=\"flex items-center justify-end gap-1\">\n        <Button type=\"button\" variant=\"outline\" size=\"icon-sm\" aria-label={previousLabel} disabled={edges.start} onClick={() => step(-1)}>\n          <ChevronLeft data-icon=\"inline-start\" />\n        </Button>\n        <Button type=\"button\" variant=\"outline\" size=\"icon-sm\" aria-label={nextLabel} disabled={edges.end} onClick={() => step(1)}>\n          <ChevronRight data-icon=\"inline-start\" />\n        </Button>\n      </div>\n      <section ref={sectionRef} className=\"min-w-0 max-w-full\" style={pinned ? { height: runway.height } : undefined}>\n        <div\n          ref={paneRef}\n          role=\"region\"\n          aria-label={label}\n          tabIndex={0}\n          data-slot=\"horizontal-scroll-pane\"\n          onKeyDown={onKeyDown}\n          onScroll={() => {\n            if (pinned) return\n            const pane = paneRef.current\n            if (!pane) return\n            publishEdges(pane.scrollLeft, distanceRef.current)\n          }}\n          onFocusCapture={(event) => {\n            const item = event.target\n            if (item instanceof HTMLElement) revealItem(item)\n          }}\n          className={cn(\n            \"h-72 min-w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\",\n            pinned ? \"sticky top-0 overflow-hidden\" : \"snap-x snap-mandatory overflow-x-auto\",\n            paneClassName,\n          )}\n        >\n          <div ref={trackRef} className={cn(\"flex w-max gap-4\", trackClassName)}>\n            {Children.map(children, (child) => (\n              <div data-slot=\"horizontal-scroll-item\" className={cn(\"w-64 shrink-0 snap-start\", itemClassName)}>\n                {child}\n              </div>\n            ))}\n          </div>\n        </div>\n      </section>\n    </div>\n  )\n}\n\nfunction layoutLeft(item: HTMLElement, track: HTMLElement) {\n  let left = 0\n  let node: HTMLElement | null = item\n  while (node && node !== track) {\n    left += node.offsetLeft\n    const parent: Element | null = node.offsetParent\n    node = parent instanceof HTMLElement ? parent : null\n  }\n  return left\n}\n",
+      "type": "registry:component",
+      "target": "@ui/horizontal-scroll-rail.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Riel horizontal",
+    "descriptionEs": "El scroll vertical mueve una fila fija. En estrecho, o con movimiento reducido, la fila se desplaza sola.",
+    "preview": "app/examples/horizontal-scroll-rail/preview.tsx",
+    "previewHref": "/examples/horizontal-scroll-rail",
+    "examples": [
+      {
+        "title": "Riel horizontal",
+        "href": "/examples/horizontal-scroll-rail",
+        "description": "El scroll vertical mueve una fila fija."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/horizontal-scroll-rail/stress",
+        "description": "320px, vacío, texto largo y RTL."
+      },
+      {
+        "title": "Glosario",
+        "href": "/examples/animations",
+        "description": "Los seis términos de scroll, con demos propias."
+      }
+    ],
+    "usage": "<HorizontalScrollRail label=\"Pieces\">{cards}</HorizontalScrollRail>",
+    "api": [
+      {
+        "name": "children",
+        "type": "ReactNode",
+        "description": "Cards. Each is wrapped in a snap item. Focusable descendants scroll into view."
+      },
+      {
+        "name": "minWidth",
+        "type": "number",
+        "description": "Below this width the rail is a native horizontal scroller. Default 768."
+      },
+      {
+        "name": "paneClassName / itemClassName",
+        "type": "string",
+        "description": "Pane height (default h-72) and item width (default w-64)."
+      },
+      {
+        "name": "label / previousLabel / nextLabel",
+        "type": "string",
+        "description": "Accessible names for the region and the step buttons."
+      }
+    ]
+  },
+  "docs": "Clean-room horizontal rail. No Motion UI or Motion+ source. On a wide screen with motion allowed, the section height is the pane plus the track overflow (ResizeObserver) and vertical scroll translates the track. Reduced motion, and viewports under minWidth, keep a native horizontal scroller with scroll-snap. Arrow keys move the rail. Focusable items scroll into view. Answer no if the CLI asks to overwrite button, use-scroll-progress, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "animation"
+  ],
+  "type": "registry:ui"
+}

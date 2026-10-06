@@ -199,6 +199,21 @@ Sound, haptics, squircles, animated theme icons, and a few expressive controls. 
 | [`motion-preference`](registry/ui/motion-preference.tsx) | System, reduced, or full motion. |
 | [`use-feedback`](registry/hooks/use-feedback.ts) | One intent for sound, haptic, and an optional motion hint. |
 
+### Animaciones
+
+Scroll and motion primitives. They inherit the host tokens and follow [`motion-preference`](registry/ui/motion-preference.tsx). The glossary page is [`/examples/animations`](/examples/animations). The six names are industry vocabulary. The demos are original. Motion UI and Motion+ are not in this registry.
+
+| Piece | Use it for |
+| --- | --- |
+| [`use-scroll-progress`](registry/hooks/use-scroll-progress.ts) | Scroll position as 0–1, for the window or a chosen element. |
+| [`scroll-progress`](registry/ui/scroll-progress.tsx) | A reading bar bound to that position. |
+| [`reveal-on-scroll`](registry/ui/reveal-on-scroll.tsx) | Fade, slide, or scale once, when the element enters. |
+| [`stagger-reveal`](registry/ui/stagger-reveal.tsx) | The same entrance, staggered across children. |
+| [`scroll-snap-rail`](registry/ui/scroll-snap-rail.tsx) | Native scroll-snap for sections or cards. |
+| [`sticky-section-list`](registry/ui/sticky-section-list.tsx) | Group headers that stick until the next group. |
+| [`parallax-layers`](registry/ui/parallax-layers.tsx) | Layers that travel at different speeds. Still when motion is reduced. |
+| [`horizontal-scroll-rail`](registry/ui/horizontal-scroll-rail.tsx) | Vertical scroll drives a horizontal rail. Native scroll when motion is reduced or the viewport is narrow. |
+
 ## Install
 
 Register the namespace once in the host `components.json`. The public catalog host is not chosen yet. `https://<your-deployment>` is a placeholder, on this page and on `/docs`.
@@ -299,7 +314,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`264` items are in `registry.json` on this branch: `219` components, `35` blocks, `4` hooks, and `6` libraries. A name links to its source file.
+`272` items are in `registry.json` on this branch: `226` components, `35` blocks, `5` hooks, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -580,6 +595,17 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`theme-toggle-icons`](registry/ui/theme-toggle-icons.tsx) · ui — Fourteen animated sun and moon icons. Pass one to theme-switch, or render ThemeToggleIcon on its own. Install: `npx shadcn@latest add @retana/theme-toggle-icons`.
 - [`morph-dialog`](registry/ui/morph-dialog.tsx) · ui — The trigger grows into a modal dialog. Focus is trapped, Escape and the backdrop close it, and focus returns to the trigger. Install: `npx shadcn@latest add @retana/morph-dialog`.
 - [`morph-popover`](registry/ui/morph-popover.tsx) · ui — A surface shared with the trigger grows into a non-modal panel. Escape and an outside pointer close it. Install: `npx shadcn@latest add @retana/morph-popover`.
+
+### Animaciones
+
+- [`use-scroll-progress`](registry/hooks/use-scroll-progress.ts) · hook — Scroll position as a 0–1 motion value, for the window or for one element. Install: `npx shadcn@latest add @retana/use-scroll-progress`.
+- [`scroll-progress`](registry/ui/scroll-progress.tsx) · ui — A reading bar bound to scroll progress, from 0 to 1. Install: `npx shadcn@latest add @retana/scroll-progress`.
+- [`reveal-on-scroll`](registry/ui/reveal-on-scroll.tsx) · ui — Fades, slides, or scales in once when it enters the viewport. Install: `npx shadcn@latest add @retana/reveal-on-scroll`.
+- [`stagger-reveal`](registry/ui/stagger-reveal.tsx) · ui — Staggers a fade and rise across direct children when the group enters. Install: `npx shadcn@latest add @retana/stagger-reveal`.
+- [`scroll-snap-rail`](registry/ui/scroll-snap-rail.tsx) · ui — A native scroll-snap region for full sections or peeking cards. Install: `npx shadcn@latest add @retana/scroll-snap-rail`.
+- [`sticky-section-list`](registry/ui/sticky-section-list.tsx) · ui — Grouped rows whose headers stick until the next group pushes them. Install: `npx shadcn@latest add @retana/sticky-section-list`.
+- [`parallax-layers`](registry/ui/parallax-layers.tsx) · ui — Layers that travel at different speeds while their parent crosses the viewport. Transform only. Install: `npx shadcn@latest add @retana/parallax-layers`.
+- [`horizontal-scroll-rail`](registry/ui/horizontal-scroll-rail.tsx) · ui — A sticky section whose vertical scroll drives a horizontal rail. Narrow viewports and reduced motion use a native scroller. Install: `npx shadcn@latest add @retana/horizontal-scroll-rail`.
 
 ### Admin
 

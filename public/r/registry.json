@@ -20013,6 +20013,592 @@
       },
       "author": "Eduardo Retana",
       "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. The period switch reuses segmented-control. The notes tab reuses reply-composer. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "use-scroll-progress",
+      "type": "registry:hook",
+      "title": "useScrollProgress",
+      "description": "Scroll position as a 0–1 motion value, for the window or for one element.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "animation"
+      ],
+      "meta": {
+        "titleEs": "Progreso de scroll",
+        "descriptionEs": "La posición del scroll como un valor de 0 a 1, de la ventana o de un elemento.",
+        "preview": "app/examples/use-scroll-progress/preview.tsx",
+        "previewHref": "/examples/use-scroll-progress",
+        "examples": [
+          {
+            "title": "Progreso de scroll",
+            "href": "/examples/use-scroll-progress",
+            "description": "La posición del scroll como un valor de 0 a 1."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/use-scroll-progress/stress",
+            "description": "320px, vacío, texto largo y RTL."
+          },
+          {
+            "title": "Glosario",
+            "href": "/examples/animations",
+            "description": "Los seis términos de scroll, con demos propias."
+          }
+        ],
+        "usage": "const { progress } = useScrollProgress({ container })",
+        "api": [
+          {
+            "name": "container",
+            "type": "RefObject<HTMLElement | null>",
+            "description": "Element that scrolls. Omit to track the window."
+          },
+          {
+            "name": "target",
+            "type": "RefObject<HTMLElement | null>",
+            "description": "Element whose travel defines 0–1."
+          },
+          {
+            "name": "axis",
+            "type": "\"x\" | \"y\"",
+            "description": "Default y."
+          },
+          {
+            "name": "offset",
+            "type": "ScrollOffset",
+            "description": "Passed through to motion useScroll. Example: [\"start end\", \"end start\"]."
+          },
+          {
+            "name": "progress / scroll",
+            "type": "MotionValue<number>",
+            "description": "progress is 0–1. scroll is the pixel offset. clampUnit guards a raw fraction."
+          }
+        ]
+      },
+      "docs": "Clean-room. No Motion UI or Motion+ source. The hook wraps motion useScroll. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Reduced motion does not freeze the value: it reports position.",
+      "files": [
+        {
+          "path": "registry/hooks/use-scroll-progress.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-scroll-progress.ts"
+        }
+      ]
+    },
+    {
+      "name": "scroll-progress",
+      "type": "registry:ui",
+      "title": "Scroll progress",
+      "description": "A reading bar bound to scroll progress, from 0 to 1.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "use-scroll-progress"
+      ],
+      "categories": [
+        "animation"
+      ],
+      "meta": {
+        "titleEs": "Barra de lectura",
+        "descriptionEs": "Una barra ligada al scroll, de 0 a 1.",
+        "preview": "app/examples/scroll-progress/preview.tsx",
+        "previewHref": "/examples/scroll-progress",
+        "examples": [
+          {
+            "title": "Barra de lectura",
+            "href": "/examples/scroll-progress",
+            "description": "Una barra ligada al scroll, de 0 a 1."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/scroll-progress/stress",
+            "description": "320px, vacío, texto largo y RTL."
+          },
+          {
+            "title": "Glosario",
+            "href": "/examples/animations",
+            "description": "Los seis términos de scroll, con demos propias."
+          }
+        ],
+        "usage": "<ScrollProgress container={ref} label=\"Reading\" showValue />",
+        "api": [
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Accessible name. Default Reading progress."
+          },
+          {
+            "name": "container / target / axis / offset",
+            "type": "UseScrollProgressOptions",
+            "description": "Same range as use-scroll-progress."
+          },
+          {
+            "name": "placement",
+            "type": "\"sticky\" | \"inline\"",
+            "description": "Stick to the top of the scrollport, or sit in flow. Default sticky."
+          },
+          {
+            "name": "showValue",
+            "type": "boolean",
+            "description": "Show the percent. Default false."
+          },
+          {
+            "name": "className / barClassName",
+            "type": "string",
+            "description": "Root and fill."
+          }
+        ]
+      },
+      "docs": "Clean-room reading bar. No Motion UI or Motion+ source. The scale follows scroll and does not tween on its own, so reduced motion does not freeze it. Answer no if the CLI asks to overwrite use-scroll-progress or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/scroll-progress.tsx",
+          "type": "registry:component",
+          "target": "@ui/scroll-progress.tsx"
+        }
+      ]
+    },
+    {
+      "name": "reveal-on-scroll",
+      "type": "registry:ui",
+      "title": "Reveal on scroll",
+      "description": "Fades, slides, or scales in once when it enters the viewport.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "motion-preference"
+      ],
+      "categories": [
+        "animation"
+      ],
+      "meta": {
+        "titleEs": "Revelar al desplazar",
+        "descriptionEs": "Entra con fade, slide o scale al llegar al viewport. Una vez.",
+        "preview": "app/examples/reveal-on-scroll/preview.tsx",
+        "previewHref": "/examples/reveal-on-scroll",
+        "examples": [
+          {
+            "title": "Revelar al desplazar",
+            "href": "/examples/reveal-on-scroll",
+            "description": "Entra con fade, slide o scale al llegar al viewport."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/reveal-on-scroll/stress",
+            "description": "320px, vacío, texto largo y RTL."
+          },
+          {
+            "title": "Glosario",
+            "href": "/examples/animations",
+            "description": "Los seis términos de scroll, con demos propias."
+          }
+        ],
+        "usage": "<RevealOnScroll variant=\"slide\" once>{children}</RevealOnScroll>",
+        "api": [
+          {
+            "name": "variant",
+            "type": "\"fade\" | \"slide\" | \"scale\"",
+            "description": "Default slide."
+          },
+          {
+            "name": "from",
+            "type": "\"up\" | \"down\" | \"left\" | \"right\"",
+            "description": "Slide direction. Default up."
+          },
+          {
+            "name": "once",
+            "type": "boolean",
+            "description": "Reveal a single time. Default true."
+          },
+          {
+            "name": "amount",
+            "type": "number",
+            "description": "How much of the element must be visible. Default 0.3."
+          },
+          {
+            "name": "root",
+            "type": "RefObject<Element | null>",
+            "description": "Scroll root. Defaults to the viewport."
+          },
+          {
+            "name": "delay / className",
+            "type": "number / string",
+            "description": "Delay in seconds, and classes for the wrapper."
+          }
+        ]
+      },
+      "docs": "Clean-room viewport entrance. No Motion UI or Motion+ source. in-view-title remains the title-only reveal. Reduced motion shows the content immediately, using motion-preference. Answer no if the CLI asks to overwrite motion-preference, motion.ts, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/reveal-on-scroll.tsx",
+          "type": "registry:component",
+          "target": "@ui/reveal-on-scroll.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "stagger-reveal",
+      "type": "registry:ui",
+      "title": "Stagger reveal",
+      "description": "Staggers a fade and rise across direct children when the group enters.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "motion-preference"
+      ],
+      "categories": [
+        "animation"
+      ],
+      "meta": {
+        "titleEs": "Revelado en cascada",
+        "descriptionEs": "Los hijos entran uno después de otro al llegar el grupo.",
+        "preview": "app/examples/stagger-reveal/preview.tsx",
+        "previewHref": "/examples/stagger-reveal",
+        "examples": [
+          {
+            "title": "Revelado en cascada",
+            "href": "/examples/stagger-reveal",
+            "description": "Los hijos entran uno después de otro."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/stagger-reveal/stress",
+            "description": "320px, vacío, texto largo y RTL."
+          },
+          {
+            "title": "Glosario",
+            "href": "/examples/animations",
+            "description": "Los seis términos de scroll, con demos propias."
+          }
+        ],
+        "usage": "<StaggerReveal as=\"ul\"><StaggerItem as=\"li\">Row</StaggerItem></StaggerReveal>",
+        "api": [
+          {
+            "name": "stagger",
+            "type": "number",
+            "description": "Seconds between children. Default is the shared item stagger."
+          },
+          {
+            "name": "once / amount / root",
+            "type": "boolean / number / RefObject",
+            "description": "Same entrance rules as reveal-on-scroll."
+          },
+          {
+            "name": "as",
+            "type": "\"div\" | \"ul\" | \"ol\"",
+            "description": "Group element. StaggerItem as is div or li. Items must be direct children."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "On the group and on each item."
+          }
+        ]
+      },
+      "docs": "Clean-room stagger. No Motion UI or Motion+ source. StaggerItem has to be a direct child. Reduced motion shows every child at once, using motion-preference. Answer no if the CLI asks to overwrite motion-preference, motion.ts, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/stagger-reveal.tsx",
+          "type": "registry:component",
+          "target": "@ui/stagger-reveal.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "scroll-snap-rail",
+      "type": "registry:ui",
+      "title": "Scroll snap rail",
+      "description": "A native scroll-snap region for full sections or peeking cards.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "motion-preference"
+      ],
+      "categories": [
+        "animation"
+      ],
+      "meta": {
+        "titleEs": "Riel con snap",
+        "descriptionEs": "Las secciones o las tarjetas se alinean al soltar, con scroll nativo.",
+        "preview": "app/examples/scroll-snap-rail/preview.tsx",
+        "previewHref": "/examples/scroll-snap-rail",
+        "examples": [
+          {
+            "title": "Riel con snap",
+            "href": "/examples/scroll-snap-rail",
+            "description": "Las secciones se alinean al soltar."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/scroll-snap-rail/stress",
+            "description": "320px, vacío, texto largo y RTL."
+          },
+          {
+            "title": "Glosario",
+            "href": "/examples/animations",
+            "description": "Los seis términos de scroll, con demos propias."
+          }
+        ],
+        "usage": "<ScrollSnapRail label=\"Stages\" className=\"h-64\"><ScrollSnapPanel className=\"h-full\">01</ScrollSnapPanel></ScrollSnapRail>",
+        "api": [
+          {
+            "name": "axis",
+            "type": "\"x\" | \"y\"",
+            "description": "Default y. Give the rail a height for vertical snap."
+          },
+          {
+            "name": "snap",
+            "type": "\"mandatory\" | \"proximity\"",
+            "description": "Default mandatory."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Accessible name of the region. The region is focusable."
+          },
+          {
+            "name": "ScrollSnapPanel",
+            "type": "component",
+            "description": "One snap child. className sets its size."
+          }
+        ]
+      },
+      "docs": "Clean-room CSS scroll-snap. No Motion UI or Motion+ source. Alignment is the browser's. Smooth scrolling is off when motion-preference says reduce. Answer no if the CLI asks to overwrite motion-preference or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/scroll-snap-rail.tsx",
+          "type": "registry:component",
+          "target": "@ui/scroll-snap-rail.tsx"
+        }
+      ]
+    },
+    {
+      "name": "sticky-section-list",
+      "type": "registry:ui",
+      "title": "Sticky section list",
+      "description": "Grouped rows whose headers stick until the next group pushes them.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "animation"
+      ],
+      "meta": {
+        "titleEs": "Lista con encabezados fijos",
+        "descriptionEs": "El encabezado del grupo se queda hasta que el siguiente lo empuja.",
+        "preview": "app/examples/sticky-section-list/preview.tsx",
+        "previewHref": "/examples/sticky-section-list",
+        "examples": [
+          {
+            "title": "Lista con encabezados fijos",
+            "href": "/examples/sticky-section-list",
+            "description": "El encabezado se queda hasta que el siguiente lo empuja."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/sticky-section-list/stress",
+            "description": "320px, vacío, texto largo y RTL."
+          },
+          {
+            "title": "Glosario",
+            "href": "/examples/animations",
+            "description": "Los seis términos de scroll, con demos propias."
+          }
+        ],
+        "usage": "<StickySectionList label=\"Directory\" sections={sections} />",
+        "api": [
+          {
+            "name": "sections",
+            "type": "StickySection[]",
+            "description": "Each group has id, label, and items with id, title, and optional detail."
+          },
+          {
+            "name": "offset",
+            "type": "number",
+            "description": "Pixels from the top of the scrollport. Default 0."
+          },
+          {
+            "name": "emptyLabel",
+            "type": "string",
+            "description": "Copy for an empty group or an empty list."
+          },
+          {
+            "name": "className / headerClassName / itemClassName",
+            "type": "string",
+            "description": "Root, sticky header, and row."
+          }
+        ]
+      },
+      "docs": "Clean-room sticky headers. No Motion UI or Motion+ source. There is no tween: the header uses position sticky, so reduced motion does not change it. Put the list in a scrollport when you want the headers to stick inside a panel. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/sticky-section-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/sticky-section-list.tsx"
+        }
+      ]
+    },
+    {
+      "name": "parallax-layers",
+      "type": "registry:ui",
+      "title": "Parallax layers",
+      "description": "Layers that travel at different speeds while their parent crosses the viewport. Transform only.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "use-scroll-progress",
+        "motion-preference"
+      ],
+      "categories": [
+        "animation"
+      ],
+      "meta": {
+        "titleEs": "Capas en paralaje",
+        "descriptionEs": "Cada capa se desplaza a una velocidad distinta. Si se reduce el movimiento, se quedan quietas.",
+        "preview": "app/examples/parallax-layers/preview.tsx",
+        "previewHref": "/examples/parallax-layers",
+        "examples": [
+          {
+            "title": "Capas en paralaje",
+            "href": "/examples/parallax-layers",
+            "description": "Cada capa se desplaza a una velocidad distinta."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/parallax-layers/stress",
+            "description": "320px, vacío, texto largo y RTL."
+          },
+          {
+            "title": "Glosario",
+            "href": "/examples/animations",
+            "description": "Los seis términos de scroll, con demos propias."
+          }
+        ],
+        "usage": "<ParallaxLayers label=\"Coast\" layers={[{ id: \"far\", speed: 0.2, children }]} />",
+        "api": [
+          {
+            "name": "layers",
+            "type": "ParallaxLayer[]",
+            "description": "id, children, and speed or depth. 0 stays put. decorative hides a shape from assistive tech."
+          },
+          {
+            "name": "distance",
+            "type": "number",
+            "description": "Pixels of travel at speed 1, from entry to exit. Default 64."
+          },
+          {
+            "name": "container",
+            "type": "RefObject<HTMLElement | null>",
+            "description": "Scrollport. Omit to use the window."
+          },
+          {
+            "name": "className / label",
+            "type": "string",
+            "description": "The root needs a height. Default h-64, which className can replace."
+          }
+        ]
+      },
+      "docs": "Clean-room parallax. No Motion UI or Motion+ source. Movement is translateY from use-scroll-progress, so the layout box does not shift. The first paint matches the server. Reduced motion, via motion-preference, holds every layer at rest. Answer no if the CLI asks to overwrite use-scroll-progress, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/parallax-layers.tsx",
+          "type": "registry:component",
+          "target": "@ui/parallax-layers.tsx"
+        }
+      ]
+    },
+    {
+      "name": "horizontal-scroll-rail",
+      "type": "registry:ui",
+      "title": "Horizontal scroll rail",
+      "description": "A sticky section whose vertical scroll drives a horizontal rail. Narrow viewports and reduced motion use a native scroller.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "use-scroll-progress",
+        "motion-preference"
+      ],
+      "categories": [
+        "animation"
+      ],
+      "meta": {
+        "titleEs": "Riel horizontal",
+        "descriptionEs": "El scroll vertical mueve una fila fija. En estrecho, o con movimiento reducido, la fila se desplaza sola.",
+        "preview": "app/examples/horizontal-scroll-rail/preview.tsx",
+        "previewHref": "/examples/horizontal-scroll-rail",
+        "examples": [
+          {
+            "title": "Riel horizontal",
+            "href": "/examples/horizontal-scroll-rail",
+            "description": "El scroll vertical mueve una fila fija."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/horizontal-scroll-rail/stress",
+            "description": "320px, vacío, texto largo y RTL."
+          },
+          {
+            "title": "Glosario",
+            "href": "/examples/animations",
+            "description": "Los seis términos de scroll, con demos propias."
+          }
+        ],
+        "usage": "<HorizontalScrollRail label=\"Pieces\">{cards}</HorizontalScrollRail>",
+        "api": [
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "description": "Cards. Each is wrapped in a snap item. Focusable descendants scroll into view."
+          },
+          {
+            "name": "minWidth",
+            "type": "number",
+            "description": "Below this width the rail is a native horizontal scroller. Default 768."
+          },
+          {
+            "name": "paneClassName / itemClassName",
+            "type": "string",
+            "description": "Pane height (default h-72) and item width (default w-64)."
+          },
+          {
+            "name": "label / previousLabel / nextLabel",
+            "type": "string",
+            "description": "Accessible names for the region and the step buttons."
+          }
+        ]
+      },
+      "docs": "Clean-room horizontal rail. No Motion UI or Motion+ source. On a wide screen with motion allowed, the section height is the pane plus the track overflow (ResizeObserver) and vertical scroll translates the track. Reduced motion, and viewports under minWidth, keep a native horizontal scroller with scroll-snap. Arrow keys move the rail. Focusable items scroll into view. Answer no if the CLI asks to overwrite button, use-scroll-progress, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/horizontal-scroll-rail.tsx",
+          "type": "registry:component",
+          "target": "@ui/horizontal-scroll-rail.tsx"
+        }
+      ]
     }
   ]
 }

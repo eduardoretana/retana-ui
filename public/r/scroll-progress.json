@@ -1,0 +1,77 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scroll-progress",
+  "title": "Scroll progress",
+  "author": "Eduardo Retana",
+  "description": "A reading bar bound to scroll progress, from 0 to 1.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [
+    "use-scroll-progress"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/scroll-progress.tsx",
+      "content": "\"use client\"\n\n/**\n * Reading bar bound to scroll progress. Clean-room. No Motion UI source.\n * The bar reports position. Reduced motion does not freeze it, and it does not tween on its own.\n */\n\nimport { useState } from \"react\"\nimport { motion, useMotionValueEvent, useTransform } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { clampUnit, useScrollProgress, type UseScrollProgressOptions } from \"@/hooks/use-scroll-progress\"\n\nexport type ScrollProgressProps = UseScrollProgressOptions & {\n  /** Accessible name. Default \"Reading progress\". */\n  label?: string\n  className?: string\n  barClassName?: string\n  /** Stick to the top of the nearest scrollport, or sit in normal flow. */\n  placement?: \"sticky\" | \"inline\"\n  /** Show the percent beside the bar. */\n  showValue?: boolean\n}\n\nexport function ScrollProgress({\n  label = \"Reading progress\",\n  className,\n  barClassName,\n  placement = \"sticky\",\n  showValue = false,\n  container,\n  target,\n  axis,\n  offset,\n  trackContentSize,\n}: ScrollProgressProps) {\n  const { progress } = useScrollProgress({ container, target, axis, offset, trackContentSize })\n  const scaleX = useTransform(progress, (value) => clampUnit(value))\n  const [value, setValue] = useState(() => clampUnit(progress.get()))\n  useMotionValueEvent(progress, \"change\", (next) => setValue(clampUnit(next)))\n  const percent = Math.round(value * 100)\n\n  return (\n    <div\n      data-slot=\"scroll-progress\"\n      className={cn(\n        \"flex w-full min-w-0 items-center gap-3 bg-background\",\n        placement === \"sticky\" && \"sticky top-0\",\n        className,\n      )}\n    >\n      <div\n        role=\"progressbar\"\n        aria-label={label}\n        aria-valuemin={0}\n        aria-valuemax={100}\n        aria-valuenow={percent}\n        aria-valuetext={`${percent} percent`}\n        className=\"h-1 min-w-0 flex-1 overflow-hidden bg-muted\"\n      >\n        <motion.div\n          data-slot=\"scroll-progress-bar\"\n          className={cn(\"h-full origin-left bg-primary rtl:origin-right\", barClassName)}\n          style={{ scaleX }}\n        />\n      </div>\n      {showValue ? (\n        <span className=\"shrink-0 pr-3 text-xs tabular-nums text-muted-foreground\">{percent}%</span>\n      ) : null}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/scroll-progress.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Barra de lectura",
+    "descriptionEs": "Una barra ligada al scroll, de 0 a 1.",
+    "preview": "app/examples/scroll-progress/preview.tsx",
+    "previewHref": "/examples/scroll-progress",
+    "examples": [
+      {
+        "title": "Barra de lectura",
+        "href": "/examples/scroll-progress",
+        "description": "Una barra ligada al scroll, de 0 a 1."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/scroll-progress/stress",
+        "description": "320px, vacío, texto largo y RTL."
+      },
+      {
+        "title": "Glosario",
+        "href": "/examples/animations",
+        "description": "Los seis términos de scroll, con demos propias."
+      }
+    ],
+    "usage": "<ScrollProgress container={ref} label=\"Reading\" showValue />",
+    "api": [
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Accessible name. Default Reading progress."
+      },
+      {
+        "name": "container / target / axis / offset",
+        "type": "UseScrollProgressOptions",
+        "description": "Same range as use-scroll-progress."
+      },
+      {
+        "name": "placement",
+        "type": "\"sticky\" | \"inline\"",
+        "description": "Stick to the top of the scrollport, or sit in flow. Default sticky."
+      },
+      {
+        "name": "showValue",
+        "type": "boolean",
+        "description": "Show the percent. Default false."
+      },
+      {
+        "name": "className / barClassName",
+        "type": "string",
+        "description": "Root and fill."
+      }
+    ]
+  },
+  "docs": "Clean-room reading bar. No Motion UI or Motion+ source. The scale follows scroll and does not tween on its own, so reduced motion does not freeze it. Answer no if the CLI asks to overwrite use-scroll-progress or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "animation"
+  ],
+  "type": "registry:ui"
+}

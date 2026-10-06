@@ -1,0 +1,78 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "stagger-reveal",
+  "title": "Stagger reveal",
+  "author": "Eduardo Retana",
+  "description": "Staggers a fade and rise across direct children when the group enters.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [
+    "motion-preference"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/stagger-reveal.tsx",
+      "content": "\"use client\"\n\n/**\n * Stagger direct StaggerItem children when the group enters the viewport.\n * Clean-room. Reduced motion shows every child at once.\n */\n\nimport { useRef, type ReactNode, type Ref, type RefObject } from \"react\"\nimport { motion, useInView } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\nimport { useMotionPreference } from \"@/components/ui/motion-preference\"\n\nconst enter = [...motionPresets.ease.enter] as [number, number, number, number]\n\ntype GroupTag = \"div\" | \"ul\" | \"ol\"\ntype ItemTag = \"div\" | \"li\"\n\nexport type StaggerRevealProps = {\n  children: ReactNode\n  className?: string\n  as?: GroupTag\n  once?: boolean\n  amount?: number\n  /** Seconds between children. Default is the shared item stagger. */\n  stagger?: number\n  root?: RefObject<Element | null>\n}\n\nexport type StaggerItemProps = {\n  children: ReactNode\n  className?: string\n  as?: ItemTag\n}\n\nexport function StaggerReveal({\n  children,\n  className,\n  as = \"div\",\n  once = true,\n  amount = 0.2,\n  stagger = motionPresets.stagger.item,\n  root,\n}: StaggerRevealProps) {\n  const ref = useRef<HTMLDivElement>(null)\n  const reduced = useMotionPreference()\n  const inView = useInView(ref, { once, amount, root, initial: reduced })\n  const visible = reduced || inView\n  const Tag = motion[as] as typeof motion.div\n\n  return (\n    <Tag\n      ref={ref as Ref<HTMLDivElement>}\n      data-slot=\"stagger-reveal\"\n      data-state={visible ? \"shown\" : \"hidden\"}\n      data-reduced={reduced ? \"true\" : \"false\"}\n      className={cn(\"min-w-0 max-w-full\", className)}\n      initial={false}\n      animate={visible ? \"show\" : \"hide\"}\n      variants={{\n        hide: {},\n        show: {\n          transition: {\n            staggerChildren: reduced ? 0 : stagger,\n            delayChildren: reduced ? 0 : 0.04,\n          },\n        },\n      }}\n    >\n      {children}\n    </Tag>\n  )\n}\n\nexport function StaggerItem({ children, className, as = \"div\" }: StaggerItemProps) {\n  const reduced = useMotionPreference()\n  const Tag = motion[as]\n  return (\n    <Tag\n      data-slot=\"stagger-item\"\n      className={cn(\"min-w-0 max-w-full\", className)}\n      variants={{\n        hide: { opacity: 0, y: 12 },\n        show: {\n          opacity: 1,\n          y: 0,\n          transition: reduced\n            ? { duration: 0 }\n            : { duration: motionPresets.duration.considered, ease: enter },\n        },\n      }}\n    >\n      {children}\n    </Tag>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/stagger-reveal.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    exit: [0.7, 0, 0.84, 0] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Revelado en cascada",
+    "descriptionEs": "Los hijos entran uno después de otro al llegar el grupo.",
+    "preview": "app/examples/stagger-reveal/preview.tsx",
+    "previewHref": "/examples/stagger-reveal",
+    "examples": [
+      {
+        "title": "Revelado en cascada",
+        "href": "/examples/stagger-reveal",
+        "description": "Los hijos entran uno después de otro."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/stagger-reveal/stress",
+        "description": "320px, vacío, texto largo y RTL."
+      },
+      {
+        "title": "Glosario",
+        "href": "/examples/animations",
+        "description": "Los seis términos de scroll, con demos propias."
+      }
+    ],
+    "usage": "<StaggerReveal as=\"ul\"><StaggerItem as=\"li\">Row</StaggerItem></StaggerReveal>",
+    "api": [
+      {
+        "name": "stagger",
+        "type": "number",
+        "description": "Seconds between children. Default is the shared item stagger."
+      },
+      {
+        "name": "once / amount / root",
+        "type": "boolean / number / RefObject",
+        "description": "Same entrance rules as reveal-on-scroll."
+      },
+      {
+        "name": "as",
+        "type": "\"div\" | \"ul\" | \"ol\"",
+        "description": "Group element. StaggerItem as is div or li. Items must be direct children."
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "description": "On the group and on each item."
+      }
+    ]
+  },
+  "docs": "Clean-room stagger. No Motion UI or Motion+ source. StaggerItem has to be a direct child. Reduced motion shows every child at once, using motion-preference. Answer no if the CLI asks to overwrite motion-preference, motion.ts, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "animation"
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,73 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "parallax-layers",
+  "title": "Parallax layers",
+  "author": "Eduardo Retana",
+  "description": "Layers that travel at different speeds while their parent crosses the viewport. Transform only.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [
+    "use-scroll-progress",
+    "motion-preference"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/parallax-layers.tsx",
+      "content": "\"use client\"\n\n/**\n * Layers that travel at different speeds while their parent crosses the viewport.\n * Clean-room. Transform only, so the layout box does not move.\n * Reduced motion holds every layer still. The first paint matches the server.\n */\n\nimport { useRef, useSyncExternalStore, type ReactNode, type RefObject } from \"react\"\nimport { motion, useTransform, type MotionValue } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { useScrollProgress } from \"@/hooks/use-scroll-progress\"\nimport { useMotionPreference } from \"@/components/ui/motion-preference\"\n\n/** Pixels a layer travels, from entry to exit, when speed is 1. */\nexport const PARALLAX_DISTANCE = 64\n\nconst subscribe = () => () => {}\n\nexport function parallaxOffset(speed: number, distance = PARALLAX_DISTANCE) {\n  if (!Number.isFinite(speed) || !Number.isFinite(distance)) return 0\n  return speed * distance\n}\n\nexport type ParallaxLayer = {\n  id: string\n  /** Travel factor. 0 stays put. Larger values move farther. */\n  speed?: number\n  /** Alias of speed. */\n  depth?: number\n  className?: string\n  /** Hide the layer from the accessibility tree when it is only a shape. */\n  decorative?: boolean\n  children: ReactNode\n}\n\nexport type ParallaxLayersProps = {\n  layers: ParallaxLayer[]\n  className?: string\n  label?: string\n  /** Pixels of travel at speed 1. Default 64. */\n  distance?: number\n  /** Scrollport. Omit to use the window. */\n  container?: RefObject<HTMLElement | null>\n}\n\nexport function ParallaxLayers({\n  layers,\n  className,\n  label = \"Parallax\",\n  distance = PARALLAX_DISTANCE,\n  container,\n}: ParallaxLayersProps) {\n  const ref = useRef<HTMLDivElement>(null)\n  const reduced = useMotionPreference()\n  const { progress } = useScrollProgress({\n    container,\n    target: ref,\n    offset: [\"start end\", \"end start\"],\n  })\n\n  return (\n    <div\n      ref={ref}\n      data-slot=\"parallax-layers\"\n      data-motion={reduced ? \"static\" : \"parallax\"}\n      role=\"group\"\n      aria-label={label}\n      className={cn(\"relative h-64 overflow-hidden\", className)}\n    >\n      {layers.map((layer) => (\n        <ParallaxLayerView\n          key={layer.id}\n          progress={progress}\n          speed={layer.speed ?? layer.depth ?? 0}\n          distance={distance}\n          reduced={reduced}\n          className={layer.className}\n          decorative={layer.decorative}\n        >\n          {layer.children}\n        </ParallaxLayerView>\n      ))}\n    </div>\n  )\n}\n\nfunction ParallaxLayerView({\n  progress,\n  speed,\n  distance,\n  reduced,\n  className,\n  decorative,\n  children,\n}: {\n  progress: MotionValue<number>\n  speed: number\n  distance: number\n  reduced: boolean\n  className?: string\n  decorative?: boolean\n  children: ReactNode\n}) {\n  const offset = parallaxOffset(speed, distance)\n  const y = useTransform(progress, [0, 1], [offset, -offset])\n  const mounted = useSyncExternalStore(subscribe, () => true, () => false)\n\n  return (\n    <motion.div\n      data-slot=\"parallax-layer\"\n      data-speed={speed}\n      aria-hidden={decorative ? true : undefined}\n      className={cn(\"absolute inset-0\", className)}\n      style={{ y: mounted && !reduced ? y : 0 }}\n    >\n      {children}\n    </motion.div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/parallax-layers.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Capas en paralaje",
+    "descriptionEs": "Cada capa se desplaza a una velocidad distinta. Si se reduce el movimiento, se quedan quietas.",
+    "preview": "app/examples/parallax-layers/preview.tsx",
+    "previewHref": "/examples/parallax-layers",
+    "examples": [
+      {
+        "title": "Capas en paralaje",
+        "href": "/examples/parallax-layers",
+        "description": "Cada capa se desplaza a una velocidad distinta."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/parallax-layers/stress",
+        "description": "320px, vacío, texto largo y RTL."
+      },
+      {
+        "title": "Glosario",
+        "href": "/examples/animations",
+        "description": "Los seis términos de scroll, con demos propias."
+      }
+    ],
+    "usage": "<ParallaxLayers label=\"Coast\" layers={[{ id: \"far\", speed: 0.2, children }]} />",
+    "api": [
+      {
+        "name": "layers",
+        "type": "ParallaxLayer[]",
+        "description": "id, children, and speed or depth. 0 stays put. decorative hides a shape from assistive tech."
+      },
+      {
+        "name": "distance",
+        "type": "number",
+        "description": "Pixels of travel at speed 1, from entry to exit. Default 64."
+      },
+      {
+        "name": "container",
+        "type": "RefObject<HTMLElement | null>",
+        "description": "Scrollport. Omit to use the window."
+      },
+      {
+        "name": "className / label",
+        "type": "string",
+        "description": "The root needs a height. Default h-64, which className can replace."
+      }
+    ]
+  },
+  "docs": "Clean-room parallax. No Motion UI or Motion+ source. Movement is translateY from use-scroll-progress, so the layout box does not shift. The first paint matches the server. Reduced motion, via motion-preference, holds every layer at rest. Answer no if the CLI asks to overwrite use-scroll-progress, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "animation"
+  ],
+  "type": "registry:ui"
+}

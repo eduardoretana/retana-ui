@@ -265,6 +265,14 @@ import Preview260 from "@/app/examples/status-banner/preview"
 import Preview261 from "@/app/examples/destination-card/preview"
 import Preview262 from "@/app/examples/next-steps/preview"
 import Preview263 from "@/app/examples/review-desk/preview"
+import Preview264 from "@/app/examples/use-scroll-progress/preview"
+import Preview265 from "@/app/examples/scroll-progress/preview"
+import Preview266 from "@/app/examples/reveal-on-scroll/preview"
+import Preview267 from "@/app/examples/stagger-reveal/preview"
+import Preview268 from "@/app/examples/scroll-snap-rail/preview"
+import Preview269 from "@/app/examples/sticky-section-list/preview"
+import Preview270 from "@/app/examples/parallax-layers/preview"
+import Preview271 from "@/app/examples/horizontal-scroll-rail/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -531,4 +539,12 @@ export const previewMap = {
   "destination-card": Preview261,
   "next-steps": Preview262,
   "review-desk": Preview263,
+  "use-scroll-progress": Preview264,
+  "scroll-progress": Preview265,
+  "reveal-on-scroll": Preview266,
+  "stagger-reveal": Preview267,
+  "scroll-snap-rail": Preview268,
+  "sticky-section-list": Preview269,
+  "parallax-layers": Preview270,
+  "horizontal-scroll-rail": Preview271,
 }

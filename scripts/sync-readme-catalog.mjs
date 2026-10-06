@@ -39,6 +39,7 @@ const GROUP_ORDER = [
   "Navigation",
   "Page blocks",
   "Actions and overlays",
+  "Animaciones",
   "Admin",
   "Other",
 ]
@@ -63,6 +64,7 @@ const GROUP_OVERRIDE = {
 function groupOf(item) {
   if (GROUP_OVERRIDE[item.name]) return GROUP_OVERRIDE[item.name]
   const cats = new Set(item.categories ?? [])
+  if (cats.has("animation")) return "Animaciones"
   if (item.pending || cats.has("admin")) return "Admin"
   if (cats.has("agents")) return "Agents"
   if (cats.has("panel")) return "Detail"

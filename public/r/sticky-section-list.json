@@ -1,0 +1,68 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sticky-section-list",
+  "title": "Sticky section list",
+  "author": "Eduardo Retana",
+  "description": "Grouped rows whose headers stick until the next group pushes them.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/sticky-section-list.tsx",
+      "content": "\"use client\"\n\n/**\n * Grouped list whose headers stick until the next group pushes them.\n * Clean-room. Sticky positioning only — there is no tween to disable.\n */\n\nimport type { ReactNode } from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type StickySectionItem = {\n  id: string\n  title: string\n  detail?: ReactNode\n}\n\nexport type StickySection = {\n  id: string\n  label: string\n  items: StickySectionItem[]\n}\n\nexport type StickySectionListProps = {\n  sections: StickySection[]\n  /** Accessible name for the whole list. */\n  label?: string\n  emptyLabel?: string\n  className?: string\n  headerClassName?: string\n  itemClassName?: string\n  /** Distance from the top of the scrollport, in pixels. */\n  offset?: number\n}\n\nexport function StickySectionList({\n  sections,\n  label = \"Grouped list\",\n  emptyLabel = \"Nothing in this group\",\n  className,\n  headerClassName,\n  itemClassName,\n  offset = 0,\n}: StickySectionListProps) {\n  if (!sections.length) {\n    return (\n      <p data-slot=\"sticky-section-list\" data-state=\"empty\" className={cn(\"text-sm text-muted-foreground\", className)}>\n        {emptyLabel}\n      </p>\n    )\n  }\n\n  return (\n    <div data-slot=\"sticky-section-list\" aria-label={label} className={cn(\"min-w-0\", className)}>\n      {sections.map((section) => {\n        const headingId = `sticky-section-${section.id.replace(/[^a-zA-Z0-9_-]/g, \"\")}`\n        return (\n          <section key={section.id} aria-labelledby={headingId}>\n            <h3\n              id={headingId}\n              className={cn(\n                \"sticky z-10 border-b border-border bg-background px-3 py-2 text-sm font-medium [overflow-wrap:anywhere]\",\n                headerClassName,\n              )}\n              style={{ top: offset }}\n            >\n              {section.label}\n            </h3>\n            {section.items.length === 0 ? (\n              <p className=\"px-3 py-3 text-sm text-muted-foreground\">{emptyLabel}</p>\n            ) : (\n              <ul>\n                {section.items.map((item) => (\n                  <li key={item.id} className={cn(\"min-w-0 border-b border-border px-3 py-3\", itemClassName)}>\n                    <p className=\"text-sm [overflow-wrap:anywhere]\">{item.title}</p>\n                    {item.detail != null && item.detail !== \"\" ? (\n                      <p className=\"text-sm text-muted-foreground [overflow-wrap:anywhere]\">{item.detail}</p>\n                    ) : null}\n                  </li>\n                ))}\n              </ul>\n            )}\n          </section>\n        )\n      })}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/sticky-section-list.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Lista con encabezados fijos",
+    "descriptionEs": "El encabezado del grupo se queda hasta que el siguiente lo empuja.",
+    "preview": "app/examples/sticky-section-list/preview.tsx",
+    "previewHref": "/examples/sticky-section-list",
+    "examples": [
+      {
+        "title": "Lista con encabezados fijos",
+        "href": "/examples/sticky-section-list",
+        "description": "El encabezado se queda hasta que el siguiente lo empuja."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/sticky-section-list/stress",
+        "description": "320px, vacío, texto largo y RTL."
+      },
+      {
+        "title": "Glosario",
+        "href": "/examples/animations",
+        "description": "Los seis términos de scroll, con demos propias."
+      }
+    ],
+    "usage": "<StickySectionList label=\"Directory\" sections={sections} />",
+    "api": [
+      {
+        "name": "sections",
+        "type": "StickySection[]",
+        "description": "Each group has id, label, and items with id, title, and optional detail."
+      },
+      {
+        "name": "offset",
+        "type": "number",
+        "description": "Pixels from the top of the scrollport. Default 0."
+      },
+      {
+        "name": "emptyLabel",
+        "type": "string",
+        "description": "Copy for an empty group or an empty list."
+      },
+      {
+        "name": "className / headerClassName / itemClassName",
+        "type": "string",
+        "description": "Root, sticky header, and row."
+      }
+    ]
+  },
+  "docs": "Clean-room sticky headers. No Motion UI or Motion+ source. There is no tween: the header uses position sticky, so reduced motion does not change it. Put the list in a scrollport when you want the headers to stick inside a panel. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "animation"
+  ],
+  "type": "registry:ui"
+}
