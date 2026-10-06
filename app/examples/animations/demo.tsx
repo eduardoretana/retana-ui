@@ -28,6 +28,9 @@ const notes = [
   "La primera meseta seca el cuerpo. La segunda funde el esmalte de ceniza.",
   "Al bajar, la puerta sigue cerrada hasta que el pirómetro marca 200.",
   "Inés firma la bitácora. Mateo anota el lote de feldespato.",
+  "El cono empieza a doblar a la hora prevista. Nadie abre la mirilla.",
+  "La meseta de esmalte dura doce minutos. Luego la curva baja sola.",
+  "El pirómetro y el cono no coinciden. Se anota la diferencia.",
   "El final del texto es el final del rango.",
 ]
 
@@ -137,7 +140,11 @@ export function Demo() {
               {
                 id: "c",
                 label: "C",
-                items: [{ id: "cira", title: "Cira Neri", detail: "Cuentas" }],
+                items: [
+                  { id: "cira", title: "Cira Neri", detail: "Cuentas" },
+                  { id: "cleo", title: "Cleo Arce", detail: "Horno" },
+                  { id: "cruz", title: "Cruz Beltrán", detail: "Galería" },
+                ],
               },
             ]}
           />

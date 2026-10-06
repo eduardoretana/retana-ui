@@ -2,8 +2,8 @@ import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { afterEach, describe, expect, it, vi } from "vitest"
 
-import { clampUnit } from "@/registry/hooks/use-scroll-progress"
-import { railRunway, HorizontalScrollRail } from "@/registry/ui/horizontal-scroll-rail"
+import { clampUnit, readingPercent } from "@/registry/hooks/use-scroll-progress"
+import { railRunway, railScrollOffset, HorizontalScrollRail } from "@/registry/ui/horizontal-scroll-rail"
 import { parallaxOffset, ParallaxLayers } from "@/registry/ui/parallax-layers"
 import { RevealOnScroll } from "@/registry/ui/reveal-on-scroll"
 import { ScrollProgress } from "@/registry/ui/scroll-progress"
@@ -23,6 +23,9 @@ describe("scroll progress math", () => {
     expect(clampUnit(2)).toBe(1)
     expect(clampUnit(-1)).toBe(0)
     expect(clampUnit(Number.NaN)).toBe(0)
+    expect(readingPercent(1, 0)).toBe(0)
+    expect(readingPercent(0.5, 240)).toBe(50)
+    expect(readingPercent(1, 240)).toBe(100)
   })
 })
 
@@ -131,6 +134,8 @@ describe("horizontal rail", () => {
     expect(railRunway(288, 1200, 320)).toEqual({ distance: 880, height: 1168 })
     expect(railRunway(200, 100, 320)).toEqual({ distance: 0, height: 200 })
     expect(railRunway(Number.NaN, 10, 10)).toEqual({ distance: 0, height: 0 })
+    expect(railScrollOffset(0)).toEqual(["start start", "end end"])
+    expect(railScrollOffset(192.4)).toEqual(["start start", "end 192px"])
   })
 
   it("falls back to a native scroller and moves focus into view", async () => {

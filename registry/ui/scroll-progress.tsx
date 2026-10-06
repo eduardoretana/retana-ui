@@ -5,11 +5,11 @@
  * The bar reports position. Reduced motion does not freeze it, and it does not tween on its own.
  */
 
-import { useState } from "react"
+import { useLayoutEffect, useState } from "react"
 import { motion, useMotionValueEvent, useTransform } from "motion/react"
 
 import { cn } from "@/lib/utils"
-import { clampUnit, useScrollProgress, type UseScrollProgressOptions } from "@/registry/retana/hooks/use-scroll-progress"
+import { clampUnit, readingPercent, useScrollProgress, type UseScrollProgressOptions } from "@/registry/retana/hooks/use-scroll-progress"
 
 export type ScrollProgressProps = UseScrollProgressOptions & {
   /** Accessible name. Default "Reading progress". */
@@ -35,10 +35,25 @@ export function ScrollProgress({
   trackContentSize,
 }: ScrollProgressProps) {
   const { progress } = useScrollProgress({ container, target, axis, offset, trackContentSize })
-  const scaleX = useTransform(progress, (value) => clampUnit(value))
   const [value, setValue] = useState(() => clampUnit(progress.get()))
+  const [overflow, setOverflow] = useState(0)
   useMotionValueEvent(progress, "change", (next) => setValue(clampUnit(next)))
-  const percent = Math.round(value * 100)
+  useLayoutEffect(() => {
+    const element = target ? null : (container?.current ?? document.scrollingElement)
+    if (!(element instanceof Element)) return
+    const read = () => {
+      const next = axis === "x" ? element.scrollWidth - element.clientWidth : element.scrollHeight - element.clientHeight
+      setOverflow((prev) => (prev === next ? prev : next))
+    }
+    read()
+    const observer = new ResizeObserver(read)
+    observer.observe(element)
+    for (const child of element.children) observer.observe(child)
+    return () => observer.disconnect()
+  }, [axis, container, target])
+  const tracked = target ? Number.POSITIVE_INFINITY : overflow
+  const scaleX = useTransform(progress, (next) => clampUnit(next))
+  const percent = readingPercent(value, tracked)
 
   return (
     <div
@@ -61,7 +76,7 @@ export function ScrollProgress({
         <motion.div
           data-slot="scroll-progress-bar"
           className={cn("h-full origin-left bg-primary rtl:origin-right", barClassName)}
-          style={{ scaleX }}
+          style={{ scaleX: tracked > 1 ? scaleX : 0 }}
         />
       </div>
       {showValue ? (

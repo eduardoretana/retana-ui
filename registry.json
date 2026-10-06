@@ -20153,7 +20153,7 @@
           }
         ]
       },
-      "docs": "Clean-room reading bar. No Motion UI or Motion+ source. The scale follows scroll and does not tween on its own, so reduced motion does not freeze it. Answer no if the CLI asks to overwrite use-scroll-progress or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "docs": "Clean-room reading bar. No Motion UI or Motion+ source. The scale follows scroll and does not tween on its own, so reduced motion does not freeze it. A scroller with no overflow reports 0. Answer no if the CLI asks to overwrite use-scroll-progress or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
       "files": [
         {
           "path": "registry/ui/scroll-progress.tsx",
@@ -20591,7 +20591,7 @@
           }
         ]
       },
-      "docs": "Clean-room horizontal rail. No Motion UI or Motion+ source. On a wide screen with motion allowed, the section height is the pane plus the track overflow (ResizeObserver) and vertical scroll translates the track. Reduced motion, and viewports under minWidth, keep a native horizontal scroller with scroll-snap. Arrow keys move the rail. Focusable items scroll into view. Answer no if the CLI asks to overwrite button, use-scroll-progress, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "docs": "Clean-room horizontal rail. No Motion UI or Motion+ source. On a wide screen with motion allowed, the pane fills the viewport and the section grows by the track overflow (ResizeObserver). Vertical scroll translates the track until the section end meets the bottom of that pane. Reduced motion, and viewports under minWidth, keep a native horizontal scroller with scroll-snap and the author pane height. Arrow keys move the rail. Focusable items scroll into view. Answer no if the CLI asks to overwrite button, use-scroll-progress, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
       "files": [
         {
           "path": "registry/ui/horizontal-scroll-rail.tsx",

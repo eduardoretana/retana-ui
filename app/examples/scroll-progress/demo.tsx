@@ -7,11 +7,12 @@ import { unbreakable } from "@/app/examples/arc/demo-data"
 import { ScrollProgress } from "@/registry/ui/scroll-progress"
 
 const notes = [
-  "El horno 2 sube a cono 6.",
-  "La primera meseta seca el cuerpo.",
-  "La segunda funde el esmalte de ceniza.",
-  "La puerta sigue cerrada hasta los 200.",
-  "Inés firma la bitácora al final.",
+  "El horno 2 sube a cono 6. La curva se anota cada veinte minutos.",
+  "La primera meseta seca el cuerpo. La segunda funde el esmalte de ceniza.",
+  "La puerta sigue cerrada hasta que el pirómetro marca 200.",
+  "Inés firma la bitácora. Mateo anota el lote de feldespato.",
+  "El cono empieza a doblar a la hora prevista. Nadie abre la mirilla.",
+  "El final del texto es el final del rango.",
 ]
 
 export function Demo() {

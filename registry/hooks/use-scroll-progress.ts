@@ -30,6 +30,15 @@ export function clampUnit(value: number) {
 }
 
 /**
+ * Percent for a reading bar.
+ * A scroller with no overflow reports 0. Motion reports 1 when the range length is 0.
+ */
+export function readingPercent(progress: number, overflow: number) {
+  if (!(overflow > 1)) return 0
+  return Math.round(clampUnit(progress) * 100)
+}
+
+/**
  * `progress` is 0 at the start of the range and 1 at the end.
  * `scroll` is the pixel offset on the chosen axis.
  */
