@@ -20105,7 +20105,7 @@
         "motion"
       ],
       "registryDependencies": [
-        "use-scroll-progress"
+        "@retana/use-scroll-progress"
       ],
       "categories": [
         "animation"
@@ -20180,7 +20180,7 @@
         "motion"
       ],
       "registryDependencies": [
-        "motion-preference"
+        "@retana/motion-preference"
       ],
       "categories": [
         "animation"
@@ -20265,7 +20265,7 @@
         "motion"
       ],
       "registryDependencies": [
-        "motion-preference"
+        "@retana/motion-preference"
       ],
       "categories": [
         "animation"
@@ -20338,7 +20338,7 @@
       "author": "Eduardo Retana",
       "dependencies": [],
       "registryDependencies": [
-        "motion-preference"
+        "@retana/motion-preference"
       ],
       "categories": [
         "animation"
@@ -20474,8 +20474,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "use-scroll-progress",
-        "motion-preference"
+        "@retana/use-scroll-progress",
+        "@retana/motion-preference"
       ],
       "categories": [
         "animation"
@@ -20547,8 +20547,8 @@
       ],
       "registryDependencies": [
         "button",
-        "use-scroll-progress",
-        "motion-preference"
+        "@retana/use-scroll-progress",
+        "@retana/motion-preference"
       ],
       "categories": [
         "animation"

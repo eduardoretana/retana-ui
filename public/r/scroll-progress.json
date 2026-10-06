@@ -8,7 +8,7 @@
     "motion"
   ],
   "registryDependencies": [
-    "use-scroll-progress"
+    "@retana/use-scroll-progress"
   ],
   "files": [
     {
