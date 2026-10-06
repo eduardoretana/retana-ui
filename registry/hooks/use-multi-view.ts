@@ -3,14 +3,18 @@
 import * as React from "react"
 
 import {
+  coerceEnabledViews,
   decodeFilters,
   decodeSort,
   encodeFilters,
   encodeSort,
+  readEnabledViews,
+  viewPersistenceKey,
   type FilterClause,
   type MultiRecord,
   type SortClause,
   type ViewConfig,
+  type ViewPersistenceScope,
 } from "@/registry/retana/lib/multi-view"
 
 export type UrlAdapter = {
@@ -39,11 +43,25 @@ export function createHistoryAdapter(): UrlAdapter {
   }
 }
 
+export type ViewPersistence = {
+  scope: ViewPersistenceScope
+  /** Collection id. Combined with `scope` into the storage key. */
+  id: string
+  /** Defaults to localStorage in the browser. Pass a memory store in tests. */
+  storage?: Pick<Storage, "getItem" | "setItem">
+}
+
 export type UseMultiViewOptions = {
   views: readonly ViewConfig[]
   /** Prefix for query keys. Default `mv`, producing `mv.view`, `mv.q`, and so on. */
   urlPrefix?: string
   url?: UrlAdapter | null
+  /** Which views can be selected. Omit it to enable every view, which is the previous behavior. */
+  enabledViews?: readonly string[]
+  defaultEnabledViews?: readonly string[]
+  onEnabledViewsChange?: (ids: string[]) => void
+  /** Remembers the enabled set for one project or for every project. At least one view stays on. */
+  persistViews?: ViewPersistence
   viewId?: string
   defaultViewId?: string
   onViewIdChange?: (viewId: string) => void
@@ -121,6 +139,10 @@ export function useMultiView({
   views,
   urlPrefix = "mv",
   url,
+  enabledViews: enabledProp,
+  defaultEnabledViews,
+  onEnabledViewsChange,
+  persistViews,
   viewId: viewIdProp,
   defaultViewId,
   onViewIdChange,
@@ -144,8 +166,18 @@ export function useMultiView({
   onOpenIdChange,
 }: UseMultiViewOptions) {
   const initialUrl = React.useState(() => readUrl(url, urlPrefix))[0]
+  const viewIds = React.useMemo(() => views.map((view) => view.id), [views])
+  const fallbackEnabled = React.useMemo(
+    () => coerceEnabledViews(defaultEnabledViews ?? viewIds, viewIds),
+    [defaultEnabledViews, viewIds],
+  )
   const fallbackView = defaultViewId ?? initialUrl.viewId ?? views[0]?.id ?? ""
 
+  const [enabledViews, setEnabledViews] = useControllable(
+    enabledProp as string[] | undefined,
+    fallbackEnabled,
+    onEnabledViewsChange,
+  )
   const [viewId, setViewId] = useControllable(
     viewIdProp,
     fallbackView,
@@ -192,7 +224,55 @@ export function useMultiView({
     onOpenIdChange,
   )
 
-  const active = views.find((view) => view.id === viewId) ?? views[0]
+  const updateEnabledViews = React.useCallback(
+    (next: readonly string[]) => {
+      const coerced = coerceEnabledViews(next, viewIds, enabledViews)
+      const same =
+        coerced.length === enabledViews.length &&
+        coerced.every((id, index) => id === enabledViews[index])
+      if (same) return
+      setEnabledViews(coerced)
+      if (!persistViews || typeof window === "undefined") return
+      try {
+        const store = persistViews.storage ?? window.localStorage
+        store.setItem(viewPersistenceKey(persistViews.scope, persistViews.id), JSON.stringify(coerced))
+      } catch {
+        // A blocked store still leaves the in-memory set in place.
+      }
+    },
+    [enabledViews, persistViews, setEnabledViews, viewIds],
+  )
+
+  const loadedViews = React.useRef(false)
+  React.useEffect(() => {
+    if (loadedViews.current) return
+    loadedViews.current = true
+    if (!persistViews || enabledProp !== undefined || typeof window === "undefined") return
+    try {
+      const store = persistViews.storage ?? window.localStorage
+      const stored = readEnabledViews(
+        store.getItem(viewPersistenceKey(persistViews.scope, persistViews.id)),
+        viewIds,
+      )
+      if (stored) updateEnabledViews(stored)
+    } catch {
+      // Ignore an unreadable store and keep the default set.
+    }
+  }, [enabledProp, persistViews, updateEnabledViews, viewIds])
+
+  const requestedView = React.useRef<string | null>(null)
+  React.useEffect(() => {
+    if (enabledViews.includes(viewId)) {
+      requestedView.current = null
+      return
+    }
+    const next = enabledViews[0]
+    if (!next || requestedView.current === next) return
+    requestedView.current = next
+    setViewId(next)
+  }, [enabledViews, setViewId, viewId])
+
+  const active = views.find((view) => view.id === viewId) ?? views.find((view) => enabledViews.includes(view.id)) ?? views[0]
   const resolvedGroupBy =
     groupByProp !== undefined || groupMode === "value" ? groupBy : (active?.groupField ?? null)
 
@@ -238,6 +318,8 @@ export function useMultiView({
 
   return {
     views,
+    enabledViews,
+    setEnabledViews: updateEnabledViews,
     active,
     viewId,
     setViewId,

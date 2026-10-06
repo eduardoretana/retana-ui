@@ -29,6 +29,7 @@ const KIND = {
 const GROUP_ORDER = [
   "Detail",
   "Chat and agents",
+  "Inbox",
   "Agents",
   "Forms",
   "Media and content",
@@ -44,6 +45,14 @@ const GROUP_ORDER = [
 
 const GROUP_OVERRIDE = {
   "attachment-chip": "Media and content",
+  "reply-composer": "Inbox",
+  "inbox-list": "Inbox",
+  "ticket-properties": "Inbox",
+  "contact-panel": "Inbox",
+  "view-customizer": "Inbox",
+  "support-inbox": "Inbox",
+  "ticket-desk": "Inbox",
+  "notification-inbox": "Inbox",
 }
 
 /**

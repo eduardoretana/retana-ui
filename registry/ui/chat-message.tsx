@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/button"
 
 export type ChatRole = "user" | "assistant" | "system"
 export type ChatMessageStatus = "sending" | "sent" | "error"
+export type ChatMessageSide = "incoming" | "outgoing"
+export type ChatMessageVariant = "default" | "note"
+export type ChatMessageReceipt = "seen" | "unseen"
 
 export type ChatMessageProps = {
   role: ChatRole
@@ -17,6 +20,15 @@ export type ChatMessageProps = {
   /** Preformatted time. The host owns locale and timezone. */
   time?: string
   avatar?: React.ReactNode
+  /** Overrides the side implied by `role`. Existing roles stay the same when this is omitted. */
+  side?: ChatMessageSide
+  /** `note` tints the bubble and labels it as an internal note. */
+  variant?: ChatMessageVariant
+  noteLabel?: string
+  /** Seen state, shown under the bubble. Omitted when unset. */
+  receipt?: ChatMessageReceipt
+  seenLabel?: string
+  unseenLabel?: string
   status?: ChatMessageStatus
   reactions?: readonly { emoji: string; count: number; mine?: boolean }[]
   onReact?: (emoji: string) => void
@@ -74,6 +86,12 @@ export function ChatMessage({
   name,
   time,
   avatar,
+  side,
+  variant = "default",
+  noteLabel = "Internal note",
+  receipt,
+  seenLabel = "Seen",
+  unseenLabel = "Not seen",
   status = "sent",
   reactions,
   onReact,
@@ -94,8 +112,9 @@ export function ChatMessage({
   const label = name ?? ROLE_LABEL[role]
   const [copied, setCopied] = React.useState(false)
   const copiedTimer = React.useRef<number>(0)
-  const mine = role === "user"
+  const mine = side ? side === "outgoing" : role === "user"
   const system = role === "system"
+  const note = variant === "note"
 
   React.useEffect(() => () => window.clearTimeout(copiedTimer.current), [])
 
@@ -118,7 +137,10 @@ export function ChatMessage({
     <article
       data-slot="chat-message"
       data-role={role}
+      data-side={mine ? "outgoing" : system ? "center" : "incoming"}
+      data-variant={variant}
       data-status={status}
+      data-receipt={receipt}
       aria-busy={status === "sending" || undefined}
       className={cn(
         "flex w-full gap-2",
@@ -132,6 +154,11 @@ export function ChatMessage({
         {system ? null : (
           <div className={cn("flex items-baseline gap-2 px-1", mine && "flex-row-reverse")}>
             <span className="text-xs font-medium">{label}</span>
+            {note ? (
+              <span className="rounded-full bg-accent px-1.5 py-0.5 text-[10px] font-medium text-accent-foreground">
+                {noteLabel}
+              </span>
+            ) : null}
             {time ? <time className="text-[11px] text-muted-foreground tabular-nums">{time}</time> : null}
           </div>
         )}
@@ -139,8 +166,9 @@ export function ChatMessage({
           className={cn(
             "rounded-2xl px-3 py-2 text-sm leading-relaxed wrap-break-word",
             system && "bg-transparent px-0 text-center text-xs text-muted-foreground",
-            mine && "rounded-ee-md bg-primary text-primary-foreground",
-            role === "assistant" && "rounded-es-md bg-muted text-foreground",
+            mine && !note && "rounded-ee-md bg-primary text-primary-foreground",
+            !mine && !system && !note && "rounded-es-md bg-muted text-foreground",
+            note && "border border-border bg-accent text-accent-foreground",
             status === "sending" && "opacity-70",
             status === "error" && "ring-1 ring-destructive/50",
             bubbleClassName,
@@ -148,6 +176,11 @@ export function ChatMessage({
         >
           {children}
         </div>
+        {receipt && !system ? (
+          <p className="px-1 text-[11px] text-muted-foreground" data-receipt={receipt}>
+            {receipt === "seen" ? seenLabel : unseenLabel}
+          </p>
+        ) : null}
         {reactions?.length ? (
           <div className="flex flex-wrap gap-1 px-1">
             {reactions.map((reaction) => (

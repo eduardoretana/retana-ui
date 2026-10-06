@@ -8,6 +8,7 @@ import {
   GanttChart,
   LayoutGrid,
   List,
+  MoreHorizontal,
   Plus,
   Search,
   Table2,
@@ -54,7 +55,7 @@ import {
   type ViewConfig,
   type ViewKind,
 } from "@/registry/retana/lib/multi-view"
-import { useMultiView, useOptimisticRecords, type UrlAdapter } from "@/registry/retana/hooks/use-multi-view"
+import { useMultiView, useOptimisticRecords, type UrlAdapter, type ViewPersistence } from "@/registry/retana/hooks/use-multi-view"
 import { EntityForm } from "@/registry/retana/ui/entity-form"
 import { LayeredPanel, type LayeredPanelMode } from "@/registry/retana/ui/layered-panel"
 import { RecordProperties } from "@/registry/retana/ui/record-properties"
@@ -65,6 +66,7 @@ import { ViewKanban } from "@/registry/retana/ui/view-kanban"
 import { useContainerWidth } from "@/registry/retana/ui/multi-view-fields"
 import { ViewTable } from "@/registry/retana/ui/view-table"
 import { ViewTimeline } from "@/registry/retana/ui/view-timeline"
+import { ViewCustomizer, ViewSwitcher as AnimatedViewSwitcher } from "@/registry/retana/ui/view-customizer"
 
 const VIEW_ICONS: Record<ViewKind, React.ComponentType<{ className?: string }>> = {
   table: Table2,
@@ -90,6 +92,16 @@ export type MultiViewProps = {
   weekStartsOn?: number
   today?: string
   url?: UrlAdapter | null
+  /** Limits the switcher to these view ids. Omit it to keep every view enabled. */
+  enabledViews?: readonly string[]
+  onEnabledViewsChange?: (ids: string[]) => void
+  /** Remembers the enabled set for one project or for every project. */
+  persistViews?: ViewPersistence
+  /** Shows the animated switcher and the view menu. Also turns on when enabled views are controlled. */
+  customizeViews?: boolean
+  viewCustomizeTitle?: string
+  viewCustomizeSubtitle?: string
+  viewCustomizeFooter?: React.ReactNode
   onRecordChange?: (id: string, patch: Record<string, unknown>) => Promise<void> | void
   onCreate?: (draft: Record<string, unknown>) => Promise<void> | void
   onDelete?: (ids: readonly string[]) => Promise<void> | void
@@ -117,6 +129,13 @@ export function MultiView({
   weekStartsOn = 1,
   today,
   url,
+  enabledViews,
+  onEnabledViewsChange,
+  persistViews,
+  customizeViews = false,
+  viewCustomizeTitle = "Views",
+  viewCustomizeSubtitle,
+  viewCustomizeFooter,
   onRecordChange,
   onCreate,
   onDelete,
@@ -134,7 +153,15 @@ export function MultiView({
   searchLabel = "Search",
   emptyLabel = "No records",
 }: MultiViewProps) {
-  const state = useMultiView({ views, url })
+  const customizing = customizeViews || enabledViews !== undefined || persistViews !== undefined || onEnabledViewsChange !== undefined
+  const state = useMultiView({
+    views,
+    url,
+    enabledViews,
+    onEnabledViewsChange,
+    persistViews,
+  })
+  const shownViews = customizing ? views.filter((view) => state.enabledViews.includes(view.id)) : views
   const data = useOptimisticRecords({
     records,
     onRecordChange,
@@ -177,7 +204,7 @@ export function MultiView({
           count={selectedCount}
           locale={locale}
           className={toolbarClassName}
-          views={views}
+          views={shownViews}
           viewId={state.viewId}
           onViewChange={state.setViewId}
           onClear={state.clearSelection}
@@ -189,7 +216,14 @@ export function MultiView({
         <Toolbar
           title={title}
           count={count}
-          views={views}
+          views={shownViews}
+          allViews={views}
+          enabledViews={state.enabledViews}
+          onEnabledViewsChange={state.setEnabledViews}
+          customizing={customizing}
+          viewCustomizeTitle={viewCustomizeTitle}
+          viewCustomizeSubtitle={viewCustomizeSubtitle}
+          viewCustomizeFooter={viewCustomizeFooter}
           viewId={state.viewId}
           onViewChange={state.setViewId}
           query={state.query}
@@ -466,6 +500,13 @@ function Toolbar({
   title,
   count,
   views,
+  allViews,
+  enabledViews,
+  onEnabledViewsChange,
+  customizing = false,
+  viewCustomizeTitle,
+  viewCustomizeSubtitle,
+  viewCustomizeFooter,
   viewId,
   onViewChange,
   query,
@@ -487,6 +528,13 @@ function Toolbar({
   title: string
   count: string
   views: readonly ViewConfig[]
+  allViews: readonly ViewConfig[]
+  enabledViews: readonly string[]
+  onEnabledViewsChange: (ids: string[]) => void
+  customizing?: boolean
+  viewCustomizeTitle: string
+  viewCustomizeSubtitle?: string
+  viewCustomizeFooter?: React.ReactNode
   viewId: string
   onViewChange: (id: string) => void
   query: string
@@ -516,13 +564,42 @@ function Toolbar({
         <h2 className="truncate text-base font-semibold">{title}</h2>
         <p className="text-xs text-muted-foreground">{count}</p>
       </div>
-      <ViewSwitcher
-        views={views}
-        viewId={viewId}
-        mode={mode}
-        onViewChange={onViewChange}
-        className={switcherClassName}
-      />
+      {customizing ? (
+        <AnimatedViewSwitcher
+          className={switcherClassName}
+          views={views.map((view) => {
+            const Icon = VIEW_ICONS[view.kind]
+            return { id: view.id, label: view.label, icon: <Icon className="size-3.5" /> }
+          })}
+          value={viewId}
+          onValueChange={onViewChange}
+          menu={
+            <ViewCustomizer
+              title={viewCustomizeTitle}
+              subtitle={viewCustomizeSubtitle}
+              footer={viewCustomizeFooter}
+              views={allViews.map((view) => {
+                const Icon = VIEW_ICONS[view.kind]
+                return { id: view.id, label: view.label, icon: <Icon className="size-3.5" /> }
+              })}
+              enabled={enabledViews}
+              onEnabledChange={onEnabledViewsChange}
+            >
+              <Button type="button" variant="outline" size="icon-sm" className="rounded-full" aria-label={viewCustomizeTitle}>
+                <MoreHorizontal />
+              </Button>
+            </ViewCustomizer>
+          }
+        />
+      ) : (
+        <ViewSwitcher
+          views={views}
+          viewId={viewId}
+          mode={mode}
+          onViewChange={onViewChange}
+          className={switcherClassName}
+        />
+      )}
       <div className={cn("relative min-w-0 flex-1 basis-36", searchClassName)}>
         <Search className="pointer-events-none absolute top-1/2 left-2 size-3.5 -translate-y-1/2 text-muted-foreground" />
         <Input

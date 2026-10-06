@@ -227,6 +227,14 @@ import Preview222 from "@/app/examples/proposal-sow/preview"
 import Preview223 from "@/app/examples/proposal-activity/preview"
 import Preview224 from "@/app/examples/proposal-send/preview"
 import Preview225 from "@/app/examples/proposal-builder/preview"
+import Preview226 from "@/app/examples/reply-composer/preview"
+import Preview227 from "@/app/examples/inbox-list/preview"
+import Preview228 from "@/app/examples/ticket-properties/preview"
+import Preview229 from "@/app/examples/contact-panel/preview"
+import Preview230 from "@/app/examples/view-customizer/preview"
+import Preview231 from "@/app/examples/support-inbox/preview"
+import Preview232 from "@/app/examples/ticket-desk/preview"
+import Preview233 from "@/app/examples/notification-inbox/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -455,4 +463,12 @@ export const previewMap = {
   "proposal-activity": Preview223,
   "proposal-send": Preview224,
   "proposal-builder": Preview225,
+  "reply-composer": Preview226,
+  "inbox-list": Preview227,
+  "ticket-properties": Preview228,
+  "contact-panel": Preview229,
+  "view-customizer": Preview230,
+  "support-inbox": Preview231,
+  "ticket-desk": Preview232,
+  "notification-inbox": Preview233,
 }

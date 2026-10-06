@@ -20,13 +20,15 @@ Catalog demos are written in Spanish. Labels on the pieces are props.
   </picture>
 </p>
 
-The index at the bottom is generated from `registry.json`. These three groups are the newest.
+The index at the bottom is generated from `registry.json`. These groups are the newest.
 
 **Arc UI free tier.** Charts, page blocks, inputs, and actions adapted from [Arc UI](https://github.com/kuratlielia/arc-library) by Elia Kuratli (MIT). This registry includes the free tier. Adapted motion depends on the `motion` package and is skipped when the reader prefers reduced motion. A few older pieces gained optional behaviors from that same tier: reactions on `chat-message`, line collapse on `code-block`, swatches and EyeDropper on `color-picker`, chip overflow on `multi-select`, upload progress on `magnetic-dropzone`, pause and play on `logo-marquee`, and focus options on `otp-field`.
 
 **Rail, adaptive table, and presence.** `rail-sidebar` is an icon rail plus a section panel, built on the host sidebar. `adaptive-table` drops, folds, and stretches columns to the container width. The presence kit is `presence`, `presence-liveblocks`, `presence-supabase`, `presence-avatars`, `live-cursors`, `typing-indicator`, and `presence-outline`. UI pieces read one provider, so the same avatars and cursors work with the in-memory adapter, Liveblocks, or Supabase Realtime. Liveblocks wiring uses the Apache-2.0 client packages. Setup notes ship in [`registry/lib/presence/README.md`](registry/lib/presence/README.md).
 
-**Multi-view.** `multi-view` shows one collection as `view-table`, `view-kanban`, `view-calendar`, `view-timeline`, `view-grouped-list`, and `view-gallery`, with `record-properties` in the record panel. `multi-view-core` and `use-multi-view` hold the field schema and the view state. Pass records in. Saves go through host callbacks and roll back when a callback rejects. Wiring for Supabase and a plain REST API is in [`registry/lib/multi-view/README.md`](registry/lib/multi-view/README.md).
+**Multi-view.** `multi-view` shows one collection as `view-table`, `view-kanban`, `view-calendar`, `view-timeline`, `view-grouped-list`, and `view-gallery`, with `record-properties` in the record panel. `multi-view-core` and `use-multi-view` hold the field schema and the view state. Pass records in. Saves go through host callbacks and roll back when a callback rejects. Wiring for Supabase and a plain REST API is in [`registry/lib/multi-view/README.md`](registry/lib/multi-view/README.md). `view-customizer` and the exported `view-switcher` choose which of those views stay on. One view hides the pill. Two or more show it, and the neighbouring add button slides with the same spring as the segmented control. The choice can be remembered per project or globally. Reduced motion skips the slide.
+
+**Inbox.** `support-inbox`, `ticket-desk`, and `notification-inbox` are three desks built from `inbox-list`, `reply-composer`, `ticket-properties`, and `contact-panel`. Reply and internal note share one composer. A note uses the host accent. Send is Cmd or Ctrl+Enter. The desks take records through props. The live demos use Estudio Bruma, a fictional ceramics studio. No third-party inbox source, copy, or assets were copied.
 
 **Layouts.** [`magnetic-bento`](registry/ui/magnetic-bento.tsx) is a bento grid with one shared highlight. The active card sets `anchor-name` and the highlight uses `position-anchor` with `inset: anchor(inside)`, so the four edges stretch between cards of different sizes. Browsers where `CSS.supports("anchor-name: --x")` is false measure the active card instead. The technique idea is from [jh3yy](https://x.com/jh3yy/status/2105823926978814273). The cards in this registry are original.
 
@@ -129,6 +131,21 @@ Names that sit near each other do different jobs. Install the row that matches t
 | [`proposal-document`](registry/ui/proposal-document.tsx) | Reorderable sections, a paper preview, and a pre-flight list. |
 
 The other steps are `proposal-opportunity`, `proposal-analyze`, `proposal-clarify`, `proposal-scope`, `proposal-similar`, `proposal-risks`, `proposal-sow`, `proposal-activity`, and `proposal-send`. They are a clean-room reading of a discovery-to-statement-of-work demo. No product names or sample copy were copied. The live walkthrough is [`/examples/proposal-builder`](/examples/proposal-builder).
+
+### Inbox
+
+Clean-room desks. Pass the records in. The Estudio Bruma demos are fictional.
+
+| Piece | Use it for |
+| --- | --- |
+| [`support-inbox`](registry/blocks/support-inbox.tsx) | Folders, a conversation list, a thread, and a contact panel with a copilot slot. |
+| [`ticket-desk`](registry/blocks/ticket-desk.tsx) | A ticket list, a thread, properties, and create or edit through `entity-form`. |
+| [`notification-inbox`](registry/blocks/notification-inbox.tsx) | Tabs with counts, mark all read, snooze, archive, and a comment thread. |
+| [`reply-composer`](registry/ui/reply-composer.tsx) | Reply and internal note, suggestion chips, and Cmd or Ctrl+Enter to send. |
+| [`inbox-list`](registry/ui/inbox-list.tsx) | Searchable rows with presence, preview, time, and an unread count. |
+| [`ticket-properties`](registry/ui/ticket-properties.tsx) | Status, priority, an overdue due date, SLA, tags, and read-only metadata. |
+| [`contact-panel`](registry/ui/contact-panel.tsx) | Details and Copilot tabs. Copilot is a slot. |
+| [`view-customizer`](registry/ui/view-customizer.tsx) | Multi-select view tiles, plus the animated `view-switcher` pill. |
 
 `admin-shell` is the collapsible admin sidebar with breadcrumbs and a command palette. `rail-sidebar` is the two-layer app sidebar: an icon rail for sections and a panel for that section's links. `multi-view` is the block that switches the six views and opens the record panel.
 
@@ -246,7 +263,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`226` items are in `registry.json` on this branch: `186` components, `31` blocks, `3` hooks, and `6` libraries. A name links to its source file.
+`234` items are in `registry.json` on this branch: `191` components, `34` blocks, `3` hooks, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -271,6 +288,17 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`image-generation`](registry/ui/image-generation.tsx) · ui — Image frame that shows progress and a shimmer while generating, then reveals the result. Install: `npx shadcn@latest add @retana/image-generation`.
 - [`ai-document`](registry/ui/ai-document.tsx) · ui — Document where an agent proposes highlighted edits the reader can accept or reject. Install: `npx shadcn@latest add @retana/ai-document`.
 - [`suggestion-card`](registry/ui/suggestion-card.tsx) · ui — A system suggestion with confidence, facts, evidence, and confirm, change, or dismiss. Install: `npx shadcn@latest add @retana/suggestion-card`.
+
+### Inbox
+
+- [`reply-composer`](registry/ui/reply-composer.tsx) · ui — A reply box with Reply and Note modes, suggestion chips, attachment, emoji, and snippet slots, and send on Cmd or Ctrl+Enter. Install: `npx shadcn@latest add @retana/reply-composer`.
+- [`inbox-list`](registry/ui/inbox-list.tsx) · ui — A searchable list of conversations, tickets, or notifications, with presence, preview, time, unread count, and an empty state. Install: `npx shadcn@latest add @retana/inbox-list`.
+- [`ticket-properties`](registry/ui/ticket-properties.tsx) · ui — Status, priority, type, assignee, an overdue due date, SLA, tags, and read-only channel and date rows. Install: `npx shadcn@latest add @retana/ticket-properties`.
+- [`contact-panel`](registry/ui/contact-panel.tsx) · ui — A side panel with Details and Copilot tabs, a contact card, editable fields, and collapsible sections. Install: `npx shadcn@latest add @retana/contact-panel`.
+- [`view-customizer`](registry/ui/view-customizer.tsx) · ui — A popover of view tiles you can turn on and off, plus an animated switcher that appears once two views are enabled. Install: `npx shadcn@latest add @retana/view-customizer`.
+- [`support-inbox`](registry/blocks/support-inbox.tsx) · block — A three-pane desk with folders, a conversation list, a reply thread, a contact panel, and a new-conversation form. Install: `npx shadcn@latest add @retana/support-inbox`.
+- [`ticket-desk`](registry/blocks/ticket-desk.tsx) · block — A ticket list with a status filter, a thread, a properties panel, and dialogs to create, edit, or delete a ticket. Install: `npx shadcn@latest add @retana/ticket-desk`.
+- [`notification-inbox`](registry/blocks/notification-inbox.tsx) · block — Notification tabs with counts, mark all read, snooze, archive, subscribe, a comment thread, and a properties column. Install: `npx shadcn@latest add @retana/notification-inbox`.
 
 ### Agents
 
@@ -383,7 +411,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`metric-card`](registry/ui/metric-card.tsx) · ui — A compact summary for a number that needs a label and context. Install: `npx shadcn@latest add @retana/metric-card`.
 - [`adaptive-table`](registry/ui/adaptive-table.tsx) · ui — Grouped table that drops, folds, and stretches columns to its container width. For a narrow panel. data-table is the full TanStack table; crm-table is a fixed contact layout. Install: `npx shadcn@latest add @retana/adaptive-table`.
 - [`multi-view-core`](registry/lib/multi-view.ts) · lib — Field schema and pure helpers for one collection shown in many views: search, filter, sort, group, month grid, timeline scale, Intl formatting, and CSV. Install: `npx shadcn@latest add @retana/multi-view-core`.
-- [`use-multi-view`](registry/hooks/use-multi-view.ts) · hook — View, search, filter, sort, group, selection, and open-record state, controlled or uncontrolled, with an optional URL adapter. Install: `npx shadcn@latest add @retana/use-multi-view`.
+- [`use-multi-view`](registry/hooks/use-multi-view.ts) · hook — View, search, filter, sort, group, selection, and open-record state, controlled or uncontrolled, with an optional URL adapter and an optional saved set of enabled views. Install: `npx shadcn@latest add @retana/use-multi-view`.
 - [`view-table`](registry/ui/view-table.tsx) · ui — Schema-driven table with checkbox selection, sortable headers, per-type cells, row actions, and column visibility. Install: `npx shadcn@latest add @retana/view-table`.
 - [`view-kanban`](registry/ui/view-kanban.tsx) · ui — Status columns with counts and sums, draggable cards, a keyboard sensor, a Move to menu, an optional summary card, a collapsed overflow, and a short highlight ring. Install: `npx shadcn@latest add @retana/view-kanban`.
 - [`view-calendar`](registry/ui/view-calendar.tsx) · ui — Month grid for a date field, with overflow, drag or Alt+Arrow reschedule, and an agenda below 560px. Install: `npx shadcn@latest add @retana/view-calendar`.

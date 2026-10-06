@@ -39,6 +39,17 @@ const dashboards = [
   ["stats-band", "A marketing band of figures."],
 ] as const
 
+const inbox = [
+  ["support-inbox", "Folders, a thread, and a contact panel. New conversations use entity-form."],
+  ["ticket-desk", "Ticket list, thread, properties, and a status filter."],
+  ["notification-inbox", "Tabs with counts, mark all read, snooze, archive, and comments."],
+  ["reply-composer", "Reply and internal note. Send with Cmd or Ctrl+Enter."],
+  ["inbox-list", "Rows with presence, preview, time, and an unread count."],
+  ["ticket-properties", "Priority, an overdue due date, SLA, tags, and read-only metadata."],
+  ["contact-panel", "Details and Copilot tabs. Copilot is a slot."],
+  ["view-customizer", "View tiles and a pill that appears once two views are on."],
+] as const
+
 const proposals = [
   ["proposal-builder", "The whole flow, from the dashboard through send. Pass records in."],
   ["proposal-shell", "Grouped sidebar, command search, unread bell, period, and a step action."],
@@ -236,6 +247,7 @@ export default function DocsPage() {
           <ChoiceTable title="Time" rows={time} />
           <ChoiceTable title="Dashboards" rows={dashboards} />
           <ChoiceTable title="Proposals" rows={proposals} />
+          <ChoiceTable title="Inbox" rows={inbox} />
           <ChoiceTable title="Meters and trends" rows={meters} />
           <ChoiceTable title="Editing a record" rows={editing} />
           <ChoiceTable title="People" rows={people} />

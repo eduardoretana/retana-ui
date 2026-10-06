@@ -1,0 +1,75 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "contact-panel",
+  "title": "Contact panel",
+  "author": "Eduardo Retana",
+  "description": "A side panel with Details and Copilot tabs, a contact card, editable fields, and collapsible sections.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button",
+    "collapsible",
+    "separator"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/contact-panel.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { ChevronDown } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Button } from \"@/components/ui/button\"\nimport { Collapsible, CollapsibleContent, CollapsibleTrigger } from \"@/components/ui/collapsible\"\nimport { Separator } from \"@/components/ui/separator\"\nimport { deskInitials, type DeskOption, type DeskPresence } from \"@/lib/inbox\"\n\nexport type ContactField = {\n  id: string\n  label: string\n  value: string\n  options?: readonly DeskOption[]\n  onChange?: (value: string) => void\n  readOnly?: boolean\n}\n\nexport type ContactSection = {\n  id: string\n  title: string\n  defaultOpen?: boolean\n  content: React.ReactNode\n}\n\nexport type ContactPanelClassNames = {\n  root?: string\n  tabs?: string\n  card?: string\n  section?: string\n}\n\nexport type ContactPanelProps = {\n  tab?: \"details\" | \"copilot\"\n  defaultTab?: \"details\" | \"copilot\"\n  onTabChange?: (tab: \"details\" | \"copilot\") => void\n  detailsLabel?: string\n  copilotLabel?: string\n  contactName: string\n  presence?: DeskPresence\n  presenceLabel?: string\n  viewContactLabel?: string\n  onViewContact?: () => void\n  fields?: readonly ContactField[]\n  spamLabel?: string\n  onMarkSpam?: () => void\n  sections?: readonly ContactSection[]\n  copilot?: React.ReactNode\n  copilotEmpty?: string\n  className?: string\n  classNames?: ContactPanelClassNames\n}\n\nexport function ContactPanel({\n  tab: tabProp,\n  defaultTab = \"details\",\n  onTabChange,\n  detailsLabel = \"Details\",\n  copilotLabel = \"Copilot\",\n  contactName,\n  presence,\n  presenceLabel,\n  viewContactLabel = \"View contact\",\n  onViewContact,\n  fields = [],\n  spamLabel = \"Mark as spam\",\n  onMarkSpam,\n  sections = [],\n  copilot,\n  copilotEmpty = \"Nothing suggested yet.\",\n  className,\n  classNames,\n}: ContactPanelProps) {\n  const [tabState, setTabState] = React.useState(defaultTab)\n  const tab = tabProp ?? tabState\n  const detailsId = React.useId()\n  const copilotId = React.useId()\n  const detailsTab = React.useId()\n  const copilotTab = React.useId()\n\n  function setTab(next: \"details\" | \"copilot\") {\n    if (tabProp === undefined) setTabState(next)\n    onTabChange?.(next)\n  }\n\n  function onTabKey(event: React.KeyboardEvent<HTMLButtonElement>) {\n    if (event.key !== \"ArrowRight\" && event.key !== \"ArrowLeft\") return\n    event.preventDefault()\n    const next = tab === \"details\" ? \"copilot\" : \"details\"\n    setTab(next)\n    document.getElementById(next === \"details\" ? detailsTab : copilotTab)?.focus()\n  }\n\n  return (\n    <aside\n      data-slot=\"contact-panel\"\n      data-tab={tab}\n      className={cn(\"flex min-h-0 min-w-0 flex-col bg-background\", className, classNames?.root)}\n    >\n      <div role=\"tablist\" aria-label={detailsLabel} className={cn(\"flex border-b border-border\", classNames?.tabs)}>\n        {(\n          [\n            { id: detailsTab, panel: detailsId, value: \"details\" as const, label: detailsLabel },\n            { id: copilotTab, panel: copilotId, value: \"copilot\" as const, label: copilotLabel },\n          ]\n        ).map((item) => {\n          const selected = tab === item.value\n          return (\n            <button\n              key={item.value}\n              id={item.id}\n              type=\"button\"\n              role=\"tab\"\n              aria-selected={selected}\n              aria-controls={item.panel}\n              tabIndex={selected ? 0 : -1}\n              className={cn(\n                \"flex-1 border-b-2 px-3 py-2 text-sm font-medium focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\",\n                selected ? \"border-foreground text-foreground\" : \"border-transparent text-muted-foreground\",\n              )}\n              onClick={() => setTab(item.value)}\n              onKeyDown={onTabKey}\n            >\n              {item.label}\n            </button>\n          )\n        })}\n      </div>\n      <div className=\"min-h-0 flex-1 overflow-y-auto\">\n        <div id={detailsId} role=\"tabpanel\" aria-labelledby={detailsTab} hidden={tab !== \"details\"} className=\"flex flex-col gap-4 p-3\">\n          <div className={cn(\"flex items-center gap-3\", classNames?.card)}>\n            <span className=\"relative grid size-10 shrink-0 place-items-center rounded-full bg-muted text-xs font-medium text-muted-foreground\">\n              <span aria-hidden>{deskInitials(contactName)}</span>\n              {presence ? (\n                <span\n                  data-presence={presence}\n                  className={cn(\n                    \"absolute end-0 bottom-0 size-2.5 rounded-full ring-2 ring-background\",\n                    presence === \"online\" && \"bg-primary\",\n                    presence === \"offline\" && \"bg-muted-foreground\",\n                    presence === \"away\" && \"bg-accent-foreground\",\n                  )}\n                />\n              ) : null}\n            </span>\n            <span className=\"min-w-0\">\n              <span className=\"block truncate text-sm font-semibold\">{contactName}</span>\n              {presenceLabel ? <span className=\"block text-xs text-muted-foreground\">{presenceLabel}</span> : null}\n            </span>\n          </div>\n          {onViewContact ? (\n            <Button type=\"button\" variant=\"outline\" size=\"sm\" onClick={onViewContact}>\n              {viewContactLabel}\n            </Button>\n          ) : null}\n          <div className=\"grid gap-3\">\n            {fields.map((field) => (\n              <label key={field.id} className=\"grid gap-1\">\n                <span className=\"text-xs text-muted-foreground\">{field.label}</span>\n                {field.options && !field.readOnly ? (\n                  <select\n                    aria-label={field.label}\n                    value={field.value}\n                    onChange={(event) => field.onChange?.(event.target.value)}\n                    className=\"h-8 rounded-md border border-input bg-background px-2 text-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n                  >\n                    {field.options.map((option) => (\n                      <option key={option.value} value={option.value}>\n                        {option.label}\n                      </option>\n                    ))}\n                  </select>\n                ) : (\n                  <span className=\"text-sm wrap-anywhere\">{field.value || \"—\"}</span>\n                )}\n              </label>\n            ))}\n          </div>\n          {onMarkSpam ? (\n            <Button type=\"button\" variant=\"outline\" onClick={onMarkSpam}>\n              {spamLabel}\n            </Button>\n          ) : null}\n          {sections.length ? <Separator /> : null}\n          {sections.map((section) => (\n            <Collapsible key={section.id} defaultOpen={section.defaultOpen} className={classNames?.section}>\n              <CollapsibleTrigger className=\"flex w-full items-center justify-between gap-2 py-1 text-left text-xs font-medium text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\">\n                {section.title}\n                <ChevronDown className=\"size-3.5\" aria-hidden />\n              </CollapsibleTrigger>\n              <CollapsibleContent className=\"pt-2 text-sm\">{section.content}</CollapsibleContent>\n            </Collapsible>\n          ))}\n        </div>\n        <div id={copilotId} role=\"tabpanel\" aria-labelledby={copilotTab} hidden={tab !== \"copilot\"} className=\"flex flex-col gap-3 p-3\">\n          {copilot ?? <p className=\"text-sm text-muted-foreground\">{copilotEmpty}</p>}\n        </div>\n      </div>\n    </aside>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/contact-panel.tsx"
+    },
+    {
+      "path": "registry/lib/inbox.ts",
+      "content": "/**\n * Shared types for the desk pieces. No fetching, no theme.\n * Dates are calendar days (`YYYY-MM-DD`). The host owns locale and timezone.\n */\n\nexport const DESK_PRESENCES = [\"online\", \"offline\", \"away\"] as const\n\nexport type DeskPresence = (typeof DESK_PRESENCES)[number]\n\nexport type DeskMessage = {\n  id: string\n  author: string\n  body: string\n  /** Preformatted time. */\n  time: string\n  side: \"incoming\" | \"outgoing\"\n  note?: boolean\n  receipt?: \"seen\" | \"unseen\"\n}\n\nexport type DeskOption = {\n  value: string\n  label: string\n}\n\nconst DATE_RE = /^(\\d{4})-(\\d{2})-(\\d{2})$/\n\nexport function foldInboxText(value: string): string {\n  return value.normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g, \"\").toLowerCase()\n}\n\nexport function isCalendarDate(value: string | undefined): value is string {\n  return Boolean(value && DATE_RE.test(value))\n}\n\n/** True when `due` is a calendar day before `today`. */\nexport function isOverdueDate(due: string | undefined, today: string): boolean {\n  if (!isCalendarDate(due) || !isCalendarDate(today)) return false\n  return due < today\n}\n\nexport function formatDeskDate(iso: string, locale?: string): string {\n  if (!isCalendarDate(iso)) return iso\n  const [year, month, day] = iso.split(\"-\").map(Number)\n  return new Intl.DateTimeFormat(locale, { dateStyle: \"medium\", timeZone: \"UTC\" }).format(\n    new Date(Date.UTC(year, month - 1, day)),\n  )\n}\n\nexport function deskInitials(name: string): string {\n  const letters = name\n    .split(/\\s+/)\n    .filter(Boolean)\n    .slice(0, 2)\n    .map((part) => part[0]?.toUpperCase() ?? \"\")\n    .join(\"\")\n  return letters || \"?\"\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/inbox.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Ficha de contacto",
+    "descriptionEs": "Pestañas Detalles y Copiloto, ficha del contacto y secciones plegables.",
+    "preview": "app/examples/contact-panel/preview.tsx",
+    "previewHref": "/examples/contact-panel",
+    "examples": [
+      {
+        "title": "Ficha de contacto",
+        "href": "/examples/contact-panel",
+        "description": "Copiloto es un hueco para tarjetas que ya tengas."
+      },
+      {
+        "title": "Marco de estrés",
+        "href": "/examples/contact-panel/stress",
+        "description": "320px y un valor vacío."
+      }
+    ],
+    "usage": "<ContactPanel contactName=\"Inés Soler\" fields={fields} sections={sections} copilot={slot} />",
+    "api": [
+      {
+        "name": "tab / onTabChange",
+        "type": "\"details\" | \"copilot\"",
+        "description": "Arrow keys move between the two tabs."
+      },
+      {
+        "name": "fields",
+        "type": "ContactField[]",
+        "description": "A select when options are set. Otherwise the value is read-only."
+      },
+      {
+        "name": "sections",
+        "type": "ContactSection[]",
+        "description": "Collapsible blocks under the fields."
+      },
+      {
+        "name": "copilot",
+        "type": "ReactNode",
+        "description": "Rendered on the Copilot tab. The panel does not fetch suggestions."
+      }
+    ]
+  },
+  "docs": "The Copilot tab is a slot, so hosts can drop in suggestion-card or tool-call without this item depending on them. Answer no if the CLI asks to overwrite button, collapsible, or separator. The item ships no theme.",
+  "categories": [
+    "panel"
+  ],
+  "type": "registry:ui"
+}
