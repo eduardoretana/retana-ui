@@ -426,7 +426,7 @@ export function WaffleChart({
                   type="button"
                   data-slot="waffle-chart-item"
                   className={cn(
-                    "grid min-h-9 w-full grid-cols-[10px_minmax(0,1fr)_auto] items-center gap-2.5 rounded-xl px-2.5 py-1 text-left text-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none active:scale-[0.98] motion-reduce:active:scale-100 data-[dim=true]:opacity-50 data-[on=true]:bg-muted data-[on=true]:text-foreground",
+                    "grid min-h-9 w-full grid-cols-[10px_minmax(0,1fr)_auto] items-center gap-2.5 rounded-xl px-2.5 py-1 text-left text-sm text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none active:scale-[0.96] motion-reduce:active:scale-100 data-[dim=true]:opacity-50 data-[on=true]:bg-muted data-[on=true]:text-foreground",
                     classNames?.item,
                   )}
                   aria-pressed={pinned === item.key}

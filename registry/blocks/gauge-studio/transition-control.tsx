@@ -11,7 +11,6 @@ const DEFAULT_EASE: EasingConfig["ease"] = [0.25, 0.1, 0.25, 1]
 
 const EASES: { value: string; label: string; ease: EasingConfig["ease"] }[] = [
   { value: "ease", label: "Ease", ease: DEFAULT_EASE },
-  { value: "ease-in", label: "Ease in", ease: [0.42, 0, 1, 1] },
   { value: "ease-out", label: "Ease out", ease: [0, 0, 0.58, 1] },
   { value: "ease-in-out", label: "Ease in-out", ease: [0.42, 0, 0.58, 1] },
   { value: "linear", label: "Linear", ease: [0, 0, 1, 1] },

@@ -229,7 +229,7 @@ function Chip({
     >
       <span
         ref={body}
-        className="relative isolate inline-flex h-8 min-w-0 items-center px-3.5 transition-transform group-active:scale-[0.97] motion-reduce:transition-none motion-reduce:group-active:scale-100"
+        className="relative isolate inline-flex h-8 min-w-0 items-center px-3.5 transition-transform group-active:scale-[0.96] motion-reduce:transition-none motion-reduce:group-active:scale-100"
         data-selected={selected || undefined}
       >
         <motion.span

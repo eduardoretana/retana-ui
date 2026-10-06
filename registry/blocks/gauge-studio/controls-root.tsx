@@ -42,7 +42,7 @@ export const ControlsRoot = () => {
 }
 
 const Chevron = ({ open }: { open: boolean }) => (
-  <ChevronRight className={cn("size-3.5 shrink-0 text-muted-foreground transition-transform", open && "rotate-90")} />
+  <ChevronRight className={cn("size-3.5 shrink-0 text-muted-foreground transition-transform motion-reduce:transition-none", open && "rotate-90")} />
 )
 
 const PanelSection = ({ panel }: { panel: PanelConfig }) => {
