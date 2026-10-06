@@ -204,13 +204,13 @@ export default function DocsPage() {
           <h2 className="text-lg font-semibold">Install</h2>
           <p className="text-muted-foreground">
             Pin <code>@retana</code> to a commit.{" "}
-            <code>f5bde24bbd0d9cbbb749f1e8959a64470cc4d5dc</code> is <code>CPL</code> when this page
+            <code>047eccb2a4589be8b30babfa2c9a57beaf4d8bfc</code> is <code>CPL</code> when this page
             was written. Replace that SHA with the commit the host should install.
           </p>
           <pre className="overflow-x-auto rounded-xl bg-muted p-4">
             <code>
               npx shadcn@latest add
-              https://raw.githubusercontent.com/eduardoretana/retana-ui/f5bde24bbd0d9cbbb749f1e8959a64470cc4d5dc/public/r/&lt;name&gt;.json
+              https://raw.githubusercontent.com/eduardoretana/retana-ui/047eccb2a4589be8b30babfa2c9a57beaf4d8bfc/public/r/&lt;name&gt;.json
             </code>
           </pre>
           <p className="text-muted-foreground">
@@ -254,7 +254,7 @@ export default function DocsPage() {
           <pre className="overflow-x-auto rounded-xl bg-muted p-4">{`{
   "registries": {
     "@retana": {
-      "url": "https://raw.githubusercontent.com/eduardoretana/retana-ui/f5bde24bbd0d9cbbb749f1e8959a64470cc4d5dc/public/r/{name}.json"
+      "url": "https://raw.githubusercontent.com/eduardoretana/retana-ui/047eccb2a4589be8b30babfa2c9a57beaf4d8bfc/public/r/{name}.json"
     }
   }
 }`}</pre>

@@ -222,13 +222,13 @@ Register the namespace once in the host `components.json`. Pin `@retana` to a co
 {
   "registries": {
     "@retana": {
-      "url": "https://raw.githubusercontent.com/eduardoretana/retana-ui/f5bde24bbd0d9cbbb749f1e8959a64470cc4d5dc/public/r/{name}.json"
+      "url": "https://raw.githubusercontent.com/eduardoretana/retana-ui/047eccb2a4589be8b30babfa2c9a57beaf4d8bfc/public/r/{name}.json"
     }
   }
 }
 ```
 
-`f5bde24bbd0d9cbbb749f1e8959a64470cc4d5dc` is `CPL` when this page was written. Replace that SHA with the commit the host should install.
+`047eccb2a4589be8b30babfa2c9a57beaf4d8bfc` is `CPL` when this page was written. Replace that SHA with the commit the host should install.
 
 ```bash
 npx shadcn@latest add @retana/layered-panel
@@ -237,7 +237,7 @@ npx shadcn@latest add @retana/layered-panel
 The same file, with no namespace:
 
 ```bash
-npx shadcn@latest add https://raw.githubusercontent.com/eduardoretana/retana-ui/f5bde24bbd0d9cbbb749f1e8959a64470cc4d5dc/public/r/layered-panel.json
+npx shadcn@latest add https://raw.githubusercontent.com/eduardoretana/retana-ui/047eccb2a4589be8b30babfa2c9a57beaf4d8bfc/public/r/layered-panel.json
 ```
 
 The public catalog host is not chosen yet. `https://<your-deployment>` does not pin a SHA. It stays a placeholder, on this page and on `/docs`, for a deployment you control.

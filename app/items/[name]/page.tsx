@@ -101,7 +101,7 @@ export default async function ItemPage({ params }: PageProps) {
           <InstallCommands name={item.name} />
           <p className="text-sm text-muted-foreground">
             The first command pins{" "}
-            <code>https://raw.githubusercontent.com/eduardoretana/retana-ui/f5bde24bbd0d9cbbb749f1e8959a64470cc4d5dc/public/r/{item.name}.json</code>
+            <code>https://raw.githubusercontent.com/eduardoretana/retana-ui/047eccb2a4589be8b30babfa2c9a57beaf4d8bfc/public/r/{item.name}.json</code>
             . <code>https://&lt;your-deployment&gt;</code> does not pin a SHA. On this site the
             deployment command uses the current origin.
           </p>

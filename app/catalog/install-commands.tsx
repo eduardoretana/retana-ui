@@ -8,7 +8,7 @@ function subscribe() {
   return () => {}
 }
 
-const PINNED_SHA = "f5bde24bbd0d9cbbb749f1e8959a64470cc4d5dc"
+const PINNED_SHA = "047eccb2a4589be8b30babfa2c9a57beaf4d8bfc"
 
 export function InstallCommands({ name }: { name: string }) {
   const origin = useSyncExternalStore(
