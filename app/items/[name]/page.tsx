@@ -100,8 +100,10 @@ export default async function ItemPage({ params }: PageProps) {
           <h2 className="text-lg font-semibold">Install</h2>
           <InstallCommands name={item.name} />
           <p className="text-sm text-muted-foreground">
-            <code>https://&lt;your-deployment&gt;</code> in the URL command is a placeholder until
-            the catalog domain is chosen. On this site the command uses the current origin.
+            The first command pins{" "}
+            <code>https://raw.githubusercontent.com/eduardoretana/retana-ui/f5bde24bbd0d9cbbb749f1e8959a64470cc4d5dc/public/r/{item.name}.json</code>
+            . <code>https://&lt;your-deployment&gt;</code> does not pin a SHA. On this site the
+            deployment command uses the current origin.
           </p>
         </section>
 
