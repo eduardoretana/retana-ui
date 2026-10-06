@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react"
+import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
 
@@ -73,6 +73,7 @@ describe("theme-switch icons", () => {
 
 describe("morph overlays", () => {
   it("moves focus into the dialog and closes on escape", async () => {
+    setMotionPreference("reduce")
     const user = userEvent.setup()
     render(
       <MorphDialog label="Edit note" title="Note">
@@ -83,11 +84,15 @@ describe("morph overlays", () => {
     expect(screen.getByRole("dialog", { name: "Note" })).toBeInTheDocument()
     expect(screen.getByRole("textbox", { name: "Title" })).toHaveFocus()
     await user.keyboard("{Escape}")
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+    })
     expect(screen.getByRole("button", { name: "Edit note" })).toHaveFocus()
+    setMotionPreference("system")
   })
 
   it("opens a non-modal popover and closes it from outside", async () => {
+    setMotionPreference("reduce")
     const user = userEvent.setup()
     render(
       <div>
@@ -100,7 +105,10 @@ describe("morph overlays", () => {
     await user.click(screen.getByRole("button", { name: "Actions" }))
     expect(screen.getByRole("dialog", { name: "Record" })).toHaveAttribute("aria-modal", "false")
     await user.click(screen.getByRole("button", { name: "Outside" }))
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+    })
+    setMotionPreference("system")
   })
 })
 

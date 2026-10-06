@@ -113,7 +113,7 @@ export function MorphPopover({
               transition={transition}
               initial={reduced ? { opacity: 0 } : false}
               animate={{ opacity: 1 }}
-              exit={reduced ? { opacity: 0 } : undefined}
+              exit={reduced ? { opacity: 0, transition: { duration: 0 } } : { opacity: 0 }}
             >
               {title ? (
                 <p id={titleId} className="text-sm font-medium">

@@ -104,6 +104,10 @@ function detectApple() {
   return /mac|iphone|ipad|ipod/i.test(navigator.platform || navigator.userAgent)
 }
 
+function subscribeApple() {
+  return () => {}
+}
+
 export function ShortcutButton({
   shortcut = "mod+s",
   onCommand,
@@ -118,7 +122,7 @@ export function ShortcutButton({
   ...props
 }: ShortcutButtonProps) {
   const parts = React.useMemo(() => parseShortcut(shortcut), [shortcut])
-  const [isApple, setIsApple] = React.useState(false)
+  const isApple = React.useSyncExternalStore(subscribeApple, detectApple, () => false)
   const [held, setHeld] = React.useState<ReadonlySet<string>>(new Set())
   const [firing, setFiring] = React.useState(false)
   const fireTimerRef = React.useRef<number | undefined>(undefined)
@@ -127,10 +131,6 @@ export function ShortcutButton({
   React.useEffect(() => {
     onCommandRef.current = onCommand
   }, [onCommand])
-
-  React.useEffect(() => {
-    setIsApple(detectApple())
-  }, [])
 
   const fire = React.useCallback(() => {
     setFiring(true)

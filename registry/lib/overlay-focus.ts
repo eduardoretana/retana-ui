@@ -33,6 +33,7 @@ export function useOverlayFocus(
   panelRef: React.RefObject<HTMLElement | null>,
   onClose: () => void,
   trap: boolean,
+  returnFocusRef?: React.RefObject<HTMLElement | null>,
 ) {
   const onCloseRef = React.useRef(onClose)
   React.useEffect(() => {
@@ -42,6 +43,7 @@ export function useOverlayFocus(
   React.useEffect(() => {
     if (!open) return
     const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const returnNode = returnFocusRef?.current ?? null
     const node = panelRef.current
     if (node) initialFocusTarget(node).focus()
 
@@ -73,7 +75,8 @@ export function useOverlayFocus(
     document.addEventListener("keydown", onKey)
     return () => {
       document.removeEventListener("keydown", onKey)
-      previous?.focus()
+      const target = returnNode?.isConnected ? returnNode : previous
+      if (target?.isConnected) target.focus()
     }
-  }, [open, panelRef, trap])
+  }, [open, panelRef, returnFocusRef, trap])
 }

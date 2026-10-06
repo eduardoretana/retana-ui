@@ -44,6 +44,7 @@ export function MorphDialog({
   panelClassName,
 }: MorphDialogProps) {
   const reduced = useMotionPreference()
+  const triggerRef = React.useRef<HTMLButtonElement>(null)
   const uid = React.useId()
   const layoutId = reduced ? undefined : `${uid}-surface`
   const titleId = `${uid}-title`
@@ -61,7 +62,7 @@ export function MorphDialog({
   )
 
   const close = React.useCallback(() => setOpen(false), [setOpen])
-  useOverlayFocus(isOpen, panelRef, close, true)
+  useOverlayFocus(isOpen, panelRef, close, true, triggerRef)
 
   React.useEffect(() => {
     if (!isOpen) return
@@ -77,25 +78,30 @@ export function MorphDialog({
   return (
     <LayoutGroup>
       <div className={className}>
-        {!isOpen ? (
-          <motion.button
-            type="button"
-            layoutId={layoutId}
-            className={cn(
-              "inline-flex h-8 items-center justify-center rounded-lg border border-border bg-background px-2.5 text-sm font-medium text-foreground",
-              triggerClassName,
-            )}
-            style={{ borderRadius: 8 }}
-            onClick={() => setOpen(true)}
-            transition={transition}
-          >
-            {label}
-          </motion.button>
-        ) : (
-          <span className="inline-flex h-8 items-center px-2.5 text-sm text-transparent" aria-hidden="true">
-            {label}
-          </span>
-        )}
+        <button
+          ref={triggerRef}
+          type="button"
+          className={cn(
+            "relative inline-flex h-8 items-center justify-center rounded-lg border border-border bg-background px-2.5 text-sm font-medium text-foreground",
+            isOpen && "invisible",
+            triggerClassName,
+          )}
+          style={{ borderRadius: 8 }}
+          aria-hidden={isOpen || undefined}
+          tabIndex={isOpen ? -1 : undefined}
+          onClick={() => setOpen(true)}
+        >
+          {!isOpen || reduced ? (
+            <motion.span
+              layoutId={layoutId}
+              className="absolute inset-0 rounded-lg border border-border bg-background"
+              style={{ borderRadius: 8 }}
+              transition={transition}
+              aria-hidden="true"
+            />
+          ) : null}
+          <span className="relative">{label}</span>
+        </button>
       </div>
       <AnimatePresence>
         {isOpen ? (
@@ -124,6 +130,7 @@ export function MorphDialog({
               )}
               style={{ borderRadius: 16 }}
               transition={transition}
+              exit={reduced ? { opacity: 0, transition: { duration: 0 } } : { opacity: 0 }}
             >
               <div className="flex items-start justify-between gap-3">
                 <h2 id={titleId} className="text-base font-semibold">

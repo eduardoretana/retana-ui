@@ -112,6 +112,7 @@ export function SlideToConfirm({
   const resetTimeoutRef = React.useRef<number | null>(null)
   const controlsRef = React.useRef<AnimationPlaybackControls | null>(null)
   const originRef = React.useRef(0)
+  const intendedRef = React.useRef(0)
   const armedRef = React.useRef(false)
   const draggingRef = React.useRef(false)
   const [state, setState] = React.useState<SlideState>("idle")
@@ -178,6 +179,7 @@ export function SlideToConfirm({
   }
 
   const fire = () => {
+    intendedRef.current = 1
     setArmedState(false)
     setState("success")
     moveTo(range, SNAP_END)
@@ -185,6 +187,7 @@ export function SlideToConfirm({
     if (resetAfter > 0) {
       resetTimeoutRef.current = window.setTimeout(() => {
         resetTimeoutRef.current = null
+        intendedRef.current = 0
         setState("idle")
         moveTo(0, SNAP_BACK)
       }, resetAfter)
@@ -194,6 +197,7 @@ export function SlideToConfirm({
   const release = () => {
     if (armedRef.current) fire()
     else {
+      intendedRef.current = 0
       setState("idle")
       moveTo(0, SNAP_BACK)
     }
@@ -214,8 +218,9 @@ export function SlideToConfirm({
     if (!draggingRef.current || range <= 0) return
     const raw = event.clientX - originRef.current
     const next = raw < 0 ? -PULL_BACK * (1 - 1 / (1 + -raw / 60)) : resist(clamp01(raw / range), resistance) * range
+    intendedRef.current = clamp01(next / range)
     moveTo(next, smoothness > 0 ? followSpring(smoothness) : null)
-    setArmedState(next / range >= safeThreshold)
+    setArmedState(intendedRef.current >= safeThreshold)
   }
 
   const handlePointerEnd = () => {
@@ -227,7 +232,7 @@ export function SlideToConfirm({
   const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
     onKeyDown?.(event)
     if (locked || range <= 0 || event.defaultPrevented) return
-    const current = clamp01(x.get() / range)
+    const current = intendedRef.current
     let next: number | null = null
     if (event.key === "ArrowRight" || event.key === "ArrowUp") next = current + KEY_STEP
     else if (event.key === "ArrowLeft" || event.key === "ArrowDown") next = current - KEY_STEP
@@ -236,7 +241,8 @@ export function SlideToConfirm({
     if (next === null) return
     event.preventDefault()
     next = clamp01(next)
-    if (next >= safeThreshold) {
+    intendedRef.current = next
+    if (next >= safeThreshold - 1e-6) {
       fire()
       return
     }
@@ -247,6 +253,7 @@ export function SlideToConfirm({
   const handleBlur = (event: React.FocusEvent<HTMLButtonElement>) => {
     onBlur?.(event)
     if (!isSuccess && x.get() !== 0) {
+      intendedRef.current = 0
       setArmedState(false)
       setState("idle")
       moveTo(0, SNAP_BACK)
