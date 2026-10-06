@@ -528,6 +528,21 @@ ssgoi (MIT, MeurSyphus) and Amicro (MIT, Syed Subhan Uddin) were reviewed and
 are not included. ssgoi is application transition infrastructure. Amicro was
 not needed for these items.
 
+Scroll vocabulary — clean-room
+
+use-scroll-progress, scroll-progress, reveal-on-scroll, stagger-reveal,
+scroll-snap-rail, sticky-section-list, parallax-layers, and
+horizontal-scroll-rail implement common scroll behaviors: a 0–1 reading
+position, a viewport entrance, staggered children, CSS scroll-snap, sticky
+group headers, transform-only parallax, and a horizontal rail driven by
+vertical scroll. The six names (scroll-triggered, scroll-linked, parallax,
+sticky, scroll snap, horizontal scroll) are industry vocabulary. A public tip
+from @gabriell_lab suggested listing them together. No frames, wireframes, or
+assets from that post were copied. Motion UI and Motion+ are not included.
+Reduced motion shows entrances immediately, holds parallax still, and uses a
+native horizontal scroller. The reading bar still reports scroll position.
+Sticky headers and scroll-snap alignment are CSS, not tweens.
+
 ---
 
 MIT License

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scroll-snap-rail",
+  "title": "Scroll snap rail",
+  "author": "Eduardo Retana",
+  "description": "A native scroll-snap region for full sections or peeking cards.",
+  "dependencies": [],
+  "registryDependencies": [
+    "motion-preference"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/scroll-snap-rail.tsx",
+      "content": "\"use client\"\n\n/**\n * CSS scroll-snap rail for sections or cards. Clean-room.\n * Alignment is native. Smooth scrolling is off when motion is reduced.\n */\n\nimport type { ReactNode } from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { useMotionPreference } from \"@/components/ui/motion-preference\"\n\nexport type SnapAxis = \"x\" | \"y\"\nexport type SnapStrictness = \"mandatory\" | \"proximity\"\n\nexport type ScrollSnapRailProps = {\n  children: ReactNode\n  axis?: SnapAxis\n  snap?: SnapStrictness\n  /** Accessible name for the scroll region. */\n  label?: string\n  className?: string\n}\n\nexport type ScrollSnapPanelProps = {\n  children: ReactNode\n  className?: string\n}\n\nexport function ScrollSnapRail({\n  children,\n  axis = \"y\",\n  snap = \"mandatory\",\n  label = \"Snapping sections\",\n  className,\n}: ScrollSnapRailProps) {\n  const reduced = useMotionPreference()\n  return (\n    <div\n      role=\"region\"\n      aria-label={label}\n      tabIndex={0}\n      data-slot=\"scroll-snap-rail\"\n      data-axis={axis}\n      data-reduced={reduced ? \"true\" : \"false\"}\n      className={cn(\n        \"min-h-0 min-w-0 max-w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\",\n        axis === \"y\" ? \"snap-y overflow-y-auto\" : \"snap-x overflow-x-auto\",\n        snap === \"proximity\" ? \"snap-proximity\" : \"snap-mandatory\",\n        reduced ? \"scroll-auto\" : \"scroll-smooth\",\n        className,\n      )}\n    >\n      {children}\n    </div>\n  )\n}\n\nexport function ScrollSnapPanel({ children, className }: ScrollSnapPanelProps) {\n  return (\n    <div data-slot=\"scroll-snap-panel\" className={cn(\"shrink-0 snap-start\", className)}>\n      {children}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/scroll-snap-rail.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Riel con snap",
+    "descriptionEs": "Las secciones o las tarjetas se alinean al soltar, con scroll nativo.",
+    "preview": "app/examples/scroll-snap-rail/preview.tsx",
+    "previewHref": "/examples/scroll-snap-rail",
+    "examples": [
+      {
+        "title": "Riel con snap",
+        "href": "/examples/scroll-snap-rail",
+        "description": "Las secciones se alinean al soltar."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/scroll-snap-rail/stress",
+        "description": "320px, vacío, texto largo y RTL."
+      },
+      {
+        "title": "Glosario",
+        "href": "/examples/animations",
+        "description": "Los seis términos de scroll, con demos propias."
+      }
+    ],
+    "usage": "<ScrollSnapRail label=\"Stages\" className=\"h-64\"><ScrollSnapPanel className=\"h-full\">01</ScrollSnapPanel></ScrollSnapRail>",
+    "api": [
+      {
+        "name": "axis",
+        "type": "\"x\" | \"y\"",
+        "description": "Default y. Give the rail a height for vertical snap."
+      },
+      {
+        "name": "snap",
+        "type": "\"mandatory\" | \"proximity\"",
+        "description": "Default mandatory."
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Accessible name of the region. The region is focusable."
+      },
+      {
+        "name": "ScrollSnapPanel",
+        "type": "component",
+        "description": "One snap child. className sets its size."
+      }
+    ]
+  },
+  "docs": "Clean-room CSS scroll-snap. No Motion UI or Motion+ source. Alignment is the browser's. Smooth scrolling is off when motion-preference says reduce. Answer no if the CLI asks to overwrite motion-preference or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "animation"
+  ],
+  "type": "registry:ui"
+}

@@ -144,6 +144,17 @@ const salesCrm = [
   ["crm-notifications", "Header popover of company notices. notification-center is the grouped inbox."],
 ] as const
 
+const animations = [
+  ["use-scroll-progress", "Scroll position as 0–1. scroll-progress is the reading bar."],
+  ["scroll-progress", "A bar bound to scroll. It reports position, so reduced motion does not freeze it."],
+  ["reveal-on-scroll", "Fade, slide, or scale once on enter. Reduced motion shows the content immediately."],
+  ["stagger-reveal", "Stagger that entrance across children. Reduced motion shows them together."],
+  ["scroll-snap-rail", "Native scroll-snap. Smooth scrolling is off when motion is reduced."],
+  ["sticky-section-list", "Group headers that stick until the next group pushes them. No tween."],
+  ["parallax-layers", "Transform-only layers at different speeds. Reduced motion holds them still."],
+  ["horizontal-scroll-rail", "Vertical scroll drives a horizontal rail. Narrow viewports and reduced motion use a native horizontal scroller."],
+] as const
+
 const micro = [
   ["ui-sounds", "Fourteen synthesized cues, with mute, volume, theme, and emphasis. press-sound stays the tap, tick, and pop facade."],
   ["theme-toggle-icons", "Fourteen animated theme icons. theme-switch accepts one as its icon and shares the transition duration."],
@@ -281,6 +292,21 @@ export default function DocsPage() {
           <ChoiceTable title="Notices" rows={notices} />
           <ChoiceTable title="Navigation" rows={navigation} />
           <ChoiceTable title="Forms" rows={forms} />
+          <ChoiceTable title="Animaciones" rows={animations} />
+          <p className="text-muted-foreground">
+            The scroll glossary — triggered, linked, parallax, sticky, snap, and horizontal — is
+            industry vocabulary. The live set is{" "}
+            <Link href="/examples/animations" className="underline-offset-2 hover:underline">
+              /examples/animations
+            </Link>
+            . Filter the catalog by{" "}
+            <Link href="/?category=animation" className="underline-offset-2 hover:underline">
+              animation
+            </Link>
+            . These pieces follow <ItemLink name="motion-preference" />. Motion UI and Motion+ are
+            not in this registry. A public tip from @gabriell_lab suggested the six names. No frames
+            or assets were copied.
+          </p>
           <ChoiceTable title="Micro-interactions" rows={micro} />
           <ChoiceTable title="Agents" rows={agents} />
           <p className="text-muted-foreground">
