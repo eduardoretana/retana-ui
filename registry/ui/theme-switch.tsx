@@ -9,6 +9,7 @@ import { Moon, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { motionPresets } from "@/registry/retana/lib/motion"
+import { ThemeToggleIcon, type ThemeToggleIconName } from "@/registry/retana/ui/theme-toggle-icons"
 
 export type ThemeSwitchVariant = "fade" | "eclipse" | "split" | "rise"
 export type ThemeName = "light" | "dark"
@@ -19,12 +20,22 @@ export type ThemeSwitchClassNames = {
   label?: string
 }
 
+/** Page-transition length. Animated icons use the same duration. */
+export const themeSwitchDurationMs: Record<ThemeSwitchVariant, number> = {
+  fade: 280,
+  eclipse: 520,
+  split: 480,
+  rise: 480,
+}
+
 export type ThemeSwitchProps = {
   theme: ThemeName
   /** Page transition. `fade` crossfades; `eclipse` opens from the control; `split` from a center seam; `rise` from the bottom. */
   variant?: ThemeSwitchVariant
   /** Next-themes compatible. Called with the next theme inside the view transition when the browser supports it. */
   onThemeChange: (next: ThemeName) => void
+  /** `lucide` keeps the sun and moon. Any other name uses a theme-toggle icon. */
+  icon?: "lucide" | ThemeToggleIconName
   label?: string
   iconOnly?: boolean
   className?: string
@@ -180,6 +191,7 @@ export function ThemeSwitch({
   theme,
   variant = "fade",
   onThemeChange,
+  icon = "lucide",
   label,
   iconOnly = false,
   className,
@@ -188,6 +200,38 @@ export function ThemeSwitch({
   const reduced = useReducedMotion() ?? false
   const settled = useSettled()
   const next = theme === "light" ? "dark" : "light"
+  const accessibleName = label ?? `Switch to ${next} mode`
+
+  if (icon !== "lucide") {
+    return (
+      <>
+        <style>{TRANSITION_CSS}</style>
+        <ThemeToggleIcon
+          name={icon}
+          duration={themeSwitchDurationMs[variant]}
+          toggled={theme === "dark"}
+          title={accessibleName}
+          aria-label={accessibleName}
+          data-slot="theme-switch"
+          data-variant={variant}
+          data-theme={theme}
+          className={cn(
+            "inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background text-sm font-medium text-foreground",
+            iconOnly ? "size-9" : "h-8 px-2.5",
+            className,
+            classNames?.root,
+          )}
+          onClick={(event) => runThemeSwitch(next, variant, event.currentTarget, onThemeChange)}
+        >
+          {iconOnly ? null : (
+            <span data-slot="theme-switch-label" className={cn("truncate", classNames?.label)}>
+              {label ?? "Switch theme"}
+            </span>
+          )}
+        </ThemeToggleIcon>
+      </>
+    )
+  }
 
   return (
     <>

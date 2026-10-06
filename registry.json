@@ -2820,24 +2820,26 @@
       "name": "press-sound",
       "type": "registry:ui",
       "title": "Press Sound",
-      "description": "Hook and wrapper that play a short synthesized click on press, with a shared mute.",
+      "description": "tap, tick, and pop on press. The cues come from ui-sounds, and mute is the same shared store.",
       "author": "Eduardo Retana",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "ui-sounds"
+      ],
       "categories": [
         "media",
         "hook"
       ],
       "meta": {
         "titleEs": "Sonido al presionar",
-        "descriptionEs": "Hook y envoltura que reproducen un clic corto sintetizado al presionar, con un silencio compartido.",
+        "descriptionEs": "tap, tick y pop al presionar. Los cues salen de ui-sounds y el silencio es el mismo almacén compartido.",
         "preview": "app/examples/press-sound/preview.tsx",
         "previewHref": "/examples/press-sound",
         "examples": [
           {
             "title": "Sonido al presionar",
             "href": "/examples/press-sound",
-            "description": "Hook y envoltura que reproducen un clic corto sintetizado al presionar, con un silencio compartido."
+            "description": "tap, tick y pop al presionar. Los cues salen de ui-sounds y el silencio es el mismo almacén compartido."
           }
         ],
         "usage": "<PressSound sound=\"tap\"><button type=\"button\">Save</button></PressSound>",
@@ -2864,7 +2866,7 @@
           }
         ]
       },
-      "docs": "Audio is generated with the Web Audio API on the press gesture. There is no audio file. Mute is shared in the tab and stored locally. No theme is shipped.",
+      "docs": "Facade over ui-sounds (cuelume@0.2.4, MIT). tap maps to tap, tick to select, and pop to toggle with strong emphasis. Mute is the shared ui-sounds store and still writes the legacy retana-press-muted key. Nothing plays before a user gesture. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
       "files": [
         {
           "path": "registry/ui/press-sound.tsx",
@@ -3018,14 +3020,15 @@
       "name": "theme-switch",
       "type": "registry:ui",
       "title": "Theme switch",
-      "description": "Four ways to move between light and dark: fade, eclipse, split, and rise. Uses the View Transitions API when the browser has it, and changes the theme immediately otherwise.",
+      "description": "Four ways to move between light and dark: fade, eclipse, split, and rise. Uses the View Transitions API when the browser has it, and changes the theme immediately otherwise. The default icon stays the lucide sun and moon. icon can be one of the theme-toggle-icons.",
       "author": "Eduardo Retana",
       "dependencies": [
         "motion",
         "lucide-react"
       ],
       "registryDependencies": [
-        "button"
+        "button",
+        "theme-toggle-icons"
       ],
       "categories": [
         "theme"
@@ -3063,10 +3066,15 @@
             "name": "iconOnly / label / className / classNames",
             "type": "boolean / string",
             "description": "Icon-only control, accessible label, and slot classes."
+          },
+          {
+            "name": "icon",
+            "type": "\"lucide\" | ThemeToggleIconName",
+            "description": "Default lucide. Any theme-toggle-icons name renders that icon and shares the variant duration."
           }
         ]
       },
-      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "docs": "Adapted from Arc UI (MIT). Optional icons come from theme-toggle-icons (MIT, Alfie Jones). Durations stay in sync: fade 280ms, eclipse 520ms, split 480ms, rise 480ms. The default icon remains lucide. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
       "files": [
         {
           "path": "registry/ui/theme-switch.tsx",
@@ -17780,6 +17788,762 @@
           "target": "@lib/motion.ts"
         }
       ]
-    }
+    },
+      {
+        "name": "ui-sounds",
+        "type": "registry:ui",
+        "title": "UI sounds",
+        "description": "Fourteen synthesized cues with a persisted mute, volume, theme, and emphasis. Playback waits for a user gesture.",
+        "author": "Eduardo Retana",
+        "dependencies": [
+          "cuelume"
+        ],
+        "registryDependencies": [],
+        "categories": [
+          "media",
+          "hook"
+        ],
+        "meta": {
+          "titleEs": "Sonidos de interfaz",
+          "descriptionEs": "Catorce cues sintetizados, con silencio, volumen, tema y énfasis guardados. No suena antes de un gesto.",
+          "preview": "app/examples/ui-sounds/preview.tsx",
+          "previewHref": "/examples/ui-sounds",
+          "examples": [
+            {
+              "title": "Sonidos de interfaz",
+              "href": "/examples/ui-sounds",
+              "description": "Catorce cues sintetizados, con silencio, volumen, tema y énfasis guardados. No suena antes de un gesto."
+            },
+            {
+              "title": "Estrés",
+              "href": "/examples/ui-sounds/stress",
+              "description": "320px, texto largo, y lectura de derecha a izquierda."
+            }
+          ],
+          "usage": "<UiSoundsProvider><button type=\"button\" onClick={() => playUiSound(\"success\")}>Done</button></UiSoundsProvider>",
+          "api": [
+            {
+              "name": "playUiSound",
+              "type": "(name?: SoundName, options?: PlayOptions) => void",
+              "description": "Plays a cuelume cue after a user gesture. No-op while muted."
+            },
+            {
+              "name": "useUiSounds",
+              "type": "hook",
+              "description": "muted, volume, theme, emphasis, and setters. Hydrates from local storage."
+            },
+            {
+              "name": "UiSoundsToggle / UiSoundsControls",
+              "type": "component",
+              "description": "Mute button, and controls for volume, theme, and emphasis."
+            },
+            {
+              "name": "theme / emphasis",
+              "type": "ThemeName / Emphasis",
+              "description": "default, mech, bubble, or press. subtle, normal, or strong."
+            }
+          ]
+        },
+        "docs": "Wraps cuelume@0.2.4 (MIT, Daniel Belyi). The pin already includes the 14-cue palette. Preference storage is this wrapper. press-sound remains a compatible facade. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+        "files": [
+          {
+            "path": "registry/ui/ui-sounds.tsx",
+            "type": "registry:component",
+            "target": "@ui/ui-sounds.tsx"
+          }
+        ]
+      },
+      {
+        "name": "squircle",
+        "type": "registry:ui",
+        "title": "Squircle",
+        "description": "A squircle surface. Uses CSS corner-shape when the browser supports it, and a Monoco clip-path otherwise, with a border and an optional shadow.",
+        "author": "Eduardo Retana",
+        "dependencies": [],
+        "registryDependencies": [],
+        "categories": [
+          "layout"
+        ],
+        "meta": {
+          "titleEs": "Squircle",
+          "descriptionEs": "Superficie squircle. Usa corner-shape si el navegador lo soporta y, si no, un clip-path de Monoco, con borde y sombra opcional.",
+          "preview": "app/examples/squircle/preview.tsx",
+          "previewHref": "/examples/squircle",
+          "examples": [
+            {
+              "title": "Squircle",
+              "href": "/examples/squircle",
+              "description": "Superficie squircle. Usa corner-shape si el navegador lo soporta y, si no, un clip-path de Monoco, con borde y sombra opcional."
+            },
+            {
+              "title": "Estrés",
+              "href": "/examples/squircle/stress",
+              "description": "320px, texto largo, y lectura de derecha a izquierda."
+            }
+          ],
+          "usage": "<Squircle radius={28} shadow>Card</Squircle>",
+          "api": [
+            {
+              "name": "radius",
+              "type": "number | number[]",
+              "description": "Corner radius in pixels. One value, or top-left, top-right, bottom-right, bottom-left."
+            },
+            {
+              "name": "smoothing",
+              "type": "number",
+              "description": "Fallback smoothing from 0 to 1. Default 1. Native corner-shape ignores it."
+            },
+            {
+              "name": "borderWidth / shadow",
+              "type": "number / boolean",
+              "description": "Border thickness in pixels, and a shadow that follows the shape."
+            },
+            {
+              "name": "useCornerShapeSupport",
+              "type": "hook",
+              "description": "True when CSS.supports corner-shape squircle. False during SSR."
+            }
+          ]
+        },
+        "docs": "Native support is Chromium 139 and later (Chrome and Edge). Safari and Firefox use the clip-path fallback. The path generator is ported from @monokai/monoco@0.3.2 (MIT, Monokai), which adapts figma-squircle (MIT, Tien Pham). Runtime CSS.supports is the source of truth. data-corner is native or clip. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+        "files": [
+          {
+            "path": "registry/ui/squircle.tsx",
+            "type": "registry:component",
+            "target": "@ui/squircle.tsx"
+          },
+          {
+            "path": "registry/lib/squircle-path.ts",
+            "type": "registry:lib",
+            "target": "@lib/squircle-path.ts"
+          }
+        ]
+      },
+      {
+        "name": "theme-toggle-icons",
+        "type": "registry:ui",
+        "title": "Theme toggle icons",
+        "description": "Fourteen animated sun and moon icons. Pass one to theme-switch, or render ThemeToggleIcon on its own.",
+        "author": "Eduardo Retana",
+        "dependencies": [],
+        "registryDependencies": [],
+        "categories": [
+          "theme"
+        ],
+        "meta": {
+          "titleEs": "Iconos de tema",
+          "descriptionEs": "Catorce iconos animados de sol y luna. Pásale uno a theme-switch, o renderiza ThemeToggleIcon solo.",
+          "preview": "app/examples/theme-toggle-icons/preview.tsx",
+          "previewHref": "/examples/theme-toggle-icons",
+          "examples": [
+            {
+              "title": "Iconos de tema",
+              "href": "/examples/theme-toggle-icons",
+              "description": "Catorce iconos animados de sol y luna. Pásale uno a theme-switch, o renderiza ThemeToggleIcon solo."
+            },
+            {
+              "title": "Estrés",
+              "href": "/examples/theme-toggle-icons/stress",
+              "description": "320px, texto largo, y lectura de derecha a izquierda."
+            }
+          ],
+          "usage": "<ThemeToggleIcon name=\"classic\" toggled={dark} duration={520} onClick={toggle} />",
+          "api": [
+            {
+              "name": "name",
+              "type": "ThemeToggleIconName",
+              "description": "around, classic, dark-inner, dark-side, eclipse, expand, half-sun, horizon, inner-moon, light-switch, lightbulb, simple, spin, or within."
+            },
+            {
+              "name": "toggled",
+              "type": "boolean",
+              "description": "Dark-theme pose. Independent of the host page dark class."
+            },
+            {
+              "name": "duration",
+              "type": "number",
+              "description": "Animation length in milliseconds. theme-switch passes its variant duration."
+            },
+            {
+              "name": "themeToggleIconNames",
+              "type": "string[]",
+              "description": "The fourteen names, in a stable order."
+            }
+          ]
+        },
+        "docs": "Ported from theme-toggles (MIT, Copyright (c) Alfie Jones). The upstream repository has no LICENSE file. MIT is declared in the README and in @theme-toggles/react@5.0.5, commit b6f8b5f8217b. See NOTICE. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+        "files": [
+          {
+            "path": "registry/ui/theme-toggle-icons.tsx",
+            "type": "registry:component",
+            "target": "@ui/theme-toggle-icons.tsx"
+          },
+          {
+            "path": "registry/ui/theme-toggles/around.tsx",
+            "type": "registry:component",
+            "target": "@ui/theme-toggles/around.tsx"
+          },
+          {
+            "path": "registry/ui/theme-toggles/classic.tsx",
+            "type": "registry:component",
+            "target": "@ui/theme-toggles/classic.tsx"
+          },
+          {
+            "path": "registry/ui/theme-toggles/dark-inner.tsx",
+            "type": "registry:component",
+            "target": "@ui/theme-toggles/dark-inner.tsx"
+          },
+          {
+            "path": "registry/ui/theme-toggles/dark-side.tsx",
+            "type": "registry:component",
+            "target": "@ui/theme-toggles/dark-side.tsx"
+          },
+          {
+            "path": "registry/ui/theme-toggles/eclipse.tsx",
+            "type": "registry:component",
+            "target": "@ui/theme-toggles/eclipse.tsx"
+          },
+          {
+            "path": "registry/ui/theme-toggles/expand.tsx",
+            "type": "registry:component",
+            "target": "@ui/theme-toggles/expand.tsx"
+          },
+          {
+            "path": "registry/ui/theme-toggles/half-sun.tsx",
+            "type": "registry:component",
+            "target": "@ui/theme-toggles/half-sun.tsx"
+          },
+          {
+            "path": "registry/ui/theme-toggles/horizon.tsx",
+            "type": "registry:component",
+            "target": "@ui/theme-toggles/horizon.tsx"
+          },
+          {
+            "path": "registry/ui/theme-toggles/inner-moon.tsx",
+            "type": "registry:component",
+            "target": "@ui/theme-toggles/inner-moon.tsx"
+          },
+          {
+            "path": "registry/ui/theme-toggles/light-switch.tsx",
+            "type": "registry:component",
+            "target": "@ui/theme-toggles/light-switch.tsx"
+          },
+          {
+            "path": "registry/ui/theme-toggles/lightbulb.tsx",
+            "type": "registry:component",
+            "target": "@ui/theme-toggles/lightbulb.tsx"
+          },
+          {
+            "path": "registry/ui/theme-toggles/simple.tsx",
+            "type": "registry:component",
+            "target": "@ui/theme-toggles/simple.tsx"
+          },
+          {
+            "path": "registry/ui/theme-toggles/spin.tsx",
+            "type": "registry:component",
+            "target": "@ui/theme-toggles/spin.tsx"
+          },
+          {
+            "path": "registry/ui/theme-toggles/within.tsx",
+            "type": "registry:component",
+            "target": "@ui/theme-toggles/within.tsx"
+          }
+        ]
+      },
+      {
+        "name": "morph-dialog",
+        "type": "registry:ui",
+        "title": "Morph dialog",
+        "description": "The trigger grows into a modal dialog. Focus is trapped, Escape and the backdrop close it, and focus returns to the trigger.",
+        "author": "Eduardo Retana",
+        "dependencies": [
+          "motion"
+        ],
+        "registryDependencies": [
+          "motion-preference"
+        ],
+        "categories": [
+          "overlay"
+        ],
+        "meta": {
+          "titleEs": "Diálogo morph",
+          "descriptionEs": "El disparador crece hasta un diálogo modal. El foco queda atrapado, Escape y el fondo lo cierran, y el foco vuelve al disparador.",
+          "preview": "app/examples/morph-dialog/preview.tsx",
+          "previewHref": "/examples/morph-dialog",
+          "examples": [
+            {
+              "title": "Diálogo morph",
+              "href": "/examples/morph-dialog",
+              "description": "El disparador crece hasta un diálogo modal. El foco queda atrapado, Escape y el fondo lo cierran, y el foco vuelve al disparador."
+            },
+            {
+              "title": "Estrés",
+              "href": "/examples/morph-dialog/stress",
+              "description": "320px, texto largo, y lectura de derecha a izquierda."
+            }
+          ],
+          "usage": "<MorphDialog label=\"Edit note\" title=\"Note\"><input aria-label=\"Title\" /></MorphDialog>",
+          "api": [
+            {
+              "name": "label / title / description",
+              "type": "ReactNode",
+              "description": "Trigger label, dialog name, and optional description."
+            },
+            {
+              "name": "open / defaultOpen / onOpenChange",
+              "type": "boolean / callback",
+              "description": "Controlled or uncontrolled open state."
+            },
+            {
+              "name": "closeLabel",
+              "type": "string",
+              "description": "Accessible name of the close control. Default Close."
+            }
+          ]
+        },
+        "docs": "Clean-room shared-element dialog using motion layoutId. Blendy is the behavior reference only and is not a dependency. Reduced motion skips the morph. Initial focus lands on the first content control. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+        "files": [
+          {
+            "path": "registry/ui/morph-dialog.tsx",
+            "type": "registry:component",
+            "target": "@ui/morph-dialog.tsx"
+          },
+          {
+            "path": "registry/lib/overlay-focus.ts",
+            "type": "registry:lib",
+            "target": "@lib/overlay-focus.ts"
+          },
+          {
+            "path": "registry/lib/motion.ts",
+            "type": "registry:lib",
+            "target": "@lib/motion.ts"
+          }
+        ]
+      },
+      {
+        "name": "morph-popover",
+        "type": "registry:ui",
+        "title": "Morph popover",
+        "description": "A surface shared with the trigger grows into a non-modal panel. Escape and an outside pointer close it.",
+        "author": "Eduardo Retana",
+        "dependencies": [
+          "motion"
+        ],
+        "registryDependencies": [
+          "motion-preference"
+        ],
+        "categories": [
+          "overlay"
+        ],
+        "meta": {
+          "titleEs": "Popover morph",
+          "descriptionEs": "Una superficie compartida con el disparador crece hasta un panel no modal. Escape y un puntero afuera lo cierran.",
+          "preview": "app/examples/morph-popover/preview.tsx",
+          "previewHref": "/examples/morph-popover",
+          "examples": [
+            {
+              "title": "Popover morph",
+              "href": "/examples/morph-popover",
+              "description": "Una superficie compartida con el disparador crece hasta un panel no modal. Escape y un puntero afuera lo cierran."
+            },
+            {
+              "title": "Estrés",
+              "href": "/examples/morph-popover/stress",
+              "description": "320px, texto largo, y lectura de derecha a izquierda."
+            }
+          ],
+          "usage": "<MorphPopover label=\"Actions\" title=\"Record\"><button type=\"button\">Duplicate</button></MorphPopover>",
+          "api": [
+            {
+              "name": "label / title",
+              "type": "ReactNode",
+              "description": "Trigger label and optional panel name."
+            },
+            {
+              "name": "open / defaultOpen / onOpenChange",
+              "type": "boolean / callback",
+              "description": "Controlled or uncontrolled open state."
+            },
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "description": "Panel content. Tab may leave the popover."
+            }
+          ]
+        },
+        "docs": "Clean-room shared-element popover using motion layoutId. Blendy is the behavior reference only and is not a dependency. aria-modal is false. Reduced motion fades the panel in place. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+        "files": [
+          {
+            "path": "registry/ui/morph-popover.tsx",
+            "type": "registry:component",
+            "target": "@ui/morph-popover.tsx"
+          },
+          {
+            "path": "registry/lib/overlay-focus.ts",
+            "type": "registry:lib",
+            "target": "@lib/overlay-focus.ts"
+          },
+          {
+            "path": "registry/lib/motion.ts",
+            "type": "registry:lib",
+            "target": "@lib/motion.ts"
+          }
+        ]
+      },
+      {
+        "name": "shortcut-button",
+        "type": "registry:ui",
+        "title": "Shortcut button",
+        "description": "A button whose keycaps depress while its keyboard shortcut is held, then runs the command.",
+        "author": "Eduardo Retana",
+        "dependencies": [],
+        "registryDependencies": [
+          "button"
+        ],
+        "categories": [
+          "button"
+        ],
+        "meta": {
+          "titleEs": "Botón con atajo",
+          "descriptionEs": "Un botón cuyas teclas se hunden mientras se mantiene el atajo, y luego ejecuta el comando.",
+          "preview": "app/examples/shortcut-button/preview.tsx",
+          "previewHref": "/examples/shortcut-button",
+          "examples": [
+            {
+              "title": "Botón con atajo",
+              "href": "/examples/shortcut-button",
+              "description": "Un botón cuyas teclas se hunden mientras se mantiene el atajo, y luego ejecuta el comando."
+            },
+            {
+              "title": "Estrés",
+              "href": "/examples/shortcut-button/stress",
+              "description": "320px, texto largo, y lectura de derecha a izquierda."
+            }
+          ],
+          "usage": "<ShortcutButton shortcut=\"mod+s\" onCommand={save}>Save</ShortcutButton>",
+          "api": [
+            {
+              "name": "shortcut",
+              "type": "string",
+              "description": "Combination such as mod+s or mod+k. mod is Command on Apple and Control elsewhere. Default mod+s."
+            },
+            {
+              "name": "onCommand",
+              "type": "() => void",
+              "description": "Runs when the shortcut completes or the button is clicked."
+            },
+            {
+              "name": "showShortcut / preventDefault",
+              "type": "boolean",
+              "description": "Show the keycaps. preventDefault defaults to true."
+            }
+          ]
+        },
+        "docs": "Adapted from Evil Buttons command-button (Apache-2.0, radiumcoders, commit ec0fa86f8d06). Colors use the host button. Key travel is removed when the reader prefers reduced motion. See NOTICE. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+        "files": [
+          {
+            "path": "registry/ui/shortcut-button.tsx",
+            "type": "registry:component",
+            "target": "@ui/shortcut-button.tsx"
+          }
+        ]
+      },
+      {
+        "name": "spotlight-button",
+        "type": "registry:ui",
+        "title": "Spotlight button",
+        "description": "A host button with a cursor spotlight and a border that lights up near the pointer.",
+        "author": "Eduardo Retana",
+        "dependencies": [
+          "motion"
+        ],
+        "registryDependencies": [
+          "button"
+        ],
+        "categories": [
+          "button"
+        ],
+        "meta": {
+          "titleEs": "Botón con foco",
+          "descriptionEs": "Un botón del host con un foco que sigue al cursor y un borde que se enciende cerca del puntero.",
+          "preview": "app/examples/spotlight-button/preview.tsx",
+          "previewHref": "/examples/spotlight-button",
+          "examples": [
+            {
+              "title": "Botón con foco",
+              "href": "/examples/spotlight-button",
+              "description": "Un botón del host con un foco que sigue al cursor y un borde que se enciende cerca del puntero."
+            },
+            {
+              "title": "Estrés",
+              "href": "/examples/spotlight-button/stress",
+              "description": "320px, texto largo, y lectura de derecha a izquierda."
+            }
+          ],
+          "usage": "<SpotlightButton>Continue</SpotlightButton>",
+          "api": [
+            {
+              "name": "variant",
+              "type": "\"default\" | \"secondary\" | \"outline\"",
+              "description": "Host button variant. Default default."
+            },
+            {
+              "name": "highlightColor / borderColor",
+              "type": "string",
+              "description": "CSS colors. Defaults mix the host foreground and background."
+            },
+            {
+              "name": "highlightSize",
+              "type": "number",
+              "description": "Spotlight radius in pixels. Default 90."
+            }
+          ]
+        },
+        "docs": "Adapted from Evil Buttons highlight-button (Apache-2.0, radiumcoders, commit ec0fa86f8d06). The ripple is skipped when the reader prefers reduced motion. See NOTICE. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+        "files": [
+          {
+            "path": "registry/ui/spotlight-button.tsx",
+            "type": "registry:component",
+            "target": "@ui/spotlight-button.tsx"
+          }
+        ]
+      },
+      {
+        "name": "slide-to-confirm",
+        "type": "registry:ui",
+        "title": "Slide to confirm",
+        "description": "Slide the handle, or hold Arrow Right, past a threshold before the action runs.",
+        "author": "Eduardo Retana",
+        "dependencies": [
+          "motion"
+        ],
+        "registryDependencies": [],
+        "categories": [
+          "button"
+        ],
+        "meta": {
+          "titleEs": "Deslizar para confirmar",
+          "descriptionEs": "Desliza el control, o mantén flecha derecha, más allá de un umbral antes de que corra la acción.",
+          "preview": "app/examples/slide-to-confirm/preview.tsx",
+          "previewHref": "/examples/slide-to-confirm",
+          "examples": [
+            {
+              "title": "Deslizar para confirmar",
+              "href": "/examples/slide-to-confirm",
+              "description": "Desliza el control, o mantén flecha derecha, más allá de un umbral antes de que corra la acción."
+            },
+            {
+              "title": "Estrés",
+              "href": "/examples/slide-to-confirm/stress",
+              "description": "320px, texto largo, y lectura de derecha a izquierda."
+            }
+          ],
+          "usage": "<SlideToConfirm onConfirm={send}>Slide to confirm</SlideToConfirm>",
+          "api": [
+            {
+              "name": "onConfirm",
+              "type": "() => void",
+              "description": "Runs once the threshold is crossed."
+            },
+            {
+              "name": "threshold",
+              "type": "number",
+              "description": "Fraction of the track, from 0 to 1. Default 0.9."
+            },
+            {
+              "name": "resistance / smoothness / resetAfter",
+              "type": "number",
+              "description": "Drag resistance, spring smoothness, and reset delay in milliseconds."
+            },
+            {
+              "name": "label",
+              "type": "ReactNode",
+              "description": "Accessible name and visible label. Default Slide to confirm."
+            }
+          ]
+        },
+        "docs": "Adapted from Evil Buttons slide-to-detonate (Apache-2.0, radiumcoders). Keyboard uses ArrowRight in steps of 0.1. Vibration was removed. Reduced motion snaps the handle. See NOTICE. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+        "files": [
+          {
+            "path": "registry/ui/slide-to-confirm.tsx",
+            "type": "registry:component",
+            "target": "@ui/slide-to-confirm.tsx"
+          }
+        ]
+      },
+      {
+        "name": "haptics",
+        "type": "registry:ui",
+        "title": "Haptics",
+        "description": "navigator.vibrate with a persisted mute. A no-op where the Vibration API is missing.",
+        "author": "Eduardo Retana",
+        "dependencies": [],
+        "registryDependencies": [],
+        "categories": [
+          "hook"
+        ],
+        "meta": {
+          "titleEs": "Hápticos",
+          "descriptionEs": "navigator.vibrate con un silencio guardado. No hace nada si la API de vibración no existe.",
+          "preview": "app/examples/haptics/preview.tsx",
+          "previewHref": "/examples/haptics",
+          "examples": [
+            {
+              "title": "Hápticos",
+              "href": "/examples/haptics",
+              "description": "navigator.vibrate con un silencio guardado. No hace nada si la API de vibración no existe."
+            },
+            {
+              "title": "Estrés",
+              "href": "/examples/haptics/stress",
+              "description": "320px, texto largo, y lectura de derecha a izquierda."
+            }
+          ],
+          "usage": "<HapticsProvider><button type=\"button\" onClick={() => triggerHaptic(\"success\")}>Done</button></HapticsProvider>",
+          "api": [
+            {
+              "name": "triggerHaptic",
+              "type": "(preset?: HapticPreset) => void",
+              "description": "tap, tick, success, error, warning, or attention. No-op when muted or unsupported."
+            },
+            {
+              "name": "useHaptics",
+              "type": "hook",
+              "description": "muted, setMuted, supported, and trigger."
+            },
+            {
+              "name": "HapticsToggle",
+              "type": "component",
+              "description": "Button for the shared mute."
+            }
+          ]
+        },
+        "docs": "Adapted from seamui haptics (MIT, Mikhail Villamor, commit 7c57149f327d). web-haptics is not a dependency. Nothing vibrates on mount. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+        "files": [
+          {
+            "path": "registry/ui/haptics.tsx",
+            "type": "registry:component",
+            "target": "@ui/haptics.tsx"
+          }
+        ]
+      },
+      {
+        "name": "motion-preference",
+        "type": "registry:ui",
+        "title": "Motion preference",
+        "description": "A persisted choice of system, reduced, or full motion. Explicit choice wins over prefers-reduced-motion.",
+        "author": "Eduardo Retana",
+        "dependencies": [
+          "motion"
+        ],
+        "registryDependencies": [],
+        "categories": [
+          "hook"
+        ],
+        "meta": {
+          "titleEs": "Preferencia de movimiento",
+          "descriptionEs": "Una elección guardada: sistema, reducido o completo. La elección explícita gana sobre prefers-reduced-motion.",
+          "preview": "app/examples/motion-preference/preview.tsx",
+          "previewHref": "/examples/motion-preference",
+          "examples": [
+            {
+              "title": "Preferencia de movimiento",
+              "href": "/examples/motion-preference",
+              "description": "Una elección guardada: sistema, reducido o completo. La elección explícita gana sobre prefers-reduced-motion."
+            },
+            {
+              "title": "Estrés",
+              "href": "/examples/motion-preference/stress",
+              "description": "320px, texto largo, y lectura de derecha a izquierda."
+            }
+          ],
+          "usage": "<MotionPreferenceControl />",
+          "api": [
+            {
+              "name": "useMotionPreference",
+              "type": "hook",
+              "description": "Returns true when motion should be reduced."
+            },
+            {
+              "name": "setMotionPreference",
+              "type": "(value: MotionPreference) => void",
+              "description": "system, reduce, or full. Persisted locally."
+            },
+            {
+              "name": "MotionPreferenceControl",
+              "type": "component",
+              "description": "Radiogroup with System, Reduce, and Full."
+            }
+          ]
+        },
+        "docs": "Adapted from seamui's reduced-motion resolution (MIT, Mikhail Villamor). The hook works without a provider. MotionConfig reducedMotion never is ignored, matching seamui, because that value is motion's default. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+        "files": [
+          {
+            "path": "registry/ui/motion-preference.tsx",
+            "type": "registry:component",
+            "target": "@ui/motion-preference.tsx"
+          }
+        ]
+      },
+      {
+        "name": "use-feedback",
+        "type": "registry:hook",
+        "title": "useFeedback",
+        "description": "One intent plays a cue, an optional haptic, and a motion hint. Sound and haptics stay independently mutable.",
+        "author": "Eduardo Retana",
+        "dependencies": [],
+        "registryDependencies": [
+          "ui-sounds",
+          "haptics",
+          "motion-preference"
+        ],
+        "categories": [
+          "hook"
+        ],
+        "meta": {
+          "titleEs": "useFeedback",
+          "descriptionEs": "Un intento reproduce un cue, un háptico opcional y una pista de movimiento. Sonido y hápticos se silencian por separado.",
+          "preview": "app/examples/use-feedback/preview.tsx",
+          "previewHref": "/examples/use-feedback",
+          "examples": [
+            {
+              "title": "useFeedback",
+              "href": "/examples/use-feedback",
+              "description": "Un intento reproduce un cue, un háptico opcional y una pista de movimiento. Sonido y hápticos se silencian por separado."
+            },
+            {
+              "title": "Estrés",
+              "href": "/examples/use-feedback/stress",
+              "description": "320px, texto largo, y lectura de derecha a izquierda."
+            }
+          ],
+          "usage": "const feedback = useFeedback()\nfeedback.trigger(\"success\")",
+          "api": [
+            {
+              "name": "trigger",
+              "type": "(intent, options?) => void",
+              "description": "tap, toggle, open, close, select, navigate, type, success, warning, error, loading, ready, attention, or confirm. Pass sound or haptic false to skip a channel."
+            },
+            {
+              "name": "motion",
+              "type": "(intent) => FeedbackMotion",
+              "description": "A short scale or shake. Duration is 0 when motion is reduced."
+            },
+            {
+              "name": "useFeedback",
+              "type": "hook",
+              "description": "muted, reduced, trigger, and motion. Nothing runs on mount."
+            }
+          ]
+        },
+        "docs": "Original wiring of ui-sounds and haptics. Reduced motion drops the animation hint only. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+        "files": [
+          {
+            "path": "registry/hooks/use-feedback.ts",
+            "type": "registry:hook",
+            "target": "@hooks/use-feedback.ts"
+          }
+        ]
+      }
   ]
 }

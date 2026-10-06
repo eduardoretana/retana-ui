@@ -235,6 +235,17 @@ import Preview230 from "@/app/examples/view-customizer/preview"
 import Preview231 from "@/app/examples/support-inbox/preview"
 import Preview232 from "@/app/examples/ticket-desk/preview"
 import Preview233 from "@/app/examples/notification-inbox/preview"
+import Preview234 from "@/app/examples/ui-sounds/preview"
+import Preview235 from "@/app/examples/squircle/preview"
+import Preview236 from "@/app/examples/theme-toggle-icons/preview"
+import Preview237 from "@/app/examples/morph-dialog/preview"
+import Preview238 from "@/app/examples/morph-popover/preview"
+import Preview239 from "@/app/examples/shortcut-button/preview"
+import Preview240 from "@/app/examples/spotlight-button/preview"
+import Preview241 from "@/app/examples/slide-to-confirm/preview"
+import Preview242 from "@/app/examples/haptics/preview"
+import Preview243 from "@/app/examples/motion-preference/preview"
+import Preview244 from "@/app/examples/use-feedback/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -471,4 +482,15 @@ export const previewMap = {
   "support-inbox": Preview231,
   "ticket-desk": Preview232,
   "notification-inbox": Preview233,
+  "ui-sounds": Preview234,
+  "squircle": Preview235,
+  "theme-toggle-icons": Preview236,
+  "morph-dialog": Preview237,
+  "morph-popover": Preview238,
+  "shortcut-button": Preview239,
+  "spotlight-button": Preview240,
+  "slide-to-confirm": Preview241,
+  "haptics": Preview242,
+  "motion-preference": Preview243,
+  "use-feedback": Preview244,
 }

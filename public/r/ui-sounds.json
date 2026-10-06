@@ -1,0 +1,66 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "ui-sounds",
+  "title": "UI sounds",
+  "author": "Eduardo Retana",
+  "description": "Fourteen synthesized cues with a persisted mute, volume, theme, and emphasis. Playback waits for a user gesture.",
+  "dependencies": [
+    "cuelume"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/ui-sounds.tsx",
+      "content": "\"use client\"\n\n/**\n * React provider around cuelume@0.2.4 (MIT, Copyright (c) 2026 Daniel Belyi).\n * https://github.com/danielwh2/cuelume\n *\n * The published 0.2.4 tarball (git caf15480081da9432a4a982446ce44c9daf3a288)\n * already contains the 14-cue palette the README describes as v0.3, plus the\n * legacy aliases. The package version was not bumped. This item depends on\n * that pin instead of vendoring main, which is still labeled 0.2.4.\n * cuelume leaves preference storage to the app. This wrapper persists mute,\n * volume, theme, and emphasis, and refuses to play before a user gesture.\n */\n\nimport * as React from \"react\"\nimport {\n  play,\n  setEnabled,\n  setTheme,\n  setVolume,\n  sounds,\n  themes,\n  type Emphasis,\n  type PlayOptions,\n  type SoundName,\n  type ThemeName,\n} from \"cuelume\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport { sounds, themes }\nexport type { Emphasis, PlayOptions, SoundName, ThemeName }\n\nexport type UiSoundPrefs = {\n  muted: boolean\n  volume: number\n  theme: ThemeName\n  emphasis: Emphasis\n}\n\nconst STORAGE_KEY = \"retana-ui-sounds\"\nconst LEGACY_MUTE_KEY = \"retana-press-muted\"\n\nconst EMPHASIS: readonly Emphasis[] = [\"subtle\", \"normal\", \"strong\"]\n\nlet prefs: UiSoundPrefs = { muted: false, volume: 1, theme: \"default\", emphasis: \"normal\" }\nlet hydrated = false\nconst listeners = new Set<() => void>()\n\nfunction emit() {\n  listeners.forEach((listener) => listener())\n}\n\nfunction clampVolume(value: number) {\n  if (!Number.isFinite(value)) return prefs.volume\n  return Math.min(1, Math.max(0, value))\n}\n\nfunction isTheme(value: unknown): value is ThemeName {\n  return typeof value === \"string\" && (themes as readonly string[]).includes(value)\n}\n\nfunction isEmphasis(value: unknown): value is Emphasis {\n  return typeof value === \"string\" && (EMPHASIS as readonly string[]).includes(value)\n}\n\nfunction applyEngine() {\n  setEnabled(!prefs.muted)\n  setVolume(prefs.volume)\n  setTheme(prefs.theme)\n}\n\nfunction persist() {\n  try {\n    localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs))\n    localStorage.setItem(LEGACY_MUTE_KEY, prefs.muted ? \"1\" : \"0\")\n  } catch {\n    /* storage may be blocked */\n  }\n}\n\nfunction commit(next: UiSoundPrefs) {\n  prefs = next\n  applyEngine()\n  persist()\n  emit()\n}\n\nexport function subscribeUiSounds(listener: () => void) {\n  listeners.add(listener)\n  return () => listeners.delete(listener)\n}\n\nexport function getUiSoundPrefs(): UiSoundPrefs {\n  return prefs\n}\n\nexport function getUiSoundMuted() {\n  return prefs.muted\n}\n\nexport function hydrateUiSounds() {\n  if (hydrated || typeof window === \"undefined\") return\n  hydrated = true\n  try {\n    const raw = localStorage.getItem(STORAGE_KEY)\n    if (raw) {\n      const parsed = JSON.parse(raw) as Partial<UiSoundPrefs>\n      prefs = {\n        muted: parsed.muted === true,\n        volume: clampVolume(typeof parsed.volume === \"number\" ? parsed.volume : 1),\n        theme: isTheme(parsed.theme) ? parsed.theme : \"default\",\n        emphasis: isEmphasis(parsed.emphasis) ? parsed.emphasis : \"normal\",\n      }\n    } else if (localStorage.getItem(LEGACY_MUTE_KEY) === \"1\") {\n      prefs = { ...prefs, muted: true }\n    }\n  } catch {\n    /* keep defaults */\n  }\n  applyEngine()\n  emit()\n}\n\nexport function setUiSoundMuted(muted: boolean) {\n  commit({ ...prefs, muted })\n}\n\nexport function setUiSoundVolume(volume: number) {\n  commit({ ...prefs, volume: clampVolume(volume) })\n}\n\nexport function setUiSoundTheme(theme: ThemeName) {\n  if (!isTheme(theme)) return\n  commit({ ...prefs, theme })\n}\n\nexport function setUiSoundEmphasis(emphasis: Emphasis) {\n  if (!isEmphasis(emphasis)) return\n  commit({ ...prefs, emphasis })\n}\n\nfunction gestureAllowed() {\n  if (typeof navigator === \"undefined\") return false\n  const activation = navigator.userActivation\n  if (activation && activation.hasBeenActive === false) return false\n  return true\n}\n\n/** Plays a cue. No-ops when muted, before a user gesture, or without Web Audio. */\nexport function playUiSound(name: SoundName = \"tap\", options?: PlayOptions) {\n  if (prefs.muted || !gestureAllowed()) return\n  play(name, { emphasis: prefs.emphasis, theme: prefs.theme, ...options })\n}\n\nexport function useUiSounds() {\n  const snapshot = React.useSyncExternalStore(subscribeUiSounds, getUiSoundPrefs, () => prefs)\n\n  React.useEffect(() => {\n    hydrateUiSounds()\n  }, [])\n\n  return {\n    ...snapshot,\n    sounds,\n    themes,\n    setMuted: setUiSoundMuted,\n    setVolume: setUiSoundVolume,\n    setTheme: setUiSoundTheme,\n    setEmphasis: setUiSoundEmphasis,\n    play: playUiSound,\n    toggle() {\n      setUiSoundMuted(!getUiSoundMuted())\n    },\n  }\n}\n\nexport function UiSoundsProvider({\n  children,\n  muted,\n  volume,\n  theme,\n  emphasis,\n}: {\n  children: React.ReactNode\n  /** Controlled mute. Omit to use the stored preference. */\n  muted?: boolean\n  volume?: number\n  theme?: ThemeName\n  emphasis?: Emphasis\n}) {\n  React.useEffect(() => {\n    hydrateUiSounds()\n    if (muted !== undefined) setUiSoundMuted(muted)\n    if (volume !== undefined) setUiSoundVolume(volume)\n    if (theme !== undefined) setUiSoundTheme(theme)\n    if (emphasis !== undefined) setUiSoundEmphasis(emphasis)\n  }, [muted, volume, theme, emphasis])\n\n  return children\n}\n\nexport function UiSoundsToggle({\n  mutedLabel = \"Unmute sounds\",\n  unmutedLabel = \"Mute sounds\",\n  className,\n}: {\n  mutedLabel?: string\n  unmutedLabel?: string\n  className?: string\n}) {\n  const sound = useUiSounds()\n  return (\n    <button\n      type=\"button\"\n      className={className}\n      aria-pressed={sound.muted}\n      onClick={() => sound.toggle()}\n    >\n      {sound.muted ? mutedLabel : unmutedLabel}\n    </button>\n  )\n}\n\nexport function UiSoundsControls({\n  className,\n  muteClassName,\n}: {\n  className?: string\n  muteClassName?: string\n}) {\n  const sound = useUiSounds()\n  return (\n    <div className={cn(\"flex flex-col gap-3 text-sm\", className)}>\n      <UiSoundsToggle\n        className={cn(\n          \"w-fit rounded-md px-2 py-1 text-muted-foreground hover:bg-muted hover:text-foreground\",\n          muteClassName,\n        )}\n      />\n      <label className=\"flex items-center gap-3\">\n        <span className=\"w-16 text-muted-foreground\">Volume</span>\n        <input\n          type=\"range\"\n          min={0}\n          max={1}\n          step={0.05}\n          value={sound.volume}\n          aria-valuetext={`${Math.round(sound.volume * 100)} percent`}\n          onChange={(event) => sound.setVolume(Number(event.target.value))}\n          className=\"w-40 accent-primary\"\n        />\n      </label>\n      <label className=\"flex items-center gap-3\">\n        <span className=\"w-16 text-muted-foreground\">Theme</span>\n        <select\n          value={sound.theme}\n          onChange={(event) => sound.setTheme(event.target.value as ThemeName)}\n          className=\"rounded-md border border-border bg-background px-2 py-1\"\n        >\n          {themes.map((theme) => (\n            <option key={theme} value={theme}>\n              {theme}\n            </option>\n          ))}\n        </select>\n      </label>\n      <label className=\"flex items-center gap-3\">\n        <span className=\"w-16 text-muted-foreground\">Weight</span>\n        <select\n          value={sound.emphasis}\n          aria-label=\"Emphasis\"\n          onChange={(event) => sound.setEmphasis(event.target.value as Emphasis)}\n          className=\"rounded-md border border-border bg-background px-2 py-1\"\n        >\n          {EMPHASIS.map((emphasis) => (\n            <option key={emphasis} value={emphasis}>\n              {emphasis}\n            </option>\n          ))}\n        </select>\n      </label>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/ui-sounds.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Sonidos de interfaz",
+    "descriptionEs": "Catorce cues sintetizados, con silencio, volumen, tema y énfasis guardados. No suena antes de un gesto.",
+    "preview": "app/examples/ui-sounds/preview.tsx",
+    "previewHref": "/examples/ui-sounds",
+    "examples": [
+      {
+        "title": "Sonidos de interfaz",
+        "href": "/examples/ui-sounds",
+        "description": "Catorce cues sintetizados, con silencio, volumen, tema y énfasis guardados. No suena antes de un gesto."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/ui-sounds/stress",
+        "description": "320px, texto largo, y lectura de derecha a izquierda."
+      }
+    ],
+    "usage": "<UiSoundsProvider><button type=\"button\" onClick={() => playUiSound(\"success\")}>Done</button></UiSoundsProvider>",
+    "api": [
+      {
+        "name": "playUiSound",
+        "type": "(name?: SoundName, options?: PlayOptions) => void",
+        "description": "Plays a cuelume cue after a user gesture. No-op while muted."
+      },
+      {
+        "name": "useUiSounds",
+        "type": "hook",
+        "description": "muted, volume, theme, emphasis, and setters. Hydrates from local storage."
+      },
+      {
+        "name": "UiSoundsToggle / UiSoundsControls",
+        "type": "component",
+        "description": "Mute button, and controls for volume, theme, and emphasis."
+      },
+      {
+        "name": "theme / emphasis",
+        "type": "ThemeName / Emphasis",
+        "description": "default, mech, bubble, or press. subtle, normal, or strong."
+      }
+    ]
+  },
+  "docs": "Wraps cuelume@0.2.4 (MIT, Daniel Belyi). The pin already includes the 14-cue palette. Preference storage is this wrapper. press-sound remains a compatible facade. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "media",
+    "hook"
+  ],
+  "type": "registry:ui"
+}

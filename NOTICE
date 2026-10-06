@@ -416,3 +416,216 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+---
+
+Micro-interactions
+
+Retana UI includes a small set of interaction pieces adapted from the projects
+below. Each port keeps the upstream license. Host semantic tokens replace
+upstream colors. Sound and haptics are optional and never play on mount.
+
+cuelume — MIT — Copyright (c) 2026 Daniel Belyi
+  https://github.com/danielwh2/cuelume
+  npm package cuelume@0.2.4, exact pin, git caf15480081da9432a4a982446ce44c9daf3a288
+  Files: registry/ui/ui-sounds.tsx (wrapper), registry/ui/press-sound.tsx (facade)
+  The published 0.2.4 tarball already exports the 14-cue palette the README
+  describes as v0.3, plus the legacy aliases. The package version was not
+  bumped, and main is still labeled 0.2.4. The engine is not vendored.
+  cuelume leaves preference storage to the app. The wrapper persists mute,
+  volume, theme, and emphasis, and refuses playback before a user gesture.
+  press-sound keeps its previous exports. tap, tick, and pop map onto cuelume
+  cues and share the same mute store, including the legacy retana-press-muted key.
+
+theme-toggles — MIT — Copyright (c) Alfie Jones
+  https://github.com/AlfieJones/theme-toggles
+  https://toggles.dev
+  @theme-toggles/react@5.0.5, upstream commit b6f8b5f8217b
+  The repository publishes no LICENSE file. MIT is declared in the README
+  ("## License MIT") and in the package.json license field. The MIT text with
+  this copyright is included below.
+  Files: registry/ui/theme-toggle-icons.tsx and registry/ui/theme-toggles/*.tsx
+  (around, classic, dark-inner, dark-side, eclipse, expand, half-sun, horizon,
+  inner-moon, light-switch, lightbulb, simple, spin, within).
+  Changes: dark-mode utilities follow the toggled prop instead of the host
+  page's dark class; children render after the icon so theme-switch can add a
+  label; each button is marked data-toggled and group/tt. theme-switch stays
+  backwards compatible. Its default icon is still the lucide sun and moon.
+  Passing icon selects one of these fourteen, and the icon duration matches
+  the page transition (fade 280ms, eclipse 520ms, split 480ms, rise 480ms).
+
+Monoco — MIT — Copyright © 2024 Monokai (monokai.com)
+  https://github.com/Monokai/monoco
+  @monokai/monoco@0.3.2, upstream commit 83c6d8d8c17f
+  File: registry/lib/squircle-path.ts (createPath and squirclePathString only)
+  The corner math is Monokai's adaptation of figma-squircle (MIT), Copyright
+  (c) 2021 Tien Pham, https://github.com/phamfoo/figma-squircle. That original
+  MIT header is kept in squircle-path.ts. registry/ui/squircle.tsx is original
+  and uses CSS corner-shape: squircle when the browser supports it (Chromium
+  139 and later). Other browsers use the Monoco path as a clip-path, with an
+  SVG stroke for the border and a drop shadow that follows the shape.
+
+blendy — MIT — Copyright 2024 Taha Shashtari
+  https://github.com/TahaSh/blendy
+  Not a dependency, and no source was copied. morph-dialog and morph-popover
+  are a clean-room shared-element morph using motion layoutId, which this
+  catalog already uses. Reduced motion skips the morph. The dialog traps
+  focus, closes on Escape and the backdrop, and restores focus. The popover
+  is non-modal.
+
+Evil Buttons — Apache License 2.0 — radiumcoders
+  https://github.com/radiumcoders/Evil-Buttons
+  Upstream commit ec0fa86f8d06. The repository has no NOTICE file to propagate.
+  https://evilbuttons.com/r/slide-to-detonate.json
+  Files:
+    registry/ui/shortcut-button.tsx (from command-button)
+    registry/ui/spotlight-button.tsx (from highlight-button)
+    registry/ui/slide-to-confirm.tsx (from slide-to-detonate)
+  Each file keeps the Apache-2.0 header and states the changes:
+    - Renamed to ShortcutButton, SpotlightButton, and SlideToConfirm.
+    - Hardcoded colors were replaced with host button variants and semantic tokens.
+    - Spotlight ripple is skipped when the reader prefers reduced motion.
+    - Slide-to-confirm dropped the dark and light color variants and the
+      automatic vibration tick. Haptics stay opt-in through the haptics item.
+    - Reduced motion snaps the slide handle and stops the label shimmer.
+  Licensed under the Apache License, Version 2.0.
+  You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+
+seamui — MIT — Copyright (c) 2026 Mikhail Villamor
+  https://github.com/meiskv/seamui
+  Upstream commit 7c57149f327d
+  Files: registry/ui/haptics.tsx, registry/ui/motion-preference.tsx
+  Only the small pieces were ported. haptics uses navigator.vibrate and is a
+  no-op where the Vibration API is missing. The web-haptics package is not a
+  dependency. Mute is persisted. motion-preference resolves an explicit user
+  choice (reduce or full) before the operating-system reduced-motion query,
+  and persists that choice. Springs and the rest of the seamui motion theme
+  are not included.
+  registry/hooks/use-feedback.ts is original. It wires a cuelume cue, an
+  optional haptic, and a motion hint. Reduced motion drops the hint only.
+
+ssgoi (MIT, MeurSyphus) and Amicro (MIT, Syed Subhan Uddin) were reviewed and
+are not included. ssgoi is application transition infrastructure. Amicro was
+not needed for these items.
+
+---
+
+MIT License
+
+Copyright (c) Alfie Jones
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+MIT License
+
+Copyright (c) 2026 Daniel Belyi
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+MIT License
+
+Copyright © 2024 Monokai (monokai.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+MIT License
+
+Copyright (c) 2021 Tien Pham
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+MIT License
+
+Copyright (c) 2026 Mikhail Villamor
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
