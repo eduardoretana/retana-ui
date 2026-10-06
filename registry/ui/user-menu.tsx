@@ -252,7 +252,7 @@ function Segmented<T extends string>({
             aria-checked={option.value === value}
             aria-label={option.label}
             title={option.label}
-            className="relative z-10 grid place-items-center rounded-full text-muted-foreground outline-none aria-checked:text-foreground"
+            className="relative z-10 grid place-items-center rounded-full text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring aria-checked:text-foreground"
             onClick={() => onChange(option.value)}
           >
             {option.icon}
