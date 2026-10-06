@@ -10,19 +10,17 @@ export function ExampleFrame({
   description,
   children,
   wide = false,
+  size,
 }: {
   title: string
   description?: string
   children: ReactNode
   wide?: boolean
+  size?: "default" | "wide" | "desk"
 }) {
+  const width = size === "desk" ? "max-w-[90rem]" : size === "wide" || wide ? "max-w-5xl" : "max-w-2xl"
   return (
-    <main
-      className={cn(
-        "mx-auto flex min-h-dvh w-full flex-col gap-8 px-4 py-8",
-        wide ? "max-w-5xl" : "max-w-2xl",
-      )}
-    >
+    <main className={cn("mx-auto flex min-h-dvh w-full flex-col gap-8 px-4 py-8", width)}>
       <header className="flex items-start gap-4">
         <div className="min-w-0 flex-1">
           <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground uppercase">

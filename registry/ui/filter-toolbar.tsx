@@ -46,6 +46,11 @@ export interface FilterToolbarProps {
   onRemove: (id: string) => void
   onClearAll?: () => void
   children?: ReactNode
+  /** Replaces the chip row. Use it for a count-tab bar. */
+  leading?: ReactNode
+  /** Outer shape. panel is the default bordered card. */
+  variant?: "panel" | "pill"
+  emptyLabel?: string
   label?: string
   /** Adds an Add filter trigger that morphs into a two step field and value menu. */
   addFilter?: { fields: FilterField[]; onAdd: (filter: FilterChip, field: FilterField) => void; label?: string; align?: "start" | "end" }
@@ -645,7 +650,7 @@ export function FilterMenu({ fields, onSelect, active = [], label = "Add filter"
   )
 }
 
-export function FilterToolbar({ filters, onRemove, onClearAll, children, label = "Active filters", addFilter, className, classNames }: FilterToolbarProps) {
+export function FilterToolbar({ filters, onRemove, onClearAll, children, leading, variant = "panel", emptyLabel = "No filters applied", label = "Active filters", addFilter, className, classNames }: FilterToolbarProps) {
   const reduced = useReducedMotion() ?? false
   const root = useRef<HTMLDivElement>(null)
   const list = useRef<HTMLDivElement>(null)
@@ -688,9 +693,10 @@ export function FilterToolbar({ filters, onRemove, onClearAll, children, label =
   const text = reduced ? { ...textMotion(true), initial: false as const } : textMotion(false)
   const emptyText = reduced ? text : { ...text, transition: { ...enter, delay: motionPresets.duration.instant * 0.75 } }
   return (
-    <div ref={root} data-slot="filter-toolbar" role="group" aria-label={label} className={cn("relative flex min-h-10 min-w-0 items-start justify-between gap-4 rounded-xl border border-border bg-card p-3 max-[520px]:flex-col max-[520px]:items-stretch", className, classNames?.root)}>
+    <div ref={root} data-slot="filter-toolbar" data-variant={variant} role="group" aria-label={label} className={cn("relative flex min-h-10 min-w-0 items-start justify-between gap-4 bg-card max-[520px]:flex-col max-[520px]:items-stretch", variant === "pill" ? "rounded-full px-2 py-1.5" : "rounded-xl border border-border p-3", className, classNames?.root)}>
       <motion.div data-slot="filter-toolbar-frame" className={cn("min-w-0 flex-1 max-[520px]:flex-none", classNames?.frame)} style={{ height: frameHeight }}>
         <div ref={list} data-slot="filter-toolbar-chips" className={cn("relative flex min-h-8 min-w-0 flex-wrap items-center gap-2", classNames?.chips)}>
+          {leading}
           <AnimatePresence initial={false}>
             {filters.map((filter, index) => (
               <motion.span key={filter.id} className="inline-flex max-w-full min-w-0 shrink-0 rounded-full" {...slot(8)}>
@@ -723,9 +729,9 @@ export function FilterToolbar({ filters, onRemove, onClearAll, children, label =
             ))}
           </AnimatePresence>
           <AnimatePresence initial={false}>
-            {filters.length ? null : (
+            {filters.length || leading || !emptyLabel ? null : (
               <motion.span key="empty" className="pointer-events-none absolute inset-y-0 left-0 flex max-w-full items-center overflow-hidden text-sm whitespace-nowrap text-muted-foreground" {...emptyText}>
-                No filters applied
+                {emptyLabel}
               </motion.span>
             )}
           </AnimatePresence>

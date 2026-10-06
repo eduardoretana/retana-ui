@@ -1,0 +1,64 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "status-pill",
+  "title": "Status pill",
+  "author": "Eduardo Retana",
+  "description": "Status chip. Tone, dot, and label come from props.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/status-pill.tsx",
+      "content": "\"use client\"\n\n/** Domain-agnostic status chip. Tones map to host tokens. */\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport type { StatusTone } from \"@/lib/status-tone\"\n\nexport type { StatusTone }\n\nexport type StatusPillProps = {\n  label: string\n  tone?: StatusTone\n  /** Solid fill. Critical becomes destructive; other tones use foreground. */\n  solid?: boolean\n  dot?: boolean\n  /** Sits on a photo: card surface, no tone wash. */\n  overlay?: boolean\n  icon?: React.ReactNode\n  className?: string\n}\n\nconst soft: Record<StatusTone, string> = {\n  neutral: \"bg-muted text-foreground\",\n  accent: \"bg-primary/15 text-foreground\",\n  warning: \"bg-chart-4/15 text-foreground\",\n  critical: \"bg-destructive/10 text-destructive\",\n  info: \"bg-chart-2/15 text-foreground\",\n  positive: \"bg-primary/15 text-foreground\",\n}\n\nconst dots: Record<StatusTone, string> = {\n  neutral: \"bg-muted-foreground\",\n  accent: \"bg-primary\",\n  warning: \"bg-chart-4\",\n  critical: \"bg-destructive\",\n  info: \"bg-chart-2\",\n  positive: \"bg-primary\",\n}\n\nexport function StatusPill({\n  label,\n  tone = \"neutral\",\n  solid = false,\n  dot = true,\n  overlay = false,\n  icon,\n  className,\n}: StatusPillProps) {\n  const surface = overlay\n    ? \"bg-card/95 text-card-foreground\"\n    : solid\n      ? tone === \"critical\"\n        ? \"bg-destructive text-background\"\n        : \"bg-foreground text-background\"\n      : soft[tone]\n  return (\n    <span\n      data-slot=\"status-pill\"\n      data-tone={tone}\n      data-solid={solid ? \"\" : undefined}\n      className={cn(\"inline-flex h-6 max-w-full items-center gap-1.5 rounded-full px-2 text-xs font-medium\", surface, className)}\n    >\n      {dot ? <span aria-hidden className={cn(\"size-1.5 shrink-0 rounded-full\", solid || overlay ? \"bg-current\" : dots[tone])} /> : null}\n      {icon}\n      <span className=\"truncate\">{label}</span>\n    </span>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/status-pill.tsx"
+    },
+    {
+      "path": "registry/lib/status-tone.ts",
+      "content": "/** Shared tone names. Host tokens only — no colors. */\n\nexport type StatusTone = \"neutral\" | \"accent\" | \"warning\" | \"critical\" | \"info\" | \"positive\"\n",
+      "type": "registry:lib",
+      "target": "@lib/status-tone.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Pastilla de estado",
+    "descriptionEs": "Un tono, un punto y una etiqueta que tú escribes.",
+    "preview": "app/examples/status-pill/preview.tsx",
+    "previewHref": "/examples/status-pill",
+    "examples": [
+      {
+        "title": "Pastilla de estado",
+        "href": "/examples/status-pill",
+        "description": "Un tono, un punto y una etiqueta que tú escribes."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/status-pill/stress",
+        "description": "320px, vacío y RTL."
+      }
+    ],
+    "usage": "<StatusPill label=\"In review\" tone=\"warning\" />",
+    "api": [
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Visible text."
+      },
+      {
+        "name": "tone",
+        "type": "StatusTone",
+        "description": "neutral, accent, warning, critical, info, or positive."
+      },
+      {
+        "name": "solid / dot / overlay",
+        "type": "boolean",
+        "description": "Solid fill, a leading dot, or a chip that sits on a cover."
+      }
+    ]
+  },
+  "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme.",
+  "categories": [
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}

@@ -26,6 +26,8 @@ export type StatStripItem = {
   currency?: string
   delta?: StatDelta
   caption?: string
+  /** Inverted tile. Used with variant="tiles". */
+  featured?: boolean
 }
 
 export type StatStripClassNames = {
@@ -39,7 +41,7 @@ export type StatStripClassNames = {
 
 export type StatStripProps = {
   items: readonly StatStripItem[]
-  variant?: "inline" | "panel"
+  variant?: "inline" | "panel" | "tiles"
   locale?: string
   className?: string
   classNames?: StatStripClassNames
@@ -77,7 +79,9 @@ export function StatStrip({ items, variant = "inline", locale = "en-US", classNa
         "@container min-w-0",
         variant === "panel"
           ? "grid grid-cols-1 overflow-hidden rounded-xl bg-card text-card-foreground @min-[16rem]:grid-cols-2 @min-[36rem]:grid-cols-4"
-          : "flex min-w-0 flex-wrap gap-x-6 gap-y-3",
+          : variant === "tiles"
+            ? "grid grid-cols-2 gap-2 @min-[36rem]:grid-cols-4"
+            : "flex min-w-0 flex-wrap gap-x-6 gap-y-3",
         className,
         classNames?.root,
       )}
@@ -96,10 +100,12 @@ export function StatStrip({ items, variant = "inline", locale = "en-US", classNa
               variant === "inline" && "min-w-36 shrink-0",
               variant === "panel" && "border-border px-4 py-3 @min-[16rem]:border-s @min-[16rem]:[&:nth-child(2n+1)]:border-s-0 @min-[36rem]:[&:nth-child(2n+1)]:border-s @min-[36rem]:first:border-s-0",
               variant === "panel" && index > 0 && "border-t @min-[16rem]:border-t-0",
+              variant === "tiles" && "rounded-xl bg-muted px-3 py-3",
+              variant === "tiles" && item.featured && "bg-foreground text-background",
               classNames?.item,
             )}
           >
-            <p className={cn("text-xs text-muted-foreground", classNames?.label)}>{item.label}</p>
+            <p className={cn("text-xs", item.featured && variant === "tiles" ? "text-background/70" : "text-muted-foreground", classNames?.label)}>{item.label}</p>
             <p className={cn("mt-1 flex flex-wrap items-center gap-2 text-3xl font-normal tabular-nums tracking-tight", classNames?.value)}>
               <span className="break-words">{value}</span>
               {item.delta && direction ? (

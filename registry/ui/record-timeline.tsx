@@ -18,6 +18,7 @@ export type RecordTimelineEvent = {
   description?: string
   meta?: string
   status?: RecordTimelineStatus
+  chips?: readonly { id: string; label: string; tone?: "neutral" | "accent" }[]
 }
 
 export type RecordTimelineClassNames = {
@@ -37,6 +38,9 @@ export type RecordTimelineProps = {
   collapseAfter?: number
   moreLabel?: (hidden: number) => string
   onSelect?: (event: RecordTimelineEvent) => void
+  filters?: readonly { id: string; label: string }[]
+  filter?: string
+  onFilterChange?: (id: string) => void
   className?: string
   classNames?: RecordTimelineClassNames
 }
@@ -57,6 +61,9 @@ export function RecordTimeline({
   collapseAfter,
   moreLabel = (hidden) => `Show ${hidden} earlier`,
   onSelect,
+  filters = [],
+  filter,
+  onFilterChange,
   className,
   classNames,
 }: RecordTimelineProps) {
@@ -68,6 +75,24 @@ export function RecordTimeline({
 
   return (
     <div data-slot="record-timeline" className={cn("min-w-0", className, classNames?.root)}>
+      {filters.length ? (
+        <div role="group" aria-label={label} className="mb-3 inline-flex rounded-full bg-muted p-0.5">
+          {filters.map((item) => {
+            const selected = (filter ?? filters[0]?.id) === item.id
+            return (
+              <button
+                key={item.id}
+                type="button"
+                aria-pressed={selected}
+                className={cn("rounded-full px-3 py-1 text-xs", selected ? "bg-foreground text-background" : "text-muted-foreground")}
+                onClick={() => onFilterChange?.(item.id)}
+              >
+                {item.label}
+              </button>
+            )
+          })}
+        </div>
+      ) : null}
       {context || rangeLabel ? (
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
           {context ? <p className="min-w-0 break-words">{context}</p> : <span />}
@@ -150,6 +175,21 @@ function EventCopy({
       </span>
       {event.description ? <p className={cn("mt-0.5 text-sm text-muted-foreground", classNames?.description)}>{event.description}</p> : null}
       {event.meta ? <p className="mt-0.5 text-xs text-muted-foreground">{joinMeta(event.meta.split("·").map((part) => part.trim()))}</p> : null}
+      {event.chips?.length ? (
+        <span className="mt-1 flex flex-wrap gap-1">
+          {event.chips.map((chip) => (
+            <span
+              key={chip.id}
+              className={cn(
+                "inline-flex h-5 items-center rounded-full px-2 font-mono text-[10px]",
+                chip.tone === "accent" ? "bg-primary/15" : "bg-muted",
+              )}
+            >
+              {chip.label}
+            </span>
+          ))}
+        </span>
+      ) : null}
     </>
   )
 }

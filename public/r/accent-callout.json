@@ -1,0 +1,58 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "accent-callout",
+  "title": "Accent callout",
+  "author": "Eduardo Retana",
+  "description": "Accent, soft, or inverted callout. Copy comes from props.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/accent-callout.tsx",
+      "content": "\"use client\"\n\n/** Highlight, soft, or inverted callout. Copy and icon come from props. */\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type AccentCalloutProps = {\n  title: string\n  body?: React.ReactNode\n  icon?: React.ReactNode\n  surface?: \"accent\" | \"soft\" | \"inverted\"\n  action?: React.ReactNode\n  inset?: React.ReactNode\n  className?: string\n}\n\nconst surfaceClass = {\n  accent: \"bg-primary text-primary-foreground\",\n  soft: \"bg-primary/15 text-foreground\",\n  inverted: \"bg-foreground text-background\",\n} as const\n\nexport function AccentCallout({\n  title,\n  body,\n  icon,\n  surface = \"accent\",\n  action,\n  inset,\n  className,\n}: AccentCalloutProps) {\n  const inverted = surface === \"inverted\"\n  return (\n    <section\n      data-slot=\"accent-callout\"\n      data-surface={surface}\n      className={cn(\"flex min-w-0 flex-col gap-3 rounded-2xl p-3\", surfaceClass[surface], className)}\n    >\n      <div className=\"flex min-w-0 items-start gap-3\">\n        {icon ? (\n          <span\n            aria-hidden\n            className={cn(\n              \"grid size-9 shrink-0 place-items-center rounded-full [&_svg]:size-4\",\n              surface === \"accent\" ? \"bg-foreground text-background\" : \"bg-primary text-primary-foreground\",\n              inverted && \"bg-background text-foreground\",\n            )}\n          >\n            {icon}\n          </span>\n        ) : null}\n        <div className=\"min-w-0 flex-1\">\n          <p className=\"text-sm font-medium wrap-break-word\">{title}</p>\n          {body ? (\n            <div className={cn(\"mt-0.5 text-xs wrap-break-word\", inverted ? \"text-background/70\" : \"opacity-80\")}>{body}</div>\n          ) : null}\n        </div>\n        {action}\n      </div>\n      {inset ? (\n        <div className={cn(\"rounded-full bg-card px-3 py-2 text-sm text-card-foreground\", inverted && \"bg-background text-foreground\")}>\n          {inset}\n        </div>\n      ) : null}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/accent-callout.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Aviso de acento",
+    "descriptionEs": "Acento, suave o invertido, con el texto que pases.",
+    "preview": "app/examples/accent-callout/preview.tsx",
+    "previewHref": "/examples/accent-callout",
+    "examples": [
+      {
+        "title": "Aviso de acento",
+        "href": "/examples/accent-callout",
+        "description": "Acento, suave o invertido, con el texto que pases."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/accent-callout/stress",
+        "description": "320px, vacío y RTL."
+      }
+    ],
+    "usage": "<AccentCallout title=\"Ready\" body=\"Nothing is blocking the action.\" surface=\"soft\" />",
+    "api": [
+      {
+        "name": "title / body",
+        "type": "string",
+        "description": "Heading and supporting copy."
+      },
+      {
+        "name": "surface",
+        "type": "\"accent\" | \"soft\" | \"inverted\"",
+        "description": "accent uses primary. inverted uses foreground and background."
+      },
+      {
+        "name": "action / inset",
+        "type": "ReactNode",
+        "description": "Optional trailing action and an inset slot."
+      }
+    ]
+  },
+  "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme.",
+  "categories": [
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}

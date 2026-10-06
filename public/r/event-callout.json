@@ -1,0 +1,55 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "event-callout",
+  "title": "Event callout",
+  "author": "Eduardo Retana",
+  "description": "Dated event with an inset action.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/event-callout.tsx",
+      "content": "\"use client\"\n\n/** Dated event with an inset action row. */\n\nimport * as React from \"react\"\nimport { Calendar, ChevronRight } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type EventCalloutProps = {\n  title: string\n  when: string\n  icon?: React.ReactNode\n  action?: string\n  onAction?: () => void\n  className?: string\n}\n\nexport function EventCallout({ title, when, icon, action, onAction, className }: EventCalloutProps) {\n  return (\n    <section data-slot=\"event-callout\" className={cn(\"flex flex-col gap-3 rounded-2xl bg-primary p-3 text-primary-foreground\", className)}>\n      <div className=\"flex items-start gap-3\">\n        <span aria-hidden className=\"grid size-9 shrink-0 place-items-center rounded-full bg-foreground text-background [&_svg]:size-4\">\n          {icon ?? <Calendar />}\n        </span>\n        <div className=\"min-w-0\">\n          <p className=\"text-sm font-medium wrap-break-word\">{title}</p>\n          <p className=\"font-mono text-xs opacity-80\">{when}</p>\n        </div>\n      </div>\n      {action ? (\n        <button\n          type=\"button\"\n          onClick={onAction}\n          className=\"flex w-full items-center justify-between gap-2 rounded-full bg-card px-3 py-2 text-start text-sm text-card-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\"\n        >\n          <span className=\"truncate\">{action}</span>\n          <ChevronRight className=\"size-4 shrink-0\" aria-hidden />\n        </button>\n      ) : null}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/event-callout.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Aviso de evento",
+    "descriptionEs": "Fecha y una acción al pie.",
+    "preview": "app/examples/event-callout/preview.tsx",
+    "previewHref": "/examples/event-callout",
+    "examples": [
+      {
+        "title": "Aviso de evento",
+        "href": "/examples/event-callout",
+        "description": "Fecha y una acción al pie."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/event-callout/stress",
+        "description": "320px, vacío y RTL."
+      }
+    ],
+    "usage": "<EventCallout title=\"Committee\" when=\"Thu 15:00\" action=\"Open calendar\" />",
+    "api": [
+      {
+        "name": "title / when",
+        "type": "string",
+        "description": "Event name and time."
+      },
+      {
+        "name": "action / onAction",
+        "type": "string / fn",
+        "description": "The inset button."
+      }
+    ]
+  },
+  "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme.",
+  "categories": [
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}

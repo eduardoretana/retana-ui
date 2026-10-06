@@ -24,6 +24,7 @@ import { motionPresets } from "@/registry/retana/lib/motion"
 export type ChipOption = {
   value: string
   label: string
+  count?: number
 }
 
 export type ChipGroupClassNames = {
@@ -43,6 +44,8 @@ export type ChipGroupProps = {
   multiple?: boolean
   /** Chips shown before the rest fold behind a “+N more” chip. Chips selected when it folds stay in view. */
   maxVisible?: number
+  /** check is the default. count hides the check and shows option.count. */
+  appearance?: "check" | "count"
   className?: string
   classNames?: ChipGroupClassNames
 }
@@ -163,6 +166,7 @@ function Chip({
   delay,
   className,
   labelClassName,
+  appearance = "check",
   onToggle,
   onFocusChip,
 }: {
@@ -173,6 +177,7 @@ function Chip({
   delay: number
   className?: string
   labelClassName?: string
+  appearance?: "check" | "count"
   onToggle: (value: string) => void
   onFocusChip: (value: string) => void
 }) {
@@ -200,8 +205,9 @@ function Chip({
   return (
     <motion.button
       type="button"
+      data-appearance={appearance}
       className={cn(
-        "group relative z-10 inline-flex max-w-full cursor-pointer rounded-full border-0 bg-transparent p-0 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none aria-pressed:text-foreground motion-reduce:transition-none",
+        "group relative z-10 inline-flex max-w-full cursor-pointer rounded-full border-0 bg-transparent p-0 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none aria-pressed:text-foreground motion-reduce:transition-none data-[appearance=count]:aria-pressed:text-background",
         className,
       )}
       data-chip={option.value}
@@ -229,11 +235,13 @@ function Chip({
         <motion.span
           className={cn(
             "absolute inset-y-0 left-0 -z-10 rounded-full border border-border bg-background",
-            selected && "border-primary bg-primary/10",
+            selected && appearance !== "count" && "border-primary bg-primary/10",
+            selected && appearance === "count" && "border-transparent bg-foreground",
           )}
           style={{ right: edge }}
           aria-hidden="true"
         />
+        {appearance === "count" ? null : (
         <motion.span
           className="absolute top-[calc(50%-7px)] left-3 grid size-3.5 origin-left place-items-center text-primary"
           style={{ scale: checkScale, opacity: checkOpacity, filter: checkBlur }}
@@ -243,9 +251,20 @@ function Chip({
             <motion.path d="M4 12.5 9.5 18 20 6.5" style={{ pathLength: checkDraw }} />
           </svg>
         </motion.span>
-        <span className={cn("w-0 shrink-0", selected && "w-[18px]")} aria-hidden="true" />
-        <motion.span className={cn("min-w-0 truncate", labelClassName)} style={{ x: lag }}>
-          {option.label}
+        )}
+        <span className={cn("w-0 shrink-0", selected && appearance !== "count" && "w-[18px]")} aria-hidden="true" />
+        <motion.span className={cn("inline-flex min-w-0 items-center gap-1.5 truncate", labelClassName)} style={{ x: lag }}>
+          <span className="truncate">{option.label}</span>
+          {option.count != null ? (
+            <span
+              className={cn(
+                "rounded-full px-1.5 font-mono text-[10px] tabular-nums",
+                selected && appearance === "count" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground",
+              )}
+            >
+              {option.count}
+            </span>
+          ) : null}
         </motion.span>
       </span>
     </motion.button>
@@ -319,6 +338,7 @@ export function ChipGroup({
   label,
   multiple = true,
   maxVisible = Infinity,
+  appearance = "check",
   className,
   classNames,
 }: ChipGroupProps) {
@@ -391,6 +411,7 @@ export function ChipGroup({
                 delay={expanded ? Math.min(Math.max(0, index - maxVisible) * motionPresets.stagger.item, 0.3) : 0}
                 className={classNames?.chip}
                 labelClassName={classNames?.label}
+                appearance={appearance}
                 onToggle={toggle}
                 onFocusChip={setActive}
               />

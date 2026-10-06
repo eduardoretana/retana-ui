@@ -18,24 +18,31 @@ import { cn } from "@/lib/utils"
 
 export type ProposalCrumb = { id: string; label: string; href?: string }
 
-export type ProposalWorkspaceTab = { id: string; label: string }
+export type ProposalWorkspaceTab = { id: string; label: string; count?: number }
 
 export type ProposalWorkspaceProps = {
-  crumbs: readonly ProposalCrumb[]
+  crumbs?: readonly ProposalCrumb[]
   tabs: readonly ProposalWorkspaceTab[]
   value: string
   onValueChange: (id: string) => void
   title?: string
+  /** line keeps the sliding underline. pill uses a filled active tab. */
+  variant?: "line" | "pill"
+  leading?: React.ReactNode
+  trailing?: React.ReactNode
   children: React.ReactNode
   className?: string
 }
 
 export function ProposalWorkspace({
-  crumbs,
+  crumbs = [],
   tabs,
   value,
   onValueChange,
   title,
+  variant = "line",
+  leading,
+  trailing,
   children,
   className,
 }: ProposalWorkspaceProps) {
@@ -67,8 +74,9 @@ export function ProposalWorkspace({
 
   return (
     <section data-slot="proposal-workspace" className={cn("flex min-w-0 flex-col gap-4", className)}>
+      {crumbs.length || title ? (
       <div className="min-w-0">
-        <Breadcrumb>
+        {crumbs.length ? <Breadcrumb>
           <BreadcrumbList>
             {crumbs.map((crumb, index) => {
               const last = index === crumbs.length - 1
@@ -88,41 +96,60 @@ export function ProposalWorkspace({
               )
             })}
           </BreadcrumbList>
-        </Breadcrumb>
+        </Breadcrumb> : null}
         {title ? <h1 className="mt-2 text-xl font-medium tracking-tight wrap-break-word">{title}</h1> : null}
       </div>
+      ) : null}
       <Tabs value={value} onValueChange={onValueChange}>
-        <div className="overflow-x-auto">
-          <div ref={listRef} className="relative w-max min-w-full">
-            <TabsList variant="line" className="h-auto w-max min-w-full justify-start gap-1 bg-transparent p-0">
-              {tabs.map((tab) => (
-                <TabsTrigger key={tab.id} value={tab.id} className="h-9 flex-none px-2 after:hidden">
-                  {tab.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-            <motion.span
-              data-slot="proposal-tab-indicator"
-              className="pointer-events-none absolute bottom-0 h-0.5 bg-foreground"
-              initial={false}
-              animate={{ left: indicator.left, width: indicator.width }}
-              transition={reduced ? { duration: 0 } : { duration: 0.2 }}
-            />
+        <div className={cn("flex flex-wrap items-center gap-2", variant === "pill" && "rounded-full bg-card px-2 py-1")}>
+          {leading}
+          <div className="overflow-x-auto">
+            <div ref={listRef} className="relative w-max min-w-full">
+              <TabsList variant={variant === "pill" ? "default" : "line"} className={cn("h-auto w-max min-w-full justify-start gap-1 bg-transparent p-0", variant === "pill" && "rounded-full")}>
+                {tabs.map((tab) => (
+                  <TabsTrigger
+                    key={tab.id}
+                    value={tab.id}
+                    className={cn(
+                      "h-9 flex-none px-2 after:hidden",
+                      variant === "pill" && "rounded-full px-3 data-active:bg-foreground data-active:text-background",
+                    )}
+                  >
+                    {tab.label}
+                    {tab.count != null ? <span className="ms-1 font-mono text-xs opacity-70">{tab.count}</span> : null}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+              {variant === "line" ? (
+                <motion.span
+                  data-slot="proposal-tab-indicator"
+                  className="pointer-events-none absolute bottom-0 h-0.5 bg-foreground"
+                  initial={false}
+                  animate={{ left: indicator.left, width: indicator.width }}
+                  transition={reduced ? { duration: 0 } : { duration: 0.2 }}
+                />
+              ) : null}
+            </div>
           </div>
+          {trailing ? <div className="ms-auto flex items-center gap-2">{trailing}</div> : null}
         </div>
       </Tabs>
-      <AnimatePresence mode="wait" initial={false}>
+      {reduced ? (
+        <div data-slot="proposal-panel">{children}</div>
+      ) : (
+      <AnimatePresence initial={false}>
         <motion.div
           key={value}
           data-slot="proposal-panel"
-          initial={reduced ? false : { opacity: 0 }}
+          initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={reduced ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: reduced ? 0 : 0.2 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
         >
           {children}
         </motion.div>
       </AnimatePresence>
+      )}
     </section>
   )
 }

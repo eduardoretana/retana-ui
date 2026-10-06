@@ -56,6 +56,7 @@ export type AdminNavItem = {
   label: string
   icon: LucideIcon
   description?: string
+  count?: number
 }
 
 export type AdminNavGroup = {
@@ -103,6 +104,8 @@ export type AdminShellProps = {
   className?: string
   contentClassName?: string
   showToaster?: boolean
+  /** pill draws an inverted active item and flips the count chip. */
+  navStyle?: "row" | "pill"
   children?: React.ReactNode
 }
 
@@ -169,6 +172,7 @@ export function AdminShell({
   className,
   contentClassName,
   showToaster = true,
+  navStyle = "row",
   children,
 }: AdminShellProps) {
   const controller = themeController ?? (
@@ -232,7 +236,12 @@ export function AdminShell({
                     const Icon = item.icon
                     return (
                       <SidebarMenuItem key={item.href}>
-                        <SidebarMenuButton asChild isActive={active} tooltip={item.label}>
+                        <SidebarMenuButton
+                          asChild
+                          isActive={active}
+                          tooltip={item.label}
+                          className={navStyle === "pill" ? "rounded-full data-active:bg-foreground data-active:text-background" : undefined}
+                        >
                           <LinkComponent
                             href={item.href}
                             aria-current={active ? "page" : undefined}
@@ -245,6 +254,16 @@ export function AdminShell({
                           >
                             <Icon />
                             <span>{item.label}</span>
+                            {item.count != null ? (
+                              <span
+                                className={cn(
+                                  "ms-auto rounded-full px-1.5 text-xs tabular-nums",
+                                  active && navStyle === "pill" ? "bg-primary text-primary-foreground" : "bg-sidebar-accent text-sidebar-foreground",
+                                )}
+                              >
+                                {item.count}
+                              </span>
+                            ) : null}
                           </LinkComponent>
                         </SidebarMenuButton>
                       </SidebarMenuItem>

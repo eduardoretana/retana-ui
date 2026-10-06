@@ -23,6 +23,8 @@ export type ViewGalleryProps = {
   chip?: string | null
   onChipChange?: (chip: string | null) => void
   onOpen?: (id: string) => void
+  /** Replaces the default card. Use it for a spec grid, progress, and footer. */
+  renderCard?: (record: MultiRecord) => React.ReactNode
   footer?: (record: MultiRecord) => React.ReactNode
   emptyLabel?: string
   className?: string
@@ -39,6 +41,7 @@ export function ViewGallery({
   chip: chipProp,
   onChipChange,
   onOpen,
+  renderCard,
   footer,
   emptyLabel = "No records",
   className,
@@ -92,6 +95,13 @@ export function ViewGallery({
         <ul className={cn("grid min-w-0 grid-cols-[repeat(auto-fill,minmax(12rem,1fr))] gap-3", gridClassName)}>
           {visible.map((record) => {
             const title = recordTitle(record, fields, config.titleField)
+            if (renderCard) {
+              return (
+                <li key={record.id} className="min-w-0">
+                  {renderCard(record)}
+                </li>
+              )
+            }
             return (
               <li key={record.id} className={cn("flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card", cardClassName)}>
                 <Cover value={coverField ? record[coverField.id] : undefined} label={title} className={coverClassName} />

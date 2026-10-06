@@ -50,6 +50,16 @@ const inbox = [
   ["view-customizer", "View tiles and a pill that appears once two views are on."],
 ] as const
 
+const review = [
+  ["review-desk", "One desk. Pass nav, records, findings, and the final action. defineReviewDesk builds a preset."],
+  ["record-card", "A hero, media, or tile card. The cover is a seeded wash."],
+  ["score-card", "A score and a tick gauge. The number comes from the config."],
+  ["issue-list", "Findings with severity. Arrow keys move the selection."],
+  ["issue-detail", "One finding, the comparison, and the approval."],
+  ["document-list", "Documents as a review list or a checklist."],
+  ["status-pill", "A tone, a dot, and a label you pass in."],
+] as const
+
 const proposals = [
   ["proposal-builder", "The whole flow, from the dashboard through send. Pass records in."],
   ["proposal-shell", "Grouped sidebar, command search, unread bell, period, and a step action."],
@@ -262,6 +272,7 @@ export default function DocsPage() {
           <ChoiceTable title="Dashboards" rows={dashboards} />
           <ChoiceTable title="Proposals" rows={proposals} />
           <ChoiceTable title="Inbox" rows={inbox} />
+          <ChoiceTable title="Review desk" rows={review} />
           <ChoiceTable title="Meters and trends" rows={meters} />
           <ChoiceTable title="Editing a record" rows={editing} />
           <ChoiceTable title="People" rows={people} />

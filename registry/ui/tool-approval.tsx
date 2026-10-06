@@ -3,7 +3,7 @@
 // Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/conversation/tool-approval/tool-approval.tsx
 
 import * as React from "react"
-import { AlertTriangle, Check, ShieldAlert, X } from "lucide-react"
+import { AlertTriangle, Check, Pencil, Plus, ShieldAlert, ShieldCheck, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -37,6 +37,12 @@ export type ToolApprovalProps = {
   title?: string
   approveLabel?: string
   denyLabel?: string
+  /** Side-by-side change rows for a human gate. */
+  changes?: readonly { id: string; kind: "add" | "edit"; title: string; detail?: string }[]
+  versionLabel?: string
+  choices?: readonly { id: string; label: string; checked: boolean; onCheckedChange?: (checked: boolean) => void; required?: boolean }[]
+  hint?: string
+  summary?: React.ReactNode
   className?: string
   classNames?: ToolApprovalClassNames
 }
@@ -80,6 +86,11 @@ export function ToolApproval({
   title = "Approval needed",
   approveLabel = "Approve",
   denyLabel = "Deny",
+  changes = [],
+  versionLabel,
+  choices = [],
+  hint,
+  summary,
   className,
   classNames,
 }: ToolApprovalProps) {
@@ -89,6 +100,7 @@ export function ToolApproval({
   const [internal, setInternal] = React.useState<ApprovalDecision | null>(defaultDecision)
   const decision = decisionProp !== undefined ? decisionProp : internal
   const entries = Object.entries(args ?? {})
+  const blocked = choices.some((choice) => choice.required && !choice.checked)
 
   const decide = React.useCallback(
     (next: ApprovalDecision) => {
@@ -166,6 +178,34 @@ export function ToolApproval({
           </p>
         ) : null}
       </div>
+      {summary}
+      {changes.length > 0 ? (
+        <div className="rounded-xl bg-muted p-2">
+          <div className="mb-2 flex items-center justify-between gap-2">
+            <p className="text-xs font-medium text-muted-foreground">Changes</p>
+            {versionLabel ? <span className="rounded-full bg-card px-2 py-0.5 font-mono text-[10px]">{versionLabel}</span> : null}
+          </div>
+          <ul className="flex flex-col gap-2">
+            {changes.map((change) => (
+              <li key={change.id} className="flex items-start gap-2">
+                <span
+                  aria-hidden
+                  className={cn(
+                    "grid size-6 shrink-0 place-items-center rounded-full",
+                    change.kind === "add" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground",
+                  )}
+                >
+                  {change.kind === "add" ? <Plus className="size-3" /> : <Pencil className="size-3" />}
+                </span>
+                <span className="min-w-0">
+                  <span className="block font-mono text-xs uppercase wrap-break-word">{change.title}</span>
+                  {change.detail ? <span className="block text-xs text-muted-foreground wrap-break-word">{change.detail}</span> : null}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
       {entries.length > 0 ? (
         <dl className={cn("flex flex-col gap-1", classNames?.args)}>
           {entries.map(([key, value]) => (
@@ -178,14 +218,26 @@ export function ToolApproval({
           ))}
         </dl>
       ) : null}
+      {choices.map((choice) => (
+        <label key={choice.id} className="flex items-start gap-2 text-sm text-foreground">
+          <Checkbox checked={choice.checked} onCheckedChange={(value) => choice.onCheckedChange?.(value === true)} />
+          <span className="wrap-break-word">{choice.label}</span>
+        </label>
+      ))}
       {onAlwaysAllowChange ? (
         <label className="flex items-center gap-2 text-sm text-foreground">
           <Checkbox checked={alwaysAllow} onCheckedChange={(value) => onAlwaysAllowChange(value === true)} />
           Always allow this tool
         </label>
       ) : null}
-      <div className={cn("flex flex-wrap gap-2", classNames?.actions)}>
-        <Button type="button" disabled={busy} onClick={() => decide("approved")}>
+      <div className={cn("flex flex-wrap items-center gap-2", classNames?.actions)}>
+        {hint ? (
+          <p className="me-auto flex items-center gap-1 text-xs text-muted-foreground">
+            <ShieldCheck className="size-3.5" aria-hidden />
+            {hint}
+          </p>
+        ) : null}
+        <Button type="button" disabled={busy || blocked} onClick={() => decide("approved")}>
           {approveLabel}
         </Button>
         <Button type="button" variant="outline" disabled={busy} onClick={() => decide("rejected")}>

@@ -1,0 +1,64 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "member-list",
+  "title": "Member list",
+  "author": "Eduardo Retana",
+  "description": "People on a record, with an owner suffix and a menu.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "avatar",
+    "button",
+    "dropdown-menu"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/member-list.tsx",
+      "content": "\"use client\"\n\n/** People on a record. Avatar, role, and an optional menu. */\n\nimport * as React from \"react\"\nimport { MoreHorizontal, UserPlus } from \"lucide-react\"\n\nimport { Avatar, AvatarFallback } from \"@/components/ui/avatar\"\nimport { Button } from \"@/components/ui/button\"\nimport {\n  DropdownMenu,\n  DropdownMenuContent,\n  DropdownMenuItem,\n  DropdownMenuTrigger,\n} from \"@/components/ui/dropdown-menu\"\nimport { cn } from \"@/lib/utils\"\n\nexport type Member = {\n  id: string\n  name: string\n  role?: string\n  owner?: boolean\n  ownerLabel?: string\n}\n\nexport type MemberAction = { id: string; label: string }\n\nexport type MemberListProps = {\n  title?: string\n  members: readonly Member[]\n  addLabel?: string\n  onAdd?: () => void\n  actions?: readonly MemberAction[]\n  onAction?: (memberId: string, actionId: string) => void\n  emptyLabel?: string\n  className?: string\n}\n\nfunction initials(name: string) {\n  return name\n    .split(/\\s+/)\n    .filter(Boolean)\n    .slice(0, 2)\n    .map((part) => part[0]?.toUpperCase() ?? \"\")\n    .join(\"\")\n}\n\nexport function MemberList({\n  title,\n  members,\n  addLabel = \"Add\",\n  onAdd,\n  actions = [],\n  onAction,\n  emptyLabel = \"No people yet\",\n  className,\n}: MemberListProps) {\n  return (\n    <section data-slot=\"member-list\" className={cn(\"flex min-w-0 flex-col gap-2\", className)}>\n      {title || onAdd ? (\n        <header className=\"flex items-center justify-between gap-2\">\n          {title ? <h3 className=\"text-sm font-medium\">{title}</h3> : <span />}\n          {onAdd ? (\n            <Button type=\"button\" size=\"icon\" variant=\"ghost\" className=\"rounded-full\" aria-label={addLabel} onClick={onAdd}>\n              <UserPlus />\n            </Button>\n          ) : null}\n        </header>\n      ) : null}\n      {members.length === 0 ? (\n        <p className=\"text-sm text-muted-foreground\">{emptyLabel}</p>\n      ) : (\n        <ul className=\"flex flex-col rounded-xl bg-muted p-1\" aria-label={title}>\n          {members.map((member) => (\n            <li key={member.id} className=\"flex items-center gap-2 rounded-lg px-2 py-1.5\">\n              <Avatar size=\"sm\">\n                <AvatarFallback>{initials(member.name) || \"?\"}</AvatarFallback>\n              </Avatar>\n              <span className=\"min-w-0 flex-1\">\n                <span className=\"block truncate text-sm font-medium\">{member.name}</span>\n                <span className=\"block truncate text-xs text-muted-foreground\">\n                  {member.role}\n                  {member.owner ? ` · ${member.ownerLabel ?? \"owner\"}` : \"\"}\n                </span>\n              </span>\n              {actions.length ? (\n                <DropdownMenu>\n                  <DropdownMenuTrigger asChild>\n                    <Button type=\"button\" size=\"icon-sm\" variant=\"ghost\" className=\"rounded-full\" aria-label={`${member.name}`}>\n                      <MoreHorizontal />\n                    </Button>\n                  </DropdownMenuTrigger>\n                  <DropdownMenuContent align=\"end\">\n                    {actions.map((action) => (\n                      <DropdownMenuItem key={action.id} onSelect={() => onAction?.(member.id, action.id)}>\n                        {action.label}\n                      </DropdownMenuItem>\n                    ))}\n                  </DropdownMenuContent>\n                </DropdownMenu>\n              ) : null}\n            </li>\n          ))}\n        </ul>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/member-list.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Lista de personas",
+    "descriptionEs": "Avatar, rol y un menú. El dueño lleva un sufijo.",
+    "preview": "app/examples/member-list/preview.tsx",
+    "previewHref": "/examples/member-list",
+    "examples": [
+      {
+        "title": "Lista de personas",
+        "href": "/examples/member-list",
+        "description": "Avatar, rol y un menú. El dueño lleva un sufijo."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/member-list/stress",
+        "description": "320px, vacío y RTL."
+      }
+    ],
+    "usage": "<MemberList title=\"People\" members={people} onAdd={add} />",
+    "api": [
+      {
+        "name": "members",
+        "type": "Member[]",
+        "description": "Name, role, and owner."
+      },
+      {
+        "name": "actions / onAction",
+        "type": "MemberAction[]",
+        "description": "Menu items."
+      },
+      {
+        "name": "addLabel / onAdd",
+        "type": "string / fn",
+        "description": "The add control."
+      }
+    ]
+  },
+  "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme.",
+  "categories": [
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}

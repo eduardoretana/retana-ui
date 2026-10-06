@@ -15,6 +15,8 @@ export type StepperStep = {
   id: string
   label: string
   description?: string
+  /** Short mono line under the label, such as a date. */
+  meta?: string
   error?: string
 }
 
@@ -37,11 +39,13 @@ export type StepperProps = {
   compact?: boolean
   label?: string
   completeLabel?: string
+  /** milestone draws a check, a filled current dot, and hollow upcoming steps. */
+  marker?: "default" | "milestone"
   className?: string
   classNames?: StepperClassNames
 }
 
-type GlyphKind = "number" | "check" | "error"
+type GlyphKind = "number" | "check" | "error" | "dot"
 
 const blur = (radius: number) => `blur(${radius}px)`
 const still = { duration: 0 } as const
@@ -116,6 +120,11 @@ function Glyph({ kind, number, delay, reduced }: { kind: GlyphKind; number: numb
       }
   const exit = { ...glyphFrom, transition: reduced ? still : leave }
   const draw = reduced ? still : { duration: 0.32, ease: motionPresets.ease.enter, delay: delay + 0.04 }
+  if (kind === "dot") {
+    return (
+      <motion.span className="col-start-1 row-start-1 size-1.5 rounded-full bg-current" initial={glyphFrom} animate={glyphRest} exit={exit} transition={pop} />
+    )
+  }
   if (kind === "number") {
     return (
       <motion.span className="col-start-1 row-start-1 grid place-items-center" initial={glyphFrom} animate={glyphRest} exit={exit} transition={pop}>
@@ -198,6 +207,7 @@ function Marker({
         className={cn(
           "relative grid size-full place-items-center rounded-full bg-card text-xs font-medium text-muted-foreground tabular-nums shadow-[inset_0_0_0_1px_var(--border)] transition-colors",
           "group-data-[status=current]/step:text-foreground group-data-[status=current]/step:shadow-[inset_0_0_0_1.5px_var(--primary)]",
+          "group-data-[marker=milestone]/step:group-data-[status=current]/step:bg-foreground group-data-[marker=milestone]/step:group-data-[status=current]/step:text-background group-data-[marker=milestone]/step:group-data-[status=current]/step:shadow-none",
           "group-data-[status=complete]/step:bg-primary group-data-[status=complete]/step:text-primary-foreground group-data-[status=complete]/step:shadow-[inset_0_0_0_1px_var(--primary)]",
           "group-data-[status=error]/step:bg-destructive/10 group-data-[status=error]/step:text-destructive group-data-[status=error]/step:shadow-[inset_0_0_0_1.5px_var(--destructive)]",
           "group-data-[clickable]/head:group-active/head:scale-[0.92] motion-reduce:group-active/head:scale-100",
@@ -220,6 +230,7 @@ export function Stepper({
   compact = false,
   label = "Progress",
   completeLabel = "All steps complete",
+  marker = "default",
   className,
   classNames,
 }: StepperProps) {
@@ -266,6 +277,7 @@ export function Stepper({
     <Root
       data-slot="stepper"
       data-orientation={orientation}
+      data-marker={marker}
       data-compact={compact ? "" : undefined}
       aria-label={label}
       role={interactive ? undefined : "group"}
@@ -282,7 +294,7 @@ export function Stepper({
           const status: StepperStatus = step.error ? "error" : index < active ? "complete" : isCurrent ? "current" : "upcoming"
           const clickable = interactive && index < active
           const detail = step.error ?? (details === "all" || isCurrent ? step.description : undefined)
-          const kind: GlyphKind = step.error ? "error" : index < active ? "check" : "number"
+          const kind: GlyphKind = step.error ? "error" : index < active ? "check" : marker === "milestone" && isCurrent ? "dot" : "number"
           const content = (
             <>
               <Marker
@@ -312,6 +324,7 @@ export function Stepper({
                   )}
                 >
                   {step.label}
+                  {step.meta ? <span className="mt-0.5 block font-mono text-[10px] text-muted-foreground">{step.meta}</span> : null}
                 </span>
                 {statusText[status] ? <span className="sr-only">, {statusText[status]}</span> : null}
                 <SwapText
@@ -331,6 +344,7 @@ export function Stepper({
               key={step.id}
               data-slot="stepper-item"
               data-status={status}
+              data-marker={marker}
               className={cn(
                 "group/step relative min-w-0",
                 !vertical && index < count - 1 && "pe-4",

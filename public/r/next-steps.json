@@ -1,0 +1,60 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "next-steps",
+  "title": "Next steps",
+  "author": "Eduardo Retana",
+  "description": "What happens next, plus a pinned action.",
+  "dependencies": [],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/next-steps.tsx",
+      "content": "\"use client\"\n\n/** Outcome callout, upcoming steps, and a pinned action. */\n\nimport * as React from \"react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\n\nexport type NextStep = {\n  id: string\n  title: string\n  detail?: string\n  icon?: React.ReactNode\n}\n\nexport type NextStepsProps = {\n  title: string\n  body?: string\n  steps?: readonly NextStep[]\n  actionLabel?: string\n  onAction?: () => void\n  className?: string\n}\n\nexport function NextSteps({ title, body, steps = [], actionLabel, onAction, className }: NextStepsProps) {\n  return (\n    <section data-slot=\"next-steps\" className={cn(\"flex min-w-0 flex-col gap-3 rounded-2xl bg-card p-3\", className)}>\n      <div className=\"rounded-xl bg-primary/15 px-3 py-2\">\n        <p className=\"text-sm font-medium wrap-break-word\">{title}</p>\n        {body ? <p className=\"text-xs text-muted-foreground wrap-break-word\">{body}</p> : null}\n      </div>\n      {steps.length ? (\n        <ol className=\"flex flex-col gap-2\">\n          {steps.map((step) => (\n            <li key={step.id} className=\"flex items-start gap-2 text-sm\">\n              <span aria-hidden className=\"grid size-7 shrink-0 place-items-center rounded-full bg-muted text-muted-foreground [&_svg]:size-3.5\">\n                {step.icon}\n              </span>\n              <span className=\"min-w-0\">\n                <span className=\"block font-medium wrap-break-word\">{step.title}</span>\n                {step.detail ? <span className=\"block text-xs text-muted-foreground wrap-break-word\">{step.detail}</span> : null}\n              </span>\n            </li>\n          ))}\n        </ol>\n      ) : null}\n      {actionLabel ? (\n        <Button type=\"button\" className=\"w-full rounded-full\" onClick={onAction}>\n          {actionLabel}\n        </Button>\n      ) : null}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/next-steps.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Próximos pasos",
+    "descriptionEs": "Qué sigue y una acción fija.",
+    "preview": "app/examples/next-steps/preview.tsx",
+    "previewHref": "/examples/next-steps",
+    "examples": [
+      {
+        "title": "Próximos pasos",
+        "href": "/examples/next-steps",
+        "description": "Qué sigue y una acción fija."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/next-steps/stress",
+        "description": "320px, vacío y RTL."
+      }
+    ],
+    "usage": "<NextSteps title=\"What happens next\" steps={steps} actionLabel=\"Open tracker\" />",
+    "api": [
+      {
+        "name": "title / body",
+        "type": "string",
+        "description": "The outcome."
+      },
+      {
+        "name": "steps",
+        "type": "NextStep[]",
+        "description": "Title, detail, and an optional icon."
+      },
+      {
+        "name": "actionLabel / onAction",
+        "type": "string / fn",
+        "description": "The pinned button."
+      }
+    ]
+  },
+  "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme.",
+  "categories": [
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}

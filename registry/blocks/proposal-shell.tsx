@@ -53,6 +53,10 @@ export type ProposalShellProps = {
   commandEmpty?: string
   onCommand?: (item: CommandPaletteItem) => void
   contained?: boolean
+  heading?: React.ReactNode
+  titleAside?: React.ReactNode
+  navStyle?: "row" | "pill"
+  panelFooter?: React.ReactNode
   className?: string
   children?: React.ReactNode
 }
@@ -86,6 +90,10 @@ export function ProposalShell({
   commandEmpty = "No matching commands",
   onCommand,
   contained = false,
+  heading,
+  titleAside,
+  navStyle = "row",
+  panelFooter,
   className,
   children,
 }: ProposalShellProps) {
@@ -107,6 +115,7 @@ export function ProposalShell({
     <>
       <div data-slot="proposal-shell" className="flex min-h-full min-w-0 flex-col">
         <header className="flex flex-wrap items-center gap-2 border-b border-border px-3 py-2 sm:px-4">
+          {heading ? <div className="flex min-w-0 items-center gap-2">{heading}{titleAside}</div> : null}
           <Button
             type="button"
             variant="outline"
@@ -183,6 +192,8 @@ export function ProposalShell({
     onNavigate,
     workspace,
     user,
+    itemStyle: navStyle,
+    panelFooter,
   }
 
   if (contained) {

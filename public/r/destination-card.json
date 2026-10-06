@@ -1,0 +1,58 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "destination-card",
+  "title": "Destination card",
+  "author": "Eduardo Retana",
+  "description": "Destination, status, and key-value rows.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/destination-card.tsx",
+      "content": "\"use client\"\n\n/** Destination plus key-value rows. */\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type DestinationCardProps = {\n  title?: string\n  name: string\n  detail?: string\n  icon?: React.ReactNode\n  status?: React.ReactNode\n  fields?: readonly { label: string; value: string }[]\n  className?: string\n}\n\nexport function DestinationCard({ title, name, detail, icon, status, fields = [], className }: DestinationCardProps) {\n  return (\n    <section data-slot=\"destination-card\" className={cn(\"flex min-w-0 flex-col gap-3 rounded-2xl bg-card p-3\", className)}>\n      {title ? <h3 className=\"text-sm font-medium\">{title}</h3> : null}\n      <div className=\"flex items-center gap-2\">\n        <span aria-hidden className=\"grid size-9 shrink-0 place-items-center rounded-lg bg-muted [&_svg]:size-4\">\n          {icon}\n        </span>\n        <span className=\"min-w-0 flex-1\">\n          <span className=\"block truncate text-sm font-medium\">{name}</span>\n          {detail ? <span className=\"block truncate text-xs text-muted-foreground\">{detail}</span> : null}\n        </span>\n        {status}\n      </div>\n      {fields.length ? (\n        <dl className=\"flex flex-col rounded-xl bg-muted px-3\">\n          {fields.map((field) => (\n            <div key={field.label} className=\"flex items-baseline justify-between gap-3 border-t border-border py-2 text-sm first:border-t-0\">\n              <dt className=\"text-muted-foreground\">{field.label}</dt>\n              <dd className=\"text-end wrap-break-word\">{field.value}</dd>\n            </div>\n          ))}\n        </dl>\n      ) : null}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/destination-card.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Tarjeta de destino",
+    "descriptionEs": "Destino, estado y pares etiqueta-valor.",
+    "preview": "app/examples/destination-card/preview.tsx",
+    "previewHref": "/examples/destination-card",
+    "examples": [
+      {
+        "title": "Tarjeta de destino",
+        "href": "/examples/destination-card",
+        "description": "Destino, estado y pares etiqueta-valor."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/destination-card/stress",
+        "description": "320px, vacío y RTL."
+      }
+    ],
+    "usage": "<DestinationCard name=\"Review desk\" detail=\"Open until 18:00\" fields={fields} />",
+    "api": [
+      {
+        "name": "name / detail",
+        "type": "string",
+        "description": "Where the package goes."
+      },
+      {
+        "name": "status",
+        "type": "ReactNode",
+        "description": "A chip or any status node."
+      },
+      {
+        "name": "fields",
+        "type": "{ label, value }[]",
+        "description": "The well under the name."
+      }
+    ]
+  },
+  "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme.",
+  "categories": [
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}

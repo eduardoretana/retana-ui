@@ -30,6 +30,10 @@ export type RadialGaugeProps = {
   currency?: string
   overLabel?: string
   tone?: RadialGaugeTone
+  /** arc keeps the needle. ticks is a needle-less semicircle of marks. */
+  variant?: "arc" | "ticks"
+  /** Shown after the value on the ticks variant, for example "%". */
+  suffix?: string
   className?: string
   classNames?: RadialGaugeClassNames
 }
@@ -69,6 +73,8 @@ export function RadialGauge({
   currency = "USD",
   overLabel = "Over budget",
   tone = "primary",
+  variant = "arc",
+  suffix,
   className,
   classNames,
 }: RadialGaugeProps) {
@@ -80,7 +86,7 @@ export function RadialGauge({
   const needle = point(angle, RADIUS - 10)
   const hub = point(angle, 8)
   const text = formatter ? formatter(value) : formatDashboardValue(value, format, locale, currency)
-  const tickCount = Math.max(2, Math.min(9, Math.round(ticks)))
+  const tickCount = variant === "ticks" ? Math.max(12, Math.min(48, Math.round(ticks))) : Math.max(2, Math.min(9, Math.round(ticks)))
   const marks = Array.from({ length: tickCount }, (_, index) => {
     const at = Math.PI * (1 - index / (tickCount - 1))
     const outer = point(at, RADIUS + 2)
@@ -88,6 +94,47 @@ export function RadialGauge({
     return { outer, inner, key: index }
   })
   const valuetext = over ? `${text}, ${overLabel}` : text
+  const filledTicks = Math.round(ratio * tickCount)
+
+  if (variant === "ticks") {
+    return (
+      <div
+        data-slot="radial-gauge"
+        data-variant="ticks"
+        data-state={over ? "over" : "ok"}
+        data-tone={over ? "destructive" : tone}
+        role="meter"
+        aria-label={label}
+        aria-valuenow={value}
+        aria-valuemin={min}
+        aria-valuemax={max}
+        aria-valuetext={valuetext}
+        className={cn("@container flex min-w-0 flex-col items-center gap-1 text-foreground", className, classNames?.root)}
+      >
+        <svg viewBox="0 0 200 118" className="h-auto w-full max-w-xs" aria-hidden>
+          <g className={classNames?.ticks}>
+            {marks.map((mark) => (
+              <line
+                key={mark.key}
+                x1={mark.inner.x}
+                y1={mark.inner.y}
+                x2={mark.outer.x}
+                y2={mark.outer.y}
+                className={mark.key < filledTicks ? "stroke-foreground" : "stroke-muted-foreground/30"}
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              />
+            ))}
+          </g>
+        </svg>
+        <p className={cn("text-3xl font-normal tabular-nums tracking-tight", over && "text-destructive", classNames?.value)}>
+          {text}
+          {suffix ? <span className="align-super text-sm">{suffix}</span> : null}
+        </p>
+        <p className={cn("text-xs text-muted-foreground", classNames?.label)}>{label}</p>
+      </div>
+    )
+  }
 
   return (
     <div
