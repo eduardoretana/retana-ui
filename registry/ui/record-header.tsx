@@ -3,7 +3,7 @@
 /** Independent implementation of a common dashboard pattern. */
 
 import * as React from "react"
-import { MoreHorizontal } from "lucide-react"
+import { ChevronLeft, MoreHorizontal } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -48,6 +48,10 @@ export type RecordHeaderProps = {
   priority?: PriorityLevel
   priorityLabel?: string
   statusDot?: string
+  statusTone?: "neutral" | "accent" | "info" | "warning"
+  onBack?: () => void
+  backLabel?: string
+  leading?: React.ReactNode
   primary?: React.ReactNode
   secondary?: readonly RecordAction[]
   menu?: readonly RecordAction[]
@@ -98,6 +102,10 @@ export function RecordHeader({
   priority,
   priorityLabel,
   statusDot,
+  statusTone = "info",
+  onBack,
+  backLabel = "Back",
+  leading,
   primary,
   secondary = [],
   menu = [],
@@ -172,10 +180,30 @@ export function RecordHeader({
         </Breadcrumb>
       ) : null}
       <div className="mt-2 flex flex-wrap items-start justify-between gap-3">
+        {onBack ? (
+          <Button type="button" size="icon" variant="ghost" className="rounded-full" aria-label={backLabel} onClick={onBack}>
+            <ChevronLeft />
+          </Button>
+        ) : null}
+        {leading}
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <Heading className={cn("m-0 text-3xl font-normal tracking-tight break-words", classNames?.title)}>{title}</Heading>
-            {status ? <span className="inline-flex h-6 items-center rounded-full bg-chart-2/20 px-2 text-xs">{status}</span> : null}
+            {status ? (
+              <span
+                data-tone={statusTone}
+                className={cn(
+                  "inline-flex h-6 items-center gap-1 rounded-full px-2 text-xs",
+                  statusTone === "accent" && "bg-primary/15",
+                  statusTone === "warning" && "bg-chart-4/15",
+                  statusTone === "neutral" && "bg-muted",
+                  statusTone === "info" && "bg-chart-2/20",
+                )}
+              >
+                {statusTone === "info" ? <span aria-hidden className="size-1.5 rounded-full bg-chart-2" /> : null}
+                {status}
+              </span>
+            ) : null}
           </div>
           {meta.length ? <p className={cn("mt-1 text-sm text-muted-foreground break-words", classNames?.meta)}>{joinMeta([...meta])}</p> : null}
           {people.length || priority || statusDot ? (

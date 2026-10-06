@@ -1,0 +1,62 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "issue-detail",
+  "title": "Issue detail",
+  "author": "Eduardo Retana",
+  "description": "Finding detail. Preview, explanation, and footer are slots.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/issue-detail.tsx",
+      "content": "\"use client\"\n\n/** Finding or issue detail. Regions are slots so the host supplies the domain. */\n\nimport * as React from \"react\"\nimport { ChevronLeft, ChevronRight } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\n\nexport type IssueDetailProps = {\n  title: string\n  meta?: React.ReactNode\n  onPrevious?: () => void\n  onNext?: () => void\n  previousLabel?: string\n  nextLabel?: string\n  preview?: React.ReactNode\n  explanation?: React.ReactNode\n  references?: React.ReactNode\n  recommendation?: React.ReactNode\n  compare?: React.ReactNode\n  footer?: React.ReactNode\n  className?: string\n}\n\nexport function IssueDetail({\n  title,\n  meta,\n  onPrevious,\n  onNext,\n  previousLabel = \"Previous\",\n  nextLabel = \"Next\",\n  preview,\n  explanation,\n  references,\n  recommendation,\n  compare,\n  footer,\n  className,\n}: IssueDetailProps) {\n  return (\n    <article data-slot=\"issue-detail\" className={cn(\"flex min-w-0 flex-col gap-3\", className)}>\n      <header className=\"flex flex-wrap items-start justify-between gap-2\">\n        <div className=\"min-w-0\">\n          <h2 className=\"text-lg font-medium wrap-break-word\">{title}</h2>\n          {meta ? <div className=\"mt-2 flex flex-wrap items-center gap-1.5\">{meta}</div> : null}\n        </div>\n        <div className=\"flex gap-1\">\n          <Button type=\"button\" size=\"icon\" variant=\"ghost\" className=\"rounded-full\" aria-label={previousLabel} onClick={onPrevious} disabled={!onPrevious}>\n            <ChevronLeft />\n          </Button>\n          <Button type=\"button\" size=\"icon\" variant=\"ghost\" className=\"rounded-full\" aria-label={nextLabel} onClick={onNext} disabled={!onNext}>\n            <ChevronRight />\n          </Button>\n        </div>\n      </header>\n      {preview}\n      {explanation}\n      {references}\n      {recommendation}\n      {compare}\n      {footer}\n    </article>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/issue-detail.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Detalle de hallazgo",
+    "descriptionEs": "Huecos para el previo, la explicación y el pie.",
+    "preview": "app/examples/issue-detail/preview.tsx",
+    "previewHref": "/examples/issue-detail",
+    "examples": [
+      {
+        "title": "Detalle de hallazgo",
+        "href": "/examples/issue-detail",
+        "description": "Huecos para el previo, la explicación y el pie."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/issue-detail/stress",
+        "description": "320px, vacío y RTL."
+      }
+    ],
+    "usage": "<IssueDetail title=\"Missing field\" explanation={body} footer={actions} />",
+    "api": [
+      {
+        "name": "title",
+        "type": "string",
+        "description": "The finding name."
+      },
+      {
+        "name": "preview / explanation / references / recommendation / compare / footer",
+        "type": "ReactNode",
+        "description": "Slots. The host supplies the domain."
+      },
+      {
+        "name": "onPrevious / onNext",
+        "type": "() => void",
+        "description": "Pager buttons."
+      }
+    ]
+  },
+  "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme.",
+  "categories": [
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}

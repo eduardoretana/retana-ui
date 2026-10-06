@@ -19,7 +19,9 @@ export type PriorityBadgeClassNames = {
 export type PriorityBadgeProps = {
   level: PriorityLevel
   label?: string
-  variant?: "chip" | "glyph"
+  variant?: "chip" | "glyph" | "pill"
+  /** Pill only. Soft keeps a wash. Solid fills high and critical. */
+  appearance?: "soft" | "solid"
   className?: string
   classNames?: PriorityBadgeClassNames
 }
@@ -62,11 +64,34 @@ export function PriorityBadge({
   level,
   label,
   variant = "chip",
+  appearance,
   className,
   classNames,
 }: PriorityBadgeProps) {
   const text = label ?? DEFAULT_LABEL[level]
   const critical = level === "critical"
+  if (variant === "pill") {
+    const solid = appearance === "solid" || (appearance !== "soft" && (level === "high" || level === "critical"))
+    return (
+      <span
+        data-slot="priority-badge"
+        data-level={level}
+        data-variant="pill"
+        className={cn(
+          "inline-flex h-6 max-w-full items-center rounded-full px-2 text-xs font-medium",
+          solid && (level === "high" || level === "critical") && "bg-destructive text-background",
+          solid && level !== "high" && level !== "critical" && "bg-foreground text-background",
+          !solid && (level === "critical" || level === "high") && "bg-destructive/10 text-destructive",
+          !solid && level === "medium" && "bg-chart-4/15 text-foreground",
+          !solid && level === "low" && "bg-muted text-foreground",
+          className,
+          classNames?.root,
+        )}
+      >
+        <span className={cn("truncate", classNames?.label)}>{text}</span>
+      </span>
+    )
+  }
   if (variant === "glyph") {
     return (
       <span className={cn("inline-flex text-foreground", critical && "text-destructive", className, classNames?.root)} aria-label={text}>

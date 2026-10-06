@@ -1,0 +1,62 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "workspace-switcher",
+  "title": "Workspace switcher",
+  "author": "Eduardo Retana",
+  "description": "Workspace row. The menu options come from props.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "dropdown-menu"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/workspace-switcher.tsx",
+      "content": "\"use client\"\n\n/** Organization switcher. Names and the menu come from props. */\n\nimport * as React from \"react\"\nimport { ChevronsUpDown } from \"lucide-react\"\n\nimport {\n  DropdownMenu,\n  DropdownMenuContent,\n  DropdownMenuItem,\n  DropdownMenuTrigger,\n} from \"@/components/ui/dropdown-menu\"\nimport { cn } from \"@/lib/utils\"\n\nexport type WorkspaceOption = {\n  id: string\n  name: string\n  detail?: string\n  logo?: React.ReactNode\n}\n\nexport type WorkspaceSwitcherProps = {\n  name: string\n  detail?: string\n  logo?: React.ReactNode\n  options?: readonly WorkspaceOption[]\n  value?: string\n  onValueChange?: (id: string) => void\n  label?: string\n  className?: string\n}\n\nexport function WorkspaceSwitcher({\n  name,\n  detail,\n  logo,\n  options = [],\n  value,\n  onValueChange,\n  label = \"Workspace\",\n  className,\n}: WorkspaceSwitcherProps) {\n  const current = options.find((option) => option.id === value)\n  const title = current?.name ?? name\n  const subtitle = current?.detail ?? detail\n  const mark = current?.logo ?? logo ?? title.slice(0, 1)\n  const body = (\n    <>\n      <span aria-hidden className=\"grid size-8 shrink-0 place-items-center rounded-lg bg-card text-xs font-semibold\">\n        {mark}\n      </span>\n      <span className=\"min-w-0 flex-1 text-start\">\n        <span className=\"block truncate text-sm font-medium\">{title}</span>\n        {subtitle ? <span className=\"block truncate text-xs text-muted-foreground\">{subtitle}</span> : null}\n      </span>\n    </>\n  )\n  if (!options.length) {\n    return (\n      <div data-slot=\"workspace-switcher\" className={cn(\"flex items-center gap-2 rounded-xl bg-muted px-2 py-2\", className)}>\n        {body}\n      </div>\n    )\n  }\n  return (\n    <DropdownMenu>\n      <DropdownMenuTrigger\n        data-slot=\"workspace-switcher\"\n        aria-label={label}\n        className={cn(\n          \"flex w-full items-center gap-2 rounded-xl bg-muted px-2 py-2 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\",\n          className,\n        )}\n      >\n        {body}\n        <ChevronsUpDown className=\"size-4 shrink-0 text-muted-foreground\" />\n      </DropdownMenuTrigger>\n      <DropdownMenuContent align=\"start\" className=\"w-64\">\n        {options.map((option) => (\n          <DropdownMenuItem key={option.id} onSelect={() => onValueChange?.(option.id)} className=\"gap-2\">\n            <span aria-hidden className=\"grid size-7 place-items-center rounded-md bg-muted text-xs font-semibold\">\n              {option.logo ?? option.name.slice(0, 1)}\n            </span>\n            <span className=\"min-w-0\">\n              <span className=\"block truncate\">{option.name}</span>\n              {option.detail ? <span className=\"block truncate text-xs text-muted-foreground\">{option.detail}</span> : null}\n            </span>\n          </DropdownMenuItem>\n        ))}\n      </DropdownMenuContent>\n    </DropdownMenu>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/workspace-switcher.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Cambio de espacio",
+    "descriptionEs": "El nombre y el menú salen de las opciones.",
+    "preview": "app/examples/workspace-switcher/preview.tsx",
+    "previewHref": "/examples/workspace-switcher",
+    "examples": [
+      {
+        "title": "Cambio de espacio",
+        "href": "/examples/workspace-switcher",
+        "description": "El nombre y el menú salen de las opciones."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/workspace-switcher/stress",
+        "description": "320px, vacío y RTL."
+      }
+    ],
+    "usage": "<WorkspaceSwitcher name=\"North desk\" options={options} value={id} onValueChange={setId} />",
+    "api": [
+      {
+        "name": "name / detail",
+        "type": "string",
+        "description": "Shown when no option is selected."
+      },
+      {
+        "name": "options",
+        "type": "WorkspaceOption[]",
+        "description": "Menu rows."
+      },
+      {
+        "name": "value / onValueChange",
+        "type": "string",
+        "description": "Controlled selection."
+      }
+    ]
+  },
+  "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme.",
+  "categories": [
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}

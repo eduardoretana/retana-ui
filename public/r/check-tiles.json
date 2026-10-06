@@ -1,0 +1,55 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "check-tiles",
+  "title": "Check tiles",
+  "author": "Eduardo Retana",
+  "description": "Check tiles. One featured tile uses the host accent.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/check-tiles.tsx",
+      "content": "\"use client\"\n\n/** Completion tiles. The first featured tile uses the accent surface. */\n\nimport * as React from \"react\"\nimport { Check } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type CheckTile = {\n  id: string\n  value: string\n  label: string\n  detail?: string\n  featured?: boolean\n}\n\nexport type CheckTilesProps = {\n  items: readonly CheckTile[]\n  label?: string\n  className?: string\n}\n\nexport function CheckTiles({ items, label = \"Checks\", className }: CheckTilesProps) {\n  return (\n    <ul data-slot=\"check-tiles\" aria-label={label} className={cn(\"grid gap-2 sm:grid-cols-3\", className)}>\n      {items.map((item) => (\n        <li\n          key={item.id}\n          className={cn(\n            \"flex min-w-0 flex-col gap-1 rounded-xl p-3\",\n            item.featured ? \"bg-primary text-primary-foreground\" : \"bg-muted text-foreground\",\n          )}\n        >\n          <span className={cn(\"grid size-6 place-items-center rounded-full\", item.featured ? \"bg-card text-foreground\" : \"bg-card text-foreground\")}>\n            <Check className=\"size-3.5\" aria-hidden />\n          </span>\n          <p className=\"text-lg font-medium tabular-nums wrap-break-word\">{item.value}</p>\n          <p className=\"text-sm wrap-break-word\">{item.label}</p>\n          {item.detail ? <p className={cn(\"text-xs wrap-break-word\", item.featured ? \"opacity-80\" : \"text-muted-foreground\")}>{item.detail}</p> : null}\n        </li>\n      ))}\n    </ul>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/check-tiles.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Mosaico de controles",
+    "descriptionEs": "La ficha destacada usa el acento del anfitrión.",
+    "preview": "app/examples/check-tiles/preview.tsx",
+    "previewHref": "/examples/check-tiles",
+    "examples": [
+      {
+        "title": "Mosaico de controles",
+        "href": "/examples/check-tiles",
+        "description": "La ficha destacada usa el acento del anfitrión."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/check-tiles/stress",
+        "description": "320px, vacío y RTL."
+      }
+    ],
+    "usage": "<CheckTiles items={tiles} label=\"Checks\" />",
+    "api": [
+      {
+        "name": "items",
+        "type": "CheckTile[]",
+        "description": "Value, label, and an optional featured flag."
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Accessible name of the list."
+      }
+    ]
+  },
+  "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme.",
+  "categories": [
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}

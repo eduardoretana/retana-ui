@@ -335,6 +335,11 @@
             "name": "breadcrumbsFor",
             "type": "function",
             "description": "Crumbs derived from the same nav config."
+          },
+          {
+            "name": "navStyle=\"pill\"",
+            "type": "\"row\" | \"pill\"",
+            "description": "Pill navigation and a count on each item. The default row style is unchanged."
           }
         ]
       },
@@ -4580,6 +4585,11 @@
             "name": "className / classNames",
             "type": "string",
             "description": "Root class and slot classes."
+          },
+          {
+            "name": "appearance=\"count\"",
+            "type": "\"check\" | \"count\"",
+            "description": "Count chips hide the check and show option.count. The default stays check."
           }
         ]
       },
@@ -5398,6 +5408,11 @@
             "name": "className / classNames",
             "type": "string",
             "description": "Root class and slot classes."
+          },
+          {
+            "name": "featured",
+            "type": "boolean",
+            "description": "Inverts the card with the host foreground and background."
           }
         ]
       },
@@ -5627,6 +5642,11 @@
             "name": "className / classNames",
             "type": "string",
             "description": "Root class and slot classes."
+          },
+          {
+            "name": "variant=\"pill\"",
+            "type": "\"panel\" | \"pill\"",
+            "description": "Pill bar, a leading slot, and emptyLabel. An empty string hides the empty message."
           }
         ]
       },
@@ -6439,6 +6459,11 @@
             "name": "className / classNames",
             "type": "string",
             "description": "Root class and slot classes."
+          },
+          {
+            "name": "marker=\"milestone\"",
+            "type": "\"default\" | \"milestone\"",
+            "description": "Milestone markers and an optional meta line on each step. The default marker is unchanged."
           }
         ]
       },
@@ -8945,6 +8970,11 @@
             "name": "className and slot classes",
             "type": "string",
             "description": "className, railClassName, panelClassName, itemClassName, groupClassName, headerClassName, footerClassName, searchClassName, insetClassName."
+          },
+          {
+            "name": "itemStyle=\"pill\"",
+            "type": "\"row\" | \"pill\"",
+            "description": "Pill items, a panel layout, and a panelFooter. Defaults keep the icon rail."
           }
         ]
       },
@@ -10127,6 +10157,11 @@
             "name": "className and slot classes",
             "type": "string",
             "description": "className, gridClassName, cardClassName, coverClassName."
+          },
+          {
+            "name": "renderCard",
+            "type": "(record) => ReactNode",
+            "description": "Replaces the card inside each item. The default card is unchanged."
           }
         ]
       },
@@ -10850,6 +10885,11 @@
             "name": "className / classNames",
             "type": "string",
             "description": "Root class and slot classes."
+          },
+          {
+            "name": "changes / choices",
+            "type": "props",
+            "description": "A change list, a version chip, required choices that disable Approve, a hint, and a summary slot."
           }
         ]
       },
@@ -11092,6 +11132,11 @@
             "name": "className / classNames",
             "type": "string",
             "description": "Root class and slot classes."
+          },
+          {
+            "name": "variant=\"links\"",
+            "type": "\"citations\" | \"links\"",
+            "description": "links is a flat list with a detail line and an icon. The default stays citations."
           }
         ]
       },
@@ -11457,6 +11502,11 @@
             "name": "className / classNames",
             "type": "string",
             "description": "Root class and slot classes."
+          },
+          {
+            "name": "variant=\"dots\" | \"segments\"",
+            "type": "ConfidenceVariant",
+            "description": "dots draws 4–24 marks. segments draws five bars plus a percent."
           }
         ]
       },
@@ -12369,6 +12419,11 @@
             "name": "className / classNames",
             "type": "string",
             "description": "Root class and slot classes."
+          },
+          {
+            "name": "tone / dashed / caption",
+            "type": "props",
+            "description": "critical and accent tones, a dashed region, a caption, and an open action."
           }
         ]
       },
@@ -13205,6 +13260,11 @@
             "name": "className / classNames",
             "type": "string",
             "description": "Root class and slot classes."
+          },
+          {
+            "name": "variant=\"tiles\"",
+            "type": "\"inline\" | \"panel\" | \"tiles\"",
+            "description": "tiles lays the stats out as cards. featured inverts one tile."
           }
         ]
       }
@@ -13261,6 +13321,11 @@
             "name": "priorityRank",
             "type": "(level) => number",
             "description": "1 through 4, for sorting."
+          },
+          {
+            "name": "variant=\"pill\"",
+            "type": "\"chip\" | \"glyph\" | \"pill\"",
+            "description": "Plain pill. appearance is soft or solid. High and critical stay solid unless appearance is soft."
           }
         ]
       }
@@ -13328,6 +13393,11 @@
             "name": "loading / emptyLabel",
             "type": "boolean / string",
             "description": "Skeleton rows, or the caught-up copy."
+          },
+          {
+            "name": "layout",
+            "type": "\"stack\" | \"table\" | \"compact\"",
+            "description": "table reads item.cells. compact is a dot, a title, and a chevron. The default stays stack."
           }
         ]
       }
@@ -13526,6 +13596,11 @@
             "name": "format / locale / currency",
             "type": "Intl",
             "description": "How values are written."
+          },
+          {
+            "name": "variant=\"pipeline\"",
+            "type": "\"legend\" | \"pipeline\"",
+            "description": "Pipeline shows a heading, counts, and an optional emphasis segment."
           }
         ]
       }
@@ -13591,6 +13666,11 @@
             "name": "collapseAfter",
             "type": "number",
             "description": "Hides earlier events behind a button."
+          },
+          {
+            "name": "filters / chips",
+            "type": "props",
+            "description": "Segmented filters and an inline chip on an event. Both are optional."
           }
         ]
       }
@@ -13658,6 +13738,11 @@
             "name": "facts / evidence",
             "type": "lists",
             "description": "Key values and a tinted callout."
+          },
+          {
+            "name": "surface=\"accent\"",
+            "type": "\"default\" | \"accent\"",
+            "description": "Accent surface and optional field pills. The default surface is unchanged."
           }
         ]
       }
@@ -13793,6 +13878,11 @@
             "name": "collapseActions",
             "type": "boolean",
             "description": "Secondary actions move into the menu when the header is narrow."
+          },
+          {
+            "name": "onBack / statusTone",
+            "type": "() => void",
+            "description": "Back control and a tone of neutral, accent, info, or warning. The default stays info."
           }
         ]
       }
@@ -13855,6 +13945,11 @@
             "name": "formatter / overLabel / tone",
             "type": "display",
             "description": "Value text, the over-budget label, and the stroke tone."
+          },
+          {
+            "name": "variant=\"ticks\"",
+            "type": "\"arc\" | \"ticks\"",
+            "description": "Ticks draws 12–48 marks and no needle. suffix appends to the value. The default stays arc."
           }
         ]
       }
@@ -15660,6 +15755,11 @@
             "name": "unread / commandItems",
             "type": "header",
             "description": "A dot on the bell, and the command menu opened from search or ⌘K."
+          },
+          {
+            "name": "navStyle / panelFooter",
+            "type": "props",
+            "description": "Passes pill navigation and a footer through to the rail. Defaults are unchanged."
           }
         ]
       },
@@ -15983,6 +16083,11 @@
             "name": "children",
             "type": "ReactNode",
             "description": "The visible panel. It fades when value changes."
+          },
+          {
+            "name": "variant=\"pill\"",
+            "type": "\"line\" | \"pill\"",
+            "description": "Pill tabs, optional leading and trailing slots, and a count on each tab."
           }
         ]
       },
@@ -17789,761 +17894,2125 @@
         }
       ]
     },
-      {
-        "name": "ui-sounds",
-        "type": "registry:ui",
-        "title": "UI sounds",
-        "description": "Fourteen synthesized cues with a persisted mute, volume, theme, and emphasis. Playback waits for a user gesture.",
-        "author": "Eduardo Retana",
-        "dependencies": [
-          "cuelume"
-        ],
-        "registryDependencies": [],
-        "categories": [
-          "media",
-          "hook"
-        ],
-        "meta": {
-          "titleEs": "Sonidos de interfaz",
-          "descriptionEs": "Catorce cues sintetizados, con silencio, volumen, tema y énfasis guardados. No suena antes de un gesto.",
-          "preview": "app/examples/ui-sounds/preview.tsx",
-          "previewHref": "/examples/ui-sounds",
-          "examples": [
-            {
-              "title": "Sonidos de interfaz",
-              "href": "/examples/ui-sounds",
-              "description": "Catorce cues sintetizados, con silencio, volumen, tema y énfasis guardados. No suena antes de un gesto."
-            },
-            {
-              "title": "Estrés",
-              "href": "/examples/ui-sounds/stress",
-              "description": "320px, texto largo, y lectura de derecha a izquierda."
-            }
-          ],
-          "usage": "<UiSoundsProvider><button type=\"button\" onClick={() => playUiSound(\"success\")}>Done</button></UiSoundsProvider>",
-          "api": [
-            {
-              "name": "playUiSound",
-              "type": "(name?: SoundName, options?: PlayOptions) => void",
-              "description": "Plays a cuelume cue after a user gesture. No-op while muted."
-            },
-            {
-              "name": "useUiSounds",
-              "type": "hook",
-              "description": "muted, volume, theme, emphasis, and setters. Hydrates from local storage."
-            },
-            {
-              "name": "UiSoundsToggle / UiSoundsControls",
-              "type": "component",
-              "description": "Mute button, and controls for volume, theme, and emphasis."
-            },
-            {
-              "name": "theme / emphasis",
-              "type": "ThemeName / Emphasis",
-              "description": "default, mech, bubble, or press. subtle, normal, or strong."
-            }
-          ]
-        },
-        "docs": "Wraps cuelume@0.2.4 (MIT, Daniel Belyi). The pin already includes the 14-cue palette. Preference storage is this wrapper. press-sound remains a compatible facade. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
-        "files": [
+    {
+      "name": "ui-sounds",
+      "type": "registry:ui",
+      "title": "UI sounds",
+      "description": "Fourteen synthesized cues with a persisted mute, volume, theme, and emphasis. Playback waits for a user gesture.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "cuelume"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "media",
+        "hook"
+      ],
+      "meta": {
+        "titleEs": "Sonidos de interfaz",
+        "descriptionEs": "Catorce cues sintetizados, con silencio, volumen, tema y énfasis guardados. No suena antes de un gesto.",
+        "preview": "app/examples/ui-sounds/preview.tsx",
+        "previewHref": "/examples/ui-sounds",
+        "examples": [
           {
-            "path": "registry/ui/ui-sounds.tsx",
-            "type": "registry:component",
-            "target": "@ui/ui-sounds.tsx"
+            "title": "Sonidos de interfaz",
+            "href": "/examples/ui-sounds",
+            "description": "Catorce cues sintetizados, con silencio, volumen, tema y énfasis guardados. No suena antes de un gesto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/ui-sounds/stress",
+            "description": "320px, texto largo, y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<UiSoundsProvider><button type=\"button\" onClick={() => playUiSound(\"success\")}>Done</button></UiSoundsProvider>",
+        "api": [
+          {
+            "name": "playUiSound",
+            "type": "(name?: SoundName, options?: PlayOptions) => void",
+            "description": "Plays a cuelume cue after a user gesture. No-op while muted."
+          },
+          {
+            "name": "useUiSounds",
+            "type": "hook",
+            "description": "muted, volume, theme, emphasis, and setters. Hydrates from local storage."
+          },
+          {
+            "name": "UiSoundsToggle / UiSoundsControls",
+            "type": "component",
+            "description": "Mute button, and controls for volume, theme, and emphasis."
+          },
+          {
+            "name": "theme / emphasis",
+            "type": "ThemeName / Emphasis",
+            "description": "default, mech, bubble, or press. subtle, normal, or strong."
           }
         ]
       },
-      {
-        "name": "squircle",
-        "type": "registry:ui",
-        "title": "Squircle",
-        "description": "A squircle surface. Uses CSS corner-shape when the browser supports it, and a Monoco clip-path otherwise, with a border and an optional shadow.",
-        "author": "Eduardo Retana",
-        "dependencies": [],
-        "registryDependencies": [],
-        "categories": [
-          "layout"
-        ],
-        "meta": {
-          "titleEs": "Squircle",
-          "descriptionEs": "Superficie squircle. Usa corner-shape si el navegador lo soporta y, si no, un clip-path de Monoco, con borde y sombra opcional.",
-          "preview": "app/examples/squircle/preview.tsx",
-          "previewHref": "/examples/squircle",
-          "examples": [
-            {
-              "title": "Squircle",
-              "href": "/examples/squircle",
-              "description": "Superficie squircle. Usa corner-shape si el navegador lo soporta y, si no, un clip-path de Monoco, con borde y sombra opcional."
-            },
-            {
-              "title": "Estrés",
-              "href": "/examples/squircle/stress",
-              "description": "320px, texto largo, y lectura de derecha a izquierda."
-            }
-          ],
-          "usage": "<Squircle radius={28} shadow>Card</Squircle>",
-          "api": [
-            {
-              "name": "radius",
-              "type": "number | number[]",
-              "description": "Corner radius in pixels. One value, or top-left, top-right, bottom-right, bottom-left."
-            },
-            {
-              "name": "smoothing",
-              "type": "number",
-              "description": "Fallback smoothing from 0 to 1. Default 1. Native corner-shape ignores it."
-            },
-            {
-              "name": "borderWidth / shadow",
-              "type": "number / boolean",
-              "description": "Border thickness in pixels, and a shadow that follows the shape."
-            },
-            {
-              "name": "useCornerShapeSupport",
-              "type": "hook",
-              "description": "True when CSS.supports corner-shape squircle. False during SSR."
-            }
-          ]
-        },
-        "docs": "Native support is Chromium 139 and later (Chrome and Edge). Safari and Firefox use the clip-path fallback. The path generator is ported from @monokai/monoco@0.3.2 (MIT, Monokai), which adapts figma-squircle (MIT, Tien Pham). Runtime CSS.supports is the source of truth. data-corner is native or clip. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
-        "files": [
+      "docs": "Wraps cuelume@0.2.4 (MIT, Daniel Belyi). The pin already includes the 14-cue palette. Preference storage is this wrapper. press-sound remains a compatible facade. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/ui-sounds.tsx",
+          "type": "registry:component",
+          "target": "@ui/ui-sounds.tsx"
+        }
+      ]
+    },
+    {
+      "name": "squircle",
+      "type": "registry:ui",
+      "title": "Squircle",
+      "description": "A squircle surface. Uses CSS corner-shape when the browser supports it, and a Monoco clip-path otherwise, with a border and an optional shadow.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "layout"
+      ],
+      "meta": {
+        "titleEs": "Squircle",
+        "descriptionEs": "Superficie squircle. Usa corner-shape si el navegador lo soporta y, si no, un clip-path de Monoco, con borde y sombra opcional.",
+        "preview": "app/examples/squircle/preview.tsx",
+        "previewHref": "/examples/squircle",
+        "examples": [
           {
-            "path": "registry/ui/squircle.tsx",
-            "type": "registry:component",
-            "target": "@ui/squircle.tsx"
+            "title": "Squircle",
+            "href": "/examples/squircle",
+            "description": "Superficie squircle. Usa corner-shape si el navegador lo soporta y, si no, un clip-path de Monoco, con borde y sombra opcional."
           },
           {
-            "path": "registry/lib/squircle-path.ts",
-            "type": "registry:lib",
-            "target": "@lib/squircle-path.ts"
+            "title": "Estrés",
+            "href": "/examples/squircle/stress",
+            "description": "320px, texto largo, y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<Squircle radius={28} shadow>Card</Squircle>",
+        "api": [
+          {
+            "name": "radius",
+            "type": "number | number[]",
+            "description": "Corner radius in pixels. One value, or top-left, top-right, bottom-right, bottom-left."
+          },
+          {
+            "name": "smoothing",
+            "type": "number",
+            "description": "Fallback smoothing from 0 to 1. Default 1. Native corner-shape ignores it."
+          },
+          {
+            "name": "borderWidth / shadow",
+            "type": "number / boolean",
+            "description": "Border thickness in pixels, and a shadow that follows the shape."
+          },
+          {
+            "name": "useCornerShapeSupport",
+            "type": "hook",
+            "description": "True when CSS.supports corner-shape squircle. False during SSR."
           }
         ]
       },
-      {
-        "name": "theme-toggle-icons",
-        "type": "registry:ui",
-        "title": "Theme toggle icons",
-        "description": "Fourteen animated sun and moon icons. Pass one to theme-switch, or render ThemeToggleIcon on its own.",
-        "author": "Eduardo Retana",
-        "dependencies": [],
-        "registryDependencies": [],
-        "categories": [
-          "theme"
-        ],
-        "meta": {
-          "titleEs": "Iconos de tema",
-          "descriptionEs": "Catorce iconos animados de sol y luna. Pásale uno a theme-switch, o renderiza ThemeToggleIcon solo.",
-          "preview": "app/examples/theme-toggle-icons/preview.tsx",
-          "previewHref": "/examples/theme-toggle-icons",
-          "examples": [
-            {
-              "title": "Iconos de tema",
-              "href": "/examples/theme-toggle-icons",
-              "description": "Catorce iconos animados de sol y luna. Pásale uno a theme-switch, o renderiza ThemeToggleIcon solo."
-            },
-            {
-              "title": "Estrés",
-              "href": "/examples/theme-toggle-icons/stress",
-              "description": "320px, texto largo, y lectura de derecha a izquierda."
-            }
-          ],
-          "usage": "<ThemeToggleIcon name=\"classic\" toggled={dark} duration={520} onClick={toggle} />",
-          "api": [
-            {
-              "name": "name",
-              "type": "ThemeToggleIconName",
-              "description": "around, classic, dark-inner, dark-side, eclipse, expand, half-sun, horizon, inner-moon, light-switch, lightbulb, simple, spin, or within."
-            },
-            {
-              "name": "toggled",
-              "type": "boolean",
-              "description": "Dark-theme pose. Independent of the host page dark class."
-            },
-            {
-              "name": "duration",
-              "type": "number",
-              "description": "Animation length in milliseconds. theme-switch passes its variant duration."
-            },
-            {
-              "name": "themeToggleIconNames",
-              "type": "string[]",
-              "description": "The fourteen names, in a stable order."
-            }
-          ]
+      "docs": "Native support is Chromium 139 and later (Chrome and Edge). Safari and Firefox use the clip-path fallback. The path generator is ported from @monokai/monoco@0.3.2 (MIT, Monokai), which adapts figma-squircle (MIT, Tien Pham). Runtime CSS.supports is the source of truth. data-corner is native or clip. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/squircle.tsx",
+          "type": "registry:component",
+          "target": "@ui/squircle.tsx"
         },
-        "docs": "Ported from theme-toggles (MIT, Copyright (c) Alfie Jones). The upstream repository has no LICENSE file. MIT is declared in the README and in @theme-toggles/react@5.0.5, commit b6f8b5f8217b. See NOTICE. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
-        "files": [
+        {
+          "path": "registry/lib/squircle-path.ts",
+          "type": "registry:lib",
+          "target": "@lib/squircle-path.ts"
+        }
+      ]
+    },
+    {
+      "name": "theme-toggle-icons",
+      "type": "registry:ui",
+      "title": "Theme toggle icons",
+      "description": "Fourteen animated sun and moon icons. Pass one to theme-switch, or render ThemeToggleIcon on its own.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "theme"
+      ],
+      "meta": {
+        "titleEs": "Iconos de tema",
+        "descriptionEs": "Catorce iconos animados de sol y luna. Pásale uno a theme-switch, o renderiza ThemeToggleIcon solo.",
+        "preview": "app/examples/theme-toggle-icons/preview.tsx",
+        "previewHref": "/examples/theme-toggle-icons",
+        "examples": [
           {
-            "path": "registry/ui/theme-toggle-icons.tsx",
-            "type": "registry:component",
-            "target": "@ui/theme-toggle-icons.tsx"
+            "title": "Iconos de tema",
+            "href": "/examples/theme-toggle-icons",
+            "description": "Catorce iconos animados de sol y luna. Pásale uno a theme-switch, o renderiza ThemeToggleIcon solo."
           },
           {
-            "path": "registry/ui/theme-toggles/around.tsx",
-            "type": "registry:component",
-            "target": "@ui/theme-toggles/around.tsx"
+            "title": "Estrés",
+            "href": "/examples/theme-toggle-icons/stress",
+            "description": "320px, texto largo, y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<ThemeToggleIcon name=\"classic\" toggled={dark} duration={520} onClick={toggle} />",
+        "api": [
+          {
+            "name": "name",
+            "type": "ThemeToggleIconName",
+            "description": "around, classic, dark-inner, dark-side, eclipse, expand, half-sun, horizon, inner-moon, light-switch, lightbulb, simple, spin, or within."
           },
           {
-            "path": "registry/ui/theme-toggles/classic.tsx",
-            "type": "registry:component",
-            "target": "@ui/theme-toggles/classic.tsx"
+            "name": "toggled",
+            "type": "boolean",
+            "description": "Dark-theme pose. Independent of the host page dark class."
           },
           {
-            "path": "registry/ui/theme-toggles/dark-inner.tsx",
-            "type": "registry:component",
-            "target": "@ui/theme-toggles/dark-inner.tsx"
+            "name": "duration",
+            "type": "number",
+            "description": "Animation length in milliseconds. theme-switch passes its variant duration."
           },
           {
-            "path": "registry/ui/theme-toggles/dark-side.tsx",
-            "type": "registry:component",
-            "target": "@ui/theme-toggles/dark-side.tsx"
-          },
-          {
-            "path": "registry/ui/theme-toggles/eclipse.tsx",
-            "type": "registry:component",
-            "target": "@ui/theme-toggles/eclipse.tsx"
-          },
-          {
-            "path": "registry/ui/theme-toggles/expand.tsx",
-            "type": "registry:component",
-            "target": "@ui/theme-toggles/expand.tsx"
-          },
-          {
-            "path": "registry/ui/theme-toggles/half-sun.tsx",
-            "type": "registry:component",
-            "target": "@ui/theme-toggles/half-sun.tsx"
-          },
-          {
-            "path": "registry/ui/theme-toggles/horizon.tsx",
-            "type": "registry:component",
-            "target": "@ui/theme-toggles/horizon.tsx"
-          },
-          {
-            "path": "registry/ui/theme-toggles/inner-moon.tsx",
-            "type": "registry:component",
-            "target": "@ui/theme-toggles/inner-moon.tsx"
-          },
-          {
-            "path": "registry/ui/theme-toggles/light-switch.tsx",
-            "type": "registry:component",
-            "target": "@ui/theme-toggles/light-switch.tsx"
-          },
-          {
-            "path": "registry/ui/theme-toggles/lightbulb.tsx",
-            "type": "registry:component",
-            "target": "@ui/theme-toggles/lightbulb.tsx"
-          },
-          {
-            "path": "registry/ui/theme-toggles/simple.tsx",
-            "type": "registry:component",
-            "target": "@ui/theme-toggles/simple.tsx"
-          },
-          {
-            "path": "registry/ui/theme-toggles/spin.tsx",
-            "type": "registry:component",
-            "target": "@ui/theme-toggles/spin.tsx"
-          },
-          {
-            "path": "registry/ui/theme-toggles/within.tsx",
-            "type": "registry:component",
-            "target": "@ui/theme-toggles/within.tsx"
+            "name": "themeToggleIconNames",
+            "type": "string[]",
+            "description": "The fourteen names, in a stable order."
           }
         ]
       },
-      {
-        "name": "morph-dialog",
-        "type": "registry:ui",
-        "title": "Morph dialog",
-        "description": "The trigger grows into a modal dialog. Focus is trapped, Escape and the backdrop close it, and focus returns to the trigger.",
-        "author": "Eduardo Retana",
-        "dependencies": [
-          "motion"
-        ],
-        "registryDependencies": [
-          "motion-preference"
-        ],
-        "categories": [
-          "overlay"
-        ],
-        "meta": {
-          "titleEs": "Diálogo morph",
-          "descriptionEs": "El disparador crece hasta un diálogo modal. El foco queda atrapado, Escape y el fondo lo cierran, y el foco vuelve al disparador.",
-          "preview": "app/examples/morph-dialog/preview.tsx",
-          "previewHref": "/examples/morph-dialog",
-          "examples": [
-            {
-              "title": "Diálogo morph",
-              "href": "/examples/morph-dialog",
-              "description": "El disparador crece hasta un diálogo modal. El foco queda atrapado, Escape y el fondo lo cierran, y el foco vuelve al disparador."
-            },
-            {
-              "title": "Estrés",
-              "href": "/examples/morph-dialog/stress",
-              "description": "320px, texto largo, y lectura de derecha a izquierda."
-            }
-          ],
-          "usage": "<MorphDialog label=\"Edit note\" title=\"Note\"><input aria-label=\"Title\" /></MorphDialog>",
-          "api": [
-            {
-              "name": "label / title / description",
-              "type": "ReactNode",
-              "description": "Trigger label, dialog name, and optional description."
-            },
-            {
-              "name": "open / defaultOpen / onOpenChange",
-              "type": "boolean / callback",
-              "description": "Controlled or uncontrolled open state."
-            },
-            {
-              "name": "closeLabel",
-              "type": "string",
-              "description": "Accessible name of the close control. Default Close."
-            }
-          ]
+      "docs": "Ported from theme-toggles (MIT, Copyright (c) Alfie Jones). The upstream repository has no LICENSE file. MIT is declared in the README and in @theme-toggles/react@5.0.5, commit b6f8b5f8217b. See NOTICE. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/theme-toggle-icons.tsx",
+          "type": "registry:component",
+          "target": "@ui/theme-toggle-icons.tsx"
         },
-        "docs": "Clean-room shared-element dialog using motion layoutId. Blendy is the behavior reference only and is not a dependency. Reduced motion skips the morph. Initial focus lands on the first content control. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
-        "files": [
+        {
+          "path": "registry/ui/theme-toggles/around.tsx",
+          "type": "registry:component",
+          "target": "@ui/theme-toggles/around.tsx"
+        },
+        {
+          "path": "registry/ui/theme-toggles/classic.tsx",
+          "type": "registry:component",
+          "target": "@ui/theme-toggles/classic.tsx"
+        },
+        {
+          "path": "registry/ui/theme-toggles/dark-inner.tsx",
+          "type": "registry:component",
+          "target": "@ui/theme-toggles/dark-inner.tsx"
+        },
+        {
+          "path": "registry/ui/theme-toggles/dark-side.tsx",
+          "type": "registry:component",
+          "target": "@ui/theme-toggles/dark-side.tsx"
+        },
+        {
+          "path": "registry/ui/theme-toggles/eclipse.tsx",
+          "type": "registry:component",
+          "target": "@ui/theme-toggles/eclipse.tsx"
+        },
+        {
+          "path": "registry/ui/theme-toggles/expand.tsx",
+          "type": "registry:component",
+          "target": "@ui/theme-toggles/expand.tsx"
+        },
+        {
+          "path": "registry/ui/theme-toggles/half-sun.tsx",
+          "type": "registry:component",
+          "target": "@ui/theme-toggles/half-sun.tsx"
+        },
+        {
+          "path": "registry/ui/theme-toggles/horizon.tsx",
+          "type": "registry:component",
+          "target": "@ui/theme-toggles/horizon.tsx"
+        },
+        {
+          "path": "registry/ui/theme-toggles/inner-moon.tsx",
+          "type": "registry:component",
+          "target": "@ui/theme-toggles/inner-moon.tsx"
+        },
+        {
+          "path": "registry/ui/theme-toggles/light-switch.tsx",
+          "type": "registry:component",
+          "target": "@ui/theme-toggles/light-switch.tsx"
+        },
+        {
+          "path": "registry/ui/theme-toggles/lightbulb.tsx",
+          "type": "registry:component",
+          "target": "@ui/theme-toggles/lightbulb.tsx"
+        },
+        {
+          "path": "registry/ui/theme-toggles/simple.tsx",
+          "type": "registry:component",
+          "target": "@ui/theme-toggles/simple.tsx"
+        },
+        {
+          "path": "registry/ui/theme-toggles/spin.tsx",
+          "type": "registry:component",
+          "target": "@ui/theme-toggles/spin.tsx"
+        },
+        {
+          "path": "registry/ui/theme-toggles/within.tsx",
+          "type": "registry:component",
+          "target": "@ui/theme-toggles/within.tsx"
+        }
+      ]
+    },
+    {
+      "name": "morph-dialog",
+      "type": "registry:ui",
+      "title": "Morph dialog",
+      "description": "The trigger grows into a modal dialog. Focus is trapped, Escape and the backdrop close it, and focus returns to the trigger.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "motion-preference"
+      ],
+      "categories": [
+        "overlay"
+      ],
+      "meta": {
+        "titleEs": "Diálogo morph",
+        "descriptionEs": "El disparador crece hasta un diálogo modal. El foco queda atrapado, Escape y el fondo lo cierran, y el foco vuelve al disparador.",
+        "preview": "app/examples/morph-dialog/preview.tsx",
+        "previewHref": "/examples/morph-dialog",
+        "examples": [
           {
-            "path": "registry/ui/morph-dialog.tsx",
-            "type": "registry:component",
-            "target": "@ui/morph-dialog.tsx"
+            "title": "Diálogo morph",
+            "href": "/examples/morph-dialog",
+            "description": "El disparador crece hasta un diálogo modal. El foco queda atrapado, Escape y el fondo lo cierran, y el foco vuelve al disparador."
           },
           {
-            "path": "registry/lib/overlay-focus.ts",
-            "type": "registry:lib",
-            "target": "@lib/overlay-focus.ts"
+            "title": "Estrés",
+            "href": "/examples/morph-dialog/stress",
+            "description": "320px, texto largo, y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<MorphDialog label=\"Edit note\" title=\"Note\"><input aria-label=\"Title\" /></MorphDialog>",
+        "api": [
+          {
+            "name": "label / title / description",
+            "type": "ReactNode",
+            "description": "Trigger label, dialog name, and optional description."
           },
           {
-            "path": "registry/lib/motion.ts",
-            "type": "registry:lib",
-            "target": "@lib/motion.ts"
-          }
-        ]
-      },
-      {
-        "name": "morph-popover",
-        "type": "registry:ui",
-        "title": "Morph popover",
-        "description": "A surface shared with the trigger grows into a non-modal panel. Escape and an outside pointer close it.",
-        "author": "Eduardo Retana",
-        "dependencies": [
-          "motion"
-        ],
-        "registryDependencies": [
-          "motion-preference"
-        ],
-        "categories": [
-          "overlay"
-        ],
-        "meta": {
-          "titleEs": "Popover morph",
-          "descriptionEs": "Una superficie compartida con el disparador crece hasta un panel no modal. Escape y un puntero afuera lo cierran.",
-          "preview": "app/examples/morph-popover/preview.tsx",
-          "previewHref": "/examples/morph-popover",
-          "examples": [
-            {
-              "title": "Popover morph",
-              "href": "/examples/morph-popover",
-              "description": "Una superficie compartida con el disparador crece hasta un panel no modal. Escape y un puntero afuera lo cierran."
-            },
-            {
-              "title": "Estrés",
-              "href": "/examples/morph-popover/stress",
-              "description": "320px, texto largo, y lectura de derecha a izquierda."
-            }
-          ],
-          "usage": "<MorphPopover label=\"Actions\" title=\"Record\"><button type=\"button\">Duplicate</button></MorphPopover>",
-          "api": [
-            {
-              "name": "label / title",
-              "type": "ReactNode",
-              "description": "Trigger label and optional panel name."
-            },
-            {
-              "name": "open / defaultOpen / onOpenChange",
-              "type": "boolean / callback",
-              "description": "Controlled or uncontrolled open state."
-            },
-            {
-              "name": "children",
-              "type": "ReactNode",
-              "description": "Panel content. Tab may leave the popover."
-            }
-          ]
-        },
-        "docs": "Clean-room shared-element popover using motion layoutId. Blendy is the behavior reference only and is not a dependency. aria-modal is false. Reduced motion fades the panel in place. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
-        "files": [
-          {
-            "path": "registry/ui/morph-popover.tsx",
-            "type": "registry:component",
-            "target": "@ui/morph-popover.tsx"
+            "name": "open / defaultOpen / onOpenChange",
+            "type": "boolean / callback",
+            "description": "Controlled or uncontrolled open state."
           },
           {
-            "path": "registry/lib/overlay-focus.ts",
-            "type": "registry:lib",
-            "target": "@lib/overlay-focus.ts"
+            "name": "closeLabel",
+            "type": "string",
+            "description": "Accessible name of the close control. Default Close."
+          }
+        ]
+      },
+      "docs": "Clean-room shared-element dialog using motion layoutId. Blendy is the behavior reference only and is not a dependency. Reduced motion skips the morph. Initial focus lands on the first content control. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/morph-dialog.tsx",
+          "type": "registry:component",
+          "target": "@ui/morph-dialog.tsx"
+        },
+        {
+          "path": "registry/lib/overlay-focus.ts",
+          "type": "registry:lib",
+          "target": "@lib/overlay-focus.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "morph-popover",
+      "type": "registry:ui",
+      "title": "Morph popover",
+      "description": "A surface shared with the trigger grows into a non-modal panel. Escape and an outside pointer close it.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "motion-preference"
+      ],
+      "categories": [
+        "overlay"
+      ],
+      "meta": {
+        "titleEs": "Popover morph",
+        "descriptionEs": "Una superficie compartida con el disparador crece hasta un panel no modal. Escape y un puntero afuera lo cierran.",
+        "preview": "app/examples/morph-popover/preview.tsx",
+        "previewHref": "/examples/morph-popover",
+        "examples": [
+          {
+            "title": "Popover morph",
+            "href": "/examples/morph-popover",
+            "description": "Una superficie compartida con el disparador crece hasta un panel no modal. Escape y un puntero afuera lo cierran."
           },
           {
-            "path": "registry/lib/motion.ts",
-            "type": "registry:lib",
-            "target": "@lib/motion.ts"
+            "title": "Estrés",
+            "href": "/examples/morph-popover/stress",
+            "description": "320px, texto largo, y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<MorphPopover label=\"Actions\" title=\"Record\"><button type=\"button\">Duplicate</button></MorphPopover>",
+        "api": [
+          {
+            "name": "label / title",
+            "type": "ReactNode",
+            "description": "Trigger label and optional panel name."
+          },
+          {
+            "name": "open / defaultOpen / onOpenChange",
+            "type": "boolean / callback",
+            "description": "Controlled or uncontrolled open state."
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "description": "Panel content. Tab may leave the popover."
           }
         ]
       },
-      {
-        "name": "shortcut-button",
-        "type": "registry:ui",
-        "title": "Shortcut button",
-        "description": "A button whose keycaps depress while its keyboard shortcut is held, then runs the command.",
-        "author": "Eduardo Retana",
-        "dependencies": [],
-        "registryDependencies": [
-          "button"
-        ],
-        "categories": [
-          "button"
-        ],
-        "meta": {
-          "titleEs": "Botón con atajo",
-          "descriptionEs": "Un botón cuyas teclas se hunden mientras se mantiene el atajo, y luego ejecuta el comando.",
-          "preview": "app/examples/shortcut-button/preview.tsx",
-          "previewHref": "/examples/shortcut-button",
-          "examples": [
-            {
-              "title": "Botón con atajo",
-              "href": "/examples/shortcut-button",
-              "description": "Un botón cuyas teclas se hunden mientras se mantiene el atajo, y luego ejecuta el comando."
-            },
-            {
-              "title": "Estrés",
-              "href": "/examples/shortcut-button/stress",
-              "description": "320px, texto largo, y lectura de derecha a izquierda."
-            }
-          ],
-          "usage": "<ShortcutButton shortcut=\"mod+s\" onCommand={save}>Save</ShortcutButton>",
-          "api": [
-            {
-              "name": "shortcut",
-              "type": "string",
-              "description": "Combination such as mod+s or mod+k. mod is Command on Apple and Control elsewhere. Default mod+s."
-            },
-            {
-              "name": "onCommand",
-              "type": "() => void",
-              "description": "Runs when the shortcut completes or the button is clicked."
-            },
-            {
-              "name": "showShortcut / preventDefault",
-              "type": "boolean",
-              "description": "Show the keycaps. preventDefault defaults to true."
-            }
-          ]
+      "docs": "Clean-room shared-element popover using motion layoutId. Blendy is the behavior reference only and is not a dependency. aria-modal is false. Reduced motion fades the panel in place. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/morph-popover.tsx",
+          "type": "registry:component",
+          "target": "@ui/morph-popover.tsx"
         },
-        "docs": "Adapted from Evil Buttons command-button (Apache-2.0, radiumcoders, commit ec0fa86f8d06). Colors use the host button. Key travel is removed when the reader prefers reduced motion. See NOTICE. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
-        "files": [
+        {
+          "path": "registry/lib/overlay-focus.ts",
+          "type": "registry:lib",
+          "target": "@lib/overlay-focus.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "shortcut-button",
+      "type": "registry:ui",
+      "title": "Shortcut button",
+      "description": "A button whose keycaps depress while its keyboard shortcut is held, then runs the command.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "button"
+      ],
+      "meta": {
+        "titleEs": "Botón con atajo",
+        "descriptionEs": "Un botón cuyas teclas se hunden mientras se mantiene el atajo, y luego ejecuta el comando.",
+        "preview": "app/examples/shortcut-button/preview.tsx",
+        "previewHref": "/examples/shortcut-button",
+        "examples": [
           {
-            "path": "registry/ui/shortcut-button.tsx",
-            "type": "registry:component",
-            "target": "@ui/shortcut-button.tsx"
+            "title": "Botón con atajo",
+            "href": "/examples/shortcut-button",
+            "description": "Un botón cuyas teclas se hunden mientras se mantiene el atajo, y luego ejecuta el comando."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/shortcut-button/stress",
+            "description": "320px, texto largo, y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<ShortcutButton shortcut=\"mod+s\" onCommand={save}>Save</ShortcutButton>",
+        "api": [
+          {
+            "name": "shortcut",
+            "type": "string",
+            "description": "Combination such as mod+s or mod+k. mod is Command on Apple and Control elsewhere. Default mod+s."
+          },
+          {
+            "name": "onCommand",
+            "type": "() => void",
+            "description": "Runs when the shortcut completes or the button is clicked."
+          },
+          {
+            "name": "showShortcut / preventDefault",
+            "type": "boolean",
+            "description": "Show the keycaps. preventDefault defaults to true."
           }
         ]
       },
-      {
-        "name": "spotlight-button",
-        "type": "registry:ui",
-        "title": "Spotlight button",
-        "description": "A host button with a cursor spotlight and a border that lights up near the pointer.",
-        "author": "Eduardo Retana",
-        "dependencies": [
-          "motion"
-        ],
-        "registryDependencies": [
-          "button"
-        ],
-        "categories": [
-          "button"
-        ],
-        "meta": {
-          "titleEs": "Botón con foco",
-          "descriptionEs": "Un botón del host con un foco que sigue al cursor y un borde que se enciende cerca del puntero.",
-          "preview": "app/examples/spotlight-button/preview.tsx",
-          "previewHref": "/examples/spotlight-button",
-          "examples": [
-            {
-              "title": "Botón con foco",
-              "href": "/examples/spotlight-button",
-              "description": "Un botón del host con un foco que sigue al cursor y un borde que se enciende cerca del puntero."
-            },
-            {
-              "title": "Estrés",
-              "href": "/examples/spotlight-button/stress",
-              "description": "320px, texto largo, y lectura de derecha a izquierda."
-            }
-          ],
-          "usage": "<SpotlightButton>Continue</SpotlightButton>",
-          "api": [
-            {
-              "name": "variant",
-              "type": "\"default\" | \"secondary\" | \"outline\"",
-              "description": "Host button variant. Default default."
-            },
-            {
-              "name": "highlightColor / borderColor",
-              "type": "string",
-              "description": "CSS colors. Defaults mix the host foreground and background."
-            },
-            {
-              "name": "highlightSize",
-              "type": "number",
-              "description": "Spotlight radius in pixels. Default 90."
-            }
-          ]
-        },
-        "docs": "Adapted from Evil Buttons highlight-button (Apache-2.0, radiumcoders, commit ec0fa86f8d06). The ripple is skipped when the reader prefers reduced motion. See NOTICE. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
-        "files": [
+      "docs": "Adapted from Evil Buttons command-button (Apache-2.0, radiumcoders, commit ec0fa86f8d06). Colors use the host button. Key travel is removed when the reader prefers reduced motion. See NOTICE. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/shortcut-button.tsx",
+          "type": "registry:component",
+          "target": "@ui/shortcut-button.tsx"
+        }
+      ]
+    },
+    {
+      "name": "spotlight-button",
+      "type": "registry:ui",
+      "title": "Spotlight button",
+      "description": "A host button with a cursor spotlight and a border that lights up near the pointer.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "button"
+      ],
+      "meta": {
+        "titleEs": "Botón con foco",
+        "descriptionEs": "Un botón del host con un foco que sigue al cursor y un borde que se enciende cerca del puntero.",
+        "preview": "app/examples/spotlight-button/preview.tsx",
+        "previewHref": "/examples/spotlight-button",
+        "examples": [
           {
-            "path": "registry/ui/spotlight-button.tsx",
-            "type": "registry:component",
-            "target": "@ui/spotlight-button.tsx"
+            "title": "Botón con foco",
+            "href": "/examples/spotlight-button",
+            "description": "Un botón del host con un foco que sigue al cursor y un borde que se enciende cerca del puntero."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/spotlight-button/stress",
+            "description": "320px, texto largo, y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<SpotlightButton>Continue</SpotlightButton>",
+        "api": [
+          {
+            "name": "variant",
+            "type": "\"default\" | \"secondary\" | \"outline\"",
+            "description": "Host button variant. Default default."
+          },
+          {
+            "name": "highlightColor / borderColor",
+            "type": "string",
+            "description": "CSS colors. Defaults mix the host foreground and background."
+          },
+          {
+            "name": "highlightSize",
+            "type": "number",
+            "description": "Spotlight radius in pixels. Default 90."
           }
         ]
       },
-      {
-        "name": "slide-to-confirm",
-        "type": "registry:ui",
-        "title": "Slide to confirm",
-        "description": "Slide the handle, or hold Arrow Right, past a threshold before the action runs.",
-        "author": "Eduardo Retana",
-        "dependencies": [
-          "motion"
-        ],
-        "registryDependencies": [],
-        "categories": [
-          "button"
-        ],
-        "meta": {
-          "titleEs": "Deslizar para confirmar",
-          "descriptionEs": "Desliza el control, o mantén flecha derecha, más allá de un umbral antes de que corra la acción.",
-          "preview": "app/examples/slide-to-confirm/preview.tsx",
-          "previewHref": "/examples/slide-to-confirm",
-          "examples": [
-            {
-              "title": "Deslizar para confirmar",
-              "href": "/examples/slide-to-confirm",
-              "description": "Desliza el control, o mantén flecha derecha, más allá de un umbral antes de que corra la acción."
-            },
-            {
-              "title": "Estrés",
-              "href": "/examples/slide-to-confirm/stress",
-              "description": "320px, texto largo, y lectura de derecha a izquierda."
-            }
-          ],
-          "usage": "<SlideToConfirm onConfirm={send}>Slide to confirm</SlideToConfirm>",
-          "api": [
-            {
-              "name": "onConfirm",
-              "type": "() => void",
-              "description": "Runs once the threshold is crossed."
-            },
-            {
-              "name": "threshold",
-              "type": "number",
-              "description": "Fraction of the track, from 0 to 1. Default 0.9."
-            },
-            {
-              "name": "resistance / smoothness / resetAfter",
-              "type": "number",
-              "description": "Drag resistance, spring smoothness, and reset delay in milliseconds."
-            },
-            {
-              "name": "label",
-              "type": "ReactNode",
-              "description": "Accessible name and visible label. Default Slide to confirm."
-            }
-          ]
-        },
-        "docs": "Adapted from Evil Buttons slide-to-detonate (Apache-2.0, radiumcoders). Keyboard uses ArrowRight in steps of 0.1. Vibration was removed. Reduced motion snaps the handle. See NOTICE. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
-        "files": [
+      "docs": "Adapted from Evil Buttons highlight-button (Apache-2.0, radiumcoders, commit ec0fa86f8d06). The ripple is skipped when the reader prefers reduced motion. See NOTICE. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/spotlight-button.tsx",
+          "type": "registry:component",
+          "target": "@ui/spotlight-button.tsx"
+        }
+      ]
+    },
+    {
+      "name": "slide-to-confirm",
+      "type": "registry:ui",
+      "title": "Slide to confirm",
+      "description": "Slide the handle, or hold Arrow Right, past a threshold before the action runs.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "button"
+      ],
+      "meta": {
+        "titleEs": "Deslizar para confirmar",
+        "descriptionEs": "Desliza el control, o mantén flecha derecha, más allá de un umbral antes de que corra la acción.",
+        "preview": "app/examples/slide-to-confirm/preview.tsx",
+        "previewHref": "/examples/slide-to-confirm",
+        "examples": [
           {
-            "path": "registry/ui/slide-to-confirm.tsx",
-            "type": "registry:component",
-            "target": "@ui/slide-to-confirm.tsx"
+            "title": "Deslizar para confirmar",
+            "href": "/examples/slide-to-confirm",
+            "description": "Desliza el control, o mantén flecha derecha, más allá de un umbral antes de que corra la acción."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/slide-to-confirm/stress",
+            "description": "320px, texto largo, y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<SlideToConfirm onConfirm={send}>Slide to confirm</SlideToConfirm>",
+        "api": [
+          {
+            "name": "onConfirm",
+            "type": "() => void",
+            "description": "Runs once the threshold is crossed."
+          },
+          {
+            "name": "threshold",
+            "type": "number",
+            "description": "Fraction of the track, from 0 to 1. Default 0.9."
+          },
+          {
+            "name": "resistance / smoothness / resetAfter",
+            "type": "number",
+            "description": "Drag resistance, spring smoothness, and reset delay in milliseconds."
+          },
+          {
+            "name": "label",
+            "type": "ReactNode",
+            "description": "Accessible name and visible label. Default Slide to confirm."
           }
         ]
       },
-      {
-        "name": "haptics",
-        "type": "registry:ui",
-        "title": "Haptics",
-        "description": "navigator.vibrate with a persisted mute. A no-op where the Vibration API is missing.",
-        "author": "Eduardo Retana",
-        "dependencies": [],
-        "registryDependencies": [],
-        "categories": [
-          "hook"
-        ],
-        "meta": {
-          "titleEs": "Hápticos",
-          "descriptionEs": "navigator.vibrate con un silencio guardado. No hace nada si la API de vibración no existe.",
-          "preview": "app/examples/haptics/preview.tsx",
-          "previewHref": "/examples/haptics",
-          "examples": [
-            {
-              "title": "Hápticos",
-              "href": "/examples/haptics",
-              "description": "navigator.vibrate con un silencio guardado. No hace nada si la API de vibración no existe."
-            },
-            {
-              "title": "Estrés",
-              "href": "/examples/haptics/stress",
-              "description": "320px, texto largo, y lectura de derecha a izquierda."
-            }
-          ],
-          "usage": "<HapticsProvider><button type=\"button\" onClick={() => triggerHaptic(\"success\")}>Done</button></HapticsProvider>",
-          "api": [
-            {
-              "name": "triggerHaptic",
-              "type": "(preset?: HapticPreset) => void",
-              "description": "tap, tick, success, error, warning, or attention. No-op when muted or unsupported."
-            },
-            {
-              "name": "useHaptics",
-              "type": "hook",
-              "description": "muted, setMuted, supported, and trigger."
-            },
-            {
-              "name": "HapticsToggle",
-              "type": "component",
-              "description": "Button for the shared mute."
-            }
-          ]
-        },
-        "docs": "Adapted from seamui haptics (MIT, Mikhail Villamor, commit 7c57149f327d). web-haptics is not a dependency. Nothing vibrates on mount. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
-        "files": [
+      "docs": "Adapted from Evil Buttons slide-to-detonate (Apache-2.0, radiumcoders). Keyboard uses ArrowRight in steps of 0.1. Vibration was removed. Reduced motion snaps the handle. See NOTICE. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/slide-to-confirm.tsx",
+          "type": "registry:component",
+          "target": "@ui/slide-to-confirm.tsx"
+        }
+      ]
+    },
+    {
+      "name": "haptics",
+      "type": "registry:ui",
+      "title": "Haptics",
+      "description": "navigator.vibrate with a persisted mute. A no-op where the Vibration API is missing.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "hook"
+      ],
+      "meta": {
+        "titleEs": "Hápticos",
+        "descriptionEs": "navigator.vibrate con un silencio guardado. No hace nada si la API de vibración no existe.",
+        "preview": "app/examples/haptics/preview.tsx",
+        "previewHref": "/examples/haptics",
+        "examples": [
           {
-            "path": "registry/ui/haptics.tsx",
-            "type": "registry:component",
-            "target": "@ui/haptics.tsx"
+            "title": "Hápticos",
+            "href": "/examples/haptics",
+            "description": "navigator.vibrate con un silencio guardado. No hace nada si la API de vibración no existe."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/haptics/stress",
+            "description": "320px, texto largo, y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<HapticsProvider><button type=\"button\" onClick={() => triggerHaptic(\"success\")}>Done</button></HapticsProvider>",
+        "api": [
+          {
+            "name": "triggerHaptic",
+            "type": "(preset?: HapticPreset) => void",
+            "description": "tap, tick, success, error, warning, or attention. No-op when muted or unsupported."
+          },
+          {
+            "name": "useHaptics",
+            "type": "hook",
+            "description": "muted, setMuted, supported, and trigger."
+          },
+          {
+            "name": "HapticsToggle",
+            "type": "component",
+            "description": "Button for the shared mute."
           }
         ]
       },
-      {
-        "name": "motion-preference",
-        "type": "registry:ui",
-        "title": "Motion preference",
-        "description": "A persisted choice of system, reduced, or full motion. Explicit choice wins over prefers-reduced-motion.",
-        "author": "Eduardo Retana",
-        "dependencies": [
-          "motion"
-        ],
-        "registryDependencies": [],
-        "categories": [
-          "hook"
-        ],
-        "meta": {
-          "titleEs": "Preferencia de movimiento",
-          "descriptionEs": "Una elección guardada: sistema, reducido o completo. La elección explícita gana sobre prefers-reduced-motion.",
-          "preview": "app/examples/motion-preference/preview.tsx",
-          "previewHref": "/examples/motion-preference",
-          "examples": [
-            {
-              "title": "Preferencia de movimiento",
-              "href": "/examples/motion-preference",
-              "description": "Una elección guardada: sistema, reducido o completo. La elección explícita gana sobre prefers-reduced-motion."
-            },
-            {
-              "title": "Estrés",
-              "href": "/examples/motion-preference/stress",
-              "description": "320px, texto largo, y lectura de derecha a izquierda."
-            }
-          ],
-          "usage": "<MotionPreferenceControl />",
-          "api": [
-            {
-              "name": "useMotionPreference",
-              "type": "hook",
-              "description": "Returns true when motion should be reduced."
-            },
-            {
-              "name": "setMotionPreference",
-              "type": "(value: MotionPreference) => void",
-              "description": "system, reduce, or full. Persisted locally."
-            },
-            {
-              "name": "MotionPreferenceControl",
-              "type": "component",
-              "description": "Radiogroup with System, Reduce, and Full."
-            }
-          ]
-        },
-        "docs": "Adapted from seamui's reduced-motion resolution (MIT, Mikhail Villamor). The hook works without a provider. MotionConfig reducedMotion never is ignored, matching seamui, because that value is motion's default. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
-        "files": [
+      "docs": "Adapted from seamui haptics (MIT, Mikhail Villamor, commit 7c57149f327d). web-haptics is not a dependency. Nothing vibrates on mount. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/haptics.tsx",
+          "type": "registry:component",
+          "target": "@ui/haptics.tsx"
+        }
+      ]
+    },
+    {
+      "name": "motion-preference",
+      "type": "registry:ui",
+      "title": "Motion preference",
+      "description": "A persisted choice of system, reduced, or full motion. Explicit choice wins over prefers-reduced-motion.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "hook"
+      ],
+      "meta": {
+        "titleEs": "Preferencia de movimiento",
+        "descriptionEs": "Una elección guardada: sistema, reducido o completo. La elección explícita gana sobre prefers-reduced-motion.",
+        "preview": "app/examples/motion-preference/preview.tsx",
+        "previewHref": "/examples/motion-preference",
+        "examples": [
           {
-            "path": "registry/ui/motion-preference.tsx",
-            "type": "registry:component",
-            "target": "@ui/motion-preference.tsx"
+            "title": "Preferencia de movimiento",
+            "href": "/examples/motion-preference",
+            "description": "Una elección guardada: sistema, reducido o completo. La elección explícita gana sobre prefers-reduced-motion."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/motion-preference/stress",
+            "description": "320px, texto largo, y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "<MotionPreferenceControl />",
+        "api": [
+          {
+            "name": "useMotionPreference",
+            "type": "hook",
+            "description": "Returns true when motion should be reduced."
+          },
+          {
+            "name": "setMotionPreference",
+            "type": "(value: MotionPreference) => void",
+            "description": "system, reduce, or full. Persisted locally."
+          },
+          {
+            "name": "MotionPreferenceControl",
+            "type": "component",
+            "description": "Radiogroup with System, Reduce, and Full."
           }
         ]
       },
-      {
-        "name": "use-feedback",
-        "type": "registry:hook",
-        "title": "useFeedback",
-        "description": "One intent plays a cue, an optional haptic, and a motion hint. Sound and haptics stay independently mutable.",
-        "author": "Eduardo Retana",
-        "dependencies": [],
-        "registryDependencies": [
-          "ui-sounds",
-          "haptics",
-          "motion-preference"
-        ],
-        "categories": [
-          "hook"
-        ],
-        "meta": {
-          "titleEs": "useFeedback",
-          "descriptionEs": "Un intento reproduce un cue, un háptico opcional y una pista de movimiento. Sonido y hápticos se silencian por separado.",
-          "preview": "app/examples/use-feedback/preview.tsx",
-          "previewHref": "/examples/use-feedback",
-          "examples": [
-            {
-              "title": "useFeedback",
-              "href": "/examples/use-feedback",
-              "description": "Un intento reproduce un cue, un háptico opcional y una pista de movimiento. Sonido y hápticos se silencian por separado."
-            },
-            {
-              "title": "Estrés",
-              "href": "/examples/use-feedback/stress",
-              "description": "320px, texto largo, y lectura de derecha a izquierda."
-            }
-          ],
-          "usage": "const feedback = useFeedback()\nfeedback.trigger(\"success\")",
-          "api": [
-            {
-              "name": "trigger",
-              "type": "(intent, options?) => void",
-              "description": "tap, toggle, open, close, select, navigate, type, success, warning, error, loading, ready, attention, or confirm. Pass sound or haptic false to skip a channel."
-            },
-            {
-              "name": "motion",
-              "type": "(intent) => FeedbackMotion",
-              "description": "A short scale or shake. Duration is 0 when motion is reduced."
-            },
-            {
-              "name": "useFeedback",
-              "type": "hook",
-              "description": "muted, reduced, trigger, and motion. Nothing runs on mount."
-            }
-          ]
-        },
-        "docs": "Original wiring of ui-sounds and haptics. Reduced motion drops the animation hint only. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
-        "files": [
+      "docs": "Adapted from seamui's reduced-motion resolution (MIT, Mikhail Villamor). The hook works without a provider. MotionConfig reducedMotion never is ignored, matching seamui, because that value is motion's default. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/motion-preference.tsx",
+          "type": "registry:component",
+          "target": "@ui/motion-preference.tsx"
+        }
+      ]
+    },
+    {
+      "name": "use-feedback",
+      "type": "registry:hook",
+      "title": "useFeedback",
+      "description": "One intent plays a cue, an optional haptic, and a motion hint. Sound and haptics stay independently mutable.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "ui-sounds",
+        "haptics",
+        "motion-preference"
+      ],
+      "categories": [
+        "hook"
+      ],
+      "meta": {
+        "titleEs": "useFeedback",
+        "descriptionEs": "Un intento reproduce un cue, un háptico opcional y una pista de movimiento. Sonido y hápticos se silencian por separado.",
+        "preview": "app/examples/use-feedback/preview.tsx",
+        "previewHref": "/examples/use-feedback",
+        "examples": [
           {
-            "path": "registry/hooks/use-feedback.ts",
-            "type": "registry:hook",
-            "target": "@hooks/use-feedback.ts"
+            "title": "useFeedback",
+            "href": "/examples/use-feedback",
+            "description": "Un intento reproduce un cue, un háptico opcional y una pista de movimiento. Sonido y hápticos se silencian por separado."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/use-feedback/stress",
+            "description": "320px, texto largo, y lectura de derecha a izquierda."
+          }
+        ],
+        "usage": "const feedback = useFeedback()\nfeedback.trigger(\"success\")",
+        "api": [
+          {
+            "name": "trigger",
+            "type": "(intent, options?) => void",
+            "description": "tap, toggle, open, close, select, navigate, type, success, warning, error, loading, ready, attention, or confirm. Pass sound or haptic false to skip a channel."
+          },
+          {
+            "name": "motion",
+            "type": "(intent) => FeedbackMotion",
+            "description": "A short scale or shake. Duration is 0 when motion is reduced."
+          },
+          {
+            "name": "useFeedback",
+            "type": "hook",
+            "description": "muted, reduced, trigger, and motion. Nothing runs on mount."
           }
         ]
-      }
+      },
+      "docs": "Original wiring of ui-sounds and haptics. Reduced motion drops the animation hint only. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/hooks/use-feedback.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-feedback.ts"
+        }
+      ]
+    },
+    {
+      "name": "status-pill",
+      "type": "registry:ui",
+      "title": "Status pill",
+      "description": "Status chip. Tone, dot, and label come from props.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/status-pill.tsx",
+          "type": "registry:component",
+          "target": "@ui/status-pill.tsx"
+        },
+        {
+          "path": "registry/lib/status-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/status-tone.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Pastilla de estado",
+        "descriptionEs": "Un tono, un punto y una etiqueta que tú escribes.",
+        "preview": "app/examples/status-pill/preview.tsx",
+        "previewHref": "/examples/status-pill",
+        "examples": [
+          {
+            "title": "Pastilla de estado",
+            "href": "/examples/status-pill",
+            "description": "Un tono, un punto y una etiqueta que tú escribes."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/status-pill/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<StatusPill label=\"In review\" tone=\"warning\" />",
+        "api": [
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Visible text."
+          },
+          {
+            "name": "tone",
+            "type": "StatusTone",
+            "description": "neutral, accent, warning, critical, info, or positive."
+          },
+          {
+            "name": "solid / dot / overlay",
+            "type": "boolean",
+            "description": "Solid fill, a leading dot, or a chip that sits on a cover."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "accent-callout",
+      "type": "registry:ui",
+      "title": "Accent callout",
+      "description": "Accent, soft, or inverted callout. Copy comes from props.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/accent-callout.tsx",
+          "type": "registry:component",
+          "target": "@ui/accent-callout.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Aviso de acento",
+        "descriptionEs": "Acento, suave o invertido, con el texto que pases.",
+        "preview": "app/examples/accent-callout/preview.tsx",
+        "previewHref": "/examples/accent-callout",
+        "examples": [
+          {
+            "title": "Aviso de acento",
+            "href": "/examples/accent-callout",
+            "description": "Acento, suave o invertido, con el texto que pases."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/accent-callout/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<AccentCallout title=\"Ready\" body=\"Nothing is blocking the action.\" surface=\"soft\" />",
+        "api": [
+          {
+            "name": "title / body",
+            "type": "string",
+            "description": "Heading and supporting copy."
+          },
+          {
+            "name": "surface",
+            "type": "\"accent\" | \"soft\" | \"inverted\"",
+            "description": "accent uses primary. inverted uses foreground and background."
+          },
+          {
+            "name": "action / inset",
+            "type": "ReactNode",
+            "description": "Optional trailing action and an inset slot."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "insight-card",
+      "type": "registry:ui",
+      "title": "Insight card",
+      "description": "Inverted assistant card with bullets, a status, stats, or a checklist.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/insight-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/insight-card.tsx"
+        },
+        {
+          "path": "registry/lib/status-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/status-tone.ts"
+        },
+        {
+          "path": "registry/ui/confidence-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/confidence-badge.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de lectura",
+        "descriptionEs": "Tarjeta invertida con viñetas, estado, cifras o lista.",
+        "preview": "app/examples/insight-card/preview.tsx",
+        "previewHref": "/examples/insight-card",
+        "examples": [
+          {
+            "title": "Tarjeta de lectura",
+            "href": "/examples/insight-card",
+            "description": "Tarjeta invertida con viñetas, estado, cifras o lista."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/insight-card/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<InsightCard title=\"Assistant\" headline=\"Two items need a person\" variant=\"bullets\" bullets={items} />",
+        "api": [
+          {
+            "name": "variant",
+            "type": "\"bullets\" | \"status\" | \"stats\" | \"checklist\"",
+            "description": "Picks the body."
+          },
+          {
+            "name": "bullets / stats / checks",
+            "type": "arrays",
+            "description": "Each row is data you pass in."
+          },
+          {
+            "name": "confidence",
+            "type": "number",
+            "description": "0–1. Shown with the dots badge on the status variant."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "workspace-switcher",
+      "type": "registry:ui",
+      "title": "Workspace switcher",
+      "description": "Workspace row. The menu options come from props.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "dropdown-menu"
+      ],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/workspace-switcher.tsx",
+          "type": "registry:component",
+          "target": "@ui/workspace-switcher.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Cambio de espacio",
+        "descriptionEs": "El nombre y el menú salen de las opciones.",
+        "preview": "app/examples/workspace-switcher/preview.tsx",
+        "previewHref": "/examples/workspace-switcher",
+        "examples": [
+          {
+            "title": "Cambio de espacio",
+            "href": "/examples/workspace-switcher",
+            "description": "El nombre y el menú salen de las opciones."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/workspace-switcher/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<WorkspaceSwitcher name=\"North desk\" options={options} value={id} onValueChange={setId} />",
+        "api": [
+          {
+            "name": "name / detail",
+            "type": "string",
+            "description": "Shown when no option is selected."
+          },
+          {
+            "name": "options",
+            "type": "WorkspaceOption[]",
+            "description": "Menu rows."
+          },
+          {
+            "name": "value / onValueChange",
+            "type": "string",
+            "description": "Controlled selection."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "assistant-status-card",
+      "type": "registry:ui",
+      "title": "Assistant status card",
+      "description": "Assistant switch and an attention link.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "switch"
+      ],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/assistant-status-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/assistant-status-card.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Estado del asistente",
+        "descriptionEs": "Interruptor y un enlace a lo que pide atención.",
+        "preview": "app/examples/assistant-status-card/preview.tsx",
+        "previewHref": "/examples/assistant-status-card",
+        "examples": [
+          {
+            "title": "Estado del asistente",
+            "href": "/examples/assistant-status-card",
+            "description": "Interruptor y un enlace a lo que pide atención."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/assistant-status-card/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<AssistantStatusCard name=\"Assistant\" checked={on} onCheckedChange={setOn} attention=\"2 need attention\" />",
+        "api": [
+          {
+            "name": "checked / onCheckedChange",
+            "type": "boolean",
+            "description": "The switch."
+          },
+          {
+            "name": "attention / onAttention",
+            "type": "string / fn",
+            "description": "The link under the switch."
+          },
+          {
+            "name": "switchLabel",
+            "type": "string",
+            "description": "Accessible name of the switch."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "record-card",
+      "type": "registry:ui",
+      "title": "Record card",
+      "description": "Record media card in hero, media, or tile form. The cover is a token wash.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/record-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/record-card.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de registro",
+        "descriptionEs": "Hero, media o ficha. La portada es un lavado del tema.",
+        "preview": "app/examples/record-card/preview.tsx",
+        "previewHref": "/examples/record-card",
+        "examples": [
+          {
+            "title": "Tarjeta de registro",
+            "href": "/examples/record-card",
+            "description": "Hero, media o ficha. La portada es un lavado del tema."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/record-card/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<RecordCard variant=\"tile\" title=\"North record\" progress={72} onOpen={open} openLabel=\"North record\" />",
+        "api": [
+          {
+            "name": "variant",
+            "type": "\"hero\" | \"media\" | \"tile\"",
+            "description": "Layout."
+          },
+          {
+            "name": "progress",
+            "type": "number",
+            "description": "0–100. Primary fill at or above highlightFrom."
+          },
+          {
+            "name": "status / stats / chips / footer",
+            "type": "slots",
+            "description": "You render the domain."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "score-card",
+      "type": "registry:ui",
+      "title": "Score card",
+      "description": "Tick gauge, optional record row, and tone-colored stats.",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/score-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/score-card.tsx"
+        },
+        {
+          "path": "registry/ui/radial-gauge.tsx",
+          "type": "registry:component",
+          "target": "@ui/radial-gauge.tsx"
+        },
+        {
+          "path": "registry/lib/dashboard-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboard-format.ts"
+        },
+        {
+          "path": "registry/lib/status-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/status-tone.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de puntaje",
+        "descriptionEs": "Medidor de marcas, ficha y tres cifras.",
+        "preview": "app/examples/score-card/preview.tsx",
+        "previewHref": "/examples/score-card",
+        "examples": [
+          {
+            "title": "Tarjeta de puntaje",
+            "href": "/examples/score-card",
+            "description": "Medidor de marcas, ficha y tres cifras."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/score-card/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<ScoreCard title=\"Score\" value={72} stats={stats} />",
+        "api": [
+          {
+            "name": "value",
+            "type": "number",
+            "description": "Counts up unless motion is reduced."
+          },
+          {
+            "name": "surface",
+            "type": "\"accent\" | \"neutral\"",
+            "description": "Wash behind the gauge."
+          },
+          {
+            "name": "stats",
+            "type": "ScoreStat[]",
+            "description": "Label, value, and a tone."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "check-tiles",
+      "type": "registry:ui",
+      "title": "Check tiles",
+      "description": "Check tiles. One featured tile uses the host accent.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/check-tiles.tsx",
+          "type": "registry:component",
+          "target": "@ui/check-tiles.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Mosaico de controles",
+        "descriptionEs": "La ficha destacada usa el acento del anfitrión.",
+        "preview": "app/examples/check-tiles/preview.tsx",
+        "previewHref": "/examples/check-tiles",
+        "examples": [
+          {
+            "title": "Mosaico de controles",
+            "href": "/examples/check-tiles",
+            "description": "La ficha destacada usa el acento del anfitrión."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/check-tiles/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<CheckTiles items={tiles} label=\"Checks\" />",
+        "api": [
+          {
+            "name": "items",
+            "type": "CheckTile[]",
+            "description": "Value, label, and an optional featured flag."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Accessible name of the list."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "member-list",
+      "type": "registry:ui",
+      "title": "Member list",
+      "description": "People on a record, with an owner suffix and a menu.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "dropdown-menu"
+      ],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/member-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/member-list.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Lista de personas",
+        "descriptionEs": "Avatar, rol y un menú. El dueño lleva un sufijo.",
+        "preview": "app/examples/member-list/preview.tsx",
+        "previewHref": "/examples/member-list",
+        "examples": [
+          {
+            "title": "Lista de personas",
+            "href": "/examples/member-list",
+            "description": "Avatar, rol y un menú. El dueño lleva un sufijo."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/member-list/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<MemberList title=\"People\" members={people} onAdd={add} />",
+        "api": [
+          {
+            "name": "members",
+            "type": "Member[]",
+            "description": "Name, role, and owner."
+          },
+          {
+            "name": "actions / onAction",
+            "type": "MemberAction[]",
+            "description": "Menu items."
+          },
+          {
+            "name": "addLabel / onAdd",
+            "type": "string / fn",
+            "description": "The add control."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "event-callout",
+      "type": "registry:ui",
+      "title": "Event callout",
+      "description": "Dated event with an inset action.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/event-callout.tsx",
+          "type": "registry:component",
+          "target": "@ui/event-callout.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Aviso de evento",
+        "descriptionEs": "Fecha y una acción al pie.",
+        "preview": "app/examples/event-callout/preview.tsx",
+        "previewHref": "/examples/event-callout",
+        "examples": [
+          {
+            "title": "Aviso de evento",
+            "href": "/examples/event-callout",
+            "description": "Fecha y una acción al pie."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/event-callout/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<EventCallout title=\"Committee\" when=\"Thu 15:00\" action=\"Open calendar\" />",
+        "api": [
+          {
+            "name": "title / when",
+            "type": "string",
+            "description": "Event name and time."
+          },
+          {
+            "name": "action / onAction",
+            "type": "string / fn",
+            "description": "The inset button."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "document-list",
+      "type": "registry:ui",
+      "title": "Document list",
+      "description": "Grouped documents in review or checklist mode.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "checkbox",
+        "collapsible",
+        "dropdown-menu"
+      ],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/document-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/document-list.tsx"
+        },
+        {
+          "path": "registry/ui/confidence-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/confidence-badge.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Lista de documentos",
+        "descriptionEs": "Grupos en modo revisión o lista de verificación.",
+        "preview": "app/examples/document-list/preview.tsx",
+        "previewHref": "/examples/document-list",
+        "examples": [
+          {
+            "title": "Lista de documentos",
+            "href": "/examples/document-list",
+            "description": "Grupos en modo revisión o lista de verificación."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/document-list/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<DocumentList title=\"Documents\" mode=\"review\" groups={groups} />",
+        "api": [
+          {
+            "name": "mode",
+            "type": "\"review\" | \"checklist\"",
+            "description": "Scores and status, or checkboxes."
+          },
+          {
+            "name": "groups",
+            "type": "DocumentGroup[]",
+            "description": "Label, icon, and rows."
+          },
+          {
+            "name": "header",
+            "type": "ReactNode",
+            "description": "Sits beside the title."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "issue-list",
+      "type": "registry:ui",
+      "title": "Issue list",
+      "description": "Selectable findings. The active row is a raised card.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/issue-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/issue-list.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Lista de hallazgos",
+        "descriptionEs": "Lista seleccionable. La fila activa se eleva.",
+        "preview": "app/examples/issue-list/preview.tsx",
+        "previewHref": "/examples/issue-list",
+        "examples": [
+          {
+            "title": "Lista de hallazgos",
+            "href": "/examples/issue-list",
+            "description": "Lista seleccionable. La fila activa se eleva."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/issue-list/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<IssueList label=\"Findings\" items={items} value={id} onValueChange={setId} />",
+        "api": [
+          {
+            "name": "items",
+            "type": "IssueListItem[]",
+            "description": "Title, severity, and an optional badge slot."
+          },
+          {
+            "name": "value / onValueChange",
+            "type": "string",
+            "description": "The selected id. Arrow keys move it."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "issue-detail",
+      "type": "registry:ui",
+      "title": "Issue detail",
+      "description": "Finding detail. Preview, explanation, and footer are slots.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/issue-detail.tsx",
+          "type": "registry:component",
+          "target": "@ui/issue-detail.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Detalle de hallazgo",
+        "descriptionEs": "Huecos para el previo, la explicación y el pie.",
+        "preview": "app/examples/issue-detail/preview.tsx",
+        "previewHref": "/examples/issue-detail",
+        "examples": [
+          {
+            "title": "Detalle de hallazgo",
+            "href": "/examples/issue-detail",
+            "description": "Huecos para el previo, la explicación y el pie."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/issue-detail/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<IssueDetail title=\"Missing field\" explanation={body} footer={actions} />",
+        "api": [
+          {
+            "name": "title",
+            "type": "string",
+            "description": "The finding name."
+          },
+          {
+            "name": "preview / explanation / references / recommendation / compare / footer",
+            "type": "ReactNode",
+            "description": "Slots. The host supplies the domain."
+          },
+          {
+            "name": "onPrevious / onNext",
+            "type": "() => void",
+            "description": "Pager buttons."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "compare-panel",
+      "type": "registry:ui",
+      "title": "Compare panel",
+      "description": "Before and after columns. One row can be marked new.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/compare-panel.tsx",
+          "type": "registry:component",
+          "target": "@ui/compare-panel.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Panel de comparación",
+        "descriptionEs": "Dos columnas. Una fila puede marcarse como nueva.",
+        "preview": "app/examples/compare-panel/preview.tsx",
+        "previewHref": "/examples/compare-panel",
+        "examples": [
+          {
+            "title": "Panel de comparación",
+            "href": "/examples/compare-panel",
+            "description": "Dos columnas. Una fila puede marcarse como nueva."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/compare-panel/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<ComparePanel title=\"Change\" beforeLabel=\"Before\" afterLabel=\"After\" before={before} after={after} highlightIndex={0} />",
+        "api": [
+          {
+            "name": "before / after",
+            "type": "string[]",
+            "description": "Rows."
+          },
+          {
+            "name": "highlightIndex",
+            "type": "number",
+            "description": "The row drawn with the accent."
+          },
+          {
+            "name": "beforeLabel / afterLabel",
+            "type": "string",
+            "description": "Column headings."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "action-footer",
+      "type": "registry:ui",
+      "title": "Action footer",
+      "description": "Hint plus secondary and primary actions.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/action-footer.tsx",
+          "type": "registry:component",
+          "target": "@ui/action-footer.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Pie de acción",
+        "descriptionEs": "Una pista y dos acciones que cambian con el estado.",
+        "preview": "app/examples/action-footer/preview.tsx",
+        "previewHref": "/examples/action-footer",
+        "examples": [
+          {
+            "title": "Pie de acción",
+            "href": "/examples/action-footer",
+            "description": "Una pista y dos acciones que cambian con el estado."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/action-footer/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<ActionFooter hint=\"This raises the score.\" secondary={{ label: \"Send\" }} primary={{ label: \"Apply\" }} />",
+        "api": [
+          {
+            "name": "hint",
+            "type": "ReactNode",
+            "description": "Supporting line."
+          },
+          {
+            "name": "secondary / primary",
+            "type": "action",
+            "description": "Label, onSelect, and an optional icon."
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "description": "Disables the primary action."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "status-banner",
+      "type": "registry:ui",
+      "title": "Status banner",
+      "description": "Status banner that crossfades when the state key changes.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/status-banner.tsx",
+          "type": "registry:component",
+          "target": "@ui/status-banner.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Franja de estado",
+        "descriptionEs": "La franja cruza el mensaje cuando cambia la clave.",
+        "preview": "app/examples/status-banner/preview.tsx",
+        "previewHref": "/examples/status-banner",
+        "examples": [
+          {
+            "title": "Franja de estado",
+            "href": "/examples/status-banner",
+            "description": "La franja cruza el mensaje cuando cambia la clave."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/status-banner/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<StatusBanner title=\"Ready\" body=\"The package can go.\" stats={stats} stateKey=\"ready\" />",
+        "api": [
+          {
+            "name": "title / body",
+            "type": "string",
+            "description": "The message."
+          },
+          {
+            "name": "stats",
+            "type": "StatusBannerStat[]",
+            "description": "Divided figures."
+          },
+          {
+            "name": "stateKey",
+            "type": "string",
+            "description": "Crossfade key. Defaults to the title."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "destination-card",
+      "type": "registry:ui",
+      "title": "Destination card",
+      "description": "Destination, status, and key-value rows.",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/destination-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/destination-card.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de destino",
+        "descriptionEs": "Destino, estado y pares etiqueta-valor.",
+        "preview": "app/examples/destination-card/preview.tsx",
+        "previewHref": "/examples/destination-card",
+        "examples": [
+          {
+            "title": "Tarjeta de destino",
+            "href": "/examples/destination-card",
+            "description": "Destino, estado y pares etiqueta-valor."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/destination-card/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<DestinationCard name=\"Review desk\" detail=\"Open until 18:00\" fields={fields} />",
+        "api": [
+          {
+            "name": "name / detail",
+            "type": "string",
+            "description": "Where the package goes."
+          },
+          {
+            "name": "status",
+            "type": "ReactNode",
+            "description": "A chip or any status node."
+          },
+          {
+            "name": "fields",
+            "type": "{ label, value }[]",
+            "description": "The well under the name."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "next-steps",
+      "type": "registry:ui",
+      "title": "Next steps",
+      "description": "What happens next, plus a pinned action.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "dashboard"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/next-steps.tsx",
+          "type": "registry:component",
+          "target": "@ui/next-steps.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Próximos pasos",
+        "descriptionEs": "Qué sigue y una acción fija.",
+        "preview": "app/examples/next-steps/preview.tsx",
+        "previewHref": "/examples/next-steps",
+        "examples": [
+          {
+            "title": "Próximos pasos",
+            "href": "/examples/next-steps",
+            "description": "Qué sigue y una acción fija."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/next-steps/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<NextSteps title=\"What happens next\" steps={steps} actionLabel=\"Open tracker\" />",
+        "api": [
+          {
+            "name": "title / body",
+            "type": "string",
+            "description": "The outcome."
+          },
+          {
+            "name": "steps",
+            "type": "NextStep[]",
+            "description": "Title, detail, and an optional icon."
+          },
+          {
+            "name": "actionLabel / onAction",
+            "type": "string / fn",
+            "description": "The pinned button."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    },
+    {
+      "name": "review-desk",
+      "type": "registry:block",
+      "title": "Review desk",
+      "description": "Configurable review desk. Nav, records, findings, and the final action come from a typed config.",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "breadcrumb",
+        "button",
+        "checkbox",
+        "collapsible",
+        "dialog",
+        "dropdown-menu",
+        "popover",
+        "skeleton",
+        "switch",
+        "tabs",
+        "textarea"
+      ],
+      "categories": [
+        "dashboard",
+        "block"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/review-desk.tsx",
+          "type": "registry:component",
+          "target": "@ui/review-desk.tsx"
+        },
+        {
+          "path": "registry/lib/review-desk.ts",
+          "type": "registry:lib",
+          "target": "@lib/review-desk.ts"
+        },
+        {
+          "path": "registry/ui/action-footer.tsx",
+          "type": "registry:component",
+          "target": "@ui/action-footer.tsx"
+        },
+        {
+          "path": "registry/ui/assistant-status-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/assistant-status-card.tsx"
+        },
+        {
+          "path": "registry/ui/attention-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/attention-list.tsx"
+        },
+        {
+          "path": "registry/ui/breakdown-bar.tsx",
+          "type": "registry:component",
+          "target": "@ui/breakdown-bar.tsx"
+        },
+        {
+          "path": "registry/ui/check-tiles.tsx",
+          "type": "registry:component",
+          "target": "@ui/check-tiles.tsx"
+        },
+        {
+          "path": "registry/ui/chip-group.tsx",
+          "type": "registry:component",
+          "target": "@ui/chip-group.tsx"
+        },
+        {
+          "path": "registry/ui/compare-panel.tsx",
+          "type": "registry:component",
+          "target": "@ui/compare-panel.tsx"
+        },
+        {
+          "path": "registry/ui/destination-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/destination-card.tsx"
+        },
+        {
+          "path": "registry/ui/detection-overlay.tsx",
+          "type": "registry:component",
+          "target": "@ui/detection-overlay.tsx"
+        },
+        {
+          "path": "registry/ui/document-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/document-list.tsx"
+        },
+        {
+          "path": "registry/ui/event-callout.tsx",
+          "type": "registry:component",
+          "target": "@ui/event-callout.tsx"
+        },
+        {
+          "path": "registry/ui/filter-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@ui/filter-toolbar.tsx"
+        },
+        {
+          "path": "registry/ui/insight-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/insight-card.tsx"
+        },
+        {
+          "path": "registry/ui/issue-detail.tsx",
+          "type": "registry:component",
+          "target": "@ui/issue-detail.tsx"
+        },
+        {
+          "path": "registry/ui/issue-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/issue-list.tsx"
+        },
+        {
+          "path": "registry/ui/magnetic-dropzone.tsx",
+          "type": "registry:component",
+          "target": "@ui/magnetic-dropzone.tsx"
+        },
+        {
+          "path": "registry/ui/member-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/member-list.tsx"
+        },
+        {
+          "path": "registry/ui/next-steps.tsx",
+          "type": "registry:component",
+          "target": "@ui/next-steps.tsx"
+        },
+        {
+          "path": "registry/ui/priority-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/priority-badge.tsx"
+        },
+        {
+          "path": "registry/ui/proposal-workspace.tsx",
+          "type": "registry:component",
+          "target": "@ui/proposal-workspace.tsx"
+        },
+        {
+          "path": "registry/ui/record-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/record-card.tsx"
+        },
+        {
+          "path": "registry/ui/record-header.tsx",
+          "type": "registry:component",
+          "target": "@ui/record-header.tsx"
+        },
+        {
+          "path": "registry/ui/record-timeline.tsx",
+          "type": "registry:component",
+          "target": "@ui/record-timeline.tsx"
+        },
+        {
+          "path": "registry/ui/reply-composer.tsx",
+          "type": "registry:component",
+          "target": "@ui/reply-composer.tsx"
+        },
+        {
+          "path": "registry/ui/score-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/score-card.tsx"
+        },
+        {
+          "path": "registry/ui/segmented-control.tsx",
+          "type": "registry:component",
+          "target": "@ui/segmented-control.tsx"
+        },
+        {
+          "path": "registry/ui/source-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/source-list.tsx"
+        },
+        {
+          "path": "registry/ui/status-banner.tsx",
+          "type": "registry:component",
+          "target": "@ui/status-banner.tsx"
+        },
+        {
+          "path": "registry/ui/status-pill.tsx",
+          "type": "registry:component",
+          "target": "@ui/status-pill.tsx"
+        },
+        {
+          "path": "registry/ui/stat-strip.tsx",
+          "type": "registry:component",
+          "target": "@ui/stat-strip.tsx"
+        },
+        {
+          "path": "registry/ui/stepper.tsx",
+          "type": "registry:component",
+          "target": "@ui/stepper.tsx"
+        },
+        {
+          "path": "registry/ui/suggestion-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/suggestion-card.tsx"
+        },
+        {
+          "path": "registry/ui/tool-approval.tsx",
+          "type": "registry:component",
+          "target": "@ui/tool-approval.tsx"
+        },
+        {
+          "path": "registry/ui/workspace-switcher.tsx",
+          "type": "registry:component",
+          "target": "@ui/workspace-switcher.tsx"
+        },
+        {
+          "path": "registry/lib/status-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/status-tone.ts"
+        },
+        {
+          "path": "registry/lib/dashboard-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/dashboard-format.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/ui/confidence-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/confidence-badge.tsx"
+        },
+        {
+          "path": "registry/ui/prompt-suggestions.tsx",
+          "type": "registry:component",
+          "target": "@ui/prompt-suggestions.tsx"
+        },
+        {
+          "path": "registry/ui/radial-gauge.tsx",
+          "type": "registry:component",
+          "target": "@ui/radial-gauge.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Mesa de revisión",
+        "descriptionEs": "El mismo bloque para permisos, ventas, crédito u otra cola. El dominio vive en la config.",
+        "preview": "app/examples/review-desk/preview.tsx",
+        "previewHref": "/examples/review-desk",
+        "examples": [
+          {
+            "title": "Mesa de revisión",
+            "href": "/examples/review-desk",
+            "description": "El mismo bloque para permisos, ventas, crédito u otra cola. El dominio vive en la config."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/review-desk/stress",
+            "description": "320px, vacío y RTL."
+          }
+        ],
+        "usage": "<ReviewDesk config={config} />",
+        "api": [
+          {
+            "name": "config",
+            "type": "ReviewDeskConfig",
+            "description": "Nav, tabs, statuses, stages, records, issues, submission, and optional copy."
+          },
+          {
+            "name": "copy",
+            "type": "Partial<ReviewDeskCopy>",
+            "description": "Override any English chrome string. {token} placeholders are filled for you."
+          },
+          {
+            "name": "onCreate",
+            "type": "() => void",
+            "description": "The new-record button."
+          },
+          {
+            "name": "periods",
+            "type": "SegmentedControl",
+            "description": "The overview period switch reuses segmented-control."
+          },
+          {
+            "name": "tabs panel notes",
+            "type": "ReplyComposer",
+            "description": "The notes tab reuses reply-composer for a reply and an internal note."
+          }
+        ]
+      },
+      "author": "Eduardo Retana",
+      "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. The period switch reuses segmented-control. The notes tab reuses reply-composer. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
+    }
   ]
 }

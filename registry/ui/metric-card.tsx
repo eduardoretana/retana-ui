@@ -25,6 +25,8 @@ export type MetricCardProps = {
   suffix?: string
   context: string
   change?: string
+  /** Inverted surface. Stays on foreground so it differs from primary. */
+  featured?: boolean
   className?: string
   classNames?: MetricCardClassNames
 }
@@ -100,13 +102,19 @@ function trendOf(change: string) {
   return undefined
 }
 
-export function MetricCard({ label, value, suffix, context, change, className, classNames }: MetricCardProps) {
+export function MetricCard({ label, value, suffix, context, change, featured = false, className, classNames }: MetricCardProps) {
   const reduceMotion = !!useReducedMotion()
   const trend = change ? trendOf(change) : undefined
   return (
     <Card
       data-slot="metric-card"
-      className={cn("min-w-0 gap-0 py-6 shadow-sm ring-border max-[380px]:py-4", className, classNames?.root)}
+      data-featured={featured ? "" : undefined}
+      className={cn(
+        "min-w-0 gap-0 py-6 shadow-sm ring-border max-[380px]:py-4",
+        featured && "bg-foreground text-background ring-0",
+        className,
+        classNames?.root,
+      )}
     >
       <CardHeader className="flex-row items-start justify-between gap-3">
         <span data-slot="metric-card-label" className={cn("min-w-0 text-sm text-muted-foreground", classNames?.label)}>

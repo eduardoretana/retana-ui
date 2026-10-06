@@ -1,0 +1,60 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "compare-panel",
+  "title": "Compare panel",
+  "author": "Eduardo Retana",
+  "description": "Before and after columns. One row can be marked new.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/compare-panel.tsx",
+      "content": "\"use client\"\n\n/** Side-by-side callouts. One row can be marked as added. */\n\nimport * as React from \"react\"\nimport { ArrowRight } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type ComparePanelProps = {\n  title: string\n  location?: string\n  beforeLabel: string\n  afterLabel: string\n  before: readonly string[]\n  after: readonly string[]\n  highlightIndex?: number\n  className?: string\n}\n\nexport function ComparePanel({\n  title,\n  location,\n  beforeLabel,\n  afterLabel,\n  before,\n  after,\n  highlightIndex,\n  className,\n}: ComparePanelProps) {\n  return (\n    <section data-slot=\"compare-panel\" className={cn(\"rounded-2xl bg-foreground p-4 text-background\", className)}>\n      <header className=\"mb-3 flex flex-wrap items-center justify-between gap-2\">\n        <h3 className=\"text-sm font-medium\">{title}</h3>\n        {location ? <p className=\"font-mono text-xs text-primary\">{location}</p> : null}\n      </header>\n      <div className=\"grid items-start gap-2 md:grid-cols-[1fr_auto_1fr]\">\n        <Column label={beforeLabel} rows={before} />\n        <ArrowRight className=\"mx-auto size-4 text-primary md:mt-8\" aria-hidden />\n        <Column label={afterLabel} rows={after} highlightIndex={highlightIndex} />\n      </div>\n    </section>\n  )\n}\n\nfunction Column({ label, rows, highlightIndex }: { label: string; rows: readonly string[]; highlightIndex?: number }) {\n  return (\n    <div className=\"min-w-0 rounded-xl border border-background/20 p-2\">\n      <p className=\"mb-2 text-xs text-background/60\">{label}</p>\n      <ul className=\"flex flex-col gap-1\">\n        {rows.map((row, index) => (\n          <li\n            key={`${row}-${index}`}\n            className={cn(\n              \"rounded-md px-2 py-1 font-mono text-xs uppercase wrap-break-word\",\n              index === highlightIndex && \"bg-primary text-primary-foreground\",\n            )}\n          >\n            {row}\n          </li>\n        ))}\n      </ul>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/compare-panel.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Panel de comparación",
+    "descriptionEs": "Dos columnas. Una fila puede marcarse como nueva.",
+    "preview": "app/examples/compare-panel/preview.tsx",
+    "previewHref": "/examples/compare-panel",
+    "examples": [
+      {
+        "title": "Panel de comparación",
+        "href": "/examples/compare-panel",
+        "description": "Dos columnas. Una fila puede marcarse como nueva."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/compare-panel/stress",
+        "description": "320px, vacío y RTL."
+      }
+    ],
+    "usage": "<ComparePanel title=\"Change\" beforeLabel=\"Before\" afterLabel=\"After\" before={before} after={after} highlightIndex={0} />",
+    "api": [
+      {
+        "name": "before / after",
+        "type": "string[]",
+        "description": "Rows."
+      },
+      {
+        "name": "highlightIndex",
+        "type": "number",
+        "description": "The row drawn with the accent."
+      },
+      {
+        "name": "beforeLabel / afterLabel",
+        "type": "string",
+        "description": "Column headings."
+      }
+    ]
+  },
+  "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme.",
+  "categories": [
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}

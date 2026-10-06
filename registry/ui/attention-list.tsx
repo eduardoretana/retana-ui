@@ -38,6 +38,8 @@ export type AttentionItem = {
   href?: string
   onSelect?: (item: AttentionItem) => void
   actions?: readonly AttentionAction[]
+  /** Cells for layout="table", keyed by column id. */
+  cells?: Record<string, React.ReactNode>
 }
 
 export type AttentionListClassNames = {
@@ -48,9 +50,13 @@ export type AttentionListClassNames = {
   empty?: string
 }
 
+export type AttentionColumn = { id: string; label: string; mono?: boolean }
+
 export type AttentionListProps = {
   items: readonly AttentionItem[]
   label?: string
+  layout?: "stack" | "table" | "compact"
+  columns?: readonly AttentionColumn[]
   max?: number
   moreLabel?: (hidden: number) => string
   emptyLabel?: string
@@ -105,6 +111,8 @@ function Chips({ chips }: { chips: readonly AttentionChip[] }) {
 export function AttentionList({
   items,
   label = "Needs you",
+  layout = "stack",
+  columns = [],
   max,
   moreLabel = (hidden) => `Show ${hidden} more`,
   emptyLabel = "You're all caught up",
@@ -147,6 +155,78 @@ export function AttentionList({
           <p className="text-xs text-muted-foreground">{emptyHint}</p>
         </div>
       ) : (
+        layout === "table" && columns.length ? (
+          <div className="min-w-0 overflow-x-auto">
+            <table className="w-full min-w-[36rem] border-separate border-spacing-0 text-sm">
+              <thead>
+                <tr className="bg-muted text-xs text-muted-foreground">
+                  {columns.map((column) => (
+                    <th key={column.id} className="px-3 py-2 text-start font-medium first:rounded-s-lg last:rounded-e-lg">
+                      {column.label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {visible.map((item, index) => {
+                  const name = rowName(item)
+                  return (
+                    <tr
+                      key={item.id}
+                      data-attention-row=""
+                      tabIndex={0}
+                      className="cursor-pointer border-b border-border hover:bg-muted/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      onClick={() => item.onSelect?.(item)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault()
+                          item.onSelect?.(item)
+                        }
+                        onRowKey(event, index)
+                      }}
+                    >
+                      {columns.map((column) => (
+                        <td key={column.id} className={cn("border-b border-border px-3 py-3 align-middle", column.mono && "font-mono text-xs")}>
+                          {item.cells?.[column.id] ?? (column.id === columns[0]?.id ? item.title : null)}
+                        </td>
+                      ))}
+                      <td className="sr-only">{name}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : layout === "compact" ? (
+          <ul role="list" aria-label={label} className="flex flex-col">
+            {visible.map((item, index) => (
+              <li key={item.id}>
+                <button
+                  type="button"
+                  data-attention-row=""
+                  className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-start hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  onClick={() => item.onSelect?.(item)}
+                  onKeyDown={(event) => onRowKey(event, index)}
+                >
+                  <span
+                    aria-hidden
+                    className={cn(
+                      "size-2 shrink-0 rounded-full",
+                      item.tone === "critical" && "bg-destructive",
+                      item.tone === "positive" && "bg-primary",
+                      (item.tone ?? "neutral") === "neutral" && "bg-chart-4",
+                    )}
+                  />
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-medium">{item.title}</span>
+                    {item.description ? <span className="block truncate text-xs text-muted-foreground">{item.description}</span> : null}
+                  </span>
+                  <ChevronRight className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
         <ul role="list" aria-label={label} className="flex flex-col">
           {visible.map((item, index) => {
             const tone = item.tone ?? "neutral"
@@ -229,6 +309,7 @@ export function AttentionList({
             )
           })}
         </ul>
+        )
       )}
       {hidden > 0 ? (
         <Button type="button" variant="ghost" size="sm" className="mt-1" onClick={() => setOpen(true)}>

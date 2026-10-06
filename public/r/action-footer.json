@@ -1,0 +1,60 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "action-footer",
+  "title": "Action footer",
+  "author": "Eduardo Retana",
+  "description": "Hint plus secondary and primary actions.",
+  "dependencies": [],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/action-footer.tsx",
+      "content": "\"use client\"\n\n/** Hint plus secondary and primary actions. Swap the actions as state changes. */\n\nimport * as React from \"react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\n\nexport type ActionFooterProps = {\n  hint?: React.ReactNode\n  secondary?: { label: string; onSelect?: () => void; icon?: React.ReactNode }\n  primary?: { label: string; onSelect?: () => void; icon?: React.ReactNode }\n  disabled?: boolean\n  className?: string\n}\n\nexport function ActionFooter({ hint, secondary, primary, disabled = false, className }: ActionFooterProps) {\n  return (\n    <footer\n      data-slot=\"action-footer\"\n      data-disabled={disabled ? \"\" : undefined}\n      className={cn(\"flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3\", className)}\n    >\n      <div className=\"min-w-0 text-xs text-muted-foreground wrap-break-word\">{hint}</div>\n      <div className=\"flex flex-wrap items-center gap-2\">\n        {secondary ? (\n          <Button type=\"button\" variant=\"outline\" className=\"rounded-full\" disabled={disabled} onClick={secondary.onSelect}>\n            {secondary.icon}\n            {secondary.label}\n          </Button>\n        ) : null}\n        {primary ? (\n          <Button type=\"button\" className=\"rounded-full\" disabled={disabled} onClick={primary.onSelect}>\n            {primary.icon}\n            {primary.label}\n          </Button>\n        ) : null}\n      </div>\n    </footer>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/action-footer.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Pie de acción",
+    "descriptionEs": "Una pista y dos acciones que cambian con el estado.",
+    "preview": "app/examples/action-footer/preview.tsx",
+    "previewHref": "/examples/action-footer",
+    "examples": [
+      {
+        "title": "Pie de acción",
+        "href": "/examples/action-footer",
+        "description": "Una pista y dos acciones que cambian con el estado."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/action-footer/stress",
+        "description": "320px, vacío y RTL."
+      }
+    ],
+    "usage": "<ActionFooter hint=\"This raises the score.\" secondary={{ label: \"Send\" }} primary={{ label: \"Apply\" }} />",
+    "api": [
+      {
+        "name": "hint",
+        "type": "ReactNode",
+        "description": "Supporting line."
+      },
+      {
+        "name": "secondary / primary",
+        "type": "action",
+        "description": "Label, onSelect, and an optional icon."
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "description": "Disables the primary action."
+      }
+    ]
+  },
+  "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme.",
+  "categories": [
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}

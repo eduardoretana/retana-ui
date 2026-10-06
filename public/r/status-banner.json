@@ -1,0 +1,61 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "status-banner",
+  "title": "Status banner",
+  "author": "Eduardo Retana",
+  "description": "Status banner that crossfades when the state key changes.",
+  "dependencies": [
+    "lucide-react",
+    "motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/status-banner.tsx",
+      "content": "\"use client\"\n\n/** Full-width status banner. Pass the next copy to crossfade the message. */\n\nimport * as React from \"react\"\nimport { AnimatePresence, motion, useReducedMotion } from \"motion/react\"\nimport { Check } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type StatusBannerStat = { label: string; value: string }\n\nexport type StatusBannerProps = {\n  title: string\n  body?: string\n  stats?: readonly StatusBannerStat[]\n  /** Changes the crossfade key. Defaults to the title. */\n  stateKey?: string\n  className?: string\n}\n\nexport function StatusBanner({ title, body, stats = [], stateKey, className }: StatusBannerProps) {\n  const reduced = useReducedMotion() ?? false\n  const bannerBody = (\n    <>\n      <div className=\"flex min-w-0 items-start gap-3\">\n        <span aria-hidden className=\"grid size-9 shrink-0 place-items-center rounded-full bg-card text-foreground\">\n          <Check className=\"size-4\" />\n        </span>\n        <div className=\"min-w-0\">\n          <h2 className=\"text-lg font-medium wrap-break-word\">{title}</h2>\n          {body ? <p className=\"text-sm opacity-80 wrap-break-word\">{body}</p> : null}\n        </div>\n      </div>\n      {stats.length ? (\n        <dl className=\"flex flex-wrap gap-4\">\n          {stats.map((stat, index) => (\n            <div key={stat.label} className={cn(\"min-w-24\", index > 0 && \"border-s border-primary-foreground/20 ps-4\")}>\n              <dt className=\"text-xs opacity-70\">{stat.label}</dt>\n              <dd className=\"font-mono text-sm\">{stat.value}</dd>\n            </div>\n          ))}\n        </dl>\n      ) : null}\n    </>\n  )\n  return (\n    <section data-slot=\"status-banner\" className={cn(\"overflow-hidden rounded-2xl bg-primary px-4 py-4 text-primary-foreground\", className)}>\n      {reduced ? (\n        <div className=\"flex flex-wrap items-center justify-between gap-4\">{bannerBody}</div>\n      ) : (\n        <AnimatePresence initial={false}>\n          <motion.div\n            key={stateKey ?? title}\n            initial={{ opacity: 0 }}\n            animate={{ opacity: 1 }}\n            exit={{ opacity: 0 }}\n            transition={{ duration: 0.2 }}\n            className=\"flex flex-wrap items-center justify-between gap-4\"\n          >\n            {bannerBody}\n          </motion.div>\n        </AnimatePresence>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/status-banner.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Franja de estado",
+    "descriptionEs": "La franja cruza el mensaje cuando cambia la clave.",
+    "preview": "app/examples/status-banner/preview.tsx",
+    "previewHref": "/examples/status-banner",
+    "examples": [
+      {
+        "title": "Franja de estado",
+        "href": "/examples/status-banner",
+        "description": "La franja cruza el mensaje cuando cambia la clave."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/status-banner/stress",
+        "description": "320px, vacío y RTL."
+      }
+    ],
+    "usage": "<StatusBanner title=\"Ready\" body=\"The package can go.\" stats={stats} stateKey=\"ready\" />",
+    "api": [
+      {
+        "name": "title / body",
+        "type": "string",
+        "description": "The message."
+      },
+      {
+        "name": "stats",
+        "type": "StatusBannerStat[]",
+        "description": "Divided figures."
+      },
+      {
+        "name": "stateKey",
+        "type": "string",
+        "description": "Crossfade key. Defaults to the title."
+      }
+    ]
+  },
+  "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme.",
+  "categories": [
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}

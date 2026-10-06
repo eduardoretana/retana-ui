@@ -10,6 +10,10 @@ export type Detection = {
   label: string
   score?: number
   box: { x: number; y: number; width: number; height: number }
+  /** chart keeps the rotating chart color. critical and accent use host tokens. */
+  tone?: "chart" | "critical" | "accent"
+  dashed?: boolean
+  caption?: string
 }
 
 export type DetectionOverlayProps = {
@@ -21,6 +25,9 @@ export type DetectionOverlayProps = {
   interactive?: boolean
   hiddenLabels?: string[]
   onHiddenLabelsChange?: (labels: string[]) => void
+  caption?: string
+  openLabel?: string
+  onOpen?: () => void
   children?: React.ReactNode
   className?: string
 }
@@ -69,6 +76,9 @@ export function DetectionOverlay({
   minScore = 0,
   interactive = true,
   hiddenLabels = [],
+  caption,
+  openLabel,
+  onOpen,
   children,
   className,
 }: DetectionOverlayProps) {
@@ -97,8 +107,13 @@ export function DetectionOverlay({
             >
               <span
                 tabIndex={interactive ? 0 : undefined}
-                className="pointer-events-auto absolute inset-0 border-2 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-                style={{ borderColor: chartFor(detection.label, labels) }}
+                className={cn(
+                  "pointer-events-auto absolute inset-0 border-2 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+                  detection.dashed && "border-dashed",
+                  detection.tone === "critical" && "border-destructive",
+                  detection.tone === "accent" && "border-primary",
+                )}
+                style={detection.tone && detection.tone !== "chart" ? undefined : { borderColor: chartFor(detection.label, labels) }}
                 onMouseEnter={() => setFocus(index)}
                 onMouseLeave={() => setFocus(null)}
                 onFocus={() => setFocus(index)}
@@ -109,7 +124,17 @@ export function DetectionOverlay({
                   {percent ? `, ${percent} confidence` : ""}, top-left
                 </span>
               </span>
-              {hideLabels ? null : (
+              {detection.tone === "critical" || detection.tone === "accent" ? (
+                <span
+                  className={cn(
+                    "absolute top-full mt-1 max-w-full truncate rounded-full px-1.5 py-0.5 text-[10px]",
+                    detection.tone === "critical" ? "bg-destructive text-background" : "bg-primary text-primary-foreground",
+                  )}
+                >
+                  {detection.label}
+                </span>
+              ) : null}
+              {hideLabels || detection.tone === "critical" || detection.tone === "accent" ? null : (
                 <span
                   className="absolute left-0 max-w-full -translate-y-full truncate rounded-sm px-1 text-[10px] text-primary-foreground"
                   style={{ backgroundColor: chartFor(detection.label, labels), top: top < 8 ? "100%" : 0 }}
@@ -121,6 +146,16 @@ export function DetectionOverlay({
           )
         })}
       </ul>
+      {caption || onOpen ? (
+        <div className="mt-2 flex items-center justify-between gap-2 text-xs">
+          {caption ? <p className="font-mono text-muted-foreground">{caption}</p> : <span />}
+          {onOpen ? (
+            <button type="button" className="font-medium focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none" onClick={onOpen}>
+              {openLabel ?? "Open"}
+            </button>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   )
 }

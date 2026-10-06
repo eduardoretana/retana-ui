@@ -3,6 +3,7 @@
 /** Independent implementation of a common dashboard pattern. */
 
 import * as React from "react"
+import { useReducedMotion } from "motion/react"
 
 import { cn } from "@/lib/utils"
 import { formatDashboardValue, shareOf, type DashboardFormat } from "@/registry/retana/lib/dashboard-format"
@@ -27,6 +28,13 @@ export type BreakdownBarProps = {
   format?: DashboardFormat
   locale?: string
   currency?: string
+  /** legend is the default list. pipeline draws gapped stages with counts underneath. */
+  variant?: "legend" | "pipeline"
+  /** Segment index drawn in the accent. The last segment stays inverted. */
+  emphasis?: number
+  heading?: string
+  caption?: string
+  action?: { label: string; onSelect: () => void }
   className?: string
   classNames?: BreakdownBarClassNames
 }
@@ -40,15 +48,73 @@ export function BreakdownBar({
   format = "currency",
   locale = "en-US",
   currency = "USD",
+  variant = "legend",
+  emphasis,
+  heading,
+  caption,
+  action,
   className,
   classNames,
 }: BreakdownBarProps) {
+  const reduced = useReducedMotion() ?? false
   const [active, setActive] = React.useState<string | null>(null)
   const sum = segments.reduce((acc, segment) => acc + Math.max(0, segment.value), 0)
   const basis = sum > 0 ? sum : Math.max(total, 0)
   const summary = segments
     .map((segment) => `${segment.label} ${formatDashboardValue(segment.value, format, locale, currency)}`)
     .join(", ")
+
+  if (variant === "pipeline") {
+    return (
+      <div data-slot="breakdown-bar" data-variant="pipeline" className={cn("flex min-w-0 flex-col gap-3", className, classNames?.root)}>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="text-sm font-medium">{heading ?? label}</p>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            {caption ? <span>{caption}</span> : null}
+            {action ? (
+              <button type="button" className="font-medium text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none" onClick={action.onSelect}>
+                {action.label}
+              </button>
+            ) : null}
+          </div>
+        </div>
+        <div role="img" aria-label={`${label}: ${summary}`} className={cn("flex h-3 gap-1", classNames?.track)}>
+          {segments.map((segment, index) => {
+            const share = shareOf(Math.max(0, segment.value), basis)
+            const last = index === segments.length - 1
+            const hot = emphasis === index
+            return (
+              <span
+                key={segment.id}
+                data-segment={segment.id}
+                className="h-full min-w-1 origin-left"
+                style={{ width: `${Math.max(share * 100, share > 0 ? 6 : 0)}%` }}
+              >
+                <span
+                  className={cn(
+                    "block h-full rounded-full motion-safe:animate-in motion-safe:slide-in-from-left-2",
+                    reduced && "animate-none",
+                    hot ? "bg-primary" : last ? "bg-foreground" : "bg-muted-foreground/25",
+                  )}
+                />
+              </span>
+            )
+          })}
+        </div>
+        <div className="flex gap-1">
+          {segments.map((segment) => {
+            const share = shareOf(Math.max(0, segment.value), basis)
+            return (
+              <div key={segment.id} className="min-w-0" style={{ width: `${Math.max(share * 100, share > 0 ? 6 : 0)}%` }}>
+                <p className="font-mono text-sm tabular-nums">{formatDashboardValue(segment.value, "number", locale)}</p>
+                <p className="truncate text-[10px] text-muted-foreground">{segment.label}</p>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div data-slot="breakdown-bar" className={cn("flex min-w-0 flex-col gap-3", className, classNames?.root)}>

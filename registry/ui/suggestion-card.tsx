@@ -53,6 +53,9 @@ export type SuggestionCardProps = {
   rationale?: string
   steps?: readonly SuggestionStep[]
   owners?: readonly SuggestionPerson[]
+  /** accent fills the card with primary. default keeps the muted well. */
+  surface?: "default" | "accent"
+  fields?: readonly { id: string; label: string }[]
   confirmLabel?: string
   changeLabel?: string
   dismissLabel?: string
@@ -86,6 +89,8 @@ export function SuggestionCard({
   rationale,
   steps = [],
   owners = [],
+  surface = "default",
+  fields = [],
   confirmLabel = "Confirm",
   changeLabel = "Change",
   dismissLabel = "Dismiss",
@@ -120,7 +125,7 @@ export function SuggestionCard({
       ? joinMeta([confirmedBy ? `Confirmed by ${confirmedBy}` : null, confirmedAt])
       : source
   return (
-    <article data-slot="suggestion-card" data-status={status} aria-labelledby={titleId} className={cn("@container rounded-2xl bg-muted p-2 text-foreground", className, classNames?.root)}>
+    <article data-slot="suggestion-card" data-status={status} data-surface={surface} aria-labelledby={titleId} className={cn("@container rounded-2xl p-2 text-foreground", surface === "accent" ? "bg-primary text-primary-foreground" : "bg-muted", className, classNames?.root)}>
       <div className="flex flex-wrap items-start justify-between gap-2 px-3 pt-2 pb-3">
         <div className="min-w-0">
           <h3 id={titleId} className={cn("text-[15px] font-medium break-words", classNames?.title)}>{heading}</h3>
@@ -201,6 +206,15 @@ export function SuggestionCard({
           </div>
         ) : null}
         {owners.length ? <p className="mt-3 text-xs text-muted-foreground">{owners.map((owner) => owner.name).join(", ")}</p> : null}
+        {fields.length ? (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {fields.map((field) => (
+              <span key={field.id} className="inline-flex max-w-full items-center rounded-full bg-card px-2 py-1 font-mono text-xs text-card-foreground">
+                <span className="truncate">{field.label}</span>
+              </span>
+            ))}
+          </div>
+        ) : null}
         <div className="mt-4 flex flex-wrap gap-2">
           {variant === "action" || status === "confirmed" ? (
             <Button type="button" className="rounded-full" onClick={onAction} aria-label={`${actionLabel}: ${suggestion}`}>

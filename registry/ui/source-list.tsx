@@ -3,7 +3,7 @@
 // Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/conversation/sources/sources.tsx
 
 import * as React from "react"
-import { ChevronDown } from "lucide-react"
+import { ArrowUpRight, ChevronDown } from "lucide-react"
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -19,6 +19,8 @@ export type SourceItem = {
   favicon?: string
   score?: number
   type?: "web" | "image" | "news"
+  detail?: string
+  icon?: React.ReactNode
 }
 
 export type SourceListProps = {
@@ -26,11 +28,13 @@ export type SourceListProps = {
   highlightId?: string
   target?: string
   defaultOpen?: boolean
+  /** citations is the collapsible source list. links is a flat reference list. */
+  variant?: "citations" | "links"
   className?: string
   classNames?: { root?: string; row?: string }
 }
 
-export function SourceList({ sources, highlightId, target = "_blank", defaultOpen = false, className, classNames }: SourceListProps) {
+export function SourceList({ sources, highlightId, target = "_blank", defaultOpen = false, variant = "citations", className, classNames }: SourceListProps) {
   const [open, setOpen] = React.useState(defaultOpen)
   const types = [...new Set(sources.map((source) => source.type).filter(Boolean))] as SourceItem["type"][]
   const contentId = React.useId()
@@ -82,6 +86,38 @@ export function SourceList({ sources, highlightId, target = "_blank", defaultOpe
       })}
     </ol>
   )
+
+  if (variant === "links") {
+    return (
+      <ul data-slot="source-list" data-variant="links" className={cn("flex flex-col gap-1", className, classNames?.root)}>
+        {sources.map((source) => {
+          const row = (
+            <>
+              <span aria-hidden className="grid size-8 shrink-0 place-items-center rounded-lg bg-muted [&_svg]:size-4">
+                {source.icon}
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm font-medium">{source.title}</span>
+                {source.detail || source.domain ? <span className="block truncate text-xs text-muted-foreground">{source.detail ?? source.domain}</span> : null}
+              </span>
+              <ArrowUpRight className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+            </>
+          )
+          return (
+            <li key={source.id} className={classNames?.row}>
+              {source.url ? (
+                <a href={source.url} target={target} rel={target === "_blank" ? "noreferrer" : undefined} className="flex items-center gap-2 rounded-lg bg-card px-2 py-2 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none">
+                  {row}
+                </a>
+              ) : (
+                <div className="flex items-center gap-2 rounded-lg bg-card px-2 py-2">{row}</div>
+              )}
+            </li>
+          )
+        })}
+      </ul>
+    )
+  }
 
   return (
     <Collapsible open={open} onOpenChange={setOpen} className={cn("rounded-lg border border-border", className, classNames?.root)}>

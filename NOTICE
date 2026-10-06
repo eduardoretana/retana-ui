@@ -329,6 +329,24 @@ gained optional fields and stay compatible when those fields are omitted.
 
 ---
 
+Review desk
+
+status-pill, accent-callout, insight-card, workspace-switcher,
+assistant-status-card, record-card, score-card, check-tiles, member-list,
+event-callout, document-list, issue-list, issue-detail, compare-panel,
+action-footer, status-banner, destination-card, next-steps, and review-desk
+are a clean-room, domain-agnostic review workflow. The behavior was observed
+in an unlicensed operations-dashboard demonstration. No source, product name,
+sample copy, icons, photos, or assets were copied. Labels, statuses, steps,
+and the final action come from a typed config. The solar, sales, and credit
+demos are fictional presets of that same block. The period switch reuses
+segmented-control. The notes tab reuses reply-composer. The pieces use the
+host shadcn tokens. Inverted surfaces use foreground and background. Highlight
+uses the host primary. Answer no if the CLI asks to overwrite a primitive
+the host already has. The items ship no theme.
+
+---
+
 LocalMode UI
 
 Retana UI includes pieces adapted from LocalMode UI (MIT):

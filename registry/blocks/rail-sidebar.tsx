@@ -156,6 +156,17 @@ export type RailSidebarProps = {
   collapsible?: "offcanvas" | "icon" | "none"
   /** In-flow layout for thumbnails, tests, and narrow containers. */
   contained?: boolean
+  /** row is the default card highlight. pill uses an inverted active item. */
+  itemStyle?: "row" | "pill"
+  /** panel hides the icon rail and shows only the link column. */
+  layout?: "rail" | "panel"
+  showSearch?: boolean
+  showSectionTitle?: boolean
+  brand?: React.ReactNode
+  /** Replaces the built-in workspace row. */
+  workspaceSlot?: React.ReactNode
+  /** Renders above the user card. */
+  panelFooter?: React.ReactNode
   mark?: React.ReactNode
   markLabel?: string
   children?: React.ReactNode
@@ -211,7 +222,7 @@ function initials(name: string) {
     .join("")
 }
 
-function ItemBody({ item, className }: { item: RailLink; className?: string }) {
+function ItemBody({ item, className, active = false, pill = false }: { item: RailLink; className?: string; active?: boolean; pill?: boolean }) {
   return (
     <>
       {item.dot ? (
@@ -225,7 +236,11 @@ function ItemBody({ item, className }: { item: RailLink; className?: string }) {
       {item.badge != null && item.badge !== "" ? (
         <Badge
           variant="secondary"
-          className={cn("ms-auto tabular-nums", item.badgeTone === "alert" && "bg-destructive/10 text-destructive")}
+          className={cn(
+            "ms-auto tabular-nums",
+            item.badgeTone === "alert" && "bg-destructive/10 text-destructive",
+            pill && active && "bg-primary text-primary-foreground",
+          )}
         >
           {item.badge}
         </Badge>
@@ -240,12 +255,14 @@ function RailAnchor({
   className,
   renderLink,
   onNavigate,
+  pill = false,
 }: {
   item: RailLink
   active: boolean
   className: string
   renderLink?: RailSidebarProps["renderLink"]
   onNavigate?: (href: string) => void
+  pill?: boolean
 }) {
   const current = active ? "page" : undefined
   const onClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -267,7 +284,7 @@ function RailAnchor({
         aria-disabled={item.disabled || undefined}
         onClick={onClick}
       >
-        {React.cloneElement(item.asChild, undefined, <ItemBody item={item} />)}
+        {React.cloneElement(item.asChild, undefined, <ItemBody item={item} active={active} pill={pill} />)}
       </Slot.Root>
     )
   }
@@ -278,7 +295,7 @@ function RailAnchor({
       className,
       "aria-current": current,
       onClick,
-      children: <ItemBody item={item} />,
+      children: <ItemBody item={item} active={active} pill={pill} />,
     })
   }
 
@@ -291,14 +308,14 @@ function RailAnchor({
         aria-disabled={item.disabled || undefined}
         onClick={onClick}
       >
-        <ItemBody item={item} />
+        <ItemBody item={item} active={active} pill={pill} />
       </a>
     )
   }
 
   return (
     <button type="button" className={className} disabled={item.disabled} aria-current={current} onClick={onClick}>
-      <ItemBody item={item} />
+      <ItemBody item={item} active={active} pill={pill} />
     </button>
   )
 }
@@ -342,6 +359,13 @@ function RailColumns({
   showCollapse,
   scope,
   footerLinks,
+  itemStyle = "row",
+  layout = "rail",
+  showSearch = true,
+  showSectionTitle = true,
+  brand,
+  workspaceSlot,
+  panelFooter,
 }: {
   sections: readonly RailSection[]
   sectionId: string
@@ -379,6 +403,13 @@ function RailColumns({
   | "expandLabel"
   | "scope"
   | "footerLinks"
+  | "itemStyle"
+  | "layout"
+  | "showSearch"
+  | "showSectionTitle"
+  | "brand"
+  | "workspaceSlot"
+  | "panelFooter"
 >) {
   const accordion = type ?? "single"
   const railRef = React.useRef<HTMLElement>(null)
@@ -452,9 +483,13 @@ function RailColumns({
   }
 
   const itemClass = cn(
-    "flex w-full min-w-0 items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-card aria-[current=page]:font-medium aria-[current=page]:shadow-sm",
+    "flex w-full min-w-0 items-center gap-2 px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+    itemStyle === "pill"
+      ? "rounded-full aria-[current=page]:bg-foreground aria-[current=page]:text-background"
+      : "rounded-md aria-[current=page]:bg-card aria-[current=page]:font-medium aria-[current=page]:shadow-sm",
     itemClassName,
   )
+  const pill = itemStyle === "pill"
 
   const userMenu = user ? (
     <DropdownMenuContent align="start" className="w-56">
@@ -471,6 +506,7 @@ function RailColumns({
       <div className={cn("flex h-full min-h-0 w-full min-w-0", className)}>
         <nav
           ref={railRef}
+          hidden={layout === "panel"}
           aria-label={railLabel ?? "Sections"}
           onKeyDown={onRailKeyDown}
           className={cn(
@@ -558,7 +594,8 @@ function RailColumns({
             className={cn("flex min-w-0 flex-1 flex-col bg-card", panelClassName)}
           >
             <div className={cn("flex flex-col gap-2 p-3", headerClassName)}>
-              {workspace && activeWorkspace ? (
+              {brand}
+              {workspaceSlot ?? (workspace && activeWorkspace ? (
                 workspace.options && workspace.options.length > 0 ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger
@@ -598,15 +635,17 @@ function RailColumns({
                     </span>
                   </div>
                 )
-              ) : null}
+              ) : null)}
 
+              {showSectionTitle ? (
               <div className="flex items-center justify-between gap-2 px-1">
                 <h2 className="min-w-0 truncate text-sm font-medium">{section?.label}</h2>
                 {section?.action}
               </div>
+              ) : null}
               {scope ? <ScopeToggle scope={scope} /> : null}
 
-              <div className={cn("relative", searchClassName)}>
+              {showSearch ? <div className={cn("relative", searchClassName)}>
                 <Search className="pointer-events-none absolute start-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   type="search"
@@ -630,7 +669,7 @@ function RailColumns({
                     ⌘K
                   </kbd>
                 )}
-              </div>
+              </div> : null}
             </div>
 
             <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-2">
@@ -641,6 +680,7 @@ function RailColumns({
                   className={cn(itemClass, "mb-1")}
                   renderLink={renderLink}
                   onNavigate={onNavigate}
+                  pill={pill}
                 />
               ) : null}
               {section?.nav.map((group) => (
@@ -668,7 +708,7 @@ function RailColumns({
                               ) : (
                                 <ChevronRight className="size-4 shrink-0 text-muted-foreground rtl:rotate-180" />
                               )}
-                              <ItemBody item={item} />
+                              <ItemBody item={item} pill={pill} />
                             </button>
                           ) : (
                             <RailAnchor
@@ -677,6 +717,7 @@ function RailColumns({
                               className={itemClass}
                               renderLink={renderLink}
                               onNavigate={onNavigate}
+                              pill={pill}
                             />
                           )}
                           {nested.length > 0 ? (
@@ -698,6 +739,7 @@ function RailColumns({
                                         className={itemClass}
                                         renderLink={renderLink}
                                         onNavigate={onNavigate}
+                                        pill={pill}
                                       />
                                     </li>
                                   ))}
@@ -725,6 +767,7 @@ function RailColumns({
                       active={Boolean(link.href && link.href === activeHref)}
                       className={itemClass}
                       renderLink={renderLink}
+                      pill={pill}
                       onNavigate={(href) => {
                         link.onSelect?.()
                         onNavigate?.(href)
@@ -734,6 +777,7 @@ function RailColumns({
                 ))}
               </ul>
             ) : null}
+            {panelFooter ? <div className="px-2 pb-2">{panelFooter}</div> : null}
             {user ? (
               <div className={cn("border-t border-border p-2", footerClassName)}>
                 <DropdownMenu>
@@ -893,6 +937,13 @@ function columnProps(props: RailSidebarProps, sectionId: string, onSectionChange
     expandLabel: props.expandLabel,
     scope: props.scope,
     footerLinks: props.footerLinks,
+    itemStyle: props.itemStyle,
+    layout: props.layout,
+    showSearch: props.showSearch,
+    showSectionTitle: props.showSectionTitle,
+    brand: props.brand,
+    workspaceSlot: props.workspaceSlot,
+    panelFooter: props.panelFooter,
     panelVisible,
     onTogglePanel,
     showCollapse,

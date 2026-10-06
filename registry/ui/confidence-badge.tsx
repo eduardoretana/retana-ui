@@ -5,12 +5,14 @@
 import { cn } from "@/lib/utils"
 
 export type ConfidenceTier = "high" | "medium" | "low"
-export type ConfidenceVariant = "badge" | "dial" | "bar"
+export type ConfidenceVariant = "badge" | "dial" | "bar" | "dots" | "segments"
 
 export type ConfidenceBadgeProps = {
   score: number
   thresholds?: { high: number; medium: number }
   variant?: ConfidenceVariant
+  /** Dot count for variant="dots". Ignored by the other variants. */
+  dots?: number
   className?: string
   classNames?: { root?: string; label?: string }
 }
@@ -25,6 +27,7 @@ export function ConfidenceBadge({
   score,
   thresholds,
   variant = "badge",
+  dots = 12,
   className,
   classNames,
 }: ConfidenceBadgeProps) {
@@ -68,6 +71,50 @@ export function ConfidenceBadge({
           />
         </svg>
         <span className={cn("absolute text-[10px] font-medium tabular-nums", classNames?.label)}>{percent}</span>
+      </span>
+    )
+  }
+
+  if (variant === "dots") {
+    const count = Math.max(4, Math.min(24, Math.round(dots)))
+    const filled = Math.round(clamped * count)
+    return (
+      <span
+        role="meter"
+        aria-label={label}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={percent}
+        data-variant="dots"
+        className={cn("inline-flex items-center gap-1", className, classNames?.root)}
+      >
+        {Array.from({ length: count }, (_, index) => (
+          <span key={index} aria-hidden className={cn("size-1.5 rounded-full", index < filled ? "bg-primary" : "bg-current opacity-25")} />
+        ))}
+      </span>
+    )
+  }
+
+  if (variant === "segments") {
+    const count = 5
+    const filled = Math.max(0, Math.min(count, Math.round(clamped * count)))
+    const lit = clamped >= 0.9 ? "bg-primary" : clamped >= 0.75 ? "bg-chart-4" : "bg-destructive"
+    return (
+      <span
+        role="meter"
+        aria-label={label}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={percent}
+        data-variant="segments"
+        className={cn("inline-flex items-center gap-1.5", className, classNames?.root)}
+      >
+        <span aria-hidden className="inline-flex gap-0.5">
+          {Array.from({ length: count }, (_, index) => (
+            <span key={index} className={cn("h-2 w-2 rounded-[2px]", index < filled ? lit : "bg-muted")} />
+          ))}
+        </span>
+        <span className={cn("font-mono text-xs tabular-nums", classNames?.label)}>{percent}%</span>
       </span>
     )
   }

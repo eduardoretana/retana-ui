@@ -1,0 +1,55 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "issue-list",
+  "title": "Issue list",
+  "author": "Eduardo Retana",
+  "description": "Selectable findings. The active row is a raised card.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/issue-list.tsx",
+      "content": "\"use client\"\n\n/** Selectable findings. The selected row is a raised card. */\n\nimport * as React from \"react\"\nimport { Check, TriangleAlert, X } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type IssueSeverity = \"pass\" | \"minor\" | \"critical\" | \"fixed\"\n\nexport type IssueListItem = {\n  id: string\n  title: string\n  description?: string\n  severity: IssueSeverity\n  badge?: React.ReactNode\n}\n\nexport type IssueListProps = {\n  label?: string\n  items: readonly IssueListItem[]\n  value?: string\n  onValueChange?: (id: string) => void\n  emptyLabel?: string\n  className?: string\n}\n\nconst iconWrap: Record<IssueSeverity, string> = {\n  pass: \"bg-primary/15 text-foreground\",\n  minor: \"bg-chart-4/20 text-foreground\",\n  critical: \"bg-destructive/10 text-destructive\",\n  fixed: \"bg-primary/15 text-foreground\",\n}\n\nfunction Mark({ severity }: { severity: IssueSeverity }) {\n  const Icon = severity === \"critical\" ? X : severity === \"minor\" ? TriangleAlert : Check\n  return (\n    <span aria-hidden className={cn(\"grid size-7 shrink-0 place-items-center rounded-full\", iconWrap[severity])}>\n      <Icon className=\"size-3.5\" />\n    </span>\n  )\n}\n\nexport function IssueList({ label = \"Findings\", items, value, onValueChange, emptyLabel = \"None\", className }: IssueListProps) {\n  function onKey(event: React.KeyboardEvent<HTMLButtonElement>, index: number) {\n    if (event.key !== \"ArrowDown\" && event.key !== \"ArrowUp\") return\n    event.preventDefault()\n    const next = event.key === \"ArrowDown\" ? Math.min(items.length - 1, index + 1) : Math.max(0, index - 1)\n    onValueChange?.(items[next]?.id ?? \"\")\n    const rows = event.currentTarget.closest(\"ul\")?.querySelectorAll<HTMLButtonElement>(\"[data-issue]\")\n    rows?.[next]?.focus()\n  }\n  return (\n    <section data-slot=\"issue-list\" className={cn(\"flex min-w-0 flex-col gap-2\", className)}>\n      <div className=\"flex items-center justify-between gap-2\">\n        <h3 className=\"text-sm font-medium\">{label}</h3>\n        <span className=\"font-mono text-xs text-muted-foreground\">{items.length}</span>\n      </div>\n      {items.length === 0 ? (\n        <p className=\"text-sm text-muted-foreground\">{emptyLabel}</p>\n      ) : (\n        <ul role=\"listbox\" aria-label={label} className=\"flex flex-col gap-1\">\n          {items.map((item, index) => {\n            const selected = item.id === value\n            return (\n              <li key={item.id}>\n                <button\n                  type=\"button\"\n                  role=\"option\"\n                  data-issue=\"\"\n                  aria-selected={selected}\n                  onClick={() => onValueChange?.(item.id)}\n                  onKeyDown={(event) => onKey(event, index)}\n                  className={cn(\n                    \"flex w-full items-start gap-2 rounded-xl px-2 py-2 text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\",\n                    selected ? \"border border-border bg-card shadow-sm\" : \"hover:bg-muted\",\n                  )}\n                >\n                  <Mark severity={item.severity} />\n                  <span className=\"min-w-0 flex-1\">\n                    <span className=\"block text-sm font-medium wrap-break-word\">{item.title}</span>\n                    {item.description ? <span className=\"mt-0.5 line-clamp-2 block text-xs text-muted-foreground\">{item.description}</span> : null}\n                  </span>\n                  {item.badge}\n                </button>\n              </li>\n            )\n          })}\n        </ul>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/issue-list.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Lista de hallazgos",
+    "descriptionEs": "Lista seleccionable. La fila activa se eleva.",
+    "preview": "app/examples/issue-list/preview.tsx",
+    "previewHref": "/examples/issue-list",
+    "examples": [
+      {
+        "title": "Lista de hallazgos",
+        "href": "/examples/issue-list",
+        "description": "Lista seleccionable. La fila activa se eleva."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/issue-list/stress",
+        "description": "320px, vacío y RTL."
+      }
+    ],
+    "usage": "<IssueList label=\"Findings\" items={items} value={id} onValueChange={setId} />",
+    "api": [
+      {
+        "name": "items",
+        "type": "IssueListItem[]",
+        "description": "Title, severity, and an optional badge slot."
+      },
+      {
+        "name": "value / onValueChange",
+        "type": "string",
+        "description": "The selected id. Arrow keys move it."
+      }
+    ]
+  },
+  "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme.",
+  "categories": [
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}

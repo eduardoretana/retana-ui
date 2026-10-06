@@ -246,6 +246,25 @@ import Preview241 from "@/app/examples/slide-to-confirm/preview"
 import Preview242 from "@/app/examples/haptics/preview"
 import Preview243 from "@/app/examples/motion-preference/preview"
 import Preview244 from "@/app/examples/use-feedback/preview"
+import Preview245 from "@/app/examples/status-pill/preview"
+import Preview246 from "@/app/examples/accent-callout/preview"
+import Preview247 from "@/app/examples/insight-card/preview"
+import Preview248 from "@/app/examples/workspace-switcher/preview"
+import Preview249 from "@/app/examples/assistant-status-card/preview"
+import Preview250 from "@/app/examples/record-card/preview"
+import Preview251 from "@/app/examples/score-card/preview"
+import Preview252 from "@/app/examples/check-tiles/preview"
+import Preview253 from "@/app/examples/member-list/preview"
+import Preview254 from "@/app/examples/event-callout/preview"
+import Preview255 from "@/app/examples/document-list/preview"
+import Preview256 from "@/app/examples/issue-list/preview"
+import Preview257 from "@/app/examples/issue-detail/preview"
+import Preview258 from "@/app/examples/compare-panel/preview"
+import Preview259 from "@/app/examples/action-footer/preview"
+import Preview260 from "@/app/examples/status-banner/preview"
+import Preview261 from "@/app/examples/destination-card/preview"
+import Preview262 from "@/app/examples/next-steps/preview"
+import Preview263 from "@/app/examples/review-desk/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -493,4 +512,23 @@ export const previewMap = {
   "haptics": Preview242,
   "motion-preference": Preview243,
   "use-feedback": Preview244,
+  "status-pill": Preview245,
+  "accent-callout": Preview246,
+  "insight-card": Preview247,
+  "workspace-switcher": Preview248,
+  "assistant-status-card": Preview249,
+  "record-card": Preview250,
+  "score-card": Preview251,
+  "check-tiles": Preview252,
+  "member-list": Preview253,
+  "event-callout": Preview254,
+  "document-list": Preview255,
+  "issue-list": Preview256,
+  "issue-detail": Preview257,
+  "compare-panel": Preview258,
+  "action-footer": Preview259,
+  "status-banner": Preview260,
+  "destination-card": Preview261,
+  "next-steps": Preview262,
+  "review-desk": Preview263,
 }

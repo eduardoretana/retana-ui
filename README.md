@@ -30,6 +30,8 @@ The index at the bottom is generated from `registry.json`. These groups are the 
 
 **Inbox.** `support-inbox`, `ticket-desk`, and `notification-inbox` are three desks built from `inbox-list`, `reply-composer`, `ticket-properties`, and `contact-panel`. Reply and internal note share one composer. A note uses the host accent. Send is Cmd or Ctrl+Enter. The desks take records through props. The live demos use Estudio Bruma, a fictional ceramics studio. No third-party inbox source, copy, or assets were copied.
 
+**Review desk.** `review-desk` is one configurable desk for a record review: overview, collection, summary, documents, a finding, and a package. Nav, statuses, findings, and the final action come from a typed config (`defineReviewDesk`). The period switch reuses `segmented-control`. The notes tab reuses `reply-composer`. Three fictional presets ship in the demo: a solar workshop, a sales pipeline, and a credit file. No third-party source, copy, or assets were copied.
+
 **Layouts.** [`magnetic-bento`](registry/ui/magnetic-bento.tsx) is a bento grid with one shared highlight. The active card sets `anchor-name` and the highlight uses `position-anchor` with `inset: anchor(inside)`, so the four edges stretch between cards of different sizes. Browsers where `CSS.supports("anchor-name: --x")` is false measure the active card instead. The technique idea is from [jh3yy](https://x.com/jh3yy/status/2105823926978814273). The cards in this registry are original.
 
 **Verification and notices.** [`two-factor-card`](registry/ui/two-factor-card.tsx) is a one-time-code card on the `input-otp` primitive: countdown, verify, alternate methods, and a success handoff. [`otp-field`](registry/ui/otp-field.tsx) is the field alone when the screen already has its own frame. [`notification-stack`](registry/ui/notification-stack.tsx) is a depth stack that advances when the front card is dismissed. [`toast-stack`](registry/ui/toast-stack.tsx) is for short results at the edge, [`notification-center`](registry/blocks/notification-center.tsx) keeps a grouped list with read state, and [`card-stack`](registry/ui/card-stack.tsx) is a left-or-right triage deck. The two new cards take visual inspiration from Design & Code With AV Facebook reels. No code from those reels was used.
@@ -146,6 +148,22 @@ Clean-room desks. Pass the records in. The Estudio Bruma demos are fictional.
 | [`ticket-properties`](registry/ui/ticket-properties.tsx) | Status, priority, an overdue due date, SLA, tags, and read-only metadata. |
 | [`contact-panel`](registry/ui/contact-panel.tsx) | Details and Copilot tabs. Copilot is a slot. |
 | [`view-customizer`](registry/ui/view-customizer.tsx) | Multi-select view tiles, plus the animated `view-switcher` pill. |
+
+### Review desk
+
+One block, three presets. Domain words stay in the config.
+
+| Piece | Use it for |
+| --- | --- |
+| [`review-desk`](registry/blocks/review-desk.tsx) | The desk. Pass nav, records, findings, and the final action. `defineReviewDesk` builds a preset. |
+| [`record-card`](registry/ui/record-card.tsx) | A hero, media, or tile card. The cover is a seeded wash. |
+| [`score-card`](registry/ui/score-card.tsx) | A score and a tick gauge. The number comes from the config. |
+| [`issue-list`](registry/ui/issue-list.tsx) | Findings with severity. Arrow keys move the selection. |
+| [`issue-detail`](registry/ui/issue-detail.tsx) | One finding, the comparison, and the approval. |
+| [`document-list`](registry/ui/document-list.tsx) | Documents as a review list or a checklist. |
+| [`status-pill`](registry/ui/status-pill.tsx) | A tone, a dot, and a label you pass in. |
+
+The overview period switch reuses `segmented-control`. The notes tab reuses `reply-composer`. The live presets are [`/examples/review-desk`](/examples/review-desk).
 
 `admin-shell` is the collapsible admin sidebar with breadcrumbs and a command palette. `rail-sidebar` is the two-layer app sidebar: an icon rail for sections and a panel for that section's links. `multi-view` is the block that switches the six views and opens the record panel.
 
@@ -281,7 +299,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`245` items are in `registry.json` on this branch: `201` components, `34` blocks, `4` hooks, and `6` libraries. A name links to its source file.
+`264` items are in `registry.json` on this branch: `219` components, `35` blocks, `4` hooks, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -453,6 +471,24 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`proposal-similar`](registry/ui/proposal-similar.tsx) · ui — Selectable past projects with revenue, duration, hours, and a match bar. The detail compares quoted and actual hours, then a three-column overlap. Install: `npx shadcn@latest add @retana/proposal-similar`.
 - [`proposal-risks`](registry/ui/proposal-risks.tsx) · ui — A resolved note, an open timeline risk with the request in the destructive token, actions whose chosen button gains a check, a client-asked table, and scope approval. Install: `npx shadcn@latest add @retana/proposal-risks`.
 - [`proposal-activity`](registry/ui/proposal-activity.tsx) · ui — A deal's activity feed, newest first, using the shared timeline. Install: `npx shadcn@latest add @retana/proposal-activity`.
+- [`status-pill`](registry/ui/status-pill.tsx) · ui — Status chip. Tone, dot, and label come from props. Install: `npx shadcn@latest add @retana/status-pill`.
+- [`accent-callout`](registry/ui/accent-callout.tsx) · ui — Accent, soft, or inverted callout. Copy comes from props. Install: `npx shadcn@latest add @retana/accent-callout`.
+- [`insight-card`](registry/ui/insight-card.tsx) · ui — Inverted assistant card with bullets, a status, stats, or a checklist. Install: `npx shadcn@latest add @retana/insight-card`.
+- [`workspace-switcher`](registry/ui/workspace-switcher.tsx) · ui — Workspace row. The menu options come from props. Install: `npx shadcn@latest add @retana/workspace-switcher`.
+- [`assistant-status-card`](registry/ui/assistant-status-card.tsx) · ui — Assistant switch and an attention link. Install: `npx shadcn@latest add @retana/assistant-status-card`.
+- [`record-card`](registry/ui/record-card.tsx) · ui — Record media card in hero, media, or tile form. The cover is a token wash. Install: `npx shadcn@latest add @retana/record-card`.
+- [`score-card`](registry/ui/score-card.tsx) · ui — Tick gauge, optional record row, and tone-colored stats. Install: `npx shadcn@latest add @retana/score-card`.
+- [`check-tiles`](registry/ui/check-tiles.tsx) · ui — Check tiles. One featured tile uses the host accent. Install: `npx shadcn@latest add @retana/check-tiles`.
+- [`member-list`](registry/ui/member-list.tsx) · ui — People on a record, with an owner suffix and a menu. Install: `npx shadcn@latest add @retana/member-list`.
+- [`event-callout`](registry/ui/event-callout.tsx) · ui — Dated event with an inset action. Install: `npx shadcn@latest add @retana/event-callout`.
+- [`document-list`](registry/ui/document-list.tsx) · ui — Grouped documents in review or checklist mode. Install: `npx shadcn@latest add @retana/document-list`.
+- [`issue-list`](registry/ui/issue-list.tsx) · ui — Selectable findings. The active row is a raised card. Install: `npx shadcn@latest add @retana/issue-list`.
+- [`issue-detail`](registry/ui/issue-detail.tsx) · ui — Finding detail. Preview, explanation, and footer are slots. Install: `npx shadcn@latest add @retana/issue-detail`.
+- [`compare-panel`](registry/ui/compare-panel.tsx) · ui — Before and after columns. One row can be marked new. Install: `npx shadcn@latest add @retana/compare-panel`.
+- [`action-footer`](registry/ui/action-footer.tsx) · ui — Hint plus secondary and primary actions. Install: `npx shadcn@latest add @retana/action-footer`.
+- [`status-banner`](registry/ui/status-banner.tsx) · ui — Status banner that crossfades when the state key changes. Install: `npx shadcn@latest add @retana/status-banner`.
+- [`destination-card`](registry/ui/destination-card.tsx) · ui — Destination, status, and key-value rows. Install: `npx shadcn@latest add @retana/destination-card`.
+- [`next-steps`](registry/ui/next-steps.tsx) · ui — What happens next, plus a pinned action. Install: `npx shadcn@latest add @retana/next-steps`.
 
 ### Charts
 
@@ -521,6 +557,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`case-review`](registry/blocks/case-review.tsx) · block — One record: header, tabs and timeline, suggestion, cost breakdown, confirm dialog, and an undo toast. Install: `npx shadcn@latest add @retana/case-review`.
 - [`proposal-dashboard`](registry/blocks/proposal-dashboard.tsx) · block — Greeting, four metric cards, action rows, a quoted-versus-delivered hours chart, a confidence gauge, and recent activity. Install: `npx shadcn@latest add @retana/proposal-dashboard`.
 - [`proposal-builder`](registry/blocks/proposal-builder.tsx) · block — The composed flow: dashboard, pipeline board, new opportunity, analyze, deal tabs, clarify, and send with a toast. Install: `npx shadcn@latest add @retana/proposal-builder`.
+- [`review-desk`](registry/blocks/review-desk.tsx) · block — Configurable review desk. Nav, records, findings, and the final action come from a typed config. Install: `npx shadcn@latest add @retana/review-desk`.
 
 ### Actions and overlays
 

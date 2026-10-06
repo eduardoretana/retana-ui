@@ -1,0 +1,71 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "document-list",
+  "title": "Document list",
+  "author": "Eduardo Retana",
+  "description": "Grouped documents in review or checklist mode.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button",
+    "checkbox",
+    "collapsible",
+    "dropdown-menu"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/document-list.tsx",
+      "content": "\"use client\"\n\n/** Grouped documents in review or checklist mode. */\n\nimport * as React from \"react\"\nimport { ChevronDown, Eye, FileText, MoreHorizontal } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Checkbox } from \"@/components/ui/checkbox\"\nimport { Collapsible, CollapsibleContent, CollapsibleTrigger } from \"@/components/ui/collapsible\"\nimport {\n  DropdownMenu,\n  DropdownMenuContent,\n  DropdownMenuItem,\n  DropdownMenuTrigger,\n} from \"@/components/ui/dropdown-menu\"\nimport { cn } from \"@/lib/utils\"\nimport { ConfidenceBadge } from \"@/components/ui/confidence-badge\"\n\nexport type DocumentRowAction = { id: string; label: string }\n\nexport type DocumentRow = {\n  id: string\n  name: string\n  meta?: string\n  status?: React.ReactNode\n  /** 0–1. Null shows the unchecked labels. */\n  score?: number | null\n  date?: string | null\n  missing?: boolean\n  checked?: boolean\n  onCheckedChange?: (checked: boolean) => void\n  previewLabel?: string\n  onPreview?: () => void\n  actions?: readonly DocumentRowAction[]\n  onAction?: (actionId: string) => void\n  uncheckedLabel?: string\n  unsetLabel?: string\n}\n\nexport type DocumentGroup = {\n  id: string\n  label: string\n  countLabel?: string\n  icon?: React.ReactNode\n  status?: React.ReactNode\n  items: readonly DocumentRow[]\n  defaultOpen?: boolean\n}\n\nexport type DocumentListProps = {\n  title?: string\n  mode?: \"review\" | \"checklist\"\n  groups: readonly DocumentGroup[]\n  header?: React.ReactNode\n  emptyLabel?: string\n  className?: string\n}\n\nexport function DocumentList({ title, mode = \"review\", groups, header, emptyLabel = \"No documents\", className }: DocumentListProps) {\n  const total = groups.reduce((sum, group) => sum + group.items.length, 0)\n  return (\n    <section data-slot=\"document-list\" data-mode={mode} className={cn(\"flex min-w-0 flex-col gap-3\", className)}>\n      {title || header ? (\n        <header className=\"flex flex-wrap items-center justify-between gap-2\">\n          {title ? <h3 className=\"text-sm font-medium\">{title}</h3> : <span />}\n          {header}\n        </header>\n      ) : null}\n      {total === 0 ? <p className=\"text-sm text-muted-foreground\">{emptyLabel}</p> : null}\n      {groups.map((group) => (\n        <Collapsible key={group.id} defaultOpen={group.defaultOpen ?? true} className=\"rounded-xl bg-muted\">\n          <CollapsibleTrigger className=\"flex w-full items-center gap-2 px-3 py-2 text-start text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\">\n            <span aria-hidden className=\"text-muted-foreground [&_svg]:size-4\">\n              {group.icon ?? <FileText className=\"size-4\" />}\n            </span>\n            <span className=\"font-medium\">{group.label}</span>\n            <span className=\"text-xs text-muted-foreground\">{group.countLabel ?? `${group.items.length}`}</span>\n            <span className=\"ms-auto flex items-center gap-2\">\n              {group.status}\n              <ChevronDown className=\"size-4 text-muted-foreground\" aria-hidden />\n            </span>\n          </CollapsibleTrigger>\n          <CollapsibleContent className=\"flex flex-col gap-1 px-1 pb-1\">\n            {group.items.map((item) => (\n              <DocumentLine key={item.id} item={item} mode={mode} />\n            ))}\n          </CollapsibleContent>\n        </Collapsible>\n      ))}\n    </section>\n  )\n}\n\nfunction DocumentLine({ item, mode }: { item: DocumentRow; mode: \"review\" | \"checklist\" }) {\n  const missing = Boolean(item.missing)\n  return (\n    <div\n      data-slot=\"document-row\"\n      data-missing={missing ? \"\" : undefined}\n      className={cn(\n        \"flex min-w-0 flex-wrap items-center gap-2 rounded-lg bg-card px-2 py-2 text-sm hover:bg-muted/80\",\n        missing && \"text-muted-foreground\",\n      )}\n    >\n      {mode === \"checklist\" ? (\n        <Checkbox checked={item.checked} onCheckedChange={(value) => item.onCheckedChange?.(value === true)} aria-label={item.name} />\n      ) : (\n        <span\n          aria-hidden\n          className={cn(\n            \"grid size-9 shrink-0 place-items-center rounded-lg bg-muted text-muted-foreground\",\n            missing && \"bg-destructive/10 text-destructive\",\n          )}\n        >\n          <FileText className=\"size-4\" />\n        </span>\n      )}\n      <span className=\"min-w-0 flex-1\">\n        <span className=\"block truncate font-medium\">{item.name}</span>\n        {item.meta && mode === \"review\" ? <span className=\"block truncate text-xs text-muted-foreground\">{item.meta}</span> : null}\n      </span>\n      {mode === \"review\" ? (\n        <>\n          {item.status}\n          {missing || item.score == null ? (\n            <span className=\"font-mono text-xs text-muted-foreground\">{item.uncheckedLabel ?? \"Not checked\"}</span>\n          ) : (\n            <ConfidenceBadge score={item.score} variant=\"segments\" className=\"w-24\" />\n          )}\n          <span className=\"w-16 shrink-0 text-end font-mono text-xs text-muted-foreground\">\n            {item.date ?? item.unsetLabel ?? \"Not set\"}\n          </span>\n        </>\n      ) : (\n        <span className=\"truncate text-xs text-muted-foreground\">{item.meta}</span>\n      )}\n      {item.onPreview ? (\n        <Button type=\"button\" size=\"icon-sm\" variant=\"ghost\" className=\"rounded-full\" aria-label={item.previewLabel ?? item.name} onClick={item.onPreview}>\n          <Eye />\n        </Button>\n      ) : null}\n      {item.actions?.length ? (\n        <DropdownMenu>\n          <DropdownMenuTrigger asChild>\n            <Button type=\"button\" size=\"icon-sm\" variant=\"ghost\" className=\"rounded-full\" aria-label={item.name}>\n              <MoreHorizontal />\n            </Button>\n          </DropdownMenuTrigger>\n          <DropdownMenuContent align=\"end\">\n            {item.actions.map((action) => (\n              <DropdownMenuItem key={action.id} onSelect={() => item.onAction?.(action.id)}>\n                {action.label}\n              </DropdownMenuItem>\n            ))}\n          </DropdownMenuContent>\n        </DropdownMenu>\n      ) : null}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/document-list.tsx"
+    },
+    {
+      "path": "registry/ui/confidence-badge.tsx",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/registry/localmode/results/confidence-score-badge/confidence-score-badge.tsx\n\nimport { cn } from \"@/lib/utils\"\n\nexport type ConfidenceTier = \"high\" | \"medium\" | \"low\"\nexport type ConfidenceVariant = \"badge\" | \"dial\" | \"bar\" | \"dots\" | \"segments\"\n\nexport type ConfidenceBadgeProps = {\n  score: number\n  thresholds?: { high: number; medium: number }\n  variant?: ConfidenceVariant\n  /** Dot count for variant=\"dots\". Ignored by the other variants. */\n  dots?: number\n  className?: string\n  classNames?: { root?: string; label?: string }\n}\n\nexport function confidenceTier(score: number, thresholds = { high: 0.8, medium: 0.5 }): ConfidenceTier {\n  if (score >= thresholds.high) return \"high\"\n  if (score >= thresholds.medium) return \"medium\"\n  return \"low\"\n}\n\nexport function ConfidenceBadge({\n  score,\n  thresholds,\n  variant = \"badge\",\n  dots = 12,\n  className,\n  classNames,\n}: ConfidenceBadgeProps) {\n  const clamped = Math.min(1, Math.max(0, score))\n  const percent = Math.round(clamped * 100)\n  const tier = confidenceTier(clamped, thresholds)\n  const label = `Confidence ${percent}%, ${tier}`\n  const tone =\n    tier === \"high\"\n      ? \"bg-primary text-primary-foreground\"\n      : tier === \"medium\"\n        ? \"bg-secondary text-secondary-foreground\"\n        : \"bg-muted text-muted-foreground\"\n\n  if (variant === \"dial\") {\n    const size = 36\n    const stroke = 3\n    const radius = (size - stroke) / 2\n    const circumference = 2 * Math.PI * radius\n    return (\n      <span\n        role=\"meter\"\n        aria-label={label}\n        aria-valuemin={0}\n        aria-valuemax={100}\n        aria-valuenow={percent}\n        className={cn(\"relative inline-flex size-9 items-center justify-center\", className, classNames?.root)}\n      >\n        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className=\"-rotate-90\" aria-hidden=\"true\">\n          <circle cx={size / 2} cy={size / 2} r={radius} fill=\"none\" strokeWidth={stroke} className=\"text-muted\" stroke=\"currentColor\" />\n          <circle\n            cx={size / 2}\n            cy={size / 2}\n            r={radius}\n            fill=\"none\"\n            strokeWidth={stroke}\n            strokeDasharray={circumference}\n            strokeDashoffset={circumference * (1 - clamped)}\n            className=\"text-primary\"\n            stroke=\"currentColor\"\n          />\n        </svg>\n        <span className={cn(\"absolute text-[10px] font-medium tabular-nums\", classNames?.label)}>{percent}</span>\n      </span>\n    )\n  }\n\n  if (variant === \"dots\") {\n    const count = Math.max(4, Math.min(24, Math.round(dots)))\n    const filled = Math.round(clamped * count)\n    return (\n      <span\n        role=\"meter\"\n        aria-label={label}\n        aria-valuemin={0}\n        aria-valuemax={100}\n        aria-valuenow={percent}\n        data-variant=\"dots\"\n        className={cn(\"inline-flex items-center gap-1\", className, classNames?.root)}\n      >\n        {Array.from({ length: count }, (_, index) => (\n          <span key={index} aria-hidden className={cn(\"size-1.5 rounded-full\", index < filled ? \"bg-primary\" : \"bg-current opacity-25\")} />\n        ))}\n      </span>\n    )\n  }\n\n  if (variant === \"segments\") {\n    const count = 5\n    const filled = Math.max(0, Math.min(count, Math.round(clamped * count)))\n    const lit = clamped >= 0.9 ? \"bg-primary\" : clamped >= 0.75 ? \"bg-chart-4\" : \"bg-destructive\"\n    return (\n      <span\n        role=\"meter\"\n        aria-label={label}\n        aria-valuemin={0}\n        aria-valuemax={100}\n        aria-valuenow={percent}\n        data-variant=\"segments\"\n        className={cn(\"inline-flex items-center gap-1.5\", className, classNames?.root)}\n      >\n        <span aria-hidden className=\"inline-flex gap-0.5\">\n          {Array.from({ length: count }, (_, index) => (\n            <span key={index} className={cn(\"h-2 w-2 rounded-[2px]\", index < filled ? lit : \"bg-muted\")} />\n          ))}\n        </span>\n        <span className={cn(\"font-mono text-xs tabular-nums\", classNames?.label)}>{percent}%</span>\n      </span>\n    )\n  }\n\n  if (variant === \"bar\") {\n    return (\n      <span className={cn(\"inline-flex min-w-24 items-center gap-2\", className, classNames?.root)} aria-label={label}>\n        <span role=\"meter\" aria-valuemin={0} aria-valuemax={100} aria-valuenow={percent} className=\"h-1.5 flex-1 overflow-hidden rounded-full bg-muted\">\n          <span className={cn(\"block h-full rounded-full\", tier === \"low\" ? \"bg-muted-foreground\" : \"bg-primary\")} style={{ width: `${percent}%` }} />\n        </span>\n        <span className={cn(\"text-xs tabular-nums\", classNames?.label)}>{tier}</span>\n      </span>\n    )\n  }\n\n  return (\n    <span aria-label={label} className={cn(\"inline-flex h-5 items-center gap-1 rounded-full px-2 text-xs font-medium\", tone, className, classNames?.root)}>\n      <span aria-hidden=\"true\">{tier === \"high\" ? \"●\" : tier === \"medium\" ? \"◐\" : \"○\"}</span>\n      <span className={classNames?.label}>{percent}%</span>\n    </span>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/confidence-badge.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Lista de documentos",
+    "descriptionEs": "Grupos en modo revisión o lista de verificación.",
+    "preview": "app/examples/document-list/preview.tsx",
+    "previewHref": "/examples/document-list",
+    "examples": [
+      {
+        "title": "Lista de documentos",
+        "href": "/examples/document-list",
+        "description": "Grupos en modo revisión o lista de verificación."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/document-list/stress",
+        "description": "320px, vacío y RTL."
+      }
+    ],
+    "usage": "<DocumentList title=\"Documents\" mode=\"review\" groups={groups} />",
+    "api": [
+      {
+        "name": "mode",
+        "type": "\"review\" | \"checklist\"",
+        "description": "Scores and status, or checkboxes."
+      },
+      {
+        "name": "groups",
+        "type": "DocumentGroup[]",
+        "description": "Label, icon, and rows."
+      },
+      {
+        "name": "header",
+        "type": "ReactNode",
+        "description": "Sits beside the title."
+      }
+    ]
+  },
+  "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme.",
+  "categories": [
+    "dashboard"
+  ],
+  "type": "registry:ui"
+}
