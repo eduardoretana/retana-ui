@@ -134,6 +134,20 @@ const salesCrm = [
   ["crm-notifications", "Header popover of company notices. notification-center is the grouped inbox."],
 ] as const
 
+const micro = [
+  ["ui-sounds", "Fourteen synthesized cues, with mute, volume, theme, and emphasis. press-sound stays the tap, tick, and pop facade."],
+  ["theme-toggle-icons", "Fourteen animated theme icons. theme-switch accepts one as its icon and shares the transition duration."],
+  ["squircle", "Native corner-shape where the browser has it, with a clip-path fallback, border, and shadow."],
+  ["morph-dialog", "The trigger grows into a modal. Focus is trapped and Escape closes it."],
+  ["morph-popover", "The trigger surface grows into a non-modal panel."],
+  ["shortcut-button", "A button with keycaps that depress for a keyboard shortcut."],
+  ["spotlight-button", "A cursor spotlight and border glow on the host button."],
+  ["slide-to-confirm", "Slide or arrow-key past a threshold before the action runs."],
+  ["haptics", "navigator.vibrate, with a persisted mute. A no-op where vibration is missing."],
+  ["motion-preference", "System, reduce, or full motion, persisted."],
+  ["use-feedback", "One intent plays a cue, a haptic, and an optional motion hint."],
+] as const
+
 const forms = [
   ["bug-report-form", "Bug report card: type, priority, environment, and a screenshot."],
   ["contact-section", "Contact block with name, email, and a message."],
@@ -256,6 +270,7 @@ export default function DocsPage() {
           <ChoiceTable title="Notices" rows={notices} />
           <ChoiceTable title="Navigation" rows={navigation} />
           <ChoiceTable title="Forms" rows={forms} />
+          <ChoiceTable title="Micro-interactions" rows={micro} />
           <ChoiceTable title="Agents" rows={agents} />
           <p className="text-muted-foreground">
             The agents family is adapted from LocalMode UI (MIT). It inherits the host theme.

@@ -1,0 +1,62 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spotlight-button",
+  "title": "Spotlight button",
+  "author": "Eduardo Retana",
+  "description": "A host button with a cursor spotlight and a border that lights up near the pointer.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/spotlight-button.tsx",
+      "content": "\"use client\"\n\n/**\n * Copyright 2026 radiumcoders\n *\n * Licensed under the Apache License, Version 2.0 (the \"License\");\n * you may not use this file except in compliance with the License.\n * You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n *\n * Adapted from Evil Buttons highlight-button (Apache-2.0).\n * https://github.com/radiumcoders/Evil-Buttons\n * Upstream commit ec0fa86f8d06. The upstream repository has no NOTICE file.\n *\n * Modifications (Retana UI, 2026):\n * - Renamed HighlightButton to SpotlightButton.\n * - Replaced hardcoded colors with host button variants and semantic tokens.\n * - The spotlight defaults to a mix of the host foreground and background.\n * - The click ripple is skipped when the reader prefers reduced motion.\n */\n\nimport * as React from \"react\"\nimport { motion, useReducedMotion } from \"motion/react\"\n\nimport { buttonVariants } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\n\nexport type SpotlightButtonProps = Omit<\n  React.ButtonHTMLAttributes<HTMLButtonElement>,\n  \"onDrag\" | \"onDragStart\" | \"onDragEnd\" | \"onAnimationStart\"\n> & {\n  variant?: \"default\" | \"secondary\" | \"outline\"\n  /** CSS color for the cursor spotlight and ripple. Defaults to host tokens. */\n  highlightColor?: string\n  /** Radius of the cursor spotlight in pixels. */\n  highlightSize?: number\n  /** CSS color the border lights up with near the cursor. */\n  borderColor?: string\n}\n\ntype Ripple = { id: number; x: number; y: number; size: number }\n\nconst BORDER_MASK = {\n  padding: 1,\n  mask: \"linear-gradient(var(--foreground) 0 0) content-box exclude, linear-gradient(var(--foreground) 0 0)\",\n  WebkitMask: \"linear-gradient(var(--foreground) 0 0) content-box xor, linear-gradient(var(--foreground) 0 0)\",\n} satisfies React.CSSProperties\n\nexport function SpotlightButton({\n  variant = \"default\",\n  highlightColor = \"color-mix(in oklch, var(--foreground) 24%, var(--background))\",\n  highlightSize = 90,\n  borderColor = \"color-mix(in oklch, var(--foreground) 55%, var(--background))\",\n  className,\n  style,\n  children,\n  onPointerMove,\n  onPointerDown,\n  onClick,\n  type = \"button\",\n  ...props\n}: SpotlightButtonProps) {\n  const reduced = useReducedMotion() ?? false\n  const buttonRef = React.useRef<HTMLButtonElement | null>(null)\n  const rippleIdRef = React.useRef(0)\n  const [ripples, setRipples] = React.useState<Ripple[]>([])\n\n  const track = (clientX: number, clientY: number) => {\n    const button = buttonRef.current\n    if (!button) return null\n    const rect = button.getBoundingClientRect()\n    const x = clientX - rect.left\n    const y = clientY - rect.top\n    button.style.setProperty(\"--hl-x\", `${x}px`)\n    button.style.setProperty(\"--hl-y\", `${y}px`)\n    return { x, y, rect }\n  }\n\n  const addRipple = (x: number, y: number, rect: DOMRect) => {\n    if (reduced) return\n    const size = 2 * Math.hypot(Math.max(x, rect.width - x), Math.max(y, rect.height - y))\n    const id = ++rippleIdRef.current\n    setRipples((current) => [...current, { id, x, y, size }])\n  }\n\n  return (\n    <motion.button\n      ref={buttonRef}\n      type={type}\n      data-slot=\"spotlight-button\"\n      onPointerMove={(event) => {\n        onPointerMove?.(event)\n        track(event.clientX, event.clientY)\n      }}\n      onPointerDown={(event) => {\n        onPointerDown?.(event)\n        const hit = track(event.clientX, event.clientY)\n        if (hit) addRipple(hit.x, hit.y, hit.rect)\n      }}\n      onClick={(event) => {\n        onClick?.(event)\n        if (event.detail === 0 && buttonRef.current) {\n          const rect = buttonRef.current.getBoundingClientRect()\n          addRipple(rect.width / 2, rect.height / 2, rect)\n        }\n      }}\n      style={\n        {\n          \"--hl-color\": highlightColor,\n          \"--hl-border\": borderColor,\n          \"--hl-size\": `${highlightSize}px`,\n          ...style,\n        } as React.CSSProperties\n      }\n      className={cn(\n        buttonVariants({ variant, size: \"default\" }),\n        \"group/highlight relative overflow-hidden motion-reduce:active:translate-y-0\",\n        className,\n      )}\n      {...props}\n    >\n      <span aria-hidden className=\"pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]\">\n        <span\n          className=\"absolute inset-0 opacity-0 transition-opacity duration-300 group-hover/highlight:opacity-100 motion-reduce:transition-none\"\n          style={{\n            background:\n              \"radial-gradient(var(--hl-size) circle at var(--hl-x, 50%) var(--hl-y, 50%), var(--hl-color), transparent 70%)\",\n          }}\n        />\n        {ripples.map((ripple) => (\n          <motion.span\n            key={ripple.id}\n            className=\"absolute rounded-full\"\n            style={{\n              left: ripple.x - ripple.size / 2,\n              top: ripple.y - ripple.size / 2,\n              width: ripple.size,\n              height: ripple.size,\n              background: \"var(--hl-color)\",\n            }}\n            initial={{ scale: 0, opacity: 1 }}\n            animate={{ scale: 1, opacity: 0 }}\n            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}\n            onAnimationComplete={() => setRipples((current) => current.filter(({ id }) => id !== ripple.id))}\n          />\n        ))}\n      </span>\n      <span\n        aria-hidden\n        className=\"pointer-events-none absolute -inset-px rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover/highlight:opacity-100 motion-reduce:transition-none\"\n        style={{\n          ...BORDER_MASK,\n          background:\n            \"radial-gradient(calc(var(--hl-size) * 0.9) circle at var(--hl-x, 50%) var(--hl-y, 50%), var(--hl-border), transparent 75%)\",\n        }}\n      />\n      <span className=\"relative inline-flex items-center gap-1.5\">{children}</span>\n    </motion.button>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/spotlight-button.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Botón con foco",
+    "descriptionEs": "Un botón del host con un foco que sigue al cursor y un borde que se enciende cerca del puntero.",
+    "preview": "app/examples/spotlight-button/preview.tsx",
+    "previewHref": "/examples/spotlight-button",
+    "examples": [
+      {
+        "title": "Botón con foco",
+        "href": "/examples/spotlight-button",
+        "description": "Un botón del host con un foco que sigue al cursor y un borde que se enciende cerca del puntero."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/spotlight-button/stress",
+        "description": "320px, texto largo, y lectura de derecha a izquierda."
+      }
+    ],
+    "usage": "<SpotlightButton>Continue</SpotlightButton>",
+    "api": [
+      {
+        "name": "variant",
+        "type": "\"default\" | \"secondary\" | \"outline\"",
+        "description": "Host button variant. Default default."
+      },
+      {
+        "name": "highlightColor / borderColor",
+        "type": "string",
+        "description": "CSS colors. Defaults mix the host foreground and background."
+      },
+      {
+        "name": "highlightSize",
+        "type": "number",
+        "description": "Spotlight radius in pixels. Default 90."
+      }
+    ]
+  },
+  "docs": "Adapted from Evil Buttons highlight-button (Apache-2.0, radiumcoders, commit ec0fa86f8d06). The ripple is skipped when the reader prefers reduced motion. See NOTICE. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "button"
+  ],
+  "type": "registry:ui"
+}

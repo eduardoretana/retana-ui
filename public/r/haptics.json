@@ -1,0 +1,58 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "haptics",
+  "title": "Haptics",
+  "author": "Eduardo Retana",
+  "description": "navigator.vibrate with a persisted mute. A no-op where the Vibration API is missing.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/haptics.tsx",
+      "content": "\"use client\"\n\n/**\n * Haptics provider adapted from seamui (MIT).\n * Copyright (c) 2026 Mikhail Villamor. https://github.com/meiskv/seamui\n * Upstream commit 7c57149f327d, registry item `haptics`.\n *\n * Modifications: playback uses `navigator.vibrate` and is a no-op where the\n * Vibration API is missing (including iOS Safari). The `web-haptics` package\n * is not a dependency. Mute is persisted. Nothing vibrates until the caller\n * asks, and never on mount.\n */\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type HapticPreset = \"tap\" | \"tick\" | \"success\" | \"error\" | \"warning\" | \"attention\"\n\nconst PATTERNS: Record<HapticPreset, number | number[]> = {\n  tap: 10,\n  tick: 6,\n  success: [12, 40, 18],\n  error: [28, 40, 28],\n  warning: [16, 36, 16],\n  attention: [18, 40, 18, 40, 24],\n}\n\nconst STORAGE_KEY = \"retana-haptics-muted\"\n\nlet muted = false\nlet hydrated = false\nconst listeners = new Set<() => void>()\n\nfunction emit() {\n  listeners.forEach((listener) => listener())\n}\n\nexport function subscribeHaptics(listener: () => void) {\n  listeners.add(listener)\n  return () => listeners.delete(listener)\n}\n\nexport function getHapticsMuted() {\n  return muted\n}\n\nexport function vibrateSupported() {\n  return typeof navigator !== \"undefined\" && typeof navigator.vibrate === \"function\"\n}\n\nexport function hydrateHaptics() {\n  if (hydrated || typeof window === \"undefined\") return\n  hydrated = true\n  try {\n    muted = localStorage.getItem(STORAGE_KEY) === \"1\"\n  } catch {\n    muted = false\n  }\n  emit()\n}\n\nexport function setHapticsMuted(next: boolean) {\n  muted = next\n  try {\n    localStorage.setItem(STORAGE_KEY, next ? \"1\" : \"0\")\n  } catch {\n    /* storage may be blocked */\n  }\n  emit()\n}\n\n/** Vibrates when the API exists and haptics are not muted. Never throws. */\nexport function triggerHaptic(preset: HapticPreset = \"tap\") {\n  if (muted || !vibrateSupported()) return\n  try {\n    navigator.vibrate(PATTERNS[preset])\n  } catch {\n    /* device rejected the pattern */\n  }\n}\n\nexport function useHaptics() {\n  const silent = React.useSyncExternalStore(subscribeHaptics, getHapticsMuted, () => false)\n  React.useEffect(() => {\n    hydrateHaptics()\n  }, [])\n  return {\n    muted: silent,\n    supported: vibrateSupported(),\n    setMuted: setHapticsMuted,\n    trigger: triggerHaptic,\n    toggle() {\n      setHapticsMuted(!getHapticsMuted())\n    },\n  }\n}\n\nexport function HapticsProvider({\n  children,\n  muted: mutedProp,\n}: {\n  children: React.ReactNode\n  /** Controlled mute. Omit to use the stored preference. */\n  muted?: boolean\n}) {\n  React.useEffect(() => {\n    hydrateHaptics()\n    if (mutedProp !== undefined) setHapticsMuted(mutedProp)\n  }, [mutedProp])\n  return children\n}\n\nexport function HapticsToggle({\n  mutedLabel = \"Enable haptics\",\n  unmutedLabel = \"Disable haptics\",\n  className,\n}: {\n  mutedLabel?: string\n  unmutedLabel?: string\n  className?: string\n}) {\n  const haptics = useHaptics()\n  return (\n    <button\n      type=\"button\"\n      className={cn(\n        \"rounded-md px-2 py-1 text-sm text-muted-foreground hover:bg-muted hover:text-foreground\",\n        className,\n      )}\n      aria-pressed={haptics.muted}\n      onClick={() => haptics.toggle()}\n    >\n      {haptics.muted ? mutedLabel : unmutedLabel}\n    </button>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/haptics.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Hápticos",
+    "descriptionEs": "navigator.vibrate con un silencio guardado. No hace nada si la API de vibración no existe.",
+    "preview": "app/examples/haptics/preview.tsx",
+    "previewHref": "/examples/haptics",
+    "examples": [
+      {
+        "title": "Hápticos",
+        "href": "/examples/haptics",
+        "description": "navigator.vibrate con un silencio guardado. No hace nada si la API de vibración no existe."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/haptics/stress",
+        "description": "320px, texto largo, y lectura de derecha a izquierda."
+      }
+    ],
+    "usage": "<HapticsProvider><button type=\"button\" onClick={() => triggerHaptic(\"success\")}>Done</button></HapticsProvider>",
+    "api": [
+      {
+        "name": "triggerHaptic",
+        "type": "(preset?: HapticPreset) => void",
+        "description": "tap, tick, success, error, warning, or attention. No-op when muted or unsupported."
+      },
+      {
+        "name": "useHaptics",
+        "type": "hook",
+        "description": "muted, setMuted, supported, and trigger."
+      },
+      {
+        "name": "HapticsToggle",
+        "type": "component",
+        "description": "Button for the shared mute."
+      }
+    ]
+  },
+  "docs": "Adapted from seamui haptics (MIT, Mikhail Villamor, commit 7c57149f327d). web-haptics is not a dependency. Nothing vibrates on mount. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "hook"
+  ],
+  "type": "registry:ui"
+}

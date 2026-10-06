@@ -1,0 +1,69 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "squircle",
+  "title": "Squircle",
+  "author": "Eduardo Retana",
+  "description": "A squircle surface. Uses CSS corner-shape when the browser supports it, and a Monoco clip-path otherwise, with a border and an optional shadow.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/squircle.tsx",
+      "content": "\"use client\"\n\n/**\n * Squircle surface. Uses CSS `corner-shape: squircle` where the browser\n * supports it (Chromium 139+, including Edge). Safari and Firefox use a\n * clip-path from the Monoco squircle path (MIT, see squircle-path.ts).\n * The fallback draws the border as an SVG stroke and the shadow as a\n * drop-shadow, because clip-path removes box-shadow and border.\n */\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { squirclePathString } from \"@/lib/squircle-path\"\n\nexport { squirclePathString }\n\nconst subscribe = () => () => {}\n\n/** True after hydration when `corner-shape: squircle` is supported. */\nexport function useCornerShapeSupport() {\n  return React.useSyncExternalStore(\n    subscribe,\n    () => typeof CSS !== \"undefined\" && CSS.supports(\"corner-shape\", \"squircle\"),\n    () => false,\n  )\n}\n\nexport type SquircleProps = React.ComponentProps<\"div\"> & {\n  /** Corner radius in pixels. One number, or top-left, top-right, bottom-right, bottom-left. */\n  radius?: number | number[]\n  /** Monoco / Figma smoothing, 0–1. Used by the clip-path fallback. Default 1. */\n  smoothing?: number\n  /** Border thickness in pixels, painted with the host border token. Default 1. */\n  borderWidth?: number\n  /** Drop shadow that follows the shape. */\n  shadow?: boolean\n}\n\nexport function Squircle({\n  radius = 28,\n  smoothing = 1,\n  borderWidth = 1,\n  shadow = false,\n  className,\n  children,\n  style,\n  ...props\n}: SquircleProps) {\n  const supported = useCornerShapeSupport()\n  const ref = React.useRef<HTMLDivElement>(null)\n  const [box, setBox] = React.useState({ width: 0, height: 0 })\n\n  React.useLayoutEffect(() => {\n    if (supported) return\n    const node = ref.current\n    if (!node) return\n    const measure = () => {\n      const next = { width: node.clientWidth, height: node.clientHeight }\n      setBox((current) => (current.width === next.width && current.height === next.height ? current : next))\n    }\n    measure()\n    if (typeof ResizeObserver === \"undefined\") return\n    const observer = new ResizeObserver(measure)\n    observer.observe(node)\n    return () => observer.disconnect()\n  }, [supported])\n\n  const radiusPx = typeof radius === \"number\" ? `${radius}px` : radius.map((value) => `${value}px`).join(\" \")\n  const path = !supported && box.width > 0 && box.height > 0\n    ? squirclePathString(box.width, box.height, radius, smoothing)\n    : \"\"\n\n  return (\n    <div\n      ref={ref}\n      data-slot=\"squircle\"\n      data-corner={supported ? \"native\" : \"clip\"}\n      className={cn(\"relative\", shadow && (supported ? \"shadow-md\" : \"drop-shadow-md\"), className)}\n      style={{\n        borderRadius: radiusPx,\n        ...(supported\n          ? {\n              cornerShape: \"squircle\",\n              borderStyle: borderWidth > 0 ? \"solid\" : undefined,\n              borderWidth: borderWidth > 0 ? borderWidth : undefined,\n              borderColor: borderWidth > 0 ? \"var(--border)\" : undefined,\n            }\n          : path\n            ? { clipPath: `path('${path}')` }\n            : null),\n        ...style,\n      } as React.CSSProperties}\n      {...props}\n    >\n      {children}\n      {!supported && path && borderWidth > 0 ? (\n        <svg\n          aria-hidden=\"true\"\n          className=\"pointer-events-none absolute inset-0 size-full\"\n          viewBox={`0 0 ${box.width} ${box.height}`}\n        >\n          <path d={path} fill=\"none\" stroke=\"var(--border)\" strokeWidth={borderWidth * 2} />\n        </svg>\n      ) : null}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/squircle.tsx"
+    },
+    {
+      "path": "registry/lib/squircle-path.ts",
+      "content": "/**\n * Squircle path generation ported from Monoco (MIT) @monokai/monoco@0.3.2.\n * Upstream commit 83c6d8d8c17f. https://github.com/Monokai/monoco\n * Copyright © 2024 Monokai (monokai.com)\n *\n * The corner math below is Monokai's adaptation of figma-squircle (MIT),\n * Copyright (c) 2021 Tien Pham. https://github.com/phamfoo/figma-squircle\n * The original license header is kept in this file.\n *\n * Modification: `squirclePathString` serializes the command list for clip-path\n * and SVG stroke. No background, gradient, or color helpers are included.\n */\n\n/*\nAdapted from \"figma-squircle\" (https://github.com/phamfoo/figma-squircle),\nrefactored and optimized by Monokai\n\n---\n\nMIT License\n\nCopyright (c) 2021 Tien Pham\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n*/\n\nfunction getSquircleCorner(\n\tradius:number,\n\tsmoothing:number,\n\tpreserveSmoothing:boolean,\n\tmaxSize:number\n) {\n\tlet p = (1 + smoothing) * radius\n\n\tif (!preserveSmoothing) {\n\t\tsmoothing = Math.min(smoothing, maxSize / radius - 1)\n\t\tp = Math.min(p, maxSize)\n\t}\n\n\tconst arc = Math.PI * 0.5 * (1 - smoothing)\n\tconst arcLength = Math.sin(arc / 2) * radius * 2 ** 0.5\n\tconst angle = Math.PI * 0.25 * smoothing\n\tconst c = radius * Math.tan((Math.PI * 0.5 - arc) * 0.25) * Math.cos(angle)\n\tconst d = c * Math.tan(angle)\n\n\tlet b = (p - arcLength - c - d) / 3\n\tlet a = 2 * b\n\n\tif (preserveSmoothing && p > maxSize) {\n\t\tconst pDist2 = maxSize - d - arcLength - c\n\t\tconst maxB = pDist2 - pDist2 / 6\n\n\t\tb = Math.min(b, maxB)\n\t\ta = pDist2 - b\n\t\tp = Math.min(p, maxSize)\n\t}\n\n\treturn {\n\t\ta,\n\t\tb,\n\t\tc,\n\t\td,\n\t\tp,\n\t\tarcLength,\n\t\tradius,\n\t\tab: a + b,\n\t\tbc: b + c,\n\t\tabc: a + b + c\n\t}\n}\n\n\nfunction createSquircleCorner(\n\tsmoothing:number,\n\tsweepFlag:number,\n\tradius:number,\n\tc1:number[],\n\tarcLength:number,\n\tarcMultiplier:number[],\n\tc2:number[],\n\tl:number[]\n) {\n\tif (radius) {\n\t\tconst result: (string|number)[][] = []\n\n\t\tif (smoothing) {\n\t\t\tresult.push(['c', ...c1])\n\t\t}\n\n\t\tif (arcLength) {\n\t\t\tresult.push(['a', radius, radius, 0, 0, sweepFlag, ...arcMultiplier.map(x => x * arcLength)])\n\t\t}\n\n\t\tif (smoothing) {\n\t\t\tresult.push(['c', ...c2])\n\t\t}\n\n\t\treturn result\n\t}\n\n\treturn [['l', ...l]]\n}\n\nexport const createPath = ({\n\twidth,\n\theight,\n\tradii,\n\toffsets,\n\tsmoothing = 1,\n\tpreserveSmoothing = true,\n\tsweepFlag = 1\n}:{\n\twidth:number,\n\theight:number,\n\tradii:number[],\n\toffsets:number[],\n\tsmoothing?:number,\n\tpreserveSmoothing?:boolean,\n\tsweepFlag?:number\n}) => {\n\tconst [ot,,, ol] = offsets\n\tconst [c1, c2, c3, c4] = radii.map(radius => getSquircleCorner(\n\t\tradius,\n\t\tsmoothing,\n\t\tpreserveSmoothing,\n\t\tMath.max(radius, Math.min(width, height) * 0.5)\n\t))\n\n\treturn [\n\t\t['M', width - c2.p + ol, ot],\n\t\t...createSquircleCorner(\n\t\t\tsmoothing,\n\t\t\tsweepFlag,\n\t\t\tc2.radius,\n\t\t\t[c2.a, 0, c2.ab, 0, c2.abc, c2.d],\n\t\t\tc2.arcLength, [1, 1],\n\t\t\t[c2.d, c2.c, c2.d, c2.bc, c2.d, c2.abc],\n\t\t\t[c2.p, 0]\n\t\t),\n\t\t['L', width + ol, height - c3.p + ot],\n\t\t...createSquircleCorner(\n\t\t\tsmoothing,\n\t\t\tsweepFlag,\n\t\t\tc3.radius,\n\t\t\t[0, c3.a, 0, c3.ab, -c3.d, c3.abc],\n\t\t\tc3.arcLength, [-1, 1],\n\t\t\t[-c3.c, c3.d, -c3.bc, c3.d, -c3.abc, c3.d],\n\t\t\t[0, c3.p]\n\t\t),\n\t\t['L', c4.p + ol, height + ot],\n\t\t...createSquircleCorner(\n\t\t\tsmoothing,\n\t\t\tsweepFlag,\n\t\t\tc4.radius,\n\t\t\t[-c4.a, 0, -c4.ab, 0, -c4.abc, -c4.d],\n\t\t\tc4.arcLength, [-1, -1],\n\t\t\t[-c4.d, -c4.c, -c4.d, -c4.bc, -c4.d, -c4.abc],\n\t\t\t[-c4.p, 0]\n\t\t),\n\t\t['L', ol, c1.p + ot],\n\t\t...createSquircleCorner(\n\t\t\tsmoothing,\n\t\t\tsweepFlag,\n\t\t\tc1.radius,\n\t\t\t[0, -c1.a, 0, -c1.ab, c1.d, -c1.abc],\n\t\t\tc1.arcLength, [1, -1],\n\t\t\t[c1.c, -c1.d, c1.bc, -c1.d, c1.abc, -c1.d],\n\t\t\t[0, -c1.p]\n\t\t),\n\t\t['Z']\n\t]\n}\n\nconst roundTo = (precision: number) => {\n  const power = 10 ** precision\n  return (value: number) => Math.round(value * power) / power\n}\n\n/** SVG path `d` for a squircle. Empty when the box has no area. */\nexport function squirclePathString(\n  width: number,\n  height: number,\n  radius: number | number[] = 0,\n  smoothing = 1,\n  precision = 3,\n): string {\n  if (!(width > 0) || !(height > 0)) return \"\"\n  const radii = (Array.isArray(radius) ? radius : [radius, radius, radius, radius]).slice(0, 4)\n  while (radii.length < 4) radii.push(radii[radii.length - 1] ?? 0)\n  const safe = radii.map((value) => (Number.isFinite(value) ? Math.max(0, value) : 0))\n  if (safe.every((value) => value <= 0)) {\n    const fix = roundTo(precision)\n    const w = fix(width)\n    const h = fix(height)\n    return `M 0 0 L ${w} 0 L ${w} ${h} L 0 ${h} Z`\n  }\n  const commands = createPath({\n    width,\n    height,\n    radii: safe,\n    offsets: [0, 0, 0, 0],\n    smoothing: Number.isFinite(smoothing) ? smoothing : 1,\n  }) as (string | number)[][]\n  const fix = roundTo(precision)\n  return commands\n    .map((part) => part.map((item) => (typeof item === \"number\" ? fix(item) : item)).join(\" \"))\n    .join(\" \")\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/squircle-path.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Squircle",
+    "descriptionEs": "Superficie squircle. Usa corner-shape si el navegador lo soporta y, si no, un clip-path de Monoco, con borde y sombra opcional.",
+    "preview": "app/examples/squircle/preview.tsx",
+    "previewHref": "/examples/squircle",
+    "examples": [
+      {
+        "title": "Squircle",
+        "href": "/examples/squircle",
+        "description": "Superficie squircle. Usa corner-shape si el navegador lo soporta y, si no, un clip-path de Monoco, con borde y sombra opcional."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/squircle/stress",
+        "description": "320px, texto largo, y lectura de derecha a izquierda."
+      }
+    ],
+    "usage": "<Squircle radius={28} shadow>Card</Squircle>",
+    "api": [
+      {
+        "name": "radius",
+        "type": "number | number[]",
+        "description": "Corner radius in pixels. One value, or top-left, top-right, bottom-right, bottom-left."
+      },
+      {
+        "name": "smoothing",
+        "type": "number",
+        "description": "Fallback smoothing from 0 to 1. Default 1. Native corner-shape ignores it."
+      },
+      {
+        "name": "borderWidth / shadow",
+        "type": "number / boolean",
+        "description": "Border thickness in pixels, and a shadow that follows the shape."
+      },
+      {
+        "name": "useCornerShapeSupport",
+        "type": "hook",
+        "description": "True when CSS.supports corner-shape squircle. False during SSR."
+      }
+    ]
+  },
+  "docs": "Native support is Chromium 139 and later (Chrome and Edge). Safari and Firefox use the clip-path fallback. The path generator is ported from @monokai/monoco@0.3.2 (MIT, Monokai), which adapts figma-squircle (MIT, Tien Pham). Runtime CSS.supports is the source of truth. data-corner is native or clip. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "layout"
+  ],
+  "type": "registry:ui"
+}

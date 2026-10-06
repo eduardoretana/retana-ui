@@ -163,6 +163,24 @@ Clean-room company book. The reference has no license, so nothing was copied. In
 | [`crm-new-company-dialog`](registry/ui/crm-new-company-dialog.tsx) | Create form with a logo, sections, and validation. |
 | [`crm-notifications`](registry/ui/crm-notifications.tsx) | Header popover. `notification-center` is the fuller inbox. |
 
+### Micro-interactions
+
+Sound, haptics, squircles, animated theme icons, and a few expressive controls. They inherit the host tokens. Sound and haptics can be muted, and nothing plays before a gesture.
+
+| Piece | Use it for |
+| --- | --- |
+| [`ui-sounds`](registry/ui/ui-sounds.tsx) | Fourteen synthesized cues (cuelume). `press-sound` stays the tap, tick, and pop facade. |
+| [`theme-toggle-icons`](registry/ui/theme-toggle-icons.tsx) | Fourteen animated theme icons. Pass `icon` to [`theme-switch`](registry/ui/theme-switch.tsx). |
+| [`squircle`](registry/ui/squircle.tsx) | `corner-shape: squircle` where the browser has it, otherwise a clip-path. |
+| [`morph-dialog`](registry/ui/morph-dialog.tsx) | A trigger that grows into a modal dialog. |
+| [`morph-popover`](registry/ui/morph-popover.tsx) | A trigger surface that grows into a non-modal panel. |
+| [`shortcut-button`](registry/ui/shortcut-button.tsx) | A button whose keycaps depress for a shortcut. |
+| [`spotlight-button`](registry/ui/spotlight-button.tsx) | A cursor spotlight on the host button. |
+| [`slide-to-confirm`](registry/ui/slide-to-confirm.tsx) | Slide or use the arrow keys past a threshold. |
+| [`haptics`](registry/ui/haptics.tsx) | `navigator.vibrate`, muted by choice, otherwise a no-op. |
+| [`motion-preference`](registry/ui/motion-preference.tsx) | System, reduced, or full motion. |
+| [`use-feedback`](registry/hooks/use-feedback.ts) | One intent for sound, haptic, and an optional motion hint. |
+
 ## Install
 
 Register the namespace once in the host `components.json`. The public catalog host is not chosen yet. `https://<your-deployment>` is a placeholder, on this page and on `/docs`.
@@ -263,7 +281,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`234` items are in `registry.json` on this branch: `191` components, `34` blocks, `3` hooks, and `6` libraries. A name links to its source file.
+`245` items are in `registry.json` on this branch: `201` components, `34` blocks, `4` hooks, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -386,7 +404,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`halftone-image`](registry/ui/halftone-image.tsx) · ui — Image drawn as dots on a canvas that grow toward the pointer. Install: `npx shadcn@latest add @retana/halftone-image`.
 - [`attachment-chip`](registry/ui/attachment-chip.tsx) · ui — File chip with a type icon, size, optional image preview, and remove. Install: `npx shadcn@latest add @retana/attachment-chip`.
 - [`marker`](registry/ui/marker.tsx) · ui — Animated highlighter mark behind a span of text. Install: `npx shadcn@latest add @retana/marker`.
-- [`press-sound`](registry/ui/press-sound.tsx) · ui — Hook and wrapper that play a short synthesized click on press, with a shared mute. Install: `npx shadcn@latest add @retana/press-sound`.
+- [`press-sound`](registry/ui/press-sound.tsx) · ui — tap, tick, and pop on press. The cues come from ui-sounds, and mute is the same shared store. Install: `npx shadcn@latest add @retana/press-sound`.
 - [`text-reveal`](registry/ui/text-reveal.tsx) · ui — Reveals a short line once, word by word, and shows the plain text if motion is reduced. Install: `npx shadcn@latest add @retana/text-reveal`.
 - [`text-morph`](registry/ui/text-morph.tsx) · ui — Morphs one short label into the next. Shared letters glide and the width follows. Install: `npx shadcn@latest add @retana/text-morph`.
 - [`text-shimmer`](registry/ui/text-shimmer.tsx) · ui — A calm light across a short status line while work is ongoing. Sets aria-busy. Install: `npx shadcn@latest add @retana/text-shimmer`.
@@ -404,6 +422,10 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`json-viewer`](registry/ui/json-viewer.tsx) · ui — A collapsible JSON tree with search and copy for a value or a path. Install: `npx shadcn@latest add @retana/json-viewer`.
 - [`comment-thread`](registry/ui/comment-thread.tsx) · ui — Threaded comments with replies, reactions, and resolve. Install: `npx shadcn@latest add @retana/comment-thread`.
 - [`magnetic-bento`](registry/ui/magnetic-bento.tsx) · ui — Bento grid with one shared highlight that glides and stretches between cards. Install: `npx shadcn@latest add @retana/magnetic-bento`.
+- [`ui-sounds`](registry/ui/ui-sounds.tsx) · ui — Fourteen synthesized cues with a persisted mute, volume, theme, and emphasis. Playback waits for a user gesture. Install: `npx shadcn@latest add @retana/ui-sounds`.
+- [`haptics`](registry/ui/haptics.tsx) · ui — navigator.vibrate with a persisted mute. A no-op where the Vibration API is missing. Install: `npx shadcn@latest add @retana/haptics`.
+- [`motion-preference`](registry/ui/motion-preference.tsx) · ui — A persisted choice of system, reduced, or full motion. Explicit choice wins over prefers-reduced-motion. Install: `npx shadcn@latest add @retana/motion-preference`.
+- [`use-feedback`](registry/hooks/use-feedback.ts) · hook — One intent plays a cue, an optional haptic, and a motion hint. Sound and haptics stay independently mutable. Install: `npx shadcn@latest add @retana/use-feedback`.
 
 ### Tables and views
 
@@ -502,7 +524,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 
 ### Actions and overlays
 
-- [`theme-switch`](registry/ui/theme-switch.tsx) · ui — Four ways to move between light and dark: fade, eclipse, split, and rise. Uses the View Transitions API when the browser has it, and changes the theme immediately otherwise. Install: `npx shadcn@latest add @retana/theme-switch`.
+- [`theme-switch`](registry/ui/theme-switch.tsx) · ui — Four ways to move between light and dark: fade, eclipse, split, and rise. Uses the View Transitions API when the browser has it, and changes the theme immediately otherwise. The default icon stays the lucide sun and moon. icon can be one of the theme-toggle-icons. Install: `npx shadcn@latest add @retana/theme-switch`.
 - [`copy-button`](registry/ui/copy-button.tsx) · ui — Copies a value and confirms in place, with a drawn check and a live announcement. Install: `npx shadcn@latest add @retana/copy-button`.
 - [`expandable-card`](registry/ui/expandable-card.tsx) · ui — A dense card that grows in width and height to show more, and closes with Escape. Install: `npx shadcn@latest add @retana/expandable-card`.
 - [`action-button`](registry/ui/action-button.tsx) · ui — A compact button that moves through pending and success after an async action. Install: `npx shadcn@latest add @retana/action-button`.
@@ -518,6 +540,9 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`bottom-sheet`](registry/ui/bottom-sheet.tsx) · ui — A sheet that rests at a peek or full height. Install: `npx shadcn@latest add @retana/bottom-sheet`.
 - [`notification-stack`](registry/ui/notification-stack.tsx) · ui — A depth stack of notices. Dismiss the front card and the next one steps forward. Install: `npx shadcn@latest add @retana/notification-stack`.
 - [`proposal-analyze`](registry/ui/proposal-analyze.tsx) · ui — Shimmer status and skeleton blocks while a draft is prepared. Install: `npx shadcn@latest add @retana/proposal-analyze`.
+- [`theme-toggle-icons`](registry/ui/theme-toggle-icons.tsx) · ui — Fourteen animated sun and moon icons. Pass one to theme-switch, or render ThemeToggleIcon on its own. Install: `npx shadcn@latest add @retana/theme-toggle-icons`.
+- [`morph-dialog`](registry/ui/morph-dialog.tsx) · ui — The trigger grows into a modal dialog. Focus is trapped, Escape and the backdrop close it, and focus returns to the trigger. Install: `npx shadcn@latest add @retana/morph-dialog`.
+- [`morph-popover`](registry/ui/morph-popover.tsx) · ui — A surface shared with the trigger grows into a non-modal panel. Escape and an outside pointer close it. Install: `npx shadcn@latest add @retana/morph-popover`.
 
 ### Admin
 
@@ -540,6 +565,13 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`crm-new-company-dialog`](registry/ui/crm-new-company-dialog.tsx) · ui — Dialog form with a logo upload, identity, relationship, and commercial sections, and field validation. Install: `npx shadcn@latest add @retana/crm-new-company-dialog`.
 - [`crm-notifications`](registry/ui/crm-notifications.tsx) · ui — Header popover of company notices with an unread count, mark read, and mark all read. Install: `npx shadcn@latest add @retana/crm-notifications`.
 - [`crm-dashboard`](registry/blocks/crm-dashboard.tsx) · block — Companies page that composes the CRM table, toolbar, detail panel, command menu, create dialog, and notifications inside a sidebar shell. Spanish sample data and plain React state. Install: `npx shadcn@latest add @retana/crm-dashboard`.
+
+### Other
+
+- [`squircle`](registry/ui/squircle.tsx) · ui — A squircle surface. Uses CSS corner-shape when the browser supports it, and a Monoco clip-path otherwise, with a border and an optional shadow. Install: `npx shadcn@latest add @retana/squircle`.
+- [`shortcut-button`](registry/ui/shortcut-button.tsx) · ui — A button whose keycaps depress while its keyboard shortcut is held, then runs the command. Install: `npx shadcn@latest add @retana/shortcut-button`.
+- [`spotlight-button`](registry/ui/spotlight-button.tsx) · ui — A host button with a cursor spotlight and a border that lights up near the pointer. Install: `npx shadcn@latest add @retana/spotlight-button`.
+- [`slide-to-confirm`](registry/ui/slide-to-confirm.tsx) · ui — Slide the handle, or hold Arrow Right, past a threshold before the action runs. Install: `npx shadcn@latest add @retana/slide-to-confirm`.
 
 <!-- CATALOG:END -->
 

@@ -1,0 +1,224 @@
+/**
+ * Squircle path generation ported from Monoco (MIT) @monokai/monoco@0.3.2.
+ * Upstream commit 83c6d8d8c17f. https://github.com/Monokai/monoco
+ * Copyright © 2024 Monokai (monokai.com)
+ *
+ * The corner math below is Monokai's adaptation of figma-squircle (MIT),
+ * Copyright (c) 2021 Tien Pham. https://github.com/phamfoo/figma-squircle
+ * The original license header is kept in this file.
+ *
+ * Modification: `squirclePathString` serializes the command list for clip-path
+ * and SVG stroke. No background, gradient, or color helpers are included.
+ */
+
+/*
+Adapted from "figma-squircle" (https://github.com/phamfoo/figma-squircle),
+refactored and optimized by Monokai
+
+---
+
+MIT License
+
+Copyright (c) 2021 Tien Pham
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+function getSquircleCorner(
+	radius:number,
+	smoothing:number,
+	preserveSmoothing:boolean,
+	maxSize:number
+) {
+	let p = (1 + smoothing) * radius
+
+	if (!preserveSmoothing) {
+		smoothing = Math.min(smoothing, maxSize / radius - 1)
+		p = Math.min(p, maxSize)
+	}
+
+	const arc = Math.PI * 0.5 * (1 - smoothing)
+	const arcLength = Math.sin(arc / 2) * radius * 2 ** 0.5
+	const angle = Math.PI * 0.25 * smoothing
+	const c = radius * Math.tan((Math.PI * 0.5 - arc) * 0.25) * Math.cos(angle)
+	const d = c * Math.tan(angle)
+
+	let b = (p - arcLength - c - d) / 3
+	let a = 2 * b
+
+	if (preserveSmoothing && p > maxSize) {
+		const pDist2 = maxSize - d - arcLength - c
+		const maxB = pDist2 - pDist2 / 6
+
+		b = Math.min(b, maxB)
+		a = pDist2 - b
+		p = Math.min(p, maxSize)
+	}
+
+	return {
+		a,
+		b,
+		c,
+		d,
+		p,
+		arcLength,
+		radius,
+		ab: a + b,
+		bc: b + c,
+		abc: a + b + c
+	}
+}
+
+
+function createSquircleCorner(
+	smoothing:number,
+	sweepFlag:number,
+	radius:number,
+	c1:number[],
+	arcLength:number,
+	arcMultiplier:number[],
+	c2:number[],
+	l:number[]
+) {
+	if (radius) {
+		const result: (string|number)[][] = []
+
+		if (smoothing) {
+			result.push(['c', ...c1])
+		}
+
+		if (arcLength) {
+			result.push(['a', radius, radius, 0, 0, sweepFlag, ...arcMultiplier.map(x => x * arcLength)])
+		}
+
+		if (smoothing) {
+			result.push(['c', ...c2])
+		}
+
+		return result
+	}
+
+	return [['l', ...l]]
+}
+
+export const createPath = ({
+	width,
+	height,
+	radii,
+	offsets,
+	smoothing = 1,
+	preserveSmoothing = true,
+	sweepFlag = 1
+}:{
+	width:number,
+	height:number,
+	radii:number[],
+	offsets:number[],
+	smoothing?:number,
+	preserveSmoothing?:boolean,
+	sweepFlag?:number
+}) => {
+	const [ot,,, ol] = offsets
+	const [c1, c2, c3, c4] = radii.map(radius => getSquircleCorner(
+		radius,
+		smoothing,
+		preserveSmoothing,
+		Math.max(radius, Math.min(width, height) * 0.5)
+	))
+
+	return [
+		['M', width - c2.p + ol, ot],
+		...createSquircleCorner(
+			smoothing,
+			sweepFlag,
+			c2.radius,
+			[c2.a, 0, c2.ab, 0, c2.abc, c2.d],
+			c2.arcLength, [1, 1],
+			[c2.d, c2.c, c2.d, c2.bc, c2.d, c2.abc],
+			[c2.p, 0]
+		),
+		['L', width + ol, height - c3.p + ot],
+		...createSquircleCorner(
+			smoothing,
+			sweepFlag,
+			c3.radius,
+			[0, c3.a, 0, c3.ab, -c3.d, c3.abc],
+			c3.arcLength, [-1, 1],
+			[-c3.c, c3.d, -c3.bc, c3.d, -c3.abc, c3.d],
+			[0, c3.p]
+		),
+		['L', c4.p + ol, height + ot],
+		...createSquircleCorner(
+			smoothing,
+			sweepFlag,
+			c4.radius,
+			[-c4.a, 0, -c4.ab, 0, -c4.abc, -c4.d],
+			c4.arcLength, [-1, -1],
+			[-c4.d, -c4.c, -c4.d, -c4.bc, -c4.d, -c4.abc],
+			[-c4.p, 0]
+		),
+		['L', ol, c1.p + ot],
+		...createSquircleCorner(
+			smoothing,
+			sweepFlag,
+			c1.radius,
+			[0, -c1.a, 0, -c1.ab, c1.d, -c1.abc],
+			c1.arcLength, [1, -1],
+			[c1.c, -c1.d, c1.bc, -c1.d, c1.abc, -c1.d],
+			[0, -c1.p]
+		),
+		['Z']
+	]
+}
+
+const roundTo = (precision: number) => {
+  const power = 10 ** precision
+  return (value: number) => Math.round(value * power) / power
+}
+
+/** SVG path `d` for a squircle. Empty when the box has no area. */
+export function squirclePathString(
+  width: number,
+  height: number,
+  radius: number | number[] = 0,
+  smoothing = 1,
+  precision = 3,
+): string {
+  if (!(width > 0) || !(height > 0)) return ""
+  const radii = (Array.isArray(radius) ? radius : [radius, radius, radius, radius]).slice(0, 4)
+  while (radii.length < 4) radii.push(radii[radii.length - 1] ?? 0)
+  const safe = radii.map((value) => (Number.isFinite(value) ? Math.max(0, value) : 0))
+  if (safe.every((value) => value <= 0)) {
+    const fix = roundTo(precision)
+    const w = fix(width)
+    const h = fix(height)
+    return `M 0 0 L ${w} 0 L ${w} ${h} L 0 ${h} Z`
+  }
+  const commands = createPath({
+    width,
+    height,
+    radii: safe,
+    offsets: [0, 0, 0, 0],
+    smoothing: Number.isFinite(smoothing) ? smoothing : 1,
+  }) as (string | number)[][]
+  const fix = roundTo(precision)
+  return commands
+    .map((part) => part.map((item) => (typeof item === "number" ? fix(item) : item)).join(" "))
+    .join(" ")
+}

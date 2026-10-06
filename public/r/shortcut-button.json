@@ -1,0 +1,60 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "shortcut-button",
+  "title": "Shortcut button",
+  "author": "Eduardo Retana",
+  "description": "A button whose keycaps depress while its keyboard shortcut is held, then runs the command.",
+  "dependencies": [],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/shortcut-button.tsx",
+      "content": "\"use client\"\n\n/**\n * Copyright 2026 radiumcoders\n *\n * Licensed under the Apache License, Version 2.0 (the \"License\");\n * you may not use this file except in compliance with the License.\n * You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an \"AS IS\" BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n *\n * Adapted from Evil Buttons command-button (Apache-2.0).\n * https://github.com/radiumcoders/Evil-Buttons\n * Upstream commit ec0fa86f8d06. The upstream repository has no NOTICE file.\n *\n * Modifications (Retana UI, 2026):\n * - Renamed CommandButton to ShortcutButton.\n * - Replaced hardcoded colors with the host button and semantic tokens.\n * - Keycap travel is skipped when the reader prefers reduced motion.\n */\n\nimport * as React from \"react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\n\nexport type ShortcutButtonProps = Omit<\n  React.ComponentProps<typeof Button>,\n  \"onDrag\" | \"onDragStart\" | \"onDragEnd\" | \"onAnimationStart\"\n> & {\n  /** Shortcut like `\"mod+s\"`. `mod` is ⌘ on Apple devices and Ctrl elsewhere. */\n  shortcut?: string\n  /** Fired when the keyboard shortcut is pressed. */\n  onCommand?: () => void\n  /** Stop the browser's own handling of the shortcut. */\n  preventDefault?: boolean\n  /** Show the shortcut as keycaps inside the button. */\n  showShortcut?: boolean\n}\n\nconst MODIFIERS = [\"mod\", \"ctrl\", \"alt\", \"shift\"] as const\nconst FIRE_MS = 160\n\nfunction normalizeKey(value: string) {\n  const key = value.toLowerCase()\n  if (key === \"cmd\" || key === \"command\" || key === \"meta\") return \"mod\"\n  if (key === \"control\") return \"ctrl\"\n  if (key === \"option\") return \"alt\"\n  if (key === \"escape\") return \"esc\"\n  if (key === \"return\") return \"enter\"\n  if (key === \" \" || key === \"spacebar\") return \"space\"\n  return key\n}\n\nfunction parseShortcut(shortcut: string) {\n  return shortcut\n    .split(\"+\")\n    .map((part) => normalizeKey(part.trim()))\n    .filter(Boolean)\n}\n\nfunction shortcutMatches(event: KeyboardEvent, parts: string[]) {\n  const wantsMod = parts.includes(\"mod\")\n  const wantsCtrl = parts.includes(\"ctrl\")\n  const finalKey = parts.find((part) => !(MODIFIERS as readonly string[]).includes(part))\n  if (wantsMod && !(event.metaKey || event.ctrlKey)) return false\n  if (!wantsMod && wantsCtrl !== event.ctrlKey) return false\n  if (parts.includes(\"alt\") !== event.altKey) return false\n  if (parts.includes(\"shift\") !== event.shiftKey) return false\n  return finalKey ? normalizeKey(event.key) === finalKey : false\n}\n\nfunction partHeld(part: string, event: KeyboardEvent, isApple: boolean) {\n  if (part === \"mod\") return isApple ? event.metaKey : event.ctrlKey\n  if (part === \"ctrl\") return event.ctrlKey\n  if (part === \"alt\") return event.altKey\n  if (part === \"shift\") return event.shiftKey\n  return false\n}\n\nfunction formatPart(part: string, isApple: boolean) {\n  if (part === \"mod\") return isApple ? \"⌘\" : \"Ctrl\"\n  if (part === \"ctrl\") return isApple ? \"⌃\" : \"Ctrl\"\n  if (part === \"alt\") return isApple ? \"⌥\" : \"Alt\"\n  if (part === \"shift\") return isApple ? \"⇧\" : \"Shift\"\n  if (part === \"enter\") return \"↵\"\n  if (part === \"esc\") return \"Esc\"\n  if (part === \"space\") return \"Space\"\n  if (part === \"arrowup\") return \"↑\"\n  if (part === \"arrowdown\") return \"↓\"\n  if (part === \"arrowleft\") return \"←\"\n  if (part === \"arrowright\") return \"→\"\n  return part.length === 1 ? part.toUpperCase() : part\n}\n\nfunction detectApple() {\n  if (typeof navigator === \"undefined\") return false\n  return /mac|iphone|ipad|ipod/i.test(navigator.platform || navigator.userAgent)\n}\n\nfunction subscribeApple() {\n  return () => {}\n}\n\nexport function ShortcutButton({\n  shortcut = \"mod+s\",\n  onCommand,\n  preventDefault = true,\n  showShortcut = true,\n  className,\n  children = \"Save\",\n  disabled,\n  onClick,\n  type = \"button\",\n  variant = \"default\",\n  ...props\n}: ShortcutButtonProps) {\n  const parts = React.useMemo(() => parseShortcut(shortcut), [shortcut])\n  const isApple = React.useSyncExternalStore(subscribeApple, detectApple, () => false)\n  const [held, setHeld] = React.useState<ReadonlySet<string>>(new Set())\n  const [firing, setFiring] = React.useState(false)\n  const fireTimerRef = React.useRef<number | undefined>(undefined)\n  const onCommandRef = React.useRef(onCommand)\n\n  React.useEffect(() => {\n    onCommandRef.current = onCommand\n  }, [onCommand])\n\n  const fire = React.useCallback(() => {\n    setFiring(true)\n    window.clearTimeout(fireTimerRef.current)\n    fireTimerRef.current = window.setTimeout(() => setFiring(false), FIRE_MS)\n  }, [])\n\n  React.useEffect(() => {\n    if (disabled) return\n    const syncModifiers = (event: KeyboardEvent) => {\n      const next = new Set(parts.filter((part) => partHeld(part, event, isApple)))\n      setHeld((current) =>\n        current.size === next.size && [...next].every((part) => current.has(part)) ? current : next,\n      )\n    }\n    const handleKeyDown = (event: KeyboardEvent) => {\n      syncModifiers(event)\n      if (event.repeat || !shortcutMatches(event, parts)) return\n      if (preventDefault) event.preventDefault()\n      fire()\n      onCommandRef.current?.()\n    }\n    const clear = () => setHeld(new Set())\n    window.addEventListener(\"keydown\", handleKeyDown)\n    window.addEventListener(\"keyup\", syncModifiers)\n    window.addEventListener(\"blur\", clear)\n    return () => {\n      window.removeEventListener(\"keydown\", handleKeyDown)\n      window.removeEventListener(\"keyup\", syncModifiers)\n      window.removeEventListener(\"blur\", clear)\n      clear()\n    }\n  }, [disabled, fire, isApple, parts, preventDefault])\n\n  React.useEffect(() => () => window.clearTimeout(fireTimerRef.current), [])\n\n  const label = parts.map((part) => formatPart(part, isApple)).join(\" \")\n  const capTone = variant === \"default\" || variant === \"destructive\"\n    ? \"bg-primary-foreground/15 text-primary-foreground\"\n    : \"bg-muted text-muted-foreground\"\n\n  return (\n    <Button\n      type={type}\n      disabled={disabled}\n      variant={variant}\n      data-shortcut={shortcut}\n      data-firing={firing || undefined}\n      data-slot=\"shortcut-button\"\n      aria-keyshortcuts={parts.map((part) => (part === \"mod\" ? (isApple ? \"Meta\" : \"Control\") : part)).join(\"+\")}\n      onClick={(event) => {\n        onClick?.(event)\n      }}\n      className={cn(\"group/cmd gap-2 motion-reduce:active:translate-y-0\", showShortcut && \"pr-1.5\", className)}\n      {...props}\n    >\n      <span>{children}</span>\n      {showShortcut ? (\n        <kbd aria-label={label} className=\"inline-flex items-center gap-0.5 font-sans\">\n          {parts.map((part) => (\n            <span\n              key={part}\n              aria-hidden\n              data-pressed={held.has(part) || undefined}\n              className={cn(\n                \"inline-flex h-5 min-w-5 items-center justify-center rounded-sm px-1 text-[11px] leading-none font-medium\",\n                capTone,\n                \"transition-transform duration-150 motion-reduce:transition-none\",\n                \"data-pressed:translate-y-px group-active/cmd:translate-y-px group-data-firing/cmd:translate-y-px\",\n                \"motion-reduce:data-pressed:translate-y-0 motion-reduce:group-active/cmd:translate-y-0\",\n              )}\n            >\n              {formatPart(part, isApple)}\n            </span>\n          ))}\n        </kbd>\n      ) : null}\n    </Button>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/shortcut-button.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Botón con atajo",
+    "descriptionEs": "Un botón cuyas teclas se hunden mientras se mantiene el atajo, y luego ejecuta el comando.",
+    "preview": "app/examples/shortcut-button/preview.tsx",
+    "previewHref": "/examples/shortcut-button",
+    "examples": [
+      {
+        "title": "Botón con atajo",
+        "href": "/examples/shortcut-button",
+        "description": "Un botón cuyas teclas se hunden mientras se mantiene el atajo, y luego ejecuta el comando."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/shortcut-button/stress",
+        "description": "320px, texto largo, y lectura de derecha a izquierda."
+      }
+    ],
+    "usage": "<ShortcutButton shortcut=\"mod+s\" onCommand={save}>Save</ShortcutButton>",
+    "api": [
+      {
+        "name": "shortcut",
+        "type": "string",
+        "description": "Combination such as mod+s or mod+k. mod is Command on Apple and Control elsewhere. Default mod+s."
+      },
+      {
+        "name": "onCommand",
+        "type": "() => void",
+        "description": "Runs when the shortcut completes or the button is clicked."
+      },
+      {
+        "name": "showShortcut / preventDefault",
+        "type": "boolean",
+        "description": "Show the keycaps. preventDefault defaults to true."
+      }
+    ]
+  },
+  "docs": "Adapted from Evil Buttons command-button (Apache-2.0, radiumcoders, commit ec0fa86f8d06). Colors use the host button. Key travel is removed when the reader prefers reduced motion. See NOTICE. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "button"
+  ],
+  "type": "registry:ui"
+}

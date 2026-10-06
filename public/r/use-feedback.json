@@ -1,0 +1,62 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-feedback",
+  "title": "useFeedback",
+  "author": "Eduardo Retana",
+  "description": "One intent plays a cue, an optional haptic, and a motion hint. Sound and haptics stay independently mutable.",
+  "dependencies": [],
+  "registryDependencies": [
+    "ui-sounds",
+    "haptics",
+    "motion-preference"
+  ],
+  "files": [
+    {
+      "path": "registry/hooks/use-feedback.ts",
+      "content": "\"use client\"\n\n/**\n * One gesture, three channels: a cuelume cue, an optional vibration, and a\n * motion hint. Sound and haptics stay independently mutable. Nothing runs\n * on mount. Reduced motion drops the animation hint only.\n */\n\nimport { triggerHaptic, type HapticPreset } from \"@/components/ui/haptics\"\nimport { useMotionPreference } from \"@/components/ui/motion-preference\"\nimport { playUiSound, useUiSounds, type Emphasis, type SoundName } from \"@/components/ui/ui-sounds\"\n\nexport type FeedbackIntent =\n  | \"tap\"\n  | \"toggle\"\n  | \"open\"\n  | \"close\"\n  | \"select\"\n  | \"navigate\"\n  | \"type\"\n  | \"success\"\n  | \"warning\"\n  | \"error\"\n  | \"loading\"\n  | \"ready\"\n  | \"attention\"\n  | \"confirm\"\n\ntype Row = { sound: SoundName; haptic: HapticPreset; emphasis?: Emphasis }\n\nconst INTENTS: Record<FeedbackIntent, Row> = {\n  tap: { sound: \"tap\", haptic: \"tap\" },\n  toggle: { sound: \"toggle\", haptic: \"tick\" },\n  open: { sound: \"open\", haptic: \"tap\" },\n  close: { sound: \"close\", haptic: \"tick\" },\n  select: { sound: \"select\", haptic: \"tick\" },\n  navigate: { sound: \"navigate\", haptic: \"tap\" },\n  type: { sound: \"type\", haptic: \"tick\" },\n  success: { sound: \"success\", haptic: \"success\" },\n  warning: { sound: \"warning\", haptic: \"warning\" },\n  error: { sound: \"error\", haptic: \"error\" },\n  loading: { sound: \"loading\", haptic: \"tick\" },\n  ready: { sound: \"ready\", haptic: \"tap\" },\n  attention: { sound: \"attention\", haptic: \"attention\" },\n  confirm: { sound: \"success\", haptic: \"success\", emphasis: \"strong\" },\n}\n\nexport type FeedbackMotion = {\n  scale?: number | number[]\n  x?: number | number[]\n  transition: { duration: number }\n}\n\nexport function feedbackMotion(intent: FeedbackIntent, reduced: boolean): FeedbackMotion {\n  if (reduced) return { scale: 1, transition: { duration: 0 } }\n  if (intent === \"error\") return { x: [0, -3, 3, 0], transition: { duration: 0.28 } }\n  if (intent === \"success\" || intent === \"confirm\") return { scale: [1, 1.04, 1], transition: { duration: 0.28 } }\n  return { scale: [1, 0.98, 1], transition: { duration: 0.16 } }\n}\n\nexport function triggerFeedback(\n  intent: FeedbackIntent,\n  options?: { sound?: boolean; haptic?: boolean },\n) {\n  const row = INTENTS[intent]\n  if (options?.sound !== false) {\n    playUiSound(row.sound, row.emphasis ? { emphasis: row.emphasis } : undefined)\n  }\n  if (options?.haptic !== false) triggerHaptic(row.haptic)\n}\n\nexport function useFeedback() {\n  const sounds = useUiSounds()\n  const reduced = useMotionPreference()\n  return {\n    muted: sounds.muted,\n    reduced,\n    trigger: triggerFeedback,\n    motion: (intent: FeedbackIntent) => feedbackMotion(intent, reduced),\n  }\n}\n",
+      "type": "registry:hook",
+      "target": "@hooks/use-feedback.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "useFeedback",
+    "descriptionEs": "Un intento reproduce un cue, un háptico opcional y una pista de movimiento. Sonido y hápticos se silencian por separado.",
+    "preview": "app/examples/use-feedback/preview.tsx",
+    "previewHref": "/examples/use-feedback",
+    "examples": [
+      {
+        "title": "useFeedback",
+        "href": "/examples/use-feedback",
+        "description": "Un intento reproduce un cue, un háptico opcional y una pista de movimiento. Sonido y hápticos se silencian por separado."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/use-feedback/stress",
+        "description": "320px, texto largo, y lectura de derecha a izquierda."
+      }
+    ],
+    "usage": "const feedback = useFeedback()\nfeedback.trigger(\"success\")",
+    "api": [
+      {
+        "name": "trigger",
+        "type": "(intent, options?) => void",
+        "description": "tap, toggle, open, close, select, navigate, type, success, warning, error, loading, ready, attention, or confirm. Pass sound or haptic false to skip a channel."
+      },
+      {
+        "name": "motion",
+        "type": "(intent) => FeedbackMotion",
+        "description": "A short scale or shake. Duration is 0 when motion is reduced."
+      },
+      {
+        "name": "useFeedback",
+        "type": "hook",
+        "description": "muted, reduced, trigger, and motion. Nothing runs on mount."
+      }
+    ]
+  },
+  "docs": "Original wiring of ui-sounds and haptics. Reduced motion drops the animation hint only. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "hook"
+  ],
+  "type": "registry:hook"
+}

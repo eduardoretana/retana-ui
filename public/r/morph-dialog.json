@@ -1,0 +1,74 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "morph-dialog",
+  "title": "Morph dialog",
+  "author": "Eduardo Retana",
+  "description": "The trigger grows into a modal dialog. Focus is trapped, Escape and the backdrop close it, and focus returns to the trigger.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [
+    "motion-preference"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/morph-dialog.tsx",
+      "content": "\"use client\"\n\n/**\n * Clean-room shared-element dialog. The trigger grows into the panel with\n * motion `layoutId`. Blendy (MIT, Taha Shashtari) is the behavior reference\n * only: none of its source is included, and it is not a dependency.\n * Reduced motion skips the morph. Focus moves in, Tab is trapped, Escape\n * and the backdrop close, and focus returns to the trigger.\n */\n\nimport * as React from \"react\"\nimport { AnimatePresence, LayoutGroup, motion } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { useOverlayFocus } from \"@/lib/overlay-focus\"\nimport { motionPresets } from \"@/lib/motion\"\nimport { useMotionPreference } from \"@/components/ui/motion-preference\"\n\nexport type MorphDialogProps = {\n  label: React.ReactNode\n  title: React.ReactNode\n  description?: React.ReactNode\n  children?: React.ReactNode\n  open?: boolean\n  defaultOpen?: boolean\n  onOpenChange?: (open: boolean) => void\n  closeLabel?: string\n  className?: string\n  triggerClassName?: string\n  panelClassName?: string\n}\n\nexport function MorphDialog({\n  label,\n  title,\n  description,\n  children,\n  open,\n  defaultOpen = false,\n  onOpenChange,\n  closeLabel = \"Close\",\n  className,\n  triggerClassName,\n  panelClassName,\n}: MorphDialogProps) {\n  const reduced = useMotionPreference()\n  const triggerRef = React.useRef<HTMLButtonElement>(null)\n  const uid = React.useId()\n  const layoutId = reduced ? undefined : `${uid}-surface`\n  const titleId = `${uid}-title`\n  const descriptionId = `${uid}-description`\n  const panelRef = React.useRef<HTMLDivElement>(null)\n  const [internal, setInternal] = React.useState(defaultOpen)\n  const isOpen = open ?? internal\n\n  const setOpen = React.useCallback(\n    (next: boolean) => {\n      if (open === undefined) setInternal(next)\n      onOpenChange?.(next)\n    },\n    [onOpenChange, open],\n  )\n\n  const close = React.useCallback(() => setOpen(false), [setOpen])\n  useOverlayFocus(isOpen, panelRef, close, true, triggerRef)\n\n  React.useEffect(() => {\n    if (!isOpen) return\n    const previous = document.body.style.overflow\n    document.body.style.overflow = \"hidden\"\n    return () => {\n      document.body.style.overflow = previous\n    }\n  }, [isOpen])\n\n  const transition = reduced ? { duration: 0 } : motionPresets.spring.morph\n\n  return (\n    <LayoutGroup>\n      <div className={className}>\n        <button\n          ref={triggerRef}\n          type=\"button\"\n          className={cn(\n            \"relative inline-flex h-8 items-center justify-center rounded-lg border border-border bg-background px-2.5 text-sm font-medium text-foreground\",\n            isOpen && \"invisible\",\n            triggerClassName,\n          )}\n          style={{ borderRadius: 8 }}\n          aria-hidden={isOpen || undefined}\n          tabIndex={isOpen ? -1 : undefined}\n          onClick={() => setOpen(true)}\n        >\n          {!isOpen || reduced ? (\n            <motion.span\n              layoutId={layoutId}\n              className=\"absolute inset-0 rounded-lg border border-border bg-background\"\n              style={{ borderRadius: 8 }}\n              transition={transition}\n              aria-hidden=\"true\"\n            />\n          ) : null}\n          <span className=\"relative\">{label}</span>\n        </button>\n      </div>\n      <AnimatePresence>\n        {isOpen ? (\n          <div className=\"fixed inset-0 z-50 grid place-items-center p-4\">\n            <motion.button\n              type=\"button\"\n              aria-label={closeLabel}\n              className=\"absolute inset-0 bg-foreground/20\"\n              initial={{ opacity: 0 }}\n              animate={{ opacity: 1 }}\n              exit={{ opacity: 0 }}\n              transition={reduced ? { duration: 0 } : { duration: motionPresets.duration.fast }}\n              onClick={close}\n            />\n            <motion.div\n              ref={panelRef}\n              role=\"dialog\"\n              aria-modal=\"true\"\n              aria-labelledby={titleId}\n              aria-describedby={description ? descriptionId : undefined}\n              tabIndex={-1}\n              layoutId={layoutId}\n              className={cn(\n                \"relative z-10 flex w-full max-w-md flex-col gap-3 border border-border bg-popover p-4 text-popover-foreground shadow-lg outline-none\",\n                panelClassName,\n              )}\n              style={{ borderRadius: 16 }}\n              transition={transition}\n              exit={reduced ? { opacity: 0, transition: { duration: 0 } } : { opacity: 0 }}\n            >\n              <div className=\"flex items-start justify-between gap-3\">\n                <h2 id={titleId} className=\"text-base font-semibold\">\n                  {title}\n                </h2>\n                <button\n                  type=\"button\"\n                  data-overlay-close=\"\"\n                  className=\"rounded-md px-2 py-1 text-sm text-muted-foreground hover:bg-muted hover:text-foreground\"\n                  onClick={close}\n                >\n                  {closeLabel}\n                </button>\n              </div>\n              {description ? (\n                <p id={descriptionId} className=\"text-sm text-muted-foreground\">\n                  {description}\n                </p>\n              ) : null}\n              {children}\n            </motion.div>\n          </div>\n        ) : null}\n      </AnimatePresence>\n    </LayoutGroup>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/morph-dialog.tsx"
+    },
+    {
+      "path": "registry/lib/overlay-focus.ts",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nconst FOCUSABLE = [\n  \"a[href]\",\n  \"button:not([disabled])\",\n  \"textarea:not([disabled])\",\n  \"input:not([disabled])\",\n  \"select:not([disabled])\",\n  \"[tabindex]:not([tabindex='-1'])\",\n].join(\",\")\n\nexport function focusableElements(root: HTMLElement) {\n  return [...root.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(\n    (element) => !element.hasAttribute(\"disabled\") && element.tabIndex !== -1 && !element.closest(\"[hidden]\"),\n  )\n}\n\n/** First control that is not a dismiss button, then the dismiss button, then the panel. */\nfunction initialFocusTarget(node: HTMLElement) {\n  const items = focusableElements(node)\n  const content = items.find((element) => element.dataset.overlayClose === undefined)\n  return content ?? items[0] ?? node\n}\n\n/**\n * Moves focus into an overlay, restores it on close, and closes on Escape.\n * `trap` cycles Tab inside the panel (modal dialogs).\n */\nexport function useOverlayFocus(\n  open: boolean,\n  panelRef: React.RefObject<HTMLElement | null>,\n  onClose: () => void,\n  trap: boolean,\n  returnFocusRef?: React.RefObject<HTMLElement | null>,\n) {\n  const onCloseRef = React.useRef(onClose)\n  React.useEffect(() => {\n    onCloseRef.current = onClose\n  }, [onClose])\n\n  React.useEffect(() => {\n    if (!open) return\n    const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null\n    const returnNode = returnFocusRef?.current ?? null\n    const node = panelRef.current\n    if (node) initialFocusTarget(node).focus()\n\n    function onKey(event: KeyboardEvent) {\n      if (event.key === \"Escape\") {\n        event.preventDefault()\n        onCloseRef.current()\n        return\n      }\n      if (!trap || event.key !== \"Tab\" || !node) return\n      const items = focusableElements(node)\n      if (!items.length) {\n        event.preventDefault()\n        node.focus()\n        return\n      }\n      const first = items[0]\n      const last = items[items.length - 1]\n      const active = document.activeElement\n      if (event.shiftKey && (active === first || active === node)) {\n        event.preventDefault()\n        last.focus()\n      } else if (!event.shiftKey && active === last) {\n        event.preventDefault()\n        first.focus()\n      }\n    }\n\n    document.addEventListener(\"keydown\", onKey)\n    return () => {\n      document.removeEventListener(\"keydown\", onKey)\n      const target = returnNode?.isConnected ? returnNode : previous\n      if (target?.isConnected) target.focus()\n    }\n  }, [open, panelRef, returnFocusRef, trap])\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/overlay-focus.ts"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    exit: [0.7, 0, 0.84, 0] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Diálogo morph",
+    "descriptionEs": "El disparador crece hasta un diálogo modal. El foco queda atrapado, Escape y el fondo lo cierran, y el foco vuelve al disparador.",
+    "preview": "app/examples/morph-dialog/preview.tsx",
+    "previewHref": "/examples/morph-dialog",
+    "examples": [
+      {
+        "title": "Diálogo morph",
+        "href": "/examples/morph-dialog",
+        "description": "El disparador crece hasta un diálogo modal. El foco queda atrapado, Escape y el fondo lo cierran, y el foco vuelve al disparador."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/morph-dialog/stress",
+        "description": "320px, texto largo, y lectura de derecha a izquierda."
+      }
+    ],
+    "usage": "<MorphDialog label=\"Edit note\" title=\"Note\"><input aria-label=\"Title\" /></MorphDialog>",
+    "api": [
+      {
+        "name": "label / title / description",
+        "type": "ReactNode",
+        "description": "Trigger label, dialog name, and optional description."
+      },
+      {
+        "name": "open / defaultOpen / onOpenChange",
+        "type": "boolean / callback",
+        "description": "Controlled or uncontrolled open state."
+      },
+      {
+        "name": "closeLabel",
+        "type": "string",
+        "description": "Accessible name of the close control. Default Close."
+      }
+    ]
+  },
+  "docs": "Clean-room shared-element dialog using motion layoutId. Blendy is the behavior reference only and is not a dependency. Reduced motion skips the morph. Initial focus lands on the first content control. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "overlay"
+  ],
+  "type": "registry:ui"
+}

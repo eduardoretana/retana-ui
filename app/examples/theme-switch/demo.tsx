@@ -6,8 +6,10 @@ import { useSyncExternalStore } from "react"
 import { StressCases } from "@/app/examples/arc/stress"
 import { unbreakable } from "@/app/examples/arc/demo-data"
 import { ThemeSwitch, type ThemeName, type ThemeSwitchVariant } from "@/registry/ui/theme-switch"
+import { themeToggleIconNames } from "@/registry/ui/theme-toggle-icons"
 
 const variants: ThemeSwitchVariant[] = ["fade", "eclipse", "split", "rise"]
+const icons = ["eclipse", "classic", "expand"] as const
 
 function useDocumentTheme(): ThemeName {
   return useSyncExternalStore(
@@ -37,6 +39,22 @@ export function Demo() {
             label={variant}
           />
         ))}
+      </div>
+      <div className="flex flex-wrap items-center gap-3">
+        {icons.map((icon) => (
+          <ThemeSwitch
+            key={icon}
+            theme={theme}
+            variant="eclipse"
+            icon={icon}
+            iconOnly
+            label={icon}
+            onThemeChange={(next) => setTheme(next)}
+          />
+        ))}
+        <p className="text-sm text-muted-foreground">
+          {themeToggleIconNames.length} animated icons. The icon duration matches the eclipse transition.
+        </p>
       </div>
       <StressCases
         empty={<ThemeSwitch theme={theme} variant="fade" iconOnly label="Theme" onThemeChange={(next) => setTheme(next)} />}

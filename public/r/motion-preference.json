@@ -1,0 +1,60 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "motion-preference",
+  "title": "Motion preference",
+  "author": "Eduardo Retana",
+  "description": "A persisted choice of system, reduced, or full motion. Explicit choice wins over prefers-reduced-motion.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/motion-preference.tsx",
+      "content": "\"use client\"\n\n/**\n * Motion preference adapted from seamui (MIT).\n * Copyright (c) 2026 Mikhail Villamor. https://github.com/meiskv/seamui\n * Upstream commit 7c57149f327d, `useReducedMotion` in registry item `motion`.\n *\n * Resolution order matches that hook:\n *   1. an explicit user choice (`reduce` or `full`);\n *   2. the operating system `prefers-reduced-motion` query.\n * `MotionConfig reducedMotion: \"never\"` is ignored, as in seamui, because that\n * value is motion's default and cannot be told apart from \"no provider\".\n *\n * Modification: the choice is persisted, and the hook works without a provider.\n * Springs, depth tokens, and the rest of seamui's motion theme are not included.\n */\n\nimport * as React from \"react\"\nimport { useReducedMotion } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type MotionPreference = \"system\" | \"reduce\" | \"full\"\n\nconst STORAGE_KEY = \"retana-motion-preference\"\nconst OPTIONS: { value: MotionPreference; label: string }[] = [\n  { value: \"system\", label: \"System\" },\n  { value: \"reduce\", label: \"Reduce\" },\n  { value: \"full\", label: \"Full\" },\n]\n\nlet preference: MotionPreference = \"system\"\nlet hydrated = false\nconst listeners = new Set<() => void>()\n\nfunction emit() {\n  listeners.forEach((listener) => listener())\n}\n\nfunction isPreference(value: unknown): value is MotionPreference {\n  return value === \"system\" || value === \"reduce\" || value === \"full\"\n}\n\nexport function subscribeMotionPreference(listener: () => void) {\n  listeners.add(listener)\n  return () => listeners.delete(listener)\n}\n\nexport function getMotionPreference() {\n  return preference\n}\n\nexport function hydrateMotionPreference() {\n  if (hydrated || typeof window === \"undefined\") return\n  hydrated = true\n  try {\n    const stored = localStorage.getItem(STORAGE_KEY)\n    if (isPreference(stored)) preference = stored\n  } catch {\n    preference = \"system\"\n  }\n  emit()\n}\n\nexport function setMotionPreference(next: MotionPreference) {\n  if (!isPreference(next)) return\n  preference = next\n  try {\n    localStorage.setItem(STORAGE_KEY, next)\n  } catch {\n    /* storage may be blocked */\n  }\n  emit()\n}\n\n/** True when motion should be reduced, including a stored user override. */\nexport function useMotionPreference() {\n  const stored = React.useSyncExternalStore(subscribeMotionPreference, getMotionPreference, () => \"system\" as const)\n  const system = useReducedMotion() ?? false\n  React.useEffect(() => {\n    hydrateMotionPreference()\n  }, [])\n  if (stored === \"reduce\") return true\n  if (stored === \"full\") return false\n  return system\n}\n\nexport function MotionPreferenceProvider({\n  children,\n  preference: preferenceProp,\n}: {\n  children: React.ReactNode\n  preference?: MotionPreference\n}) {\n  React.useEffect(() => {\n    hydrateMotionPreference()\n    if (preferenceProp !== undefined) setMotionPreference(preferenceProp)\n  }, [preferenceProp])\n  return children\n}\n\nexport function MotionPreferenceControl({\n  className,\n  label = \"Motion\",\n}: {\n  className?: string\n  label?: string\n}) {\n  const stored = React.useSyncExternalStore(subscribeMotionPreference, getMotionPreference, () => \"system\" as const)\n  React.useEffect(() => {\n    hydrateMotionPreference()\n  }, [])\n  return (\n    <div className={cn(\"flex flex-wrap items-center gap-2\", className)} role=\"radiogroup\" aria-label={label}>\n      <span className=\"text-sm text-muted-foreground\">{label}</span>\n      {OPTIONS.map((option) => {\n        const selected = stored === option.value\n        return (\n          <button\n            key={option.value}\n            type=\"button\"\n            role=\"radio\"\n            aria-checked={selected}\n            className={cn(\n              \"rounded-md border px-2 py-1 text-sm\",\n              selected ? \"border-border bg-muted text-foreground\" : \"border-transparent text-muted-foreground hover:bg-muted\",\n            )}\n            onClick={() => setMotionPreference(option.value)}\n          >\n            {option.label}\n          </button>\n        )\n      })}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/motion-preference.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Preferencia de movimiento",
+    "descriptionEs": "Una elección guardada: sistema, reducido o completo. La elección explícita gana sobre prefers-reduced-motion.",
+    "preview": "app/examples/motion-preference/preview.tsx",
+    "previewHref": "/examples/motion-preference",
+    "examples": [
+      {
+        "title": "Preferencia de movimiento",
+        "href": "/examples/motion-preference",
+        "description": "Una elección guardada: sistema, reducido o completo. La elección explícita gana sobre prefers-reduced-motion."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/motion-preference/stress",
+        "description": "320px, texto largo, y lectura de derecha a izquierda."
+      }
+    ],
+    "usage": "<MotionPreferenceControl />",
+    "api": [
+      {
+        "name": "useMotionPreference",
+        "type": "hook",
+        "description": "Returns true when motion should be reduced."
+      },
+      {
+        "name": "setMotionPreference",
+        "type": "(value: MotionPreference) => void",
+        "description": "system, reduce, or full. Persisted locally."
+      },
+      {
+        "name": "MotionPreferenceControl",
+        "type": "component",
+        "description": "Radiogroup with System, Reduce, and Full."
+      }
+    ]
+  },
+  "docs": "Adapted from seamui's reduced-motion resolution (MIT, Mikhail Villamor). The hook works without a provider. MotionConfig reducedMotion never is ignored, matching seamui, because that value is motion's default. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "hook"
+  ],
+  "type": "registry:ui"
+}
