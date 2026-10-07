@@ -9,7 +9,7 @@
     "recharts"
   ],
   "registryDependencies": [
-    "gauge-kit",
+    "@retana/gauge-kit",
     "button",
     "card",
     "chart",
