@@ -6,7 +6,8 @@
   "description": "A sheet that rests at a peek or full height.",
   "dependencies": [
     "motion",
-    "lucide-react"
+    "lucide-react",
+    "radix-ui"
   ],
   "registryDependencies": [
     "button"

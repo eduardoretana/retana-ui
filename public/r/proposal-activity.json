@@ -5,7 +5,8 @@
   "author": "Eduardo Retana",
   "description": "A deal's activity feed, newest first, using the shared timeline.",
   "dependencies": [
-    "motion"
+    "motion",
+    "lucide-react"
   ],
   "registryDependencies": [],
   "files": [

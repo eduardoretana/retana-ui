@@ -8,7 +8,7 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "gauge-kit",
+    "@retana/gauge-kit",
     "button",
     "slider",
     "switch",

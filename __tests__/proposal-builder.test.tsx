@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
 
+import { ProposalBuilder } from "@/registry/blocks/proposal-builder"
 import { ProposalDashboard } from "@/registry/blocks/proposal-dashboard"
 import { ProposalShell } from "@/registry/blocks/proposal-shell"
 import { ProposalAnalyze } from "@/registry/ui/proposal-analyze"
@@ -286,5 +287,9 @@ describe("proposal panels", () => {
     expect(screen.getByRole("slider", { name: "Seek" })).toHaveAttribute("aria-valuemax", "1122")
     await user.click(screen.getByRole("button", { name: "Send" }))
     expect(onSend).toHaveBeenCalled()
+  })
+
+  it("exports the builder block", () => {
+    expect(ProposalBuilder).toBeTypeOf("function")
   })
 })

@@ -8,7 +8,7 @@
     "motion"
   ],
   "registryDependencies": [
-    "motion-preference"
+    "@retana/motion-preference"
   ],
   "files": [
     {

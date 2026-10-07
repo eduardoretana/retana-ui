@@ -216,21 +216,31 @@ Scroll and motion primitives. They inherit the host tokens and follow [`motion-p
 
 ## Install
 
-Register the namespace once in the host `components.json`. The public catalog host is not chosen yet. `https://<your-deployment>` is a placeholder, on this page and on `/docs`.
-
-```bash
-npx shadcn@latest add @retana/layered-panel
-```
+Register the namespace once in the host `components.json`. Pin `@retana` to a commit. A branch name would float.
 
 ```json
 {
   "registries": {
     "@retana": {
-      "url": "https://<your-deployment>/r/{name}.json"
+      "url": "https://raw.githubusercontent.com/eduardoretana/retana-ui/047eccb2a4589be8b30babfa2c9a57beaf4d8bfc/public/r/{name}.json"
     }
   }
 }
 ```
+
+`047eccb2a4589be8b30babfa2c9a57beaf4d8bfc` is `CPL` when this page was written. Replace that SHA with the commit the host should install.
+
+```bash
+npx shadcn@latest add @retana/layered-panel
+```
+
+The same file, with no namespace:
+
+```bash
+npx shadcn@latest add https://raw.githubusercontent.com/eduardoretana/retana-ui/047eccb2a4589be8b30babfa2c9a57beaf4d8bfc/public/r/layered-panel.json
+```
+
+The public catalog host is not chosen yet. `https://<your-deployment>` does not pin a SHA. It stays a placeholder, on this page and on `/docs`, for a deployment you control.
 
 Omit `headers` when the deployment is public and `REGISTRY_TOKEN` is unset. When the deployment gates `/r/*`, add the header. The shadcn CLI substitutes `${REGISTRY_TOKEN}` from the host's `.env.local`.
 

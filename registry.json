@@ -2829,7 +2829,7 @@
       "author": "Eduardo Retana",
       "dependencies": [],
       "registryDependencies": [
-        "ui-sounds"
+        "@retana/ui-sounds"
       ],
       "categories": [
         "media",
@@ -3033,7 +3033,7 @@
       ],
       "registryDependencies": [
         "button",
-        "theme-toggle-icons"
+        "@retana/theme-toggle-icons"
       ],
       "categories": [
         "theme"
@@ -7248,7 +7248,8 @@
       "author": "Eduardo Retana",
       "dependencies": [
         "motion",
-        "lucide-react"
+        "lucide-react",
+        "radix-ui"
       ],
       "registryDependencies": [
         "button"
@@ -8871,7 +8872,8 @@
       "title": "Rail sidebar",
       "description": "Two-layer app sidebar: circular section buttons on an icon rail and a panel for that section's navigation, with an optional scope toggle, alert counts, and footer links. Built on the host shadcn sidebar, including its mobile sheet.",
       "dependencies": [
-        "lucide-react"
+        "lucide-react",
+        "radix-ui"
       ],
       "registryDependencies": [
         "sidebar",
@@ -13540,7 +13542,9 @@
     },
     {
       "author": "Eduardo Retana",
-      "dependencies": [],
+      "dependencies": [
+        "motion"
+      ],
       "registryDependencies": [],
       "categories": [
         "chart",
@@ -14020,7 +14024,8 @@
       "author": "Eduardo Retana",
       "dependencies": [
         "lucide-react",
-        "motion"
+        "motion",
+        "radix-ui"
       ],
       "registryDependencies": [
         "avatar",
@@ -14664,7 +14669,8 @@
       "author": "Eduardo Retana",
       "dependencies": [
         "lucide-react",
-        "motion"
+        "motion",
+        "radix-ui"
       ],
       "registryDependencies": [
         "avatar",
@@ -14980,7 +14986,8 @@
       "author": "Eduardo Retana",
       "dependencies": [
         "lucide-react",
-        "motion"
+        "motion",
+        "radix-ui"
       ],
       "registryDependencies": [
         "avatar",
@@ -15381,7 +15388,7 @@
         "recharts"
       ],
       "registryDependencies": [
-        "gauge-kit",
+        "@retana/gauge-kit",
         "button",
         "card",
         "chart",
@@ -15551,7 +15558,7 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "gauge-kit",
+        "@retana/gauge-kit",
         "button",
         "slider",
         "switch",
@@ -16646,7 +16653,8 @@
       "title": "Proposal activity",
       "description": "A deal's activity feed, newest first, using the shared timeline.",
       "dependencies": [
-        "motion"
+        "motion",
+        "lucide-react"
       ],
       "registryDependencies": [],
       "categories": [
@@ -18165,7 +18173,7 @@
         "motion"
       ],
       "registryDependencies": [
-        "motion-preference"
+        "@retana/motion-preference"
       ],
       "categories": [
         "overlay"
@@ -18235,7 +18243,7 @@
         "motion"
       ],
       "registryDependencies": [
-        "motion-preference"
+        "@retana/motion-preference"
       ],
       "categories": [
         "overlay"
@@ -18598,9 +18606,9 @@
       "author": "Eduardo Retana",
       "dependencies": [],
       "registryDependencies": [
-        "ui-sounds",
-        "haptics",
-        "motion-preference"
+        "@retana/ui-sounds",
+        "@retana/haptics",
+        "@retana/motion-preference"
       ],
       "categories": [
         "hook"
@@ -20097,7 +20105,7 @@
         "motion"
       ],
       "registryDependencies": [
-        "use-scroll-progress"
+        "@retana/use-scroll-progress"
       ],
       "categories": [
         "animation"
@@ -20172,7 +20180,7 @@
         "motion"
       ],
       "registryDependencies": [
-        "motion-preference"
+        "@retana/motion-preference"
       ],
       "categories": [
         "animation"
@@ -20257,7 +20265,7 @@
         "motion"
       ],
       "registryDependencies": [
-        "motion-preference"
+        "@retana/motion-preference"
       ],
       "categories": [
         "animation"
@@ -20330,7 +20338,7 @@
       "author": "Eduardo Retana",
       "dependencies": [],
       "registryDependencies": [
-        "motion-preference"
+        "@retana/motion-preference"
       ],
       "categories": [
         "animation"
@@ -20466,8 +20474,8 @@
         "motion"
       ],
       "registryDependencies": [
-        "use-scroll-progress",
-        "motion-preference"
+        "@retana/use-scroll-progress",
+        "@retana/motion-preference"
       ],
       "categories": [
         "animation"
@@ -20539,8 +20547,8 @@
       ],
       "registryDependencies": [
         "button",
-        "use-scroll-progress",
-        "motion-preference"
+        "@retana/use-scroll-progress",
+        "@retana/motion-preference"
       ],
       "categories": [
         "animation"

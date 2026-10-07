@@ -10,7 +10,7 @@
   ],
   "registryDependencies": [
     "button",
-    "theme-toggle-icons"
+    "@retana/theme-toggle-icons"
   ],
   "files": [
     {

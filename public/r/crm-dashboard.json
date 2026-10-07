@@ -6,7 +6,8 @@
   "description": "Companies page that composes the CRM table, toolbar, detail panel, command menu, create dialog, and notifications inside a sidebar shell. Spanish sample data and plain React state.",
   "dependencies": [
     "lucide-react",
-    "motion"
+    "motion",
+    "radix-ui"
   ],
   "registryDependencies": [
     "avatar",

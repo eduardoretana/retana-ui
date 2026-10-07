@@ -81,6 +81,18 @@ describe("ViewKanban", () => {
     expect(onMove).toHaveBeenCalledWith("a", { stage: "new" })
   })
 
+  it("does not move a card when readOnly", async () => {
+    const user = userEvent.setup()
+    const onMove = vi.fn(async () => undefined)
+    render(
+      <ViewKanban records={rows} fields={fields} config={views[1]!} locale="en-US" readOnly onMove={onMove} />,
+    )
+    expect(screen.getByRole("button", { name: "Drag Bruma" })).toBeDisabled()
+    screen.getByRole("button", { name: "Bruma" }).focus()
+    await user.keyboard("{ArrowRight}")
+    expect(onMove).not.toHaveBeenCalled()
+  })
+
   it("marks reduced motion", async () => {
     const original = window.matchMedia
     window.matchMedia = (query: string) =>
@@ -124,6 +136,25 @@ describe("ViewCalendar", () => {
     await user.keyboard("{Alt>}{ArrowRight}{/Alt}")
     expect(onMove).toHaveBeenCalledWith("a", { close: "2026-03-16" })
   })
+
+  it("does not reschedule when readOnly", async () => {
+    const user = userEvent.setup()
+    const onMove = vi.fn(async () => undefined)
+    render(
+      <ViewCalendar
+        records={rows}
+        fields={fields}
+        config={{ id: "cal", kind: "calendar", label: "Calendar", titleField: "name", dateField: "close" }}
+        locale="en-US"
+        today="2026-03-15"
+        readOnly
+        onMove={onMove}
+      />,
+    )
+    screen.getByRole("button", { name: "Reschedule Bruma" }).focus()
+    await user.keyboard("{Alt>}{ArrowRight}{/Alt}")
+    expect(onMove).not.toHaveBeenCalled()
+  })
 })
 
 describe("ViewTimeline", () => {
@@ -147,6 +178,27 @@ describe("ViewTimeline", () => {
     expect(onMove).toHaveBeenCalledWith("a", { start: "2026-04-02", end: "2026-04-11" })
     await user.keyboard("{Shift>}{ArrowRight}{/Shift}")
     expect(onMove).toHaveBeenCalledWith("a", { start: "2026-04-01", end: "2026-04-11" })
+  })
+
+  it("does not move a bar when readOnly", async () => {
+    const user = userEvent.setup()
+    const onMove = vi.fn(async () => undefined)
+    render(
+      <ViewTimeline
+        records={rows}
+        fields={fields}
+        config={{ id: "time", kind: "timeline", label: "Timeline", titleField: "name", startField: "start", endField: "end" }}
+        locale="en-US"
+        today="2026-04-03"
+        zoom="day"
+        readOnly
+        onMove={onMove}
+      />,
+    )
+    const bar = screen.getByRole("button", { name: "Bruma, Apr 1, 2026 to Apr 10, 2026" })
+    bar.focus()
+    await user.keyboard("{ArrowRight}")
+    expect(onMove).not.toHaveBeenCalled()
   })
 })
 

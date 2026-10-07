@@ -203,14 +203,25 @@ export default function DocsPage() {
         <section className="flex flex-col gap-3 text-sm leading-6">
           <h2 className="text-lg font-semibold">Install</h2>
           <p className="text-muted-foreground">
-            The catalog domain is not chosen yet. <code>https://&lt;your-deployment&gt;</code> is a
-            placeholder everywhere it appears.
+            Pin <code>@retana</code> to a commit.{" "}
+            <code>047eccb2a4589be8b30babfa2c9a57beaf4d8bfc</code> is <code>CPL</code> when this page
+            was written. Replace that SHA with the commit the host should install.
+          </p>
+          <pre className="overflow-x-auto rounded-xl bg-muted p-4">
+            <code>
+              npx shadcn@latest add
+              https://raw.githubusercontent.com/eduardoretana/retana-ui/047eccb2a4589be8b30babfa2c9a57beaf4d8bfc/public/r/&lt;name&gt;.json
+            </code>
+          </pre>
+          <p className="text-muted-foreground">
+            The catalog domain is not chosen yet. <code>https://&lt;your-deployment&gt;</code> does
+            not pin a SHA. It is a placeholder for a deployment you control.
           </p>
           <pre className="overflow-x-auto rounded-xl bg-muted p-4">
             <code>npx shadcn@latest add @retana/&lt;name&gt;</code>
           </pre>
           <p className="text-muted-foreground">
-            Or one JSON file, with no namespace:
+            Or one JSON file from that deployment, with no namespace:
           </p>
           <pre className="overflow-x-auto rounded-xl bg-muted p-4">
             <code>npx shadcn@latest add https://&lt;your-deployment&gt;/r/&lt;name&gt;.json</code>
@@ -236,8 +247,20 @@ export default function DocsPage() {
         <section className="flex flex-col gap-3 text-sm leading-6">
           <h2 className="text-lg font-semibold">Namespace</h2>
           <p className="text-muted-foreground">
-            In the host project&apos;s <code>components.json</code>. Drop the headers block when{" "}
-            <code>REGISTRY_PUBLIC=true</code> and no token is set.
+            In the host project&apos;s <code>components.json</code>, pin the commit. A gated
+            deployment uses the second block. Drop the headers when <code>REGISTRY_PUBLIC=true</code>{" "}
+            and no token is set.
+          </p>
+          <pre className="overflow-x-auto rounded-xl bg-muted p-4">{`{
+  "registries": {
+    "@retana": {
+      "url": "https://raw.githubusercontent.com/eduardoretana/retana-ui/047eccb2a4589be8b30babfa2c9a57beaf4d8bfc/public/r/{name}.json"
+    }
+  }
+}`}</pre>
+          <p className="text-muted-foreground">
+            A deployment that gates <code>/r/*</code> can use the placeholder URL and a header. That
+            URL does not pin a SHA.
           </p>
           <pre className="overflow-x-auto rounded-xl bg-muted p-4">{`{
   "registries": {
