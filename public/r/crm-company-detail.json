@@ -6,7 +6,8 @@
   "description": "Side panel with a score card, a pipeline health meter, an activity trend, and detail sections.",
   "dependencies": [
     "lucide-react",
-    "motion"
+    "motion",
+    "radix-ui"
   ],
   "registryDependencies": [
     "avatar",

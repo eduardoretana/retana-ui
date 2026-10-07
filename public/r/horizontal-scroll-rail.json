@@ -10,8 +10,8 @@
   ],
   "registryDependencies": [
     "button",
-    "use-scroll-progress",
-    "motion-preference"
+    "@retana/use-scroll-progress",
+    "@retana/motion-preference"
   ],
   "files": [
     {

@@ -6,9 +6,9 @@
   "description": "One intent plays a cue, an optional haptic, and a motion hint. Sound and haptics stay independently mutable.",
   "dependencies": [],
   "registryDependencies": [
-    "ui-sounds",
-    "haptics",
-    "motion-preference"
+    "@retana/ui-sounds",
+    "@retana/haptics",
+    "@retana/motion-preference"
   ],
   "files": [
     {

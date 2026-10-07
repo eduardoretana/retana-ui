@@ -280,8 +280,10 @@ export function TagInput({
         <div
           ref={contentRef}
           className="relative flex min-h-9 cursor-text flex-wrap content-start items-center gap-1.5 p-[7px]"
-          onClick={(event) => {
-            if (event.target === event.currentTarget) inputRef.current?.focus()
+          onMouseDown={(event) => {
+            if (event.target !== event.currentTarget) return
+            event.preventDefault()
+            inputRef.current?.focus()
           }}
         >
           <span

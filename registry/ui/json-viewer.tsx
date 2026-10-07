@@ -564,7 +564,7 @@ export const JsonViewer = forwardRef<HTMLDivElement, JsonViewerProps>(function J
                 aria-controls={`${uid}-tree`}
                 spellCheck={false}
                 autoComplete="off"
-                className="h-[34px] min-w-0 flex-1 bg-transparent px-1 text-sm text-foreground outline-none placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:hidden"
+                className="h-[34px] min-w-0 flex-1 bg-transparent px-1 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-3 focus-visible:ring-ring [&::-webkit-search-cancel-button]:hidden"
                 onChange={(event) => onQuery(event.target.value)}
                 onKeyDown={onSearchKeyDown}
               />
