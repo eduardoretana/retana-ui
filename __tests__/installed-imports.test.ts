@@ -73,6 +73,24 @@ describe("unresolvableImports", () => {
     expect(errors).toEqual([])
   })
 
+  it("treats @retana/name as the installed module of that retana item", () => {
+    const errors = unresolvableImports({
+      name: "gauge-scenes",
+      registryDependencies: ["@retana/gauge-kit", "button"],
+      files: [
+        {
+          path: "registry/blocks/gauge-scenes/car-dashboard.tsx",
+          target: "@ui/car-dashboard.tsx",
+          content: [
+            'import { Gauge } from "@/components/ui/gauge-kit"',
+            'import { Button } from "@/components/ui/button"',
+          ].join("\n"),
+        },
+      ],
+    })
+    expect(errors).toEqual([])
+  })
+
   it("rejects catalog aliases and imports that miss the installed files", () => {
     const errors = unresolvableImports({
       name: "data-table",

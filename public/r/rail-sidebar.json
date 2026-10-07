@@ -5,7 +5,8 @@
   "author": "Eduardo Retana",
   "description": "Two-layer app sidebar: circular section buttons on an icon rail and a panel for that section's navigation, with an optional scope toggle, alert counts, and footer links. Built on the host shadcn sidebar, including its mobile sheet.",
   "dependencies": [
-    "lucide-react"
+    "lucide-react",
+    "radix-ui"
   ],
   "registryDependencies": [
     "sidebar",

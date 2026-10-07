@@ -73,20 +73,25 @@ function resolveRelative(fromModule: string, specifier: string) {
   return parts.join("/").replace(/\.(tsx|ts|jsx|js)$/, "")
 }
 
+function providesModule(dependencies: Set<string>, name: string) {
+  if (dependencies.has(name)) return true
+  return dependencies.has(`@retana/${name}`)
+}
+
 function hostCanResolve(specifier: string, dependencies: Set<string>, modules: Set<string>) {
   if (modules.has(specifier)) return true
   if (specifier === "@/lib/utils") return true
   if (specifier.startsWith("@/components/ui/")) {
     const name = specifier.slice("@/components/ui/".length)
-    return !name.includes("/") && dependencies.has(name)
+    return !name.includes("/") && providesModule(dependencies, name)
   }
   if (specifier.startsWith("@/hooks/")) {
     const name = specifier.slice("@/hooks/".length)
-    return !name.includes("/") && dependencies.has(name)
+    return !name.includes("/") && providesModule(dependencies, name)
   }
   if (specifier.startsWith("@/components/")) {
     const name = specifier.slice("@/components/".length)
-    return !name.includes("/") && dependencies.has(name)
+    return !name.includes("/") && providesModule(dependencies, name)
   }
   return false
 }

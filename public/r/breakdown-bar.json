@@ -4,7 +4,9 @@
   "title": "Breakdown bar",
   "author": "Eduardo Retana",
   "description": "A total, a segmented bar, and a legend. Unlike usage-meter, there is no limit.",
-  "dependencies": [],
+  "dependencies": [
+    "motion"
+  ],
   "registryDependencies": [],
   "files": [
     {
