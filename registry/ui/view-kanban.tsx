@@ -62,6 +62,8 @@ export type ViewKanbanProps = {
   onOpen?: (id: string) => void
   onDelete?: (ids: readonly string[]) => Promise<void> | void
   onMove?: (id: string, patch: Record<string, unknown>) => Promise<void> | void
+  /** Cards stay put. Omitted, the board still drags. */
+  readOnly?: boolean
   onCreateRequest?: (seed: Record<string, unknown>) => void
   emptyLabel?: string
   emptyHint?: string
@@ -89,6 +91,7 @@ export function ViewKanban({
   onOpen,
   onDelete,
   onMove,
+  readOnly = false,
   onCreateRequest,
   emptyLabel = "No items",
   emptyHint,
@@ -168,7 +171,7 @@ export function ViewKanban({
 
   return (
     <DndContext
-      sensors={sensors}
+      sensors={readOnly ? [] : sensors}
       collisionDetection={closestCorners}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
@@ -249,6 +252,7 @@ export function ViewKanban({
                       moveLabel={moveLabel}
                       groups={groups.map((item) => ({ key: item.key, label: item.label }))}
                       onMoveTo={(key) => moveTo(record.id, key)}
+                      readOnly={readOnly}
                       highlighted={highlightedIds?.includes(record.id)}
                       layout={cardLayout}
                     />
@@ -366,6 +370,7 @@ function Card({
   moveLabel,
   groups,
   onMoveTo,
+  readOnly = false,
   highlighted = false,
   layout = "fields",
 }: {
@@ -384,11 +389,13 @@ function Card({
   moveLabel: string
   groups: readonly { key: string; label: string }[]
   onMoveTo: (key: string) => void
+  readOnly?: boolean
   highlighted?: boolean
   layout?: "fields" | "summary"
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: record.id,
+    disabled: readOnly,
   })
   const title = recordTitle(record, fields, titleField)
   const [ring, setRing] = React.useState(highlighted)
@@ -426,10 +433,11 @@ function Card({
         />
         <button
           type="button"
-          className="mt-0.5 text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
+          className="mt-0.5 text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-default"
           aria-label={`Drag ${title}`}
-          {...attributes}
-          {...listeners}
+          disabled={readOnly}
+          {...(readOnly ? {} : attributes)}
+          {...(readOnly ? {} : listeners)}
         >
           <GripVertical className="size-3.5" />
         </button>
@@ -439,6 +447,7 @@ function Card({
           dir="auto"
           onClick={() => onOpen?.(record.id)}
           onKeyDown={(event) => {
+            if (readOnly) return
             if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return
             const current = groups.findIndex((group) => group.key === groupKey)
             const delta = event.key === "ArrowRight" ? 1 : -1
