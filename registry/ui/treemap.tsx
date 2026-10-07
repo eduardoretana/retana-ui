@@ -522,7 +522,7 @@ export function Treemap({
                   {index < trail.length - 1 ? (
                     <button
                       type="button"
-                      className="max-w-full min-h-8 min-w-0 truncate rounded-md px-1.5 text-sm text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none active:scale-[0.97] motion-reduce:active:scale-100"
+                      className="max-w-full min-h-8 min-w-0 truncate rounded-md px-1.5 text-sm text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none active:scale-[0.96] motion-reduce:active:scale-100"
                       onClick={() => {
                         zoomTo(node.id)
                         setActive(null)

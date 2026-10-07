@@ -6,7 +6,7 @@
  */
 
 import { useLayoutEffect, useState } from "react"
-import { motion, useMotionValueEvent, useTransform } from "motion/react"
+import { motion, useMotionValueEvent, useReducedMotion, useTransform } from "motion/react"
 
 import { cn } from "@/lib/utils"
 import { clampUnit, readingPercent, useScrollProgress, type UseScrollProgressOptions } from "@/registry/retana/hooks/use-scroll-progress"
@@ -34,6 +34,7 @@ export function ScrollProgress({
   offset,
   trackContentSize,
 }: ScrollProgressProps) {
+  const reduced = useReducedMotion() === true
   const { progress } = useScrollProgress({ container, target, axis, offset, trackContentSize })
   const [value, setValue] = useState(() => clampUnit(progress.get()))
   const [overflow, setOverflow] = useState(0)
@@ -73,11 +74,20 @@ export function ScrollProgress({
         aria-valuetext={`${percent} percent`}
         className="h-1 min-w-0 flex-1 overflow-hidden bg-muted"
       >
-        <motion.div
-          data-slot="scroll-progress-bar"
-          className={cn("h-full origin-left bg-primary rtl:origin-right", barClassName)}
-          style={{ scaleX: tracked > 1 ? scaleX : 0 }}
-        />
+        {reduced ? (
+          <div
+            data-slot="scroll-progress-bar"
+            data-reduced="true"
+            className={cn("h-full origin-left bg-primary rtl:origin-right", barClassName)}
+            style={{ transform: `scaleX(${tracked > 1 ? value : 0})` }}
+          />
+        ) : (
+          <motion.div
+            data-slot="scroll-progress-bar"
+            className={cn("h-full origin-left bg-primary rtl:origin-right", barClassName)}
+            style={{ scaleX: tracked > 1 ? scaleX : 0 }}
+          />
+        )}
       </div>
       {showValue ? (
         <span className="shrink-0 pr-3 text-xs tabular-nums text-muted-foreground">{percent}%</span>

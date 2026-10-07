@@ -12,7 +12,8 @@ export const motionPresets = {
   },
   ease: {
     enter: [0.16, 1, 0.3, 1] as const,
-    exit: [0.7, 0, 0.84, 0] as const,
+    // Exit decelerates, the same curve as CSS ease-out.
+    exit: [0, 0, 0.58, 1] as const,
     standard: [0.22, 1, 0.36, 1] as const,
     inOut: [0.65, 0, 0.35, 1] as const,
   },
