@@ -44,6 +44,8 @@ export type ViewTimelineProps = {
   onZoomChange?: (zoom: TimelineZoom) => void
   onOpen?: (id: string) => void
   onMove?: (id: string, patch: Record<string, unknown>) => Promise<void> | void
+  /** Bars stay put. Omitted, the timeline still moves and resizes. */
+  readOnly?: boolean
   className?: string
   rowClassName?: string
   barClassName?: string
@@ -60,6 +62,7 @@ export function ViewTimeline({
   onZoomChange,
   onOpen,
   onMove,
+  readOnly = false,
   className,
   rowClassName,
   barClassName,
@@ -146,6 +149,7 @@ export function ViewTimeline({
               barClassName={barClassName}
               onOpen={onOpen}
               onCommit={commit}
+              readOnly={readOnly}
             />
           ))}
         </div>
@@ -178,6 +182,7 @@ function GroupBlock({
   barClassName,
   onOpen,
   onCommit,
+  readOnly = false,
 }: {
   label: string
   records: readonly MultiRecord[]
@@ -196,6 +201,7 @@ function GroupBlock({
   barClassName?: string
   onOpen?: (id: string) => void
   onCommit: (id: string, start: string, end: string) => void
+  readOnly?: boolean
 }) {
   const [open, setOpen] = React.useState(true)
   return (
@@ -230,6 +236,7 @@ function GroupBlock({
               barClassName={barClassName}
               onOpen={onOpen}
               onCommit={onCommit}
+              readOnly={readOnly}
             />
           ))
         : null}
@@ -263,6 +270,7 @@ function TimelineRow({
   barClassName,
   onOpen,
   onCommit,
+  readOnly = false,
 }: {
   record: MultiRecord
   fields: readonly FieldDef[]
@@ -280,6 +288,7 @@ function TimelineRow({
   barClassName?: string
   onOpen?: (id: string) => void
   onCommit: (id: string, start: string, end: string) => void
+  readOnly?: boolean
 }) {
   const title = recordTitle(record, fields, titleField)
   const range = readRange(record, startField, endField)
@@ -287,7 +296,7 @@ function TimelineRow({
   const drag = React.useRef<{ edge: "move" | "start" | "end"; x: number; start: string; end: string } | null>(null)
 
   function onPointerDown(event: React.PointerEvent<HTMLButtonElement>, edge: "move" | "start" | "end") {
-    if (!range) return
+    if (readOnly || !range) return
     event.currentTarget.setPointerCapture(event.pointerId)
     drag.current = { edge, x: event.clientX, start: range.start, end: range.end }
   }
@@ -309,7 +318,7 @@ function TimelineRow({
   }
 
   function onKeyDown(event: React.KeyboardEvent) {
-    if (!range) return
+    if (readOnly || !range) return
     const dir = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0
     if (!dir) return
     event.preventDefault()

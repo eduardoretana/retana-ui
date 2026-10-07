@@ -26,7 +26,9 @@ describe("JsonViewer", () => {
     const glaze = await screen.findByRole("treeitem", { name: "glaze: ash" })
     expect(glaze).toBeInTheDocument()
 
-    await user.type(screen.getByRole("searchbox", { name: "Search JSON" }), "ash")
+    const search = screen.getByRole("searchbox", { name: "Search JSON" })
+    expect(search.className).toContain("focus-visible:ring-3")
+    await user.type(search, "ash")
     expect(screen.getByText("1/1")).toBeInTheDocument()
     expect(screen.getByRole("treeitem", { name: "glaze: ash" })).toBeInTheDocument()
     await user.keyboard("{Escape}")

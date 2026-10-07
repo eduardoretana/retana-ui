@@ -6,7 +6,7 @@
   "description": "A native scroll-snap region for full sections or peeking cards.",
   "dependencies": [],
   "registryDependencies": [
-    "motion-preference"
+    "@retana/motion-preference"
   ],
   "files": [
     {

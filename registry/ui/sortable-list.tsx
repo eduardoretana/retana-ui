@@ -44,6 +44,8 @@ export type SortableListItem = {
 export type SortableListProps = {
   items: readonly SortableListItem[]
   onReorder: (ids: readonly string[]) => Promise<void> | void
+  /** Rows stay put. Omitted, the list still drags. */
+  readOnly?: boolean
   onEdit?: (id: string) => void
   /** Visible subset. Hidden ids keep their places when this list is reordered. */
   visibleIds?: readonly string[]
@@ -76,6 +78,7 @@ function isVideo(url: string) {
 export function SortableList({
   items,
   onReorder,
+  readOnly = false,
   onEdit,
   visibleIds,
   label = "rows",
@@ -147,7 +150,7 @@ export function SortableList({
 
   return (
     <DndContext
-      sensors={sensors}
+      sensors={readOnly ? [] : sensors}
       collisionDetection={closestCenter}
       onDragEnd={onDragEnd}
       accessibility={{
@@ -179,6 +182,7 @@ export function SortableList({
               moveBottomLabel={moveBottomLabel}
               onEdit={onEdit}
               onMove={move}
+              readOnly={readOnly}
             />
           ))}
         </ol>
@@ -199,6 +203,7 @@ function SortableRow({
   moveBottomLabel,
   onEdit,
   onMove,
+  readOnly = false,
 }: {
   item: SortableListItem
   index: number
@@ -211,9 +216,10 @@ function SortableRow({
   moveBottomLabel: string
   onEdit?: (id: string) => void
   onMove: (id: string, target: "up" | "down" | "top" | "bottom") => void
+  readOnly?: boolean
 }) {
   const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } =
-    useSortable({ id: item.id })
+    useSortable({ id: item.id, disabled: readOnly })
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -233,10 +239,11 @@ function SortableRow({
         ref={setActivatorNodeRef}
         variant="ghost"
         size="icon-sm"
-        className="cursor-grab touch-none active:cursor-grabbing motion-reduce:transition-none"
+        className="cursor-grab touch-none active:cursor-grabbing motion-reduce:transition-none disabled:cursor-default"
         aria-label={`${reorderLabel} ${item.title}`}
-        {...attributes}
-        {...listeners}
+        disabled={readOnly}
+        {...(readOnly ? {} : attributes)}
+        {...(readOnly ? {} : listeners)}
       >
         <GripVertical />
       </Button>
@@ -247,16 +254,16 @@ function SortableRow({
         {item.meta ? <p className="truncate text-xs text-muted-foreground">{item.meta}</p> : null}
       </div>
       <div className="hidden items-center gap-0.5 sm:flex">
-        <MoveButton label={`${moveTopLabel} ${item.title}`} disabled={index <= 0} onClick={() => onMove(item.id, "top")}>
+        <MoveButton label={`${moveTopLabel} ${item.title}`} disabled={readOnly || index <= 0} onClick={() => onMove(item.id, "top")}>
           <ArrowUpToLine />
         </MoveButton>
-        <MoveButton label={`${moveUpLabel} ${item.title}`} disabled={index <= 0} onClick={() => onMove(item.id, "up")}>
+        <MoveButton label={`${moveUpLabel} ${item.title}`} disabled={readOnly || index <= 0} onClick={() => onMove(item.id, "up")}>
           <ArrowUp />
         </MoveButton>
-        <MoveButton label={`${moveDownLabel} ${item.title}`} disabled={index >= count - 1} onClick={() => onMove(item.id, "down")}>
+        <MoveButton label={`${moveDownLabel} ${item.title}`} disabled={readOnly || index >= count - 1} onClick={() => onMove(item.id, "down")}>
           <ArrowDown />
         </MoveButton>
-        <MoveButton label={`${moveBottomLabel} ${item.title}`} disabled={index >= count - 1} onClick={() => onMove(item.id, "bottom")}>
+        <MoveButton label={`${moveBottomLabel} ${item.title}`} disabled={readOnly || index >= count - 1} onClick={() => onMove(item.id, "bottom")}>
           <ArrowDownToLine />
         </MoveButton>
       </div>
