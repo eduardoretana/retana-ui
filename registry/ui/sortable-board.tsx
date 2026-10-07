@@ -87,6 +87,8 @@ export type SortableBoardProps = {
   items: readonly BoardItem[]
   categories: readonly BoardCategory[]
   onReorder: (ids: readonly string[]) => Promise<void> | void
+  /** Cards stay put. Omitted, the board still drags. */
+  readOnly?: boolean
   onToggleHomepage: (id: string, show: boolean) => Promise<void> | void
   onEdit?: (id: string) => void
   view?: "list" | "grid"
@@ -124,6 +126,7 @@ export function SortableBoard({
   items,
   categories,
   onReorder,
+  readOnly = false,
   onToggleHomepage,
   onEdit,
   view: viewProp,
@@ -310,7 +313,7 @@ export function SortableBoard({
         <EmptyState title={emptyTitle} />
       ) : (
         <DndContext
-          sensors={sensors}
+          sensors={readOnly ? [] : sensors}
           collisionDetection={closestCenter}
           onDragEnd={onDragEnd}
           accessibility={{
@@ -349,6 +352,7 @@ export function SortableBoard({
                   editLabel={editLabel}
                   onEdit={onEdit}
                   onToggle={() => void toggle(item)}
+                  readOnly={readOnly}
                 />
               ))}
             </ol>
@@ -370,6 +374,7 @@ function BoardCard({
   editLabel,
   onEdit,
   onToggle,
+  readOnly = false,
 }: {
   item: BoardItem
   index: number
@@ -381,9 +386,10 @@ function BoardCard({
   editLabel: string
   onEdit?: (id: string) => void
   onToggle: () => void
+  readOnly?: boolean
 }) {
   const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } =
-    useSortable({ id: item.id })
+    useSortable({ id: item.id, disabled: readOnly })
   const style = { transform: CSS.Transform.toString(transform), transition }
   const thumb = item.imageUrl || item.videoUrl
 
@@ -403,10 +409,11 @@ function BoardCard({
           ref={setActivatorNodeRef}
           variant="ghost"
           size="icon-sm"
-          className="cursor-grab touch-none"
+          className="cursor-grab touch-none disabled:cursor-default"
           aria-label={`${reorderLabel} ${item.title}`}
-          {...attributes}
-          {...listeners}
+          disabled={readOnly}
+          {...(readOnly ? {} : attributes)}
+          {...(readOnly ? {} : listeners)}
         >
           <GripVertical />
         </Button>

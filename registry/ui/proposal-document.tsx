@@ -20,6 +20,8 @@ export type ProposalContact = {
 export type ProposalDocumentProps = {
   sections: readonly ProposalSection[]
   onSectionsChange: (sections: ProposalSection[]) => void
+  /** Sections stay put. Omitted, they still drag and move with the arrow keys. */
+  readOnly?: boolean
   variables: Readonly<Record<string, string>>
   phases: readonly { id: string; label: string; hours: string }[]
   preflight: readonly PreflightItem[]
@@ -54,6 +56,7 @@ function paint(body: string, variables: Readonly<Record<string, string>>) {
 export function ProposalDocument({
   sections,
   onSectionsChange,
+  readOnly = false,
   variables,
   phases,
   preflight,
@@ -83,12 +86,14 @@ export function ProposalDocument({
           {sections.map((section, index) => (
             <li
               key={section.id}
-              draggable
+              draggable={!readOnly}
               onDragStart={() => {
+                if (readOnly) return
                 dragId.current = section.id
               }}
               onDragOver={(event) => event.preventDefault()}
               onDrop={() => {
+                if (readOnly) return
                 const from = dragId.current
                 dragId.current = null
                 if (!from || from === section.id) return
@@ -108,7 +113,9 @@ export function ProposalDocument({
                 type="button"
                 className="grid size-7 shrink-0 place-items-center rounded-md text-muted-foreground hover:bg-muted"
                 aria-label={`${reorderLabel} ${section.title}`}
+                disabled={readOnly}
                 onKeyDown={(event) => {
+                  if (readOnly) return
                   if (event.key === "ArrowUp") {
                     event.preventDefault()
                     move(section.id, -1)

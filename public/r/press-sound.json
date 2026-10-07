@@ -6,7 +6,7 @@
   "description": "tap, tick, and pop on press. The cues come from ui-sounds, and mute is the same shared store.",
   "dependencies": [],
   "registryDependencies": [
-    "ui-sounds"
+    "@retana/ui-sounds"
   ],
   "files": [
     {

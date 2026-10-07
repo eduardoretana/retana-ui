@@ -6,7 +6,8 @@
   "description": "Greeting, stat strip, annotated trend, attention list, ranked bars, and a period card. Pass shell to wrap it in the rail sidebar.",
   "dependencies": [
     "lucide-react",
-    "motion"
+    "motion",
+    "radix-ui"
   ],
   "registryDependencies": [
     "avatar",

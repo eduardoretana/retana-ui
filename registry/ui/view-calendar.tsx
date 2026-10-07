@@ -4,6 +4,7 @@ import * as React from "react"
 import {
   DndContext,
   DragOverlay,
+  KeyboardSensor,
   PointerSensor,
   useDraggable,
   useDroppable,
@@ -41,6 +42,8 @@ export type ViewCalendarProps = {
   today?: string
   onOpen?: (id: string) => void
   onMove?: (id: string, patch: Record<string, unknown>) => Promise<void> | void
+  /** Events stay on their day. Omitted, the calendar still drags. */
+  readOnly?: boolean
   todayLabel?: string
   moreLabel?: (count: number) => string
   className?: string
@@ -58,6 +61,7 @@ export function ViewCalendar({
   today,
   onOpen,
   onMove,
+  readOnly = false,
   todayLabel = "Today",
   moreLabel = (count) => `+${count} more`,
   className,
@@ -100,7 +104,10 @@ export function ViewCalendar({
     return map
   }, [dateField, records])
 
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }))
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
+    useSensor(KeyboardSensor),
+  )
 
   function shiftMonth(delta: number) {
     setCursor((current) => {
@@ -175,11 +182,12 @@ export function ViewCalendar({
           dateField={dateField}
           onOpen={onOpen}
           onReschedule={reschedule}
+          readOnly={readOnly}
           className={agendaClassName}
           cardClassName={cardClassName}
         />
       ) : (
-        <DndContext sensors={sensors} onDragEnd={onDragEnd}>
+        <DndContext sensors={readOnly ? [] : sensors} onDragEnd={onDragEnd}>
           <div
             role="grid"
             aria-label={monthName}
@@ -222,6 +230,7 @@ export function ViewCalendar({
                     }}
                     onOpen={onOpen}
                     onReschedule={reschedule}
+                    readOnly={readOnly}
                     dateField={dateField}
                   />
                 ))}
@@ -251,6 +260,7 @@ function DayCell({
   onKeyDown,
   onOpen,
   onReschedule,
+  readOnly = false,
   dateField,
 }: {
   cellId: string
@@ -268,6 +278,7 @@ function DayCell({
   onKeyDown: (event: React.KeyboardEvent) => void
   onOpen?: (id: string) => void
   onReschedule: (id: string, iso: string) => void
+  readOnly?: boolean
   dateField: string
 }) {
   const { setNodeRef, isOver } = useDroppable({ id: `day:${iso}` })
@@ -307,9 +318,11 @@ function DayCell({
           className={cardClassName}
           onOpen={onOpen}
           onReschedule={(delta) => {
+            if (readOnly) return
             const next = addDays(iso, delta)
             if (next) onReschedule(record.id, next)
           }}
+          readOnly={readOnly}
           dateField={dateField}
         />
       ))}
@@ -340,6 +353,7 @@ function RecordChip({
   className,
   onOpen,
   onReschedule,
+  readOnly = false,
 }: {
   record: MultiRecord
   fields: readonly FieldDef[]
@@ -347,9 +361,10 @@ function RecordChip({
   className?: string
   onOpen?: (id: string) => void
   onReschedule: (delta: number) => void
+  readOnly?: boolean
   dateField: string
 }) {
-  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: record.id })
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: record.id, disabled: readOnly })
   const title = recordTitle(record, fields, titleField)
   return (
     <button
@@ -363,9 +378,10 @@ function RecordChip({
       aria-label={`Reschedule ${title}`}
       dir="auto"
       onClick={() => onOpen?.(record.id)}
-      {...attributes}
-      {...listeners}
+      {...(readOnly ? {} : attributes)}
+      {...(readOnly ? {} : listeners)}
       onKeyDown={(event) => {
+        if (readOnly) return
         if (event.altKey && (event.key === "ArrowLeft" || event.key === "ArrowRight")) {
           event.preventDefault()
           event.stopPropagation()
@@ -389,6 +405,7 @@ function Agenda({
   locale,
   onOpen,
   onReschedule,
+  readOnly = false,
   className,
   cardClassName,
 }: {
@@ -401,6 +418,7 @@ function Agenda({
   dateField: string
   onOpen?: (id: string) => void
   onReschedule: (id: string, iso: string) => void
+  readOnly?: boolean
   className?: string
   cardClassName?: string
 }) {
@@ -420,6 +438,7 @@ function Agenda({
               dir="auto"
               onClick={() => onOpen?.(record.id)}
               onKeyDown={(event) => {
+                if (readOnly) return
                 if (!event.altKey || (event.key !== "ArrowLeft" && event.key !== "ArrowRight")) return
                 const next = addDays(day.iso, event.key === "ArrowRight" ? 1 : -1)
                 if (!next) return
