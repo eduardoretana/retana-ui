@@ -1,0 +1,77 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pinned-steps",
+  "title": "Pinned steps",
+  "author": "Eduardo Retana",
+  "description": "A sticky visual column that cross-fades as each step crosses the center of the viewport. Narrow viewports and reduced motion stack the step with its visual.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/use-min-width",
+    "@retana/motion-preference"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/pinned-steps.tsx",
+      "content": "\"use client\"\n\n/**\n * Scrollytelling steps. The visual column sticks while each step crosses\n * the center of the viewport. Clean-room. Narrow viewports and reduced\n * motion stack the step and its visual in normal flow.\n */\n\nimport { useEffect, useRef, useState, type CSSProperties, type ReactNode } from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { useMinWidth } from \"@/hooks/use-min-width\"\nimport { motionPresets } from \"@/lib/motion\"\nimport { useMotionPreference } from \"@/components/ui/motion-preference\"\n\n/** Center band: a step is active while it crosses the middle of the viewport. */\nexport const PINNED_STEP_MARGIN = \"-50% 0px -50% 0px\"\n\nconst ease = motionPresets.ease.enter.join(\", \")\nconst fade = `${motionPresets.duration.considered}s cubic-bezier(${ease})`\n\nexport function pinnedStepsMode(wide: boolean, reduced: boolean) {\n  return wide && !reduced ? \"pinned\" : \"stacked\"\n}\n\nexport function pinnedStepMotion(active: boolean, reduced: boolean): CSSProperties {\n  return {\n    opacity: active ? 1 : 0,\n    transform: active ? \"translate3d(0, 0, 0)\" : \"translate3d(0, 0.75rem, 0)\",\n    transition: reduced ? \"none\" : `opacity ${fade}, transform ${fade}`,\n  }\n}\n\nexport type PinnedStep = {\n  id: string\n  title: string\n  body: string\n  visual: ReactNode\n  /** Shapes with no information are hidden from assistive tech. */\n  decorative?: boolean\n}\n\nexport type PinnedStepsProps = {\n  steps: PinnedStep[]\n  label?: string\n  emptyLabel?: string\n  className?: string\n  visualClassName?: string\n  stepClassName?: string\n  /** Stack below this viewport width. Default 768. */\n  minWidth?: number\n}\n\nexport function PinnedSteps({\n  steps,\n  label = \"Steps\",\n  emptyLabel = \"No steps\",\n  className,\n  visualClassName,\n  stepClassName,\n  minWidth = 768,\n}: PinnedStepsProps) {\n  const reduced = useMotionPreference()\n  const wide = useMinWidth(minWidth)\n  const mode = pinnedStepsMode(wide, reduced)\n  const nodes = useRef(new Map<string, HTMLElement>())\n  const stepsRef = useRef(steps)\n  const stepKey = steps.map((step) => step.id).join(\"\\0\")\n  const [active, setActive] = useState(steps[0]?.id ?? \"\")\n\n  useEffect(() => {\n    stepsRef.current = steps\n  }, [steps])\n\n  useEffect(() => {\n    const list = stepsRef.current\n    if (!list.some((step) => step.id === active)) setActive(list[0]?.id ?? \"\")\n  }, [active, stepKey])\n\n  useEffect(() => {\n    if (mode !== \"pinned\") return\n    const observers: IntersectionObserver[] = []\n    for (const step of stepsRef.current) {\n      const node = nodes.current.get(step.id)\n      if (!node) continue\n      const observer = new IntersectionObserver(\n        (entries) => {\n          if (entries.some((entry) => entry.isIntersecting)) setActive(step.id)\n        },\n        { root: null, rootMargin: PINNED_STEP_MARGIN, threshold: 0 },\n      )\n      observer.observe(node)\n      observers.push(observer)\n    }\n    return () => {\n      for (const observer of observers) observer.disconnect()\n    }\n  }, [mode, stepKey])\n\n  if (steps.length === 0) {\n    return (\n      <p data-slot=\"pinned-steps\" data-mode=\"stacked\" data-state=\"empty\" className={cn(\"text-sm text-muted-foreground\", className)}>\n        {emptyLabel}\n      </p>\n    )\n  }\n\n  return (\n    <div\n      data-slot=\"pinned-steps\"\n      data-mode={mode}\n      className={cn(mode === \"pinned\" ? \"grid grid-cols-2 items-start gap-8\" : \"flex flex-col gap-10\", className)}\n    >\n      {mode === \"pinned\" ? (\n        <div\n          data-slot=\"pinned-steps-visual\"\n          className={cn(\"sticky top-0 flex h-[70vh] items-center\", visualClassName)}\n        >\n          <div className=\"relative h-64 w-full min-w-0\">\n            {steps.map((step) => (\n              <StepVisual\n                key={step.id}\n                step={step}\n                active={step.id === active}\n                reduced={reduced}\n                className=\"absolute inset-0\"\n              />\n            ))}\n          </div>\n        </div>\n      ) : null}\n      <div data-slot=\"pinned-steps-track\" role=\"region\" aria-label={label} className=\"min-w-0\">\n        {steps.map((step) => {\n          const current = step.id === active\n          return (\n            <article\n              key={step.id}\n              ref={(node) => {\n                if (node) nodes.current.set(step.id, node)\n                else nodes.current.delete(step.id)\n              }}\n              data-slot=\"pinned-step\"\n              data-step={step.id}\n              data-active={current ? \"true\" : \"false\"}\n              aria-current={mode === \"pinned\" && current ? \"step\" : undefined}\n              className={cn(\n                \"flex min-w-0 flex-col justify-center gap-3\",\n                mode === \"pinned\" && \"min-h-[80vh]\",\n                stepClassName,\n              )}\n            >\n              <h3 className=\"text-lg font-semibold tracking-tight [overflow-wrap:anywhere]\">{step.title}</h3>\n              <p className=\"text-sm leading-6 text-muted-foreground [overflow-wrap:anywhere]\">{step.body}</p>\n              {mode === \"stacked\" ? <StepVisual step={step} active reduced={reduced} className=\"relative h-48\" /> : null}\n            </article>\n          )\n        })}\n      </div>\n    </div>\n  )\n}\n\nfunction StepVisual({\n  step,\n  active,\n  reduced,\n  className,\n}: {\n  step: PinnedStep\n  active: boolean\n  reduced: boolean\n  className?: string\n}) {\n  const decorative = step.decorative === true\n  return (\n    <div\n      data-slot=\"pinned-step-visual\"\n      data-step={step.id}\n      data-active={active ? \"true\" : \"false\"}\n      data-decorative={decorative ? \"true\" : \"false\"}\n      aria-hidden={decorative ? true : active ? undefined : true}\n      aria-live={!decorative && active ? \"polite\" : undefined}\n      className={cn(\"min-w-0\", !active && \"pointer-events-none\", className)}\n      style={pinnedStepMotion(active, reduced)}\n    >\n      {step.visual}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/pinned-steps.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    // Exit decelerates, the same curve as CSS ease-out.\n    exit: [0, 0, 0.58, 1] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Pasos fijos",
+    "descriptionEs": "La columna visual se queda fija y cambia con el paso que cruza el centro. En estrecho, o con movimiento reducido, cada paso lleva su visual.",
+    "preview": "app/examples/pinned-steps/preview.tsx",
+    "previewHref": "/examples/pinned-steps",
+    "examples": [
+      {
+        "title": "Pasos fijos",
+        "href": "/examples/pinned-steps",
+        "description": "La columna visual se queda mientras los pasos avanzan."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/pinned-steps/stress",
+        "description": "320px, vacío, texto largo y RTL."
+      },
+      {
+        "title": "Glosario",
+        "href": "/examples/animations",
+        "description": "Los diez términos de scroll, con demos propias."
+      }
+    ],
+    "usage": "<PinnedSteps label=\"Firing\" steps={[{ id: \"dry\", title: \"Drying\", body: \"The door stays ajar.\", visual }]} />",
+    "api": [
+      {
+        "name": "steps",
+        "type": "PinnedStep[]",
+        "description": "id, title, body, and visual. decorative hides the visual from assistive tech. A visual with data is a polite live region while it is the active one."
+      },
+      {
+        "name": "minWidth",
+        "type": "number",
+        "description": "Stack below this viewport width. Default 768. Shared with use-min-width."
+      },
+      {
+        "name": "label / emptyLabel",
+        "type": "string",
+        "description": "Accessible name of the step region, and the copy for an empty list."
+      },
+      {
+        "name": "className / visualClassName / stepClassName",
+        "type": "string",
+        "description": "Root, sticky visual column, and each step. Defaults are a two-column pin and an 80vh step."
+      }
+    ]
+  },
+  "docs": "Clean-room scrollytelling. No Motion UI or Motion+ source. On a wide screen with motion allowed, the visual column is position sticky and each step is in normal flow. One IntersectionObserver per step uses rootMargin -50% 0px -50% 0px, so the step that crosses the center is active. The cross-fade is opacity and transform only, timed with motionPresets. Below 768px, and when motion-preference says reduce, each step stacks with its visual and nothing sticks. A decorative visual is aria-hidden. A visual that carries data uses aria-live polite while it is showing. Answer no if the CLI asks to overwrite use-min-width, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "animation"
+  ],
+  "type": "registry:ui"
+}

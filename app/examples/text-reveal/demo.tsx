@@ -8,6 +8,11 @@ export function Demo() {
   return (
     <div className="flex flex-col gap-8">
       <TextReveal as="h2" text={"El horno de Oaxaca\nabre el sábado"} className="text-3xl font-semibold tracking-tight" />
+      <div className="h-48 overflow-y-auto rounded-xl border border-border p-4">
+        <div className="h-24" />
+        <TextReveal as="p" trigger="scroll" text="La meseta de esmalte sigue el scroll, palabra por palabra." />
+        <div className="h-40" />
+      </div>
       <StressCases
         empty={<TextReveal text="" />}
         long={<TextReveal text={unbreakable} className="text-sm break-all" />}

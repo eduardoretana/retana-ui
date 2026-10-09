@@ -35,7 +35,7 @@
       {
         "title": "Glosario",
         "href": "/examples/animations",
-        "description": "Los seis términos de scroll, con demos propias."
+        "description": "Los diez términos de scroll, con demos propias."
       }
     ],
     "usage": "<ScrollSnapRail label=\"Stages\" className=\"h-64\"><ScrollSnapPanel className=\"h-full\">01</ScrollSnapPanel></ScrollSnapRail>",

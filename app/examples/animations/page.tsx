@@ -6,14 +6,14 @@ import { Demo } from "./demo"
 
 export const metadata: Metadata = {
   title: "Animaciones",
-  description: "Seis formas de nombrar el scroll, con demos propias.",
+  description: "Diez formas de nombrar el scroll, con demos propias.",
 }
 
 export default function Page() {
   return (
     <ExampleFrame
       title="Animaciones"
-      description="Scroll-triggered, scroll-linked, parallax, sticky, snap y horizontal. El vocabulario es de la industria. Las demos son de este catálogo."
+      description="Scroll-triggered, scroll-linked, parallax, sticky, pin, snap, horizontal, stagger, text reveal y progress bar. El vocabulario es de la industria. Las demos son de este catálogo."
       wide
     >
       <Demo />

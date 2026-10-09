@@ -201,7 +201,7 @@ Sound, haptics, squircles, animated theme icons, and a few expressive controls. 
 
 ### Animaciones
 
-Scroll and motion primitives. They inherit the host tokens and follow [`motion-preference`](registry/ui/motion-preference.tsx). The glossary page is [`/examples/animations`](/examples/animations). The six names are industry vocabulary. The demos are original. Motion UI and Motion+ are not in this registry.
+Scroll and motion primitives. They inherit the host tokens and follow [`motion-preference`](registry/ui/motion-preference.tsx). The glossary page is [`/examples/animations`](/examples/animations). The ten names are industry vocabulary. The demos are original. Where the browser supports it, scroll-driven CSS (`view()` and `scroll()`) runs first and the hook is the fallback. Motion UI and Motion+ are not in this registry.
 
 | Piece | Use it for |
 | --- | --- |
@@ -213,6 +213,10 @@ Scroll and motion primitives. They inherit the host tokens and follow [`motion-p
 | [`sticky-section-list`](registry/ui/sticky-section-list.tsx) | Group headers that stick until the next group. |
 | [`parallax-layers`](registry/ui/parallax-layers.tsx) | Layers that travel at different speeds. Still when motion is reduced. |
 | [`horizontal-scroll-rail`](registry/ui/horizontal-scroll-rail.tsx) | Vertical scroll drives a horizontal rail. Native scroll when motion is reduced or the viewport is narrow. |
+| [`use-min-width`](registry/hooks/use-min-width.ts) | Viewport width cutoff shared by the rail and the pinned steps. The first paint stays narrow. |
+| [`pinned-steps`](registry/ui/pinned-steps.tsx) | A sticky visual column that cross-fades as each step crosses the center. Stacked when the viewport is narrow or motion is reduced. |
+| [`scroll-linked`](registry/ui/scroll-linked.tsx) | Fade, rise, scale, or rotate tied to scroll progress. CSS timelines first, then the hook. Reduced motion shows the end state. |
+| [`text-reveal`](registry/ui/text-reveal.tsx) | Word-by-word reveal on mount, or opacity tied to scroll. Full text when motion is reduced. |
 
 ## Install
 
@@ -324,7 +328,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`272` items are in `registry.json` on this branch: `226` components, `35` blocks, `5` hooks, and `6` libraries. A name links to its source file.
+`275` items are in `registry.json` on this branch: `228` components, `35` blocks, `6` hooks, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -448,7 +452,6 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`attachment-chip`](registry/ui/attachment-chip.tsx) · ui — File chip with a type icon, size, optional image preview, and remove. Install: `npx shadcn@latest add @retana/attachment-chip`.
 - [`marker`](registry/ui/marker.tsx) · ui — Animated highlighter mark behind a span of text. Install: `npx shadcn@latest add @retana/marker`.
 - [`press-sound`](registry/ui/press-sound.tsx) · ui — tap, tick, and pop on press. The cues come from ui-sounds, and mute is the same shared store. Install: `npx shadcn@latest add @retana/press-sound`.
-- [`text-reveal`](registry/ui/text-reveal.tsx) · ui — Reveals a short line once, word by word, and shows the plain text if motion is reduced. Install: `npx shadcn@latest add @retana/text-reveal`.
 - [`text-morph`](registry/ui/text-morph.tsx) · ui — Morphs one short label into the next. Shared letters glide and the width follows. Install: `npx shadcn@latest add @retana/text-morph`.
 - [`text-shimmer`](registry/ui/text-shimmer.tsx) · ui — A calm light across a short status line while work is ongoing. Sets aria-busy. Install: `npx shadcn@latest add @retana/text-shimmer`.
 - [`in-view-title`](registry/ui/in-view-title.tsx) · ui — A section title that reveals as it scrolls into view: blur, word, line, tracking, or wipe. Install: `npx shadcn@latest add @retana/in-view-title`.
@@ -608,6 +611,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 
 ### Animaciones
 
+- [`text-reveal`](registry/ui/text-reveal.tsx) · ui — Reveals a short line word by word on mount, or ties each word's opacity to scroll. Reduced motion shows the plain text. Install: `npx shadcn@latest add @retana/text-reveal`.
 - [`use-scroll-progress`](registry/hooks/use-scroll-progress.ts) · hook — Scroll position as a 0–1 motion value, for the window or for one element. Install: `npx shadcn@latest add @retana/use-scroll-progress`.
 - [`scroll-progress`](registry/ui/scroll-progress.tsx) · ui — A reading bar bound to scroll progress, from 0 to 1. Install: `npx shadcn@latest add @retana/scroll-progress`.
 - [`reveal-on-scroll`](registry/ui/reveal-on-scroll.tsx) · ui — Fades, slides, or scales in once when it enters the viewport. Install: `npx shadcn@latest add @retana/reveal-on-scroll`.
@@ -616,6 +620,9 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`sticky-section-list`](registry/ui/sticky-section-list.tsx) · ui — Grouped rows whose headers stick until the next group pushes them. Install: `npx shadcn@latest add @retana/sticky-section-list`.
 - [`parallax-layers`](registry/ui/parallax-layers.tsx) · ui — Layers that travel at different speeds while their parent crosses the viewport. Transform only. Install: `npx shadcn@latest add @retana/parallax-layers`.
 - [`horizontal-scroll-rail`](registry/ui/horizontal-scroll-rail.tsx) · ui — A sticky section whose vertical scroll drives a horizontal rail. Narrow viewports and reduced motion use a native scroller. Install: `npx shadcn@latest add @retana/horizontal-scroll-rail`.
+- [`use-min-width`](registry/hooks/use-min-width.ts) · hook — True when the viewport is at least a given number of CSS pixels wide. The first paint uses the narrow layout. Install: `npx shadcn@latest add @retana/use-min-width`.
+- [`pinned-steps`](registry/ui/pinned-steps.tsx) · ui — A sticky visual column that cross-fades as each step crosses the center of the viewport. Narrow viewports and reduced motion stack the step with its visual. Install: `npx shadcn@latest add @retana/pinned-steps`.
+- [`scroll-linked`](registry/ui/scroll-linked.tsx) · ui — Maps scroll progress to a fade, rise, scale, or rotate. CSS scroll-driven animations run first. Reduced motion shows the finished state. Install: `npx shadcn@latest add @retana/scroll-linked`.
 
 ### Admin
 
