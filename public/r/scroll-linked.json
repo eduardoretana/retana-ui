@@ -1,0 +1,84 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scroll-linked",
+  "title": "Scroll linked",
+  "author": "Eduardo Retana",
+  "description": "Maps scroll progress to a fade, rise, scale, or rotate. CSS scroll-driven animations run first. Reduced motion shows the finished state.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [
+    "@retana/use-scroll-progress",
+    "@retana/motion-preference"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/scroll-linked.tsx",
+      "content": "\"use client\"\n\n/**\n * Maps scroll progress onto a fade, rise, scale, or rotate.\n * CSS scroll-driven animations run first. use-scroll-progress is the fallback.\n * Reduced motion shows the finished state. Clean-room. Transform and opacity only.\n */\n\nimport { useRef, type CSSProperties, type ReactNode, type RefObject } from \"react\"\nimport { motion, useTransform, type MotionValue } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { clampUnit, useScrollProgress } from \"@/hooks/use-scroll-progress\"\nimport { useAnimationTimeline } from \"@/lib/scroll-timeline\"\nimport { useMotionPreference } from \"@/components/ui/motion-preference\"\n\nexport const SCROLL_LINKED_PRESETS = [\"fade\", \"rise\", \"scale\", \"rotate\"] as const\n\nexport type ScrollLinkedPreset = (typeof SCROLL_LINKED_PRESETS)[number]\nexport type ScrollLinkedTimeline = \"view\" | \"scroll\"\n\nexport type ScrollLinkedProps = {\n  children: ReactNode\n  /** Default rise. */\n  preset?: ScrollLinkedPreset\n  /**\n   * Progress window, from 0 to 1, on the chosen timeline.\n   * The effect starts at the first number and finishes at the second. Default [0, 1].\n   */\n  range?: readonly [number, number]\n  /** view() follows this element. scroll() follows the scrollport. Default view. */\n  timeline?: ScrollLinkedTimeline\n  /** Scrollport. Omit to use the window. */\n  container?: RefObject<HTMLElement | null>\n  className?: string\n}\n\nexport function unitRange(range: readonly [number, number] | undefined): [number, number] {\n  const start = range && Number.isFinite(range[0]) ? range[0] : 0\n  const end = range && Number.isFinite(range[1]) ? range[1] : 1\n  if (start === end) return [start, start]\n  return start < end ? [start, end] : [end, start]\n}\n\n/** CSS animation-range for the same window the hook uses. */\nexport function scrollLinkedAnimationRange(range: readonly [number, number], timeline: ScrollLinkedTimeline) {\n  const [start, end] = unitRange(range)\n  const from = Math.round(clampUnit(start) * 100)\n  const to = Math.round(clampUnit(end) * 100)\n  if (timeline === \"scroll\") return `${from}% ${to}%`\n  return `cover ${from}% cover ${to}%`\n}\n\nexport function scrollLinkedTimelineName(timeline: ScrollLinkedTimeline, hasContainer: boolean) {\n  if (timeline === \"view\") return \"view()\"\n  return hasContainer ? \"scroll(nearest)\" : \"scroll(root)\"\n}\n\nexport function scrollLinkedDriver(reduced: boolean, supported: boolean) {\n  if (reduced) return \"reduced\" as const\n  if (supported) return \"css\" as const\n  return \"hook\" as const\n}\n\n/** Progress inside a window. Non-finite input stays at the start of the effect. */\nexport function rangeProgress(progress: number, range: readonly [number, number]) {\n  const [start, end] = unitRange(range)\n  if (!Number.isFinite(progress) || start === end) return 0\n  return clampUnit((progress - start) / (end - start))\n}\n\nexport const SCROLL_LINKED_CSS = `\n@keyframes retana-scroll-linked-fade {\n  from { opacity: 0; }\n  to { opacity: 1; }\n}\n@keyframes retana-scroll-linked-rise {\n  from { opacity: 0; transform: translateY(1rem); }\n  to { opacity: 1; transform: none; }\n}\n@keyframes retana-scroll-linked-scale {\n  from { opacity: 0; transform: scale(0.96); }\n  to { opacity: 1; transform: none; }\n}\n@keyframes retana-scroll-linked-rotate {\n  from { transform: rotate(-8deg); }\n  to { transform: none; }\n}\n@supports ((animation-timeline: view()) or (animation-timeline: scroll())) {\n  [data-slot=\"scroll-linked\"][data-driver=\"css\"] {\n    animation-name: var(--scroll-linked-animation);\n    animation-duration: auto;\n    animation-timing-function: linear;\n    animation-fill-mode: both;\n    animation-timeline: var(--scroll-linked-timeline, view());\n    animation-range: var(--scroll-linked-range, cover 0% cover 100%);\n  }\n}\n`\n\nconst FINAL: CSSProperties = { opacity: 1, transform: \"none\" }\n\nexport function ScrollLinked({\n  children,\n  preset = \"rise\",\n  range,\n  timeline = \"view\",\n  container,\n  className,\n}: ScrollLinkedProps) {\n  const ref = useRef<HTMLDivElement>(null)\n  const reduced = useMotionPreference()\n  const kind = timeline === \"view\" ? \"view()\" : \"scroll()\"\n  const supported = useAnimationTimeline(kind)\n  const driver = scrollLinkedDriver(reduced, supported)\n  const windowRange = unitRange(range)\n  const { progress } = useScrollProgress({\n    container,\n    target: timeline === \"view\" ? ref : undefined,\n    offset: timeline === \"view\" ? [\"start end\", \"end start\"] : undefined,\n  })\n\n  if (driver === \"reduced\") {\n    return (\n      <div\n        ref={ref}\n        data-slot=\"scroll-linked\"\n        data-preset={preset}\n        data-driver=\"reduced\"\n        data-reduced=\"true\"\n        data-state=\"final\"\n        className={cn(\"min-w-0 max-w-full\", className)}\n        style={FINAL}\n      >\n        {children}\n      </div>\n    )\n  }\n\n  if (driver === \"css\") {\n    const style = {\n      \"--scroll-linked-animation\": `retana-scroll-linked-${preset}`,\n      \"--scroll-linked-timeline\": scrollLinkedTimelineName(timeline, Boolean(container)),\n      \"--scroll-linked-range\": scrollLinkedAnimationRange(windowRange, timeline),\n    } as CSSProperties\n    return (\n      <div\n        ref={ref}\n        data-slot=\"scroll-linked\"\n        data-preset={preset}\n        data-driver=\"css\"\n        data-timeline={timeline}\n        data-reduced=\"false\"\n        className={cn(\"min-w-0 max-w-full\", className)}\n        style={style}\n      >\n        <style>{SCROLL_LINKED_CSS}</style>\n        {children}\n      </div>\n    )\n  }\n\n  return (\n    <ScrollLinkedMotion\n      ref={ref}\n      preset={preset}\n      progress={progress}\n      range={windowRange}\n      className={className}\n    >\n      {children}\n    </ScrollLinkedMotion>\n  )\n}\n\nfunction ScrollLinkedMotion({\n  ref,\n  preset,\n  progress,\n  range,\n  className,\n  children,\n}: {\n  ref: RefObject<HTMLDivElement | null>\n  preset: ScrollLinkedPreset\n  progress: MotionValue<number>\n  range: readonly [number, number]\n  className?: string\n  children: ReactNode\n}) {\n  const input = [range[0], range[1]] as [number, number]\n  const opacity = useTransform(progress, input, [preset === \"rotate\" ? 1 : 0, 1])\n  const y = useTransform(progress, input, [preset === \"rise\" ? 16 : 0, 0])\n  const scale = useTransform(progress, input, [preset === \"scale\" ? 0.96 : 1, 1])\n  const rotate = useTransform(progress, input, [preset === \"rotate\" ? -8 : 0, 0])\n\n  return (\n    <motion.div\n      ref={ref}\n      data-slot=\"scroll-linked\"\n      data-preset={preset}\n      data-driver=\"hook\"\n      data-reduced=\"false\"\n      className={cn(\"min-w-0 max-w-full\", className)}\n      style={{ opacity, y, scale, rotate }}\n    >\n      <style>{SCROLL_LINKED_CSS}</style>\n      {children}\n    </motion.div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/scroll-linked.tsx"
+    },
+    {
+      "path": "registry/lib/scroll-timeline.ts",
+      "content": "\"use client\"\n\n/**\n * Feature detection for CSS scroll-driven animations. Clean-room.\n * The server snapshot is false, so the first paint uses the hook path.\n */\n\nimport { useSyncExternalStore } from \"react\"\n\nexport type AnimationTimelineKind = \"scroll()\" | \"view()\"\n\n/** True when the browser can drive an animation from the named timeline. */\nexport function supportsAnimationTimeline(kind: AnimationTimelineKind) {\n  return typeof CSS !== \"undefined\" && typeof CSS.supports === \"function\" && CSS.supports(\"animation-timeline\", kind)\n}\n\n/** Client-only support flag. Hydration matches the server (unsupported) and then upgrades. */\nexport function useAnimationTimeline(kind: AnimationTimelineKind) {\n  return useSyncExternalStore(\n    () => () => {},\n    () => supportsAnimationTimeline(kind),\n    () => false,\n  )\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/scroll-timeline.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Scroll ligado",
+    "descriptionEs": "Fade, subida, escala o giro siguen el avance del scroll. Si el navegador puede, lo hace con CSS. Con movimiento reducido se ve el estado final.",
+    "preview": "app/examples/scroll-linked/preview.tsx",
+    "previewHref": "/examples/scroll-linked",
+    "examples": [
+      {
+        "title": "Scroll ligado",
+        "href": "/examples/scroll-linked",
+        "description": "Fade, subida, escala o giro siguen el avance del scroll."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/scroll-linked/stress",
+        "description": "320px, vacío, texto largo y RTL."
+      },
+      {
+        "title": "Glosario",
+        "href": "/examples/animations",
+        "description": "Los diez términos de scroll, con demos propias."
+      }
+    ],
+    "usage": "<ScrollLinked preset=\"rise\" range={[0, 0.45]}>{children}</ScrollLinked>",
+    "api": [
+      {
+        "name": "preset",
+        "type": "\"fade\" | \"rise\" | \"scale\" | \"rotate\"",
+        "description": "Default rise. Opacity and transform only."
+      },
+      {
+        "name": "range",
+        "type": "[number, number]",
+        "description": "Progress window on the timeline. Default [0, 1]. The CSS animation-range uses the same window."
+      },
+      {
+        "name": "timeline",
+        "type": "\"view\" | \"scroll\"",
+        "description": "view() follows this element. scroll() follows the scrollport, scroll(root) for the document. Default view."
+      },
+      {
+        "name": "container",
+        "type": "RefObject<HTMLElement | null>",
+        "description": "Scrollport for the hook fallback. Omit to use the window."
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "description": "Classes on the wrapper."
+      }
+    ]
+  },
+  "docs": "Clean-room scroll-linked wrapper. No Motion UI or Motion+ source. Supported browsers use animation-timeline view() or scroll() and an animation-range taken from range. Otherwise use-scroll-progress and useTransform map the same window onto opacity and transform. Reduced motion, via motion-preference, shows the finished state and does not animate. Answer no if the CLI asks to overwrite use-scroll-progress, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "animation"
+  ],
+  "type": "registry:ui"
+}

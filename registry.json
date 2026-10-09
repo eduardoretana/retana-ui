@@ -3355,16 +3355,21 @@
       "name": "text-reveal",
       "type": "registry:ui",
       "title": "Text reveal",
-      "description": "Reveals a short line once, word by word, and shows the plain text if motion is reduced.",
+      "description": "Reveals a short line word by word on mount, or ties each word's opacity to scroll. Reduced motion shows the plain text.",
       "author": "Eduardo Retana",
-      "dependencies": [],
-      "registryDependencies": [],
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@retana/use-scroll-progress",
+        "@retana/motion-preference"
+      ],
       "categories": [
-        "content"
+        "animation"
       ],
       "meta": {
         "titleEs": "Texto que aparece",
-        "descriptionEs": "Revela una frase corta palabra por palabra. Con movimiento reducido el texto está visible desde el inicio.",
+        "descriptionEs": "Revela una frase corta palabra por palabra, al montarse o con el scroll. Con movimiento reducido el texto está visible desde el inicio.",
         "preview": "app/examples/text-reveal/preview.tsx",
         "previewHref": "/examples/text-reveal",
         "examples": [
@@ -3372,9 +3377,14 @@
             "title": "Texto que aparece",
             "href": "/examples/text-reveal",
             "description": "Revela una frase corta palabra por palabra. Con movimiento reducido el texto está visible desde el inicio."
+          },
+          {
+            "title": "Glosario",
+            "href": "/examples/animations",
+            "description": "Los diez términos de scroll, con demos propias."
           }
         ],
-        "usage": "<TextReveal as=\"h2\" text={\"Kiln open\\nSaturday\"} />",
+        "usage": "<TextReveal as=\"h2\" trigger=\"scroll\" text={\"Kiln open\\nSaturday\"} />",
         "api": [
           {
             "name": "text",
@@ -3387,13 +3397,18 @@
             "description": "Element. Default h2."
           },
           {
+            "name": "trigger",
+            "type": "\"mount\" | \"scroll\"",
+            "description": "mount plays once. scroll ties each word to the viewport. Default mount."
+          },
+          {
             "name": "delay",
             "type": "number",
-            "description": "Seconds before the first word. Default 0."
+            "description": "Seconds before the first word, when trigger is mount. Default 0."
           }
         ]
       },
-      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "docs": "Adapted from Arc UI (MIT) for the mount reveal. The scroll trigger is clean-room: each word fades from about 0.2 to 1 with animation-timeline view() and animation-range entry 20% cover 50% when the browser supports it, and use-scroll-progress otherwise. If progress is not a number, the word stays fully visible. Words are aria-hidden. A screen-reader span keeps the full sentence. Reduced motion, including motion-preference, shows the text at full opacity. Answer no if the CLI asks to overwrite use-scroll-progress, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors. Motion UI and Motion+ are not included.",
       "files": [
         {
           "path": "registry/ui/text-reveal.tsx",
@@ -3404,6 +3419,11 @@
           "path": "registry/lib/motion.ts",
           "type": "registry:lib",
           "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/scroll-timeline.ts",
+          "type": "registry:lib",
+          "target": "@lib/scroll-timeline.ts"
         }
       ]
     },
@@ -20054,7 +20074,7 @@
           {
             "title": "Glosario",
             "href": "/examples/animations",
-            "description": "Los seis términos de scroll, con demos propias."
+            "description": "Los diez términos de scroll, con demos propias."
           }
         ],
         "usage": "const { progress } = useScrollProgress({ container })",
@@ -20129,7 +20149,7 @@
           {
             "title": "Glosario",
             "href": "/examples/animations",
-            "description": "Los seis términos de scroll, con demos propias."
+            "description": "Los diez términos de scroll, con demos propias."
           }
         ],
         "usage": "<ScrollProgress container={ref} label=\"Reading\" showValue />",
@@ -20161,12 +20181,17 @@
           }
         ]
       },
-      "docs": "Clean-room reading bar. No Motion UI or Motion+ source. The scale follows scroll and does not tween on its own, so reduced motion does not freeze it. A scroller with no overflow reports 0. Answer no if the CLI asks to overwrite use-scroll-progress or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "docs": "Clean-room reading bar. No Motion UI or Motion+ source. When the browser supports scroll-driven animations, a vertical bar with no custom offset scales on the X axis with animation-timeline scroll(root), or scroll(nearest) inside a container. use-scroll-progress is the fallback and the source of aria-valuenow. The scale follows scroll and does not tween on its own, so reduced motion does not freeze it. A scroller with no overflow reports 0. Answer no if the CLI asks to overwrite use-scroll-progress or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
       "files": [
         {
           "path": "registry/ui/scroll-progress.tsx",
           "type": "registry:component",
           "target": "@ui/scroll-progress.tsx"
+        },
+        {
+          "path": "registry/lib/scroll-timeline.ts",
+          "type": "registry:lib",
+          "target": "@lib/scroll-timeline.ts"
         }
       ]
     },
@@ -20204,7 +20229,7 @@
           {
             "title": "Glosario",
             "href": "/examples/animations",
-            "description": "Los seis términos de scroll, con demos propias."
+            "description": "Los diez términos de scroll, con demos propias."
           }
         ],
         "usage": "<RevealOnScroll variant=\"slide\" once>{children}</RevealOnScroll>",
@@ -20289,7 +20314,7 @@
           {
             "title": "Glosario",
             "href": "/examples/animations",
-            "description": "Los seis términos de scroll, con demos propias."
+            "description": "Los diez términos de scroll, con demos propias."
           }
         ],
         "usage": "<StaggerReveal as=\"ul\"><StaggerItem as=\"li\">Row</StaggerItem></StaggerReveal>",
@@ -20362,7 +20387,7 @@
           {
             "title": "Glosario",
             "href": "/examples/animations",
-            "description": "Los seis términos de scroll, con demos propias."
+            "description": "Los diez términos de scroll, con demos propias."
           }
         ],
         "usage": "<ScrollSnapRail label=\"Stages\" className=\"h-64\"><ScrollSnapPanel className=\"h-full\">01</ScrollSnapPanel></ScrollSnapRail>",
@@ -20428,7 +20453,7 @@
           {
             "title": "Glosario",
             "href": "/examples/animations",
-            "description": "Los seis términos de scroll, con demos propias."
+            "description": "Los diez términos de scroll, con demos propias."
           }
         ],
         "usage": "<StickySectionList label=\"Directory\" sections={sections} />",
@@ -20499,7 +20524,7 @@
           {
             "title": "Glosario",
             "href": "/examples/animations",
-            "description": "Los seis términos de scroll, con demos propias."
+            "description": "Los diez términos de scroll, con demos propias."
           }
         ],
         "usage": "<ParallaxLayers label=\"Coast\" layers={[{ id: \"far\", speed: 0.2, children }]} />",
@@ -20526,12 +20551,17 @@
           }
         ]
       },
-      "docs": "Clean-room parallax. No Motion UI or Motion+ source. Movement is translateY from use-scroll-progress, so the layout box does not shift. The first paint matches the server. Reduced motion, via motion-preference, holds every layer at rest. Answer no if the CLI asks to overwrite use-scroll-progress, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "docs": "Clean-room parallax. No Motion UI or Motion+ source. When the browser supports a view timeline, each layer translates on animation-timeline view() across the same entry-to-exit travel as the hook. use-scroll-progress is the fallback. Movement is translateY only, so the layout box does not shift. The first paint matches the server. Reduced motion, via motion-preference, holds every layer at rest. Answer no if the CLI asks to overwrite use-scroll-progress, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
       "files": [
         {
           "path": "registry/ui/parallax-layers.tsx",
           "type": "registry:component",
           "target": "@ui/parallax-layers.tsx"
+        },
+        {
+          "path": "registry/lib/scroll-timeline.ts",
+          "type": "registry:lib",
+          "target": "@lib/scroll-timeline.ts"
         }
       ]
     },
@@ -20548,6 +20578,7 @@
       "registryDependencies": [
         "button",
         "@retana/use-scroll-progress",
+        "@retana/use-min-width",
         "@retana/motion-preference"
       ],
       "categories": [
@@ -20572,7 +20603,7 @@
           {
             "title": "Glosario",
             "href": "/examples/animations",
-            "description": "Los seis términos de scroll, con demos propias."
+            "description": "Los diez términos de scroll, con demos propias."
           }
         ],
         "usage": "<HorizontalScrollRail label=\"Pieces\">{cards}</HorizontalScrollRail>",
@@ -20599,12 +20630,223 @@
           }
         ]
       },
-      "docs": "Clean-room horizontal rail. No Motion UI or Motion+ source. On a wide screen with motion allowed, the pane fills the viewport and the section grows by the track overflow (ResizeObserver). Vertical scroll translates the track until the section end meets the bottom of that pane. Reduced motion, and viewports under minWidth, keep a native horizontal scroller with scroll-snap and the author pane height. Arrow keys move the rail. Focusable items scroll into view. Answer no if the CLI asks to overwrite button, use-scroll-progress, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "docs": "Clean-room horizontal rail. No Motion UI or Motion+ source. On a wide screen with motion allowed, the pane fills the viewport and the section grows by the track overflow (ResizeObserver). Vertical scroll translates the track until the section end meets the bottom of that pane. Reduced motion, and viewports under minWidth, keep a native horizontal scroller with scroll-snap and the author pane height. The width cutoff is use-min-width, shared with pinned-steps. Arrow keys move the rail. Focusable items scroll into view. Answer no if the CLI asks to overwrite button, use-scroll-progress, use-min-width, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
       "files": [
         {
           "path": "registry/ui/horizontal-scroll-rail.tsx",
           "type": "registry:component",
           "target": "@ui/horizontal-scroll-rail.tsx"
+        }
+      ]
+    },
+    {
+      "name": "use-min-width",
+      "type": "registry:hook",
+      "title": "useMinWidth",
+      "description": "True when the viewport is at least a given number of CSS pixels wide. The first paint uses the narrow layout.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "animation"
+      ],
+      "meta": {
+        "titleEs": "Ancho mínimo",
+        "descriptionEs": "Verdadero cuando el viewport alcanza un ancho, en píxeles. El primer render usa el layout estrecho.",
+        "preview": "app/examples/use-min-width/preview.tsx",
+        "previewHref": "/examples/use-min-width",
+        "examples": [
+          {
+            "title": "Ancho mínimo",
+            "href": "/examples/use-min-width",
+            "description": "Verdadero cuando el viewport alcanza un ancho, en píxeles."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/use-min-width/stress",
+            "description": "320px, vacío, texto largo y RTL."
+          },
+          {
+            "title": "Glosario",
+            "href": "/examples/animations",
+            "description": "Los diez términos de scroll, con demos propias."
+          }
+        ],
+        "usage": "const wide = useMinWidth(768)",
+        "api": [
+          {
+            "name": "px",
+            "type": "number",
+            "description": "Minimum viewport width. Non-finite values are treated as 0."
+          },
+          {
+            "name": "return",
+            "type": "boolean",
+            "description": "True at or above px. The server snapshot is false, so the first paint does not pin."
+          }
+        ]
+      },
+      "docs": "Clean-room width cutoff shared by horizontal-scroll-rail and pinned-steps. No Motion UI or Motion+ source. The server snapshot is the narrow layout. Answer no if the CLI asks to overwrite a file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/hooks/use-min-width.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-min-width.ts"
+        }
+      ]
+    },
+    {
+      "name": "pinned-steps",
+      "type": "registry:ui",
+      "title": "Pinned steps",
+      "description": "A sticky visual column that cross-fades as each step crosses the center of the viewport. Narrow viewports and reduced motion stack the step with its visual.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/use-min-width",
+        "@retana/motion-preference"
+      ],
+      "categories": [
+        "animation"
+      ],
+      "meta": {
+        "titleEs": "Pasos fijos",
+        "descriptionEs": "La columna visual se queda fija y cambia con el paso que cruza el centro. En estrecho, o con movimiento reducido, cada paso lleva su visual.",
+        "preview": "app/examples/pinned-steps/preview.tsx",
+        "previewHref": "/examples/pinned-steps",
+        "examples": [
+          {
+            "title": "Pasos fijos",
+            "href": "/examples/pinned-steps",
+            "description": "La columna visual se queda mientras los pasos avanzan."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/pinned-steps/stress",
+            "description": "320px, vacío, texto largo y RTL."
+          },
+          {
+            "title": "Glosario",
+            "href": "/examples/animations",
+            "description": "Los diez términos de scroll, con demos propias."
+          }
+        ],
+        "usage": "<PinnedSteps label=\"Firing\" steps={[{ id: \"dry\", title: \"Drying\", body: \"The door stays ajar.\", visual }]} />",
+        "api": [
+          {
+            "name": "steps",
+            "type": "PinnedStep[]",
+            "description": "id, title, body, and visual. decorative hides the visual from assistive tech. A visual with data is a polite live region while it is the active one."
+          },
+          {
+            "name": "minWidth",
+            "type": "number",
+            "description": "Stack below this viewport width. Default 768. Shared with use-min-width."
+          },
+          {
+            "name": "label / emptyLabel",
+            "type": "string",
+            "description": "Accessible name of the step region, and the copy for an empty list."
+          },
+          {
+            "name": "className / visualClassName / stepClassName",
+            "type": "string",
+            "description": "Root, sticky visual column, and each step. Defaults are a two-column pin and an 80vh step."
+          }
+        ]
+      },
+      "docs": "Clean-room scrollytelling. No Motion UI or Motion+ source. On a wide screen with motion allowed, the visual column is position sticky and each step is in normal flow. One IntersectionObserver per step uses rootMargin -50% 0px -50% 0px, so the step that crosses the center is active. The cross-fade is opacity and transform only, timed with motionPresets. Below 768px, and when motion-preference says reduce, each step stacks with its visual and nothing sticks. A decorative visual is aria-hidden. A visual that carries data uses aria-live polite while it is showing. Answer no if the CLI asks to overwrite use-min-width, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/pinned-steps.tsx",
+          "type": "registry:component",
+          "target": "@ui/pinned-steps.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "scroll-linked",
+      "type": "registry:ui",
+      "title": "Scroll linked",
+      "description": "Maps scroll progress to a fade, rise, scale, or rotate. CSS scroll-driven animations run first. Reduced motion shows the finished state.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@retana/use-scroll-progress",
+        "@retana/motion-preference"
+      ],
+      "categories": [
+        "animation"
+      ],
+      "meta": {
+        "titleEs": "Scroll ligado",
+        "descriptionEs": "Fade, subida, escala o giro siguen el avance del scroll. Si el navegador puede, lo hace con CSS. Con movimiento reducido se ve el estado final.",
+        "preview": "app/examples/scroll-linked/preview.tsx",
+        "previewHref": "/examples/scroll-linked",
+        "examples": [
+          {
+            "title": "Scroll ligado",
+            "href": "/examples/scroll-linked",
+            "description": "Fade, subida, escala o giro siguen el avance del scroll."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/scroll-linked/stress",
+            "description": "320px, vacío, texto largo y RTL."
+          },
+          {
+            "title": "Glosario",
+            "href": "/examples/animations",
+            "description": "Los diez términos de scroll, con demos propias."
+          }
+        ],
+        "usage": "<ScrollLinked preset=\"rise\" range={[0, 0.45]}>{children}</ScrollLinked>",
+        "api": [
+          {
+            "name": "preset",
+            "type": "\"fade\" | \"rise\" | \"scale\" | \"rotate\"",
+            "description": "Default rise. Opacity and transform only."
+          },
+          {
+            "name": "range",
+            "type": "[number, number]",
+            "description": "Progress window on the timeline. Default [0, 1]. The CSS animation-range uses the same window."
+          },
+          {
+            "name": "timeline",
+            "type": "\"view\" | \"scroll\"",
+            "description": "view() follows this element. scroll() follows the scrollport, scroll(root) for the document. Default view."
+          },
+          {
+            "name": "container",
+            "type": "RefObject<HTMLElement | null>",
+            "description": "Scrollport for the hook fallback. Omit to use the window."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Classes on the wrapper."
+          }
+        ]
+      },
+      "docs": "Clean-room scroll-linked wrapper. No Motion UI or Motion+ source. Supported browsers use animation-timeline view() or scroll() and an animation-range taken from range. Otherwise use-scroll-progress and useTransform map the same window onto opacity and transform. Reduced motion, via motion-preference, shows the finished state and does not animate. Answer no if the CLI asks to overwrite use-scroll-progress, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/scroll-linked.tsx",
+          "type": "registry:component",
+          "target": "@ui/scroll-linked.tsx"
+        },
+        {
+          "path": "registry/lib/scroll-timeline.ts",
+          "type": "registry:lib",
+          "target": "@lib/scroll-timeline.ts"
         }
       ]
     }

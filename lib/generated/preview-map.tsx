@@ -273,6 +273,9 @@ import Preview268 from "@/app/examples/scroll-snap-rail/preview"
 import Preview269 from "@/app/examples/sticky-section-list/preview"
 import Preview270 from "@/app/examples/parallax-layers/preview"
 import Preview271 from "@/app/examples/horizontal-scroll-rail/preview"
+import Preview272 from "@/app/examples/use-min-width/preview"
+import Preview273 from "@/app/examples/pinned-steps/preview"
+import Preview274 from "@/app/examples/scroll-linked/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -547,4 +550,7 @@ export const previewMap = {
   "sticky-section-list": Preview269,
   "parallax-layers": Preview270,
   "horizontal-scroll-rail": Preview271,
+  "use-min-width": Preview272,
+  "pinned-steps": Preview273,
+  "scroll-linked": Preview274,
 }

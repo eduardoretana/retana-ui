@@ -9,12 +9,13 @@
  * horizontal scroller with scroll-snap instead. Focusable items scroll into view.
  */
 
-import { Children, useLayoutEffect, useRef, useState, useSyncExternalStore, type KeyboardEvent, type ReactNode } from "react"
+import { Children, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react"
 import { useMotionValueEvent } from "motion/react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { useMinWidth } from "@/registry/retana/hooks/use-min-width"
 import { clampUnit, useScrollProgress, type UseScrollProgressOptions } from "@/registry/retana/hooks/use-scroll-progress"
 import { useMotionPreference } from "@/registry/retana/ui/motion-preference"
 
@@ -47,19 +48,6 @@ export function railRunway(paneHeight: number, trackWidth: number, paneWidth: nu
 }
 
 type Edges = { start: boolean; end: boolean }
-
-function useMinWidth(px: number) {
-  const query = `(min-width: ${px}px)`
-  return useSyncExternalStore(
-    (onChange) => {
-      const media = window.matchMedia(query)
-      media.addEventListener("change", onChange)
-      return () => media.removeEventListener("change", onChange)
-    },
-    () => window.matchMedia(query).matches,
-    () => false,
-  )
-}
 
 export type HorizontalScrollRailProps = {
   children: ReactNode
