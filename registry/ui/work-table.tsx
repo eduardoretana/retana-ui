@@ -108,6 +108,8 @@ import {
   type WorkDensity,
   type WorkMove,
   type WorkShift,
+  type WorkSortDir,
+  type WorkSortKey,
 } from "@/registry/retana/lib/work-table"
 import { StatusPill } from "@/registry/retana/ui/status-pill"
 
@@ -1204,4 +1206,4 @@ export {
   withSequentialRank,
 } from "@/registry/retana/lib/work-table"
 export { useWorkCollection, useWorkTableLayout } from "@/registry/retana/hooks/use-work-table"
-export type { WorkColumnLayout, WorkMove }
+export type { WorkColumnLayout, WorkMove, WorkSortDir, WorkSortKey }
