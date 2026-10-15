@@ -227,6 +227,16 @@ of the common pattern: one collection shown as a table, board, calendar,
 timeline, list, or gallery. No shadcn/studio code, data, or assets were
 consulted.
 
+work-table, work-table-toolbar, work-table-cells, work-table-board,
+work-table-tree, work-table-queue, and work-table-support are a clean-room
+reimplementation of a work table with drag and drop: reorderable columns and
+rows, layout presets, grouped status, a section tree, and a flat queue. The
+behavior was described, not copied. No shadcn/studio or other paid-library
+source, sample rows, icons, screenshots, or assets were used. The Spanish
+rows in the demos are fictional. Tones are the host semantic names from
+status-tone.ts. The pieces use @dnd-kit and @tanstack/react-table, both
+permissively licensed, and they ship no theme.
+
 ---
 
 Sales CRM

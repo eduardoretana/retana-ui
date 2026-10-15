@@ -18713,6 +18713,11 @@
             "name": "solid / dot / overlay",
             "type": "boolean",
             "description": "Solid fill, a leading dot, or a chip that sits on a cover."
+          },
+          {
+            "name": "appearance",
+            "type": "\"soft\" | \"outline\" | \"text\" | \"solid\"",
+            "description": "Soft is the default wash. Outline and text reuse the same tone map. The solid prop still forces a solid fill."
           }
         ]
       },
@@ -20607,6 +20612,582 @@
           "target": "@ui/horizontal-scroll-rail.tsx"
         }
       ]
+    },
+    {
+      "name": "work-table",
+      "type": "registry:ui",
+      "title": "Work table",
+      "description": "TanStack table with dnd-kit column and row reorder, layout presets, density, bulk actions, and pagination.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "@tanstack/react-table",
+        "lucide-react",
+        "sonner"
+      ],
+      "registryDependencies": [
+        "button",
+        "checkbox",
+        "dropdown-menu",
+        "input",
+        "select",
+        "skeleton",
+        "table",
+        "tooltip",
+        "@retana/status-pill"
+      ],
+      "categories": [
+        "table"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/work-table.tsx",
+          "type": "registry:component",
+          "target": "@ui/work-table.tsx"
+        },
+        {
+          "path": "registry/hooks/use-work-table.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-work-table.ts"
+        },
+        {
+          "path": "registry/lib/work-table.ts",
+          "type": "registry:lib",
+          "target": "@lib/work-table.ts"
+        },
+        {
+          "path": "registry/lib/reorder.ts",
+          "type": "registry:lib",
+          "target": "@lib/reorder.ts"
+        },
+        {
+          "path": "registry/lib/status-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/status-tone.ts"
+        },
+        {
+          "path": "registry/lib/work-table/README.md",
+          "type": "registry:file",
+          "target": "@lib/work-table/README.md"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tabla de trabajo",
+        "descriptionEs": "Columnas y filas arrastrables, diseños, densidad, acciones en bloque y paginación. El orden se anuncia y se puede deshacer.",
+        "preview": "app/examples/work-table/preview.tsx",
+        "previewHref": "/examples/work-table",
+        "examples": [
+          {
+            "title": "Tabla de trabajo",
+            "href": "/examples/work-table",
+            "description": "Asas, orden en vivo, diseños, selección y paginación."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/work-table/stress",
+            "description": "Vacío, carga, error, 320px, texto largo y RTL."
+          }
+        ],
+        "usage": "<WorkTable rows={rows} columns={columns} onMove={(event) => setRows(event.rows)} persistenceKey=\"work\" />",
+        "api": [
+          {
+            "name": "rows / columns",
+            "type": "T[] / WorkColumn<T>[]",
+            "description": "Rows need an id. A column cell receives the row and its index."
+          },
+          {
+            "name": "mode",
+            "type": "\"flat\" | \"grouped\" | \"tree\"",
+            "description": "Flat paginates. Grouped buckets by status. Tree indents by parent."
+          },
+          {
+            "name": "onMove / onReorder",
+            "type": "callback",
+            "description": "Adapter. onMove receives the next rows. There is no backend SDK."
+          },
+          {
+            "name": "onAssign / onRemove / onUpdate",
+            "type": "callback",
+            "description": "Bulk assign, destructive row action, and a field patch."
+          },
+          {
+            "name": "persistenceKey / layoutApi",
+            "type": "string / hook",
+            "description": "Optional localStorage key, or a layout hook the host already owns."
+          },
+          {
+            "name": "state",
+            "type": "\"ready\" | \"loading\" | \"error\"",
+            "description": "Empty, loading, and error are built in. onRetry sits on the error state."
+          }
+        ]
+      },
+      "docs": "Clean-room work table. Behavior only: no paid-library source, sample rows, icons, or assets. Columns and rows reorder with dnd-kit (pointer and keyboard) and announce through aria-live. Layout presets can persist in localStorage. Reduced motion skips transitions. Status tones come from status-pill and status-tone.ts. Answer no if the CLI asks to overwrite button, checkbox, dropdown-menu, input, select, skeleton, table, tooltip, status-pill, reorder, or status-tone. The item ships no theme."
+    },
+    {
+      "name": "work-table-toolbar",
+      "type": "registry:ui",
+      "title": "Work table toolbar",
+      "description": "Search, priority toggle, assignee multiselect, cycle select, and sort menu for a work table.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "checkbox",
+        "dropdown-menu",
+        "input",
+        "popover",
+        "select",
+        "tooltip"
+      ],
+      "categories": [
+        "table"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/work-table-toolbar.tsx",
+          "type": "registry:component",
+          "target": "@ui/work-table-toolbar.tsx"
+        },
+        {
+          "path": "registry/lib/work-table.ts",
+          "type": "registry:lib",
+          "target": "@lib/work-table.ts"
+        },
+        {
+          "path": "registry/lib/reorder.ts",
+          "type": "registry:lib",
+          "target": "@lib/reorder.ts"
+        },
+        {
+          "path": "registry/lib/status-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/status-tone.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Barra de la tabla de trabajo",
+        "descriptionEs": "Búsqueda, prioridades P0–P3, responsables con avatar, ciclo y menú de orden.",
+        "preview": "app/examples/work-table-toolbar/preview.tsx",
+        "previewHref": "/examples/work-table-toolbar",
+        "examples": [
+          {
+            "title": "Barra",
+            "href": "/examples/work-table-toolbar",
+            "description": "Filtros controlados y botones de restablecer, expandir y restaurar."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/work-table-toolbar/stress",
+            "description": "320px, vacío y un nombre largo."
+          }
+        ],
+        "usage": "<WorkTableToolbar query={query} onQueryChange={setQuery} priorities={priorities} onPrioritiesChange={setPriorities} people={people} assignees={assignees} onAssigneesChange={setAssignees} cycles={cycles} cycle={cycle} onCycleChange={setCycle} sortKey={sortKey} sortDir={sortDir} onSortChange={setSort} onReset={reset} />",
+        "api": [
+          {
+            "name": "query / priorities",
+            "type": "string / WorkPriority[]",
+            "description": "Search text and the pressed P0–P3 levels."
+          },
+          {
+            "name": "people / assignees",
+            "type": "person[] / string[]",
+            "description": "Multiselect. Avatars show the selected people."
+          },
+          {
+            "name": "cycles / cycle",
+            "type": "WorkCycle[] / string | null",
+            "description": "Single cycle. Null is every cycle."
+          },
+          {
+            "name": "sortKey / sortDir",
+            "type": "manual | date | priority | effort",
+            "description": "Sort menu, including ascending and descending."
+          },
+          {
+            "name": "onReset / onExpand / onRestore",
+            "type": "() => void",
+            "description": "Optional icon buttons. Labels default to Spanish."
+          }
+        ]
+      },
+      "docs": "Clean-room filter bar for the work table. No paid-library source or assets. It does not own the rows. Answer no if the CLI asks to overwrite avatar, button, checkbox, dropdown-menu, input, popover, select, tooltip, or the shared work-table helpers. The item ships no theme."
+    },
+    {
+      "name": "work-table-cells",
+      "type": "registry:ui",
+      "title": "Work table cells",
+      "description": "Title, person, priority, relative date, status, SLA, effort, compact numbers, and rank cells.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "@retana/status-pill"
+      ],
+      "categories": [
+        "table"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/work-table-cells.tsx",
+          "type": "registry:component",
+          "target": "@ui/work-table-cells.tsx"
+        },
+        {
+          "path": "registry/lib/work-table.ts",
+          "type": "registry:lib",
+          "target": "@lib/work-table.ts"
+        },
+        {
+          "path": "registry/lib/reorder.ts",
+          "type": "registry:lib",
+          "target": "@lib/reorder.ts"
+        },
+        {
+          "path": "registry/lib/status-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/status-tone.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Celdas de la tabla de trabajo",
+        "descriptionEs": "Título compuesto, persona, prioridad, fecha relativa, estado, SLA, esfuerzo, números compactos y rango.",
+        "preview": "app/examples/work-table-cells/preview.tsx",
+        "previewHref": "/examples/work-table-cells",
+        "examples": [
+          {
+            "title": "Celdas",
+            "href": "/examples/work-table-cells",
+            "description": "Vencida, Vencido, 6.3k y pastillas soft, outline y texto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/work-table-cells/stress",
+            "description": "Vacío, texto largo, emoji y RTL."
+          }
+        ],
+        "usage": "<WorkTitleCell title={row.title} code={row.code} kind={row.kind} />",
+        "api": [
+          {
+            "name": "WorkTitleCell",
+            "type": "title, code, kind",
+            "description": "Title plus an id and type line."
+          },
+          {
+            "name": "WorkPersonCell",
+            "type": "person",
+            "description": "Avatar and name, or an empty label."
+          },
+          {
+            "name": "WorkPriorityCell",
+            "type": "p0–p3",
+            "description": "Flag plus a status pill. Tone names come from priorityTone."
+          },
+          {
+            "name": "WorkDueCell / WorkSlaCell",
+            "type": "ISO date",
+            "description": "Relative due date (Vencida) and SLA (Vencido or hours left)."
+          },
+          {
+            "name": "WorkStatusCell",
+            "type": "label, tone, appearance",
+            "description": "soft, outline, or text. The tone map stays in status-pill."
+          },
+          {
+            "name": "WorkEffortCell / WorkNumberCell / WorkRankCell",
+            "type": "number",
+            "description": "Segmented points, 6.3k / % / min, and a rank badge."
+          }
+        ]
+      },
+      "docs": "Clean-room cells. No paid-library source or assets. Semantic tones go through StatusPill and status-tone.ts; this file does not ship a second color map. Answer no if the CLI asks to overwrite avatar, status-pill, or the shared helpers. The item ships no theme."
+    },
+    {
+      "name": "work-table-board",
+      "type": "registry:block",
+      "title": "Grouped work board",
+      "description": "Work table grouped by status, with collapsible groups, point totals, and cross-group drag.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/work-table",
+        "@retana/work-table-toolbar",
+        "@retana/work-table-cells"
+      ],
+      "categories": [
+        "block"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/work-table-board.tsx",
+          "type": "registry:component",
+          "target": "@ui/work-table-board.tsx"
+        },
+        {
+          "path": "registry/blocks/work-table-shared.tsx",
+          "type": "registry:component",
+          "target": "@ui/work-table-shared.tsx"
+        },
+        {
+          "path": "registry/lib/work-table-demo.ts",
+          "type": "registry:lib",
+          "target": "@lib/work-table-demo.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tablero agrupado",
+        "descriptionEs": "Grupos por estado, colapsables, con conteo, suma de puntos y arrastre que cambia el estado.",
+        "preview": "app/examples/work-table-board/preview.tsx",
+        "previewHref": "/examples/work-table-board",
+        "examples": [
+          {
+            "title": "Tablero",
+            "href": "/examples/work-table-board",
+            "description": "Mostrar más por grupo. Soltar en otro grupo cambia el estado."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/work-table-board/stress",
+            "description": "Carga, error y 320px."
+          }
+        ],
+        "usage": "<WorkTableBoard />",
+        "api": [
+          {
+            "name": "state",
+            "type": "\"ready\" | \"loading\" | \"error\"",
+            "description": "Passes through to the table."
+          },
+          {
+            "name": "errorMessage",
+            "type": "string",
+            "description": "Shown in the error state."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Slot on the demo shell."
+          }
+        ]
+      },
+      "docs": "Clean-room grouped demo. Fictional Spanish rows. Composes work-table, the toolbar, and the cells. Dragging between groups calls onMove with the new status. Answer no if the CLI asks to overwrite a file the host already has. The item ships no theme."
+    },
+    {
+      "name": "work-table-tree",
+      "type": "registry:block",
+      "title": "Work table tree",
+      "description": "Section and article tree with nesting on drop and a summary footer.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/work-table",
+        "@retana/work-table-toolbar",
+        "@retana/work-table-cells"
+      ],
+      "categories": [
+        "block"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/work-table-tree.tsx",
+          "type": "registry:component",
+          "target": "@ui/work-table-tree.tsx"
+        },
+        {
+          "path": "registry/blocks/work-table-shared.tsx",
+          "type": "registry:component",
+          "target": "@ui/work-table-shared.tsx"
+        },
+        {
+          "path": "registry/lib/work-table-demo.ts",
+          "type": "registry:lib",
+          "target": "@lib/work-table-demo.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Árbol de secciones",
+        "descriptionEs": "Secciones y artículos. El indicador de soltar muestra el nivel y el pie resume el documento.",
+        "preview": "app/examples/work-table-tree/preview.tsx",
+        "previewHref": "/examples/work-table-tree",
+        "examples": [
+          {
+            "title": "Árbol",
+            "href": "/examples/work-table-tree",
+            "description": "Anidar o subir un nivel. El pie cuenta secciones y artículos."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/work-table-tree/stress",
+            "description": "Carga, error y 320px."
+          }
+        ],
+        "usage": "<WorkTableTree />",
+        "api": [
+          {
+            "name": "state",
+            "type": "\"ready\" | \"loading\" | \"error\"",
+            "description": "Passes through to the table."
+          },
+          {
+            "name": "errorMessage",
+            "type": "string",
+            "description": "Shown in the error state."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Slot on the demo shell."
+          }
+        ]
+      },
+      "docs": "Clean-room tree demo. Fictional Spanish sections. Drop depth is shown on the indicator; left and right change the level while a keyboard drag is active. Answer no if the CLI asks to overwrite a file the host already has. The item ships no theme."
+    },
+    {
+      "name": "work-table-queue",
+      "type": "registry:block",
+      "title": "Ranked work queue",
+      "description": "Flat queue whose rank follows the manual order, with pagination.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/work-table",
+        "@retana/work-table-toolbar",
+        "@retana/work-table-cells"
+      ],
+      "categories": [
+        "block"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/work-table-queue.tsx",
+          "type": "registry:component",
+          "target": "@ui/work-table-queue.tsx"
+        },
+        {
+          "path": "registry/blocks/work-table-shared.tsx",
+          "type": "registry:component",
+          "target": "@ui/work-table-shared.tsx"
+        },
+        {
+          "path": "registry/lib/work-table-demo.ts",
+          "type": "registry:lib",
+          "target": "@lib/work-table-demo.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Cola con ranking",
+        "descriptionEs": "Cola plana. El rango se recalcula con el orden manual y la paginación queda abajo.",
+        "preview": "app/examples/work-table-queue/preview.tsx",
+        "previewHref": "/examples/work-table-queue",
+        "examples": [
+          {
+            "title": "Cola",
+            "href": "/examples/work-table-queue",
+            "description": "Mover una fila cambia su rango. Filas por página al pie."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/work-table-queue/stress",
+            "description": "Carga, error y 320px."
+          }
+        ],
+        "usage": "<WorkTableQueue />",
+        "api": [
+          {
+            "name": "state",
+            "type": "\"ready\" | \"loading\" | \"error\"",
+            "description": "Passes through to the table."
+          },
+          {
+            "name": "errorMessage",
+            "type": "string",
+            "description": "Shown in the error state."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Slot on the demo shell."
+          }
+        ]
+      },
+      "docs": "Clean-room flat queue. Rank is the row index after each move. Answer no if the CLI asks to overwrite a file the host already has. The item ships no theme."
+    },
+    {
+      "name": "work-table-support",
+      "type": "registry:block",
+      "title": "Support work queue",
+      "description": "Support queue with SLA cells and bulk move.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/work-table",
+        "@retana/work-table-toolbar",
+        "@retana/work-table-cells"
+      ],
+      "categories": [
+        "block"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/work-table-support.tsx",
+          "type": "registry:component",
+          "target": "@ui/work-table-support.tsx"
+        },
+        {
+          "path": "registry/blocks/work-table-shared.tsx",
+          "type": "registry:component",
+          "target": "@ui/work-table-shared.tsx"
+        },
+        {
+          "path": "registry/lib/work-table-demo.ts",
+          "type": "registry:lib",
+          "target": "@lib/work-table-demo.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Cola de soporte",
+        "descriptionEs": "Cola de encargos con SLA y movimiento en bloque.",
+        "preview": "app/examples/work-table-support/preview.tsx",
+        "previewHref": "/examples/work-table-support",
+        "examples": [
+          {
+            "title": "Soporte",
+            "href": "/examples/work-table-support",
+            "description": "Vencido o horas restantes. Selecciona varias filas y muévelas juntas."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/work-table-support/stress",
+            "description": "Carga, error y 320px."
+          }
+        ],
+        "usage": "<WorkTableSupport />",
+        "api": [
+          {
+            "name": "state",
+            "type": "\"ready\" | \"loading\" | \"error\"",
+            "description": "Passes through to the table."
+          },
+          {
+            "name": "errorMessage",
+            "type": "string",
+            "description": "Shown in the error state."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Slot on the demo shell."
+          }
+        ]
+      },
+      "docs": "Clean-room support queue. Fictional tickets. Bulk move uses the table selection. Answer no if the CLI asks to overwrite a file the host already has. The item ships no theme."
     }
   ]
 }

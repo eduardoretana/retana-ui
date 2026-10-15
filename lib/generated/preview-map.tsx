@@ -273,6 +273,13 @@ import Preview268 from "@/app/examples/scroll-snap-rail/preview"
 import Preview269 from "@/app/examples/sticky-section-list/preview"
 import Preview270 from "@/app/examples/parallax-layers/preview"
 import Preview271 from "@/app/examples/horizontal-scroll-rail/preview"
+import Preview272 from "@/app/examples/work-table/preview"
+import Preview273 from "@/app/examples/work-table-toolbar/preview"
+import Preview274 from "@/app/examples/work-table-cells/preview"
+import Preview275 from "@/app/examples/work-table-board/preview"
+import Preview276 from "@/app/examples/work-table-tree/preview"
+import Preview277 from "@/app/examples/work-table-queue/preview"
+import Preview278 from "@/app/examples/work-table-support/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -547,4 +554,11 @@ export const previewMap = {
   "sticky-section-list": Preview269,
   "parallax-layers": Preview270,
   "horizontal-scroll-rail": Preview271,
+  "work-table": Preview272,
+  "work-table-toolbar": Preview273,
+  "work-table-cells": Preview274,
+  "work-table-board": Preview275,
+  "work-table-tree": Preview276,
+  "work-table-queue": Preview277,
+  "work-table-support": Preview278,
 }
