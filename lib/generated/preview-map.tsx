@@ -273,6 +273,16 @@ import Preview268 from "@/app/examples/scroll-snap-rail/preview"
 import Preview269 from "@/app/examples/sticky-section-list/preview"
 import Preview270 from "@/app/examples/parallax-layers/preview"
 import Preview271 from "@/app/examples/horizontal-scroll-rail/preview"
+import Preview272 from "@/app/examples/app-shell/preview"
+import Preview273 from "@/app/examples/assistant-home/preview"
+import Preview274 from "@/app/examples/agent-chat/preview"
+import Preview275 from "@/app/examples/agent-run/preview"
+import Preview276 from "@/app/examples/settings-billing/preview"
+import Preview277 from "@/app/examples/onboarding/preview"
+import Preview278 from "@/app/examples/integrations/preview"
+import Preview279 from "@/app/examples/crm/preview"
+import Preview280 from "@/app/examples/analytics/preview"
+import Preview281 from "@/app/examples/evals/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -547,4 +557,14 @@ export const previewMap = {
   "sticky-section-list": Preview269,
   "parallax-layers": Preview270,
   "horizontal-scroll-rail": Preview271,
+  "app-shell": Preview272,
+  "assistant-home": Preview273,
+  "agent-chat": Preview274,
+  "agent-run": Preview275,
+  "settings-billing": Preview276,
+  "onboarding": Preview277,
+  "integrations": Preview278,
+  "crm": Preview279,
+  "analytics": Preview280,
+  "evals": Preview281,
 }

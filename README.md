@@ -324,10 +324,23 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`272` items are in `registry.json` on this branch: `226` components, `35` blocks, `5` hooks, and `6` libraries. A name links to its source file.
+`282` items are in `registry.json` on this branch: `226` components, `45` blocks, `5` hooks, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
+
+### Interfaces
+
+- [`app-shell`](registry/blocks/app-shell.tsx) · block — Workspace sidebar with navigation, projects, getting-started progress, and a user footer. Page content sits in a card. Install: `npx shadcn@latest add @retana/app-shell`.
+- [`assistant-home`](registry/blocks/assistant-home.tsx) · block — Greeting, a prompt composer with plugins, model, microphone, and send, plus connectable apps and action chips. Install: `npx shadcn@latest add @retana/assistant-home`.
+- [`agent-chat`](registry/blocks/agent-chat.tsx) · block — Workspace shell, an orchestrator thread with agents at work, and a brief for product, angle, audience, channels, palette, and call to action. Install: `npx shadcn@latest add @retana/agent-chat`.
+- [`agent-run`](registry/blocks/agent-run.tsx) · block — Plan steps with tool chips, a tool-call activity log, a needs-input question, a draft diff with accept and reject, and run cost details. Install: `npx shadcn@latest add @retana/agent-run`.
+- [`settings-billing`](registry/blocks/settings-billing.tsx) · block — General, members, billing, and API tabs, with segmented credit usage, plans, a payment method, monthly or yearly prices, and invoices. Install: `npx shadcn@latest add @retana/settings-billing`.
+- [`onboarding`](registry/blocks/onboarding.tsx) · block — Four-step setup with connectable tools and a side checklist. Install: `npx shadcn@latest add @retana/onboarding`.
+- [`integrations`](registry/blocks/integrations.tsx) · block — Categorized directory with search, connect and connected states, and a request form. Install: `npx shadcn@latest add @retana/integrations`.
+- [`crm`](registry/blocks/crm.tsx) · block — Sales workspace and an editable spreadsheet for company, stage, owner, and value, with selection and a one-step undo. Install: `npx shadcn@latest add @retana/crm`.
+- [`analytics`](registry/blocks/analytics.tsx) · block — Four KPIs, revenue by channel, a breakdown, top products, and a weekly trend. Install: `npx shadcn@latest add @retana/analytics`.
+- [`evals`](registry/blocks/evals.tsx) · block — KPIs against the previous version, a pass-rate chart, a prompt diff, and a test-case table. Install: `npx shadcn@latest add @retana/evals`.
 
 ### Detail
 
