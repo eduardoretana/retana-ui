@@ -1,0 +1,76 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-chat",
+  "title": "Agent chat",
+  "author": "Eduardo Retana",
+  "description": "Workspace shell, an orchestrator thread with agents at work, and a brief for product, angle, audience, channels, palette, and call to action.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "badge",
+    "button",
+    "textarea",
+    "@retana/app-shell"
+  ],
+  "files": [
+    {
+      "path": "registry/blocks/agent-chat.tsx",
+      "content": "\"use client\"\n\n/**\n * Three-pane agent conversation. Status words travel with the color so the\n * working state stays clear when motion is reduced.\n */\n\nimport * as React from \"react\"\nimport { Send } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Textarea } from \"@/components/ui/textarea\"\nimport { ScreenFrame, type AppShellProps, type ShellDensity } from \"@/components/ui/app-shell\"\n\nexport type AgentChatRole = \"user\" | \"orchestrator\" | \"agent\"\n\nexport type AgentChatMessage = {\n  id: string\n  role: AgentChatRole\n  author: string\n  body: string\n  time?: string\n}\n\nexport type WorkingAgentStatus = \"queued\" | \"working\" | \"done\"\n\nexport type WorkingAgent = {\n  id: string\n  name: string\n  task: string\n  status: WorkingAgentStatus\n}\n\nexport type BriefSwatch = \"primary\" | \"accent\" | \"muted\" | \"chart-1\" | \"chart-2\" | \"chart-3\" | \"chart-4\" | \"chart-5\"\n\nexport type BriefPalette = {\n  id: string\n  label: string\n  swatch: BriefSwatch\n}\n\nexport type AgentBrief = {\n  product: string\n  angle: string\n  audience: string\n  channels: string[]\n  palette: BriefPalette[]\n  cta: string\n}\n\nexport type AgentChatClassNames = {\n  root?: string\n  thread?: string\n  agents?: string\n  brief?: string\n  composer?: string\n}\n\nexport type AgentChatProps = {\n  title?: string\n  messages?: AgentChatMessage[]\n  agents?: WorkingAgent[]\n  brief?: AgentBrief\n  reply?: string\n  defaultReply?: string\n  onReplyChange?: (value: string) => void\n  onSend?: (text: string) => void\n  pending?: boolean\n  shell?: boolean\n  shellProps?: Partial<AppShellProps>\n  density?: ShellDensity\n  className?: string\n  classNames?: AgentChatClassNames\n}\n\nconst swatchClass: Record<BriefSwatch, string> = {\n  primary: \"bg-primary\",\n  accent: \"bg-accent\",\n  muted: \"bg-muted\",\n  \"chart-1\": \"bg-chart-1\",\n  \"chart-2\": \"bg-chart-2\",\n  \"chart-3\": \"bg-chart-3\",\n  \"chart-4\": \"bg-chart-4\",\n  \"chart-5\": \"bg-chart-5\",\n}\n\nconst statusLabel: Record<WorkingAgentStatus, string> = {\n  queued: \"En espera\",\n  working: \"Trabajando\",\n  done: \"Listo\",\n}\n\nconst statusClass: Record<WorkingAgentStatus, string> = {\n  queued: \"bg-muted text-muted-foreground\",\n  working: \"bg-accent text-accent-foreground\",\n  done: \"bg-primary/10 text-primary\",\n}\n\nexport const agentChatMessages: AgentChatMessage[] = [\n  {\n    id: \"m1\",\n    role: \"user\",\n    author: \"Mara Solís\",\n    time: \"09:14\",\n    body: \"Necesito un encargo para presentar la linterna de campo al equipo de obra.\",\n  },\n  {\n    id: \"m2\",\n    role: \"orchestrator\",\n    author: \"Orquestador\",\n    time: \"09:14\",\n    body: \"Armo el encargo en tres partes: contexto del producto, ángulo y una llamada a la acción. Investigación y redacción trabajan en paralelo.\",\n  },\n  {\n    id: \"m3\",\n    role: \"agent\",\n    author: \"Investigación\",\n    time: \"09:15\",\n    body: \"El público pide menos ruido y un alcance corto. El canal más usado esta semana fue el correo del lunes.\",\n  },\n]\n\nexport const agentChatAgents: WorkingAgent[] = [\n  { id: \"research\", name: \"Investigación\", task: \"Audiencia y canales\", status: \"done\" },\n  { id: \"writer\", name: \"Redacción\", task: \"Borrador del encargo\", status: \"working\" },\n  { id: \"review\", name: \"Revisión\", task: \"Tono y cifras\", status: \"queued\" },\n]\n\nexport const agentChatBrief: AgentBrief = {\n  product: \"Linterna de campo\",\n  angle: \"Menos ruido, más alcance\",\n  audience: \"Cuadrillas pequeñas de obra\",\n  channels: [\"Correo\", \"Sitio\", \"Ficha impresa\"],\n  palette: [\n    { id: \"ink\", label: \"Tinta\", swatch: \"primary\" },\n    { id: \"paper\", label: \"Papel\", swatch: \"muted\" },\n    { id: \"signal\", label: \"Señal\", swatch: \"chart-2\" },\n  ],\n  cta: \"Pedir una muestra\",\n}\n\nconst roleLabel: Record<AgentChatRole, string> = {\n  user: \"Tú\",\n  orchestrator: \"Coordinación\",\n  agent: \"Agente\",\n}\n\nexport function AgentChat({\n  title = \"Encargo de la linterna\",\n  messages = agentChatMessages,\n  agents = agentChatAgents,\n  brief = agentChatBrief,\n  reply,\n  defaultReply = \"\",\n  onReplyChange,\n  onSend,\n  pending = false,\n  shell = true,\n  shellProps,\n  density = \"comfortable\",\n  className,\n  classNames,\n}: AgentChatProps) {\n  const replyId = React.useId()\n  const [replyState, setReplyState] = React.useState(defaultReply)\n  const draft = reply ?? replyState\n  const space = density === \"compact\" ? \"p-3\" : \"p-4\"\n\n  function setDraft(next: string) {\n    onReplyChange?.(next)\n    if (reply === undefined) setReplyState(next)\n  }\n\n  return (\n    <ScreenFrame\n      shell={shell}\n      shellProps={{ activeId: \"assistant\", contentLabel: \"Conversación\", density, ...shellProps }}\n      className={className}\n    >\n      <div data-slot=\"agent-chat\" data-density={density} className={cn(\"@container flex min-h-0 min-w-0 flex-1 flex-col\", classNames?.root)}>\n        <header className={cn(\"flex items-center justify-between gap-3 border-b border-border\", space)}>\n          <div className=\"min-w-0\">\n            <p className=\"text-xs text-muted-foreground\">Conversación</p>\n            <h1 className=\"truncate text-lg font-semibold tracking-tight\">{title}</h1>\n          </div>\n          <Badge variant=\"secondary\">{agents.filter((agent) => agent.status === \"working\").length} en curso</Badge>\n        </header>\n        <div className=\"flex min-h-0 flex-1 flex-col @min-[880px]:flex-row\">\n          <div className=\"flex min-h-0 min-w-0 flex-1 flex-col\">\n            <div className={cn(\"min-h-0 flex-1 space-y-4 overflow-auto\", space, classNames?.thread)}>\n              {messages.length === 0 ? (\n                <p className=\"text-sm text-muted-foreground\">La conversación está vacía.</p>\n              ) : (\n                <ol className=\"flex flex-col gap-3\">\n                  {messages.map((message) => (\n                    <li\n                      key={message.id}\n                      className={cn(\n                        \"max-w-2xl rounded-xl border border-border px-3 py-2\",\n                        message.role === \"user\" && \"ml-auto bg-muted\",\n                        message.role === \"orchestrator\" && \"bg-card\",\n                      )}\n                    >\n                      <div className=\"flex items-baseline justify-between gap-2\">\n                        <p className=\"min-w-0 truncate text-xs font-medium\">\n                          <span className=\"text-muted-foreground\">{roleLabel[message.role]} · </span>\n                          {message.author}\n                        </p>\n                        {message.time ? <time className=\"shrink-0 text-[11px] text-muted-foreground tabular-nums\">{message.time}</time> : null}\n                      </div>\n                      <p className=\"mt-1 text-sm break-words\">{message.body}</p>\n                    </li>\n                  ))}\n                </ol>\n              )}\n              <section aria-label=\"Agentes en curso\" className={cn(\"rounded-xl border border-border p-3\", classNames?.agents)}>\n                <h2 className=\"text-sm font-medium\">Agentes en curso</h2>\n                {agents.length === 0 ? (\n                  <p className=\"mt-2 text-sm text-muted-foreground\">Nadie está trabajando.</p>\n                ) : (\n                  <ul className=\"mt-2 flex flex-col gap-2\">\n                    {agents.map((agent) => (\n                      <li key={agent.id} className=\"flex min-w-0 items-center justify-between gap-2\">\n                        <span className=\"min-w-0\">\n                          <span className=\"block truncate text-sm font-medium\">{agent.name}</span>\n                          <span className=\"block truncate text-xs text-muted-foreground\">{agent.task}</span>\n                        </span>\n                        <span className={cn(\"inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium\", statusClass[agent.status])}>\n                          {agent.status === \"working\" ? (\n                            <span className=\"size-1.5 rounded-full bg-current motion-safe:animate-pulse motion-reduce:animate-none\" aria-hidden />\n                          ) : null}\n                          {statusLabel[agent.status]}\n                        </span>\n                      </li>\n                    ))}\n                  </ul>\n                )}\n              </section>\n            </div>\n            <form\n              className={cn(\"border-t border-border\", space, classNames?.composer)}\n              onSubmit={(event) => {\n                event.preventDefault()\n                if (pending || !draft.trim()) return\n                onSend?.(draft.trim())\n                if (reply === undefined) setReplyState(\"\")\n              }}\n            >\n              <label htmlFor={replyId} className=\"sr-only\">\n                Respuesta\n              </label>\n              <div className=\"flex items-end gap-2\">\n                <Textarea\n                  id={replyId}\n                  value={draft}\n                  disabled={pending}\n                  placeholder=\"Escribe una indicación\"\n                  className=\"min-h-16 flex-1\"\n                  onChange={(event) => setDraft(event.target.value)}\n                />\n                <Button type=\"submit\" disabled={pending || !draft.trim()} aria-label=\"Enviar respuesta\">\n                  <Send />\n                </Button>\n              </div>\n            </form>\n          </div>\n          <aside aria-label=\"Encargo\" className={cn(\"min-w-0 border-t border-border @min-[880px]:w-80 @min-[880px]:border-t-0 @min-[880px]:border-s\", space, classNames?.brief)}>\n            <h2 className=\"text-sm font-medium\">Encargo</h2>\n            <dl className=\"mt-3 flex flex-col gap-3 text-sm\">\n              <div>\n                <dt className=\"text-xs text-muted-foreground\">Producto</dt>\n                <dd className=\"break-words font-medium\">{brief.product || \"—\"}</dd>\n              </div>\n              <div>\n                <dt className=\"text-xs text-muted-foreground\">Ángulo</dt>\n                <dd className=\"break-words\">{brief.angle || \"—\"}</dd>\n              </div>\n              <div>\n                <dt className=\"text-xs text-muted-foreground\">Audiencia</dt>\n                <dd className=\"break-words\">{brief.audience || \"—\"}</dd>\n              </div>\n              <div>\n                <dt className=\"text-xs text-muted-foreground\">Canales</dt>\n                <dd>\n                  {brief.channels.length === 0 ? (\n                    \"—\"\n                  ) : (\n                    <ul className=\"mt-1 flex flex-wrap gap-1\">\n                      {brief.channels.map((channel) => (\n                        <li key={channel}>\n                          <Badge variant=\"outline\">{channel}</Badge>\n                        </li>\n                      ))}\n                    </ul>\n                  )}\n                </dd>\n              </div>\n              <div>\n                <dt className=\"text-xs text-muted-foreground\">Paleta</dt>\n                <dd>\n                  {brief.palette.length === 0 ? (\n                    \"—\"\n                  ) : (\n                    <ul className=\"mt-1 flex flex-col gap-1\">\n                      {brief.palette.map((swatch) => (\n                        <li key={swatch.id} className=\"flex min-w-0 items-center gap-2\">\n                          <span className={cn(\"size-3 shrink-0 rounded-sm border border-border\", swatchClass[swatch.swatch])} />\n                          <span className=\"truncate\">{swatch.label}</span>\n                        </li>\n                      ))}\n                    </ul>\n                  )}\n                </dd>\n              </div>\n              <div>\n                <dt className=\"text-xs text-muted-foreground\">Llamada a la acción</dt>\n                <dd className=\"break-words font-medium\">{brief.cta || \"—\"}</dd>\n              </div>\n            </dl>\n          </aside>\n        </div>\n      </div>\n    </ScreenFrame>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/agent-chat.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Chat de agentes",
+    "descriptionEs": "Shell, conversación con coordinación y agentes en curso, y un panel de encargo con producto, ángulo, audiencia, canales, paleta y llamada a la acción.",
+    "preview": "app/examples/agent-chat/preview.tsx",
+    "previewHref": "/examples/agent-chat",
+    "examples": [
+      {
+        "title": "Encargo de la linterna",
+        "href": "/examples/agent-chat",
+        "description": "Tres columnas: barra, hilo y encargo."
+      }
+    ],
+    "usage": "<AgentChat messages={messages} agents={agents} brief={brief} />",
+    "api": [
+      {
+        "name": "messages",
+        "type": "AgentChatMessage[]",
+        "description": "User, orchestrator, and agent turns."
+      },
+      {
+        "name": "agents",
+        "type": "WorkingAgent[]",
+        "description": "Queued, working, or done. The word is visible, not only the color."
+      },
+      {
+        "name": "brief",
+        "type": "AgentBrief",
+        "description": "Product, angle, audience, channels, named palette swatches, and call to action."
+      },
+      {
+        "name": "onSend",
+        "type": "(text: string) => void",
+        "description": "Reply from the composer at the bottom of the thread."
+      },
+      {
+        "name": "shell",
+        "type": "boolean",
+        "description": "Default true. Set false to render only the thread and brief."
+      },
+      {
+        "name": "classNames",
+        "type": "AgentChatClassNames",
+        "description": "Slot classes for the thread, agent list, brief, and composer."
+      }
+    ]
+  },
+  "docs": "Inspirado en patrones de Affect UI (preview público); reimplementación clean-room; no código ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Instalar también trae @retana/app-shell.",
+  "categories": [
+    "interfaces",
+    "block"
+  ],
+  "type": "registry:block"
+}

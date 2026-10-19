@@ -216,6 +216,19 @@ on the host shadcn sidebar and the host's semantic classes.
 
 Clean-room pieces
 
+Affect UI — interfaces
+
+app-shell, assistant-home, agent-chat, agent-run, settings-billing,
+onboarding, integrations, crm, analytics, and evals are inspired by public
+screen previews on Affect UI:
+
+  https://www.affectui.com/screens
+
+Affect Pro is a paid product and was not purchased, fetched, or ported.
+These pieces are a clean-room reimplementation of the observed arrangement
+only. No Affect source, sample data, icons, assets, or internal strings
+were copied. Colors come from the host shadcn tokens.
+
 adaptive-table is a clean-room reimplementation from a behavior description
 only. No names, icons, or rows from that reference were copied. Columns drop,
 fold, and stretch to the container width.
