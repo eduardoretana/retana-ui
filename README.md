@@ -324,7 +324,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`282` items are in `registry.json` on this branch: `226` components, `45` blocks, `5` hooks, and `6` libraries. A name links to its source file.
+`283` items are in `registry.json` on this branch: `227` components, `45` blocks, `5` hooks, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -527,6 +527,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`status-banner`](registry/ui/status-banner.tsx) · ui — Status banner that crossfades when the state key changes. Install: `npx shadcn@latest add @retana/status-banner`.
 - [`destination-card`](registry/ui/destination-card.tsx) · ui — Destination, status, and key-value rows. Install: `npx shadcn@latest add @retana/destination-card`.
 - [`next-steps`](registry/ui/next-steps.tsx) · ui — What happens next, plus a pinned action. Install: `npx shadcn@latest add @retana/next-steps`.
+- [`data-table-grouping`](registry/ui/data-table-grouping.tsx) · ui — TanStack table with live column grouping that keeps the selection, collapsible group headers, a nested tree with subtotals, master-detail rows, and a pinned grand-total footer. Column order, visibility, density, filters, and page size are in the toolbar. Install: `npx shadcn@latest add @retana/data-table-grouping`.
 
 ### Charts
 

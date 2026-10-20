@@ -283,6 +283,7 @@ import Preview278 from "@/app/examples/integrations/preview"
 import Preview279 from "@/app/examples/crm/preview"
 import Preview280 from "@/app/examples/analytics/preview"
 import Preview281 from "@/app/examples/evals/preview"
+import Preview282 from "@/app/examples/data-table-grouping/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -567,4 +568,5 @@ export const previewMap = {
   "crm": Preview279,
   "analytics": Preview280,
   "evals": Preview281,
+  "data-table-grouping": Preview282,
 }

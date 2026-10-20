@@ -21322,6 +21322,116 @@
         ]
       },
       "docs": "Inspirado en patrones de Affect UI (preview público); reimplementación clean-room; no código ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Instalar también trae @retana/app-shell."
+    },
+    {
+      "author": "Eduardo Retana",
+      "name": "data-table-grouping",
+      "type": "registry:ui",
+      "title": "Grouped data table",
+      "description": "TanStack table with live column grouping that keeps the selection, collapsible group headers, a nested tree with subtotals, master-detail rows, and a pinned grand-total footer. Column order, visibility, density, filters, and page size are in the toolbar.",
+      "dependencies": [
+        "@tanstack/react-table",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "checkbox",
+        "dropdown-menu",
+        "input",
+        "progress",
+        "select",
+        "skeleton",
+        "table"
+      ],
+      "categories": [
+        "table"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/data-table-grouping.tsx",
+          "type": "registry:component",
+          "target": "@ui/data-table-grouping.tsx"
+        },
+        {
+          "path": "registry/lib/data-table-grouping.ts",
+          "type": "registry:lib",
+          "target": "@lib/data-table-grouping.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tabla con agrupación",
+        "descriptionEs": "Agrupa en caliente sin perder la selección, pliega grupos, suma un árbol anidado, abre el detalle de una fila y fija el gran total. También reordena columnas, densidad, filtros y filas por página.",
+        "preview": "app/examples/data-table-grouping/preview.tsx",
+        "previewHref": "/examples/data-table-grouping",
+        "examples": [
+          {
+            "title": "Obrador, archivo y bitácora",
+            "href": "/examples/data-table-grouping",
+            "description": "Pipeline agrupado por etapa, presupuesto en árbol y órdenes con subtabla de tareas."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/data-table-grouping/stress",
+            "description": "Vacío, textos largos, números, RTL, árbol, carga y error."
+          }
+        ],
+        "usage": "<DataTableGrouping\n  data={rows}\n  columns={columns}\n  getRowId={(row) => row.id}\n  getRowLabel={(row) => row.name}\n  aggregates={{ amount: \"sum\" }}\n  groupCriteria={[{ id: \"stage\", label: \"Etapa\", columnId: \"stage\" }]}\n  defaultGroupBy=\"stage\"\n  getSubRows={(row) => row.children}\n  renderDetail={(row) => <Tasks row={row} />}\n/>",
+        "api": [
+          {
+            "name": "columns",
+            "type": "DataTableGroupingColumn<T>[]",
+            "description": "TanStack column defs (v8-compatible). Set aggregationFn or pass aggregates."
+          },
+          {
+            "name": "getRowId",
+            "type": "(row) => string",
+            "description": "Stable id. Selection is stored by this id, so it survives a regroup."
+          },
+          {
+            "name": "groupCriteria / groupBy",
+            "type": "DataTableGroupingCriterion[] / string | null",
+            "description": "Group-by pills. columnId null clears grouping. Controlled with groupBy and onGroupByChange."
+          },
+          {
+            "name": "getSubRows",
+            "type": "(row) => T[] | undefined",
+            "description": "Nested tree. Parents show sum or avg of their leaves. Avg is the mean."
+          },
+          {
+            "name": "renderDetail",
+            "type": "(row) => ReactNode",
+            "description": "Master-detail. Expanding a row reveals this subtable under the row."
+          },
+          {
+            "name": "aggregates / align",
+            "type": "Record<columnId, \"sum\" | \"avg\"> / \"start\" | \"end\"",
+            "description": "Per-column total for groups, tree parents, and the pinned footer."
+          },
+          {
+            "name": "filters / searchText",
+            "type": "DataTableGroupingFilter[] / (row) => string",
+            "description": "Client-side. A parent stays visible when a descendant matches."
+          },
+          {
+            "name": "density / groupTone",
+            "type": "compact | comfortable | spacious / subtle | plain | accent",
+            "description": "Typed class maps. No private colors."
+          },
+          {
+            "name": "loading / error / onRetry",
+            "type": "boolean / ReactNode / () => void",
+            "description": "Loading skeletons, empty status, and an error alert with retry."
+          },
+          {
+            "name": "labels / className slots",
+            "type": "Partial<DataTableGroupingLabels> / string",
+            "description": "Copy and className, toolbarClassName, tableClassName, groupRowClassName, rowClassName, footerClassName, detailClassName, maxBodyHeight."
+          }
+        ]
+      },
+      "docs": "Clean-room reimplementation of grouped-table behavior. No Shadcn Studio source, sample data, icons, or assets were copied. The rows in the demos are fictional. This repo depends on @tanstack/react-table v9; the piece uses its v8-compatible useLegacyTable, getGroupedRowModel, and getExpandedRowModel. Answer no if the CLI asks to overwrite avatar, badge, button, checkbox, dropdown-menu, input, progress, select, skeleton, or table. The piece ships no theme, cssVars, or palette colors. Chevron and meter motion is skipped when the reader prefers reduced motion. Selection keys are getRowId values, so changing the group-by column keeps the checked rows."
     }
   ]
 }
