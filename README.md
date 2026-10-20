@@ -324,7 +324,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`282` items are in `registry.json` on this branch: `226` components, `45` blocks, `5` hooks, and `6` libraries. A name links to its source file.
+`283` items are in `registry.json` on this branch: `227` components, `45` blocks, `5` hooks, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -414,6 +414,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`language-pair`](registry/ui/language-pair.tsx) · ui — From and to language pickers with a swap. Install: `npx shadcn@latest add @retana/language-pair`.
 - [`install-command`](registry/ui/install-command.tsx) · ui — Package-manager tabs that rewrite one install command and copy it. Install: `npx shadcn@latest add @retana/install-command`.
 - [`demo-collage`](registry/blocks/demo-collage.tsx) · block — A grid of live mini demos that render when they scroll into view. Install: `npx shadcn@latest add @retana/demo-collage`.
+- [`agent-tree`](registry/ui/agent-tree.tsx) · ui — A controlled tree of agents: who launched whom, with live status, cost, orthogonal edges, and a non-destructive retry. Install: `npx shadcn@latest add @retana/agent-tree`.
 
 ### Forms
 

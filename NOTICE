@@ -229,6 +229,12 @@ These pieces are a clean-room reimplementation of the observed arrangement
 only. No Affect source, sample data, icons, assets, or internal strings
 were copied. Colors come from the host shadcn tokens.
 
+agent-tree is a separate clean-room reimplementation of the observed
+agent-tree arrangement (who launched whom), inspired by a public Flo / Affect
+UI preview. No source, sample data, icons, assets, or internal strings were
+copied. Status color uses the host semantic tokens. The demos use an original
+lighthouse-bulletin scenario.
+
 adaptive-table is a clean-room reimplementation from a behavior description
 only. No names, icons, or rows from that reference were copied. Columns drop,
 fold, and stretch to the container width.
