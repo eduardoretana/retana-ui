@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-pituitary",
+  "title": "Pituitary",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The pituitary gland in its setting: the hypothalamus above it, the optic chiasm, its portal blood supply, the cavernous sinus and the sphenoid bone. 19 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-pituitary.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Built in this repository by scripts/models/build.ts from BodyParts3D 4.3.\n// The GLB is served from organui.com; see attribution.source.\nconst framed = [\n  \"pituitary-gland\",\n  \"hypothalamus\",\n  \"tuber-cinereum\",\n  \"mammillary-bodies\",\n  \"optic-chiasm\",\n  \"right-optic-nerve\",\n  \"left-optic-nerve\",\n  \"right-optic-tract\",\n  \"left-optic-tract\",\n  \"right-cavernous-sinus\",\n]\n\nexport const pituitaryModel: OrganModel = {\n  name: \"Pituitary gland\",\n  src: \"https://organui.com/models/pituitary.glb\",\n  bytes: 1002364,\n  defaultView: \"Left lateral\",\n  views: [\n    {\n      name: \"Left lateral\",\n      direction: [1, 0, 0],\n      structureIds: framed,\n    },\n    {\n      name: \"Anterior\",\n      direction: [0, 0, 1],\n      structureIds: framed,\n    },\n    {\n      name: \"Inferior\",\n      direction: [0, -1, 0],\n      structureIds: framed,\n    },\n  ],\n  hiddenIds: [\"sphenoid-bone\"],\n  structures: [\n    {\n      id: \"pituitary-gland\",\n      label: \"Pituitary gland\",\n      group: \"Pituitary gland\",\n      tone: \"chart-1\", shade: 0.11,\n      description:\n        \"A pea-sized gland hanging from the base of the brain on a thin stalk. Its front lobe makes hormones that run the thyroid, adrenals, growth and fertility; its back lobe releases hormones made in the hypothalamus.\",\n    },\n    {\n      id: \"hypothalamus\",\n      label: \"Hypothalamus\",\n      group: \"Hypothalamus\",\n      tone: \"chart-2\", shade: 0.11,\n      description:\n        \"The floor and lower walls of the third ventricle. It senses the body's state and controls the pituitary through nerve fibres and a private blood supply.\",\n    },\n    {\n      id: \"tuber-cinereum\",\n      label: \"Tuber cinereum\",\n      group: \"Hypothalamus\",\n      tone: \"chart-2\", shade: 0.05,\n      description:\n        \"The grey bulge of the hypothalamus between the optic chiasm and the mammillary bodies. The pituitary stalk leaves from its centre.\",\n    },\n    {\n      id: \"mammillary-bodies\",\n      label: \"Mammillary bodies\",\n      group: \"Hypothalamus\",\n      tone: \"chart-2\", shade: 0.01,\n      description:\n        \"A pair of round bumps behind the tuber cinereum. They relay memory signals from the hippocampus toward the thalamus.\",\n    },\n    {\n      id: \"supraoptic-nuclei\",\n      label: \"Supraoptic nuclei\",\n      group: \"Hypothalamus\",\n      tone: \"chart-2\", shade: 0.1,\n      description:\n        \"Cell clusters just above the optic tracts that make antidiuretic hormone. Their fibres run down the stalk to the back lobe, which releases it.\",\n    },\n    {\n      id: \"paraventricular-nuclei\",\n      label: \"Paraventricular nuclei\",\n      group: \"Hypothalamus\",\n      tone: \"chart-2\", shade: 0.05,\n      description:\n        \"Cell clusters in the wall of the third ventricle that make oxytocin and signal the pituitary to drive the stress response.\",\n    },\n    {\n      id: \"optic-chiasm\",\n      label: \"Optic chiasm\",\n      group: \"Visual pathway\",\n      tone: \"chart-2\", shade: 0.16,\n      description:\n        \"Where the optic nerves meet and half their fibres cross, just in front of and above the pituitary stalk. A growing pituitary tumour presses on it first, narrowing side vision.\",\n    },\n    {\n      id: \"right-optic-nerve\",\n      label: \"Right optic nerve\",\n      group: \"Visual pathway\",\n      tone: \"chart-2\", shade: 0.11,\n      description:\n        \"Carries signals from the right eye back through the optic canal to the chiasm.\",\n    },\n    {\n      id: \"left-optic-nerve\",\n      label: \"Left optic nerve\",\n      group: \"Visual pathway\",\n      tone: \"chart-2\", shade: 0.08,\n      description:\n        \"Carries signals from the left eye back through the optic canal to the chiasm.\",\n    },\n    {\n      id: \"right-optic-tract\",\n      label: \"Right optic tract\",\n      group: \"Visual pathway\",\n      tone: \"chart-2\", shade: 0.07,\n      description:\n        \"Continues from the chiasm around the midbrain toward the thalamus, carrying the left half of what both eyes see.\",\n    },\n    {\n      id: \"left-optic-tract\",\n      label: \"Left optic tract\",\n      group: \"Visual pathway\",\n      tone: \"chart-2\", shade: 0.04,\n      description:\n        \"Continues from the chiasm around the midbrain, carrying the right half of what both eyes see.\",\n    },\n    {\n      id: \"hypophyseal-portal-veins\",\n      label: \"Hypophyseal portal veins\",\n      group: \"Blood supply\",\n      tone: \"chart-4\", shade: 0.08,\n      description:\n        \"Small veins that carry releasing hormones from the hypothalamus down the stalk straight to the front lobe, before they reach the rest of the body.\",\n    },\n    {\n      id: \"right-superior-hypophyseal-artery\",\n      label: \"Right superior hypophyseal artery\",\n      group: \"Blood supply\",\n      tone: \"chart-1\", shade: 0.06,\n      description:\n        \"A branch of the internal carotid artery that feeds the stalk and the start of the portal system. The model includes the right one only.\",\n    },\n    {\n      id: \"right-inferior-hypophyseal-artery\",\n      label: \"Right inferior hypophyseal artery\",\n      group: \"Blood supply\",\n      tone: \"chart-1\", shade: 0.01,\n      description:\n        \"A branch of the internal carotid artery in the cavernous sinus that mainly feeds the back lobe. The model includes the right one only.\",\n    },\n    {\n      id: \"right-internal-carotid-artery\",\n      label: \"Right internal carotid artery\",\n      group: \"Blood supply\",\n      tone: \"chart-1\", shade: -0.03,\n      description:\n        \"The main artery to the front of the brain. It climbs through the skull base and curves through the cavernous sinus beside the gland.\",\n    },\n    {\n      id: \"right-cavernous-sinus\",\n      label: \"Right cavernous sinus\",\n      group: \"Venous sinuses\",\n      tone: \"chart-4\", shade: 0.05,\n      description:\n        \"A venous space on the side of the sella turcica that drains the gland. The internal carotid artery and the nerves to the eye muscles pass through it.\",\n    },\n    {\n      id: \"anterior-intercavernous-sinus\",\n      label: \"Anterior intercavernous sinus\",\n      group: \"Venous sinuses\",\n      tone: \"chart-4\", shade: 0.1,\n      description:\n        \"Links the two cavernous sinuses across the front of the gland.\",\n    },\n    {\n      id: \"posterior-intercavernous-sinus\",\n      label: \"Posterior intercavernous sinus\",\n      group: \"Venous sinuses\",\n      tone: \"chart-4\", shade: 0.01,\n      description: \"Links the two cavernous sinuses behind the gland.\",\n    },\n    {\n      id: \"sphenoid-bone\",\n      label: \"Sphenoid bone\",\n      group: \"Skull base\",\n      tone: \"chart-2\", shade: 0.24,\n      description:\n        \"The bone across the middle of the skull base. The pituitary sits in the sella turcica, a saddle-shaped hollow on its upper surface, which is why surgeons often reach it through the nose and sphenoid sinus.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"BodyParts3D / Anatomography, © The Database Center for Life Science. CC BY-SA 2.1 Japan. Adapted by OrganUI.\",\n    license: \"CC BY-SA 2.1 JP\",\n    licenseUrl: \"https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en\",\n    source:\n      \"https://github.com/organui/organui/blob/master/apps/web/public/models/pituitary.ATTRIBUTION.md\",\n  },\n}\n\nexport type PituitaryProps = Omit<OrganViewerProps, \"model\">\n\nexport function Pituitary(props: PituitaryProps) {\n  return <OrganViewer model={pituitaryModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-pituitary.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Hipófisis",
+    "descriptionEs": "Hipófisis en 3D: 19 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+    "preview": "app/examples/organ-pituitary/preview.tsx",
+    "previewHref": "/examples/organ-pituitary",
+    "examples": [
+      {
+        "title": "Hipófisis",
+        "href": "/examples/organ-pituitary",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Pituitary selectedId={id} onSelectionChange={setId} />  // datos: pituitaryModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "pituitaryModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "endocrine"
+  ],
+  "type": "registry:component"
+}
