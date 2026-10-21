@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-skin",
+  "title": "Skin",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The skin from the OrganUI skin explorer: 13 selectable structures and 3 named views. Model licensed CC0 1.0.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-skin.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Generated from organui/skin-3d at 0e29b30. The GLB stays in that\n// repository under its own licence; see attribution.source.\nexport const skinModel: OrganModel = {\n  name: \"Skin\",\n  src: \"https://cdn.jsdelivr.net/gh/organui/skin-3d@0e29b3087641e269183f1ecef7a997e412b584fb/public/models/skin.glb\",\n  bytes: 3537896,\n  defaultView: \"Oblique\",\n  views: [\n    {\n      name: \"Oblique\",\n      direction: [0.55, 0.55, 1],\n    },\n    {\n      name: \"Cross-section\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Surface\",\n      direction: [0, 1, 0.7],\n    },\n  ],\n  structures: [\n    {\n      id: \"epidermis\",\n      label: \"Epidermis\",\n      group: \"Skin layers\",\n      tone: \"chart-1\", shade: 0.15,\n      description:\n        \"The thin outer layer of the skin. It renews itself constantly and forms a barrier against water loss and infection.\",\n    },\n    {\n      id: \"papillary-dermis\",\n      label: \"Papillary dermis\",\n      group: \"Skin layers\",\n      tone: \"chart-1\", shade: 0.22,\n      description:\n        \"The thin upper part of the dermis. Its finger-like papillae interlock with the epidermis and carry capillary loops close to the surface.\",\n    },\n    {\n      id: \"reticular-dermis\",\n      label: \"Reticular dermis\",\n      group: \"Skin layers\",\n      tone: \"chart-1\", shade: 0.14,\n      description:\n        \"The thick, dense lower part of the dermis. Its collagen and elastic fibres give skin strength and stretch, and it houses hair follicles and glands.\",\n    },\n    {\n      id: \"hypodermis\",\n      label: \"Hypodermis\",\n      group: \"Skin layers\",\n      tone: \"chart-2\", shade: 0.21,\n      description:\n        \"The subcutaneous layer beneath the dermis. Mostly fat, it insulates, cushions and anchors the skin to the tissue below.\",\n    },\n    {\n      id: \"hair-shaft\",\n      label: \"Hair shaft\",\n      group: \"Hair and glands\",\n      tone: \"chart-2\", shade: -0.18,\n      description:\n        \"The keratinised strand of hair. It grows from the bulb at the base of the follicle and emerges through the epidermis.\",\n    },\n    {\n      id: \"hair-follicle\",\n      label: \"Hair follicle\",\n      group: \"Hair and glands\",\n      tone: \"chart-1\", shade: 0.04,\n      description:\n        \"A tube of epidermal cells reaching down into the dermis. Its swollen base, the bulb, produces the growing hair.\",\n    },\n    {\n      id: \"sebaceous-gland\",\n      label: \"Sebaceous gland\",\n      group: \"Hair and glands\",\n      tone: \"chart-3\", shade: 0.05,\n      description:\n        \"Small lobed glands that open into the hair follicle and release sebum, an oily secretion that softens hair and skin.\",\n    },\n    {\n      id: \"arrector-pili\",\n      label: \"Arrector pili muscle\",\n      group: \"Hair and glands\",\n      tone: \"chart-1\", shade: 0.01,\n      description:\n        \"A small band of smooth muscle from the follicle to the upper dermis. When it contracts the hair stands up, giving goosebumps.\",\n    },\n    {\n      id: \"sweat-gland\",\n      label: \"Eccrine sweat gland\",\n      group: \"Hair and glands\",\n      tone: \"chart-3\", shade: 0.08,\n      description:\n        \"A coiled tube deep in the dermis that secretes sweat. Its duct spirals up through the epidermis to a pore on the surface.\",\n    },\n    {\n      id: \"arteries\",\n      label: \"Cutaneous arteries\",\n      group: \"Vessels and nerves\",\n      tone: \"chart-1\", shade: 0.0,\n      description:\n        \"Arteries form a deep plexus where the dermis meets the hypodermis and a superficial plexus in the upper dermis, which sends capillary loops into the papillae.\",\n    },\n    {\n      id: \"veins\",\n      label: \"Cutaneous veins\",\n      group: \"Vessels and nerves\",\n      tone: \"chart-4\", shade: 0.04,\n      description:\n        \"Veins run beside the arteries in the same two plexuses and carry blood back out of the skin.\",\n    },\n    {\n      id: \"nerve\",\n      label: \"Cutaneous nerve\",\n      group: \"Vessels and nerves\",\n      tone: \"chart-2\", shade: 0.01,\n      description:\n        \"Sensory nerve fibres rise through the hypodermis and dermis, ending freely or in receptors that detect touch, pressure, pain and temperature.\",\n    },\n    {\n      id: \"lamellar-corpuscle\",\n      label: \"Lamellar corpuscle\",\n      group: \"Vessels and nerves\",\n      tone: \"chart-5\", shade: 0.16,\n      description:\n        \"Also called a Pacinian corpuscle. A layered, onion-like receptor deep in the skin that responds to pressure and vibration.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"OrganUI Skin schematic model, dedicated to the public domain under CC0 1.0\",\n    license: \"CC0 1.0\",\n    licenseUrl: \"https://creativecommons.org/publicdomain/zero/1.0/\",\n    source:\n      \"https://github.com/organui/skin-3d/blob/0e29b3087641e269183f1ecef7a997e412b584fb/public/models/ATTRIBUTION.md\",\n  },\n}\n\nexport type SkinProps = Omit<OrganViewerProps, \"model\">\n\nexport function Skin(props: SkinProps) {\n  return <OrganViewer model={skinModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-skin.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Piel",
+    "descriptionEs": "Piel en 3D: 13 estructuras seleccionables. Modelo bajo CC0 1.0; el crédito queda visible.",
+    "preview": "app/examples/organ-skin/preview.tsx",
+    "previewHref": "/examples/organ-skin",
+    "examples": [
+      {
+        "title": "Piel",
+        "href": "/examples/organ-skin",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Skin selectedId={id} onSelectionChange={setId} />  // datos: skinModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "skinModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC0 1.0.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "integumentary"
+  ],
+  "type": "registry:component"
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-spleen",
+  "title": "Spleen",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The spleen from the OrganUI spleen explorer: 9 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-spleen.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Generated from organui/spleen-3d at 5059a95. The GLB stays in that\n// repository under its own licence; see attribution.source.\nexport const spleenModel: OrganModel = {\n  name: \"Spleen\",\n  src: \"https://cdn.jsdelivr.net/gh/organui/spleen-3d@5059a958d2c39547294d39de8ec296fda3888148/public/models/spleen.glb\",\n  bytes: 1695732,\n  defaultView: \"Posterior\",\n  views: [\n    {\n      name: \"Anterior\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Posterior\",\n      direction: [0, 0, -1],\n    },\n    {\n      name: \"Left lateral\",\n      direction: [1, 0, 0],\n    },\n  ],\n  structures: [\n    {\n      id: \"spleen\",\n      label: \"Spleen\",\n      group: \"Spleen\",\n      tone: \"chart-1\", shade: -0.05,\n      description:\n        \"The largest lymphatic organ. It filters blood, removes worn-out red blood cells, and helps the immune system respond to infection.\",\n    },\n    {\n      id: \"splenic-artery\",\n      label: \"Splenic artery\",\n      group: \"Splenic vessels\",\n      tone: \"chart-1\", shade: 0.05,\n      description:\n        \"Carries blood from the celiac trunk along the upper border of the pancreas to the spleen.\",\n    },\n    {\n      id: \"splenic-vein\",\n      label: \"Splenic vein\",\n      group: \"Splenic vessels\",\n      tone: \"chart-4\", shade: 0.03,\n      description:\n        \"Drains blood from the spleen behind the pancreas. It joins the superior mesenteric vein to form the portal vein, which carries it to the liver.\",\n    },\n    {\n      id: \"celiac-trunk\",\n      label: \"Celiac trunk\",\n      group: \"Splenic vessels\",\n      tone: \"chart-1\", shade: 0.1,\n      description:\n        \"A short branch of the abdominal aorta that divides to supply the stomach, liver and spleen. The splenic artery is its largest branch.\",\n    },\n    {\n      id: \"superior-mesenteric-vein\",\n      label: \"Superior mesenteric vein\",\n      group: \"Splenic vessels\",\n      tone: \"chart-4\", shade: 0.11,\n      description:\n        \"Drains the small intestine and joins the splenic vein behind the neck of the pancreas.\",\n    },\n    {\n      id: \"stomach\",\n      label: \"Stomach\",\n      group: \"Neighbouring organs\",\n      tone: \"chart-1\", shade: 0.16,\n      description:\n        \"Lies in front of and to the right of the spleen. The spleen’s front surface rests against the back of the stomach.\",\n    },\n    {\n      id: \"pancreas\",\n      label: \"Pancreas\",\n      group: \"Neighbouring organs\",\n      tone: \"chart-2\", shade: 0.14,\n      description:\n        \"Its tail reaches toward the splenic hilum, and the splenic vessels run along its upper border and back.\",\n    },\n    {\n      id: \"left-kidney\",\n      label: \"Left kidney\",\n      group: \"Neighbouring organs\",\n      tone: \"chart-1\", shade: 0.03,\n      description:\n        \"Sits behind and below the spleen. The spleen’s inner surface touches the upper part of the left kidney.\",\n    },\n    {\n      id: \"left-adrenal\",\n      label: \"Left adrenal gland\",\n      group: \"Neighbouring organs\",\n      tone: \"chart-2\", shade: 0.06,\n      description:\n        \"A small hormone-producing gland on top of the left kidney, close to the spleen’s inner surface.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"BodyParts3D, © The Database Center for Life Science licensed under CC Attribution-Share Alike 2.1 Japan\",\n    license: \"CC BY-SA 2.1 JP\",\n    licenseUrl: \"https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en\",\n    source:\n      \"https://github.com/organui/spleen-3d/blob/5059a958d2c39547294d39de8ec296fda3888148/public/models/ATTRIBUTION.md\",\n  },\n}\n\nexport type SpleenProps = Omit<OrganViewerProps, \"model\">\n\nexport function Spleen(props: SpleenProps) {\n  return <OrganViewer model={spleenModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-spleen.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Bazo",
+    "descriptionEs": "Bazo en 3D: 9 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+    "preview": "app/examples/organ-spleen/preview.tsx",
+    "previewHref": "/examples/organ-spleen",
+    "examples": [
+      {
+        "title": "Bazo",
+        "href": "/examples/organ-spleen",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Spleen selectedId={id} onSelectionChange={setId} />  // datos: spleenModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "spleenModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "lymphatic"
+  ],
+  "type": "registry:component"
+}
