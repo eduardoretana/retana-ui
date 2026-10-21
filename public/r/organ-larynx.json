@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-larynx",
+  "title": "Larynx",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The larynx from the OrganUI larynx explorer: 20 selectable structures and 4 named views. Model licensed CC BY-SA 2.1 JP.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-larynx.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Generated from organui/larynx-3d at aa18162. The GLB stays in that\n// repository under its own licence; see attribution.source.\nexport const larynxModel: OrganModel = {\n  name: \"Larynx\",\n  src: \"https://cdn.jsdelivr.net/gh/organui/larynx-3d@aa18162e23a7617b1db91e5b929f05940fede2b2/public/models/larynx.glb\",\n  bytes: 5257920,\n  defaultView: \"Anterior\",\n  views: [\n    {\n      name: \"Anterior\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Posterior\",\n      direction: [0, 0, -1],\n    },\n    {\n      name: \"Left lateral\",\n      direction: [1, 0, 0],\n    },\n    {\n      name: \"Superior\",\n      direction: [0, 1, 0.35],\n    },\n  ],\n  structures: [\n    {\n      id: \"hyoid-bone\",\n      label: \"Hyoid bone\",\n      group: \"Cartilages and bone\",\n      tone: \"chart-2\", shade: 0.25,\n      description:\n        \"A U-shaped bone above the larynx that touches no other bone. The larynx hangs from it by the thyrohyoid membrane.\",\n    },\n    {\n      id: \"thyroid-cartilage\",\n      label: \"Thyroid cartilage\",\n      group: \"Cartilages and bone\",\n      tone: \"chart-4\", shade: 0.16,\n      description:\n        \"The largest cartilage of the larynx. Its two plates meet at the front to form the laryngeal prominence, the Adam’s apple, and shield the vocal folds.\",\n    },\n    {\n      id: \"cricoid-cartilage\",\n      label: \"Cricoid cartilage\",\n      group: \"Cartilages and bone\",\n      tone: \"chart-4\", shade: 0.1,\n      description:\n        \"The only complete ring of cartilage in the airway, narrow at the front and tall at the back. It sits below the thyroid cartilage and on top of the trachea.\",\n    },\n    {\n      id: \"epiglottis\",\n      label: \"Epiglottis\",\n      group: \"Cartilages and bone\",\n      tone: \"chart-3\", shade: 0.16,\n      description:\n        \"A leaf-shaped flap of elastic cartilage behind the tongue. It tips back over the entrance of the larynx when you swallow.\",\n    },\n    {\n      id: \"arytenoid-cartilages\",\n      label: \"Arytenoid cartilages\",\n      group: \"Cartilages and bone\",\n      tone: \"chart-4\", shade: 0.1,\n      description:\n        \"Two small pyramids on the back of the cricoid. The vocal ligaments attach to them, so their rocking and sliding opens and closes the vocal folds.\",\n    },\n    {\n      id: \"corniculate-cuneiform-cartilages\",\n      label: \"Corniculate and cuneiform cartilages\",\n      group: \"Cartilages and bone\",\n      tone: \"chart-4\", shade: 0.16,\n      description:\n        \"Tiny nodules of cartilage. The corniculates cap the arytenoids and the cuneiforms stiffen the aryepiglottic folds at the entrance of the larynx.\",\n    },\n    {\n      id: \"thyrohyoid-membrane\",\n      label: \"Thyrohyoid membrane\",\n      group: \"Ligaments and membranes\",\n      tone: \"chart-2\", shade: 0.16,\n      description:\n        \"A sheet that hangs the thyroid cartilage from the hyoid bone. It is thickened in the midline and at its back edges into the thyrohyoid ligaments.\",\n    },\n    {\n      id: \"cricothyroid-ligament\",\n      label: \"Median cricothyroid ligament\",\n      group: \"Ligaments and membranes\",\n      tone: \"chart-2\", shade: 0.12,\n      description:\n        \"Bridges the gap at the front between the thyroid and cricoid cartilages. It can be felt just below the Adam’s apple.\",\n    },\n    {\n      id: \"conus-elasticus\",\n      label: \"Conus elasticus\",\n      group: \"Ligaments and membranes\",\n      tone: \"chart-2\", shade: 0.1,\n      description:\n        \"An elastic membrane rising from the cricoid toward the vocal folds. Its free upper edge thickens into the vocal ligaments.\",\n    },\n    {\n      id: \"vocal-ligaments\",\n      label: \"Vocal ligaments\",\n      group: \"Ligaments and membranes\",\n      tone: \"chart-2\", shade: 0.17,\n      description:\n        \"Two bands running from the back of the thyroid cartilage to the arytenoids. With the vocalis muscles they form the vocal folds, which vibrate to make sound.\",\n    },\n    {\n      id: \"epiglottic-ligaments\",\n      label: \"Epiglottic ligaments\",\n      group: \"Ligaments and membranes\",\n      tone: \"chart-2\", shade: 0.14,\n      description:\n        \"Tie the epiglottis forward to the hyoid bone and its stalk down to the inside of the thyroid cartilage.\",\n    },\n    {\n      id: \"cricothyroid-muscle\",\n      label: \"Cricothyroid\",\n      group: \"Muscles\",\n      tone: \"chart-1\", shade: 0.05,\n      description:\n        \"The only intrinsic muscle on the outside of the larynx. It tilts the thyroid cartilage forward, stretching the vocal folds and raising the pitch of the voice.\",\n    },\n    {\n      id: \"posterior-crico-arytenoid\",\n      label: \"Posterior crico-arytenoid\",\n      group: \"Muscles\",\n      tone: \"chart-1\", shade: 0.01,\n      description:\n        \"On the back of the cricoid. It is the only muscle that opens the vocal folds, which keeps the airway open for breathing.\",\n    },\n    {\n      id: \"lateral-crico-arytenoid\",\n      label: \"Lateral crico-arytenoid\",\n      group: \"Muscles\",\n      tone: \"chart-1\", shade: 0.09,\n      description:\n        \"Rotates the arytenoids inward to bring the vocal folds together.\",\n    },\n    {\n      id: \"arytenoid-muscles\",\n      label: \"Arytenoid muscles\",\n      group: \"Muscles\",\n      tone: \"chart-1\", shade: -0.01,\n      description:\n        \"Span the backs of the two arytenoids. They pull the cartilages together to close the back of the glottis.\",\n    },\n    {\n      id: \"thyro-arytenoid\",\n      label: \"Thyro-arytenoid\",\n      group: \"Muscles\",\n      tone: \"chart-1\", shade: 0.14,\n      description:\n        \"Runs beside the vocal folds from the thyroid cartilage to the arytenoids. It shortens and relaxes the folds, lowering the pitch.\",\n    },\n    {\n      id: \"vocalis\",\n      label: \"Vocalis\",\n      group: \"Muscles\",\n      tone: \"chart-1\", shade: 0.18,\n      description:\n        \"The innermost fibres of the thyro-arytenoid, lying along each vocal ligament. They fine-tune the tension of the vocal folds.\",\n    },\n    {\n      id: \"aryepiglottic-muscle\",\n      label: \"Aryepiglottic\",\n      group: \"Muscles\",\n      tone: \"chart-1\", shade: 0.06,\n      description:\n        \"Thin fibres running from the arytenoids up to the sides of the epiglottis. They help narrow the entrance of the larynx when you swallow.\",\n    },\n    {\n      id: \"trachea\",\n      label: \"Trachea\",\n      group: \"Airway\",\n      tone: \"chart-1\", shade: 0.19,\n      description:\n        \"The windpipe. It continues from the cricoid cartilage down into the chest, held open by C-shaped rings of cartilage, and divides into the two main bronchi.\",\n    },\n    {\n      id: \"thyroid-gland\",\n      label: \"Thyroid gland\",\n      group: \"Neighbouring organs\",\n      tone: \"chart-1\", shade: 0.01,\n      description:\n        \"A hormone gland wrapped around the front of the upper trachea. Its isthmus crosses the trachea just below the cricoid cartilage.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"BodyParts3D / Anatomography, © The Database Center for Life Science. CC BY-SA 2.1 Japan. Adapted by OrganUI.\",\n    license: \"CC BY-SA 2.1 JP\",\n    licenseUrl: \"https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en\",\n    source:\n      \"https://github.com/organui/larynx-3d/blob/aa18162e23a7617b1db91e5b929f05940fede2b2/public/models/ATTRIBUTION.md\",\n  },\n}\n\nexport type LarynxProps = Omit<OrganViewerProps, \"model\">\n\nexport function Larynx(props: LarynxProps) {\n  return <OrganViewer model={larynxModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-larynx.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Laringe",
+    "descriptionEs": "Laringe en 3D: 20 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+    "preview": "app/examples/organ-larynx/preview.tsx",
+    "previewHref": "/examples/organ-larynx",
+    "examples": [
+      {
+        "title": "Laringe",
+        "href": "/examples/organ-larynx",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Larynx selectedId={id} onSelectionChange={setId} />  // datos: larynxModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "larynxModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "respiratory"
+  ],
+  "type": "registry:component"
+}
