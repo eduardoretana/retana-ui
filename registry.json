@@ -21322,6 +21322,3118 @@
         ]
       },
       "docs": "Inspirado en patrones de Affect UI (preview público); reimplementación clean-room; no código ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Instalar también trae @retana/app-shell."
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "empty",
+        "field",
+        "input"
+      ],
+      "categories": [
+        "salud",
+        "anatomy"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "name": "anatomy-tree",
+      "type": "registry:ui",
+      "title": "Anatomy tree",
+      "description": "Search, select and control visibility in hierarchical anatomy data.",
+      "files": [
+        {
+          "path": "registry/ui/anatomy-tree.tsx",
+          "type": "registry:component",
+          "target": "@ui/anatomy-tree.tsx"
+        },
+        {
+          "path": "registry/lib/clinical-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/clinical-tone.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Árbol anatómico",
+        "descriptionEs": "Busca, selecciona y oculta estructuras en una jerarquía anatómica, con teclado completo.",
+        "preview": "app/examples/anatomy-tree/preview.tsx",
+        "previewHref": "/examples/anatomy-tree",
+        "examples": [
+          {
+            "title": "Árbol anatómico",
+            "href": "/examples/anatomy-tree",
+            "description": "Demo con datos ficticios."
+          }
+        ],
+        "usage": "<AnatomyTree data={nodes} selectedId={id} onSelectionChange={setId} visibility={v} onVisibilityChange={setV} />",
+        "api": [
+          {
+            "name": "data",
+            "type": "AnatomyNode[]",
+            "description": "Grupos y hojas; color acepta un token CSS."
+          },
+          {
+            "name": "selectedId / onSelectionChange",
+            "type": "string | null",
+            "description": "Selección controlada."
+          },
+          {
+            "name": "visibility / onVisibilityChange",
+            "type": "Record<string, boolean>",
+            "description": "IDs ausentes = visibles."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "card"
+      ],
+      "categories": [
+        "salud",
+        "clinical"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "name": "vital-signs",
+      "type": "registry:ui",
+      "title": "Vital signs",
+      "description": "Heart rate, blood pressure, SpO₂ and temperature, each flagged against a configurable normal range.",
+      "files": [
+        {
+          "path": "registry/ui/vital-signs.tsx",
+          "type": "registry:component",
+          "target": "@ui/vital-signs.tsx"
+        },
+        {
+          "path": "registry/lib/clinical-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/clinical-tone.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Signos vitales",
+        "descriptionEs": "FC, presión, SpO₂ y temperatura, cada uno marcado contra rangos que puedes ajustar.",
+        "preview": "app/examples/vital-signs/preview.tsx",
+        "previewHref": "/examples/vital-signs",
+        "examples": [
+          {
+            "title": "Signos vitales",
+            "href": "/examples/vital-signs",
+            "description": "Demo con datos ficticios."
+          }
+        ],
+        "usage": "<VitalSigns readings={{ heartRate: 72, systolic: 118, diastolic: 76, spo2: 98, temperature: 36.8 }} />",
+        "api": [
+          {
+            "name": "readings",
+            "type": "VitalReadings",
+            "description": "Valores medidos; faltantes se muestran como sin dato."
+          },
+          {
+            "name": "ranges",
+            "type": "Partial<VitalRanges>",
+            "description": "Sobrescribe rangos adultos por defecto."
+          },
+          {
+            "name": "temperatureUnit",
+            "type": "\"celsius\" | \"fahrenheit\"",
+            "description": "Unidad de temperatura."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "salud",
+        "clinical"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "name": "ecg-trace",
+      "type": "registry:ui",
+      "title": "ECG trace",
+      "description": "A recorded or live ECG rhythm strip on standard paper, with labelled P, QRS and T waves. Not for diagnostic use.",
+      "files": [
+        {
+          "path": "registry/ui/ecg-trace.tsx",
+          "type": "registry:component",
+          "target": "@ui/ecg-trace.tsx"
+        },
+        {
+          "path": "registry/lib/clinical-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/clinical-tone.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Trazo de ECG",
+        "descriptionEs": "Tira de ritmo grabada o en vivo sobre papel estándar, con pausa y detección de ondas.",
+        "preview": "app/examples/ecg-trace/preview.tsx",
+        "previewHref": "/examples/ecg-trace",
+        "examples": [
+          {
+            "title": "Trazo de ECG",
+            "href": "/examples/ecg-trace",
+            "description": "Demo con datos ficticios."
+          }
+        ],
+        "usage": "<EcgTrace samples={leadII} sampleRate={500} lead=\"II\" />",
+        "api": [
+          {
+            "name": "samples",
+            "type": "number[]",
+            "description": "Milivoltios grabados."
+          },
+          {
+            "name": "stream",
+            "type": "EcgStream",
+            "description": "Fuente en vivo (WebSocket, BLE)."
+          },
+          {
+            "name": "sampleRate / duration",
+            "type": "number",
+            "description": "Hz y segundos visibles."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "salud",
+        "clinical"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "name": "body-map",
+      "type": "registry:ui",
+      "title": "Body map",
+      "description": "Pick regions on a front and back body outline to record where pain or symptoms are.",
+      "files": [
+        {
+          "path": "registry/ui/body-map.tsx",
+          "type": "registry:component",
+          "target": "@ui/body-map.tsx"
+        },
+        {
+          "path": "registry/lib/clinical-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/clinical-tone.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Mapa corporal",
+        "descriptionEs": "Elige regiones en silueta frontal y posterior para registrar dónde duele. Funciona dentro de un form.",
+        "preview": "app/examples/body-map/preview.tsx",
+        "previewHref": "/examples/body-map",
+        "examples": [
+          {
+            "title": "Mapa corporal",
+            "href": "/examples/body-map",
+            "description": "Demo con datos ficticios."
+          }
+        ],
+        "usage": "<BodyMap label=\"¿Dónde duele?\" value={regiones} onValueChange={setRegiones} name=\"regiones\" />",
+        "api": [
+          {
+            "name": "value / onValueChange",
+            "type": "string[]",
+            "description": "IDs de región seleccionados."
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "description": "Campo oculto para envío de formularios."
+          },
+          {
+            "name": "regions",
+            "type": "BodyMapRegion[]",
+            "description": "Regiones propias en lugar de las incluidas."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [
+        "three@0.186.0",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "alert",
+        "button",
+        "progress",
+        "select",
+        "tooltip"
+      ],
+      "categories": [
+        "salud",
+        "anatomy"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "name": "organ-viewer",
+      "type": "registry:ui",
+      "title": "Organ viewer",
+      "description": "Rotate, frame and select the structures of a GLB anatomy model, with ghosting and named views.",
+      "files": [
+        {
+          "path": "registry/ui/organ-viewer.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-viewer.tsx"
+        },
+        {
+          "path": "registry/lib/clinical-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/clinical-tone.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Visor de órganos 3D",
+        "descriptionEs": "Rota, encuadra y selecciona estructuras de un modelo anatómico GLB con three.js. Colores desde tokens del tema.",
+        "preview": "app/examples/organ-viewer/preview.tsx",
+        "previewHref": "/examples/organ-viewer",
+        "examples": [
+          {
+            "title": "Visor de órganos 3D",
+            "href": "/examples/organ-viewer",
+            "description": "Demo con datos ficticios."
+          }
+        ],
+        "usage": "<OrganViewer model={heartModel} selectedId={id} onSelectionChange={setId} />",
+        "api": [
+          {
+            "name": "model",
+            "type": "OrganModel",
+            "description": "Estructuras con tone/shade (tokens), vistas y crédito."
+          },
+          {
+            "name": "selectedId / visibility",
+            "type": "string | Record",
+            "description": "Selección y visibilidad controladas."
+          },
+          {
+            "name": "attribution",
+            "type": "boolean",
+            "description": "Muestra el crédito del modelo. Mantenlo salvo que acredites en otro lugar."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [
+        "three@0.186.0",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "alert",
+        "button",
+        "select",
+        "tooltip"
+      ],
+      "categories": [
+        "salud",
+        "molecular"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "name": "molecule-viewer",
+      "type": "registry:ui",
+      "title": "Molecule viewer",
+      "description": "Load a PDB or mmCIF structure and explore it as a cartoon, ball and stick or spacefill model, with residue selection and a sequence strip.",
+      "files": [
+        {
+          "path": "registry/ui/molecule-viewer.tsx",
+          "type": "registry:component",
+          "target": "@ui/molecule-viewer.tsx"
+        },
+        {
+          "path": "registry/lib/clinical-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/clinical-tone.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Visor de moléculas",
+        "descriptionEs": "Carga una estructura PDB o mmCIF y explórala como cartoon, bolas y varillas o esferas.",
+        "preview": "app/examples/molecule-viewer/preview.tsx",
+        "previewHref": "/examples/molecule-viewer",
+        "examples": [
+          {
+            "title": "Visor de moléculas",
+            "href": "/examples/molecule-viewer",
+            "description": "Demo con datos ficticios."
+          }
+        ],
+        "usage": "<MoleculeViewer src=\"https://files.rcsb.org/download/1CRN.cif\" />",
+        "api": [
+          {
+            "name": "src / data",
+            "type": "string",
+            "description": "URL o texto del archivo."
+          },
+          {
+            "name": "representation / colorScheme",
+            "type": "enum",
+            "description": "Estilo y esquema de color (mapeado a tokens)."
+          },
+          {
+            "name": "selectedId",
+            "type": "string | null",
+            "description": "Residuo seleccionado."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [
+        "three@0.186.0",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "alert",
+        "button",
+        "tooltip"
+      ],
+      "categories": [
+        "salud",
+        "molecular"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "name": "dna-helix",
+      "type": "registry:ui",
+      "title": "DNA helix",
+      "description": "A procedural B-DNA double helix built from a sequence, with selectable base pairs and both strands listed below.",
+      "files": [
+        {
+          "path": "registry/ui/dna-helix.tsx",
+          "type": "registry:component",
+          "target": "@ui/dna-helix.tsx"
+        },
+        {
+          "path": "registry/lib/clinical-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/clinical-tone.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Doble hélice de ADN",
+        "descriptionEs": "Hélice B-DNA procedural desde una secuencia, con selección de pares de bases.",
+        "preview": "app/examples/dna-helix/preview.tsx",
+        "previewHref": "/examples/dna-helix",
+        "examples": [
+          {
+            "title": "Doble hélice de ADN",
+            "href": "/examples/dna-helix",
+            "description": "Demo con datos ficticios."
+          }
+        ],
+        "usage": "<DnaHelix sequence=\"ATGCGTACCTGA\" selectedIndex={i} onSelectionChange={setI} />",
+        "api": [
+          {
+            "name": "sequence",
+            "type": "string",
+            "description": "Bases A, T, G, C."
+          },
+          {
+            "name": "selectedIndex",
+            "type": "number | null",
+            "description": "Par seleccionado."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "table"
+      ],
+      "categories": [
+        "salud",
+        "clinical"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "name": "lab-results",
+      "type": "registry:ui",
+      "title": "Lab results table",
+      "description": "Lab values flagged against the reference ranges you pass, with text and icon flags and a trend sparkline.",
+      "files": [
+        {
+          "path": "registry/ui/lab-results.tsx",
+          "type": "registry:component",
+          "target": "@ui/lab-results.tsx"
+        },
+        {
+          "path": "registry/lib/clinical-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/clinical-tone.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Resultados de laboratorio",
+        "descriptionEs": "Valores marcados contra rangos de referencia, con tendencia y sparkline histórico.",
+        "preview": "app/examples/lab-results/preview.tsx",
+        "previewHref": "/examples/lab-results",
+        "examples": [
+          {
+            "title": "Resultados de laboratorio",
+            "href": "/examples/lab-results",
+            "description": "Demo con datos ficticios."
+          }
+        ],
+        "usage": "<LabResultsTable results={resultados} caption=\"Panel\" />",
+        "api": [
+          {
+            "name": "results",
+            "type": "LabResult[]",
+            "description": "Valor, unidad, rango e historial."
+          },
+          {
+            "name": "caption",
+            "type": "string",
+            "description": "Título accesible de la tabla."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "empty"
+      ],
+      "categories": [
+        "salud",
+        "clinical"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "name": "growth-chart",
+      "type": "registry:ui",
+      "title": "Growth chart",
+      "description": "Child growth percentile curves for weight, length/height and head circumference from reference tables you supply, with plotted measurements, percentiles and z-scores.",
+      "files": [
+        {
+          "path": "registry/ui/growth-chart.tsx",
+          "type": "registry:component",
+          "target": "@ui/growth-chart.tsx"
+        },
+        {
+          "path": "registry/lib/clinical-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/clinical-tone.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Curva de crecimiento",
+        "descriptionEs": "Percentiles de peso, talla y perímetro cefálico. Tú provees y licencias las tablas (OMS/CDC).",
+        "preview": "app/examples/growth-chart/preview.tsx",
+        "previewHref": "/examples/growth-chart",
+        "examples": [
+          {
+            "title": "Curva de crecimiento",
+            "href": "/examples/growth-chart",
+            "description": "Demo con datos ficticios."
+          }
+        ],
+        "usage": "<GrowthChart standards={tablas} measure=\"weight\" sex=\"female\" measurements={visitas} />",
+        "api": [
+          {
+            "name": "standards",
+            "type": "GrowthStandards",
+            "description": "Tablas LMS que tú hospedas."
+          },
+          {
+            "name": "measure / sex",
+            "type": "enum",
+            "description": "Medida y sexo."
+          },
+          {
+            "name": "measurements",
+            "type": "GrowthMeasurement[]",
+            "description": "Visitas en meses y valor."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "alert",
+        "button",
+        "card",
+        "empty"
+      ],
+      "categories": [
+        "salud",
+        "clinical"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "name": "medication-schedule",
+      "type": "registry:ui",
+      "title": "Medication schedule",
+      "description": "A daily dosing timeline with dose tracking and interaction warnings from data you provide.",
+      "files": [
+        {
+          "path": "registry/ui/medication-schedule.tsx",
+          "type": "registry:component",
+          "target": "@ui/medication-schedule.tsx"
+        },
+        {
+          "path": "registry/lib/clinical-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/clinical-tone.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Horario de medicamentos",
+        "descriptionEs": "Línea de tiempo diaria de tomas con registro y avisos de interacción que tú provees.",
+        "preview": "app/examples/medication-schedule/preview.tsx",
+        "previewHref": "/examples/medication-schedule",
+        "examples": [
+          {
+            "title": "Horario de medicamentos",
+            "href": "/examples/medication-schedule",
+            "description": "Demo con datos ficticios."
+          }
+        ],
+        "usage": "<MedicationSchedule medications={meds} date={fecha} doseStatus={estado} onDoseStatusChange={setEstado} />",
+        "api": [
+          {
+            "name": "medications",
+            "type": "Medication[]",
+            "description": "Nombre, dosis y horarios."
+          },
+          {
+            "name": "interactions",
+            "type": "Interaction[]",
+            "description": "De tu propia fuente; no se incluye ninguna."
+          },
+          {
+            "name": "doseStatus",
+            "type": "Record<string, DoseStatus>",
+            "description": "Tomada, omitida o pendiente."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "salud",
+        "clinical"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "name": "dermatome-map",
+      "type": "registry:ui",
+      "title": "Dermatome map",
+      "description": "Front and back body map of the skin each spinal nerve supplies, C2 to S4-5, with ISNCSCI key sensory points.",
+      "files": [
+        {
+          "path": "registry/ui/dermatome-map.tsx",
+          "type": "registry:component",
+          "target": "@ui/dermatome-map.tsx"
+        },
+        {
+          "path": "registry/lib/clinical-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/clinical-tone.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Mapa de dermatomas",
+        "descriptionEs": "Mapa frontal y posterior de la piel que inerva cada nervio espinal; ideal para exploración sensitiva.",
+        "preview": "app/examples/dermatome-map/preview.tsx",
+        "previewHref": "/examples/dermatome-map",
+        "examples": [
+          {
+            "title": "Mapa de dermatomas",
+            "href": "/examples/dermatome-map",
+            "description": "Demo con datos ficticios."
+          }
+        ],
+        "usage": "<DermatomeMap selectedId={id} onSelectionChange={setId} />",
+        "api": [
+          {
+            "name": "selectedId / onSelectionChange",
+            "type": "DermatomeId | null",
+            "description": "Dermatoma seleccionado (C2–S5)."
+          },
+          {
+            "name": "fill",
+            "type": "(id) => string",
+            "description": "Relleno por nivel; por defecto tokens chart."
+          },
+          {
+            "name": "views",
+            "type": "(\"front\" | \"back\")[]",
+            "description": "Vistas a mostrar."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "alert",
+        "button",
+        "progress",
+        "select",
+        "slider",
+        "toggle",
+        "tooltip"
+      ],
+      "categories": [
+        "salud",
+        "imaging"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "name": "image-viewer",
+      "type": "registry:ui",
+      "title": "Medical image viewer",
+      "description": "Scroll through CT or MRI slices with window and level, zoom and pan, and read DICOM files in the browser.",
+      "files": [
+        {
+          "path": "registry/ui/image-viewer.tsx",
+          "type": "registry:component",
+          "target": "@ui/image-viewer.tsx"
+        },
+        {
+          "path": "registry/lib/clinical-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/clinical-tone.ts"
+        },
+        {
+          "path": "registry/lib/image-viewer-dicom.ts",
+          "type": "registry:lib",
+          "target": "@lib/image-viewer-dicom.ts"
+        },
+        {
+          "path": "registry/lib/image-viewer-head-phantom.ts",
+          "type": "registry:lib",
+          "target": "@lib/image-viewer-head-phantom.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Visor de imágenes médicas",
+        "descriptionEs": "Recorre cortes de TC o RM con ventana/nivel, zoom y desplazamiento. Incluye lector DICOM y fantoma de prueba.",
+        "preview": "app/examples/image-viewer/preview.tsx",
+        "previewHref": "/examples/image-viewer",
+        "examples": [
+          {
+            "title": "Visor de imágenes médicas",
+            "href": "/examples/image-viewer",
+            "description": "Demo con datos ficticios."
+          }
+        ],
+        "usage": "<ImageViewer {...serie} presets={ctWindowPresets} slice={i} onSliceChange={setI} />",
+        "api": [
+          {
+            "name": "slices",
+            "type": "ImageSlice[]",
+            "description": "Cortes con píxeles crudos."
+          },
+          {
+            "name": "window / presets",
+            "type": "ImageWindow",
+            "description": "Ventana y nivel; presets de TC."
+          },
+          {
+            "name": "parseDicom / dicomSeries",
+            "type": "lib",
+            "description": "Lector DICOM sin dependencias."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "endocrine"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-adrenals",
+      "type": "registry:component",
+      "title": "Adrenals",
+      "description": "The adrenals from the OrganUI adrenals explorer: 12 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-adrenals.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-adrenals.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Glándulas suprarrenales",
+        "descriptionEs": "Glándulas suprarrenales en 3D: 12 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-adrenals/preview.tsx",
+        "previewHref": "/examples/organ-adrenals",
+        "examples": [
+          {
+            "title": "Glándulas suprarrenales",
+            "href": "/examples/organ-adrenals",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Adrenals selectedId={id} onSelectionChange={setId} />  // datos: adrenalsModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "adrenalsModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "digestive"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-appendix",
+      "type": "registry:component",
+      "title": "Appendix",
+      "description": "The vermiform appendix with the cecum, terminal ileum, iliac vessels and the muscles behind it: 7 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-appendix.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-appendix.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Apéndice",
+        "descriptionEs": "Apéndice en 3D: 7 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-appendix/preview.tsx",
+        "previewHref": "/examples/organ-appendix",
+        "examples": [
+          {
+            "title": "Apéndice",
+            "href": "/examples/organ-appendix",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Appendix selectedId={id} onSelectionChange={setId} />  // datos: appendixModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "appendixModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "urinary"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-bladder",
+      "type": "registry:component",
+      "title": "Bladder",
+      "description": "The bladder from the OrganUI bladder explorer: 12 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-bladder.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-bladder.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Vejiga",
+        "descriptionEs": "Vejiga en 3D: 12 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-bladder/preview.tsx",
+        "previewHref": "/examples/organ-bladder",
+        "examples": [
+          {
+            "title": "Vejiga",
+            "href": "/examples/organ-bladder",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Bladder selectedId={id} onSelectionChange={setId} />  // datos: bladderModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "bladderModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "nervous"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
+      "name": "organ-brain",
+      "type": "registry:component",
+      "title": "Brain",
+      "description": "The brain from the OrganUI brain explorer: 19 selectable structures and 6 named views. Model licensed CC BY 4.0.",
+      "files": [
+        {
+          "path": "registry/ui/organ-brain.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-brain.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Cerebro",
+        "descriptionEs": "Cerebro en 3D: 19 estructuras seleccionables. Modelo bajo CC BY 4.0; el crédito queda visible.",
+        "preview": "app/examples/organ-brain/preview.tsx",
+        "previewHref": "/examples/organ-brain",
+        "examples": [
+          {
+            "title": "Cerebro",
+            "href": "/examples/organ-brain",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Brain selectedId={id} onSelectionChange={setId} />  // datos: brainModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "brainModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "reproductive"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
+      "name": "organ-breast",
+      "type": "registry:component",
+      "title": "Breast",
+      "description": "Both breasts from the HuBMAP Human Reference Atlas: 16 selectable structures and 3 named views. Model licensed CC BY 4.0.",
+      "files": [
+        {
+          "path": "registry/ui/organ-breast.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-breast.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Mama",
+        "descriptionEs": "Mama en 3D: 16 estructuras seleccionables. Modelo bajo CC BY 4.0; el crédito queda visible.",
+        "preview": "app/examples/organ-breast/preview.tsx",
+        "previewHref": "/examples/organ-breast",
+        "examples": [
+          {
+            "title": "Mama",
+            "href": "/examples/organ-breast",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Breast selectedId={id} onSelectionChange={setId} />  // datos: breastModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "breastModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "cell"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC0 1.0.",
+      "name": "organ-cell",
+      "type": "registry:component",
+      "title": "Cell",
+      "description": "An animal cell with a quarter cut away, from an original OrganUI schematic model: 15 selectable organelles and structures and 4 named views. Model licensed CC0 1.0.",
+      "files": [
+        {
+          "path": "registry/ui/organ-cell.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-cell.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Célula",
+        "descriptionEs": "Célula en 3D: 15 estructuras seleccionables. Modelo bajo CC0 1.0; el crédito queda visible.",
+        "preview": "app/examples/organ-cell/preview.tsx",
+        "previewHref": "/examples/organ-cell",
+        "examples": [
+          {
+            "title": "Célula",
+            "href": "/examples/organ-cell",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Cell selectedId={id} onSelectionChange={setId} />  // datos: cellModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "cellModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "respiratory"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-diaphragm",
+      "type": "registry:component",
+      "title": "Diaphragm",
+      "description": "The diaphragm with the structures that pass through it and the organs above and below: 13 selectable structures and 4 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-diaphragm.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-diaphragm.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Diafragma",
+        "descriptionEs": "Diafragma en 3D: 13 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-diaphragm/preview.tsx",
+        "previewHref": "/examples/organ-diaphragm",
+        "examples": [
+          {
+            "title": "Diafragma",
+            "href": "/examples/organ-diaphragm",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Diaphragm selectedId={id} onSelectionChange={setId} />  // datos: diaphragmModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "diaphragmModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "senses"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
+      "name": "organ-ear",
+      "type": "registry:component",
+      "title": "Ear",
+      "description": "The ear from the OrganUI ear explorer: 16 selectable structures and 3 named views. Model licensed CC BY-SA 4.0.",
+      "files": [
+        {
+          "path": "registry/ui/organ-ear.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-ear.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Oído",
+        "descriptionEs": "Oído en 3D: 16 estructuras seleccionables. Modelo bajo CC BY-SA 4.0; el crédito queda visible.",
+        "preview": "app/examples/organ-ear/preview.tsx",
+        "previewHref": "/examples/organ-ear",
+        "examples": [
+          {
+            "title": "Oído",
+            "href": "/examples/organ-ear",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Ear selectedId={id} onSelectionChange={setId} />  // datos: earModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "earModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "digestive"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-esophagus",
+      "type": "registry:component",
+      "title": "Esophagus",
+      "description": "The esophagus from the OrganUI esophagus explorer: 17 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-esophagus.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-esophagus.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Esófago",
+        "descriptionEs": "Esófago en 3D: 17 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-esophagus/preview.tsx",
+        "previewHref": "/examples/organ-esophagus",
+        "examples": [
+          {
+            "title": "Esófago",
+            "href": "/examples/organ-esophagus",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Esophagus selectedId={id} onSelectionChange={setId} />  // datos: esophagusModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "esophagusModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "senses"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-eye",
+      "type": "registry:component",
+      "title": "Eye",
+      "description": "The eye from the OrganUI eye explorer: 21 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-eye.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-eye.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Ojo",
+        "descriptionEs": "Ojo en 3D: 21 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-eye/preview.tsx",
+        "previewHref": "/examples/organ-eye",
+        "examples": [
+          {
+            "title": "Ojo",
+            "href": "/examples/organ-eye",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Eye selectedId={id} onSelectionChange={setId} />  // datos: eyeModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "eyeModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "digestive"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-gallbladder",
+      "type": "registry:component",
+      "title": "Gallbladder",
+      "description": "The gallbladder from the OrganUI gallbladder explorer: 15 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-gallbladder.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-gallbladder.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Vesícula biliar",
+        "descriptionEs": "Vesícula biliar en 3D: 15 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-gallbladder/preview.tsx",
+        "previewHref": "/examples/organ-gallbladder",
+        "examples": [
+          {
+            "title": "Vesícula biliar",
+            "href": "/examples/organ-gallbladder",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Gallbladder selectedId={id} onSelectionChange={setId} />  // datos: gallbladderModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "gallbladderModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "integumentary"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC0 1.0.",
+      "name": "organ-hair",
+      "type": "registry:component",
+      "title": "Hair",
+      "description": "A hair follicle in a cut-away plug of scalp, from an original OrganUI schematic model: 14 selectable structures and 3 named views. Model licensed CC0 1.0.",
+      "files": [
+        {
+          "path": "registry/ui/organ-hair.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-hair.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Folículo piloso",
+        "descriptionEs": "Folículo piloso en 3D: 14 estructuras seleccionables. Modelo bajo CC0 1.0; el crédito queda visible.",
+        "preview": "app/examples/organ-hair/preview.tsx",
+        "previewHref": "/examples/organ-hair",
+        "examples": [
+          {
+            "title": "Folículo piloso",
+            "href": "/examples/organ-hair",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Hair selectedId={id} onSelectionChange={setId} />  // datos: hairModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "hairModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "cardiovascular"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
+      "name": "organ-heart",
+      "type": "registry:component",
+      "title": "Heart",
+      "description": "The heart from the OrganUI heart explorer: 11 selectable structures and 3 named views. Model licensed CC BY 4.0.",
+      "files": [
+        {
+          "path": "registry/ui/organ-heart.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-heart.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Corazón",
+        "descriptionEs": "Corazón en 3D: 11 estructuras seleccionables. Modelo bajo CC BY 4.0; el crédito queda visible.",
+        "preview": "app/examples/organ-heart/preview.tsx",
+        "previewHref": "/examples/organ-heart",
+        "examples": [
+          {
+            "title": "Corazón",
+            "href": "/examples/organ-heart",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Heart selectedId={id} onSelectionChange={setId} />  // datos: heartModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "heartModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "digestive"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-intestines",
+      "type": "registry:component",
+      "title": "Intestines",
+      "description": "The intestines from the OrganUI intestines explorer: 11 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-intestines.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-intestines.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Intestinos",
+        "descriptionEs": "Intestinos en 3D: 11 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-intestines/preview.tsx",
+        "previewHref": "/examples/organ-intestines",
+        "examples": [
+          {
+            "title": "Intestinos",
+            "href": "/examples/organ-intestines",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Intestines selectedId={id} onSelectionChange={setId} />  // datos: intestinesModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "intestinesModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "musculoskeletal"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
+      "name": "organ-joints",
+      "type": "registry:component",
+      "title": "Joints",
+      "description": "The joints and ligaments of the whole body, from Z-Anatomy: 197 selectable structures and 9 named views. Model licensed CC BY-SA 4.0.",
+      "files": [
+        {
+          "path": "registry/ui/organ-joints.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-joints.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Articulaciones y ligamentos",
+        "descriptionEs": "Articulaciones y ligamentos en 3D: 197 estructuras seleccionables. Modelo bajo CC BY-SA 4.0; el crédito queda visible.",
+        "preview": "app/examples/organ-joints/preview.tsx",
+        "previewHref": "/examples/organ-joints",
+        "examples": [
+          {
+            "title": "Articulaciones y ligamentos",
+            "href": "/examples/organ-joints",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Joints selectedId={id} onSelectionChange={setId} />  // datos: jointsModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "jointsModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "urinary"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
+      "name": "organ-kidneys",
+      "type": "registry:component",
+      "title": "Kidneys",
+      "description": "The kidneys from the OrganUI kidneys explorer: 6 selectable structures and 4 named views. Model licensed CC BY 4.0.",
+      "files": [
+        {
+          "path": "registry/ui/organ-kidneys.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-kidneys.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Riñones",
+        "descriptionEs": "Riñones en 3D: 6 estructuras seleccionables. Modelo bajo CC BY 4.0; el crédito queda visible.",
+        "preview": "app/examples/organ-kidneys/preview.tsx",
+        "previewHref": "/examples/organ-kidneys",
+        "examples": [
+          {
+            "title": "Riñones",
+            "href": "/examples/organ-kidneys",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Kidneys selectedId={id} onSelectionChange={setId} />  // datos: kidneysModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "kidneysModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "respiratory"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-larynx",
+      "type": "registry:component",
+      "title": "Larynx",
+      "description": "The larynx from the OrganUI larynx explorer: 20 selectable structures and 4 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-larynx.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-larynx.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Laringe",
+        "descriptionEs": "Laringe en 3D: 20 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-larynx/preview.tsx",
+        "previewHref": "/examples/organ-larynx",
+        "examples": [
+          {
+            "title": "Laringe",
+            "href": "/examples/organ-larynx",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Larynx selectedId={id} onSelectionChange={setId} />  // datos: larynxModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "larynxModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "digestive"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
+      "name": "organ-liver",
+      "type": "registry:component",
+      "title": "Liver",
+      "description": "The liver from the OrganUI liver explorer: 7 selectable structures and 5 named views. Model licensed CC BY 4.0.",
+      "files": [
+        {
+          "path": "registry/ui/organ-liver.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-liver.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Hígado",
+        "descriptionEs": "Hígado en 3D: 7 estructuras seleccionables. Modelo bajo CC BY 4.0; el crédito queda visible.",
+        "preview": "app/examples/organ-liver/preview.tsx",
+        "previewHref": "/examples/organ-liver",
+        "examples": [
+          {
+            "title": "Hígado",
+            "href": "/examples/organ-liver",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Liver selectedId={id} onSelectionChange={setId} />  // datos: liverModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "liverModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "respiratory"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-lungs",
+      "type": "registry:component",
+      "title": "Lungs",
+      "description": "The lungs from the OrganUI lungs explorer: 20 selectable structures and 4 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-lungs.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-lungs.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Pulmones",
+        "descriptionEs": "Pulmones en 3D: 20 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-lungs/preview.tsx",
+        "previewHref": "/examples/organ-lungs",
+        "examples": [
+          {
+            "title": "Pulmones",
+            "href": "/examples/organ-lungs",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Lungs selectedId={id} onSelectionChange={setId} />  // datos: lungsModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "lungsModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "lymphatic"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
+      "name": "organ-lymph",
+      "type": "registry:component",
+      "title": "Lymph node",
+      "description": "The lymph node from the OrganUI lymph node explorer: 7 selectable structures and 3 named views. Model licensed CC BY 4.0.",
+      "files": [
+        {
+          "path": "registry/ui/organ-lymph.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-lymph.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Ganglio linfático",
+        "descriptionEs": "Ganglio linfático en 3D: 7 estructuras seleccionables. Modelo bajo CC BY 4.0; el crédito queda visible.",
+        "preview": "app/examples/organ-lymph/preview.tsx",
+        "previewHref": "/examples/organ-lymph",
+        "examples": [
+          {
+            "title": "Ganglio linfático",
+            "href": "/examples/organ-lymph",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Lymph selectedId={id} onSelectionChange={setId} />  // datos: lymphModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "lymphModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "musculoskeletal"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-muscles",
+      "type": "registry:component",
+      "title": "Muscles",
+      "description": "The muscles from the OrganUI muscles explorer: 177 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-muscles.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-muscles.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Músculos",
+        "descriptionEs": "Músculos en 3D: 177 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-muscles/preview.tsx",
+        "previewHref": "/examples/organ-muscles",
+        "examples": [
+          {
+            "title": "Músculos",
+            "href": "/examples/organ-muscles",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Muscles selectedId={id} onSelectionChange={setId} />  // datos: musclesModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "musclesModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "integumentary"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC0 1.0.",
+      "name": "organ-nails",
+      "type": "registry:component",
+      "title": "Nails",
+      "description": "A fingertip halved through the nail, from an original OrganUI schematic model: 14 selectable structures and 3 named views. Model licensed CC0 1.0.",
+      "files": [
+        {
+          "path": "registry/ui/organ-nails.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-nails.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Uñas",
+        "descriptionEs": "Uñas en 3D: 14 estructuras seleccionables. Modelo bajo CC0 1.0; el crédito queda visible.",
+        "preview": "app/examples/organ-nails/preview.tsx",
+        "previewHref": "/examples/organ-nails",
+        "examples": [
+          {
+            "title": "Uñas",
+            "href": "/examples/organ-nails",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Nails selectedId={id} onSelectionChange={setId} />  // datos: nailsModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "nailsModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "nervous"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
+      "name": "organ-nerves",
+      "type": "registry:component",
+      "title": "Nerves",
+      "description": "The peripheral nerves of the whole body, from the cranial nerves to the plexuses of the arms and legs: 41 selectable structures and 6 named views. Model licensed CC BY-SA 4.0.",
+      "files": [
+        {
+          "path": "registry/ui/organ-nerves.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-nerves.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Nervios periféricos",
+        "descriptionEs": "Nervios periféricos en 3D: 41 estructuras seleccionables. Modelo bajo CC BY-SA 4.0; el crédito queda visible.",
+        "preview": "app/examples/organ-nerves/preview.tsx",
+        "previewHref": "/examples/organ-nerves",
+        "examples": [
+          {
+            "title": "Nervios periféricos",
+            "href": "/examples/organ-nerves",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Nerves selectedId={id} onSelectionChange={setId} />  // datos: nervesModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "nervesModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "respiratory"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
+      "name": "organ-nose",
+      "type": "registry:component",
+      "title": "Nose",
+      "description": "The nose from the OrganUI nose explorer: 22 selectable structures and 3 named views. Model licensed CC BY-SA 4.0.",
+      "files": [
+        {
+          "path": "registry/ui/organ-nose.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-nose.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Nariz",
+        "descriptionEs": "Nariz en 3D: 22 estructuras seleccionables. Modelo bajo CC BY-SA 4.0; el crédito queda visible.",
+        "preview": "app/examples/organ-nose/preview.tsx",
+        "previewHref": "/examples/organ-nose",
+        "examples": [
+          {
+            "title": "Nariz",
+            "href": "/examples/organ-nose",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Nose selectedId={id} onSelectionChange={setId} />  // datos: noseModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "noseModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "digestive"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-pancreas",
+      "type": "registry:component",
+      "title": "Pancreas",
+      "description": "The pancreas from the OrganUI pancreas explorer: 15 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-pancreas.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-pancreas.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Páncreas",
+        "descriptionEs": "Páncreas en 3D: 15 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-pancreas/preview.tsx",
+        "previewHref": "/examples/organ-pancreas",
+        "examples": [
+          {
+            "title": "Páncreas",
+            "href": "/examples/organ-pancreas",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Pancreas selectedId={id} onSelectionChange={setId} />  // datos: pancreasModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "pancreasModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "endocrine"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-parathyroid",
+      "type": "registry:component",
+      "title": "Parathyroid",
+      "description": "The four parathyroid glands on the back of the thyroid: 9 selectable structures and 5 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-parathyroid.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-parathyroid.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Paratiroides",
+        "descriptionEs": "Paratiroides en 3D: 9 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-parathyroid/preview.tsx",
+        "previewHref": "/examples/organ-parathyroid",
+        "examples": [
+          {
+            "title": "Paratiroides",
+            "href": "/examples/organ-parathyroid",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Parathyroid selectedId={id} onSelectionChange={setId} />  // datos: parathyroidModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "parathyroidModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "respiratory"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-pharynx",
+      "type": "registry:component",
+      "title": "Pharynx",
+      "description": "The pharynx from the OrganUI pharynx explorer: 20 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-pharynx.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-pharynx.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Faringe",
+        "descriptionEs": "Faringe en 3D: 20 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-pharynx/preview.tsx",
+        "previewHref": "/examples/organ-pharynx",
+        "examples": [
+          {
+            "title": "Faringe",
+            "href": "/examples/organ-pharynx",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Pharynx selectedId={id} onSelectionChange={setId} />  // datos: pharynxModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "pharynxModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "endocrine"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-pineal",
+      "type": "registry:component",
+      "title": "Pineal",
+      "description": "The pineal gland and its neighbours deep in the brain: the epithalamus, thalami, midbrain tectum and deep veins. 15 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-pineal.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-pineal.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Glándula pineal",
+        "descriptionEs": "Glándula pineal en 3D: 15 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-pineal/preview.tsx",
+        "previewHref": "/examples/organ-pineal",
+        "examples": [
+          {
+            "title": "Glándula pineal",
+            "href": "/examples/organ-pineal",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Pineal selectedId={id} onSelectionChange={setId} />  // datos: pinealModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "pinealModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "endocrine"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-pituitary",
+      "type": "registry:component",
+      "title": "Pituitary",
+      "description": "The pituitary gland in its setting: the hypothalamus above it, the optic chiasm, its portal blood supply, the cavernous sinus and the sphenoid bone. 19 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-pituitary.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-pituitary.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Hipófisis",
+        "descriptionEs": "Hipófisis en 3D: 19 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-pituitary/preview.tsx",
+        "previewHref": "/examples/organ-pituitary",
+        "examples": [
+          {
+            "title": "Hipófisis",
+            "href": "/examples/organ-pituitary",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Pituitary selectedId={id} onSelectionChange={setId} />  // datos: pituitaryModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "pituitaryModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "reproductive"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-prostate",
+      "type": "registry:component",
+      "title": "Prostate",
+      "description": "The prostate from the OrganUI prostate explorer: 13 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-prostate.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-prostate.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Próstata",
+        "descriptionEs": "Próstata en 3D: 13 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-prostate/preview.tsx",
+        "previewHref": "/examples/organ-prostate",
+        "examples": [
+          {
+            "title": "Próstata",
+            "href": "/examples/organ-prostate",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Prostate selectedId={id} onSelectionChange={setId} />  // datos: prostateModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "prostateModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "digestive"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
+      "name": "organ-salivary-glands",
+      "type": "registry:component",
+      "title": "Salivary glands",
+      "description": "The major salivary glands, from Z-Anatomy: 15 selectable structures and 3 named views. Model licensed CC BY-SA 4.0.",
+      "files": [
+        {
+          "path": "registry/ui/organ-salivary-glands.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-salivary-glands.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Glándulas salivales",
+        "descriptionEs": "Glándulas salivales en 3D: 15 estructuras seleccionables. Modelo bajo CC BY-SA 4.0; el crédito queda visible.",
+        "preview": "app/examples/organ-salivary-glands/preview.tsx",
+        "previewHref": "/examples/organ-salivary-glands",
+        "examples": [
+          {
+            "title": "Glándulas salivales",
+            "href": "/examples/organ-salivary-glands",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<SalivaryGlands selectedId={id} onSelectionChange={setId} />  // datos: salivaryGlandsModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "salivaryGlandsModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "musculoskeletal"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-skeleton",
+      "type": "registry:component",
+      "title": "Skeleton",
+      "description": "The skeleton from the OrganUI skeleton explorer: 242 selectable structures and 8 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-skeleton.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-skeleton.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Esqueleto",
+        "descriptionEs": "Esqueleto en 3D: 242 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-skeleton/preview.tsx",
+        "previewHref": "/examples/organ-skeleton",
+        "examples": [
+          {
+            "title": "Esqueleto",
+            "href": "/examples/organ-skeleton",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Skeleton selectedId={id} onSelectionChange={setId} />  // datos: skeletonModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "skeletonModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "integumentary"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC0 1.0.",
+      "name": "organ-skin",
+      "type": "registry:component",
+      "title": "Skin",
+      "description": "The skin from the OrganUI skin explorer: 13 selectable structures and 3 named views. Model licensed CC0 1.0.",
+      "files": [
+        {
+          "path": "registry/ui/organ-skin.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-skin.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Piel",
+        "descriptionEs": "Piel en 3D: 13 estructuras seleccionables. Modelo bajo CC0 1.0; el crédito queda visible.",
+        "preview": "app/examples/organ-skin/preview.tsx",
+        "previewHref": "/examples/organ-skin",
+        "examples": [
+          {
+            "title": "Piel",
+            "href": "/examples/organ-skin",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Skin selectedId={id} onSelectionChange={setId} />  // datos: skinModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "skinModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "nervous"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-spinal-cord",
+      "type": "registry:component",
+      "title": "Spinal cord",
+      "description": "The spinal cord from the OrganUI spinal cord explorer: 63 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-spinal-cord.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-spinal-cord.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Médula espinal",
+        "descriptionEs": "Médula espinal en 3D: 63 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-spinal-cord/preview.tsx",
+        "previewHref": "/examples/organ-spinal-cord",
+        "examples": [
+          {
+            "title": "Médula espinal",
+            "href": "/examples/organ-spinal-cord",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<SpinalCord selectedId={id} onSelectionChange={setId} />  // datos: spinalCordModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "spinalCordModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "lymphatic"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-spleen",
+      "type": "registry:component",
+      "title": "Spleen",
+      "description": "The spleen from the OrganUI spleen explorer: 9 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-spleen.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-spleen.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Bazo",
+        "descriptionEs": "Bazo en 3D: 9 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-spleen/preview.tsx",
+        "previewHref": "/examples/organ-spleen",
+        "examples": [
+          {
+            "title": "Bazo",
+            "href": "/examples/organ-spleen",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Spleen selectedId={id} onSelectionChange={setId} />  // datos: spleenModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "spleenModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "digestive"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-stomach",
+      "type": "registry:component",
+      "title": "Stomach",
+      "description": "The stomach from the OrganUI stomach explorer: 9 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-stomach.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-stomach.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Estómago",
+        "descriptionEs": "Estómago en 3D: 9 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-stomach/preview.tsx",
+        "previewHref": "/examples/organ-stomach",
+        "examples": [
+          {
+            "title": "Estómago",
+            "href": "/examples/organ-stomach",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Stomach selectedId={id} onSelectionChange={setId} />  // datos: stomachModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "stomachModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "digestive"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-teeth",
+      "type": "registry:component",
+      "title": "Teeth",
+      "description": "The teeth from the OrganUI teeth explorer: 33 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-teeth.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-teeth.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Dientes",
+        "descriptionEs": "Dientes en 3D: 33 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-teeth/preview.tsx",
+        "previewHref": "/examples/organ-teeth",
+        "examples": [
+          {
+            "title": "Dientes",
+            "href": "/examples/organ-teeth",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Teeth selectedId={id} onSelectionChange={setId} />  // datos: teethModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "teethModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "lymphatic"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-thymus",
+      "type": "registry:component",
+      "title": "Thymus",
+      "description": "The thymus from the OrganUI thymus explorer: 13 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-thymus.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-thymus.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Timo",
+        "descriptionEs": "Timo en 3D: 13 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-thymus/preview.tsx",
+        "previewHref": "/examples/organ-thymus",
+        "examples": [
+          {
+            "title": "Timo",
+            "href": "/examples/organ-thymus",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Thymus selectedId={id} onSelectionChange={setId} />  // datos: thymusModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "thymusModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "endocrine"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-thyroid",
+      "type": "registry:component",
+      "title": "Thyroid",
+      "description": "The thyroid from the OrganUI thyroid explorer: 18 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-thyroid.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-thyroid.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tiroides",
+        "descriptionEs": "Tiroides en 3D: 18 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-thyroid/preview.tsx",
+        "previewHref": "/examples/organ-thyroid",
+        "examples": [
+          {
+            "title": "Tiroides",
+            "href": "/examples/organ-thyroid",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Thyroid selectedId={id} onSelectionChange={setId} />  // datos: thyroidModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "thyroidModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "digestive"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-tongue",
+      "type": "registry:component",
+      "title": "Tongue",
+      "description": "The tongue from the OrganUI tongue explorer: 13 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-tongue.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-tongue.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Lengua",
+        "descriptionEs": "Lengua en 3D: 13 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-tongue/preview.tsx",
+        "previewHref": "/examples/organ-tongue",
+        "examples": [
+          {
+            "title": "Lengua",
+            "href": "/examples/organ-tongue",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Tongue selectedId={id} onSelectionChange={setId} />  // datos: tongueModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "tongueModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "reproductive"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
+      "name": "organ-uterus",
+      "type": "registry:component",
+      "title": "Uterus",
+      "description": "The uterus from the OrganUI uterus explorer: 27 selectable structures and 3 named views. Model licensed CC BY 4.0.",
+      "files": [
+        {
+          "path": "registry/ui/organ-uterus.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-uterus.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Útero",
+        "descriptionEs": "Útero en 3D: 27 estructuras seleccionables. Modelo bajo CC BY 4.0; el crédito queda visible.",
+        "preview": "app/examples/organ-uterus/preview.tsx",
+        "previewHref": "/examples/organ-uterus",
+        "examples": [
+          {
+            "title": "Útero",
+            "href": "/examples/organ-uterus",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Uterus selectedId={id} onSelectionChange={setId} />  // datos: uterusModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "uterusModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "cardiovascular"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "name": "organ-vessels",
+      "type": "registry:component",
+      "title": "Vessels",
+      "description": "The vessels from the OrganUI vessels explorer: 51 selectable structures and 6 named views. Model licensed CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/ui/organ-vessels.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-vessels.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Vasos sanguíneos",
+        "descriptionEs": "Vasos sanguíneos en 3D: 51 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+        "preview": "app/examples/organ-vessels/preview.tsx",
+        "previewHref": "/examples/organ-vessels",
+        "examples": [
+          {
+            "title": "Vasos sanguíneos",
+            "href": "/examples/organ-vessels",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Vessels selectedId={id} onSelectionChange={setId} />  // datos: vesselsModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "vesselsModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "organ",
+        "senses"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
+      "name": "organ-vestibular",
+      "type": "registry:component",
+      "title": "Vestibular system",
+      "description": "The inner ear's balance organs: the vestibule and three semicircular canals, with the cochlea and vestibular nerve. 6 selectable structures and 4 named views. Model licensed CC BY-SA 4.0.",
+      "files": [
+        {
+          "path": "registry/ui/organ-vestibular.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-vestibular.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Sistema vestibular",
+        "descriptionEs": "Sistema vestibular en 3D: 6 estructuras seleccionables. Modelo bajo CC BY-SA 4.0; el crédito queda visible.",
+        "preview": "app/examples/organ-vestibular/preview.tsx",
+        "previewHref": "/examples/organ-vestibular",
+        "examples": [
+          {
+            "title": "Sistema vestibular",
+            "href": "/examples/organ-vestibular",
+            "description": "Modelo GLB fijado a commit."
+          }
+        ],
+        "usage": "<Vestibular selectedId={id} onSelectionChange={setId} />  // datos: vestibularModel",
+        "api": [
+          {
+            "name": "...OrganViewerProps",
+            "type": "Omit<OrganViewerProps, \"model\">",
+            "description": "Mismas props que organ-viewer."
+          },
+          {
+            "name": "vestibularModel",
+            "type": "OrganModel",
+            "description": "Datos del modelo para bloques y árbol anatómico."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "sheet",
+        "toggle",
+        "@retana/anatomy-tree",
+        "@retana/organ-heart",
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "bloque"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "name": "organ-explorer",
+      "type": "registry:block",
+      "title": "Explorer 01",
+      "description": "An organ viewer with an anatomy panel that docks beside it on wide screens and opens as a sheet on phones. Heart model licensed CC BY 4.0.",
+      "files": [
+        {
+          "path": "registry/blocks/organ-explorer.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-explorer.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Explorador de órgano",
+        "descriptionEs": "Visor con panel anatómico acoplado o en hoja inferior en móvil.",
+        "preview": "app/examples/organ-explorer/preview.tsx",
+        "previewHref": "/examples/organ-explorer",
+        "examples": [
+          {
+            "title": "Explorador de órgano",
+            "href": "/examples/organ-explorer",
+            "description": "Con el corazón como modelo."
+          }
+        ],
+        "usage": "<OrganExplorer model={heartModel} />",
+        "api": [
+          {
+            "name": "model / models",
+            "type": "OrganModel",
+            "description": "Modelo(s) a explorar."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "sheet",
+        "@retana/anatomy-tree",
+        "@retana/organ-heart",
+        "@retana/organ-viewer"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "bloque"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "name": "anatomy-workspace",
+      "type": "registry:block",
+      "title": "Explorer 02",
+      "description": "A full-height anatomy workspace with the tree in a sidebar and a details card to hide or isolate the selected structure. Heart model licensed CC BY 4.0.",
+      "files": [
+        {
+          "path": "registry/blocks/anatomy-workspace.tsx",
+          "type": "registry:component",
+          "target": "@ui/anatomy-workspace.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Espacio de trabajo anatómico",
+        "descriptionEs": "Área completa con árbol lateral, visor y ficha de la estructura.",
+        "preview": "app/examples/anatomy-workspace/preview.tsx",
+        "previewHref": "/examples/anatomy-workspace",
+        "examples": [
+          {
+            "title": "Espacio de trabajo anatómico",
+            "href": "/examples/anatomy-workspace",
+            "description": "Con el corazón como modelo."
+          }
+        ],
+        "usage": "<AnatomyWorkspace model={heartModel} />",
+        "api": [
+          {
+            "name": "model / models",
+            "type": "OrganModel",
+            "description": "Modelo(s) a explorar."
+          }
+        ]
+      }
+    },
+    {
+      "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "select",
+        "@retana/organ-heart",
+        "@retana/organ-kidneys",
+        "@retana/organ-viewer",
+        "@retana/organ-pancreas",
+        "@retana/organ-stomach"
+      ],
+      "categories": [
+        "salud",
+        "anatomia",
+        "bloque"
+      ],
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "name": "organ-switcher",
+      "type": "registry:block",
+      "title": "Explorer 03",
+      "description": "One viewer that switches between several organs from a menu, here the heart, kidneys, stomach and pancreas. Models licensed CC BY 4.0 and CC BY-SA 2.1 JP.",
+      "files": [
+        {
+          "path": "registry/blocks/organ-switcher.tsx",
+          "type": "registry:component",
+          "target": "@ui/organ-switcher.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Selector de órganos",
+        "descriptionEs": "Un visor que cambia entre varios órganos desde un menú.",
+        "preview": "app/examples/organ-switcher/preview.tsx",
+        "previewHref": "/examples/organ-switcher",
+        "examples": [
+          {
+            "title": "Selector de órganos",
+            "href": "/examples/organ-switcher",
+            "description": "Con el corazón como modelo."
+          }
+        ],
+        "usage": "<OrganSwitcher model={heartModel} />",
+        "api": [
+          {
+            "name": "model / models",
+            "type": "OrganModel",
+            "description": "Modelo(s) a explorar."
+          }
+        ]
+      }
     }
   ]
 }
