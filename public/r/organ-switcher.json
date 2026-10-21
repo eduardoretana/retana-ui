@@ -1,0 +1,54 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-switcher",
+  "title": "Explorer 03",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "One viewer that switches between several organs from a menu, here the heart, kidneys, stomach and pancreas. Models licensed CC BY 4.0 and CC BY-SA 2.1 JP.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "select",
+    "@retana/organ-heart",
+    "@retana/organ-kidneys",
+    "@retana/organ-viewer",
+    "@retana/organ-pancreas",
+    "@retana/organ-stomach"
+  ],
+  "files": [
+    {
+      "path": "registry/blocks/organ-switcher.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nimport {\n  Select,\n  SelectContent,\n  SelectGroup,\n  SelectItem,\n  SelectTrigger,\n  SelectValue,\n} from \"@/components/ui/select\"\nimport { OrganViewer, type OrganModel } from \"@/components/ui/organ-viewer\"\n\n// One viewer for several organs. Switching remounts the viewer, so each organ\n// opens in its own default view with nothing selected.\nexport function OrganSwitcher({\n  models,\n  defaultOrgan = models[0]?.name,\n  className,\n}: {\n  models: readonly OrganModel[]\n  /** Name of the organ shown first. Defaults to the first model. */\n  defaultOrgan?: string\n  className?: string\n}) {\n  const [organ, setOrgan] = React.useState(defaultOrgan)\n  const [selectedId, setSelectedId] = React.useState<string | null>(null)\n  const model = models.find(({ name }) => name === organ) ?? models[0]\n  if (!model) return null\n  const selected = model.structures.find(({ id }) => id === selectedId)\n  return (\n    <div className={cn(\"flex flex-col gap-4\", className)}>\n      <div className=\"flex flex-wrap items-center justify-between gap-3\">\n        <div className=\"flex flex-col gap-0.5\">\n          <h2 className=\"text-lg font-semibold\">{model.name}</h2>\n          <p className=\"text-sm text-muted-foreground\">\n            {model.structures.length} structures, {model.views.length} views\n          </p>\n        </div>\n        <Select\n          value={model.name}\n          onValueChange={(next) => {\n            if (!next) return\n            setOrgan(next)\n            setSelectedId(null)\n          }}\n        >\n          <SelectTrigger aria-label=\"Organ\" className=\"min-w-40\">\n            <SelectValue />\n          </SelectTrigger>\n          <SelectContent>\n            <SelectGroup>\n              {models.map(({ name }) => (\n                <SelectItem key={name} value={name}>\n                  {name}\n                </SelectItem>\n              ))}\n            </SelectGroup>\n          </SelectContent>\n        </Select>\n      </div>\n      <OrganViewer\n        key={model.name}\n        model={model}\n        selectedId={selectedId}\n        onSelectionChange={setSelectedId}\n        className=\"h-[28rem]\"\n      />\n      <p className=\"text-sm text-muted-foreground\" role=\"status\">\n        {selected\n          ? `${selected.label}: ${selected.description ?? selected.group}`\n          : `Select a structure of the ${model.name.toLowerCase()} to learn about it.`}\n      </p>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-switcher.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Selector de órganos",
+    "descriptionEs": "Un visor que cambia entre varios órganos desde un menú.",
+    "preview": "app/examples/organ-switcher/preview.tsx",
+    "previewHref": "/examples/organ-switcher",
+    "examples": [
+      {
+        "title": "Selector de órganos",
+        "href": "/examples/organ-switcher",
+        "description": "Con el corazón como modelo."
+      }
+    ],
+    "usage": "<OrganSwitcher model={heartModel} />",
+    "api": [
+      {
+        "name": "model / models",
+        "type": "OrganModel",
+        "description": "Modelo(s) a explorar."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+  "categories": [
+    "salud",
+    "anatomia",
+    "bloque"
+  ],
+  "type": "registry:block"
+}

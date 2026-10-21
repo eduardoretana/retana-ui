@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-stomach",
+  "title": "Stomach",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The stomach from the OrganUI stomach explorer: 9 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-stomach.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Generated from organui/stomach-3d at a945af4. The GLB stays in that\n// repository under its own licence; see attribution.source.\nexport const stomachModel: OrganModel = {\n  name: \"Stomach\",\n  src: \"https://cdn.jsdelivr.net/gh/organui/stomach-3d@a945af4e28cc37da63143c685293e7dae7e7f6d5/public/models/stomach.glb\",\n  bytes: 1161368,\n  defaultView: \"Anterior\",\n  views: [\n    {\n      name: \"Anterior\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Posterior\",\n      direction: [0, 0, -1],\n    },\n    {\n      name: \"Left lateral\",\n      direction: [1, 0, 0],\n    },\n  ],\n  structures: [\n    {\n      id: \"stomach\",\n      label: \"Stomach\",\n      group: \"Digestive tract\",\n      tone: \"chart-1\", shade: 0.14,\n      description:\n        \"A muscular J-shaped sac in the upper left abdomen that stores food, mixes it with digestive juices, and passes it on in small amounts.\",\n    },\n    {\n      id: \"esophagus\",\n      label: \"Esophagus (lower part)\",\n      group: \"Digestive tract\",\n      tone: \"chart-1\", shade: 0.11,\n      description:\n        \"The muscular tube that carries swallowed food down through the chest. It passes through the diaphragm and opens into the stomach at the cardia.\",\n    },\n    {\n      id: \"duodenum\",\n      label: \"Duodenum\",\n      group: \"Digestive tract\",\n      tone: \"chart-2\", shade: 0.14,\n      description:\n        \"The first part of the small intestine. It receives food from the stomach through the pylorus and curves around the head of the pancreas.\",\n    },\n    {\n      id: \"celiac-trunk\",\n      label: \"Celiac trunk\",\n      group: \"Arteries\",\n      tone: \"chart-1\", shade: 0.01,\n      description:\n        \"A short artery branching from the abdominal aorta. It divides into the left gastric, splenic, and common hepatic arteries, which supply the stomach and its neighbours.\",\n    },\n    {\n      id: \"left-gastric-artery\",\n      label: \"Left gastric artery\",\n      group: \"Arteries\",\n      tone: \"chart-1\", shade: 0.07,\n      description:\n        \"The smallest celiac branch. It runs up toward the esophagus and along the lesser curvature of the stomach.\",\n    },\n    {\n      id: \"splenic-artery\",\n      label: \"Splenic artery\",\n      group: \"Arteries\",\n      tone: \"chart-1\", shade: -0.02,\n      description:\n        \"A winding branch running left behind the stomach along the pancreas to the spleen. Its branches also supply parts of the stomach.\",\n    },\n    {\n      id: \"common-hepatic-artery\",\n      label: \"Common hepatic artery\",\n      group: \"Arteries\",\n      tone: \"chart-1\", shade: 0.11,\n      description:\n        \"The celiac branch running right toward the liver. Its branches help supply the stomach, duodenum, and pancreas.\",\n    },\n    {\n      id: \"spleen\",\n      label: \"Spleen\",\n      group: \"Neighbouring organs\",\n      tone: \"muted-foreground\", shade: -0.01,\n      description:\n        \"An organ of the immune and blood systems that sits behind and to the left of the stomach, under the ribs.\",\n    },\n    {\n      id: \"pancreas\",\n      label: \"Pancreas\",\n      group: \"Neighbouring organs\",\n      tone: \"chart-2\", shade: 0.18,\n      description:\n        \"A gland lying behind the stomach. It releases digestive juices into the duodenum and hormones such as insulin into the blood.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"BodyParts3D, © The Database Center for Life Science licensed under CC Attribution-Share Alike 2.1 Japan\",\n    license: \"CC BY-SA 2.1 JP\",\n    licenseUrl: \"https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en\",\n    source:\n      \"https://github.com/organui/stomach-3d/blob/a945af4e28cc37da63143c685293e7dae7e7f6d5/public/models/ATTRIBUTION.md\",\n  },\n}\n\nexport type StomachProps = Omit<OrganViewerProps, \"model\">\n\nexport function Stomach(props: StomachProps) {\n  return <OrganViewer model={stomachModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-stomach.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Estómago",
+    "descriptionEs": "Estómago en 3D: 9 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+    "preview": "app/examples/organ-stomach/preview.tsx",
+    "previewHref": "/examples/organ-stomach",
+    "examples": [
+      {
+        "title": "Estómago",
+        "href": "/examples/organ-stomach",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Stomach selectedId={id} onSelectionChange={setId} />  // datos: stomachModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "stomachModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "digestive"
+  ],
+  "type": "registry:component"
+}
