@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-tongue",
+  "title": "Tongue",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The tongue from the OrganUI tongue explorer: 13 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-tongue.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Generated from organui/tongue-3d at 38841f8. The GLB stays in that\n// repository under its own licence; see attribution.source.\nexport const tongueModel: OrganModel = {\n  name: \"Tongue\",\n  src: \"https://cdn.jsdelivr.net/gh/organui/tongue-3d@38841f8ebc82849f56e891b79b2daca9591e0806/public/models/tongue.glb\",\n  bytes: 1295752,\n  defaultView: \"Left lateral\",\n  views: [\n    {\n      name: \"Left lateral\",\n      direction: [1, 0, 0],\n    },\n    {\n      name: \"Anterior\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Superior\",\n      direction: [0, 1, 0.35],\n    },\n  ],\n  structures: [\n    {\n      id: \"tongue\",\n      label: \"Tongue\",\n      group: \"Tongue\",\n      tone: \"chart-1\", shade: 0.16,\n      description:\n        \"A muscular organ on the floor of the mouth. It shapes food for swallowing, carries the taste buds and forms the sounds of speech.\",\n    },\n    {\n      id: \"genioglossus\",\n      label: \"Genioglossus\",\n      group: \"Extrinsic muscles\",\n      tone: \"chart-1\", shade: 0.01,\n      description:\n        \"A fan-shaped muscle from the inside of the chin into the body of the tongue. It pushes the tongue forward and out.\",\n    },\n    {\n      id: \"hyoglossus\",\n      label: \"Hyoglossus\",\n      group: \"Extrinsic muscles\",\n      tone: \"chart-1\", shade: 0.06,\n      description:\n        \"A thin, flat muscle rising from the hyoid bone into the side of the tongue. It pulls the tongue down and back.\",\n    },\n    {\n      id: \"geniohyoid\",\n      label: \"Geniohyoid\",\n      group: \"Floor of mouth\",\n      tone: \"chart-1\", shade: 0.0,\n      description:\n        \"A narrow muscle running from the chin to the hyoid bone just below the genioglossus. It pulls the hyoid forward.\",\n    },\n    {\n      id: \"mylohyoid\",\n      label: \"Mylohyoid\",\n      group: \"Floor of mouth\",\n      tone: \"chart-1\", shade: 0.1,\n      description:\n        \"A sheet of muscle that forms the floor of the mouth beneath the tongue. It raises the floor of the mouth when swallowing.\",\n    },\n    {\n      id: \"hyoid-bone\",\n      label: \"Hyoid bone\",\n      group: \"Nearby structures\",\n      tone: \"chart-2\", shade: 0.27,\n      description:\n        \"A U-shaped bone in the upper neck that anchors the tongue and the floor of the mouth. It does not touch any other bone.\",\n    },\n    {\n      id: \"epiglottis\",\n      label: \"Epiglottis\",\n      group: \"Nearby structures\",\n      tone: \"chart-3\", shade: 0.16,\n      description:\n        \"A leaf-shaped flap of cartilage behind the root of the tongue. It tips back over the larynx when you swallow.\",\n    },\n    {\n      id: \"submandibular-glands\",\n      label: \"Submandibular glands\",\n      group: \"Nearby structures\",\n      tone: \"chart-2\", shade: 0.14,\n      description:\n        \"Salivary glands beneath the jaw on each side. Their ducts open under the tongue, beside its frenulum.\",\n    },\n    {\n      id: \"sublingual-glands\",\n      label: \"Sublingual glands\",\n      group: \"Nearby structures\",\n      tone: \"chart-2\", shade: 0.2,\n      description:\n        \"The smallest of the main salivary glands. They lie in the floor of the mouth, under the front of the tongue.\",\n    },\n    {\n      id: \"hypoglossal-nerves\",\n      label: \"Hypoglossal nerves\",\n      group: \"Nerves\",\n      tone: \"chart-2\", shade: 0.08,\n      description:\n        \"The twelfth cranial nerves. They run down from the skull and forward into the tongue, and move almost all of its muscles.\",\n    },\n    {\n      id: \"lingual-nerves\",\n      label: \"Lingual nerves\",\n      group: \"Nerves\",\n      tone: \"chart-2\", shade: 0.01,\n      description:\n        \"Branches of the mandibular nerve that carry touch, temperature and, through the chorda tympani, taste from the front two thirds of the tongue.\",\n    },\n    {\n      id: \"lingual-artery\",\n      label: \"Lingual artery\",\n      group: \"Vessels\",\n      tone: \"chart-1\", shade: -0.03,\n      description:\n        \"A branch of the external carotid artery and the main blood supply of the tongue. It runs forward above the hyoid bone and gives off the sublingual artery.\",\n    },\n    {\n      id: \"lingual-veins\",\n      label: \"Lingual veins\",\n      group: \"Vessels\",\n      tone: \"chart-4\", shade: 0.05,\n      description:\n        \"Drain the tongue toward the internal jugular vein. The deep lingual vein can be seen through the thin skin under the tongue.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"BodyParts3D / Anatomography, © The Database Center for Life Science. CC BY-SA 2.1 Japan. Adapted by OrganUI.\",\n    license: \"CC BY-SA 2.1 JP\",\n    licenseUrl: \"https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en\",\n    source:\n      \"https://github.com/organui/tongue-3d/blob/38841f8ebc82849f56e891b79b2daca9591e0806/public/models/ATTRIBUTION.md\",\n  },\n}\n\nexport type TongueProps = Omit<OrganViewerProps, \"model\">\n\nexport function Tongue(props: TongueProps) {\n  return <OrganViewer model={tongueModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-tongue.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Lengua",
+    "descriptionEs": "Lengua en 3D: 13 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+    "preview": "app/examples/organ-tongue/preview.tsx",
+    "previewHref": "/examples/organ-tongue",
+    "examples": [
+      {
+        "title": "Lengua",
+        "href": "/examples/organ-tongue",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Tongue selectedId={id} onSelectionChange={setId} />  // datos: tongueModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "tongueModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "digestive"
+  ],
+  "type": "registry:component"
+}
