@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-bladder",
+  "title": "Bladder",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The bladder from the OrganUI bladder explorer: 12 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-bladder.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Generated from organui/bladder-3d at 36674f5. The GLB stays in that\n// repository under its own licence; see attribution.source.\nexport const bladderModel: OrganModel = {\n  name: \"Bladder\",\n  src: \"https://cdn.jsdelivr.net/gh/organui/bladder-3d@36674f5d09ba1c9c58a3f76c944705c23ee91375/public/models/bladder.glb\",\n  bytes: 1817148,\n  defaultView: \"Anterior\",\n  views: [\n    {\n      name: \"Anterior\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Posterior\",\n      direction: [0, 0, -1],\n    },\n    {\n      name: \"Left lateral\",\n      direction: [1, 0, 0],\n    },\n  ],\n  structures: [\n    {\n      id: \"urinary-bladder\",\n      label: \"Urinary bladder\",\n      group: \"Urinary tract\",\n      tone: \"chart-1\", shade: 0.13,\n      description:\n        \"A hollow, balloon-shaped muscular organ in the pelvis that stores urine until it is released.\",\n    },\n    {\n      id: \"right-ureter\",\n      label: \"Right ureter\",\n      group: \"Urinary tract\",\n      tone: \"chart-2\", shade: 0.16,\n      description:\n        \"A narrow muscular tube that carries urine from the right kidney down to the bladder.\",\n    },\n    {\n      id: \"left-ureter\",\n      label: \"Left ureter\",\n      group: \"Urinary tract\",\n      tone: \"chart-2\", shade: 0.18,\n      description:\n        \"A narrow muscular tube that carries urine from the left kidney down to the bladder.\",\n    },\n    {\n      id: \"urethra\",\n      label: \"Urethra\",\n      group: \"Urinary tract\",\n      tone: \"chart-1\", shade: 0.09,\n      description:\n        \"The tube that lets urine leave the body from the bottom of the bladder.\",\n    },\n    {\n      id: \"prostate\",\n      label: \"Prostate\",\n      group: \"Reproductive organs\",\n      tone: \"muted-foreground\", shade: 0.07,\n      description:\n        \"A walnut-sized gland that sits just below the bladder and surrounds the first part of the urethra.\",\n    },\n    {\n      id: \"right-seminal-vesicle\",\n      label: \"Right seminal vesicle\",\n      group: \"Reproductive organs\",\n      tone: \"muted-foreground\", shade: 0.12,\n      description:\n        \"A small gland behind the bladder that adds fluid to semen. It lies close to the bladder’s back wall.\",\n    },\n    {\n      id: \"left-seminal-vesicle\",\n      label: \"Left seminal vesicle\",\n      group: \"Reproductive organs\",\n      tone: \"muted-foreground\", shade: 0.15,\n      description:\n        \"A small gland behind the bladder that adds fluid to semen. It lies close to the bladder’s back wall.\",\n    },\n    {\n      id: \"right-pubococcygeus\",\n      label: \"Right pubococcygeus\",\n      group: \"Pelvic floor\",\n      tone: \"chart-1\", shade: 0.03,\n      description:\n        \"Part of the pelvic floor muscles, which support the bladder and help hold urine in until it is released.\",\n    },\n    {\n      id: \"left-pubococcygeus\",\n      label: \"Left pubococcygeus\",\n      group: \"Pelvic floor\",\n      tone: \"chart-1\", shade: 0.05,\n      description:\n        \"Part of the pelvic floor muscles, which support the bladder and help hold urine in until it is released.\",\n    },\n    {\n      id: \"right-puborectalis\",\n      label: \"Right puborectalis\",\n      group: \"Pelvic floor\",\n      tone: \"chart-1\", shade: -0.01,\n      description:\n        \"Part of the pelvic floor muscles. It forms a sling that loops behind the lower rectum.\",\n    },\n    {\n      id: \"left-puborectalis\",\n      label: \"Left puborectalis\",\n      group: \"Pelvic floor\",\n      tone: \"chart-1\", shade: 0.02,\n      description:\n        \"Part of the pelvic floor muscles. It forms a sling that loops behind the lower rectum.\",\n    },\n    {\n      id: \"rectum\",\n      label: \"Rectum\",\n      group: \"Neighbouring organs\",\n      tone: \"muted-foreground\", shade: 0.06,\n      description:\n        \"The last part of the large intestine, which stores stool. It lies behind the bladder and prostate.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"BodyParts3D, © The Database Center for Life Science licensed under CC Attribution-Share Alike 2.1 Japan\",\n    license: \"CC BY-SA 2.1 JP\",\n    licenseUrl: \"https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en\",\n    source:\n      \"https://github.com/organui/bladder-3d/blob/36674f5d09ba1c9c58a3f76c944705c23ee91375/public/models/ATTRIBUTION.md\",\n  },\n}\n\nexport type BladderProps = Omit<OrganViewerProps, \"model\">\n\nexport function Bladder(props: BladderProps) {\n  return <OrganViewer model={bladderModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-bladder.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Vejiga",
+    "descriptionEs": "Vejiga en 3D: 12 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+    "preview": "app/examples/organ-bladder/preview.tsx",
+    "previewHref": "/examples/organ-bladder",
+    "examples": [
+      {
+        "title": "Vejiga",
+        "href": "/examples/organ-bladder",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Bladder selectedId={id} onSelectionChange={setId} />  // datos: bladderModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "bladderModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "urinary"
+  ],
+  "type": "registry:component"
+}

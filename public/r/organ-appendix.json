@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-appendix",
+  "title": "Appendix",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The vermiform appendix with the cecum, terminal ileum, iliac vessels and the muscles behind it: 7 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-appendix.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Built by apps/web/scripts/models/appendix.ts from BodyParts3D 3.0 meshes.\n// The GLB is hosted by OrganUI under its own licence; see attribution.source.\nexport const appendixModel: OrganModel = {\n  name: \"Appendix\",\n  src: \"https://organui.com/models/appendix.glb\",\n  bytes: 1786832,\n  // From below and medially, where the terminal ileum does not hide it.\n  defaultView: \"Appendix\",\n  views: [\n    {\n      name: \"Appendix\",\n      direction: [0.5, -0.8, 0.6],\n      structureIds: [\"appendix\"],\n    },\n    {\n      name: \"Anterior\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Right lateral\",\n      direction: [-1, 0, 0],\n    },\n  ],\n  structures: [\n    {\n      id: \"appendix\",\n      label: \"Vermiform appendix\",\n      group: \"Appendix\",\n      tone: \"chart-1\", shade: 0.13,\n      description:\n        \"A narrow, blind-ended tube that opens into the cecum just below the ileocecal junction. Its wall is rich in lymphoid tissue, and its position varies from person to person.\",\n    },\n    {\n      id: \"colon\",\n      label: \"Cecum and ascending colon\",\n      group: \"Large intestine\",\n      tone: \"chart-2\", shade: 0.16,\n      description:\n        \"The pouch-like start of the large intestine in the right iliac fossa and the colon rising from it. The three taeniae coli meet at the base of the appendix. Cut above the pelvis.\",\n    },\n    {\n      id: \"ileum\",\n      label: \"Ileum\",\n      group: \"Small intestine\",\n      tone: \"chart-2\", shade: 0.2,\n      description:\n        \"The last part of the small intestine. It joins the cecum at the ileocecal valve, close to the appendix. Coils outside the right lower abdomen are cut away.\",\n    },\n    {\n      id: \"right-external-iliac-artery\",\n      label: \"Right external iliac artery\",\n      group: \"Iliac vessels\",\n      tone: \"chart-1\", shade: 0.03,\n      description:\n        \"Runs along the pelvic brim toward the leg. The appendix often lies just in front of it.\",\n    },\n    {\n      id: \"right-external-iliac-vein\",\n      label: \"Right external iliac vein\",\n      group: \"Iliac vessels\",\n      tone: \"chart-4\", shade: 0.0,\n      description:\n        \"Lies beside its artery and drains the right leg into the common iliac vein.\",\n    },\n    {\n      id: \"right-psoas-major\",\n      label: \"Right psoas major\",\n      group: \"Posterior abdominal wall\",\n      tone: \"chart-1\", shade: 0.01,\n      description:\n        \"A long hip flexor behind the cecum. An inflamed appendix lying against it can make extending the hip painful, the psoas sign. Cut above the pelvis.\",\n    },\n    {\n      id: \"right-iliacus\",\n      label: \"Right iliacus\",\n      group: \"Posterior abdominal wall\",\n      tone: \"chart-1\", shade: 0.07,\n      description:\n        \"Fills the iliac fossa, the hollow of the pelvic bone on which the cecum and appendix usually rest. Shown down to the hip.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"BodyParts3D, © The Database Center for Life Science licensed under CC Attribution-Share Alike 2.1 Japan\",\n    license: \"CC BY-SA 2.1 JP\",\n    licenseUrl: \"https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en\",\n    source:\n      \"https://github.com/organui/organui/blob/master/apps/web/public/models/appendix.ATTRIBUTION.md\",\n  },\n}\n\nexport type AppendixProps = Omit<OrganViewerProps, \"model\">\n\nexport function Appendix(props: AppendixProps) {\n  return <OrganViewer model={appendixModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-appendix.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Apéndice",
+    "descriptionEs": "Apéndice en 3D: 7 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+    "preview": "app/examples/organ-appendix/preview.tsx",
+    "previewHref": "/examples/organ-appendix",
+    "examples": [
+      {
+        "title": "Apéndice",
+        "href": "/examples/organ-appendix",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Appendix selectedId={id} onSelectionChange={setId} />  // datos: appendixModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "appendixModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "digestive"
+  ],
+  "type": "registry:component"
+}
