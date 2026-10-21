@@ -675,3 +675,40 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+OrganUI (healthcare and life sciences)
+
+Retana UI includes components adapted from OrganUI (MIT):
+
+  https://organui.com  ·  https://organui.com/docs/licences
+
+Copyright (c) 2026 OrganUI
+
+OrganUI has no paid or Pro tier; every registry item is MIT. The pieces were
+ported from OrganUI's Base UI style onto this registry's Radix primitives.
+Fixed anatomical, chemical and chart colours were replaced with host theme
+tokens (registry/lib/clinical-tone.ts): every structure names a `tone` and an
+optional `shade`, and WebGL resolves the token at runtime. Scene lighting is
+neutral white. Interface text stays in English and can be overridden by props.
+
+3D models are NOT copied into this repository. Each organ item loads a GLB at
+runtime from a commit-pinned URL in the matching github.com/organui/*-3d
+repository, and the model keeps its own licence (CC0 1.0, CC BY 4.0,
+CC BY-SA 2.1 JP or CC BY-SA 4.0, per model). The BY licences require credit:
+the viewer shows it by default. If you pass `attribution={false}`, credit the
+model elsewhere in your interface. ShareAlike applies to adapted models.
+
+Sample data: the growth-chart demo uses an illustrative curve, not WHO data
+(WHO standards are GPL-3 and need permission for commercial use). The
+molecule demo fetches PDB 1CRN (wwPDB, CC0). The head phantom, synthetic ECG,
+vitals, lab and medication examples are generated and MIT.
+
+Adapted items:
+
+- anatomy-tree, vital-signs, ecg-trace, body-map, dermatome-map, lab-results,
+  growth-chart, medication-schedule, image-viewer, organ-viewer,
+  molecule-viewer, dna-helix
+- organ-* (43 organ and tissue models)
+- organ-explorer, anatomy-workspace, organ-switcher (blocks)
