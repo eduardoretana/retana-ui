@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-parathyroid",
+  "title": "Parathyroid",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The four parathyroid glands on the back of the thyroid: 9 selectable structures and 5 named views. Model licensed CC BY-SA 2.1 JP.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-parathyroid.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Built from the BodyParts3D 4.3 meshes organui/thyroid-3d pins, cut down to\n// the parathyroid glands and the structures that locate them. The GLB is\n// hosted by OrganUI; see attribution.source.\nexport const parathyroidModel: OrganModel = {\n  name: \"Parathyroid\",\n  src: \"https://organui.com/models/parathyroid.glb\",\n  bytes: 1099860,\n  defaultView: \"Posterior\",\n  views: [\n    {\n      name: \"Posterior\",\n      direction: [0, 0, -1],\n    },\n    {\n      name: \"Right glands\",\n      direction: [-0.4, 0, -1],\n      structureIds: [\n        \"right-superior-parathyroid\",\n        \"right-inferior-parathyroid\",\n      ],\n    },\n    {\n      name: \"Left glands\",\n      direction: [0.4, 0, -1],\n      structureIds: [\"left-superior-parathyroid\", \"left-inferior-parathyroid\"],\n    },\n    {\n      name: \"Anterior\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Right lateral\",\n      direction: [-1, 0, 0],\n    },\n  ],\n  structures: [\n    {\n      id: \"right-superior-parathyroid\",\n      label: \"Right superior parathyroid\",\n      group: \"Parathyroid glands\",\n      tone: \"chart-2\", shade: 0.09,\n      description:\n        \"A gland about the size of a grain of rice on the back of the upper right thyroid lobe. The four parathyroids release parathyroid hormone, which raises calcium in the blood.\",\n    },\n    {\n      id: \"right-inferior-parathyroid\",\n      label: \"Right inferior parathyroid\",\n      group: \"Parathyroid glands\",\n      tone: \"chart-2\", shade: 0.05,\n      description:\n        \"Sits on the back of the lower right lobe. The lower glands start higher in the embryo and travel down, so their final position varies more than the upper ones.\",\n    },\n    {\n      id: \"left-superior-parathyroid\",\n      label: \"Left superior parathyroid\",\n      group: \"Parathyroid glands\",\n      tone: \"chart-2\", shade: 0.14,\n      description:\n        \"On the back of the upper left lobe, near where the recurrent laryngeal nerve enters the larynx.\",\n    },\n    {\n      id: \"left-inferior-parathyroid\",\n      label: \"Left inferior parathyroid\",\n      group: \"Parathyroid glands\",\n      tone: \"chart-2\", shade: 0.03,\n      description:\n        \"On the back of the lower left lobe. Like its right partner, it is sometimes found lower down, even inside the thymus.\",\n    },\n    {\n      id: \"right-lobe\",\n      label: \"Right lobe\",\n      group: \"Thyroid gland\",\n      tone: \"chart-1\", shade: 0.03,\n      description:\n        \"The right wing of the thyroid gland. Both right parathyroids rest against its back surface.\",\n    },\n    {\n      id: \"left-lobe\",\n      label: \"Left lobe\",\n      group: \"Thyroid gland\",\n      tone: \"chart-1\", shade: 0.07,\n      description:\n        \"The left wing of the thyroid gland, carrying the two left parathyroids on its back.\",\n    },\n    {\n      id: \"isthmus\",\n      label: \"Isthmus\",\n      group: \"Thyroid gland\",\n      tone: \"chart-1\", shade: -0.02,\n      description:\n        \"The bridge joining the two thyroid lobes across the front of the trachea.\",\n    },\n    {\n      id: \"thyroid-cartilage\",\n      label: \"Thyroid cartilage\",\n      group: \"Larynx\",\n      tone: \"muted-foreground\", shade: 0.22,\n      description:\n        \"The largest cartilage of the larynx, forming the Adam’s apple. Shown to place the glands in the neck.\",\n    },\n    {\n      id: \"cricoid-cartilage\",\n      label: \"Cricoid cartilage\",\n      group: \"Larynx\",\n      tone: \"muted-foreground\", shade: 0.17,\n      description:\n        \"The ring of cartilage at the bottom of the larynx. The superior parathyroids usually lie near its level.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"BodyParts3D / Anatomography, © The Database Center for Life Science. CC BY-SA 2.1 Japan. Adapted by OrganUI.\",\n    license: \"CC BY-SA 2.1 JP\",\n    licenseUrl: \"https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en\",\n    source:\n      \"https://github.com/organui/organui/blob/master/apps/web/public/models/parathyroid.ATTRIBUTION.md\",\n  },\n}\n\nexport type ParathyroidProps = Omit<OrganViewerProps, \"model\">\n\nexport function Parathyroid(props: ParathyroidProps) {\n  return <OrganViewer model={parathyroidModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-parathyroid.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Paratiroides",
+    "descriptionEs": "Paratiroides en 3D: 9 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+    "preview": "app/examples/organ-parathyroid/preview.tsx",
+    "previewHref": "/examples/organ-parathyroid",
+    "examples": [
+      {
+        "title": "Paratiroides",
+        "href": "/examples/organ-parathyroid",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Parathyroid selectedId={id} onSelectionChange={setId} />  // datos: parathyroidModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "parathyroidModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "endocrine"
+  ],
+  "type": "registry:component"
+}
