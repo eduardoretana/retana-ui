@@ -1,0 +1,54 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "anatomy-workspace",
+  "title": "Explorer 02",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "A full-height anatomy workspace with the tree in a sidebar and a details card to hide or isolate the selected structure. Heart model licensed CC BY 4.0.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button",
+    "card",
+    "sheet",
+    "@retana/anatomy-tree",
+    "@retana/organ-heart",
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/blocks/anatomy-workspace.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { PanelLeftIcon } from \"lucide-react\"\nimport { cn } from \"@/lib/utils\"\n\nimport { AnatomyTree } from \"@/components/ui/anatomy-tree\"\nimport { Button } from \"@/components/ui/button\"\nimport {\n  Card,\n  CardContent,\n  CardDescription,\n  CardFooter,\n  CardHeader,\n  CardTitle,\n} from \"@/components/ui/card\"\nimport {\n  Sheet,\n  SheetContent,\n  SheetHeader,\n  SheetTitle,\n} from \"@/components/ui/sheet\"\nimport {\n  OrganViewer,\n  organAnatomyNodes,\n  organDefaultVisibility,\n  type OrganModel,\n} from \"@/components/ui/organ-viewer\"\n\n// Matches the lg breakpoint where the sidebar is shown.\nconst WIDE = \"(min-width: 64rem)\"\nfunction subscribeWide(onChange: () => void) {\n  const query = matchMedia(WIDE)\n  query.addEventListener(\"change\", onChange)\n  return () => query.removeEventListener(\"change\", onChange)\n}\n\n// A full-height workspace: the anatomy tree stays in a sidebar on wide\n// screens and opens as a sheet on phones, and a details card acts on the\n// selected structure.\nexport function AnatomyWorkspace({\n  model,\n  className,\n}: {\n  model: OrganModel\n  className?: string\n}) {\n  const [data] = React.useState(() => organAnatomyNodes(model))\n  const [selectedId, setSelectedId] = React.useState<string | null>(null)\n  const [visibility, setVisibility] = React.useState<Record<string, boolean>>(\n    () => organDefaultVisibility(model)\n  )\n  const [open, setOpen] = React.useState(false)\n  const wide = React.useSyncExternalStore(\n    subscribeWide,\n    () => matchMedia(WIDE).matches,\n    () => true\n  )\n  const sheetRef = React.useRef<HTMLDivElement>(null)\n  const selected = model.structures.find(({ id }) => id === selectedId)\n  const hidden = model.structures.filter(\n    ({ id }) => visibility[id] === false\n  ).length\n  const tree = (className: string) => (\n    <AnatomyTree\n      data={data}\n      selectedId={selectedId}\n      onSelectionChange={setSelectedId}\n      visibility={visibility}\n      onVisibilityChange={setVisibility}\n      label={`${model.name} anatomy`}\n      defaultExpandedIds={\n        model.structures.length <= 40 ? data.map(({ id }) => id) : []\n      }\n      className={className}\n    />\n  )\n  return (\n    <div className={cn(\"flex h-svh flex-col\", className)}>\n      <header className=\"flex h-14 shrink-0 items-center gap-3 border-b px-4\">\n        {!wide && (\n          <Button\n            variant=\"outline\"\n            size=\"icon\"\n            aria-label=\"Open anatomy\"\n            onClick={() => setOpen(true)}\n          >\n            <PanelLeftIcon\n              aria-hidden=\"true\"\n            />\n          </Button>\n        )}\n        <h1 className=\"font-medium\">{model.name}</h1>\n        <p className=\"truncate text-sm text-muted-foreground\">\n          {model.structures.length} structures\n          {hidden > 0 && `, ${hidden} hidden`}\n        </p>\n        <Button\n          variant=\"ghost\"\n          size=\"sm\"\n          className=\"ml-auto\"\n          disabled={hidden === 0}\n          onClick={() => setVisibility({})}\n        >\n          Show all\n        </Button>\n      </header>\n      <div className=\"flex min-h-0 flex-1\">\n        {wide && (\n          <aside\n            aria-label=\"Anatomy\"\n            className=\"flex w-72 shrink-0 flex-col border-r\"\n          >\n            {tree(\"min-h-0 flex-1 overflow-auto rounded-none border-0\")}\n          </aside>\n        )}\n        <main className=\"flex min-w-0 flex-1 flex-col gap-4 p-4\">\n          <OrganViewer\n            model={model}\n            selectedId={selectedId}\n            onSelectionChange={setSelectedId}\n            visibility={visibility}\n            className=\"h-auto min-h-72 flex-1\"\n          />\n          <Card size=\"sm\" className=\"shrink-0\">\n            <CardHeader>\n              <CardTitle>\n                {selected?.label ?? \"No structure selected\"}\n              </CardTitle>\n              <CardDescription>\n                {selected?.group ??\n                  \"Select a structure in the model or the anatomy list.\"}\n              </CardDescription>\n            </CardHeader>\n            {selected && (\n              <>\n                {selected.description && (\n                  <CardContent>\n                    <p>{selected.description}</p>\n                  </CardContent>\n                )}\n                <CardFooter className=\"gap-2\">\n                  <Button\n                    variant=\"outline\"\n                    size=\"sm\"\n                    onClick={() =>\n                      setVisibility((current) => ({\n                        ...current,\n                        [selected.id]: current[selected.id] === false,\n                      }))\n                    }\n                  >\n                    {visibility[selected.id] === false ? \"Show\" : \"Hide\"}\n                  </Button>\n                  <Button\n                    variant=\"outline\"\n                    size=\"sm\"\n                    onClick={() =>\n                      setVisibility(\n                        Object.fromEntries(\n                          model.structures\n                            .filter(({ id }) => id !== selected.id)\n                            .map(({ id }) => [id, false])\n                        )\n                      )\n                    }\n                  >\n                    Isolate\n                  </Button>\n                  <Button\n                    variant=\"ghost\"\n                    size=\"sm\"\n                    className=\"ml-auto\"\n                    onClick={() => setSelectedId(null)}\n                  >\n                    Clear\n                  </Button>\n                </CardFooter>\n              </>\n            )}\n          </Card>\n        </main>\n      </div>\n      <Sheet open={open && !wide} onOpenChange={setOpen}>\n        <SheetContent\n          ref={sheetRef}\n          side=\"left\"\n          onOpenAutoFocus={(event) => {\n            const input = sheetRef.current?.querySelector(\"input\")\n            if (input) {\n              event.preventDefault()\n              input.focus()\n            }\n          }}\n          className=\"gap-0\"\n        >\n          <SheetHeader className=\"pr-12\">\n            <SheetTitle>{model.name} anatomy</SheetTitle>\n          </SheetHeader>\n          {tree(\n            \"min-h-0 flex-1 overflow-auto rounded-none border-x-0 border-b-0\"\n          )}\n        </SheetContent>\n      </Sheet>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/anatomy-workspace.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Espacio de trabajo anatómico",
+    "descriptionEs": "Área completa con árbol lateral, visor y ficha de la estructura.",
+    "preview": "app/examples/anatomy-workspace/preview.tsx",
+    "previewHref": "/examples/anatomy-workspace",
+    "examples": [
+      {
+        "title": "Espacio de trabajo anatómico",
+        "href": "/examples/anatomy-workspace",
+        "description": "Con el corazón como modelo."
+      }
+    ],
+    "usage": "<AnatomyWorkspace model={heartModel} />",
+    "api": [
+      {
+        "name": "model / models",
+        "type": "OrganModel",
+        "description": "Modelo(s) a explorar."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+  "categories": [
+    "salud",
+    "anatomia",
+    "bloque"
+  ],
+  "type": "registry:block"
+}
