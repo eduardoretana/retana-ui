@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-explorer",
+  "title": "Explorer 01",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "An organ viewer with an anatomy panel that docks beside it on wide screens and opens as a sheet on phones. Heart model licensed CC BY 4.0.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "sheet",
+    "toggle",
+    "@retana/anatomy-tree",
+    "@retana/organ-heart",
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/blocks/organ-explorer.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { PanelRightIcon } from \"lucide-react\"\nimport { cn } from \"@/lib/utils\"\n\nimport { AnatomyTree } from \"@/components/ui/anatomy-tree\"\nimport {\n  Sheet,\n  SheetContent,\n  SheetHeader,\n  SheetTitle,\n} from \"@/components/ui/sheet\"\nimport { Toggle } from \"@/components/ui/toggle\"\nimport {\n  OrganViewer,\n  organAnatomyNodes,\n  organDefaultVisibility,\n  type OrganModel,\n} from \"@/components/ui/organ-viewer\"\n\n// Matches the lg breakpoint where the panel fits beside the viewer.\nconst WIDE = \"(min-width: 64rem)\"\nfunction subscribeWide(onChange: () => void) {\n  const query = matchMedia(WIDE)\n  query.addEventListener(\"change\", onChange)\n  return () => query.removeEventListener(\"change\", onChange)\n}\n\n// The anatomy tree drives the viewer, and picks in 3D flow back to the tree.\n// Like the explorers, the panel starts closed so the 3D view stands alone.\n// Phones open it as a sheet.\nexport function OrganExplorer({\n  model,\n  className,\n}: {\n  model: OrganModel\n  className?: string\n}) {\n  const [data] = React.useState(() => organAnatomyNodes(model))\n  const [selectedId, setSelectedId] = React.useState<string | null>(null)\n  const [visibility, setVisibility] = React.useState(() =>\n    organDefaultVisibility(model)\n  )\n  const [view, setView] = React.useState<string | null>(model.defaultView)\n  const selected = model.structures.find(({ id }) => id === selectedId)\n  const [open, setOpen] = React.useState(false)\n  const wide = React.useSyncExternalStore(\n    subscribeWide,\n    () => matchMedia(WIDE).matches,\n    () => true\n  )\n  const panel = React.useId()\n  const panelRef = React.useRef<HTMLDivElement>(null)\n  const sheetRef = React.useRef<HTMLDivElement>(null)\n  const toggle = React.useRef<HTMLButtonElement>(null)\n  React.useEffect(() => {\n    if (open && wide)\n      panelRef.current?.querySelector<HTMLElement>(\"input\")?.focus()\n  }, [open, wide])\n  const close = () => {\n    setOpen(false)\n    toggle.current?.focus()\n  }\n  const tree = (className: string) => (\n    <AnatomyTree\n      data={data}\n      selectedId={selectedId}\n      onSelectionChange={setSelectedId}\n      visibility={visibility}\n      onVisibilityChange={setVisibility}\n      label={`${model.name} anatomy`}\n      // Small organs open fully; the skeleton and muscles start collapsed.\n      defaultExpandedIds={\n        model.structures.length <= 40 ? data.map(({ id }) => id) : []\n      }\n      className={className}\n    />\n  )\n  return (\n    <div\n      className={cn(\n        \"grid gap-4\",\n        open && wide && \"grid-cols-[minmax(0,1fr)_18rem]\",\n        className\n      )}\n    >\n      <div className=\"flex min-w-0 flex-col gap-3\">\n        <OrganViewer\n          model={model}\n          selectedId={selectedId}\n          onSelectionChange={setSelectedId}\n          visibility={visibility}\n          onViewChange={setView}\n          className=\"h-[28rem]\"\n        />\n        <div className=\"flex items-start justify-between gap-4\">\n          <p className=\"text-sm text-muted-foreground\" role=\"status\">\n            {selected\n              ? `${selected.label}: ${selected.description ?? selected.group}`\n              : `View: ${view ?? \"Custom view\"}. Select a structure to learn about it.`}\n          </p>\n          <Toggle\n            ref={toggle}\n            variant=\"outline\"\n            pressed={open}\n            onPressedChange={(pressed) => (pressed ? setOpen(true) : close())}\n            aria-controls={open && wide ? panel : undefined}\n            className=\"shrink-0\"\n          >\n            <PanelRightIcon\n              aria-hidden=\"true\"\n              data-icon=\"inline-start\"\n            />\n            Anatomy\n          </Toggle>\n        </div>\n      </div>\n      {open && wide && (\n        <div\n          id={panel}\n          ref={panelRef}\n          onKeyDown={(event) => {\n            if (event.key === \"Escape\") close()\n          }}\n        >\n          {tree(\"max-h-[28rem] overflow-auto\")}\n        </div>\n      )}\n      <Sheet\n        open={open && !wide}\n        onOpenChange={(next) => {\n          if (!next) setOpen(false)\n        }}\n      >\n        <SheetContent\n          ref={sheetRef}\n          side=\"bottom\"\n          onOpenAutoFocus={(event) => {\n            const input = sheetRef.current?.querySelector(\"input\")\n            if (input) {\n              event.preventDefault()\n              input.focus()\n            }\n          }}\n          onCloseAutoFocus={(event) => {\n            event.preventDefault()\n            toggle.current?.focus()\n          }}\n          className=\"gap-0 data-[side=bottom]:h-[70svh]\"\n        >\n          <SheetHeader className=\"pr-12\">\n            <SheetTitle>{model.name} anatomy</SheetTitle>\n          </SheetHeader>\n          {tree(\n            \"min-h-0 flex-1 overflow-auto rounded-none border-x-0 border-b-0\"\n          )}\n        </SheetContent>\n      </Sheet>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-explorer.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Explorador de órgano",
+    "descriptionEs": "Visor con panel anatómico acoplado o en hoja inferior en móvil.",
+    "preview": "app/examples/organ-explorer/preview.tsx",
+    "previewHref": "/examples/organ-explorer",
+    "examples": [
+      {
+        "title": "Explorador de órgano",
+        "href": "/examples/organ-explorer",
+        "description": "Con el corazón como modelo."
+      }
+    ],
+    "usage": "<OrganExplorer model={heartModel} />",
+    "api": [
+      {
+        "name": "model / models",
+        "type": "OrganModel",
+        "description": "Modelo(s) a explorar."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+  "categories": [
+    "salud",
+    "anatomia",
+    "bloque"
+  ],
+  "type": "registry:block"
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-eye",
+  "title": "Eye",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The eye from the OrganUI eye explorer: 21 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-eye.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Generated from organui/eye-3d at 99f74f1. The GLB stays in that\n// repository under its own licence; see attribution.source.\nexport const eyeModel: OrganModel = {\n  name: \"Eye\",\n  src: \"https://cdn.jsdelivr.net/gh/organui/eye-3d@99f74f1c096ae2813dd18e1ecb2c9cbbd701c530/public/models/eye.glb\",\n  bytes: 3947432,\n  defaultView: \"Anterior\",\n  views: [\n    {\n      name: \"Anterior\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Lateral\",\n      direction: [-1, 0, 0],\n    },\n    {\n      name: \"Superior\",\n      direction: [0, 1, 0.08],\n    },\n  ],\n  structures: [\n    {\n      id: \"cornea\",\n      label: \"Cornea\",\n      group: \"Wall of the eyeball\",\n      tone: \"chart-4\", shade: 0.19,\n      description:\n        \"The clear, curved front window of the eye. It lets light in and does most of the focusing.\",\n    },\n    {\n      id: \"sclera\",\n      label: \"Sclera\",\n      group: \"Wall of the eyeball\",\n      tone: \"chart-2\", shade: 0.29,\n      description:\n        \"The tough white outer coat of the eyeball. It protects the eye and anchors the eye muscles.\",\n    },\n    {\n      id: \"choroid\",\n      label: \"Choroid\",\n      group: \"Wall of the eyeball\",\n      tone: \"chart-1\", shade: -0.01,\n      description:\n        \"A layer rich in blood vessels between the sclera and the retina that nourishes the outer retina.\",\n    },\n    {\n      id: \"retina\",\n      label: \"Retina\",\n      group: \"Wall of the eyeball\",\n      tone: \"chart-1\", shade: 0.13,\n      description:\n        \"The light-sensitive lining at the back of the eye. It turns light into signals sent along the optic nerve.\",\n    },\n    {\n      id: \"iris\",\n      label: \"Iris\",\n      group: \"Wall of the eyeball\",\n      tone: \"muted-foreground\", shade: -0.0,\n      description:\n        \"The coloured ring behind the cornea. Its muscles change the size of the pupil to control how much light enters.\",\n    },\n    {\n      id: \"anterior-chamber\",\n      label: \"Anterior chamber\",\n      group: \"Inside the eyeball\",\n      tone: \"chart-4\", shade: 0.23,\n      description:\n        \"The fluid-filled space between the cornea and the iris. Its clear fluid, the aqueous humour, keeps the eye’s shape.\",\n    },\n    {\n      id: \"lens\",\n      label: \"Lens\",\n      group: \"Inside the eyeball\",\n      tone: \"chart-2\", shade: 0.18,\n      description:\n        \"A clear, flexible structure behind the iris that fine-tunes focus for near and far objects.\",\n    },\n    {\n      id: \"suspensory-ligament\",\n      label: \"Suspensory ligament of lens\",\n      group: \"Inside the eyeball\",\n      tone: \"chart-2\", shade: 0.13,\n      description:\n        \"Fine fibres that hold the lens in place. Changes in their tension let the lens change shape to focus.\",\n    },\n    {\n      id: \"vitreous-body\",\n      label: \"Vitreous body\",\n      group: \"Inside the eyeball\",\n      tone: \"chart-3\", shade: 0.26,\n      description:\n        \"The clear gel that fills the large space behind the lens and helps hold the eye’s shape.\",\n    },\n    {\n      id: \"superior-rectus\",\n      label: \"Superior rectus\",\n      group: \"Eye muscles\",\n      tone: \"chart-1\", shade: 0.03,\n      description:\n        \"One of the six muscles that move the eye. It mainly turns the eye upward.\",\n    },\n    {\n      id: \"inferior-rectus\",\n      label: \"Inferior rectus\",\n      group: \"Eye muscles\",\n      tone: \"chart-1\", shade: 0.0,\n      description:\n        \"One of the six muscles that move the eye. It mainly turns the eye downward.\",\n    },\n    {\n      id: \"medial-rectus\",\n      label: \"Medial rectus\",\n      group: \"Eye muscles\",\n      tone: \"chart-1\", shade: 0.05,\n      description:\n        \"One of the six muscles that move the eye. It turns the eye inward, toward the nose.\",\n    },\n    {\n      id: \"lateral-rectus\",\n      label: \"Lateral rectus\",\n      group: \"Eye muscles\",\n      tone: \"chart-1\", shade: 0.07,\n      description:\n        \"One of the six muscles that move the eye. It turns the eye outward, away from the nose.\",\n    },\n    {\n      id: \"superior-oblique\",\n      label: \"Superior oblique\",\n      group: \"Eye muscles\",\n      tone: \"chart-1\", shade: 0.09,\n      description:\n        \"An eye muscle whose tendon passes through a small pulley, the trochlea, before reaching the eyeball. It mainly rotates the eye and helps it look down and out.\",\n    },\n    {\n      id: \"inferior-oblique\",\n      label: \"Inferior oblique\",\n      group: \"Eye muscles\",\n      tone: \"chart-1\", shade: 0.03,\n      description:\n        \"An eye muscle that wraps under the eyeball from the front. It mainly rotates the eye and helps it look up and out.\",\n    },\n    {\n      id: \"levator-palpebrae\",\n      label: \"Levator palpebrae superioris\",\n      group: \"Eye muscles\",\n      tone: \"chart-1\", shade: 0.12,\n      description:\n        \"The muscle that raises the upper eyelid. It does not move the eyeball.\",\n    },\n    {\n      id: \"optic-nerve\",\n      label: \"Optic nerve\",\n      group: \"Nerve and eyelid\",\n      tone: \"chart-2\", shade: 0.13,\n      description: \"Carries visual signals from the retina to the brain.\",\n    },\n    {\n      id: \"trochlea\",\n      label: \"Trochlea\",\n      group: \"Nerve and eyelid\",\n      tone: \"chart-2\", shade: 0.24,\n      description:\n        \"A small loop of cartilage that acts as a pulley for the tendon of the superior oblique muscle.\",\n    },\n    {\n      id: \"lacrimal-gland\",\n      label: \"Lacrimal gland\",\n      group: \"Nerve and eyelid\",\n      tone: \"chart-4\", shade: 0.16,\n      description:\n        \"Makes the watery part of tears, which keep the front of the eye moist and clean.\",\n    },\n    {\n      id: \"upper-tarsal-plate\",\n      label: \"Upper tarsal plate\",\n      group: \"Nerve and eyelid\",\n      tone: \"chart-1\", shade: 0.19,\n      description:\n        \"A firm plate of dense connective tissue that stiffens and shapes the upper eyelid.\",\n    },\n    {\n      id: \"lower-tarsal-plate\",\n      label: \"Lower tarsal plate\",\n      group: \"Nerve and eyelid\",\n      tone: \"chart-1\", shade: 0.16,\n      description:\n        \"A firm plate of dense connective tissue that supports the lower eyelid.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"BodyParts3D / Anatomography, © The Database Center for Life Science (DBCLS), CC BY-SA 2.1 Japan\",\n    license: \"CC BY-SA 2.1 JP\",\n    licenseUrl: \"https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en\",\n    source:\n      \"https://github.com/organui/eye-3d/blob/99f74f1c096ae2813dd18e1ecb2c9cbbd701c530/public/models/LICENSE.txt\",\n  },\n}\n\nexport type EyeProps = Omit<OrganViewerProps, \"model\">\n\nexport function Eye(props: EyeProps) {\n  return <OrganViewer model={eyeModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-eye.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Ojo",
+    "descriptionEs": "Ojo en 3D: 21 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+    "preview": "app/examples/organ-eye/preview.tsx",
+    "previewHref": "/examples/organ-eye",
+    "examples": [
+      {
+        "title": "Ojo",
+        "href": "/examples/organ-eye",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Eye selectedId={id} onSelectionChange={setId} />  // datos: eyeModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "eyeModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "senses"
+  ],
+  "type": "registry:component"
+}

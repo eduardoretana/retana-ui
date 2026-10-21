@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-esophagus",
+  "title": "Esophagus",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The esophagus from the OrganUI esophagus explorer: 17 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-esophagus.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Generated from organui/esophagus-3d at ba0fddb. The GLB stays in that\n// repository under its own licence; see attribution.source.\nexport const esophagusModel: OrganModel = {\n  name: \"Esophagus\",\n  src: \"https://cdn.jsdelivr.net/gh/organui/esophagus-3d@ba0fddba344ae586f266586a9a30f3fce10f2aec/public/models/esophagus.glb\",\n  bytes: 4001332,\n  defaultView: \"Anterior\",\n  views: [\n    {\n      name: \"Anterior\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Posterior\",\n      direction: [0, 0, -1],\n    },\n    {\n      name: \"Left lateral\",\n      direction: [1, 0, 0],\n    },\n  ],\n  structures: [\n    {\n      id: \"esophagus\",\n      label: \"Esophagus\",\n      group: \"Esophagus\",\n      tone: \"chart-1\", shade: 0.12,\n      description:\n        \"A muscular tube about 25 cm long that carries swallowed food from the throat to the stomach. It runs behind the trachea and the heart and passes through the diaphragm.\",\n    },\n    {\n      id: \"stomach\",\n      label: \"Stomach\",\n      group: \"Neighbouring organs\",\n      tone: \"chart-2\", shade: 0.11,\n      description:\n        \"The esophagus ends just below the diaphragm, which is not shown, by opening into the stomach at the cardia.\",\n    },\n    {\n      id: \"trachea\",\n      label: \"Trachea\",\n      group: \"Neighbouring organs\",\n      tone: \"muted-foreground\", shade: 0.21,\n      description:\n        \"The windpipe lies directly in front of the esophagus in the neck and upper chest, until it divides into the two main bronchi.\",\n    },\n    {\n      id: \"main-bronchi\",\n      label: \"Main bronchi\",\n      group: \"Neighbouring organs\",\n      tone: \"muted-foreground\", shade: 0.16,\n      description:\n        \"The left main bronchus crosses in front of the esophagus and presses a shallow narrowing into it.\",\n    },\n    {\n      id: \"thyroid-gland\",\n      label: \"Thyroid gland\",\n      group: \"Neighbouring organs\",\n      tone: \"chart-1\", shade: 0.1,\n      description:\n        \"Wraps around the front and sides of the trachea in the lower neck, beside the start of the esophagus.\",\n    },\n    {\n      id: \"left-atrium\",\n      label: \"Left atrium\",\n      group: \"Neighbouring organs\",\n      tone: \"chart-1\", shade: 0.1,\n      description:\n        \"The back of the heart. The esophagus lies directly behind it, separated only by the pericardium.\",\n    },\n    {\n      id: \"aortic-arch\",\n      label: \"Arch of aorta\",\n      group: \"Arteries\",\n      tone: \"chart-1\", shade: 0.01,\n      description:\n        \"Curves over the left main bronchus, crossing the left side of the esophagus and leaving a narrowing where it presses on it.\",\n    },\n    {\n      id: \"descending-aorta\",\n      label: \"Descending aorta\",\n      group: \"Arteries\",\n      tone: \"chart-1\", shade: -0.03,\n      description:\n        \"Runs down behind and to the left of the esophagus. Near the diaphragm the esophagus crosses in front of it.\",\n    },\n    {\n      id: \"esophageal-arteries\",\n      label: \"Esophageal arteries\",\n      group: \"Arteries\",\n      tone: \"chart-1\", shade: 0.14,\n      description:\n        \"Small branches of the aorta that supply the thoracic part of the esophagus.\",\n    },\n    {\n      id: \"inferior-thyroid-arteries\",\n      label: \"Inferior thyroid arteries\",\n      group: \"Arteries\",\n      tone: \"chart-1\", shade: 0.06,\n      description:\n        \"Supply the thyroid gland and send branches to the esophagus in the neck.\",\n    },\n    {\n      id: \"left-gastric-artery\",\n      label: \"Left gastric artery\",\n      group: \"Arteries\",\n      tone: \"chart-1\", shade: 0.1,\n      description:\n        \"Runs along the upper curve of the stomach and sends branches up to the abdominal part of the esophagus.\",\n    },\n    {\n      id: \"azygos-vein\",\n      label: \"Azygos vein\",\n      group: \"Veins\",\n      tone: \"chart-4\", shade: 0.01,\n      description:\n        \"Runs up the right side of the spine, behind the esophagus, and drains most of the esophagus in the chest.\",\n    },\n    {\n      id: \"hemiazygos-veins\",\n      label: \"Hemiazygos veins\",\n      group: \"Veins\",\n      tone: \"chart-4\", shade: 0.1,\n      description:\n        \"Run up the left side of the spine and cross behind the aorta to join the azygos vein.\",\n    },\n    {\n      id: \"left-gastric-vein\",\n      label: \"Left gastric vein\",\n      group: \"Veins\",\n      tone: \"chart-4\", shade: 0.15,\n      description:\n        \"Drains the lower esophagus into the portal system. Its link with the azygos veins is where esophageal varices form when portal pressure rises.\",\n    },\n    {\n      id: \"right-vagus-nerve\",\n      label: \"Right vagus nerve\",\n      group: \"Nerves\",\n      tone: \"chart-2\", shade: 0.09,\n      description:\n        \"Descends beside the esophagus, joins the esophageal plexus and passes through the hiatus mostly behind it, as the posterior vagal trunk.\",\n    },\n    {\n      id: \"left-vagus-nerve\",\n      label: \"Left vagus nerve\",\n      group: \"Nerves\",\n      tone: \"chart-2\", shade: 0.01,\n      description:\n        \"Crosses the aortic arch, then spreads over the esophagus and passes through the hiatus mostly in front of it, as the anterior vagal trunk.\",\n    },\n    {\n      id: \"recurrent-laryngeal-nerves\",\n      label: \"Recurrent laryngeal nerves\",\n      group: \"Nerves\",\n      tone: \"chart-2\", shade: 0.16,\n      description:\n        \"Branches of the vagus that climb back up in the groove between the trachea and esophagus to reach the larynx.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"BodyParts3D / Anatomography, © The Database Center for Life Science. CC BY-SA 2.1 Japan. Adapted by OrganUI.\",\n    license: \"CC BY-SA 2.1 JP\",\n    licenseUrl: \"https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en\",\n    source:\n      \"https://github.com/organui/esophagus-3d/blob/ba0fddba344ae586f266586a9a30f3fce10f2aec/public/models/ATTRIBUTION.md\",\n  },\n}\n\nexport type EsophagusProps = Omit<OrganViewerProps, \"model\">\n\nexport function Esophagus(props: EsophagusProps) {\n  return <OrganViewer model={esophagusModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-esophagus.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Esófago",
+    "descriptionEs": "Esófago en 3D: 17 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+    "preview": "app/examples/organ-esophagus/preview.tsx",
+    "previewHref": "/examples/organ-esophagus",
+    "examples": [
+      {
+        "title": "Esófago",
+        "href": "/examples/organ-esophagus",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Esophagus selectedId={id} onSelectionChange={setId} />  // datos: esophagusModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "esophagusModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "digestive"
+  ],
+  "type": "registry:component"
+}
