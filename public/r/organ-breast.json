@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-breast",
+  "title": "Breast",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "Both breasts from the HuBMAP Human Reference Atlas: 16 selectable structures and 3 named views. Model licensed CC BY 4.0.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-breast.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Built in this repository by scripts/models/breast.ts from the HuBMAP Human\n// Reference Atlas breast reference organs. The GLB is served from organui.com\n// under its own licence; see attribution.source.\nexport const breastModel: OrganModel = {\n  name: \"Breast\",\n  src: \"https://organui.com/models/breast.glb\",\n  bytes: 2221312,\n  defaultView: \"Anterior\",\n  views: [\n    {\n      name: \"Anterior\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Right lateral\",\n      direction: [-1, 0, 0.25],\n      structureIds: [\n        \"right-fat\",\n        \"right-suspensory-ligaments\",\n        \"right-mammary-lobes\",\n        \"right-main-lactiferous-ducts\",\n        \"right-main-lactiferous-sinuses\",\n        \"right-areola\",\n        \"right-areolar-tubercles\",\n        \"right-nipple\",\n      ],\n    },\n    {\n      name: \"Left lateral\",\n      direction: [1, 0, 0.25],\n      structureIds: [\n        \"left-fat\",\n        \"left-suspensory-ligaments\",\n        \"left-mammary-lobes\",\n        \"left-main-lactiferous-ducts\",\n        \"left-main-lactiferous-sinuses\",\n        \"left-areola\",\n        \"left-areolar-tubercles\",\n        \"left-nipple\",\n      ],\n    },\n  ],\n  structures: [\n    {\n      id: \"right-fat\",\n      label: \"Right adipose tissue\",\n      group: \"Right breast\",\n      tone: \"chart-2\", shade: 0.21,\n      description:\n        \"The fat that gives the right breast most of its size and shape. It fills the spaces between the lobes and lies under the skin. Hide it to see the gland inside.\",\n    },\n    {\n      id: \"right-suspensory-ligaments\",\n      label: \"Right suspensory ligaments\",\n      group: \"Right breast\",\n      tone: \"chart-2\", shade: 0.25,\n      description:\n        \"Bands of connective tissue, also called Cooper's ligaments, that run from the deep fascia over the chest muscles to the skin and support the right breast.\",\n    },\n    {\n      id: \"right-mammary-lobes\",\n      label: \"Right mammary lobes\",\n      group: \"Right breast\",\n      tone: \"chart-1\", shade: 0.16,\n      description:\n        \"The 15 to 20 lobes of glandular tissue in the right breast. Each lobe is made of smaller lobules that produce milk during lactation.\",\n    },\n    {\n      id: \"right-main-lactiferous-ducts\",\n      label: \"Right lactiferous ducts\",\n      group: \"Right breast\",\n      tone: \"chart-1\", shade: 0.08,\n      description:\n        \"One main duct drains each lobe of the right breast and carries milk toward the nipple.\",\n    },\n    {\n      id: \"right-main-lactiferous-sinuses\",\n      label: \"Right lactiferous sinuses\",\n      group: \"Right breast\",\n      tone: \"chart-1\", shade: 0.0,\n      description:\n        \"Widened parts of the ducts just behind the areola of the right breast, where milk collects before it leaves through the nipple.\",\n    },\n    {\n      id: \"right-areola\",\n      label: \"Right areola\",\n      group: \"Right breast\",\n      tone: \"chart-1\", shade: 0.06,\n      description:\n        \"The ring of darker skin around the right nipple. It darkens and widens during pregnancy.\",\n    },\n    {\n      id: \"right-areolar-tubercles\",\n      label: \"Right areolar tubercles\",\n      group: \"Right breast\",\n      tone: \"chart-1\", shade: -0.0,\n      description:\n        \"Small bumps on the right areola, also called Montgomery's tubercles. Their glands keep the areola and nipple moist.\",\n    },\n    {\n      id: \"right-nipple\",\n      label: \"Right nipple\",\n      group: \"Right breast\",\n      tone: \"chart-1\", shade: -0.03,\n      description:\n        \"The raised centre of the right areola. The lactiferous ducts open on its tip.\",\n    },\n    {\n      id: \"left-fat\",\n      label: \"Left adipose tissue\",\n      group: \"Left breast\",\n      tone: \"chart-2\", shade: 0.19,\n      description:\n        \"The fat that gives the left breast most of its size and shape. It fills the spaces between the lobes and lies under the skin. Hide it to see the gland inside.\",\n    },\n    {\n      id: \"left-suspensory-ligaments\",\n      label: \"Left suspensory ligaments\",\n      group: \"Left breast\",\n      tone: \"chart-2\", shade: 0.21,\n      description:\n        \"Bands of connective tissue, also called Cooper's ligaments, that run from the deep fascia over the chest muscles to the skin and support the left breast.\",\n    },\n    {\n      id: \"left-mammary-lobes\",\n      label: \"Left mammary lobes\",\n      group: \"Left breast\",\n      tone: \"chart-1\", shade: 0.13,\n      description:\n        \"The 15 to 20 lobes of glandular tissue in the left breast. Each lobe is made of smaller lobules that produce milk during lactation.\",\n    },\n    {\n      id: \"left-main-lactiferous-ducts\",\n      label: \"Left lactiferous ducts\",\n      group: \"Left breast\",\n      tone: \"chart-1\", shade: 0.05,\n      description:\n        \"One main duct drains each lobe of the left breast and carries milk toward the nipple.\",\n    },\n    {\n      id: \"left-main-lactiferous-sinuses\",\n      label: \"Left lactiferous sinuses\",\n      group: \"Left breast\",\n      tone: \"chart-1\", shade: -0.03,\n      description:\n        \"Widened parts of the ducts just behind the areola of the left breast, where milk collects before it leaves through the nipple.\",\n    },\n    {\n      id: \"left-areola\",\n      label: \"Left areola\",\n      group: \"Left breast\",\n      tone: \"chart-1\", shade: 0.03,\n      description:\n        \"The ring of darker skin around the left nipple. It darkens and widens during pregnancy.\",\n    },\n    {\n      id: \"left-areolar-tubercles\",\n      label: \"Left areolar tubercles\",\n      group: \"Left breast\",\n      tone: \"chart-1\", shade: -0.03,\n      description:\n        \"Small bumps on the left areola, also called Montgomery's tubercles. Their glands keep the areola and nipple moist.\",\n    },\n    {\n      id: \"left-nipple\",\n      label: \"Left nipple\",\n      group: \"Left breast\",\n      tone: \"chart-1\", shade: -0.06,\n      description:\n        \"The raised centre of the left areola. The lactiferous ducts open on its tip.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"HuBMAP Human Reference Atlas 3D reference organs for the breast (Heidi Schlehlein), CC BY 4.0. Adapted by OrganUI.\",\n    license: \"CC BY 4.0\",\n    licenseUrl: \"https://creativecommons.org/licenses/by/4.0/\",\n    source:\n      \"https://github.com/organui/organui/blob/master/apps/web/public/models/breast.ATTRIBUTION.md\",\n  },\n}\n\nexport type BreastProps = Omit<OrganViewerProps, \"model\">\n\nexport function Breast(props: BreastProps) {\n  return <OrganViewer model={breastModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-breast.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Mama",
+    "descriptionEs": "Mama en 3D: 16 estructuras seleccionables. Modelo bajo CC BY 4.0; el crédito queda visible.",
+    "preview": "app/examples/organ-breast/preview.tsx",
+    "previewHref": "/examples/organ-breast",
+    "examples": [
+      {
+        "title": "Mama",
+        "href": "/examples/organ-breast",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Breast selectedId={id} onSelectionChange={setId} />  // datos: breastModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "breastModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "reproductive"
+  ],
+  "type": "registry:component"
+}
