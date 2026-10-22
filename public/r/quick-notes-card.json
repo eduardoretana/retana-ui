@@ -1,0 +1,71 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "quick-notes-card",
+  "title": "QuickNotesCard",
+  "author": "Eduardo Retana",
+  "description": "Short note list with accessible add and delete, and an empty state.",
+  "dependencies": [
+    "lucide-react",
+    "motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/ae/quick-notes-card.tsx",
+      "content": "\"use client\"\n\n/** Clean-room AE dashboard piece. Theme tokens only. */\n\nimport { useId, useState, type FormEvent } from \"react\"\nimport { AnimatePresence, motion, useReducedMotion } from \"motion/react\"\nimport { Plus, X } from \"lucide-react\"\n\nimport { AeCard, AeEmpty } from \"@/components/ui/ae/card-shell\"\n\nexport type QuickNote = { id: string; text: string }\n\nexport type QuickNotesCardProps = {\n  title?: string\n  notes?: QuickNote[]\n  onChange?: (notes: QuickNote[]) => void\n  placeholder?: string\n  className?: string\n}\n\nexport function QuickNotesCard({ title = \"Notas rápidas\", notes: initial = [], onChange, placeholder = \"Escribe una nota…\", className }: QuickNotesCardProps) {\n  const reduce = !!useReducedMotion()\n  const inputId = useId()\n  const [notes, setNotes] = useState(initial)\n  const [draft, setDraft] = useState(\"\")\n  const commit = (next: QuickNote[]) => {\n    setNotes(next)\n    onChange?.(next)\n  }\n  const add = (event: FormEvent) => {\n    event.preventDefault()\n    const text = draft.trim()\n    if (!text) return\n    commit([...notes, { id: `${Date.now()}`, text }])\n    setDraft(\"\")\n  }\n  return (\n    <AeCard title={title} className={className}>\n      {notes.length === 0 ? <AeEmpty>Sin notas por ahora.</AeEmpty> : null}\n      <ul className=\"grid gap-2\">\n        <AnimatePresence initial={false}>\n          {notes.map((note) => (\n            <motion.li\n              key={note.id}\n              layout={!reduce}\n              initial={reduce ? false : { opacity: 0, y: 6 }}\n              animate={{ opacity: 1, y: 0 }}\n              exit={reduce ? { opacity: 0, transition: { duration: 0 } } : { opacity: 0, x: 12 }}\n              className=\"group flex min-w-0 items-start gap-2 rounded-2xl bg-muted/60 px-3 py-2 text-sm\"\n            >\n              <span aria-hidden className=\"mt-1.5 size-1.5 shrink-0 rounded-full bg-primary\" />\n              <span className=\"min-w-0 flex-1 break-words\">{note.text}</span>\n              <button\n                type=\"button\"\n                aria-label={`Borrar nota: ${note.text}`}\n                onClick={() => commit(notes.filter((item) => item.id !== note.id))}\n                className=\"grid size-6 shrink-0 place-items-center rounded-full text-muted-foreground outline-none hover:bg-background hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring\"\n              >\n                <X aria-hidden className=\"size-3.5\" />\n              </button>\n            </motion.li>\n          ))}\n        </AnimatePresence>\n      </ul>\n      <form onSubmit={add} className=\"flex items-center gap-2\">\n        <label htmlFor={inputId} className=\"sr-only\">\n          Nueva nota\n        </label>\n        <input\n          id={inputId}\n          value={draft}\n          onChange={(event) => setDraft(event.target.value)}\n          placeholder={placeholder}\n          className=\"h-10 min-w-0 flex-1 rounded-full border border-input bg-background px-4 text-sm outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring\"\n        />\n        <button type=\"submit\" aria-label=\"Agregar nota\" disabled={!draft.trim()} className=\"grid size-10 shrink-0 place-items-center rounded-full bg-foreground text-background outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-40\">\n          <Plus aria-hidden className=\"size-4\" />\n        </button>\n      </form>\n    </AeCard>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/ae/quick-notes-card.tsx"
+    },
+    {
+      "path": "registry/blocks/ae/card-shell.tsx",
+      "content": "\"use client\"\n\n/** Clean-room AE dashboard surface. Theme tokens only. */\n\nimport type { ReactNode } from \"react\"\nimport { motion, useReducedMotion } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { aeCard, liftOnHover, riseItem } from \"@/lib/ae-dash\"\n\nexport type AeCardProps = {\n  title?: ReactNode\n  action?: ReactNode\n  children: ReactNode\n  className?: string\n  /** Section label for screen readers when there is no visible title. */\n  label?: string\n  as?: \"section\" | \"article\"\n}\n\n/** White card with a large radius, soft shadow, staggered rise and hover lift. Put it inside an `AeStagger`. */\nexport function AeCard({ title, action, children, className, label, as = \"section\" }: AeCardProps) {\n  const reduce = !!useReducedMotion()\n  const Tag = as === \"article\" ? motion.article : motion.section\n  return (\n    <Tag\n      data-slot=\"ae-card\"\n      aria-label={typeof title === \"string\" ? title : label}\n      variants={riseItem(reduce)}\n      whileHover={liftOnHover(reduce)}\n      className={cn(aeCard, \"flex min-w-0 flex-col gap-4 p-5 transition-shadow hover:shadow-md\", className)}\n    >\n      {title || action ? (\n        <header className=\"flex min-w-0 items-center justify-between gap-3\">\n          {title ? <h3 className=\"min-w-0 truncate text-base font-semibold\">{title}</h3> : <span />}\n          {action}\n        </header>\n      ) : null}\n      {children}\n    </Tag>\n  )\n}\n\n/** Runs the staggered entrance of every AeCard inside it. */\nexport function AeStagger({ children, className }: { children: ReactNode; className?: string }) {\n  return (\n    <motion.div data-slot=\"ae-stagger\" initial=\"hidden\" animate=\"shown\" variants={{ hidden: {}, shown: { transition: { staggerChildren: 0.07 } } }} className={className}>\n      {children}\n    </motion.div>\n  )\n}\n\nexport function AeEmpty({ children }: { children: ReactNode }) {\n  return <p className=\"rounded-2xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground\">{children}</p>\n}\n\nexport function AeSkeleton({ rows = 3 }: { rows?: number }) {\n  return (\n    <div role=\"status\" aria-label=\"Cargando\" className=\"grid gap-3\">\n      {Array.from({ length: rows }, (_, index) => (\n        <div key={index} className=\"h-6 animate-pulse rounded-full bg-muted motion-reduce:animate-none\" />\n      ))}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/ae/card-shell.tsx"
+    },
+    {
+      "path": "registry/lib/ae-dash.ts",
+      "content": "/**\n * Shared motion and surface helpers for the AE dashboard pieces.\n * Clean-room. Durations only, no colors or theme tokens.\n */\nimport type { Transition, Variants } from \"motion/react\"\n\nimport { motionPresets } from \"@/lib/motion\"\n\n/** Parent of a staggered entrance. Children use `riseItem`. */\nexport const staggerParent: Variants = {\n  hidden: {},\n  shown: { transition: { staggerChildren: motionPresets.stagger.line, delayChildren: 0.04 } },\n}\n\n/** Fade and slide up. With reduced motion the caller passes `reduce` and gets a plain fade. */\nexport function riseItem(reduce: boolean): Variants {\n  return reduce\n    ? { hidden: { opacity: 0 }, shown: { opacity: 1, transition: { duration: motionPresets.duration.instant } } }\n    : {\n        hidden: { opacity: 0, y: 16 },\n        shown: { opacity: 1, y: 0, transition: { duration: motionPresets.duration.considered, ease: [...motionPresets.ease.enter] } },\n      }\n}\n\n/** Grow transition for bars and stroke draws. Zero when motion is reduced. */\nexport function growTransition(reduce: boolean, index = 0): Transition {\n  return reduce ? { duration: 0 } : { duration: motionPresets.duration.considered * 1.5, ease: [...motionPresets.ease.enter], delay: 0.15 + index * motionPresets.stagger.item }\n}\n\n/** Hover lift for a card. Off when motion is reduced. */\nexport function liftOnHover(reduce: boolean) {\n  return reduce ? undefined : { y: -3, transition: motionPresets.spring.gentle }\n}\n\n/** Base card surface: theme card color, very large radius, soft shadow. */\nexport const aeCard = \"rounded-3xl border border-border/60 bg-card text-card-foreground shadow-sm\"\n\n/** Spanish compact number, e.g. 12 400 → \"12.4 mil\". */\nexport function compactEs(value: number) {\n  return new Intl.NumberFormat(\"es-MX\", { notation: \"compact\", maximumFractionDigits: 1 }).format(value)\n}\n\nexport function initials(name: string) {\n  return name\n    .split(/\\s+/)\n    .filter(Boolean)\n    .slice(0, 2)\n    .map((part) => part[0]?.toUpperCase() ?? \"\")\n    .join(\"\")\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/ae-dash.ts"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    // Exit decelerates, the same curve as CSS ease-out.\n    exit: [0, 0, 0.58, 1] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Notas rápidas",
+    "descriptionEs": "Lista corta de notas con alta y borrado accesibles, y estado vacío.",
+    "preview": "app/examples/quick-notes-card/preview.tsx",
+    "previewHref": "/examples/quick-notes-card",
+    "examples": [
+      {
+        "title": "Notas rápidas",
+        "href": "/examples/quick-notes-card",
+        "description": "Datos ficticios de Asesor Experto."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/quick-notes-card/stress",
+        "description": "320px, ancho y RTL."
+      }
+    ],
+    "usage": "<QuickNotesCard notes={notas} onChange={guardar} />",
+    "api": [
+      {
+        "name": "className",
+        "type": "string",
+        "description": "Root class."
+      }
+    ]
+  },
+  "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+  "categories": [
+    "dashboard",
+    "block",
+    "ae"
+  ],
+  "type": "registry:block"
+}
