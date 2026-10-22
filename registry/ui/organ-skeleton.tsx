@@ -228,7 +228,7 @@ export const skeletonModel: OrganModel = {
       id: "frontal-bone",
       label: "Frontal bone",
       group: "Skull",
-      tone: "chart-2", shade: 0.24,
+      color: "#e2d3b6",
       description:
         "Forms the forehead, the roofs of the eye sockets and the front of the cranial vault.",
     },
@@ -236,7 +236,7 @@ export const skeletonModel: OrganModel = {
       id: "right-parietal-bone",
       label: "Right parietal bone",
       group: "Skull",
-      tone: "chart-2", shade: 0.19,
+      color: "#d6c4a2",
       description:
         "One of a pair of curved plates forming the top and upper sides of the cranial vault, joined at the sagittal suture.",
     },
@@ -244,7 +244,7 @@ export const skeletonModel: OrganModel = {
       id: "left-parietal-bone",
       label: "Left parietal bone",
       group: "Skull",
-      tone: "chart-2", shade: 0.24,
+      color: "#e2d3b6",
       description:
         "One of a pair of curved plates forming the top and upper sides of the cranial vault, joined at the sagittal suture.",
     },
@@ -252,7 +252,7 @@ export const skeletonModel: OrganModel = {
       id: "occipital-bone",
       label: "Occipital bone",
       group: "Skull",
-      tone: "chart-2", shade: 0.19,
+      color: "#d6c4a2",
       description:
         "Forms the back and base of the skull. The spinal cord passes through its large opening, the foramen magnum, and its condyles rest on the atlas.",
     },
@@ -260,7 +260,7 @@ export const skeletonModel: OrganModel = {
       id: "right-temporal-bone",
       label: "Right temporal bone",
       group: "Skull",
-      tone: "chart-2", shade: 0.24,
+      color: "#e2d3b6",
       description:
         "Forms the lower side of the skull. It houses the middle and inner ear and forms the socket of the jaw joint.",
     },
@@ -268,7 +268,7 @@ export const skeletonModel: OrganModel = {
       id: "left-temporal-bone",
       label: "Left temporal bone",
       group: "Skull",
-      tone: "chart-2", shade: 0.19,
+      color: "#d6c4a2",
       description:
         "Forms the lower side of the skull. It houses the middle and inner ear and forms the socket of the jaw joint.",
     },
@@ -276,7 +276,7 @@ export const skeletonModel: OrganModel = {
       id: "sphenoid-bone",
       label: "Sphenoid bone",
       group: "Skull",
-      tone: "chart-2", shade: 0.24,
+      color: "#e2d3b6",
       description:
         "A butterfly-shaped bone across the middle of the skull base. It links the cranial and facial bones and cradles the pituitary gland.",
     },
@@ -284,7 +284,7 @@ export const skeletonModel: OrganModel = {
       id: "ethmoid-bone",
       label: "Ethmoid bone",
       group: "Skull",
-      tone: "chart-2", shade: 0.19,
+      color: "#d6c4a2",
       description:
         "A light, air-filled bone between the eye sockets. It forms part of the nasal cavity and the floor of the front of the cranium.",
     },
@@ -292,14 +292,14 @@ export const skeletonModel: OrganModel = {
       id: "right-nasal-bone",
       label: "Right nasal bone",
       group: "Skull",
-      tone: "chart-2", shade: 0.24,
+      color: "#e2d3b6",
       description: "One of two small bones forming the bridge of the nose.",
     },
     {
       id: "right-lacrimal-bone",
       label: "Right lacrimal bone",
       group: "Skull",
-      tone: "chart-2", shade: 0.19,
+      color: "#d6c4a2",
       description:
         "The smallest facial bone, in the inner wall of the eye socket. It holds the groove for the tear sac.",
     },
@@ -307,7 +307,7 @@ export const skeletonModel: OrganModel = {
       id: "right-zygomatic-bone",
       label: "Right zygomatic bone",
       group: "Skull",
-      tone: "chart-2", shade: 0.24,
+      color: "#e2d3b6",
       description:
         "The cheekbone. It forms the prominence of the cheek and part of the outer wall and floor of the eye socket.",
     },
@@ -315,7 +315,7 @@ export const skeletonModel: OrganModel = {
       id: "right-maxilla",
       label: "Right maxilla",
       group: "Skull",
-      tone: "chart-2", shade: 0.19,
+      color: "#d6c4a2",
       description:
         "One half of the upper jaw. It holds the upper teeth and forms most of the hard palate and the floor of the eye socket.",
     },
@@ -323,7 +323,7 @@ export const skeletonModel: OrganModel = {
       id: "right-palatine-bone",
       label: "Right palatine bone",
       group: "Skull",
-      tone: "chart-2", shade: 0.24,
+      color: "#e2d3b6",
       description:
         "An L-shaped bone forming the back of the hard palate and part of the nasal cavity wall.",
     },
@@ -331,7 +331,7 @@ export const skeletonModel: OrganModel = {
       id: "right-inferior-nasal-concha",
       label: "Right inferior nasal concha",
       group: "Skull",
-      tone: "chart-2", shade: 0.19,
+      color: "#d6c4a2",
       description:
         "A thin, scroll-shaped bone on the side wall of the nasal cavity that helps warm and moisten inhaled air.",
     },
@@ -339,14 +339,14 @@ export const skeletonModel: OrganModel = {
       id: "left-nasal-bone",
       label: "Left nasal bone",
       group: "Skull",
-      tone: "chart-2", shade: 0.24,
+      color: "#e2d3b6",
       description: "One of two small bones forming the bridge of the nose.",
     },
     {
       id: "left-lacrimal-bone",
       label: "Left lacrimal bone",
       group: "Skull",
-      tone: "chart-2", shade: 0.19,
+      color: "#d6c4a2",
       description:
         "The smallest facial bone, in the inner wall of the eye socket. It holds the groove for the tear sac.",
     },
@@ -354,7 +354,7 @@ export const skeletonModel: OrganModel = {
       id: "left-zygomatic-bone",
       label: "Left zygomatic bone",
       group: "Skull",
-      tone: "chart-2", shade: 0.24,
+      color: "#e2d3b6",
       description:
         "The cheekbone. It forms the prominence of the cheek and part of the outer wall and floor of the eye socket.",
     },
@@ -362,7 +362,7 @@ export const skeletonModel: OrganModel = {
       id: "left-maxilla",
       label: "Left maxilla",
       group: "Skull",
-      tone: "chart-2", shade: 0.19,
+      color: "#d6c4a2",
       description:
         "One half of the upper jaw. It holds the upper teeth and forms most of the hard palate and the floor of the eye socket.",
     },
@@ -370,7 +370,7 @@ export const skeletonModel: OrganModel = {
       id: "left-palatine-bone",
       label: "Left palatine bone",
       group: "Skull",
-      tone: "chart-2", shade: 0.24,
+      color: "#e2d3b6",
       description:
         "An L-shaped bone forming the back of the hard palate and part of the nasal cavity wall.",
     },
@@ -378,7 +378,7 @@ export const skeletonModel: OrganModel = {
       id: "left-inferior-nasal-concha",
       label: "Left inferior nasal concha",
       group: "Skull",
-      tone: "chart-2", shade: 0.19,
+      color: "#d6c4a2",
       description:
         "A thin, scroll-shaped bone on the side wall of the nasal cavity that helps warm and moisten inhaled air.",
     },
@@ -386,7 +386,7 @@ export const skeletonModel: OrganModel = {
       id: "vomer",
       label: "Vomer",
       group: "Skull",
-      tone: "chart-2", shade: 0.24,
+      color: "#e2d3b6",
       description:
         "A thin plate forming the back and lower part of the nasal septum.",
     },
@@ -394,7 +394,7 @@ export const skeletonModel: OrganModel = {
       id: "mandible",
       label: "Mandible",
       group: "Skull",
-      tone: "chart-2", shade: 0.19,
+      color: "#d6c4a2",
       description:
         "The lower jaw, the only movable bone of the skull. It holds the lower teeth and hinges at the temporal bones.",
     },
@@ -402,7 +402,7 @@ export const skeletonModel: OrganModel = {
       id: "hyoid-bone",
       label: "Hyoid bone",
       group: "Skull",
-      tone: "chart-2", shade: 0.24,
+      color: "#e2d3b6",
       description:
         "A U-shaped bone in the neck that touches no other bone. It anchors the tongue and the muscles used in swallowing.",
     },
@@ -410,7 +410,7 @@ export const skeletonModel: OrganModel = {
       id: "atlas-c1",
       label: "Atlas (C1)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.19,
+      color: "#dcc59d",
       description:
         "The first cervical vertebra. A ring of bone with no body, it carries the skull and lets the head nod.",
     },
@@ -418,7 +418,7 @@ export const skeletonModel: OrganModel = {
       id: "axis-c2",
       label: "Axis (C2)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.14,
+      color: "#cfb68b",
       description:
         "The second cervical vertebra. Its upward peg, the dens, is the pivot the atlas and head turn around.",
     },
@@ -426,7 +426,7 @@ export const skeletonModel: OrganModel = {
       id: "third-cervical-vertebra-c3",
       label: "Third cervical vertebra (C3)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.19,
+      color: "#dcc59d",
       description:
         "A small neck vertebra. Openings in its transverse processes carry the vertebral arteries up to the brain.",
     },
@@ -434,7 +434,7 @@ export const skeletonModel: OrganModel = {
       id: "fourth-cervical-vertebra-c4",
       label: "Fourth cervical vertebra (C4)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.14,
+      color: "#cfb68b",
       description:
         "A small neck vertebra. Openings in its transverse processes carry the vertebral arteries up to the brain.",
     },
@@ -442,7 +442,7 @@ export const skeletonModel: OrganModel = {
       id: "fifth-cervical-vertebra-c5",
       label: "Fifth cervical vertebra (C5)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.19,
+      color: "#dcc59d",
       description:
         "A small neck vertebra. Openings in its transverse processes carry the vertebral arteries up to the brain.",
     },
@@ -450,7 +450,7 @@ export const skeletonModel: OrganModel = {
       id: "sixth-cervical-vertebra-c6",
       label: "Sixth cervical vertebra (C6)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.14,
+      color: "#cfb68b",
       description:
         "A small neck vertebra. Openings in its transverse processes carry the vertebral arteries up to the brain.",
     },
@@ -458,7 +458,7 @@ export const skeletonModel: OrganModel = {
       id: "seventh-cervical-vertebra-c7",
       label: "Seventh cervical vertebra (C7)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.19,
+      color: "#dcc59d",
       description:
         "The lowest neck vertebra. Its long spinous process is the bump you can feel at the base of the neck.",
     },
@@ -466,7 +466,7 @@ export const skeletonModel: OrganModel = {
       id: "first-thoracic-vertebra-t1",
       label: "First thoracic vertebra (T1)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.14,
+      color: "#cfb68b",
       description:
         "A vertebra of the upper back. It has facets where the ribs attach, so the thoracic spine moves less than the neck or lower back.",
     },
@@ -474,7 +474,7 @@ export const skeletonModel: OrganModel = {
       id: "second-thoracic-vertebra-t2",
       label: "Second thoracic vertebra (T2)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.19,
+      color: "#dcc59d",
       description:
         "A vertebra of the upper back. It has facets where the ribs attach, so the thoracic spine moves less than the neck or lower back.",
     },
@@ -482,7 +482,7 @@ export const skeletonModel: OrganModel = {
       id: "third-thoracic-vertebra-t3",
       label: "Third thoracic vertebra (T3)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.14,
+      color: "#cfb68b",
       description:
         "A vertebra of the upper back. It has facets where the ribs attach, so the thoracic spine moves less than the neck or lower back.",
     },
@@ -490,7 +490,7 @@ export const skeletonModel: OrganModel = {
       id: "fourth-thoracic-vertebra-t4",
       label: "Fourth thoracic vertebra (T4)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.19,
+      color: "#dcc59d",
       description:
         "A vertebra of the upper back. It has facets where the ribs attach, so the thoracic spine moves less than the neck or lower back.",
     },
@@ -498,7 +498,7 @@ export const skeletonModel: OrganModel = {
       id: "fifth-thoracic-vertebra-t5",
       label: "Fifth thoracic vertebra (T5)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.14,
+      color: "#cfb68b",
       description:
         "A vertebra of the upper back. It has facets where the ribs attach, so the thoracic spine moves less than the neck or lower back.",
     },
@@ -506,7 +506,7 @@ export const skeletonModel: OrganModel = {
       id: "sixth-thoracic-vertebra-t6",
       label: "Sixth thoracic vertebra (T6)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.19,
+      color: "#dcc59d",
       description:
         "A vertebra of the upper back. It has facets where the ribs attach, so the thoracic spine moves less than the neck or lower back.",
     },
@@ -514,7 +514,7 @@ export const skeletonModel: OrganModel = {
       id: "seventh-thoracic-vertebra-t7",
       label: "Seventh thoracic vertebra (T7)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.14,
+      color: "#cfb68b",
       description:
         "A vertebra of the upper back. It has facets where the ribs attach, so the thoracic spine moves less than the neck or lower back.",
     },
@@ -522,7 +522,7 @@ export const skeletonModel: OrganModel = {
       id: "eighth-thoracic-vertebra-t8",
       label: "Eighth thoracic vertebra (T8)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.19,
+      color: "#dcc59d",
       description:
         "A vertebra of the upper back. It has facets where the ribs attach, so the thoracic spine moves less than the neck or lower back.",
     },
@@ -530,7 +530,7 @@ export const skeletonModel: OrganModel = {
       id: "ninth-thoracic-vertebra-t9",
       label: "Ninth thoracic vertebra (T9)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.14,
+      color: "#cfb68b",
       description:
         "A vertebra of the upper back. It has facets where the ribs attach, so the thoracic spine moves less than the neck or lower back.",
     },
@@ -538,7 +538,7 @@ export const skeletonModel: OrganModel = {
       id: "tenth-thoracic-vertebra-t10",
       label: "Tenth thoracic vertebra (T10)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.19,
+      color: "#dcc59d",
       description:
         "A vertebra of the upper back. It has facets where the ribs attach, so the thoracic spine moves less than the neck or lower back.",
     },
@@ -546,7 +546,7 @@ export const skeletonModel: OrganModel = {
       id: "eleventh-thoracic-vertebra-t11",
       label: "Eleventh thoracic vertebra (T11)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.14,
+      color: "#cfb68b",
       description:
         "A vertebra of the upper back. It has facets where the ribs attach, so the thoracic spine moves less than the neck or lower back.",
     },
@@ -554,7 +554,7 @@ export const skeletonModel: OrganModel = {
       id: "twelfth-thoracic-vertebra-t12",
       label: "Twelfth thoracic vertebra (T12)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.19,
+      color: "#dcc59d",
       description:
         "A vertebra of the upper back. It has facets where the ribs attach, so the thoracic spine moves less than the neck or lower back.",
     },
@@ -562,7 +562,7 @@ export const skeletonModel: OrganModel = {
       id: "first-lumbar-vertebra-l1",
       label: "First lumbar vertebra (L1)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.14,
+      color: "#cfb68b",
       description:
         "A large vertebra of the lower back. Its heavy body carries most of the weight of the upper body.",
     },
@@ -570,7 +570,7 @@ export const skeletonModel: OrganModel = {
       id: "second-lumbar-vertebra-l2",
       label: "Second lumbar vertebra (L2)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.19,
+      color: "#dcc59d",
       description:
         "A large vertebra of the lower back. Its heavy body carries most of the weight of the upper body.",
     },
@@ -578,7 +578,7 @@ export const skeletonModel: OrganModel = {
       id: "third-lumbar-vertebra-l3",
       label: "Third lumbar vertebra (L3)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.14,
+      color: "#cfb68b",
       description:
         "A large vertebra of the lower back. Its heavy body carries most of the weight of the upper body.",
     },
@@ -586,7 +586,7 @@ export const skeletonModel: OrganModel = {
       id: "fourth-lumbar-vertebra-l4",
       label: "Fourth lumbar vertebra (L4)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.19,
+      color: "#dcc59d",
       description:
         "A large vertebra of the lower back. Its heavy body carries most of the weight of the upper body.",
     },
@@ -594,7 +594,7 @@ export const skeletonModel: OrganModel = {
       id: "fifth-lumbar-vertebra-l5",
       label: "Fifth lumbar vertebra (L5)",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.14,
+      color: "#cfb68b",
       description:
         "A large vertebra of the lower back. Its heavy body carries most of the weight of the upper body.",
     },
@@ -602,7 +602,7 @@ export const skeletonModel: OrganModel = {
       id: "sacrum",
       label: "Sacrum",
       group: "Vertebral column",
-      tone: "chart-2", shade: 0.19,
+      color: "#dcc59d",
       description:
         "Five fused vertebrae forming the back of the pelvis. It joins the hip bones at the sacroiliac joints.",
     },
@@ -610,7 +610,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-c2-c3",
       label: "Intervertebral disc C2–C3",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -618,7 +618,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-c3-c4",
       label: "Intervertebral disc C3–C4",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -626,7 +626,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-c4-c5",
       label: "Intervertebral disc C4–C5",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -634,7 +634,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-c5-c6",
       label: "Intervertebral disc C5–C6",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -642,7 +642,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-c6-c7",
       label: "Intervertebral disc C6–C7",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -650,7 +650,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-c7-t1",
       label: "Intervertebral disc C7–T1",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -658,7 +658,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-t1-t2",
       label: "Intervertebral disc T1–T2",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -666,7 +666,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-t2-t3",
       label: "Intervertebral disc T2–T3",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -674,7 +674,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-t3-t4",
       label: "Intervertebral disc T3–T4",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -682,7 +682,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-t4-t5",
       label: "Intervertebral disc T4–T5",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -690,7 +690,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-t5-t6",
       label: "Intervertebral disc T5–T6",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -698,7 +698,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-t6-t7",
       label: "Intervertebral disc T6–T7",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -706,7 +706,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-t7-t8",
       label: "Intervertebral disc T7–T8",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -714,7 +714,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-t8-t9",
       label: "Intervertebral disc T8–T9",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -722,7 +722,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-t9-t10",
       label: "Intervertebral disc T9–T10",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -730,7 +730,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-t10-t11",
       label: "Intervertebral disc T10–T11",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -738,7 +738,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-t11-t12",
       label: "Intervertebral disc T11–T12",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -746,7 +746,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-t12-l1",
       label: "Intervertebral disc T12–L1",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -754,7 +754,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-l1-l2",
       label: "Intervertebral disc L1–L2",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -762,7 +762,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-l2-l3",
       label: "Intervertebral disc L2–L3",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -770,7 +770,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-l3-l4",
       label: "Intervertebral disc L3–L4",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -778,7 +778,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-l4-l5",
       label: "Intervertebral disc L4–L5",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -786,7 +786,7 @@ export const skeletonModel: OrganModel = {
       id: "intervertebral-disc-l5-s1",
       label: "Intervertebral disc L5–S1",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A pad of fibrocartilage between two vertebral bodies. Its tough outer ring and soft core absorb shock and let the spine bend.",
     },
@@ -794,7 +794,7 @@ export const skeletonModel: OrganModel = {
       id: "manubrium-of-sternum",
       label: "Manubrium of sternum",
       group: "Thorax",
-      tone: "chart-2", shade: 0.26,
+      color: "#e6d8bd",
       description:
         "The top of the breastbone. The clavicles and first ribs attach to it.",
     },
@@ -802,7 +802,7 @@ export const skeletonModel: OrganModel = {
       id: "body-of-sternum",
       label: "Body of sternum",
       group: "Thorax",
-      tone: "chart-2", shade: 0.2,
+      color: "#d9c8a8",
       description:
         "The long middle part of the breastbone, where the second to seventh costal cartilages attach.",
     },
@@ -810,7 +810,7 @@ export const skeletonModel: OrganModel = {
       id: "xiphoid-process",
       label: "Xiphoid process",
       group: "Thorax",
-      tone: "chart-2", shade: 0.26,
+      color: "#e6d8bd",
       description:
         "The small tip at the bottom of the breastbone. Some abdominal muscles and the diaphragm attach to it.",
     },
@@ -818,7 +818,7 @@ export const skeletonModel: OrganModel = {
       id: "right-first-rib",
       label: "Right first rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.2,
+      color: "#d9c8a8",
       description:
         "A true rib: its own costal cartilage joins it directly to the sternum.",
     },
@@ -826,7 +826,7 @@ export const skeletonModel: OrganModel = {
       id: "right-second-rib",
       label: "Right second rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.26,
+      color: "#e6d8bd",
       description:
         "A true rib: its own costal cartilage joins it directly to the sternum.",
     },
@@ -834,7 +834,7 @@ export const skeletonModel: OrganModel = {
       id: "right-third-rib",
       label: "Right third rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.2,
+      color: "#d9c8a8",
       description:
         "A true rib: its own costal cartilage joins it directly to the sternum.",
     },
@@ -842,7 +842,7 @@ export const skeletonModel: OrganModel = {
       id: "right-fourth-rib",
       label: "Right fourth rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.26,
+      color: "#e6d8bd",
       description:
         "A true rib: its own costal cartilage joins it directly to the sternum.",
     },
@@ -850,7 +850,7 @@ export const skeletonModel: OrganModel = {
       id: "right-fifth-rib",
       label: "Right fifth rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.2,
+      color: "#d9c8a8",
       description:
         "A true rib: its own costal cartilage joins it directly to the sternum.",
     },
@@ -858,7 +858,7 @@ export const skeletonModel: OrganModel = {
       id: "right-sixth-rib",
       label: "Right sixth rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.26,
+      color: "#e6d8bd",
       description:
         "A true rib: its own costal cartilage joins it directly to the sternum.",
     },
@@ -866,7 +866,7 @@ export const skeletonModel: OrganModel = {
       id: "right-seventh-rib",
       label: "Right seventh rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.2,
+      color: "#d9c8a8",
       description:
         "A true rib: its own costal cartilage joins it directly to the sternum.",
     },
@@ -874,7 +874,7 @@ export const skeletonModel: OrganModel = {
       id: "right-eighth-rib",
       label: "Right eighth rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.26,
+      color: "#e6d8bd",
       description:
         "A false rib: its cartilage joins the cartilage of the rib above instead of the sternum.",
     },
@@ -882,7 +882,7 @@ export const skeletonModel: OrganModel = {
       id: "right-ninth-rib",
       label: "Right ninth rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.2,
+      color: "#d9c8a8",
       description:
         "A false rib: its cartilage joins the cartilage of the rib above instead of the sternum.",
     },
@@ -890,7 +890,7 @@ export const skeletonModel: OrganModel = {
       id: "right-tenth-rib",
       label: "Right tenth rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.26,
+      color: "#e6d8bd",
       description:
         "A false rib: its cartilage joins the cartilage of the rib above instead of the sternum.",
     },
@@ -898,7 +898,7 @@ export const skeletonModel: OrganModel = {
       id: "right-eleventh-rib",
       label: "Right eleventh rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.2,
+      color: "#d9c8a8",
       description:
         "A floating rib: it ends in the muscles of the flank without reaching the front of the chest.",
     },
@@ -906,7 +906,7 @@ export const skeletonModel: OrganModel = {
       id: "right-twelfth-rib",
       label: "Right twelfth rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.26,
+      color: "#e6d8bd",
       description:
         "A floating rib: it ends in the muscles of the flank without reaching the front of the chest.",
     },
@@ -914,7 +914,7 @@ export const skeletonModel: OrganModel = {
       id: "left-first-rib",
       label: "Left first rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.2,
+      color: "#d9c8a8",
       description:
         "A true rib: its own costal cartilage joins it directly to the sternum.",
     },
@@ -922,7 +922,7 @@ export const skeletonModel: OrganModel = {
       id: "left-second-rib",
       label: "Left second rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.26,
+      color: "#e6d8bd",
       description:
         "A true rib: its own costal cartilage joins it directly to the sternum.",
     },
@@ -930,7 +930,7 @@ export const skeletonModel: OrganModel = {
       id: "left-third-rib",
       label: "Left third rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.2,
+      color: "#d9c8a8",
       description:
         "A true rib: its own costal cartilage joins it directly to the sternum.",
     },
@@ -938,7 +938,7 @@ export const skeletonModel: OrganModel = {
       id: "left-fourth-rib",
       label: "Left fourth rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.26,
+      color: "#e6d8bd",
       description:
         "A true rib: its own costal cartilage joins it directly to the sternum.",
     },
@@ -946,7 +946,7 @@ export const skeletonModel: OrganModel = {
       id: "left-fifth-rib",
       label: "Left fifth rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.2,
+      color: "#d9c8a8",
       description:
         "A true rib: its own costal cartilage joins it directly to the sternum.",
     },
@@ -954,7 +954,7 @@ export const skeletonModel: OrganModel = {
       id: "left-sixth-rib",
       label: "Left sixth rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.26,
+      color: "#e6d8bd",
       description:
         "A true rib: its own costal cartilage joins it directly to the sternum.",
     },
@@ -962,7 +962,7 @@ export const skeletonModel: OrganModel = {
       id: "left-seventh-rib",
       label: "Left seventh rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.2,
+      color: "#d9c8a8",
       description:
         "A true rib: its own costal cartilage joins it directly to the sternum.",
     },
@@ -970,7 +970,7 @@ export const skeletonModel: OrganModel = {
       id: "left-eighth-rib",
       label: "Left eighth rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.26,
+      color: "#e6d8bd",
       description:
         "A false rib: its cartilage joins the cartilage of the rib above instead of the sternum.",
     },
@@ -978,7 +978,7 @@ export const skeletonModel: OrganModel = {
       id: "left-ninth-rib",
       label: "Left ninth rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.2,
+      color: "#d9c8a8",
       description:
         "A false rib: its cartilage joins the cartilage of the rib above instead of the sternum.",
     },
@@ -986,7 +986,7 @@ export const skeletonModel: OrganModel = {
       id: "left-tenth-rib",
       label: "Left tenth rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.26,
+      color: "#e6d8bd",
       description:
         "A false rib: its cartilage joins the cartilage of the rib above instead of the sternum.",
     },
@@ -994,7 +994,7 @@ export const skeletonModel: OrganModel = {
       id: "left-eleventh-rib",
       label: "Left eleventh rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.2,
+      color: "#d9c8a8",
       description:
         "A floating rib: it ends in the muscles of the flank without reaching the front of the chest.",
     },
@@ -1002,7 +1002,7 @@ export const skeletonModel: OrganModel = {
       id: "left-twelfth-rib",
       label: "Left twelfth rib",
       group: "Thorax",
-      tone: "chart-2", shade: 0.26,
+      color: "#e6d8bd",
       description:
         "A floating rib: it ends in the muscles of the flank without reaching the front of the chest.",
     },
@@ -1010,7 +1010,7 @@ export const skeletonModel: OrganModel = {
       id: "right-first-costal-cartilage",
       label: "Right first costal cartilage",
       group: "Thorax",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A bar of hyaline cartilage joining a rib to the sternum. Its flexibility lets the chest expand when you breathe.",
     },
@@ -1018,7 +1018,7 @@ export const skeletonModel: OrganModel = {
       id: "right-second-costal-cartilage",
       label: "Right second costal cartilage",
       group: "Thorax",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "A bar of hyaline cartilage joining a rib to the sternum. Its flexibility lets the chest expand when you breathe.",
     },
@@ -1026,7 +1026,7 @@ export const skeletonModel: OrganModel = {
       id: "right-third-costal-cartilage",
       label: "Right third costal cartilage",
       group: "Thorax",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A bar of hyaline cartilage joining a rib to the sternum. Its flexibility lets the chest expand when you breathe.",
     },
@@ -1034,7 +1034,7 @@ export const skeletonModel: OrganModel = {
       id: "right-fourth-costal-cartilage",
       label: "Right fourth costal cartilage",
       group: "Thorax",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "A bar of hyaline cartilage joining a rib to the sternum. Its flexibility lets the chest expand when you breathe.",
     },
@@ -1042,7 +1042,7 @@ export const skeletonModel: OrganModel = {
       id: "right-fifth-costal-cartilage",
       label: "Right fifth costal cartilage",
       group: "Thorax",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A bar of hyaline cartilage joining a rib to the sternum. Its flexibility lets the chest expand when you breathe.",
     },
@@ -1050,7 +1050,7 @@ export const skeletonModel: OrganModel = {
       id: "right-sixth-costal-cartilage",
       label: "Right sixth costal cartilage",
       group: "Thorax",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "A bar of hyaline cartilage joining a rib to the sternum. Its flexibility lets the chest expand when you breathe.",
     },
@@ -1058,7 +1058,7 @@ export const skeletonModel: OrganModel = {
       id: "right-seventh-costal-cartilage",
       label: "Right seventh costal cartilage",
       group: "Thorax",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A bar of hyaline cartilage joining a rib to the sternum. Its flexibility lets the chest expand when you breathe.",
     },
@@ -1066,7 +1066,7 @@ export const skeletonModel: OrganModel = {
       id: "right-lower-costal-cartilages",
       label: "Right lower costal cartilages",
       group: "Thorax",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "The cartilages of the eighth to tenth ribs, which join one another and the seventh cartilage to form the lower edge of the rib cage, the costal margin.",
     },
@@ -1074,7 +1074,7 @@ export const skeletonModel: OrganModel = {
       id: "left-first-costal-cartilage",
       label: "Left first costal cartilage",
       group: "Thorax",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A bar of hyaline cartilage joining a rib to the sternum. Its flexibility lets the chest expand when you breathe.",
     },
@@ -1082,7 +1082,7 @@ export const skeletonModel: OrganModel = {
       id: "left-second-costal-cartilage",
       label: "Left second costal cartilage",
       group: "Thorax",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "A bar of hyaline cartilage joining a rib to the sternum. Its flexibility lets the chest expand when you breathe.",
     },
@@ -1090,7 +1090,7 @@ export const skeletonModel: OrganModel = {
       id: "left-third-costal-cartilage",
       label: "Left third costal cartilage",
       group: "Thorax",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A bar of hyaline cartilage joining a rib to the sternum. Its flexibility lets the chest expand when you breathe.",
     },
@@ -1098,7 +1098,7 @@ export const skeletonModel: OrganModel = {
       id: "left-fourth-costal-cartilage",
       label: "Left fourth costal cartilage",
       group: "Thorax",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "A bar of hyaline cartilage joining a rib to the sternum. Its flexibility lets the chest expand when you breathe.",
     },
@@ -1106,7 +1106,7 @@ export const skeletonModel: OrganModel = {
       id: "left-fifth-costal-cartilage",
       label: "Left fifth costal cartilage",
       group: "Thorax",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A bar of hyaline cartilage joining a rib to the sternum. Its flexibility lets the chest expand when you breathe.",
     },
@@ -1114,7 +1114,7 @@ export const skeletonModel: OrganModel = {
       id: "left-sixth-costal-cartilage",
       label: "Left sixth costal cartilage",
       group: "Thorax",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "A bar of hyaline cartilage joining a rib to the sternum. Its flexibility lets the chest expand when you breathe.",
     },
@@ -1122,7 +1122,7 @@ export const skeletonModel: OrganModel = {
       id: "left-seventh-costal-cartilage",
       label: "Left seventh costal cartilage",
       group: "Thorax",
-      tone: "chart-4", shade: 0.14,
+      color: "#98b5bf",
       description:
         "A bar of hyaline cartilage joining a rib to the sternum. Its flexibility lets the chest expand when you breathe.",
     },
@@ -1130,7 +1130,7 @@ export const skeletonModel: OrganModel = {
       id: "left-lower-costal-cartilages",
       label: "Left lower costal cartilages",
       group: "Thorax",
-      tone: "chart-4", shade: 0.18,
+      color: "#a9c3cb",
       description:
         "The cartilages of the eighth to tenth ribs, which join one another and the seventh cartilage to form the lower edge of the rib cage, the costal margin.",
     },
@@ -1138,7 +1138,7 @@ export const skeletonModel: OrganModel = {
       id: "right-clavicle",
       label: "Right clavicle",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "The collarbone. An S-shaped strut between the sternum and the scapula that holds the shoulder out from the chest.",
     },
@@ -1146,7 +1146,7 @@ export const skeletonModel: OrganModel = {
       id: "right-scapula",
       label: "Right scapula",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The shoulder blade. A flat triangular bone on the back of the rib cage; its shallow socket holds the head of the humerus.",
     },
@@ -1154,14 +1154,14 @@ export const skeletonModel: OrganModel = {
       id: "right-humerus",
       label: "Right humerus",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description: "The upper arm bone, from the shoulder joint to the elbow.",
     },
     {
       id: "right-radius",
       label: "Right radius",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The forearm bone on the thumb side. It rotates around the ulna to turn the palm up or down.",
     },
@@ -1169,7 +1169,7 @@ export const skeletonModel: OrganModel = {
       id: "right-ulna",
       label: "Right ulna",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "The forearm bone on the little-finger side. Its hooked upper end forms the point of the elbow.",
     },
@@ -1177,7 +1177,7 @@ export const skeletonModel: OrganModel = {
       id: "right-scaphoid",
       label: "Right scaphoid",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The largest bone of the first carpal row, on the thumb side; the most commonly fractured wrist bone.",
     },
@@ -1185,7 +1185,7 @@ export const skeletonModel: OrganModel = {
       id: "right-lunate",
       label: "Right lunate",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "A crescent-shaped bone in the middle of the first carpal row, between the scaphoid and triquetral.",
     },
@@ -1193,7 +1193,7 @@ export const skeletonModel: OrganModel = {
       id: "right-triquetral",
       label: "Right triquetral",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "A pyramid-shaped bone of the first carpal row on the little-finger side.",
     },
@@ -1201,7 +1201,7 @@ export const skeletonModel: OrganModel = {
       id: "right-pisiform",
       label: "Right pisiform",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "A small pea-shaped bone on the front of the triquetral, inside the tendon of a wrist flexor.",
     },
@@ -1209,7 +1209,7 @@ export const skeletonModel: OrganModel = {
       id: "right-trapezium",
       label: "Right trapezium",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The carpal bone at the base of the thumb; its saddle-shaped joint gives the thumb its wide range of movement.",
     },
@@ -1217,7 +1217,7 @@ export const skeletonModel: OrganModel = {
       id: "right-trapezoid",
       label: "Right trapezoid",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "A small wedge-shaped carpal bone at the base of the index finger.",
     },
@@ -1225,7 +1225,7 @@ export const skeletonModel: OrganModel = {
       id: "right-capitate",
       label: "Right capitate",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The largest carpal bone, at the centre of the wrist below the middle finger.",
     },
@@ -1233,7 +1233,7 @@ export const skeletonModel: OrganModel = {
       id: "right-hamate",
       label: "Right hamate",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "A carpal bone on the little-finger side with a hook that forms one wall of the carpal tunnel.",
     },
@@ -1241,7 +1241,7 @@ export const skeletonModel: OrganModel = {
       id: "right-first-metacarpal-bone",
       label: "Right first metacarpal bone",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "A long bone of the palm leading to the thumb. Its rounded head forms a knuckle.",
     },
@@ -1249,7 +1249,7 @@ export const skeletonModel: OrganModel = {
       id: "right-second-metacarpal-bone",
       label: "Right second metacarpal bone",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "A long bone of the palm leading to the index finger. Its rounded head forms a knuckle.",
     },
@@ -1257,7 +1257,7 @@ export const skeletonModel: OrganModel = {
       id: "right-third-metacarpal-bone",
       label: "Right third metacarpal bone",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "A long bone of the palm leading to the middle finger. Its rounded head forms a knuckle.",
     },
@@ -1265,7 +1265,7 @@ export const skeletonModel: OrganModel = {
       id: "right-fourth-metacarpal-bone",
       label: "Right fourth metacarpal bone",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "A long bone of the palm leading to the ring finger. Its rounded head forms a knuckle.",
     },
@@ -1273,7 +1273,7 @@ export const skeletonModel: OrganModel = {
       id: "right-fifth-metacarpal-bone",
       label: "Right fifth metacarpal bone",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "A long bone of the palm leading to the little finger. Its rounded head forms a knuckle.",
     },
@@ -1281,7 +1281,7 @@ export const skeletonModel: OrganModel = {
       id: "right-thumb-proximal-phalanx",
       label: "Right thumb, proximal phalanx",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal. The thumb has only two phalanges.",
     },
@@ -1289,7 +1289,7 @@ export const skeletonModel: OrganModel = {
       id: "right-index-finger-proximal-phalanx",
       label: "Right index finger, proximal phalanx",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal.",
     },
@@ -1297,7 +1297,7 @@ export const skeletonModel: OrganModel = {
       id: "right-middle-finger-proximal-phalanx",
       label: "Right middle finger, proximal phalanx",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal.",
     },
@@ -1305,7 +1305,7 @@ export const skeletonModel: OrganModel = {
       id: "right-ring-finger-proximal-phalanx",
       label: "Right ring finger, proximal phalanx",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal.",
     },
@@ -1313,7 +1313,7 @@ export const skeletonModel: OrganModel = {
       id: "right-little-finger-proximal-phalanx",
       label: "Right little finger, proximal phalanx",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal.",
     },
@@ -1321,7 +1321,7 @@ export const skeletonModel: OrganModel = {
       id: "right-index-finger-middle-phalanx",
       label: "Right index finger, middle phalanx",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The middle of the three phalanges of a finger or lesser toe.",
     },
@@ -1329,7 +1329,7 @@ export const skeletonModel: OrganModel = {
       id: "right-middle-finger-middle-phalanx",
       label: "Right middle finger, middle phalanx",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "The middle of the three phalanges of a finger or lesser toe.",
     },
@@ -1337,7 +1337,7 @@ export const skeletonModel: OrganModel = {
       id: "right-ring-finger-middle-phalanx",
       label: "Right ring finger, middle phalanx",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The middle of the three phalanges of a finger or lesser toe.",
     },
@@ -1345,7 +1345,7 @@ export const skeletonModel: OrganModel = {
       id: "right-little-finger-middle-phalanx",
       label: "Right little finger, middle phalanx",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "The middle of the three phalanges of a finger or lesser toe.",
     },
@@ -1353,7 +1353,7 @@ export const skeletonModel: OrganModel = {
       id: "right-thumb-distal-phalanx",
       label: "Right thumb, distal phalanx",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail. The thumb has only two phalanges.",
     },
@@ -1361,7 +1361,7 @@ export const skeletonModel: OrganModel = {
       id: "right-index-finger-distal-phalanx",
       label: "Right index finger, distal phalanx",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail.",
     },
@@ -1369,7 +1369,7 @@ export const skeletonModel: OrganModel = {
       id: "right-middle-finger-distal-phalanx",
       label: "Right middle finger, distal phalanx",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail.",
     },
@@ -1377,7 +1377,7 @@ export const skeletonModel: OrganModel = {
       id: "right-ring-finger-distal-phalanx",
       label: "Right ring finger, distal phalanx",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail.",
     },
@@ -1385,7 +1385,7 @@ export const skeletonModel: OrganModel = {
       id: "right-little-finger-distal-phalanx",
       label: "Right little finger, distal phalanx",
       group: "Right upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail.",
     },
@@ -1393,7 +1393,7 @@ export const skeletonModel: OrganModel = {
       id: "left-clavicle",
       label: "Left clavicle",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "The collarbone. An S-shaped strut between the sternum and the scapula that holds the shoulder out from the chest.",
     },
@@ -1401,7 +1401,7 @@ export const skeletonModel: OrganModel = {
       id: "left-scapula",
       label: "Left scapula",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The shoulder blade. A flat triangular bone on the back of the rib cage; its shallow socket holds the head of the humerus.",
     },
@@ -1409,14 +1409,14 @@ export const skeletonModel: OrganModel = {
       id: "left-humerus",
       label: "Left humerus",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description: "The upper arm bone, from the shoulder joint to the elbow.",
     },
     {
       id: "left-radius",
       label: "Left radius",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The forearm bone on the thumb side. It rotates around the ulna to turn the palm up or down.",
     },
@@ -1424,7 +1424,7 @@ export const skeletonModel: OrganModel = {
       id: "left-ulna",
       label: "Left ulna",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "The forearm bone on the little-finger side. Its hooked upper end forms the point of the elbow.",
     },
@@ -1432,7 +1432,7 @@ export const skeletonModel: OrganModel = {
       id: "left-scaphoid",
       label: "Left scaphoid",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The largest bone of the first carpal row, on the thumb side; the most commonly fractured wrist bone.",
     },
@@ -1440,7 +1440,7 @@ export const skeletonModel: OrganModel = {
       id: "left-lunate",
       label: "Left lunate",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "A crescent-shaped bone in the middle of the first carpal row, between the scaphoid and triquetral.",
     },
@@ -1448,7 +1448,7 @@ export const skeletonModel: OrganModel = {
       id: "left-triquetral",
       label: "Left triquetral",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "A pyramid-shaped bone of the first carpal row on the little-finger side.",
     },
@@ -1456,7 +1456,7 @@ export const skeletonModel: OrganModel = {
       id: "left-pisiform",
       label: "Left pisiform",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "A small pea-shaped bone on the front of the triquetral, inside the tendon of a wrist flexor.",
     },
@@ -1464,7 +1464,7 @@ export const skeletonModel: OrganModel = {
       id: "left-trapezium",
       label: "Left trapezium",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The carpal bone at the base of the thumb; its saddle-shaped joint gives the thumb its wide range of movement.",
     },
@@ -1472,7 +1472,7 @@ export const skeletonModel: OrganModel = {
       id: "left-trapezoid",
       label: "Left trapezoid",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "A small wedge-shaped carpal bone at the base of the index finger.",
     },
@@ -1480,7 +1480,7 @@ export const skeletonModel: OrganModel = {
       id: "left-capitate",
       label: "Left capitate",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The largest carpal bone, at the centre of the wrist below the middle finger.",
     },
@@ -1488,7 +1488,7 @@ export const skeletonModel: OrganModel = {
       id: "left-hamate",
       label: "Left hamate",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "A carpal bone on the little-finger side with a hook that forms one wall of the carpal tunnel.",
     },
@@ -1496,7 +1496,7 @@ export const skeletonModel: OrganModel = {
       id: "left-first-metacarpal-bone",
       label: "Left first metacarpal bone",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "A long bone of the palm leading to the thumb. Its rounded head forms a knuckle.",
     },
@@ -1504,7 +1504,7 @@ export const skeletonModel: OrganModel = {
       id: "left-second-metacarpal-bone",
       label: "Left second metacarpal bone",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "A long bone of the palm leading to the index finger. Its rounded head forms a knuckle.",
     },
@@ -1512,7 +1512,7 @@ export const skeletonModel: OrganModel = {
       id: "left-third-metacarpal-bone",
       label: "Left third metacarpal bone",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "A long bone of the palm leading to the middle finger. Its rounded head forms a knuckle.",
     },
@@ -1520,7 +1520,7 @@ export const skeletonModel: OrganModel = {
       id: "left-fourth-metacarpal-bone",
       label: "Left fourth metacarpal bone",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "A long bone of the palm leading to the ring finger. Its rounded head forms a knuckle.",
     },
@@ -1528,7 +1528,7 @@ export const skeletonModel: OrganModel = {
       id: "left-fifth-metacarpal-bone",
       label: "Left fifth metacarpal bone",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "A long bone of the palm leading to the little finger. Its rounded head forms a knuckle.",
     },
@@ -1536,7 +1536,7 @@ export const skeletonModel: OrganModel = {
       id: "left-thumb-proximal-phalanx",
       label: "Left thumb, proximal phalanx",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal. The thumb has only two phalanges.",
     },
@@ -1544,7 +1544,7 @@ export const skeletonModel: OrganModel = {
       id: "left-index-finger-proximal-phalanx",
       label: "Left index finger, proximal phalanx",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal.",
     },
@@ -1552,7 +1552,7 @@ export const skeletonModel: OrganModel = {
       id: "left-middle-finger-proximal-phalanx",
       label: "Left middle finger, proximal phalanx",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal.",
     },
@@ -1560,7 +1560,7 @@ export const skeletonModel: OrganModel = {
       id: "left-ring-finger-proximal-phalanx",
       label: "Left ring finger, proximal phalanx",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal.",
     },
@@ -1568,7 +1568,7 @@ export const skeletonModel: OrganModel = {
       id: "left-little-finger-proximal-phalanx",
       label: "Left little finger, proximal phalanx",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal.",
     },
@@ -1576,7 +1576,7 @@ export const skeletonModel: OrganModel = {
       id: "left-index-finger-middle-phalanx",
       label: "Left index finger, middle phalanx",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The middle of the three phalanges of a finger or lesser toe.",
     },
@@ -1584,7 +1584,7 @@ export const skeletonModel: OrganModel = {
       id: "left-middle-finger-middle-phalanx",
       label: "Left middle finger, middle phalanx",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "The middle of the three phalanges of a finger or lesser toe.",
     },
@@ -1592,7 +1592,7 @@ export const skeletonModel: OrganModel = {
       id: "left-ring-finger-middle-phalanx",
       label: "Left ring finger, middle phalanx",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The middle of the three phalanges of a finger or lesser toe.",
     },
@@ -1600,7 +1600,7 @@ export const skeletonModel: OrganModel = {
       id: "left-little-finger-middle-phalanx",
       label: "Left little finger, middle phalanx",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "The middle of the three phalanges of a finger or lesser toe.",
     },
@@ -1608,7 +1608,7 @@ export const skeletonModel: OrganModel = {
       id: "left-thumb-distal-phalanx",
       label: "Left thumb, distal phalanx",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail. The thumb has only two phalanges.",
     },
@@ -1616,7 +1616,7 @@ export const skeletonModel: OrganModel = {
       id: "left-index-finger-distal-phalanx",
       label: "Left index finger, distal phalanx",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail.",
     },
@@ -1624,7 +1624,7 @@ export const skeletonModel: OrganModel = {
       id: "left-middle-finger-distal-phalanx",
       label: "Left middle finger, distal phalanx",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail.",
     },
@@ -1632,7 +1632,7 @@ export const skeletonModel: OrganModel = {
       id: "left-ring-finger-distal-phalanx",
       label: "Left ring finger, distal phalanx",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.22,
+      color: "#e0cdaa",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail.",
     },
@@ -1640,7 +1640,7 @@ export const skeletonModel: OrganModel = {
       id: "left-little-finger-distal-phalanx",
       label: "Left little finger, distal phalanx",
       group: "Left upper limb",
-      tone: "chart-2", shade: 0.17,
+      color: "#d2bd97",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail.",
     },
@@ -1648,7 +1648,7 @@ export const skeletonModel: OrganModel = {
       id: "right-hip-bone",
       label: "Right hip bone",
       group: "Pelvis",
-      tone: "chart-2", shade: 0.18,
+      color: "#d8c19a",
       description:
         "Formed by the ilium, ischium and pubis fused together. It carries the hip socket and joins the sacrum behind and the other hip bone in front.",
     },
@@ -1656,7 +1656,7 @@ export const skeletonModel: OrganModel = {
       id: "left-hip-bone",
       label: "Left hip bone",
       group: "Pelvis",
-      tone: "chart-2", shade: 0.13,
+      color: "#cbb188",
       description:
         "Formed by the ilium, ischium and pubis fused together. It carries the hip socket and joins the sacrum behind and the other hip bone in front.",
     },
@@ -1664,7 +1664,7 @@ export const skeletonModel: OrganModel = {
       id: "right-femur",
       label: "Right femur",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The thigh bone, the longest and strongest bone in the body. Its ball-shaped head fits the hip socket.",
     },
@@ -1672,7 +1672,7 @@ export const skeletonModel: OrganModel = {
       id: "right-patella",
       label: "Right patella",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The kneecap, a sesamoid bone inside the quadriceps tendon that protects the knee and improves the muscle’s leverage.",
     },
@@ -1680,7 +1680,7 @@ export const skeletonModel: OrganModel = {
       id: "right-tibia",
       label: "Right tibia",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The shinbone. The larger lower-leg bone, it carries the body’s weight from the knee to the ankle.",
     },
@@ -1688,7 +1688,7 @@ export const skeletonModel: OrganModel = {
       id: "right-fibula",
       label: "Right fibula",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The slender outer bone of the lower leg. It anchors muscles and forms the outer ankle bump.",
     },
@@ -1696,7 +1696,7 @@ export const skeletonModel: OrganModel = {
       id: "right-talus",
       label: "Right talus",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The ankle bone that sits between the tibia, fibula and calcaneus, transferring weight from the leg to the foot.",
     },
@@ -1704,7 +1704,7 @@ export const skeletonModel: OrganModel = {
       id: "right-calcaneus",
       label: "Right calcaneus",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The heel bone, the largest bone of the foot. The Achilles tendon attaches to its back.",
     },
@@ -1712,7 +1712,7 @@ export const skeletonModel: OrganModel = {
       id: "right-navicular",
       label: "Right navicular",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "A boat-shaped bone on the inner side of the foot, in front of the talus.",
     },
@@ -1720,7 +1720,7 @@ export const skeletonModel: OrganModel = {
       id: "right-cuboid",
       label: "Right cuboid",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "A cube-shaped bone on the outer side of the foot, in front of the calcaneus.",
     },
@@ -1728,7 +1728,7 @@ export const skeletonModel: OrganModel = {
       id: "right-medial-cuneiform",
       label: "Right medial cuneiform",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The largest of the three wedge-shaped cuneiform bones, at the base of the big toe’s metatarsal.",
     },
@@ -1736,7 +1736,7 @@ export const skeletonModel: OrganModel = {
       id: "right-intermediate-cuneiform",
       label: "Right intermediate cuneiform",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The smallest cuneiform bone, at the base of the second metatarsal.",
     },
@@ -1744,7 +1744,7 @@ export const skeletonModel: OrganModel = {
       id: "right-lateral-cuneiform",
       label: "Right lateral cuneiform",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The cuneiform bone at the base of the third metatarsal, beside the cuboid.",
     },
@@ -1752,7 +1752,7 @@ export const skeletonModel: OrganModel = {
       id: "right-first-metatarsal-bone",
       label: "Right first metatarsal bone",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "A long bone of the foot leading to the big toe. The metatarsal heads form the ball of the foot.",
     },
@@ -1760,7 +1760,7 @@ export const skeletonModel: OrganModel = {
       id: "right-second-metatarsal-bone",
       label: "Right second metatarsal bone",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "A long bone of the foot leading to the second toe. The metatarsal heads form the ball of the foot.",
     },
@@ -1768,7 +1768,7 @@ export const skeletonModel: OrganModel = {
       id: "right-third-metatarsal-bone",
       label: "Right third metatarsal bone",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "A long bone of the foot leading to the third toe. The metatarsal heads form the ball of the foot.",
     },
@@ -1776,7 +1776,7 @@ export const skeletonModel: OrganModel = {
       id: "right-fourth-metatarsal-bone",
       label: "Right fourth metatarsal bone",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "A long bone of the foot leading to the fourth toe. The metatarsal heads form the ball of the foot.",
     },
@@ -1784,7 +1784,7 @@ export const skeletonModel: OrganModel = {
       id: "right-fifth-metatarsal-bone",
       label: "Right fifth metatarsal bone",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "A long bone of the foot leading to the little toe. The metatarsal heads form the ball of the foot.",
     },
@@ -1792,7 +1792,7 @@ export const skeletonModel: OrganModel = {
       id: "right-big-toe-proximal-phalanx",
       label: "Right big toe, proximal phalanx",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal. The big toe has only two phalanges.",
     },
@@ -1800,7 +1800,7 @@ export const skeletonModel: OrganModel = {
       id: "right-second-toe-proximal-phalanx",
       label: "Right second toe, proximal phalanx",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal.",
     },
@@ -1808,7 +1808,7 @@ export const skeletonModel: OrganModel = {
       id: "right-third-toe-proximal-phalanx",
       label: "Right third toe, proximal phalanx",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal.",
     },
@@ -1816,7 +1816,7 @@ export const skeletonModel: OrganModel = {
       id: "right-fourth-toe-proximal-phalanx",
       label: "Right fourth toe, proximal phalanx",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal.",
     },
@@ -1824,7 +1824,7 @@ export const skeletonModel: OrganModel = {
       id: "right-little-toe-proximal-phalanx",
       label: "Right little toe, proximal phalanx",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal.",
     },
@@ -1832,7 +1832,7 @@ export const skeletonModel: OrganModel = {
       id: "right-second-toe-middle-phalanx",
       label: "Right second toe, middle phalanx",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The middle of the three phalanges of a finger or lesser toe.",
     },
@@ -1840,7 +1840,7 @@ export const skeletonModel: OrganModel = {
       id: "right-third-toe-middle-phalanx",
       label: "Right third toe, middle phalanx",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The middle of the three phalanges of a finger or lesser toe.",
     },
@@ -1848,7 +1848,7 @@ export const skeletonModel: OrganModel = {
       id: "right-fourth-toe-middle-phalanx",
       label: "Right fourth toe, middle phalanx",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The middle of the three phalanges of a finger or lesser toe.",
     },
@@ -1856,7 +1856,7 @@ export const skeletonModel: OrganModel = {
       id: "right-little-toe-middle-phalanx",
       label: "Right little toe, middle phalanx",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The middle of the three phalanges of a finger or lesser toe.",
     },
@@ -1864,7 +1864,7 @@ export const skeletonModel: OrganModel = {
       id: "right-big-toe-distal-phalanx",
       label: "Right big toe, distal phalanx",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail. The big toe has only two phalanges.",
     },
@@ -1872,7 +1872,7 @@ export const skeletonModel: OrganModel = {
       id: "right-second-toe-distal-phalanx",
       label: "Right second toe, distal phalanx",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail.",
     },
@@ -1880,7 +1880,7 @@ export const skeletonModel: OrganModel = {
       id: "right-third-toe-distal-phalanx",
       label: "Right third toe, distal phalanx",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail.",
     },
@@ -1888,7 +1888,7 @@ export const skeletonModel: OrganModel = {
       id: "right-fourth-toe-distal-phalanx",
       label: "Right fourth toe, distal phalanx",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail.",
     },
@@ -1896,7 +1896,7 @@ export const skeletonModel: OrganModel = {
       id: "right-little-toe-distal-phalanx",
       label: "Right little toe, distal phalanx",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail.",
     },
@@ -1904,7 +1904,7 @@ export const skeletonModel: OrganModel = {
       id: "right-sesamoid-bones-of-the-foot",
       label: "Right sesamoid bones of the foot",
       group: "Right lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "Small bones embedded in tendons under the head of the first metatarsal. They protect the tendons and help the big toe push off.",
     },
@@ -1912,7 +1912,7 @@ export const skeletonModel: OrganModel = {
       id: "left-femur",
       label: "Left femur",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The thigh bone, the longest and strongest bone in the body. Its ball-shaped head fits the hip socket.",
     },
@@ -1920,7 +1920,7 @@ export const skeletonModel: OrganModel = {
       id: "left-patella",
       label: "Left patella",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The kneecap, a sesamoid bone inside the quadriceps tendon that protects the knee and improves the muscle’s leverage.",
     },
@@ -1928,7 +1928,7 @@ export const skeletonModel: OrganModel = {
       id: "left-tibia",
       label: "Left tibia",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The shinbone. The larger lower-leg bone, it carries the body’s weight from the knee to the ankle.",
     },
@@ -1936,7 +1936,7 @@ export const skeletonModel: OrganModel = {
       id: "left-fibula",
       label: "Left fibula",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The slender outer bone of the lower leg. It anchors muscles and forms the outer ankle bump.",
     },
@@ -1944,7 +1944,7 @@ export const skeletonModel: OrganModel = {
       id: "left-talus",
       label: "Left talus",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The ankle bone that sits between the tibia, fibula and calcaneus, transferring weight from the leg to the foot.",
     },
@@ -1952,7 +1952,7 @@ export const skeletonModel: OrganModel = {
       id: "left-calcaneus",
       label: "Left calcaneus",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The heel bone, the largest bone of the foot. The Achilles tendon attaches to its back.",
     },
@@ -1960,7 +1960,7 @@ export const skeletonModel: OrganModel = {
       id: "left-navicular",
       label: "Left navicular",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "A boat-shaped bone on the inner side of the foot, in front of the talus.",
     },
@@ -1968,7 +1968,7 @@ export const skeletonModel: OrganModel = {
       id: "left-cuboid",
       label: "Left cuboid",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "A cube-shaped bone on the outer side of the foot, in front of the calcaneus.",
     },
@@ -1976,7 +1976,7 @@ export const skeletonModel: OrganModel = {
       id: "left-medial-cuneiform",
       label: "Left medial cuneiform",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The largest of the three wedge-shaped cuneiform bones, at the base of the big toe’s metatarsal.",
     },
@@ -1984,7 +1984,7 @@ export const skeletonModel: OrganModel = {
       id: "left-intermediate-cuneiform",
       label: "Left intermediate cuneiform",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The smallest cuneiform bone, at the base of the second metatarsal.",
     },
@@ -1992,7 +1992,7 @@ export const skeletonModel: OrganModel = {
       id: "left-lateral-cuneiform",
       label: "Left lateral cuneiform",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The cuneiform bone at the base of the third metatarsal, beside the cuboid.",
     },
@@ -2000,7 +2000,7 @@ export const skeletonModel: OrganModel = {
       id: "left-first-metatarsal-bone",
       label: "Left first metatarsal bone",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "A long bone of the foot leading to the big toe. The metatarsal heads form the ball of the foot.",
     },
@@ -2008,7 +2008,7 @@ export const skeletonModel: OrganModel = {
       id: "left-second-metatarsal-bone",
       label: "Left second metatarsal bone",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "A long bone of the foot leading to the second toe. The metatarsal heads form the ball of the foot.",
     },
@@ -2016,7 +2016,7 @@ export const skeletonModel: OrganModel = {
       id: "left-third-metatarsal-bone",
       label: "Left third metatarsal bone",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "A long bone of the foot leading to the third toe. The metatarsal heads form the ball of the foot.",
     },
@@ -2024,7 +2024,7 @@ export const skeletonModel: OrganModel = {
       id: "left-fourth-metatarsal-bone",
       label: "Left fourth metatarsal bone",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "A long bone of the foot leading to the fourth toe. The metatarsal heads form the ball of the foot.",
     },
@@ -2032,7 +2032,7 @@ export const skeletonModel: OrganModel = {
       id: "left-fifth-metatarsal-bone",
       label: "Left fifth metatarsal bone",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "A long bone of the foot leading to the little toe. The metatarsal heads form the ball of the foot.",
     },
@@ -2040,7 +2040,7 @@ export const skeletonModel: OrganModel = {
       id: "left-big-toe-proximal-phalanx",
       label: "Left big toe, proximal phalanx",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal. The big toe has only two phalanges.",
     },
@@ -2048,7 +2048,7 @@ export const skeletonModel: OrganModel = {
       id: "left-second-toe-proximal-phalanx",
       label: "Left second toe, proximal phalanx",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal.",
     },
@@ -2056,7 +2056,7 @@ export const skeletonModel: OrganModel = {
       id: "left-third-toe-proximal-phalanx",
       label: "Left third toe, proximal phalanx",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal.",
     },
@@ -2064,7 +2064,7 @@ export const skeletonModel: OrganModel = {
       id: "left-fourth-toe-proximal-phalanx",
       label: "Left fourth toe, proximal phalanx",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal.",
     },
@@ -2072,7 +2072,7 @@ export const skeletonModel: OrganModel = {
       id: "left-little-toe-proximal-phalanx",
       label: "Left little toe, proximal phalanx",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The phalanx nearest the palm or sole, hinged to a metacarpal or metatarsal.",
     },
@@ -2080,7 +2080,7 @@ export const skeletonModel: OrganModel = {
       id: "left-second-toe-middle-phalanx",
       label: "Left second toe, middle phalanx",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The middle of the three phalanges of a finger or lesser toe.",
     },
@@ -2088,7 +2088,7 @@ export const skeletonModel: OrganModel = {
       id: "left-third-toe-middle-phalanx",
       label: "Left third toe, middle phalanx",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The middle of the three phalanges of a finger or lesser toe.",
     },
@@ -2096,7 +2096,7 @@ export const skeletonModel: OrganModel = {
       id: "left-fourth-toe-middle-phalanx",
       label: "Left fourth toe, middle phalanx",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The middle of the three phalanges of a finger or lesser toe.",
     },
@@ -2104,7 +2104,7 @@ export const skeletonModel: OrganModel = {
       id: "left-little-toe-middle-phalanx",
       label: "Left little toe, middle phalanx",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The middle of the three phalanges of a finger or lesser toe.",
     },
@@ -2112,7 +2112,7 @@ export const skeletonModel: OrganModel = {
       id: "left-big-toe-distal-phalanx",
       label: "Left big toe, distal phalanx",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail. The big toe has only two phalanges.",
     },
@@ -2120,7 +2120,7 @@ export const skeletonModel: OrganModel = {
       id: "left-second-toe-distal-phalanx",
       label: "Left second toe, distal phalanx",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail.",
     },
@@ -2128,7 +2128,7 @@ export const skeletonModel: OrganModel = {
       id: "left-third-toe-distal-phalanx",
       label: "Left third toe, distal phalanx",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail.",
     },
@@ -2136,7 +2136,7 @@ export const skeletonModel: OrganModel = {
       id: "left-fourth-toe-distal-phalanx",
       label: "Left fourth toe, distal phalanx",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail.",
     },
@@ -2144,7 +2144,7 @@ export const skeletonModel: OrganModel = {
       id: "left-little-toe-distal-phalanx",
       label: "Left little toe, distal phalanx",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.18,
+      color: "#d5c19c",
       description:
         "The fingertip or toe-tip bone. Its flattened end supports the nail.",
     },
@@ -2152,7 +2152,7 @@ export const skeletonModel: OrganModel = {
       id: "left-sesamoid-bones-of-the-foot",
       label: "Left sesamoid bones of the foot",
       group: "Left lower limb",
-      tone: "chart-2", shade: 0.23,
+      color: "#e3d1b0",
       description:
         "Small bones embedded in tendons under the head of the first metatarsal. They protect the tendons and help the big toe push off.",
     },

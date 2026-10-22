@@ -30,7 +30,7 @@ export const prostateModel: OrganModel = {
       id: "prostate",
       label: "Prostate",
       group: "Glands",
-      tone: "chart-1", shade: 0.11,
+      color: "#c98a7d",
       description:
         "A walnut-sized gland below the bladder and in front of the rectum. The urethra runs through it, and it adds fluid to semen.",
     },
@@ -38,7 +38,7 @@ export const prostateModel: OrganModel = {
       id: "seminal-vesicles",
       label: "Seminal vesicles",
       group: "Glands",
-      tone: "chart-2", shade: 0.08,
+      color: "#d6a95f",
       description:
         "Paired coiled glands behind the bladder. They make most of the fluid in semen and join the deferent ducts above the prostate.",
     },
@@ -46,7 +46,7 @@ export const prostateModel: OrganModel = {
       id: "testes",
       label: "Testes",
       group: "Testes and ducts",
-      tone: "chart-1", shade: 0.2,
+      color: "#e0b9a0",
       description:
         "Paired glands in the scrotum that produce sperm and testosterone.",
     },
@@ -54,7 +54,7 @@ export const prostateModel: OrganModel = {
       id: "epididymides",
       label: "Epididymides",
       group: "Testes and ducts",
-      tone: "chart-5", shade: 0.07,
+      color: "#9c7bb0",
       description:
         "Tightly coiled tubes on the back of each testis, where sperm mature and are stored.",
     },
@@ -62,7 +62,7 @@ export const prostateModel: OrganModel = {
       id: "deferent-ducts",
       label: "Deferent ducts",
       group: "Testes and ducts",
-      tone: "muted-foreground", shade: 0.02,
+      color: "#6f9a8b",
       description:
         "Carry sperm from each epididymis up through the groin, over the bladder and down behind it to the prostate.",
     },
@@ -70,7 +70,7 @@ export const prostateModel: OrganModel = {
       id: "corpora-cavernosa",
       label: "Corpora cavernosa",
       group: "Penis and urethra",
-      tone: "chart-1", shade: 0.06,
+      color: "#b86f78",
       description:
         "Two columns of erectile tissue along the top of the penis. They fill with blood during an erection.",
     },
@@ -78,7 +78,7 @@ export const prostateModel: OrganModel = {
       id: "corpus-spongiosum",
       label: "Corpus spongiosum",
       group: "Penis and urethra",
-      tone: "chart-1", shade: 0.15,
+      color: "#d28f8f",
       description:
         "The column of erectile tissue along the underside of the penis. It surrounds the urethra and ends in the glans.",
     },
@@ -86,7 +86,7 @@ export const prostateModel: OrganModel = {
       id: "glans-penis",
       label: "Glans penis",
       group: "Penis and urethra",
-      tone: "chart-1", shade: 0.21,
+      color: "#e3a6a0",
       description:
         "The expanded tip of the corpus spongiosum, where the urethra opens.",
     },
@@ -94,7 +94,7 @@ export const prostateModel: OrganModel = {
       id: "urethra",
       label: "Urethra",
       group: "Penis and urethra",
-      tone: "chart-2", shade: 0.13,
+      color: "#e8c76a",
       description:
         "Carries urine from the bladder and semen from the ejaculatory ducts. It passes through the prostate and the length of the penis.",
     },
@@ -102,7 +102,7 @@ export const prostateModel: OrganModel = {
       id: "dorsal-arteries",
       label: "Dorsal arteries of penis",
       group: "Vessels",
-      tone: "chart-1", shade: 0.01,
+      color: "#b8564c",
       description:
         "Paired arteries along the top of the penis that supply its skin and the glans.",
     },
@@ -110,7 +110,7 @@ export const prostateModel: OrganModel = {
       id: "dorsal-veins",
       label: "Dorsal veins of penis",
       group: "Vessels",
-      tone: "chart-4", shade: 0.05,
+      color: "#6d8db0",
       description:
         "Run along the midline of the penis. The deep vein drains the erectile tissue toward the veins around the prostate.",
     },
@@ -118,7 +118,7 @@ export const prostateModel: OrganModel = {
       id: "urinary-bladder",
       label: "Urinary bladder",
       group: "Neighbouring organs",
-      tone: "chart-2", shade: 0.13,
+      color: "#c7b98e",
       description:
         "Stores urine. The prostate sits directly below it and the seminal vesicles lie against its back.",
     },
@@ -126,7 +126,7 @@ export const prostateModel: OrganModel = {
       id: "rectum",
       label: "Rectum",
       group: "Neighbouring organs",
-      tone: "chart-2", shade: 0.05,
+      color: "#a88a74",
       description:
         "The last part of the large intestine. It lies behind the prostate, which is why the prostate can be felt through its wall.",
     },

@@ -47,7 +47,7 @@ export const pituitaryModel: OrganModel = {
       id: "pituitary-gland",
       label: "Pituitary gland",
       group: "Pituitary gland",
-      tone: "chart-1", shade: 0.11,
+      color: "#d68a6e",
       description:
         "A pea-sized gland hanging from the base of the brain on a thin stalk. Its front lobe makes hormones that run the thyroid, adrenals, growth and fertility; its back lobe releases hormones made in the hypothalamus.",
     },
@@ -55,7 +55,7 @@ export const pituitaryModel: OrganModel = {
       id: "hypothalamus",
       label: "Hypothalamus",
       group: "Hypothalamus",
-      tone: "chart-2", shade: 0.11,
+      color: "#c9a27a",
       description:
         "The floor and lower walls of the third ventricle. It senses the body's state and controls the pituitary through nerve fibres and a private blood supply.",
     },
@@ -63,7 +63,7 @@ export const pituitaryModel: OrganModel = {
       id: "tuber-cinereum",
       label: "Tuber cinereum",
       group: "Hypothalamus",
-      tone: "chart-2", shade: 0.05,
+      color: "#b88e68",
       description:
         "The grey bulge of the hypothalamus between the optic chiasm and the mammillary bodies. The pituitary stalk leaves from its centre.",
     },
@@ -71,7 +71,7 @@ export const pituitaryModel: OrganModel = {
       id: "mammillary-bodies",
       label: "Mammillary bodies",
       group: "Hypothalamus",
-      tone: "chart-2", shade: 0.01,
+      color: "#a87d5d",
       description:
         "A pair of round bumps behind the tuber cinereum. They relay memory signals from the hippocampus toward the thalamus.",
     },
@@ -79,7 +79,7 @@ export const pituitaryModel: OrganModel = {
       id: "supraoptic-nuclei",
       label: "Supraoptic nuclei",
       group: "Hypothalamus",
-      tone: "chart-2", shade: 0.1,
+      color: "#e2b25c",
       description:
         "Cell clusters just above the optic tracts that make antidiuretic hormone. Their fibres run down the stalk to the back lobe, which releases it.",
     },
@@ -87,7 +87,7 @@ export const pituitaryModel: OrganModel = {
       id: "paraventricular-nuclei",
       label: "Paraventricular nuclei",
       group: "Hypothalamus",
-      tone: "chart-2", shade: 0.05,
+      color: "#d49e48",
       description:
         "Cell clusters in the wall of the third ventricle that make oxytocin and signal the pituitary to drive the stress response.",
     },
@@ -95,7 +95,7 @@ export const pituitaryModel: OrganModel = {
       id: "optic-chiasm",
       label: "Optic chiasm",
       group: "Visual pathway",
-      tone: "chart-2", shade: 0.16,
+      color: "#e8d27a",
       description:
         "Where the optic nerves meet and half their fibres cross, just in front of and above the pituitary stalk. A growing pituitary tumour presses on it first, narrowing side vision.",
     },
@@ -103,7 +103,7 @@ export const pituitaryModel: OrganModel = {
       id: "right-optic-nerve",
       label: "Right optic nerve",
       group: "Visual pathway",
-      tone: "chart-2", shade: 0.11,
+      color: "#dcc46a",
       description:
         "Carries signals from the right eye back through the optic canal to the chiasm.",
     },
@@ -111,7 +111,7 @@ export const pituitaryModel: OrganModel = {
       id: "left-optic-nerve",
       label: "Left optic nerve",
       group: "Visual pathway",
-      tone: "chart-2", shade: 0.08,
+      color: "#d4bb5f",
       description:
         "Carries signals from the left eye back through the optic canal to the chiasm.",
     },
@@ -119,7 +119,7 @@ export const pituitaryModel: OrganModel = {
       id: "right-optic-tract",
       label: "Right optic tract",
       group: "Visual pathway",
-      tone: "chart-2", shade: 0.07,
+      color: "#cdb65e",
       description:
         "Continues from the chiasm around the midbrain toward the thalamus, carrying the left half of what both eyes see.",
     },
@@ -127,7 +127,7 @@ export const pituitaryModel: OrganModel = {
       id: "left-optic-tract",
       label: "Left optic tract",
       group: "Visual pathway",
-      tone: "chart-2", shade: 0.04,
+      color: "#c4ac55",
       description:
         "Continues from the chiasm around the midbrain, carrying the right half of what both eyes see.",
     },
@@ -135,7 +135,7 @@ export const pituitaryModel: OrganModel = {
       id: "hypophyseal-portal-veins",
       label: "Hypophyseal portal veins",
       group: "Blood supply",
-      tone: "chart-4", shade: 0.08,
+      color: "#8a7fb3",
       description:
         "Small veins that carry releasing hormones from the hypothalamus down the stalk straight to the front lobe, before they reach the rest of the body.",
     },
@@ -143,7 +143,7 @@ export const pituitaryModel: OrganModel = {
       id: "right-superior-hypophyseal-artery",
       label: "Right superior hypophyseal artery",
       group: "Blood supply",
-      tone: "chart-1", shade: 0.06,
+      color: "#c86a5e",
       description:
         "A branch of the internal carotid artery that feeds the stalk and the start of the portal system. The model includes the right one only.",
     },
@@ -151,7 +151,7 @@ export const pituitaryModel: OrganModel = {
       id: "right-inferior-hypophyseal-artery",
       label: "Right inferior hypophyseal artery",
       group: "Blood supply",
-      tone: "chart-1", shade: 0.01,
+      color: "#b65a50",
       description:
         "A branch of the internal carotid artery in the cavernous sinus that mainly feeds the back lobe. The model includes the right one only.",
     },
@@ -159,7 +159,7 @@ export const pituitaryModel: OrganModel = {
       id: "right-internal-carotid-artery",
       label: "Right internal carotid artery",
       group: "Blood supply",
-      tone: "chart-1", shade: -0.03,
+      color: "#a94d45",
       description:
         "The main artery to the front of the brain. It climbs through the skull base and curves through the cavernous sinus beside the gland.",
     },
@@ -167,7 +167,7 @@ export const pituitaryModel: OrganModel = {
       id: "right-cavernous-sinus",
       label: "Right cavernous sinus",
       group: "Venous sinuses",
-      tone: "chart-4", shade: 0.05,
+      color: "#6d8db0",
       description:
         "A venous space on the side of the sella turcica that drains the gland. The internal carotid artery and the nerves to the eye muscles pass through it.",
     },
@@ -175,7 +175,7 @@ export const pituitaryModel: OrganModel = {
       id: "anterior-intercavernous-sinus",
       label: "Anterior intercavernous sinus",
       group: "Venous sinuses",
-      tone: "chart-4", shade: 0.1,
+      color: "#7f9fbf",
       description:
         "Links the two cavernous sinuses across the front of the gland.",
     },
@@ -183,14 +183,14 @@ export const pituitaryModel: OrganModel = {
       id: "posterior-intercavernous-sinus",
       label: "Posterior intercavernous sinus",
       group: "Venous sinuses",
-      tone: "chart-4", shade: 0.01,
+      color: "#5f7fa6",
       description: "Links the two cavernous sinuses behind the gland.",
     },
     {
       id: "sphenoid-bone",
       label: "Sphenoid bone",
       group: "Skull base",
-      tone: "chart-2", shade: 0.24,
+      color: "#e2d6b8",
       description:
         "The bone across the middle of the skull base. The pituitary sits in the sella turcica, a saddle-shaped hollow on its upper surface, which is why surgeons often reach it through the nose and sphenoid sinus.",
     },
