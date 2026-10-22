@@ -30,7 +30,7 @@ export const teethModel: OrganModel = {
       id: "upper-right-central-incisor",
       label: "Upper right central incisor",
       group: "Upper right teeth",
-      tone: "chart-2", shade: 0.3,
+      color: "#f4eedf",
       description:
         "The widest front tooth. Its straight, chisel-shaped edge bites into food and shapes the look of a smile.",
     },
@@ -38,7 +38,7 @@ export const teethModel: OrganModel = {
       id: "upper-right-lateral-incisor",
       label: "Upper right lateral incisor",
       group: "Upper right teeth",
-      tone: "chart-2", shade: 0.3,
+      color: "#efe7d3",
       description:
         "A smaller, rounder version of the central incisor beside it. It helps cut food at the front of the mouth.",
     },
@@ -46,7 +46,7 @@ export const teethModel: OrganModel = {
       id: "upper-right-canine",
       label: "Upper right canine",
       group: "Upper right teeth",
-      tone: "chart-2", shade: 0.28,
+      color: "#ece0c4",
       description:
         "The eye tooth at the corner of the arch. It has a single pointed cusp for gripping and the longest root of any tooth.",
     },
@@ -54,7 +54,7 @@ export const teethModel: OrganModel = {
       id: "upper-right-first-premolar",
       label: "Upper right first premolar",
       group: "Upper right teeth",
-      tone: "chart-2", shade: 0.26,
+      color: "#e9dcbd",
       description:
         "A tooth with two cusps, one on the cheek side and one on the palate side. It usually has two roots.",
     },
@@ -62,7 +62,7 @@ export const teethModel: OrganModel = {
       id: "upper-right-second-premolar",
       label: "Upper right second premolar",
       group: "Upper right teeth",
-      tone: "chart-2", shade: 0.24,
+      color: "#e5d6b4",
       description:
         "Similar to the first premolar but with cusps of more equal size, and usually a single root.",
     },
@@ -70,7 +70,7 @@ export const teethModel: OrganModel = {
       id: "upper-right-first-molar",
       label: "Upper right first molar",
       group: "Upper right teeth",
-      tone: "chart-2", shade: 0.22,
+      color: "#e2d0aa",
       description:
         "The largest upper tooth, with four cusps and three roots. It is often the first permanent tooth to erupt, around age six.",
     },
@@ -78,7 +78,7 @@ export const teethModel: OrganModel = {
       id: "upper-right-second-molar",
       label: "Upper right second molar",
       group: "Upper right teeth",
-      tone: "chart-2", shade: 0.2,
+      color: "#ddc9a2",
       description:
         "A smaller grinding tooth with four cusps and three roots, erupting around age twelve.",
     },
@@ -86,7 +86,7 @@ export const teethModel: OrganModel = {
       id: "upper-left-central-incisor",
       label: "Upper left central incisor",
       group: "Upper left teeth",
-      tone: "chart-2", shade: 0.3,
+      color: "#f4eedf",
       description:
         "The widest front tooth. Its straight, chisel-shaped edge bites into food and shapes the look of a smile.",
     },
@@ -94,7 +94,7 @@ export const teethModel: OrganModel = {
       id: "upper-left-lateral-incisor",
       label: "Upper left lateral incisor",
       group: "Upper left teeth",
-      tone: "chart-2", shade: 0.3,
+      color: "#efe7d3",
       description:
         "A smaller, rounder version of the central incisor beside it. It helps cut food at the front of the mouth.",
     },
@@ -102,7 +102,7 @@ export const teethModel: OrganModel = {
       id: "upper-left-canine",
       label: "Upper left canine",
       group: "Upper left teeth",
-      tone: "chart-2", shade: 0.28,
+      color: "#ece0c4",
       description:
         "The eye tooth at the corner of the arch. It has a single pointed cusp for gripping and the longest root of any tooth.",
     },
@@ -110,7 +110,7 @@ export const teethModel: OrganModel = {
       id: "upper-left-first-premolar",
       label: "Upper left first premolar",
       group: "Upper left teeth",
-      tone: "chart-2", shade: 0.26,
+      color: "#e9dcbd",
       description:
         "A tooth with two cusps, one on the cheek side and one on the palate side. It usually has two roots.",
     },
@@ -118,7 +118,7 @@ export const teethModel: OrganModel = {
       id: "upper-left-second-premolar",
       label: "Upper left second premolar",
       group: "Upper left teeth",
-      tone: "chart-2", shade: 0.24,
+      color: "#e5d6b4",
       description:
         "Similar to the first premolar but with cusps of more equal size, and usually a single root.",
     },
@@ -126,7 +126,7 @@ export const teethModel: OrganModel = {
       id: "upper-left-first-molar",
       label: "Upper left first molar",
       group: "Upper left teeth",
-      tone: "chart-2", shade: 0.22,
+      color: "#e2d0aa",
       description:
         "The largest upper tooth, with four cusps and three roots. It is often the first permanent tooth to erupt, around age six.",
     },
@@ -134,7 +134,7 @@ export const teethModel: OrganModel = {
       id: "upper-left-second-molar",
       label: "Upper left second molar",
       group: "Upper left teeth",
-      tone: "chart-2", shade: 0.2,
+      color: "#ddc9a2",
       description:
         "A smaller grinding tooth with four cusps and three roots, erupting around age twelve.",
     },
@@ -142,7 +142,7 @@ export const teethModel: OrganModel = {
       id: "lower-left-central-incisor",
       label: "Lower left central incisor",
       group: "Lower left teeth",
-      tone: "chart-2", shade: 0.3,
+      color: "#f4eedf",
       description:
         "The smallest tooth in the mouth. Its thin, flat edge meets the back of the upper incisors when you bite.",
     },
@@ -150,7 +150,7 @@ export const teethModel: OrganModel = {
       id: "lower-left-lateral-incisor",
       label: "Lower left lateral incisor",
       group: "Lower left teeth",
-      tone: "chart-2", shade: 0.3,
+      color: "#efe7d3",
       description:
         "Slightly wider than the lower central incisor next to it, with a single flattened root.",
     },
@@ -158,7 +158,7 @@ export const teethModel: OrganModel = {
       id: "lower-left-canine",
       label: "Lower left canine",
       group: "Lower left teeth",
-      tone: "chart-2", shade: 0.28,
+      color: "#ece0c4",
       description:
         "The pointed tooth at the corner of the lower arch. It guides the jaw when it slides to the side.",
     },
@@ -166,7 +166,7 @@ export const teethModel: OrganModel = {
       id: "lower-left-first-premolar",
       label: "Lower left first premolar",
       group: "Lower left teeth",
-      tone: "chart-2", shade: 0.26,
+      color: "#e9dcbd",
       description:
         "A tall cusp on the cheek side and a much smaller one on the tongue side, with a single root.",
     },
@@ -174,7 +174,7 @@ export const teethModel: OrganModel = {
       id: "lower-left-second-premolar",
       label: "Lower left second premolar",
       group: "Lower left teeth",
-      tone: "chart-2", shade: 0.24,
+      color: "#e5d6b4",
       description:
         "Larger than the first premolar and often with three cusps. It has a single root.",
     },
@@ -182,7 +182,7 @@ export const teethModel: OrganModel = {
       id: "lower-left-first-molar",
       label: "Lower left first molar",
       group: "Lower left teeth",
-      tone: "chart-2", shade: 0.22,
+      color: "#e2d0aa",
       description:
         "A broad grinding tooth with five cusps and two roots, front and back. It erupts around age six.",
     },
@@ -190,7 +190,7 @@ export const teethModel: OrganModel = {
       id: "lower-left-second-molar",
       label: "Lower left second molar",
       group: "Lower left teeth",
-      tone: "chart-2", shade: 0.2,
+      color: "#ddc9a2",
       description:
         "A grinding tooth with four cusps and two roots, erupting around age twelve.",
     },
@@ -198,7 +198,7 @@ export const teethModel: OrganModel = {
       id: "lower-right-central-incisor",
       label: "Lower right central incisor",
       group: "Lower right teeth",
-      tone: "chart-2", shade: 0.3,
+      color: "#f4eedf",
       description:
         "The smallest tooth in the mouth. Its thin, flat edge meets the back of the upper incisors when you bite.",
     },
@@ -206,7 +206,7 @@ export const teethModel: OrganModel = {
       id: "lower-right-lateral-incisor",
       label: "Lower right lateral incisor",
       group: "Lower right teeth",
-      tone: "chart-2", shade: 0.3,
+      color: "#efe7d3",
       description:
         "Slightly wider than the lower central incisor next to it, with a single flattened root.",
     },
@@ -214,7 +214,7 @@ export const teethModel: OrganModel = {
       id: "lower-right-canine",
       label: "Lower right canine",
       group: "Lower right teeth",
-      tone: "chart-2", shade: 0.28,
+      color: "#ece0c4",
       description:
         "The pointed tooth at the corner of the lower arch. It guides the jaw when it slides to the side.",
     },
@@ -222,7 +222,7 @@ export const teethModel: OrganModel = {
       id: "lower-right-first-premolar",
       label: "Lower right first premolar",
       group: "Lower right teeth",
-      tone: "chart-2", shade: 0.26,
+      color: "#e9dcbd",
       description:
         "A tall cusp on the cheek side and a much smaller one on the tongue side, with a single root.",
     },
@@ -230,7 +230,7 @@ export const teethModel: OrganModel = {
       id: "lower-right-second-premolar",
       label: "Lower right second premolar",
       group: "Lower right teeth",
-      tone: "chart-2", shade: 0.24,
+      color: "#e5d6b4",
       description:
         "Larger than the first premolar and often with three cusps. It has a single root.",
     },
@@ -238,7 +238,7 @@ export const teethModel: OrganModel = {
       id: "lower-right-first-molar",
       label: "Lower right first molar",
       group: "Lower right teeth",
-      tone: "chart-2", shade: 0.22,
+      color: "#e2d0aa",
       description:
         "A broad grinding tooth with five cusps and two roots, front and back. It erupts around age six.",
     },
@@ -246,7 +246,7 @@ export const teethModel: OrganModel = {
       id: "lower-right-second-molar",
       label: "Lower right second molar",
       group: "Lower right teeth",
-      tone: "chart-2", shade: 0.2,
+      color: "#ddc9a2",
       description:
         "A grinding tooth with four cusps and two roots, erupting around age twelve.",
     },
@@ -254,7 +254,7 @@ export const teethModel: OrganModel = {
       id: "upper-gum",
       label: "Upper gum",
       group: "Gums",
-      tone: "chart-1", shade: 0.15,
+      color: "#d9878d",
       description:
         "The gingiva around the necks of the upper teeth. It covers the bone of the upper jaw and seals around each tooth.",
     },
@@ -262,7 +262,7 @@ export const teethModel: OrganModel = {
       id: "lower-gum",
       label: "Lower gum",
       group: "Gums",
-      tone: "chart-1", shade: 0.12,
+      color: "#cf7a82",
       description:
         "The gingiva around the necks of the lower teeth, covering the tooth-bearing ridge of the mandible.",
     },
@@ -270,7 +270,7 @@ export const teethModel: OrganModel = {
       id: "right-maxilla",
       label: "Right maxilla",
       group: "Jaw bones",
-      tone: "muted-foreground", shade: 0.18,
+      color: "#bdbcb4",
       description:
         "One half of the upper jaw. It holds the upper teeth on this side and forms part of the hard palate, the nose and the floor of the eye socket.",
     },
@@ -278,7 +278,7 @@ export const teethModel: OrganModel = {
       id: "left-maxilla",
       label: "Left maxilla",
       group: "Jaw bones",
-      tone: "muted-foreground", shade: 0.16,
+      color: "#b6b5ad",
       description:
         "The other half of the upper jaw, mirroring the right maxilla. It is fixed to the skull and does not move.",
     },
@@ -286,7 +286,7 @@ export const teethModel: OrganModel = {
       id: "mandible",
       label: "Mandible",
       group: "Jaw bones",
-      tone: "muted-foreground", shade: 0.13,
+      color: "#adaca4",
       description:
         "The lower jaw, the only bone of the skull that moves. It holds the lower teeth and hinges at the temporomandibular joints in front of the ears.",
     },

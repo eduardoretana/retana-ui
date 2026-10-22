@@ -30,7 +30,7 @@ export const thyroidModel: OrganModel = {
       id: "right-lobe",
       label: "Right lobe",
       group: "Thyroid gland",
-      tone: "chart-1", shade: 0.03,
+      color: "#b8655a",
       description:
         "One of the two wings of the thyroid gland. It wraps around the side of the trachea and the lower larynx.",
     },
@@ -38,7 +38,7 @@ export const thyroidModel: OrganModel = {
       id: "left-lobe",
       label: "Left lobe",
       group: "Thyroid gland",
-      tone: "chart-1", shade: 0.07,
+      color: "#c47465",
       description:
         "The other wing of the gland, mirroring the right lobe on the left side of the trachea.",
     },
@@ -46,7 +46,7 @@ export const thyroidModel: OrganModel = {
       id: "isthmus",
       label: "Isthmus",
       group: "Thyroid gland",
-      tone: "chart-1", shade: -0.02,
+      color: "#a5564d",
       description:
         "The narrow bridge that joins the two lobes across the front of the trachea, just below the cricoid cartilage.",
     },
@@ -54,7 +54,7 @@ export const thyroidModel: OrganModel = {
       id: "right-superior-parathyroid",
       label: "Right superior parathyroid",
       group: "Parathyroid glands",
-      tone: "chart-2", shade: 0.09,
+      color: "#e0a35a",
       description:
         "A pea-sized gland on the back of the upper right lobe. The parathyroids control calcium levels in the blood.",
     },
@@ -62,28 +62,28 @@ export const thyroidModel: OrganModel = {
       id: "right-inferior-parathyroid",
       label: "Right inferior parathyroid",
       group: "Parathyroid glands",
-      tone: "chart-2", shade: 0.05,
+      color: "#d48f4c",
       description: "A small gland on the back of the lower right lobe.",
     },
     {
       id: "left-superior-parathyroid",
       label: "Left superior parathyroid",
       group: "Parathyroid glands",
-      tone: "chart-2", shade: 0.14,
+      color: "#e8b56f",
       description: "A small gland on the back of the upper left lobe.",
     },
     {
       id: "left-inferior-parathyroid",
       label: "Left inferior parathyroid",
       group: "Parathyroid glands",
-      tone: "chart-2", shade: 0.03,
+      color: "#cf8442",
       description: "A small gland on the back of the lower left lobe.",
     },
     {
       id: "hyoid-bone",
       label: "Hyoid bone",
       group: "Larynx and trachea",
-      tone: "chart-2", shade: 0.24,
+      color: "#e2d6b8",
       description:
         "A U-shaped bone above the larynx. It anchors muscles of the tongue and throat and does not touch any other bone.",
     },
@@ -91,7 +91,7 @@ export const thyroidModel: OrganModel = {
       id: "thyroid-cartilage",
       label: "Thyroid cartilage",
       group: "Larynx and trachea",
-      tone: "muted-foreground", shade: 0.22,
+      color: "#c6cdbf",
       description:
         "The largest cartilage of the larynx, forming the Adam’s apple. The gland is named after it, though it sits below it.",
     },
@@ -99,7 +99,7 @@ export const thyroidModel: OrganModel = {
       id: "cricoid-cartilage",
       label: "Cricoid cartilage",
       group: "Larynx and trachea",
-      tone: "muted-foreground", shade: 0.17,
+      color: "#b3bcae",
       description:
         "A ring of cartilage at the bottom of the larynx. The isthmus of the thyroid lies just below it.",
     },
@@ -107,7 +107,7 @@ export const thyroidModel: OrganModel = {
       id: "trachea",
       label: "Trachea",
       group: "Larynx and trachea",
-      tone: "muted-foreground", shade: 0.14,
+      color: "#a7b4a6",
       description:
         "The windpipe. The thyroid lobes rest against its sides and the isthmus crosses its front.",
     },
@@ -115,7 +115,7 @@ export const thyroidModel: OrganModel = {
       id: "common-carotid-artery",
       label: "Right common carotid artery",
       group: "Arteries",
-      tone: "chart-1", shade: 0.01,
+      color: "#b8564c",
       description:
         "The main artery to the head on this side. It runs up beside the thyroid lobe and divides near the top of the thyroid cartilage.",
     },
@@ -123,7 +123,7 @@ export const thyroidModel: OrganModel = {
       id: "superior-thyroid-artery",
       label: "Superior thyroid artery",
       group: "Arteries",
-      tone: "chart-1", shade: 0.1,
+      color: "#d0836c",
       description:
         "The first branch of the external carotid artery. It descends to the upper pole of the lobe and divides over the gland.",
     },
@@ -131,7 +131,7 @@ export const thyroidModel: OrganModel = {
       id: "superior-thyroid-vein",
       label: "Superior thyroid vein",
       group: "Veins",
-      tone: "chart-4", shade: 0.05,
+      color: "#6d8db0",
       description:
         "Drains the upper part of the lobe and follows the superior thyroid artery.",
     },
@@ -139,7 +139,7 @@ export const thyroidModel: OrganModel = {
       id: "middle-thyroid-vein",
       label: "Middle thyroid vein",
       group: "Veins",
-      tone: "chart-4", shade: 0.1,
+      color: "#7f9fbf",
       description:
         "A short vein from the side of the lobe straight to the internal jugular vein.",
     },
@@ -147,7 +147,7 @@ export const thyroidModel: OrganModel = {
       id: "inferior-thyroid-veins",
       label: "Inferior thyroid veins",
       group: "Veins",
-      tone: "chart-4", shade: 0.01,
+      color: "#5f7fa6",
       description:
         "A network of veins from the lower poles and isthmus that runs down in front of the trachea toward the brachiocephalic veins.",
     },
@@ -155,7 +155,7 @@ export const thyroidModel: OrganModel = {
       id: "right-recurrent-laryngeal-nerve",
       label: "Right recurrent laryngeal nerve",
       group: "Nerves",
-      tone: "chart-2", shade: 0.1,
+      color: "#e3c95e",
       description:
         "A branch of the vagus nerve that climbs behind the thyroid lobe to the larynx and moves most of the vocal cord muscles.",
     },
@@ -163,7 +163,7 @@ export const thyroidModel: OrganModel = {
       id: "left-recurrent-laryngeal-nerve",
       label: "Left recurrent laryngeal nerve",
       group: "Nerves",
-      tone: "chart-2", shade: 0.05,
+      color: "#d6b84a",
       description:
         "The left branch starts lower, looping under the aortic arch in the chest before climbing beside the trachea.",
     },
