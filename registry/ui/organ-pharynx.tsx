@@ -30,7 +30,7 @@ export const pharynxModel: OrganModel = {
       id: "superior-constrictor",
       label: "Superior pharyngeal constrictor",
       group: "Constrictors",
-      tone: "chart-1", shade: 0.06,
+      color: "#c8705f",
       description:
         "The top of the three curved muscles that form the back and side walls of the pharynx. It wraps the nasal and oral parts of the throat and squeezes food downward when you swallow.",
     },
@@ -38,7 +38,7 @@ export const pharynxModel: OrganModel = {
       id: "middle-constrictor",
       label: "Middle pharyngeal constrictor",
       group: "Constrictors",
-      tone: "chart-1", shade: 0.11,
+      color: "#d98a6c",
       description:
         "A fan-shaped muscle that starts on the hyoid bone and spreads backward to the midline seam. Its upper fibres overlap the superior constrictor from behind.",
     },
@@ -46,7 +46,7 @@ export const pharynxModel: OrganModel = {
       id: "inferior-constrictor",
       label: "Inferior pharyngeal constrictor",
       group: "Constrictors",
-      tone: "chart-1", shade: 0.02,
+      color: "#b85f55",
       description:
         "The thickest constrictor. It starts on the thyroid and cricoid cartilages, overlaps the middle constrictor and continues into the esophagus. Its lowest fibres act as the upper esophageal sphincter.",
     },
@@ -54,7 +54,7 @@ export const pharynxModel: OrganModel = {
       id: "pharyngeal-raphe",
       label: "Pharyngeal raphe",
       group: "Constrictors",
-      tone: "chart-2", shade: 0.25,
+      color: "#e6d3b8",
       description:
         "A fibrous seam down the back of the pharynx where the left and right constrictors meet. It hangs from the base of the skull.",
     },
@@ -62,7 +62,7 @@ export const pharynxModel: OrganModel = {
       id: "stylopharyngeus",
       label: "Stylopharyngeus",
       group: "Longitudinal muscles",
-      tone: "chart-2", shade: 0.08,
+      color: "#c99a6b",
       description:
         "A slender muscle from the styloid process of the skull. It slips between the superior and middle constrictors and lifts and widens the pharynx during swallowing.",
     },
@@ -70,7 +70,7 @@ export const pharynxModel: OrganModel = {
       id: "palatopharyngeus",
       label: "Palatopharyngeus",
       group: "Longitudinal muscles",
-      tone: "chart-1", shade: 0.13,
+      color: "#d6a07f",
       description:
         "Runs from the soft palate down the inside of the pharyngeal wall to the thyroid cartilage. It raises the pharynx and larynx and forms the back arch of the tonsil bed.",
     },
@@ -78,7 +78,7 @@ export const pharynxModel: OrganModel = {
       id: "salpingopharyngeus",
       label: "Salpingopharyngeus",
       group: "Longitudinal muscles",
-      tone: "chart-2", shade: 0.18,
+      color: "#e3b48f",
       description:
         "A small muscle from the cartilage of the auditory tube that blends into palatopharyngeus. It helps raise the pharynx when you swallow.",
     },
@@ -86,7 +86,7 @@ export const pharynxModel: OrganModel = {
       id: "levator-veli-palatini",
       label: "Levator veli palatini",
       group: "Soft palate",
-      tone: "chart-5", shade: 0.06,
+      color: "#a87fa8",
       description:
         "Lifts the soft palate up and back against the back wall of the pharynx, sealing the nose off from the mouth when you swallow or speak.",
     },
@@ -94,7 +94,7 @@ export const pharynxModel: OrganModel = {
       id: "tensor-veli-palatini",
       label: "Tensor veli palatini",
       group: "Soft palate",
-      tone: "chart-4", shade: 0.12,
+      color: "#8f8fbf",
       description:
         "Hooks around a small bony pulley and tightens the soft palate. It also opens the auditory tube, which is why swallowing can make your ears pop.",
     },
@@ -102,7 +102,7 @@ export const pharynxModel: OrganModel = {
       id: "musculus-uvulae",
       label: "Musculus uvulae",
       group: "Soft palate",
-      tone: "chart-5", shade: 0.13,
+      color: "#c290b8",
       description:
         "A small paired muscle inside the uvula. It shortens and thickens the uvula, helping the soft palate seal against the back of the pharynx.",
     },
@@ -110,7 +110,7 @@ export const pharynxModel: OrganModel = {
       id: "tongue",
       label: "Tongue",
       group: "Larynx and tongue",
-      tone: "chart-1", shade: 0.18,
+      color: "#d99a9a",
       description:
         "The back of the tongue forms the front wall of the oral part of the pharynx. When you swallow it pushes food back into the pharynx.",
     },
@@ -118,7 +118,7 @@ export const pharynxModel: OrganModel = {
       id: "epiglottis",
       label: "Epiglottis",
       group: "Larynx and tongue",
-      tone: "chart-2", shade: 0.19,
+      color: "#cfd6a0",
       description:
         "A leaf of cartilage behind the tongue. It tips back over the entrance to the larynx during swallowing, steering food around it into the lower pharynx.",
     },
@@ -126,7 +126,7 @@ export const pharynxModel: OrganModel = {
       id: "hyoid-bone",
       label: "Hyoid bone",
       group: "Larynx and tongue",
-      tone: "chart-2", shade: 0.29,
+      color: "#e8e1cf",
       description:
         "A U-shaped bone at the root of the tongue. The middle constrictor attaches to its horns, and it rises with the larynx when you swallow.",
     },
@@ -134,7 +134,7 @@ export const pharynxModel: OrganModel = {
       id: "thyroid-cartilage",
       label: "Thyroid cartilage",
       group: "Larynx and tongue",
-      tone: "chart-4", shade: 0.21,
+      color: "#b9c7cf",
       description:
         "The largest cartilage of the larynx, forming the Adam’s apple. The inferior constrictor attaches to its side.",
     },
@@ -142,7 +142,7 @@ export const pharynxModel: OrganModel = {
       id: "cricoid-cartilage",
       label: "Cricoid cartilage",
       group: "Larynx and tongue",
-      tone: "muted-foreground", shade: 0.16,
+      color: "#a7b6c0",
       description:
         "A ring of cartilage below the thyroid cartilage. The pharynx becomes the esophagus at its lower border, about level with the sixth cervical vertebra.",
     },
@@ -150,7 +150,7 @@ export const pharynxModel: OrganModel = {
       id: "arytenoid-cartilages",
       label: "Arytenoid cartilages",
       group: "Larynx and tongue",
-      tone: "muted-foreground", shade: 0.12,
+      color: "#95a7b4",
       description:
         "Two small cartilages on the back of the cricoid. They face into the lower pharynx, where food passes on either side of the larynx.",
     },
@@ -158,7 +158,7 @@ export const pharynxModel: OrganModel = {
       id: "ascending-pharyngeal-artery",
       label: "Ascending pharyngeal artery",
       group: "Vessels and nerves",
-      tone: "chart-1", shade: 0.01,
+      color: "#b8564c",
       description:
         "A long thin branch of the external carotid artery that climbs beside the pharynx and supplies its wall, the soft palate and the tonsil.",
     },
@@ -166,7 +166,7 @@ export const pharynxModel: OrganModel = {
       id: "pharyngeal-venous-plexus",
       label: "Pharyngeal venous plexus",
       group: "Vessels and nerves",
-      tone: "chart-4", shade: 0.01,
+      color: "#5f7fa6",
       description:
         "A network of veins on the outer surface of the constrictors. It drains into the internal jugular vein.",
     },
@@ -174,7 +174,7 @@ export const pharynxModel: OrganModel = {
       id: "glossopharyngeal-nerves",
       label: "Glossopharyngeal nerves",
       group: "Vessels and nerves",
-      tone: "chart-2", shade: 0.09,
+      color: "#e0c25a",
       description:
         "The ninth cranial nerve. It carries sensation from the pharynx and back of the tongue, triggers the gag reflex and supplies stylopharyngeus.",
     },
@@ -182,7 +182,7 @@ export const pharynxModel: OrganModel = {
       id: "pharyngeal-nerves",
       label: "Pharyngeal nerves",
       group: "Vessels and nerves",
-      tone: "chart-2", shade: 0.16,
+      color: "#ead27a",
       description:
         "Small branches from the pterygopalatine ganglion that carry sensation from the lining of the upper, nasal part of the pharynx.",
     },

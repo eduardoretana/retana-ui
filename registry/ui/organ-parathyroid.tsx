@@ -44,7 +44,7 @@ export const parathyroidModel: OrganModel = {
       id: "right-superior-parathyroid",
       label: "Right superior parathyroid",
       group: "Parathyroid glands",
-      tone: "chart-2", shade: 0.09,
+      color: "#e0a35a",
       description:
         "A gland about the size of a grain of rice on the back of the upper right thyroid lobe. The four parathyroids release parathyroid hormone, which raises calcium in the blood.",
     },
@@ -52,7 +52,7 @@ export const parathyroidModel: OrganModel = {
       id: "right-inferior-parathyroid",
       label: "Right inferior parathyroid",
       group: "Parathyroid glands",
-      tone: "chart-2", shade: 0.05,
+      color: "#d48f4c",
       description:
         "Sits on the back of the lower right lobe. The lower glands start higher in the embryo and travel down, so their final position varies more than the upper ones.",
     },
@@ -60,7 +60,7 @@ export const parathyroidModel: OrganModel = {
       id: "left-superior-parathyroid",
       label: "Left superior parathyroid",
       group: "Parathyroid glands",
-      tone: "chart-2", shade: 0.14,
+      color: "#e8b56f",
       description:
         "On the back of the upper left lobe, near where the recurrent laryngeal nerve enters the larynx.",
     },
@@ -68,7 +68,7 @@ export const parathyroidModel: OrganModel = {
       id: "left-inferior-parathyroid",
       label: "Left inferior parathyroid",
       group: "Parathyroid glands",
-      tone: "chart-2", shade: 0.03,
+      color: "#cf8442",
       description:
         "On the back of the lower left lobe. Like its right partner, it is sometimes found lower down, even inside the thymus.",
     },
@@ -76,7 +76,7 @@ export const parathyroidModel: OrganModel = {
       id: "right-lobe",
       label: "Right lobe",
       group: "Thyroid gland",
-      tone: "chart-1", shade: 0.03,
+      color: "#b8655a",
       description:
         "The right wing of the thyroid gland. Both right parathyroids rest against its back surface.",
     },
@@ -84,7 +84,7 @@ export const parathyroidModel: OrganModel = {
       id: "left-lobe",
       label: "Left lobe",
       group: "Thyroid gland",
-      tone: "chart-1", shade: 0.07,
+      color: "#c47465",
       description:
         "The left wing of the thyroid gland, carrying the two left parathyroids on its back.",
     },
@@ -92,7 +92,7 @@ export const parathyroidModel: OrganModel = {
       id: "isthmus",
       label: "Isthmus",
       group: "Thyroid gland",
-      tone: "chart-1", shade: -0.02,
+      color: "#a5564d",
       description:
         "The bridge joining the two thyroid lobes across the front of the trachea.",
     },
@@ -100,7 +100,7 @@ export const parathyroidModel: OrganModel = {
       id: "thyroid-cartilage",
       label: "Thyroid cartilage",
       group: "Larynx",
-      tone: "muted-foreground", shade: 0.22,
+      color: "#c6cdbf",
       description:
         "The largest cartilage of the larynx, forming the Adam’s apple. Shown to place the glands in the neck.",
     },
@@ -108,7 +108,7 @@ export const parathyroidModel: OrganModel = {
       id: "cricoid-cartilage",
       label: "Cricoid cartilage",
       group: "Larynx",
-      tone: "muted-foreground", shade: 0.17,
+      color: "#b3bcae",
       description:
         "The ring of cartilage at the bottom of the larynx. The superior parathyroids usually lie near its level.",
     },
