@@ -31,7 +31,7 @@ export const uterusModel: OrganModel = {
       id: "fundus",
       label: "Fundus",
       group: "Uterus and vagina",
-      tone: "chart-1", shade: 0.08,
+      color: "#c46f74",
       description:
         "The rounded top of the uterus, above the points where the uterine tubes enter.",
     },
@@ -39,7 +39,7 @@ export const uterusModel: OrganModel = {
       id: "body",
       label: "Body",
       group: "Uterus and vagina",
-      tone: "chart-1", shade: 0.17,
+      color: "#dc958d",
       description:
         "The main, muscular part of the uterus. A pregnancy develops inside it.",
     },
@@ -47,7 +47,7 @@ export const uterusModel: OrganModel = {
       id: "cornua",
       label: "Cornua",
       group: "Uterus and vagina",
-      tone: "chart-1", shade: 0.19,
+      color: "#e3ab93",
       description:
         "The upper corners of the uterus, where the uterine tubes join it.",
     },
@@ -55,7 +55,7 @@ export const uterusModel: OrganModel = {
       id: "tubal-ostia",
       label: "Tubal openings",
       group: "Uterus and vagina",
-      tone: "chart-1", shade: 0.01,
+      color: "#a85b62",
       description:
         "Where each uterine tube opens into the cavity of the uterus.",
     },
@@ -63,7 +63,7 @@ export const uterusModel: OrganModel = {
       id: "lower-segment",
       label: "Lower uterine segment",
       group: "Uterus and vagina",
-      tone: "chart-1", shade: 0.13,
+      color: "#cf9a86",
       description:
         "The narrow part between the body and the cervix, also called the isthmus of the uterus.",
     },
@@ -71,7 +71,7 @@ export const uterusModel: OrganModel = {
       id: "cervix",
       label: "Cervix",
       group: "Uterus and vagina",
-      tone: "chart-1", shade: 0.09,
+      color: "#b97f86",
       description:
         "The lower, narrow end of the uterus. Its canal links the cavity of the uterus to the vagina.",
     },
@@ -79,7 +79,7 @@ export const uterusModel: OrganModel = {
       id: "internal-os",
       label: "Internal os",
       group: "Uterus and vagina",
-      tone: "chart-1", shade: -0.05,
+      color: "#8e4f58",
       description:
         "The upper opening of the cervical canal, into the cavity of the uterus.",
     },
@@ -87,14 +87,14 @@ export const uterusModel: OrganModel = {
       id: "external-os",
       label: "External os",
       group: "Uterus and vagina",
-      tone: "chart-1", shade: -0.1,
+      color: "#7c4450",
       description: "The lower opening of the cervical canal, into the vagina.",
     },
     {
       id: "vagina",
       label: "Vagina",
       group: "Uterus and vagina",
-      tone: "chart-1", shade: 0.19,
+      color: "#d6a7a2",
       description:
         "A muscular canal that runs from the cervix down to the outside of the body.",
     },
@@ -102,14 +102,14 @@ export const uterusModel: OrganModel = {
       id: "cervicovaginal-junction",
       label: "Cervicovaginal junction",
       group: "Uterus and vagina",
-      tone: "chart-1", shade: 0.05,
+      color: "#a87a80",
       description: "Where the cervix meets the upper end of the vagina.",
     },
     {
       id: "isthmus",
       label: "Isthmus",
       group: "Uterine tubes",
-      tone: "chart-2", shade: 0.09,
+      color: "#d9a35f",
       description:
         "The narrow inner third of each uterine tube, next to the uterus.",
     },
@@ -117,7 +117,7 @@ export const uterusModel: OrganModel = {
       id: "ampulla",
       label: "Ampulla",
       group: "Uterine tubes",
-      tone: "chart-2", shade: 0.13,
+      color: "#e3b56f",
       description:
         "The wide, curving middle part of each tube and the usual place where fertilisation happens.",
     },
@@ -125,7 +125,7 @@ export const uterusModel: OrganModel = {
       id: "infundibulum",
       label: "Infundibulum",
       group: "Uterine tubes",
-      tone: "chart-2", shade: 0.05,
+      color: "#cf9550",
       description:
         "The funnel-shaped outer end of each tube, which opens beside the ovary.",
     },
@@ -133,7 +133,7 @@ export const uterusModel: OrganModel = {
       id: "fimbriae",
       label: "Fimbriae",
       group: "Uterine tubes",
-      tone: "chart-2", shade: -0.0,
+      color: "#b98345",
       description:
         "Finger-like fringes around the open end of each tube that sweep a released egg inside.",
     },
@@ -141,7 +141,7 @@ export const uterusModel: OrganModel = {
       id: "left-ovary",
       label: "Left ovary",
       group: "Ovaries",
-      tone: "chart-5", shade: 0.09,
+      color: "#9a7fb8",
       description:
         "An almond-shaped gland that holds the egg follicles and makes oestrogen and progesterone.",
     },
@@ -149,7 +149,7 @@ export const uterusModel: OrganModel = {
       id: "right-ovary",
       label: "Right ovary",
       group: "Ovaries",
-      tone: "chart-5", shade: 0.04,
+      color: "#8a70aa",
       description:
         "An almond-shaped gland that holds the egg follicles and makes oestrogen and progesterone.",
     },
@@ -157,7 +157,7 @@ export const uterusModel: OrganModel = {
       id: "broad-ligament",
       label: "Broad ligament",
       group: "Ligaments",
-      tone: "chart-1", shade: 0.2,
+      color: "#d9b4a3",
       description:
         "A wide fold of peritoneum that drapes over the uterus, tubes and ovaries and joins them to the side walls of the pelvis.",
     },
@@ -165,7 +165,7 @@ export const uterusModel: OrganModel = {
       id: "mesosalpinx",
       label: "Mesosalpinx",
       group: "Ligaments",
-      tone: "chart-2", shade: 0.23,
+      color: "#e9c9a8",
       description:
         "The upper part of the broad ligament that holds each uterine tube.",
     },
@@ -173,7 +173,7 @@ export const uterusModel: OrganModel = {
       id: "mesovarium",
       label: "Mesovarium",
       group: "Ligaments",
-      tone: "chart-5", shade: 0.22,
+      color: "#c9b3d6",
       description:
         "The short fold of the broad ligament that attaches each ovary.",
     },
@@ -181,7 +181,7 @@ export const uterusModel: OrganModel = {
       id: "ovarian-ligaments",
       label: "Ovarian ligaments",
       group: "Ligaments",
-      tone: "chart-5", shade: 0.16,
+      color: "#b49ac8",
       description:
         "Cords that tie each ovary to the side of the uterus, just below the tube.",
     },
@@ -189,7 +189,7 @@ export const uterusModel: OrganModel = {
       id: "suspensory-ligaments",
       label: "Suspensory ligaments of the ovary",
       group: "Ligaments",
-      tone: "chart-5", shade: 0.12,
+      color: "#a68fbf",
       description:
         "Folds that run from each ovary up to the pelvic wall and carry the ovarian vessels.",
     },
@@ -197,7 +197,7 @@ export const uterusModel: OrganModel = {
       id: "round-ligaments",
       label: "Round ligaments",
       group: "Ligaments",
-      tone: "chart-1", shade: 0.19,
+      color: "#d9a7a0",
       description:
         "Cords that run from the top corners of the uterus forward and down through the groin.",
     },
@@ -205,7 +205,7 @@ export const uterusModel: OrganModel = {
       id: "cardinal-ligaments",
       label: "Cardinal ligaments",
       group: "Ligaments",
-      tone: "chart-1", shade: 0.14,
+      color: "#cfa58a",
       description:
         "Bands at the base of the broad ligament that anchor the cervix to the side walls of the pelvis.",
     },
@@ -213,14 +213,14 @@ export const uterusModel: OrganModel = {
       id: "uterosacral-ligaments",
       label: "Uterosacral ligaments",
       group: "Ligaments",
-      tone: "chart-1", shade: 0.11,
+      color: "#bf9a83",
       description: "Bands that run back from the cervix to the sacrum.",
     },
     {
       id: "uterine-arteries",
       label: "Uterine arteries",
       group: "Blood vessels",
-      tone: "chart-1", shade: 0.01,
+      color: "#b8564c",
       description:
         "Branches of the internal iliac arteries that reach the sides of the uterus near the cervix.",
     },
@@ -228,14 +228,14 @@ export const uterusModel: OrganModel = {
       id: "uterine-veins",
       label: "Uterine veins",
       group: "Blood vessels",
-      tone: "chart-4", shade: 0.05,
+      color: "#6d8db0",
       description: "Drain the uterus into the internal iliac veins.",
     },
     {
       id: "bladder",
       label: "Urinary bladder",
       group: "Neighbouring structures",
-      tone: "chart-2", shade: 0.13,
+      color: "#d6c27a",
       description:
         "Sits in front of and below the uterus, which tips forward over it.",
     },

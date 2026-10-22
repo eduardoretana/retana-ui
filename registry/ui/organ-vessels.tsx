@@ -87,7 +87,7 @@ export const vesselsModel: OrganModel = {
       id: "carotid-arteries",
       label: "Carotid arteries",
       group: "Head and neck",
-      tone: "chart-1", shade: 0.0,
+      color: "#c0463f",
       description:
         "The main arteries of the neck. Each common carotid artery divides into an internal branch for the brain and an external branch for the face and scalp.",
     },
@@ -95,7 +95,7 @@ export const vesselsModel: OrganModel = {
       id: "vertebral-arteries",
       label: "Vertebral arteries",
       group: "Head and neck",
-      tone: "chart-1", shade: 0.07,
+      color: "#d0675a",
       description:
         "Rise from the subclavian arteries through openings in the neck vertebrae and join at the base of the skull to help supply the brain.",
     },
@@ -103,7 +103,7 @@ export const vesselsModel: OrganModel = {
       id: "jugular-veins",
       label: "Jugular veins",
       group: "Head and neck",
-      tone: "chart-4", shade: -0.01,
+      color: "#4f74a8",
       description:
         "Drain blood from the brain, face and neck. The internal jugular vein runs beside the carotid artery and joins the subclavian vein behind the collarbone.",
     },
@@ -111,7 +111,7 @@ export const vesselsModel: OrganModel = {
       id: "ascending-aorta",
       label: "Ascending aorta",
       group: "Chest",
-      tone: "chart-1", shade: -0.04,
+      color: "#b23a36",
       description:
         "The first part of the aorta, the body’s largest artery. It leaves the left ventricle of the heart and rises toward the neck.",
     },
@@ -119,7 +119,7 @@ export const vesselsModel: OrganModel = {
       id: "aortic-arch",
       label: "Aortic arch",
       group: "Chest",
-      tone: "chart-1", shade: -0.06,
+      color: "#a8322f",
       description:
         "Curves backward and to the left over the heart. The brachiocephalic trunk, left common carotid and left subclavian arteries leave its top.",
     },
@@ -127,7 +127,7 @@ export const vesselsModel: OrganModel = {
       id: "descending-aorta",
       label: "Descending aorta",
       group: "Chest",
-      tone: "chart-1", shade: -0.08,
+      color: "#9e2c2b",
       description:
         "Runs down the back of the chest and through the diaphragm into the abdomen, where it divides into the two common iliac arteries.",
     },
@@ -135,7 +135,7 @@ export const vesselsModel: OrganModel = {
       id: "brachiocephalic-trunk",
       label: "Brachiocephalic trunk",
       group: "Chest",
-      tone: "chart-1", shade: 0.02,
+      color: "#c4524a",
       description:
         "The first branch of the aortic arch. It divides into the right subclavian and right common carotid arteries.",
     },
@@ -143,7 +143,7 @@ export const vesselsModel: OrganModel = {
       id: "internal-thoracic-arteries",
       label: "Internal thoracic arteries",
       group: "Chest",
-      tone: "chart-1", shade: 0.1,
+      color: "#d97a68",
       description:
         "Run down the inside of the front chest wall, beside the breastbone, and supply the chest wall and breasts.",
     },
@@ -151,7 +151,7 @@ export const vesselsModel: OrganModel = {
       id: "pulmonary-trunk",
       label: "Pulmonary trunk",
       group: "Chest",
-      tone: "chart-4", shade: 0.04,
+      color: "#6a6fb0",
       description:
         "Carries blood low in oxygen from the right ventricle of the heart and divides into the right and left pulmonary arteries.",
     },
@@ -159,7 +159,7 @@ export const vesselsModel: OrganModel = {
       id: "pulmonary-arteries",
       label: "Pulmonary arteries",
       group: "Chest",
-      tone: "chart-4", shade: 0.1,
+      color: "#7f84c2",
       description:
         "Carry blood from the pulmonary trunk to each lung to pick up oxygen.",
     },
@@ -167,7 +167,7 @@ export const vesselsModel: OrganModel = {
       id: "pulmonary-veins",
       label: "Pulmonary veins",
       group: "Chest",
-      tone: "chart-1", shade: 0.11,
+      color: "#d4707c",
       description:
         "Four short veins, two from each lung, that bring blood rich in oxygen back to the left atrium of the heart.",
     },
@@ -175,7 +175,7 @@ export const vesselsModel: OrganModel = {
       id: "superior-vena-cava",
       label: "Superior vena cava",
       group: "Chest",
-      tone: "chart-4", shade: -0.07,
+      color: "#3f5f96",
       description:
         "Formed by the two brachiocephalic veins. It returns blood from the head, neck and arms to the right atrium.",
     },
@@ -183,7 +183,7 @@ export const vesselsModel: OrganModel = {
       id: "brachiocephalic-veins",
       label: "Brachiocephalic veins",
       group: "Chest",
-      tone: "chart-4", shade: 0.0,
+      color: "#5677ab",
       description:
         "Each forms where the internal jugular and subclavian veins meet. The left one crosses in front of the aortic arch to join the right.",
     },
@@ -191,7 +191,7 @@ export const vesselsModel: OrganModel = {
       id: "azygos-system",
       label: "Azygos system",
       group: "Chest",
-      tone: "chart-4", shade: 0.07,
+      color: "#7090bd",
       description:
         "Veins along the spine that drain the back of the chest wall and empty into the superior vena cava.",
     },
@@ -199,7 +199,7 @@ export const vesselsModel: OrganModel = {
       id: "subclavian-arteries",
       label: "Subclavian arteries",
       group: "Arms",
-      tone: "chart-1", shade: -0.0,
+      color: "#bb4d43",
       description:
         "Arch over the top of each lung behind the collarbone. They supply the arms and give off the vertebral and internal thoracic arteries.",
     },
@@ -207,7 +207,7 @@ export const vesselsModel: OrganModel = {
       id: "axillary-arteries",
       label: "Axillary arteries",
       group: "Arms",
-      tone: "chart-1", shade: 0.04,
+      color: "#c75d4f",
       description:
         "Continue the subclavian arteries through the armpit and become the brachial arteries.",
     },
@@ -215,7 +215,7 @@ export const vesselsModel: OrganModel = {
       id: "brachial-arteries",
       label: "Brachial arteries",
       group: "Arms",
-      tone: "chart-1", shade: 0.07,
+      color: "#d06c5b",
       description:
         "Run down the inner side of the upper arm. This is the artery used for blood pressure readings at the elbow.",
     },
@@ -223,7 +223,7 @@ export const vesselsModel: OrganModel = {
       id: "radial-arteries",
       label: "Radial arteries",
       group: "Arms",
-      tone: "chart-1", shade: 0.1,
+      color: "#d97a66",
       description:
         "Run along the thumb side of the forearm. The pulse is usually felt over this artery at the wrist.",
     },
@@ -231,7 +231,7 @@ export const vesselsModel: OrganModel = {
       id: "ulnar-arteries",
       label: "Ulnar arteries",
       group: "Arms",
-      tone: "chart-1", shade: 0.13,
+      color: "#e08b75",
       description:
         "Run along the little-finger side of the forearm toward the palm.",
     },
@@ -239,7 +239,7 @@ export const vesselsModel: OrganModel = {
       id: "palmar-arches",
       label: "Deep palmar arches",
       group: "Arms",
-      tone: "chart-1", shade: 0.17,
+      color: "#e79c86",
       description:
         "Loops across the palm, formed mainly by the radial artery, that send branches to the fingers.",
     },
@@ -247,7 +247,7 @@ export const vesselsModel: OrganModel = {
       id: "subclavian-veins",
       label: "Subclavian veins",
       group: "Arms",
-      tone: "chart-4", shade: 0.02,
+      color: "#5a7cb0",
       description:
         "Carry blood from the arms under the collarbone to meet the internal jugular veins.",
     },
@@ -255,7 +255,7 @@ export const vesselsModel: OrganModel = {
       id: "axillary-veins",
       label: "Axillary veins",
       group: "Arms",
-      tone: "chart-4", shade: 0.05,
+      color: "#6688bb",
       description:
         "Collect blood from the arm in the armpit and continue as the subclavian veins.",
     },
@@ -263,7 +263,7 @@ export const vesselsModel: OrganModel = {
       id: "cephalic-veins",
       label: "Cephalic veins",
       group: "Arms",
-      tone: "chart-4", shade: 0.1,
+      color: "#7896c4",
       description:
         "Surface veins on the thumb side of the arm. They rise to the shoulder and empty into the axillary veins.",
     },
@@ -271,7 +271,7 @@ export const vesselsModel: OrganModel = {
       id: "basilic-veins",
       label: "Basilic veins",
       group: "Arms",
-      tone: "chart-4", shade: 0.13,
+      color: "#88a3cc",
       description:
         "Surface veins on the little-finger side of the arm. Near the elbow they are a common site for drawing blood.",
     },
@@ -279,7 +279,7 @@ export const vesselsModel: OrganModel = {
       id: "celiac-trunk",
       label: "Celiac trunk",
       group: "Abdomen",
-      tone: "chart-1", shade: -0.01,
+      color: "#b8463f",
       description:
         "A short branch from the front of the aorta just below the diaphragm. It supplies the stomach, liver, spleen and pancreas.",
     },
@@ -287,14 +287,14 @@ export const vesselsModel: OrganModel = {
       id: "hepatic-artery",
       label: "Hepatic artery",
       group: "Abdomen",
-      tone: "chart-1", shade: 0.06,
+      color: "#cf6a58",
       description: "Runs from the celiac trunk to the liver.",
     },
     {
       id: "splenic-artery",
       label: "Splenic artery",
       group: "Abdomen",
-      tone: "chart-1", shade: -0.04,
+      color: "#a93f3c",
       description:
         "A winding artery from the celiac trunk along the top of the pancreas to the spleen.",
     },
@@ -302,7 +302,7 @@ export const vesselsModel: OrganModel = {
       id: "superior-mesenteric-artery",
       label: "Superior mesenteric artery",
       group: "Abdomen",
-      tone: "chart-1", shade: 0.02,
+      color: "#c25a4c",
       description:
         "Leaves the aorta just below the celiac trunk and supplies the small intestine and the first half of the large intestine.",
     },
@@ -310,7 +310,7 @@ export const vesselsModel: OrganModel = {
       id: "inferior-mesenteric-artery",
       label: "Inferior mesenteric artery",
       group: "Abdomen",
-      tone: "chart-1", shade: 0.09,
+      color: "#d47b66",
       description:
         "Leaves the lower aorta and supplies the last part of the large intestine.",
     },
@@ -318,7 +318,7 @@ export const vesselsModel: OrganModel = {
       id: "renal-arteries",
       label: "Renal arteries",
       group: "Abdomen",
-      tone: "chart-1", shade: 0.01,
+      color: "#bf5148",
       description:
         "Leave the sides of the aorta and divide as they enter each kidney. Together they carry about a fifth of the blood the heart pumps.",
     },
@@ -326,7 +326,7 @@ export const vesselsModel: OrganModel = {
       id: "inferior-vena-cava",
       label: "Inferior vena cava",
       group: "Abdomen",
-      tone: "chart-4", shade: -0.09,
+      color: "#38598f",
       description:
         "The body’s largest vein. It runs up the right side of the aorta and returns blood from the legs and abdomen to the right atrium.",
     },
@@ -334,7 +334,7 @@ export const vesselsModel: OrganModel = {
       id: "renal-veins",
       label: "Renal veins",
       group: "Abdomen",
-      tone: "chart-4", shade: 0.02,
+      color: "#5b7db1",
       description:
         "Drain the kidneys into the inferior vena cava. The left one is longer and crosses in front of the aorta.",
     },
@@ -342,7 +342,7 @@ export const vesselsModel: OrganModel = {
       id: "portal-vein",
       label: "Portal vein",
       group: "Abdomen",
-      tone: "chart-4", shade: -0.03,
+      color: "#4a6aa0",
       description:
         "Carries blood from the intestines, stomach, pancreas and spleen to the liver, which processes it before it reaches the rest of the body.",
     },
@@ -350,7 +350,7 @@ export const vesselsModel: OrganModel = {
       id: "splenic-mesenteric-veins",
       label: "Splenic and mesenteric veins",
       group: "Abdomen",
-      tone: "chart-4", shade: 0.11,
+      color: "#7c99c6",
       description:
         "Drain the spleen and the intestines and join behind the pancreas to form the portal vein.",
     },
@@ -358,7 +358,7 @@ export const vesselsModel: OrganModel = {
       id: "common-iliac-arteries",
       label: "Common iliac arteries",
       group: "Pelvis",
-      tone: "chart-1", shade: -0.02,
+      color: "#b5433d",
       description:
         "The two branches the aorta divides into at about the level of the navel. Each divides again into an internal and an external iliac artery.",
     },
@@ -366,7 +366,7 @@ export const vesselsModel: OrganModel = {
       id: "internal-iliac-arteries",
       label: "Internal iliac arteries",
       group: "Pelvis",
-      tone: "chart-1", shade: 0.08,
+      color: "#d07362",
       description:
         "Supply the pelvic organs, the buttocks and the inner thigh.",
     },
@@ -374,7 +374,7 @@ export const vesselsModel: OrganModel = {
       id: "external-iliac-arteries",
       label: "External iliac arteries",
       group: "Pelvis",
-      tone: "chart-1", shade: 0.02,
+      color: "#c25549",
       description:
         "Run along the brim of the pelvis and pass under the groin ligament to become the femoral arteries.",
     },
@@ -382,7 +382,7 @@ export const vesselsModel: OrganModel = {
       id: "common-iliac-veins",
       label: "Common iliac veins",
       group: "Pelvis",
-      tone: "chart-4", shade: -0.04,
+      color: "#4565a0",
       description:
         "Join in front of the lower spine to form the inferior vena cava.",
     },
@@ -390,21 +390,21 @@ export const vesselsModel: OrganModel = {
       id: "internal-iliac-veins",
       label: "Internal iliac veins",
       group: "Pelvis",
-      tone: "chart-4", shade: 0.08,
+      color: "#7392c2",
       description: "Drain the pelvic organs and the buttocks.",
     },
     {
       id: "external-iliac-veins",
       label: "External iliac veins",
       group: "Pelvis",
-      tone: "chart-4", shade: 0.01,
+      color: "#5978ad",
       description: "Continue the femoral veins up into the pelvis.",
     },
     {
       id: "femoral-arteries",
       label: "Femoral arteries",
       group: "Legs",
-      tone: "chart-1", shade: 0.0,
+      color: "#bd4b42",
       description:
         "The main arteries of the thigh. A pulse can be felt in the groin, and the artery is a common entry point for catheter procedures.",
     },
@@ -412,7 +412,7 @@ export const vesselsModel: OrganModel = {
       id: "deep-femoral-arteries",
       label: "Deep femoral arteries",
       group: "Legs",
-      tone: "chart-1", shade: 0.09,
+      color: "#d37665",
       description:
         "Large branches of the femoral arteries that supply the deep thigh muscles.",
     },
@@ -420,7 +420,7 @@ export const vesselsModel: OrganModel = {
       id: "popliteal-arteries",
       label: "Popliteal arteries",
       group: "Legs",
-      tone: "chart-1", shade: 0.03,
+      color: "#c65c4e",
       description:
         "Continue the femoral arteries behind the knee and divide into the tibial arteries.",
     },
@@ -428,7 +428,7 @@ export const vesselsModel: OrganModel = {
       id: "anterior-tibial-arteries",
       label: "Anterior tibial arteries",
       group: "Legs",
-      tone: "chart-1", shade: 0.11,
+      color: "#d9826c",
       description:
         "Supply the front of the lower leg and continue onto the top of the foot.",
     },
@@ -436,7 +436,7 @@ export const vesselsModel: OrganModel = {
       id: "posterior-tibial-arteries",
       label: "Posterior tibial arteries",
       group: "Legs",
-      tone: "chart-1", shade: 0.06,
+      color: "#cc6a59",
       description:
         "Run down the back of the lower leg and pass behind the inner ankle into the sole of the foot.",
     },
@@ -444,7 +444,7 @@ export const vesselsModel: OrganModel = {
       id: "fibular-arteries",
       label: "Fibular arteries",
       group: "Legs",
-      tone: "chart-1", shade: 0.15,
+      color: "#e3957d",
       description:
         "Branches of the posterior tibial arteries that run along the fibula, the thinner bone of the lower leg.",
     },
@@ -452,7 +452,7 @@ export const vesselsModel: OrganModel = {
       id: "foot-arteries",
       label: "Foot arteries",
       group: "Legs",
-      tone: "chart-1", shade: 0.19,
+      color: "#eaa58e",
       description:
         "The dorsalis pedis artery on top of the foot, where a pulse can be felt, and the plantar arch across the sole.",
     },
@@ -460,7 +460,7 @@ export const vesselsModel: OrganModel = {
       id: "femoral-veins",
       label: "Femoral veins",
       group: "Legs",
-      tone: "chart-4", shade: -0.02,
+      color: "#4e6fa6",
       description:
         "Deep veins of the thigh that run beside the femoral arteries. Clots in these veins are a form of deep vein thrombosis.",
     },
@@ -468,7 +468,7 @@ export const vesselsModel: OrganModel = {
       id: "popliteal-veins",
       label: "Popliteal veins",
       group: "Legs",
-      tone: "chart-4", shade: 0.04,
+      color: "#6283b8",
       description:
         "Deep veins behind the knee that continue upward as the femoral veins.",
     },
@@ -476,7 +476,7 @@ export const vesselsModel: OrganModel = {
       id: "great-saphenous-veins",
       label: "Great saphenous veins",
       group: "Legs",
-      tone: "chart-4", shade: 0.12,
+      color: "#809dc9",
       description:
         "The longest veins in the body. They run just under the skin from the inner ankle to the groin, where they join the femoral veins.",
     },
@@ -484,7 +484,7 @@ export const vesselsModel: OrganModel = {
       id: "small-saphenous-veins",
       label: "Small saphenous veins",
       group: "Legs",
-      tone: "chart-4", shade: 0.16,
+      color: "#93acd2",
       description:
         "Surface veins that run up the back of the calf from the outer ankle and join the popliteal veins.",
     },

@@ -3,7 +3,6 @@
 import * as React from "react"
 import { CircleAlertIcon, MinusIcon, PlusIcon, RotateCcwIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { onThemeChange, resolveCssColor, toneVar, type ClinicalTone } from "@/registry/retana/lib/clinical-tone"
 import {
   AmbientLight,
   Box3,
@@ -23,7 +22,6 @@ import {
   type Intersection,
   type Material,
   type Object3D,
-  SRGBColorSpace,
 } from "three"
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js"
 import { OrbitControls } from "three/addons/controls/OrbitControls.js"
@@ -52,10 +50,7 @@ export type OrganStructure = {
   label: string
   /** Interface grouping, as shown in the explorer's anatomy panel. */
   group: string
-  /** Theme token for the structure. Retana UI maps OrganUI colours onto host tokens. */
-  tone: ClinicalTone
-  /** Lightness nudge, -1..1: positive mixes toward background, negative toward foreground. */
-  shade?: number
+  color: string
   description?: string
 }
 
@@ -125,7 +120,7 @@ export function organAnatomyNodes(model: OrganModel) {
     selectable: false,
     children: model.structures
       .filter((structure) => structure.group === group)
-      .map(({ id, label, tone, shade }) => ({ id, label, color: toneVar(tone, shade) })),
+      .map(({ id, label, color }) => ({ id, label, color })),
   }))
 }
 
@@ -139,17 +134,7 @@ export function organDefaultVisibility(
 // Shared with every OrganUI explorer so named views fill the stage by the same
 // rule whatever the organ's shape.
 const FRAME_FILL = 0.8
-/** Neutral white light. Lighting is physical, not a theme colour. */
-const LIGHT = () => new Color(1, 1, 1)
-const NO_EMISSION = new Color(0, 0, 0)
-
-function tokenColor(value: string, scope: Element | null, fallback: number) {
-  const rgb = resolveCssColor(value, scope)
-  const color = new Color()
-  if (rgb) color.setRGB(rgb[0], rgb[1], rgb[2], SRGBColorSpace)
-  else color.setScalar(fallback)
-  return color
-}
+const STAGE_TONE = new Color("#e4e3dc")
 
 function surfacePoints(meshes: Mesh[], stride = 16) {
   const points: Vector3[] = []
@@ -449,12 +434,12 @@ export function OrganViewer({
     }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     const stage = new Scene()
-    stage.add(new AmbientLight(LIGHT(), 0.8))
-    stage.add(new HemisphereLight(LIGHT(), new Color(0.6, 0.6, 0.6), 1.6))
-    const lights: [number[], number, Color][] = [
-      [[-4, 6, 6], 2.6, LIGHT()],
-      [[5, 1, -4], 1.8, LIGHT()],
-      [[-3, -3, 0], 0.45, LIGHT()],
+    stage.add(new AmbientLight("#ffffff", 0.8))
+    stage.add(new HemisphereLight("#fffcf3", "#a49b8f", 1.6))
+    const lights: [number[], number, string][] = [
+      [[-4, 6, 6], 2.6, "#fff5e6"],
+      [[5, 1, -4], 1.8, "#e1edff"],
+      [[-3, -3, 0], 0.45, "#ffffff"],
     ]
     for (const [position, intensity, color] of lights) {
       const light = new DirectionalLight(color, intensity)
@@ -608,31 +593,11 @@ export function OrganViewer({
     }
     canvas.addEventListener("webglcontextlost", onContextLost)
 
-    let ghosts = new Map<string, Color>()
-    let tints = new Map<string, Color>()
-    let stageTone = tokenColor("var(--muted)", canvas, 0.9)
-    let lastPaint: [string | null, Readonly<Record<string, boolean>>] | null = null
-    const stopTheme = onThemeChange(() => {
-      ghosts = new Map()
-      tints = new Map()
-      stageTone = tokenColor("var(--muted)", canvas, 0.9)
-      if (lastPaint) engineValue.paint(lastPaint[0], lastPaint[1])
-    })
-    const tintOf = (id: string) => {
-      const structure = structures.get(id)!
-      const key = toneVar(structure.tone, structure.shade)
-      let tint = tints.get(key)
-      if (!tint) {
-        tint = tokenColor(key, canvas, 0.6)
-        tints.set(key, tint)
-      }
-      return { key, tint }
-    }
-    const engineValue: Engine = {
+    const ghosts = new Map<string, Color>()
+    setEngine({
       paint(selected, shown) {
-        lastPaint = [selected, shown]
         for (const [id, list] of meshes) {
-          const { key: color, tint } = tintOf(id)
+          const color = structures.get(id)!.color
           const state = !selected
             ? "normal"
             : id === selected
@@ -640,15 +605,15 @@ export function OrganViewer({
               : "ghosted"
           let ghost = ghosts.get(color)
           if (!ghost) {
-            ghost = tint.clone().lerp(stageTone, 0.5)
+            ghost = new Color(color).lerp(STAGE_TONE, 0.5)
             ghosts.set(color, ghost)
           }
           for (const mesh of list) {
             const material = mesh.material as MeshStandardMaterial
             mesh.visible = shown[id] !== false
             if (state === "ghosted") material.color.copy(ghost)
-            else material.color.copy(tint)
-            material.emissive.copy(state === "selected" ? tint : NO_EMISSION)
+            else material.color.set(color)
+            material.emissive.set(state === "selected" ? color : "#000000")
             material.emissiveIntensity = state === "selected" ? 0.35 : 0
             material.transparent = state === "ghosted"
             material.opacity = state === "ghosted" ? 0.22 : 1
@@ -692,13 +657,11 @@ export function OrganViewer({
         setInteracted(true)
         render()
       },
-    }
-    setEngine(engineValue)
+    })
     frame = requestAnimationFrame(tick)
 
     return () => {
       cancelAnimationFrame(frame)
-      stopTheme()
       setEngine(null)
       observer.disconnect()
       motion.removeEventListener("change", applyMotion)
