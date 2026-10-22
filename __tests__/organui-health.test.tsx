@@ -20,15 +20,15 @@ describe("clinical-tone", () => {
 })
 
 describe("organ models", () => {
-  it("carry tokens, not hard-coded colours, and keep their credit", () => {
+  it("keep OrganUI's realistic colours (ui-system exception) and their credit", () => {
     for (const model of [musclesModel, skeletonModel]) {
       expect(model.src).toMatch(/@[0-9a-f]{40}\//)
       expect(model.attribution.license).toMatch(/CC/)
-      for (const structure of model.structures) expect(structure.tone).toMatch(/^(chart-[1-5]|muted-foreground)$/)
+      for (const structure of model.structures) expect(structure.color).toMatch(/^#[0-9a-f]{6}$/i)
     }
     const groups = organAnatomyNodes(musclesModel)
     expect(groups.length).toBeGreaterThan(3)
-    expect(groups[0]!.children[0]!.color).toMatch(/var\(--/)
+    expect(groups[0]!.children[0]!.color).toMatch(/^#/)
   })
 })
 
@@ -54,9 +54,19 @@ describe("body and dermatome maps", () => {
     render(<BodyMap label="¿Dónde duele?" value={["right-knee"]} onValueChange={() => {}} name="regiones" />)
     expect(screen.getAllByRole("button").length).toBeGreaterThan(0)
   })
-  it("fills dermatomes from theme tokens", () => {
-    expect(dermatomeColor("C5")).toMatch(/var\(--chart-4\)/)
+  it("keeps the clinical dermatome palette", () => {
+    expect(dermatomeColor("C5")).toMatch(/^oklch\(/)
     const { container } = render(<DermatomeMap selectedId={null} onSelectionChange={() => {}} />)
     expect(container.querySelector("svg")).toBeTruthy()
+  })
+})
+
+describe("scientific colour exception", () => {
+  it("is scoped to the listed anatomy files only", async () => {
+    const { isScientificColorException } = await import("@/scripts/validate-registry")
+    expect(isScientificColorException("registry/ui/organ-muscles.tsx")).toBe(true)
+    expect(isScientificColorException("registry/ui/molecule-viewer.tsx")).toBe(true)
+    expect(isScientificColorException("registry/ui/vital-signs.tsx")).toBe(false)
+    expect(isScientificColorException("registry/ui/organ-explorer-chrome.tsx")).toBe(false)
   })
 })

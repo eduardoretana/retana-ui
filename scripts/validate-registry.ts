@@ -105,7 +105,23 @@ function isHostTokenMix(args: string) {
   return /\bvar\s*\(/.test(args)
 }
 
+/**
+ * ui-system exception (Eduardo, 2026-10-21): OrganUI anatomy, imaging and
+ * molecular scenes keep their original realistic colours and lighting.
+ * Scoped to these files only; see docs/ui-system-exceptions.md.
+ */
+const ORGAN_MODELS =
+  "adrenals|appendix|bladder|brain|breast|cell|diaphragm|ear|esophagus|eye|gallbladder|hair|heart|intestines|joints|kidneys|larynx|liver|lungs|lymph|muscles|nails|nerves|nose|pancreas|parathyroid|pharynx|pineal|pituitary|prostate|salivary-glands|skeleton|skin|spinal-cord|spleen|stomach|teeth|thymus|thyroid|tongue|uterus|vessels|vestibular"
+const SCIENTIFIC_COLOR_EXCEPTIONS = new RegExp(
+  `^registry/ui/(?:organ-(?:${ORGAN_MODELS}|viewer)|dna-helix|molecule-viewer|dermatome-map|image-viewer)\\.tsx$`,
+)
+
+export function isScientificColorException(filePath: string) {
+  return SCIENTIFIC_COLOR_EXCEPTIONS.test(filePath)
+}
+
 function scanSource(filePath: string, source: string) {
+  if (isScientificColorException(filePath)) return []
   const errors: string[] = []
   const rules: { label: string; pattern: RegExp }[] = [
     { label: "Tailwind palette color", pattern: palettePattern },

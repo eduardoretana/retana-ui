@@ -688,10 +688,11 @@ Copyright (c) 2026 OrganUI
 
 OrganUI has no paid or Pro tier; every registry item is MIT. The pieces were
 ported from OrganUI's Base UI style onto this registry's Radix primitives.
-Fixed anatomical, chemical and chart colours were replaced with host theme
-tokens (registry/lib/clinical-tone.ts): every structure names a `tone` and an
-optional `shade`, and WebGL resolves the token at runtime. Scene lighting is
-neutral white. Interface text stays in English and can be overridden by props.
+By explicit ui-system exception (docs/ui-system-exceptions.md, EX-01), the
+anatomy, imaging and molecular scenes keep OrganUI's original realistic
+colours and 3D lighting (organ-*, organ-viewer, molecule-viewer, dna-helix,
+dermatome-map, image-viewer). UI chrome stays on host theme tokens.
+Interface text stays in English and can be overridden by props.
 
 3D models are NOT copied into this repository. Each organ item loads a GLB at
 runtime from a commit-pinned URL in the matching github.com/organui/*-3d
