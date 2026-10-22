@@ -51,7 +51,7 @@ export const breastModel: OrganModel = {
       id: "right-fat",
       label: "Right adipose tissue",
       group: "Right breast",
-      tone: "chart-2", shade: 0.21,
+      color: "#ecc99b",
       description:
         "The fat that gives the right breast most of its size and shape. It fills the spaces between the lobes and lies under the skin. Hide it to see the gland inside.",
     },
@@ -59,7 +59,7 @@ export const breastModel: OrganModel = {
       id: "right-suspensory-ligaments",
       label: "Right suspensory ligaments",
       group: "Right breast",
-      tone: "chart-2", shade: 0.25,
+      color: "#d8d3c4",
       description:
         "Bands of connective tissue, also called Cooper's ligaments, that run from the deep fascia over the chest muscles to the skin and support the right breast.",
     },
@@ -67,7 +67,7 @@ export const breastModel: OrganModel = {
       id: "right-mammary-lobes",
       label: "Right mammary lobes",
       group: "Right breast",
-      tone: "chart-1", shade: 0.16,
+      color: "#de8f8a",
       description:
         "The 15 to 20 lobes of glandular tissue in the right breast. Each lobe is made of smaller lobules that produce milk during lactation.",
     },
@@ -75,7 +75,7 @@ export const breastModel: OrganModel = {
       id: "right-main-lactiferous-ducts",
       label: "Right lactiferous ducts",
       group: "Right breast",
-      tone: "chart-1", shade: 0.08,
+      color: "#c8697a",
       description:
         "One main duct drains each lobe of the right breast and carries milk toward the nipple.",
     },
@@ -83,7 +83,7 @@ export const breastModel: OrganModel = {
       id: "right-main-lactiferous-sinuses",
       label: "Right lactiferous sinuses",
       group: "Right breast",
-      tone: "chart-1", shade: 0.0,
+      color: "#a9566a",
       description:
         "Widened parts of the ducts just behind the areola of the right breast, where milk collects before it leaves through the nipple.",
     },
@@ -91,7 +91,7 @@ export const breastModel: OrganModel = {
       id: "right-areola",
       label: "Right areola",
       group: "Right breast",
-      tone: "chart-1", shade: 0.06,
+      color: "#b9806c",
       description:
         "The ring of darker skin around the right nipple. It darkens and widens during pregnancy.",
     },
@@ -99,7 +99,7 @@ export const breastModel: OrganModel = {
       id: "right-areolar-tubercles",
       label: "Right areolar tubercles",
       group: "Right breast",
-      tone: "chart-1", shade: -0.0,
+      color: "#a26d5c",
       description:
         "Small bumps on the right areola, also called Montgomery's tubercles. Their glands keep the areola and nipple moist.",
     },
@@ -107,7 +107,7 @@ export const breastModel: OrganModel = {
       id: "right-nipple",
       label: "Right nipple",
       group: "Right breast",
-      tone: "chart-1", shade: -0.03,
+      color: "#9c5f4f",
       description:
         "The raised centre of the right areola. The lactiferous ducts open on its tip.",
     },
@@ -115,7 +115,7 @@ export const breastModel: OrganModel = {
       id: "left-fat",
       label: "Left adipose tissue",
       group: "Left breast",
-      tone: "chart-2", shade: 0.19,
+      color: "#e6c08f",
       description:
         "The fat that gives the left breast most of its size and shape. It fills the spaces between the lobes and lies under the skin. Hide it to see the gland inside.",
     },
@@ -123,7 +123,7 @@ export const breastModel: OrganModel = {
       id: "left-suspensory-ligaments",
       label: "Left suspensory ligaments",
       group: "Left breast",
-      tone: "chart-2", shade: 0.21,
+      color: "#cfc9b8",
       description:
         "Bands of connective tissue, also called Cooper's ligaments, that run from the deep fascia over the chest muscles to the skin and support the left breast.",
     },
@@ -131,7 +131,7 @@ export const breastModel: OrganModel = {
       id: "left-mammary-lobes",
       label: "Left mammary lobes",
       group: "Left breast",
-      tone: "chart-1", shade: 0.13,
+      color: "#d4837e",
       description:
         "The 15 to 20 lobes of glandular tissue in the left breast. Each lobe is made of smaller lobules that produce milk during lactation.",
     },
@@ -139,7 +139,7 @@ export const breastModel: OrganModel = {
       id: "left-main-lactiferous-ducts",
       label: "Left lactiferous ducts",
       group: "Left breast",
-      tone: "chart-1", shade: 0.05,
+      color: "#bd5f70",
       description:
         "One main duct drains each lobe of the left breast and carries milk toward the nipple.",
     },
@@ -147,7 +147,7 @@ export const breastModel: OrganModel = {
       id: "left-main-lactiferous-sinuses",
       label: "Left lactiferous sinuses",
       group: "Left breast",
-      tone: "chart-1", shade: -0.03,
+      color: "#9e4c60",
       description:
         "Widened parts of the ducts just behind the areola of the left breast, where milk collects before it leaves through the nipple.",
     },
@@ -155,7 +155,7 @@ export const breastModel: OrganModel = {
       id: "left-areola",
       label: "Left areola",
       group: "Left breast",
-      tone: "chart-1", shade: 0.03,
+      color: "#ad7562",
       description:
         "The ring of darker skin around the left nipple. It darkens and widens during pregnancy.",
     },
@@ -163,7 +163,7 @@ export const breastModel: OrganModel = {
       id: "left-areolar-tubercles",
       label: "Left areolar tubercles",
       group: "Left breast",
-      tone: "chart-1", shade: -0.03,
+      color: "#976352",
       description:
         "Small bumps on the left areola, also called Montgomery's tubercles. Their glands keep the areola and nipple moist.",
     },
@@ -171,7 +171,7 @@ export const breastModel: OrganModel = {
       id: "left-nipple",
       label: "Left nipple",
       group: "Left breast",
-      tone: "chart-1", shade: -0.06,
+      color: "#915545",
       description:
         "The raised centre of the left areola. The lactiferous ducts open on its tip.",
     },

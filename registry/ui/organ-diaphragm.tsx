@@ -35,7 +35,7 @@ export const diaphragmModel: OrganModel = {
       id: "right-hemidiaphragm",
       label: "Right hemidiaphragm",
       group: "Diaphragm",
-      tone: "chart-1", shade: 0.09,
+      color: "#c97f6d",
       description:
         "The right dome, which rises higher than the left because the liver lies beneath it. Its right crus arises from the first three lumbar vertebrae, and the right phrenic nerve supplies it.",
     },
@@ -43,7 +43,7 @@ export const diaphragmModel: OrganModel = {
       id: "left-hemidiaphragm",
       label: "Left hemidiaphragm",
       group: "Diaphragm",
-      tone: "chart-1", shade: 0.13,
+      color: "#d6937e",
       description:
         "The left dome, over the stomach and spleen. The heart rests on the central tendon where the two halves meet, and the left phrenic nerve supplies this side.",
     },
@@ -51,7 +51,7 @@ export const diaphragmModel: OrganModel = {
       id: "esophagus",
       label: "Esophagus",
       group: "Passing through",
-      tone: "chart-1", shade: 0.16,
+      color: "#d9a88f",
       description:
         "Passes through the esophageal hiatus at about T10, a sling of the right crus that also helps keep stomach contents from refluxing.",
     },
@@ -59,7 +59,7 @@ export const diaphragmModel: OrganModel = {
       id: "inferior-vena-cava",
       label: "Inferior vena cava",
       group: "Passing through",
-      tone: "chart-4", shade: 0.02,
+      color: "#5f7fae",
       description:
         "Passes through the caval opening in the central tendon at about T8. Breathing in widens the opening and helps blood return to the heart.",
     },
@@ -67,7 +67,7 @@ export const diaphragmModel: OrganModel = {
       id: "descending-aorta",
       label: "Descending aorta",
       group: "Passing through",
-      tone: "chart-1", shade: 0.02,
+      color: "#c0564b",
       description:
         "Passes behind the diaphragm, under the median arcuate ligament between the crura at about T12, so its flow is not squeezed when the diaphragm contracts.",
     },
@@ -75,7 +75,7 @@ export const diaphragmModel: OrganModel = {
       id: "heart",
       label: "Heart",
       group: "Above",
-      tone: "chart-1", shade: 0.09,
+      color: "#b98a80",
       description:
         "Sits on the central tendon inside the pericardium, which is fused to the diaphragm's upper surface.",
     },
@@ -83,7 +83,7 @@ export const diaphragmModel: OrganModel = {
       id: "right-lung-lower-lobe",
       label: "Lower lobe of right lung",
       group: "Above",
-      tone: "chart-4", shade: 0.21,
+      color: "#b9c3cf",
       description:
         "Its base rests on the right dome. The pleural recess around the dome's edge is where fluid collects first.",
     },
@@ -91,7 +91,7 @@ export const diaphragmModel: OrganModel = {
       id: "left-lung-lower-lobe",
       label: "Lower lobe of left lung",
       group: "Above",
-      tone: "chart-4", shade: 0.24,
+      color: "#c4ccd6",
       description:
         "Its base rests on the left dome and follows it down as the diaphragm contracts in a breath.",
     },
@@ -99,7 +99,7 @@ export const diaphragmModel: OrganModel = {
       id: "liver",
       label: "Liver",
       group: "Below",
-      tone: "chart-1", shade: -0.04,
+      color: "#9c5a4c",
       description:
         "Fills the underside of the right dome. Its bare area touches the diaphragm directly, with no peritoneum between them.",
     },
@@ -107,7 +107,7 @@ export const diaphragmModel: OrganModel = {
       id: "stomach",
       label: "Stomach",
       group: "Below",
-      tone: "chart-1", shade: 0.18,
+      color: "#d4a3a0",
       description:
         "Its fundus sits under the left dome. Part of it can slide up through a widened esophageal hiatus as a hiatal hernia.",
     },
@@ -115,7 +115,7 @@ export const diaphragmModel: OrganModel = {
       id: "spleen",
       label: "Spleen",
       group: "Below",
-      tone: "chart-1", shade: -0.03,
+      color: "#8f5a6e",
       description:
         "Lies against the back of the left dome, over the 9th to 11th ribs.",
     },
@@ -123,7 +123,7 @@ export const diaphragmModel: OrganModel = {
       id: "right-psoas-major",
       label: "Right psoas major",
       group: "Behind",
-      tone: "chart-1", shade: 0.03,
+      color: "#b46b5e",
       description:
         "Runs down from the lumbar spine. The medial arcuate ligament, one of the diaphragm's origins, arches over its upper end. Cut below the diaphragm here.",
     },
@@ -131,7 +131,7 @@ export const diaphragmModel: OrganModel = {
       id: "left-psoas-major",
       label: "Left psoas major",
       group: "Behind",
-      tone: "chart-1", shade: 0.06,
+      color: "#bf7769",
       description:
         "The left psoas, under the left medial arcuate ligament. Cut below the diaphragm here.",
     },

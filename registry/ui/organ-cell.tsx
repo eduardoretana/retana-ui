@@ -37,7 +37,7 @@ export const cellModel: OrganModel = {
       id: "plasma-membrane",
       label: "Plasma membrane",
       group: "Cell surface",
-      tone: "chart-1", shade: 0.21,
+      color: "#e7a29b",
       description:
         "A lipid bilayer studded with proteins that encloses the cell. It lets some molecules through, pumps others and carries the receptors the cell senses its surroundings with.",
     },
@@ -45,7 +45,7 @@ export const cellModel: OrganModel = {
       id: "microvilli",
       label: "Microvilli",
       group: "Cell surface",
-      tone: "chart-1", shade: 0.13,
+      color: "#d2857f",
       description:
         "Finger-like folds of the membrane, each held up by a core of actin filaments. They multiply the surface area of cells that absorb, such as those lining the gut and kidney tubules.",
     },
@@ -53,7 +53,7 @@ export const cellModel: OrganModel = {
       id: "nuclear-envelope",
       label: "Nuclear envelope",
       group: "Nucleus",
-      tone: "chart-5", shade: 0.06,
+      color: "#8a6bb8",
       description:
         "Two membranes around the nucleus, perforated by nuclear pores that control what passes between nucleus and cytoplasm. The outer membrane is continuous with the rough ER.",
     },
@@ -61,7 +61,7 @@ export const cellModel: OrganModel = {
       id: "nucleolus",
       label: "Nucleolus",
       group: "Nucleus",
-      tone: "chart-5", shade: -0.13,
+      color: "#4a2d7f",
       description:
         "A dense region of the nucleus with no membrane of its own, where ribosomal RNA is made and assembled with proteins into ribosome subunits.",
     },
@@ -69,7 +69,7 @@ export const cellModel: OrganModel = {
       id: "chromatin",
       label: "Chromatin",
       group: "Nucleus",
-      tone: "chart-5", shade: 0.19,
+      color: "#c29ae0",
       description:
         "The cell's DNA wound around histone proteins. Loose chromatin holds active genes; it condenses into visible chromosomes only when the cell divides.",
     },
@@ -77,7 +77,7 @@ export const cellModel: OrganModel = {
       id: "rough-er",
       label: "Rough endoplasmic reticulum",
       group: "Endomembrane system",
-      tone: "chart-4", shade: 0.03,
+      color: "#4f8cc4",
       description:
         "Flattened membrane sacs continuous with the nuclear envelope, studded with ribosomes. Proteins made there are threaded inside to fold and are sent on to the Golgi.",
     },
@@ -85,7 +85,7 @@ export const cellModel: OrganModel = {
       id: "smooth-er",
       label: "Smooth endoplasmic reticulum",
       group: "Endomembrane system",
-      tone: "chart-4", shade: 0.12,
+      color: "#78c2d4",
       description:
         "A network of tubules without ribosomes that makes lipids and steroid hormones, detoxifies drugs and, in muscle, stores the calcium that triggers contraction.",
     },
@@ -93,7 +93,7 @@ export const cellModel: OrganModel = {
       id: "golgi-apparatus",
       label: "Golgi apparatus",
       group: "Endomembrane system",
-      tone: "chart-2", shade: 0.05,
+      color: "#e9ad35",
       description:
         "A stack of curved, flattened sacs. Proteins from the ER enter its convex face, are modified and sorted, and leave in vesicles from the concave face.",
     },
@@ -101,7 +101,7 @@ export const cellModel: OrganModel = {
       id: "vesicles",
       label: "Secretory vesicles",
       group: "Endomembrane system",
-      tone: "chart-2", shade: 0.18,
+      color: "#f4d67c",
       description:
         "Small membrane bubbles that bud from the Golgi and carry proteins to the plasma membrane, where they fuse and release their contents outside the cell.",
     },
@@ -109,7 +109,7 @@ export const cellModel: OrganModel = {
       id: "lysosomes",
       label: "Lysosomes",
       group: "Endomembrane system",
-      tone: "chart-3", shade: -0.03,
+      color: "#78a447",
       description:
         "Acidic vesicles full of digestive enzymes that break down worn-out organelles, engulfed material and large molecules for reuse.",
     },
@@ -117,7 +117,7 @@ export const cellModel: OrganModel = {
       id: "mitochondria",
       label: "Mitochondria",
       group: "Other organelles",
-      tone: "chart-1", shade: 0.04,
+      color: "#de6638",
       description:
         "Organelles with a folded inner membrane where cellular respiration turns sugars and fats into ATP. They carry their own small genome, inherited from the mother.",
     },
@@ -125,7 +125,7 @@ export const cellModel: OrganModel = {
       id: "peroxisomes",
       label: "Peroxisomes",
       group: "Other organelles",
-      tone: "chart-2", shade: 0.03,
+      color: "#b4c64a",
       description:
         "Small vesicles that break down long fatty acids and neutralise hydrogen peroxide with the enzyme catalase.",
     },
@@ -133,7 +133,7 @@ export const cellModel: OrganModel = {
       id: "ribosomes",
       label: "Free ribosomes",
       group: "Other organelles",
-      tone: "chart-4", shade: -0.14,
+      color: "#38486b",
       description:
         "RNA–protein machines that translate messenger RNA into protein. Free ribosomes make proteins that stay in the cytoplasm; those on the rough ER make proteins for export or membranes.",
     },
@@ -141,7 +141,7 @@ export const cellModel: OrganModel = {
       id: "centrosome",
       label: "Centrosome",
       group: "Cytoskeleton",
-      tone: "chart-4", shade: -0.06,
+      color: "#3c9c8c",
       description:
         "A pair of centrioles at right angles beside the nucleus. It organises microtubules and duplicates before division to form the two poles of the spindle.",
     },
@@ -149,7 +149,7 @@ export const cellModel: OrganModel = {
       id: "microtubules",
       label: "Microtubules",
       group: "Cytoskeleton",
-      tone: "muted-foreground", shade: 0.14,
+      color: "#9db9a6",
       description:
         "Hollow protein tubes radiating from the centrosome. They shape the cell and are the tracks motor proteins carry vesicles and organelles along.",
     },
