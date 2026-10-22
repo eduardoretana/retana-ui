@@ -397,8 +397,9 @@ export function ImageViewer({
     const context = element.getContext("2d")
     if (!context) return
     context.setTransform(1, 0, 0, 1, 0, 0)
-    // The stage behind the canvas paints the backdrop from theme tokens.
-    context.clearRect(0, 0, element.width, element.height)
+    // Radiology convention: images sit on true black (ui-system exception).
+    context.fillStyle = "#000"
+    context.fillRect(0, 0, element.width, element.height)
     if (!bitmap) return
     const scale = fit * view.zoom
     context.setTransform(
@@ -609,7 +610,7 @@ export function ImageViewer({
         aria-label={label}
         aria-describedby={instructions}
         tabIndex={0}
-        className="relative min-h-0 flex-1 touch-none overflow-hidden bg-foreground dark:bg-background select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring"
+        className="relative min-h-0 flex-1 touch-none overflow-hidden bg-black select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring"
         style={{
           cursor: !pixels ? undefined : tool === "pan" ? "grab" : "crosshair",
         }}

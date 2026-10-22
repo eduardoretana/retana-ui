@@ -3,7 +3,6 @@
 import * as React from "react"
 import { CircleAlertIcon, MinusIcon, PauseIcon, PlayIcon, PlusIcon, RotateCcwIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { resolveCssColor } from "@/registry/retana/lib/clinical-tone"
 import {
   AmbientLight,
   CatmullRomCurve3,
@@ -26,7 +25,6 @@ import {
   Vector2,
   Vector3,
   WebGLRenderer,
-  SRGBColorSpace,
 } from "three"
 import { OrbitControls } from "three/addons/controls/OrbitControls.js"
 
@@ -82,10 +80,10 @@ const COMPLEMENT: Record<Nucleobase, Nucleobase> = {
 
 /** Colours shared with the molecule viewer's nucleotide colouring. */
 export const nucleobaseColors: Record<Nucleobase, string> = {
-  A: "color-mix(in oklch, var(--chart-1), var(--background) 11%)",
-  T: "var(--chart-4)",
-  G: "var(--chart-3)",
-  C: "color-mix(in oklch, var(--chart-2), var(--background) 11%)",
+  A: "#e15759",
+  T: "#4e79a7",
+  G: "#59a14f",
+  C: "#edc948",
 }
 
 export const nucleobaseNames: Record<Nucleobase, string> = {
@@ -121,17 +119,8 @@ const RISE = 3.38
 const TWIST = (34.3 * Math.PI) / 180
 const RADIUS = 9
 const MINOR_GROOVE = (140 * Math.PI) / 180
-const STAGE_TONE = "var(--muted)"
-/** Resolve a theme token expression to a three.js colour. */
-function cssColor(value: string) {
-  const rgb = resolveCssColor(value)
-  const color = new Color()
-  if (rgb) color.setRGB(rgb[0], rgb[1], rgb[2], SRGBColorSpace)
-  else color.setScalar(0.6)
-  return color
-}
-
-const STRAND_COLORS = ["var(--muted-foreground)", "var(--muted-foreground)"] as const
+const STAGE_TONE = new Color("#e4e3dc")
+const STRAND_COLORS = ["#6b7a8c", "#9a8770"] as const
 const UP = new Vector3(0, 1, 0)
 
 // The helix runs along x, from the 5′ end of the drawn strand on the left.
@@ -212,15 +201,15 @@ function buildHelix(pairs: BasePair[]) {
     pickable: [bases, phosphates],
     paint(selected: number) {
       const tone = (hex: string, pair: number) => {
-        color.copy(cssColor(hex))
+        color.set(hex)
         return selected >= 0 && pair !== selected
-          ? color.lerp(cssColor(STAGE_TONE), 0.65)
+          ? color.lerp(STAGE_TONE, 0.65)
           : color
       }
       strands.forEach((tube, strand) => {
         const material = tube.material as MeshStandardMaterial
-        material.color.copy(cssColor(STRAND_COLORS[strand]!))
-        if (selected >= 0) material.color.lerp(cssColor(STAGE_TONE), 0.65)
+        material.color.set(STRAND_COLORS[strand]!)
+        if (selected >= 0) material.color.lerp(STAGE_TONE, 0.65)
       })
       for (const pair of pairs)
         for (const strand of [0, 1] as const) {
@@ -464,12 +453,12 @@ export function DnaHelix({
     }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     const stage = new Scene()
-    stage.add(new AmbientLight(new Color(1, 1, 1), 0.8))
-    stage.add(new HemisphereLight(new Color(1, 1, 1), new Color(0.6, 0.6, 0.6), 1.4))
+    stage.add(new AmbientLight("#ffffff", 0.8))
+    stage.add(new HemisphereLight("#fffcf3", "#a49b8f", 1.4))
     const camera = new PerspectiveCamera(34, 1, 0.5, 5000)
-    const lights: [number[], number, Color][] = [
-      [[-4, 6, 6], 2.4, new Color(1, 1, 1)],
-      [[5, 1, -4], 1.4, new Color(1, 1, 1)],
+    const lights: [number[], number, string][] = [
+      [[-4, 6, 6], 2.4, "#fff5e6"],
+      [[5, 1, -4], 1.4, "#e1edff"],
     ]
     for (const [position, intensity, color] of lights) {
       const light = new DirectionalLight(color, intensity)

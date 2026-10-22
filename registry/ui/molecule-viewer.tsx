@@ -3,7 +3,6 @@
 import * as React from "react"
 import { CircleAlertIcon, MinusIcon, PlusIcon, RotateCcwIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { resolveCssColor } from "@/registry/retana/lib/clinical-tone"
 import {
   AmbientLight,
   BufferAttribute,
@@ -29,7 +28,6 @@ import {
   WebGLRenderer,
   type Intersection,
   type Object3D,
-  SRGBColorSpace,
 } from "three"
 import { OrbitControls } from "three/addons/controls/OrbitControls.js"
 
@@ -597,75 +595,66 @@ export function parseStructure(
 // ---------------------------------------------------------------------------
 // Appearance
 
-const STAGE_TONE = "var(--muted)"
-/** Resolve a theme token expression to a three.js colour. */
-function cssColor(value: string) {
-  const rgb = resolveCssColor(value)
-  const color = new Color()
-  if (rgb) color.setRGB(rgb[0], rgb[1], rgb[2], SRGBColorSpace)
-  else color.setScalar(0.6)
-  return color
-}
-
+const STAGE_TONE = new Color("#e4e3dc")
 const CHAIN_COLORS = [
-  "var(--chart-4)",
-  "color-mix(in oklch, var(--chart-1), var(--background) 11%)",
-  "var(--chart-3)",
-  "color-mix(in oklch, var(--chart-2), var(--background) 6%)",
-  "color-mix(in oklch, var(--chart-5), var(--background) 8%)",
-  "color-mix(in oklch, var(--chart-4), var(--background) 9%)",
-  "color-mix(in oklch, var(--chart-2), var(--background) 11%)",
-  "color-mix(in oklch, var(--chart-1), var(--background) 31%)",
-  "var(--chart-1)",
-  "color-mix(in oklch, var(--muted-foreground), var(--background) 20%)",
+  "#4e79a7",
+  "#e15759",
+  "#59a14f",
+  "#f28e2b",
+  "#b07aa1",
+  "#76b7b2",
+  "#edc948",
+  "#ff9da7",
+  "#9c755f",
+  "#bab0ac",
 ]
 const SECONDARY_COLORS: Record<SecondaryStructure, string> = {
-  helix: "var(--chart-1)",
-  sheet: "color-mix(in oklch, var(--chart-2), var(--background) 5%)",
-  coil: "color-mix(in oklch, var(--muted-foreground), var(--background) 16%)",
+  helix: "#c8466d",
+  sheet: "#e0a43a",
+  coil: "#a3a9b0",
 }
 // Jmol's CPK palette, with carbon darkened to stand out on a light stage.
 const ELEMENT_COLORS: Record<string, string> = {
-  H: "color-mix(in oklch, var(--muted-foreground), var(--background) 40%)",
-  C: "color-mix(in oklch, var(--muted-foreground), var(--background) 5%)",
-  N: "color-mix(in oklch, var(--chart-4), var(--background) 8%)",
-  O: "var(--chart-1)",
-  S: "var(--chart-2)",
-  P: "var(--chart-2)",
-  Se: "var(--chart-2)",
-  Fe: "var(--chart-1)",
-  Zn: "color-mix(in oklch, var(--chart-4), var(--background) 9%)",
-  Mg: "var(--chart-3)",
-  Ca: "var(--chart-3)",
-  Na: "color-mix(in oklch, var(--chart-5), var(--background) 15%)",
-  K: "var(--chart-5)",
-  Cl: "var(--chart-3)",
-  Cu: "var(--chart-2)",
-  Mn: "color-mix(in oklch, var(--chart-5), var(--background) 13%)",
-  F: "color-mix(in oklch, var(--chart-3), var(--background) 10%)",
-  Br: "color-mix(in oklch, var(--chart-1), var(--foreground) 9%)",
-  I: "color-mix(in oklch, var(--chart-5), var(--foreground) 21%)",
+  H: "#f2f2f2",
+  C: "#8c8c8c",
+  N: "#3050f8",
+  O: "#ff0d0d",
+  S: "#e6c228",
+  P: "#ff8000",
+  Se: "#ffa100",
+  Fe: "#e06633",
+  Zn: "#7d80b0",
+  Mg: "#8aff00",
+  Ca: "#3dff00",
+  Na: "#ab5cf2",
+  K: "#8f40d4",
+  Cl: "#1ff01f",
+  Cu: "#c88033",
+  Mn: "#9c7ac7",
+  F: "#90e050",
+  Br: "#a62929",
+  I: "#940094",
 }
 const RESIDUE_GROUPS: [string, string, string[]][] = [
   [
     "Hydrophobic",
-    "color-mix(in oklch, var(--chart-2), var(--background) 5%)",
+    "#d9a441",
     ["ALA", "VAL", "LEU", "ILE", "MET", "MSE", "PHE", "TRP"],
   ],
-  ["Polar", "var(--chart-3)", ["SER", "THR", "ASN", "GLN", "TYR", "CYS", "SEC"]],
-  ["Acidic", "color-mix(in oklch, var(--chart-1), var(--background) 5%)", ["ASP", "GLU"]],
-  ["Basic", "var(--chart-4)", ["LYS", "ARG", "HIS", "PYL"]],
-  ["Glycine and proline", "color-mix(in oklch, var(--chart-4), var(--background) 16%)", ["GLY", "PRO"]],
+  ["Polar", "#4fa67a", ["SER", "THR", "ASN", "GLN", "TYR", "CYS", "SEC"]],
+  ["Acidic", "#d1495b", ["ASP", "GLU"]],
+  ["Basic", "#3f7cc0", ["LYS", "ARG", "HIS", "PYL"]],
+  ["Glycine and proline", "#9b8bc4", ["GLY", "PRO"]],
 ]
 const BASE_COLORS: Record<string, string> = {
-  A: "color-mix(in oklch, var(--chart-1), var(--background) 11%)",
-  T: "var(--chart-4)",
-  U: "var(--chart-4)",
-  G: "var(--chart-3)",
-  C: "color-mix(in oklch, var(--chart-2), var(--background) 11%)",
-  I: "color-mix(in oklch, var(--muted-foreground), var(--background) 16%)",
+  A: "#e15759",
+  T: "#4e79a7",
+  U: "#4e79a7",
+  G: "#59a14f",
+  C: "#edc948",
+  I: "#a3a9b0",
 }
-const OTHER = "color-mix(in oklch, var(--muted-foreground), var(--background) 16%)"
+const OTHER = "#a3a9b0"
 
 // Van der Waals radii in ångströms (Bondi), for spacefill.
 const VDW: Record<string, number> = {
@@ -706,7 +695,7 @@ function residueColor(
       const position = rainbow.get(index)
       return position === undefined
         ? OTHER
-        : `color-mix(in oklch, var(--chart-1), var(--chart-4) ${Math.round(position * 100)}%)`
+        : `#${new Color().setHSL((1 - position) * 0.68, 0.7, 0.5).getHexString()}`
     }
     default:
       return CHAIN_COLORS[
@@ -730,7 +719,7 @@ function atomColor(
     residue.kind === "water" ||
     (atom.element !== "C" && scheme !== "chain" && scheme !== "rainbow")
   )
-    return ELEMENT_COLORS[atom.element] ?? "var(--chart-5)"
+    return ELEMENT_COLORS[atom.element] ?? "#ff1493"
   return residueColor(structure, atom.residue, scheme, rainbow)
 }
 
@@ -1417,11 +1406,11 @@ export function MoleculeViewer({
     }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     const stage = new Scene()
-    stage.add(new AmbientLight(new Color(1, 1, 1), 0.8))
-    stage.add(new HemisphereLight(new Color(1, 1, 1), new Color(0.6, 0.6, 0.6), 1.4))
-    const lights: [number[], number, Color][] = [
-      [[-4, 6, 6], 2.4, new Color(1, 1, 1)],
-      [[5, 1, -4], 1.6, new Color(1, 1, 1)],
+    stage.add(new AmbientLight("#ffffff", 0.8))
+    stage.add(new HemisphereLight("#fffcf3", "#a49b8f", 1.4))
+    const lights: [number[], number, string][] = [
+      [[-4, 6, 6], 2.4, "#fff5e6"],
+      [[5, 1, -4], 1.6, "#e1edff"],
     ]
     const camera = new PerspectiveCamera(34, 1, 0.1, 1000)
     for (const [position, intensity, color] of lights) {
@@ -1562,9 +1551,9 @@ export function MoleculeViewer({
         if (!built) return
         // Everything but the selected residue fades towards the stage.
         const dim = (hex: string, residue: number) => {
-          const color = cssColor(hex)
+          const color = new Color(hex)
           return selected >= 0 && residue !== selected
-            ? color.lerp(cssColor(STAGE_TONE), 0.65)
+            ? color.lerp(STAGE_TONE, 0.65)
             : color
         }
         const residueColors = structure.residues.map((_, index) =>
