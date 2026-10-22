@@ -21339,7 +21339,7 @@
         "salud",
         "anatomy"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE).",
       "name": "anatomy-tree",
       "type": "registry:ui",
       "title": "Anatomy tree",
@@ -21400,7 +21400,7 @@
         "salud",
         "clinical"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE).",
       "name": "vital-signs",
       "type": "registry:ui",
       "title": "Vital signs",
@@ -21462,7 +21462,7 @@
         "salud",
         "clinical"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE).",
       "name": "ecg-trace",
       "type": "registry:ui",
       "title": "ECG trace",
@@ -21524,7 +21524,7 @@
         "salud",
         "clinical"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE).",
       "name": "body-map",
       "type": "registry:ui",
       "title": "Body map",
@@ -21591,7 +21591,7 @@
         "salud",
         "anatomy"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE).",
       "name": "organ-viewer",
       "type": "registry:ui",
       "title": "Organ viewer",
@@ -21610,7 +21610,7 @@
       ],
       "meta": {
         "titleEs": "Visor de órganos 3D",
-        "descriptionEs": "Rota, encuadra y selecciona estructuras de un modelo anatómico GLB con three.js. Colores desde tokens del tema.",
+        "descriptionEs": "Rota, encuadra y selecciona estructuras de un modelo anatómico GLB con three.js. Colores realistas originales (excepción EX-01).",
         "preview": "app/examples/organ-viewer/preview.tsx",
         "previewHref": "/examples/organ-viewer",
         "examples": [
@@ -21625,7 +21625,7 @@
           {
             "name": "model",
             "type": "OrganModel",
-            "description": "Estructuras con tone/shade (tokens), vistas y crédito."
+            "description": "Estructuras con color realista, vistas y crédito."
           },
           {
             "name": "selectedId / visibility",
@@ -21657,7 +21657,7 @@
         "salud",
         "molecular"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE).",
       "name": "molecule-viewer",
       "type": "registry:ui",
       "title": "Molecule viewer",
@@ -21696,7 +21696,7 @@
           {
             "name": "representation / colorScheme",
             "type": "enum",
-            "description": "Estilo y esquema de color (mapeado a tokens)."
+            "description": "Estilo y esquema de color (CPK, cadena, residuo…)."
           },
           {
             "name": "selectedId",
@@ -21722,7 +21722,7 @@
         "salud",
         "molecular"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE).",
       "name": "dna-helix",
       "type": "registry:ui",
       "title": "DNA helix",
@@ -21778,7 +21778,7 @@
         "salud",
         "clinical"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE).",
       "name": "lab-results",
       "type": "registry:ui",
       "title": "Lab results table",
@@ -21834,7 +21834,7 @@
         "salud",
         "clinical"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE).",
       "name": "growth-chart",
       "type": "registry:ui",
       "title": "Growth chart",
@@ -21899,7 +21899,7 @@
         "salud",
         "clinical"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE).",
       "name": "medication-schedule",
       "type": "registry:ui",
       "title": "Medication schedule",
@@ -21961,7 +21961,7 @@
         "salud",
         "clinical"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE).",
       "name": "dermatome-map",
       "type": "registry:ui",
       "title": "Dermatome map",
@@ -22000,7 +22000,7 @@
           {
             "name": "fill",
             "type": "(id) => string",
-            "description": "Relleno por nivel; por defecto tokens chart."
+            "description": "Relleno por nivel; por defecto paleta clínica por región."
           },
           {
             "name": "views",
@@ -22029,7 +22029,7 @@
         "salud",
         "imaging"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE).",
       "name": "image-viewer",
       "type": "registry:ui",
       "title": "Medical image viewer",
@@ -22100,7 +22100,7 @@
         "organ",
         "endocrine"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-adrenals",
       "type": "registry:component",
       "title": "Adrenals",
@@ -22151,7 +22151,7 @@
         "organ",
         "digestive"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-appendix",
       "type": "registry:component",
       "title": "Appendix",
@@ -22202,7 +22202,7 @@
         "organ",
         "urinary"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-bladder",
       "type": "registry:component",
       "title": "Bladder",
@@ -22253,7 +22253,7 @@
         "organ",
         "nervous"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
       "name": "organ-brain",
       "type": "registry:component",
       "title": "Brain",
@@ -22304,7 +22304,7 @@
         "organ",
         "reproductive"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
       "name": "organ-breast",
       "type": "registry:component",
       "title": "Breast",
@@ -22354,7 +22354,7 @@
         "anatomia",
         "cell"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC0 1.0.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC0 1.0.",
       "name": "organ-cell",
       "type": "registry:component",
       "title": "Cell",
@@ -22405,7 +22405,7 @@
         "organ",
         "respiratory"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-diaphragm",
       "type": "registry:component",
       "title": "Diaphragm",
@@ -22456,7 +22456,7 @@
         "organ",
         "senses"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
       "name": "organ-ear",
       "type": "registry:component",
       "title": "Ear",
@@ -22507,7 +22507,7 @@
         "organ",
         "digestive"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-esophagus",
       "type": "registry:component",
       "title": "Esophagus",
@@ -22558,7 +22558,7 @@
         "organ",
         "senses"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-eye",
       "type": "registry:component",
       "title": "Eye",
@@ -22609,7 +22609,7 @@
         "organ",
         "digestive"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-gallbladder",
       "type": "registry:component",
       "title": "Gallbladder",
@@ -22660,7 +22660,7 @@
         "organ",
         "integumentary"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC0 1.0.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC0 1.0.",
       "name": "organ-hair",
       "type": "registry:component",
       "title": "Hair",
@@ -22711,7 +22711,7 @@
         "organ",
         "cardiovascular"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
       "name": "organ-heart",
       "type": "registry:component",
       "title": "Heart",
@@ -22762,7 +22762,7 @@
         "organ",
         "digestive"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-intestines",
       "type": "registry:component",
       "title": "Intestines",
@@ -22813,7 +22813,7 @@
         "organ",
         "musculoskeletal"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
       "name": "organ-joints",
       "type": "registry:component",
       "title": "Joints",
@@ -22864,7 +22864,7 @@
         "organ",
         "urinary"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
       "name": "organ-kidneys",
       "type": "registry:component",
       "title": "Kidneys",
@@ -22915,7 +22915,7 @@
         "organ",
         "respiratory"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-larynx",
       "type": "registry:component",
       "title": "Larynx",
@@ -22966,7 +22966,7 @@
         "organ",
         "digestive"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
       "name": "organ-liver",
       "type": "registry:component",
       "title": "Liver",
@@ -23017,7 +23017,7 @@
         "organ",
         "respiratory"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-lungs",
       "type": "registry:component",
       "title": "Lungs",
@@ -23068,7 +23068,7 @@
         "organ",
         "lymphatic"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
       "name": "organ-lymph",
       "type": "registry:component",
       "title": "Lymph node",
@@ -23119,7 +23119,7 @@
         "organ",
         "musculoskeletal"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-muscles",
       "type": "registry:component",
       "title": "Muscles",
@@ -23170,7 +23170,7 @@
         "organ",
         "integumentary"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC0 1.0.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC0 1.0.",
       "name": "organ-nails",
       "type": "registry:component",
       "title": "Nails",
@@ -23221,7 +23221,7 @@
         "organ",
         "nervous"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
       "name": "organ-nerves",
       "type": "registry:component",
       "title": "Nerves",
@@ -23272,7 +23272,7 @@
         "organ",
         "respiratory"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
       "name": "organ-nose",
       "type": "registry:component",
       "title": "Nose",
@@ -23323,7 +23323,7 @@
         "organ",
         "digestive"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-pancreas",
       "type": "registry:component",
       "title": "Pancreas",
@@ -23374,7 +23374,7 @@
         "organ",
         "endocrine"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-parathyroid",
       "type": "registry:component",
       "title": "Parathyroid",
@@ -23425,7 +23425,7 @@
         "organ",
         "respiratory"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-pharynx",
       "type": "registry:component",
       "title": "Pharynx",
@@ -23476,7 +23476,7 @@
         "organ",
         "endocrine"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-pineal",
       "type": "registry:component",
       "title": "Pineal",
@@ -23527,7 +23527,7 @@
         "organ",
         "endocrine"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-pituitary",
       "type": "registry:component",
       "title": "Pituitary",
@@ -23578,7 +23578,7 @@
         "organ",
         "reproductive"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-prostate",
       "type": "registry:component",
       "title": "Prostate",
@@ -23629,7 +23629,7 @@
         "organ",
         "digestive"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
       "name": "organ-salivary-glands",
       "type": "registry:component",
       "title": "Salivary glands",
@@ -23680,7 +23680,7 @@
         "organ",
         "musculoskeletal"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-skeleton",
       "type": "registry:component",
       "title": "Skeleton",
@@ -23731,7 +23731,7 @@
         "organ",
         "integumentary"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC0 1.0.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC0 1.0.",
       "name": "organ-skin",
       "type": "registry:component",
       "title": "Skin",
@@ -23782,7 +23782,7 @@
         "organ",
         "nervous"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-spinal-cord",
       "type": "registry:component",
       "title": "Spinal cord",
@@ -23833,7 +23833,7 @@
         "organ",
         "lymphatic"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-spleen",
       "type": "registry:component",
       "title": "Spleen",
@@ -23884,7 +23884,7 @@
         "organ",
         "digestive"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-stomach",
       "type": "registry:component",
       "title": "Stomach",
@@ -23935,7 +23935,7 @@
         "organ",
         "digestive"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-teeth",
       "type": "registry:component",
       "title": "Teeth",
@@ -23986,7 +23986,7 @@
         "organ",
         "lymphatic"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-thymus",
       "type": "registry:component",
       "title": "Thymus",
@@ -24037,7 +24037,7 @@
         "organ",
         "endocrine"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-thyroid",
       "type": "registry:component",
       "title": "Thyroid",
@@ -24088,7 +24088,7 @@
         "organ",
         "digestive"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-tongue",
       "type": "registry:component",
       "title": "Tongue",
@@ -24139,7 +24139,7 @@
         "organ",
         "reproductive"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
       "name": "organ-uterus",
       "type": "registry:component",
       "title": "Uterus",
@@ -24190,7 +24190,7 @@
         "organ",
         "cardiovascular"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
       "name": "organ-vessels",
       "type": "registry:component",
       "title": "Vessels",
@@ -24241,7 +24241,7 @@
         "organ",
         "senses"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
       "name": "organ-vestibular",
       "type": "registry:component",
       "title": "Vestibular system",
@@ -24297,7 +24297,7 @@
         "anatomia",
         "bloque"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE).",
       "name": "organ-explorer",
       "type": "registry:block",
       "title": "Explorer 01",
@@ -24349,7 +24349,7 @@
         "anatomia",
         "bloque"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE).",
       "name": "anatomy-workspace",
       "type": "registry:block",
       "title": "Explorer 02",
@@ -24401,7 +24401,7 @@
         "anatomia",
         "bloque"
       ],
-      "docs": "Adapted from OrganUI (MIT, https://organui.com). Colours map to host theme tokens; 3D models load at runtime under their own licence (see NOTICE).",
+      "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE).",
       "name": "organ-switcher",
       "type": "registry:block",
       "title": "Explorer 03",
