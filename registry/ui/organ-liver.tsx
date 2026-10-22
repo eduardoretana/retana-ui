@@ -38,7 +38,7 @@ export const liverModel: OrganModel = {
       id: "liver",
       label: "Liver surface",
       group: "Liver",
-      tone: "chart-1", shade: -0.01,
+      color: "#a85750",
       description:
         "The liver processes nutrients, stores energy, and makes bile to help digest fats. It sits beneath the diaphragm, mostly on the right side of the abdomen.",
     },
@@ -46,7 +46,7 @@ export const liverModel: OrganModel = {
       id: "gallbladder",
       label: "Gallbladder",
       group: "Biliary system",
-      tone: "chart-3", shade: 0.01,
+      color: "#86a65f",
       description:
         "A small organ beneath the liver that stores bile between meals and releases it into the small intestine to support fat digestion.",
     },
@@ -54,7 +54,7 @@ export const liverModel: OrganModel = {
       id: "portal",
       label: "Portal vein",
       group: "Blood vessels",
-      tone: "chart-4", shade: 0.11,
+      color: "#9783c1",
       description:
         "The hepatic portal vein brings nutrient-rich blood to the liver from the digestive organs. Its branches distribute this blood through the liver.",
     },
@@ -62,7 +62,7 @@ export const liverModel: OrganModel = {
       id: "hepatic-veins",
       label: "Hepatic veins",
       group: "Blood vessels",
-      tone: "chart-4", shade: 0.05,
+      color: "#649cbb",
       description:
         "The hepatic veins carry blood away from the liver toward the inferior vena cava, returning it to the circulation.",
     },
@@ -70,7 +70,7 @@ export const liverModel: OrganModel = {
       id: "artery",
       label: "Hepatic artery",
       group: "Blood vessels",
-      tone: "chart-1", shade: 0.12,
+      color: "#d99173",
       description:
         "The hepatic artery supplies oxygenated blood to the liver, alongside the nutrient-rich blood arriving through the portal vein.",
     },
@@ -78,7 +78,7 @@ export const liverModel: OrganModel = {
       id: "biliary",
       label: "Hepatic bile ducts",
       group: "Biliary system",
-      tone: "chart-2", shade: 0.0,
+      color: "#b1a450",
       description:
         "A branching network collects bile from the liver. The right and left hepatic ducts join the common hepatic duct.",
     },
@@ -86,7 +86,7 @@ export const liverModel: OrganModel = {
       id: "cystic",
       label: "Cystic duct",
       group: "Biliary system",
-      tone: "chart-3", shade: 0.01,
+      color: "#6b9d83",
       description:
         "The cystic duct connects the gallbladder with the bile duct system, providing a passage for stored bile.",
     },

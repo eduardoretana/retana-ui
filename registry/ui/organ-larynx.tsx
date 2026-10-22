@@ -34,7 +34,7 @@ export const larynxModel: OrganModel = {
       id: "hyoid-bone",
       label: "Hyoid bone",
       group: "Cartilages and bone",
-      tone: "chart-2", shade: 0.25,
+      color: "#e6d8b8",
       description:
         "A U-shaped bone above the larynx that touches no other bone. The larynx hangs from it by the thyrohyoid membrane.",
     },
@@ -42,7 +42,7 @@ export const larynxModel: OrganModel = {
       id: "thyroid-cartilage",
       label: "Thyroid cartilage",
       group: "Cartilages and bone",
-      tone: "chart-4", shade: 0.16,
+      color: "#9fb9c4",
       description:
         "The largest cartilage of the larynx. Its two plates meet at the front to form the laryngeal prominence, the Adam’s apple, and shield the vocal folds.",
     },
@@ -50,7 +50,7 @@ export const larynxModel: OrganModel = {
       id: "cricoid-cartilage",
       label: "Cricoid cartilage",
       group: "Cartilages and bone",
-      tone: "chart-4", shade: 0.1,
+      color: "#88a8b8",
       description:
         "The only complete ring of cartilage in the airway, narrow at the front and tall at the back. It sits below the thyroid cartilage and on top of the trachea.",
     },
@@ -58,7 +58,7 @@ export const larynxModel: OrganModel = {
       id: "epiglottis",
       label: "Epiglottis",
       group: "Cartilages and bone",
-      tone: "chart-3", shade: 0.16,
+      color: "#b7c99e",
       description:
         "A leaf-shaped flap of elastic cartilage behind the tongue. It tips back over the entrance of the larynx when you swallow.",
     },
@@ -66,7 +66,7 @@ export const larynxModel: OrganModel = {
       id: "arytenoid-cartilages",
       label: "Arytenoid cartilages",
       group: "Cartilages and bone",
-      tone: "chart-4", shade: 0.1,
+      color: "#7e9cc2",
       description:
         "Two small pyramids on the back of the cricoid. The vocal ligaments attach to them, so their rocking and sliding opens and closes the vocal folds.",
     },
@@ -74,7 +74,7 @@ export const larynxModel: OrganModel = {
       id: "corniculate-cuneiform-cartilages",
       label: "Corniculate and cuneiform cartilages",
       group: "Cartilages and bone",
-      tone: "chart-4", shade: 0.16,
+      color: "#a99cc7",
       description:
         "Tiny nodules of cartilage. The corniculates cap the arytenoids and the cuneiforms stiffen the aryepiglottic folds at the entrance of the larynx.",
     },
@@ -82,7 +82,7 @@ export const larynxModel: OrganModel = {
       id: "thyrohyoid-membrane",
       label: "Thyrohyoid membrane",
       group: "Ligaments and membranes",
-      tone: "chart-2", shade: 0.16,
+      color: "#d9c48f",
       description:
         "A sheet that hangs the thyroid cartilage from the hyoid bone. It is thickened in the midline and at its back edges into the thyrohyoid ligaments.",
     },
@@ -90,7 +90,7 @@ export const larynxModel: OrganModel = {
       id: "cricothyroid-ligament",
       label: "Median cricothyroid ligament",
       group: "Ligaments and membranes",
-      tone: "chart-2", shade: 0.12,
+      color: "#e0b56e",
       description:
         "Bridges the gap at the front between the thyroid and cricoid cartilages. It can be felt just below the Adam’s apple.",
     },
@@ -98,7 +98,7 @@ export const larynxModel: OrganModel = {
       id: "conus-elasticus",
       label: "Conus elasticus",
       group: "Ligaments and membranes",
-      tone: "chart-2", shade: 0.1,
+      color: "#c7b07a",
       description:
         "An elastic membrane rising from the cricoid toward the vocal folds. Its free upper edge thickens into the vocal ligaments.",
     },
@@ -106,7 +106,7 @@ export const larynxModel: OrganModel = {
       id: "vocal-ligaments",
       label: "Vocal ligaments",
       group: "Ligaments and membranes",
-      tone: "chart-2", shade: 0.17,
+      color: "#f0d27a",
       description:
         "Two bands running from the back of the thyroid cartilage to the arytenoids. With the vocalis muscles they form the vocal folds, which vibrate to make sound.",
     },
@@ -114,7 +114,7 @@ export const larynxModel: OrganModel = {
       id: "epiglottic-ligaments",
       label: "Epiglottic ligaments",
       group: "Ligaments and membranes",
-      tone: "chart-2", shade: 0.14,
+      color: "#cdb98c",
       description:
         "Tie the epiglottis forward to the hyoid bone and its stalk down to the inside of the thyroid cartilage.",
     },
@@ -122,7 +122,7 @@ export const larynxModel: OrganModel = {
       id: "cricothyroid-muscle",
       label: "Cricothyroid",
       group: "Muscles",
-      tone: "chart-1", shade: 0.05,
+      color: "#c56b5c",
       description:
         "The only intrinsic muscle on the outside of the larynx. It tilts the thyroid cartilage forward, stretching the vocal folds and raising the pitch of the voice.",
     },
@@ -130,7 +130,7 @@ export const larynxModel: OrganModel = {
       id: "posterior-crico-arytenoid",
       label: "Posterior crico-arytenoid",
       group: "Muscles",
-      tone: "chart-1", shade: 0.01,
+      color: "#b45a52",
       description:
         "On the back of the cricoid. It is the only muscle that opens the vocal folds, which keeps the airway open for breathing.",
     },
@@ -138,7 +138,7 @@ export const larynxModel: OrganModel = {
       id: "lateral-crico-arytenoid",
       label: "Lateral crico-arytenoid",
       group: "Muscles",
-      tone: "chart-1", shade: 0.09,
+      color: "#d07f6b",
       description:
         "Rotates the arytenoids inward to bring the vocal folds together.",
     },
@@ -146,7 +146,7 @@ export const larynxModel: OrganModel = {
       id: "arytenoid-muscles",
       label: "Arytenoid muscles",
       group: "Muscles",
-      tone: "chart-1", shade: -0.01,
+      color: "#a8524f",
       description:
         "Span the backs of the two arytenoids. They pull the cartilages together to close the back of the glottis.",
     },
@@ -154,7 +154,7 @@ export const larynxModel: OrganModel = {
       id: "thyro-arytenoid",
       label: "Thyro-arytenoid",
       group: "Muscles",
-      tone: "chart-1", shade: 0.14,
+      color: "#d99282",
       description:
         "Runs beside the vocal folds from the thyroid cartilage to the arytenoids. It shortens and relaxes the folds, lowering the pitch.",
     },
@@ -162,7 +162,7 @@ export const larynxModel: OrganModel = {
       id: "vocalis",
       label: "Vocalis",
       group: "Muscles",
-      tone: "chart-1", shade: 0.18,
+      color: "#e3a08c",
       description:
         "The innermost fibres of the thyro-arytenoid, lying along each vocal ligament. They fine-tune the tension of the vocal folds.",
     },
@@ -170,7 +170,7 @@ export const larynxModel: OrganModel = {
       id: "aryepiglottic-muscle",
       label: "Aryepiglottic",
       group: "Muscles",
-      tone: "chart-1", shade: 0.06,
+      color: "#bd7468",
       description:
         "Thin fibres running from the arytenoids up to the sides of the epiglottis. They help narrow the entrance of the larynx when you swallow.",
     },
@@ -178,7 +178,7 @@ export const larynxModel: OrganModel = {
       id: "trachea",
       label: "Trachea",
       group: "Airway",
-      tone: "chart-1", shade: 0.19,
+      color: "#d7a1a4",
       description:
         "The windpipe. It continues from the cricoid cartilage down into the chest, held open by C-shaped rings of cartilage, and divides into the two main bronchi.",
     },
@@ -186,7 +186,7 @@ export const larynxModel: OrganModel = {
       id: "thyroid-gland",
       label: "Thyroid gland",
       group: "Neighbouring organs",
-      tone: "chart-1", shade: 0.01,
+      color: "#a5675f",
       description:
         "A hormone gland wrapped around the front of the upper trachea. Its isthmus crosses the trachea just below the cricoid cartilage.",
     },
