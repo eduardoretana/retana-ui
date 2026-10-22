@@ -32,7 +32,7 @@ export const hairModel: OrganModel = {
       id: "medulla",
       label: "Medulla",
       group: "Hair shaft",
-      tone: "chart-2", shade: 0.25,
+      color: "#e8d7b4",
       description:
         "The loose, sometimes absent core of a thick hair. Its cells and air spaces scatter light, so it changes how a hair looks more than how strong it is.",
     },
@@ -40,7 +40,7 @@ export const hairModel: OrganModel = {
       id: "cortex",
       label: "Cortex",
       group: "Hair shaft",
-      tone: "chart-1", shade: -0.15,
+      color: "#6b4a33",
       description:
         "The bulk of the hair shaft: long keratin-filled cells that give hair its strength and stretch. Melanin granules here set the hair's colour.",
     },
@@ -48,7 +48,7 @@ export const hairModel: OrganModel = {
       id: "cuticle",
       label: "Cuticle",
       group: "Hair shaft",
-      tone: "chart-2", shade: 0.01,
+      color: "#a8875f",
       description:
         "Overlapping flat cells that wrap the shaft like roof tiles, pointing towards the tip. A smooth cuticle makes hair shine and protects the cortex.",
     },
@@ -56,7 +56,7 @@ export const hairModel: OrganModel = {
       id: "inner-root-sheath",
       label: "Inner root sheath",
       group: "Root sheaths",
-      tone: "chart-5", shade: 0.17,
+      color: "#c9a3c9",
       description:
         "A layer that grows up with the hair from the bulb and moulds the shaft. It interlocks with the hair cuticle and breaks down at the level of the sebaceous gland.",
     },
@@ -64,7 +64,7 @@ export const hairModel: OrganModel = {
       id: "outer-root-sheath",
       label: "Outer root sheath",
       group: "Root sheaths",
-      tone: "chart-1", shade: 0.2,
+      color: "#e2b49a",
       description:
         "The downward continuation of the epidermis that lines the follicle. Its bulge, near the arrector pili attachment, holds the stem cells that regrow hair.",
     },
@@ -72,7 +72,7 @@ export const hairModel: OrganModel = {
       id: "connective-tissue-sheath",
       label: "Connective tissue sheath",
       group: "Root sheaths",
-      tone: "chart-1", shade: 0.08,
+      color: "#b98a7c",
       description:
         "A fibrous sleeve of dermis around the whole follicle, separated from the outer root sheath by a thick basement membrane, the glassy membrane.",
     },
@@ -80,7 +80,7 @@ export const hairModel: OrganModel = {
       id: "hair-matrix",
       label: "Hair matrix",
       group: "Hair bulb",
-      tone: "chart-1", shade: -0.08,
+      color: "#8f5a3c",
       description:
         "Rapidly dividing cells in the hair bulb that produce the hair shaft and inner root sheath. Melanocytes among them pass pigment to the new hair.",
     },
@@ -88,7 +88,7 @@ export const hairModel: OrganModel = {
       id: "dermal-papilla",
       label: "Dermal papilla",
       group: "Hair bulb",
-      tone: "chart-1", shade: 0.14,
+      color: "#d77f86",
       description:
         "A knob of specialised connective tissue cupped by the bulb. It signals the matrix to grow and carries the capillaries that feed it.",
     },
@@ -96,7 +96,7 @@ export const hairModel: OrganModel = {
       id: "papilla-vessels",
       label: "Papilla capillaries",
       group: "Hair bulb",
-      tone: "chart-1", shade: 0.0,
+      color: "#c2463e",
       description:
         "A capillary loop that rises into the dermal papilla and supplies the growing matrix, one of the most active tissues in the body.",
     },
@@ -104,7 +104,7 @@ export const hairModel: OrganModel = {
       id: "sebaceous-gland",
       label: "Sebaceous gland",
       group: "Follicle appendages",
-      tone: "chart-3", shade: 0.05,
+      color: "#a7b56b",
       description:
         "Lobed glands that empty sebum into the upper follicle through a short duct. Sebum coats the hair and skin and helps keep them supple.",
     },
@@ -112,7 +112,7 @@ export const hairModel: OrganModel = {
       id: "arrector-pili",
       label: "Arrector pili muscle",
       group: "Follicle appendages",
-      tone: "chart-1", shade: 0.01,
+      color: "#b3525a",
       description:
         "A band of smooth muscle from the follicle's bulge to the upper dermis. Cold or fear makes it contract, standing the hair up as goosebumps.",
     },
@@ -120,7 +120,7 @@ export const hairModel: OrganModel = {
       id: "epidermis",
       label: "Epidermis",
       group: "Surrounding skin",
-      tone: "chart-1", shade: 0.15,
+      color: "#d9a586",
       description:
         "The outer layer of the skin. It dips down around the hair to form the follicle opening and continues as the outer root sheath.",
     },
@@ -128,7 +128,7 @@ export const hairModel: OrganModel = {
       id: "dermis",
       label: "Dermis",
       group: "Surrounding skin",
-      tone: "chart-1", shade: 0.24,
+      color: "#e8b9ae",
       description:
         "The connective tissue layer that houses the follicle, its gland and muscle. Long scalp follicles reach through it into the fat below.",
     },
@@ -136,7 +136,7 @@ export const hairModel: OrganModel = {
       id: "hypodermis",
       label: "Hypodermis",
       group: "Surrounding skin",
-      tone: "chart-2", shade: 0.21,
+      color: "#ecd496",
       description:
         "The fatty layer beneath the dermis. The bulbs of actively growing scalp hairs sit at its upper edge.",
     },

@@ -30,7 +30,7 @@ export const eyeModel: OrganModel = {
       id: "cornea",
       label: "Cornea",
       group: "Wall of the eyeball",
-      tone: "chart-4", shade: 0.19,
+      color: "#a9c4cf",
       description:
         "The clear, curved front window of the eye. It lets light in and does most of the focusing.",
     },
@@ -38,7 +38,7 @@ export const eyeModel: OrganModel = {
       id: "sclera",
       label: "Sclera",
       group: "Wall of the eyeball",
-      tone: "chart-2", shade: 0.29,
+      color: "#e6ddcf",
       description:
         "The tough white outer coat of the eyeball. It protects the eye and anchors the eye muscles.",
     },
@@ -46,7 +46,7 @@ export const eyeModel: OrganModel = {
       id: "choroid",
       label: "Choroid",
       group: "Wall of the eyeball",
-      tone: "chart-1", shade: -0.01,
+      color: "#9a6a5c",
       description:
         "A layer rich in blood vessels between the sclera and the retina that nourishes the outer retina.",
     },
@@ -54,7 +54,7 @@ export const eyeModel: OrganModel = {
       id: "retina",
       label: "Retina",
       group: "Wall of the eyeball",
-      tone: "chart-1", shade: 0.13,
+      color: "#d49a7c",
       description:
         "The light-sensitive lining at the back of the eye. It turns light into signals sent along the optic nerve.",
     },
@@ -62,7 +62,7 @@ export const eyeModel: OrganModel = {
       id: "iris",
       label: "Iris",
       group: "Wall of the eyeball",
-      tone: "muted-foreground", shade: -0.0,
+      color: "#6f8f7a",
       description:
         "The coloured ring behind the cornea. Its muscles change the size of the pupil to control how much light enters.",
     },
@@ -70,7 +70,7 @@ export const eyeModel: OrganModel = {
       id: "anterior-chamber",
       label: "Anterior chamber",
       group: "Inside the eyeball",
-      tone: "chart-4", shade: 0.23,
+      color: "#b9d3d8",
       description:
         "The fluid-filled space between the cornea and the iris. Its clear fluid, the aqueous humour, keeps the eye’s shape.",
     },
@@ -78,7 +78,7 @@ export const eyeModel: OrganModel = {
       id: "lens",
       label: "Lens",
       group: "Inside the eyeball",
-      tone: "chart-2", shade: 0.18,
+      color: "#e0c98f",
       description:
         "A clear, flexible structure behind the iris that fine-tunes focus for near and far objects.",
     },
@@ -86,7 +86,7 @@ export const eyeModel: OrganModel = {
       id: "suspensory-ligament",
       label: "Suspensory ligament of lens",
       group: "Inside the eyeball",
-      tone: "chart-2", shade: 0.13,
+      color: "#c7b28a",
       description:
         "Fine fibres that hold the lens in place. Changes in their tension let the lens change shape to focus.",
     },
@@ -94,7 +94,7 @@ export const eyeModel: OrganModel = {
       id: "vitreous-body",
       label: "Vitreous body",
       group: "Inside the eyeball",
-      tone: "chart-3", shade: 0.26,
+      color: "#c9dbd5",
       description:
         "The clear gel that fills the large space behind the lens and helps hold the eye’s shape.",
     },
@@ -102,7 +102,7 @@ export const eyeModel: OrganModel = {
       id: "superior-rectus",
       label: "Superior rectus",
       group: "Eye muscles",
-      tone: "chart-1", shade: 0.03,
+      color: "#b5675d",
       description:
         "One of the six muscles that move the eye. It mainly turns the eye upward.",
     },
@@ -110,7 +110,7 @@ export const eyeModel: OrganModel = {
       id: "inferior-rectus",
       label: "Inferior rectus",
       group: "Eye muscles",
-      tone: "chart-1", shade: 0.0,
+      color: "#a85f58",
       description:
         "One of the six muscles that move the eye. It mainly turns the eye downward.",
     },
@@ -118,7 +118,7 @@ export const eyeModel: OrganModel = {
       id: "medial-rectus",
       label: "Medial rectus",
       group: "Eye muscles",
-      tone: "chart-1", shade: 0.05,
+      color: "#bd7363",
       description:
         "One of the six muscles that move the eye. It turns the eye inward, toward the nose.",
     },
@@ -126,7 +126,7 @@ export const eyeModel: OrganModel = {
       id: "lateral-rectus",
       label: "Lateral rectus",
       group: "Eye muscles",
-      tone: "chart-1", shade: 0.07,
+      color: "#c27b69",
       description:
         "One of the six muscles that move the eye. It turns the eye outward, away from the nose.",
     },
@@ -134,7 +134,7 @@ export const eyeModel: OrganModel = {
       id: "superior-oblique",
       label: "Superior oblique",
       group: "Eye muscles",
-      tone: "chart-1", shade: 0.09,
+      color: "#c98872",
       description:
         "An eye muscle whose tendon passes through a small pulley, the trochlea, before reaching the eyeball. It mainly rotates the eye and helps it look down and out.",
     },
@@ -142,7 +142,7 @@ export const eyeModel: OrganModel = {
       id: "inferior-oblique",
       label: "Inferior oblique",
       group: "Eye muscles",
-      tone: "chart-1", shade: 0.03,
+      color: "#b0705f",
       description:
         "An eye muscle that wraps under the eyeball from the front. It mainly rotates the eye and helps it look up and out.",
     },
@@ -150,7 +150,7 @@ export const eyeModel: OrganModel = {
       id: "levator-palpebrae",
       label: "Levator palpebrae superioris",
       group: "Eye muscles",
-      tone: "chart-1", shade: 0.12,
+      color: "#d0977d",
       description:
         "The muscle that raises the upper eyelid. It does not move the eyeball.",
     },
@@ -158,14 +158,14 @@ export const eyeModel: OrganModel = {
       id: "optic-nerve",
       label: "Optic nerve",
       group: "Nerve and eyelid",
-      tone: "chart-2", shade: 0.13,
+      color: "#e3c66f",
       description: "Carries visual signals from the retina to the brain.",
     },
     {
       id: "trochlea",
       label: "Trochlea",
       group: "Nerve and eyelid",
-      tone: "chart-2", shade: 0.24,
+      color: "#d9d2bf",
       description:
         "A small loop of cartilage that acts as a pulley for the tendon of the superior oblique muscle.",
     },
@@ -173,7 +173,7 @@ export const eyeModel: OrganModel = {
       id: "lacrimal-gland",
       label: "Lacrimal gland",
       group: "Nerve and eyelid",
-      tone: "chart-4", shade: 0.16,
+      color: "#9fb6c7",
       description:
         "Makes the watery part of tears, which keep the front of the eye moist and clean.",
     },
@@ -181,7 +181,7 @@ export const eyeModel: OrganModel = {
       id: "upper-tarsal-plate",
       label: "Upper tarsal plate",
       group: "Nerve and eyelid",
-      tone: "chart-1", shade: 0.19,
+      color: "#d6b3a3",
       description:
         "A firm plate of dense connective tissue that stiffens and shapes the upper eyelid.",
     },
@@ -189,7 +189,7 @@ export const eyeModel: OrganModel = {
       id: "lower-tarsal-plate",
       label: "Lower tarsal plate",
       group: "Nerve and eyelid",
-      tone: "chart-1", shade: 0.16,
+      color: "#cfa999",
       description:
         "A firm plate of dense connective tissue that supports the lower eyelid.",
     },

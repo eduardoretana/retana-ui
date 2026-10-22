@@ -30,7 +30,7 @@ export const esophagusModel: OrganModel = {
       id: "esophagus",
       label: "Esophagus",
       group: "Esophagus",
-      tone: "chart-1", shade: 0.12,
+      color: "#e0956a",
       description:
         "A muscular tube about 25 cm long that carries swallowed food from the throat to the stomach. It runs behind the trachea and the heart and passes through the diaphragm.",
     },
@@ -38,7 +38,7 @@ export const esophagusModel: OrganModel = {
       id: "stomach",
       label: "Stomach",
       group: "Neighbouring organs",
-      tone: "chart-2", shade: 0.11,
+      color: "#c9a07a",
       description:
         "The esophagus ends just below the diaphragm, which is not shown, by opening into the stomach at the cardia.",
     },
@@ -46,7 +46,7 @@ export const esophagusModel: OrganModel = {
       id: "trachea",
       label: "Trachea",
       group: "Neighbouring organs",
-      tone: "muted-foreground", shade: 0.21,
+      color: "#b9c4cc",
       description:
         "The windpipe lies directly in front of the esophagus in the neck and upper chest, until it divides into the two main bronchi.",
     },
@@ -54,7 +54,7 @@ export const esophagusModel: OrganModel = {
       id: "main-bronchi",
       label: "Main bronchi",
       group: "Neighbouring organs",
-      tone: "muted-foreground", shade: 0.16,
+      color: "#a5b3bd",
       description:
         "The left main bronchus crosses in front of the esophagus and presses a shallow narrowing into it.",
     },
@@ -62,7 +62,7 @@ export const esophagusModel: OrganModel = {
       id: "thyroid-gland",
       label: "Thyroid gland",
       group: "Neighbouring organs",
-      tone: "chart-1", shade: 0.1,
+      color: "#b8869b",
       description:
         "Wraps around the front and sides of the trachea in the lower neck, beside the start of the esophagus.",
     },
@@ -70,7 +70,7 @@ export const esophagusModel: OrganModel = {
       id: "left-atrium",
       label: "Left atrium",
       group: "Neighbouring organs",
-      tone: "chart-1", shade: 0.1,
+      color: "#c47a86",
       description:
         "The back of the heart. The esophagus lies directly behind it, separated only by the pericardium.",
     },
@@ -78,7 +78,7 @@ export const esophagusModel: OrganModel = {
       id: "aortic-arch",
       label: "Arch of aorta",
       group: "Arteries",
-      tone: "chart-1", shade: 0.01,
+      color: "#b8564c",
       description:
         "Curves over the left main bronchus, crossing the left side of the esophagus and leaving a narrowing where it presses on it.",
     },
@@ -86,7 +86,7 @@ export const esophagusModel: OrganModel = {
       id: "descending-aorta",
       label: "Descending aorta",
       group: "Arteries",
-      tone: "chart-1", shade: -0.03,
+      color: "#a94a46",
       description:
         "Runs down behind and to the left of the esophagus. Near the diaphragm the esophagus crosses in front of it.",
     },
@@ -94,7 +94,7 @@ export const esophagusModel: OrganModel = {
       id: "esophageal-arteries",
       label: "Esophageal arteries",
       group: "Arteries",
-      tone: "chart-1", shade: 0.14,
+      color: "#de9878",
       description:
         "Small branches of the aorta that supply the thoracic part of the esophagus.",
     },
@@ -102,7 +102,7 @@ export const esophagusModel: OrganModel = {
       id: "inferior-thyroid-arteries",
       label: "Inferior thyroid arteries",
       group: "Arteries",
-      tone: "chart-1", shade: 0.06,
+      color: "#c9725f",
       description:
         "Supply the thyroid gland and send branches to the esophagus in the neck.",
     },
@@ -110,7 +110,7 @@ export const esophagusModel: OrganModel = {
       id: "left-gastric-artery",
       label: "Left gastric artery",
       group: "Arteries",
-      tone: "chart-1", shade: 0.1,
+      color: "#d0836c",
       description:
         "Runs along the upper curve of the stomach and sends branches up to the abdominal part of the esophagus.",
     },
@@ -118,7 +118,7 @@ export const esophagusModel: OrganModel = {
       id: "azygos-vein",
       label: "Azygos vein",
       group: "Veins",
-      tone: "chart-4", shade: 0.01,
+      color: "#5f7fa6",
       description:
         "Runs up the right side of the spine, behind the esophagus, and drains most of the esophagus in the chest.",
     },
@@ -126,7 +126,7 @@ export const esophagusModel: OrganModel = {
       id: "hemiazygos-veins",
       label: "Hemiazygos veins",
       group: "Veins",
-      tone: "chart-4", shade: 0.1,
+      color: "#7f9fbf",
       description:
         "Run up the left side of the spine and cross behind the aorta to join the azygos vein.",
     },
@@ -134,7 +134,7 @@ export const esophagusModel: OrganModel = {
       id: "left-gastric-vein",
       label: "Left gastric vein",
       group: "Veins",
-      tone: "chart-4", shade: 0.15,
+      color: "#93aecb",
       description:
         "Drains the lower esophagus into the portal system. Its link with the azygos veins is where esophageal varices form when portal pressure rises.",
     },
@@ -142,7 +142,7 @@ export const esophagusModel: OrganModel = {
       id: "right-vagus-nerve",
       label: "Right vagus nerve",
       group: "Nerves",
-      tone: "chart-2", shade: 0.09,
+      color: "#e0c25a",
       description:
         "Descends beside the esophagus, joins the esophageal plexus and passes through the hiatus mostly behind it, as the posterior vagal trunk.",
     },
@@ -150,7 +150,7 @@ export const esophagusModel: OrganModel = {
       id: "left-vagus-nerve",
       label: "Left vagus nerve",
       group: "Nerves",
-      tone: "chart-2", shade: 0.01,
+      color: "#c9a73f",
       description:
         "Crosses the aortic arch, then spreads over the esophagus and passes through the hiatus mostly in front of it, as the anterior vagal trunk.",
     },
@@ -158,7 +158,7 @@ export const esophagusModel: OrganModel = {
       id: "recurrent-laryngeal-nerves",
       label: "Recurrent laryngeal nerves",
       group: "Nerves",
-      tone: "chart-2", shade: 0.16,
+      color: "#ead27a",
       description:
         "Branches of the vagus that climb back up in the groove between the trachea and esophagus to reach the larynx.",
     },

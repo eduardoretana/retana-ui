@@ -30,7 +30,7 @@ export const gallbladderModel: OrganModel = {
       id: "gallbladder",
       label: "Gallbladder",
       group: "Gallbladder",
-      tone: "chart-3", shade: -0.03,
+      color: "#6f9a4f",
       description:
         "A pear-shaped sac on the underside of the liver. It stores and concentrates bile between meals and squeezes it out after eating.",
     },
@@ -38,7 +38,7 @@ export const gallbladderModel: OrganModel = {
       id: "cystic-duct",
       label: "Cystic duct",
       group: "Bile ducts",
-      tone: "chart-3", shade: 0.02,
+      color: "#9fb35a",
       description:
         "A short duct from the neck of the gallbladder. Bile flows in through it to be stored and back out when the gallbladder contracts.",
     },
@@ -46,7 +46,7 @@ export const gallbladderModel: OrganModel = {
       id: "common-hepatic-duct",
       label: "Common hepatic duct",
       group: "Bile ducts",
-      tone: "chart-2", shade: 0.04,
+      color: "#c2ad55",
       description:
         "Formed where the right and left hepatic ducts meet. It carries bile from the liver down toward the duodenum.",
     },
@@ -54,7 +54,7 @@ export const gallbladderModel: OrganModel = {
       id: "right-hepatic-duct",
       label: "Right hepatic duct",
       group: "Bile ducts",
-      tone: "chart-2", shade: 0.1,
+      color: "#d6c06a",
       description:
         "Drains bile from the right part of the liver. It is short in this model.",
     },
@@ -62,7 +62,7 @@ export const gallbladderModel: OrganModel = {
       id: "left-hepatic-duct",
       label: "Left hepatic duct",
       group: "Bile ducts",
-      tone: "chart-2", shade: -0.0,
+      color: "#b89b45",
       description:
         "Drains bile from the left part of the liver and runs across to meet the right hepatic duct.",
     },
@@ -70,7 +70,7 @@ export const gallbladderModel: OrganModel = {
       id: "intrahepatic-ducts",
       label: "Intrahepatic bile ducts",
       group: "Bile ducts",
-      tone: "chart-2", shade: 0.17,
+      color: "#dccf8e",
       description:
         "Branches inside the liver that collect bile from its segments and lead to the right and left hepatic ducts.",
     },
@@ -78,7 +78,7 @@ export const gallbladderModel: OrganModel = {
       id: "pancreatic-duct",
       label: "Pancreatic duct",
       group: "Bile ducts",
-      tone: "chart-3", shade: -0.01,
+      color: "#7d9a5e",
       description:
         "Runs the length of the pancreas. It usually joins the common bile duct just before both open into the duodenum.",
     },
@@ -86,7 +86,7 @@ export const gallbladderModel: OrganModel = {
       id: "liver",
       label: "Liver",
       group: "Neighbouring organs",
-      tone: "chart-1", shade: -0.02,
+      color: "#a55e4e",
       description:
         "Makes bile and drains it through the hepatic ducts. The gallbladder lies in a shallow fossa on its underside.",
     },
@@ -94,7 +94,7 @@ export const gallbladderModel: OrganModel = {
       id: "duodenum",
       label: "Duodenum",
       group: "Neighbouring organs",
-      tone: "chart-1", shade: 0.13,
+      color: "#c99089",
       description:
         "The first part of the small intestine. Bile and pancreatic juice enter it through the major duodenal papilla.",
     },
@@ -102,7 +102,7 @@ export const gallbladderModel: OrganModel = {
       id: "pancreas",
       label: "Pancreas",
       group: "Neighbouring organs",
-      tone: "chart-2", shade: 0.14,
+      color: "#dcb67e",
       description:
         "A gland behind the stomach. The lower common bile duct passes through or behind its head.",
     },
@@ -110,7 +110,7 @@ export const gallbladderModel: OrganModel = {
       id: "portal-vein",
       label: "Portal vein",
       group: "Vessels",
-      tone: "chart-4", shade: 0.01,
+      color: "#5f7fa6",
       description:
         "Carries blood from the gut and spleen to the liver. It runs behind the bile duct and the hepatic artery.",
     },
@@ -118,7 +118,7 @@ export const gallbladderModel: OrganModel = {
       id: "common-hepatic-artery",
       label: "Common hepatic artery",
       group: "Vessels",
-      tone: "chart-1", shade: 0.01,
+      color: "#b8564c",
       description:
         "Runs from the celiac trunk toward the liver and continues as the hepatic artery proper.",
     },
@@ -126,7 +126,7 @@ export const gallbladderModel: OrganModel = {
       id: "hepatic-artery-proper",
       label: "Hepatic artery proper",
       group: "Vessels",
-      tone: "chart-1", shade: 0.06,
+      color: "#c9725f",
       description:
         "Climbs beside the bile duct toward the liver and divides into the right and left hepatic arteries.",
     },
@@ -134,7 +134,7 @@ export const gallbladderModel: OrganModel = {
       id: "right-hepatic-artery",
       label: "Right hepatic artery",
       group: "Vessels",
-      tone: "chart-1", shade: 0.1,
+      color: "#d0836c",
       description:
         "Supplies the right part of the liver. The cystic artery to the gallbladder usually arises from it.",
     },
@@ -142,7 +142,7 @@ export const gallbladderModel: OrganModel = {
       id: "left-hepatic-artery",
       label: "Left hepatic artery",
       group: "Vessels",
-      tone: "chart-1", shade: 0.14,
+      color: "#de9878",
       description: "Supplies the left part of the liver.",
     },
   ],
