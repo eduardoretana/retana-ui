@@ -1,0 +1,71 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "stat-sparkline-card",
+  "title": "StatSparklineCard",
+  "author": "Eduardo Retana",
+  "description": "Big number, muted label, up/down change and a sparkline that draws in.",
+  "dependencies": [
+    "lucide-react",
+    "motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/ae/stat-sparkline-card.tsx",
+      "content": "\"use client\"\n\n/** Clean-room AE dashboard piece. Theme tokens only. */\n\nimport { useId } from \"react\"\nimport { motion, useReducedMotion } from \"motion/react\"\nimport { ArrowDownRight, ArrowUpRight } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { growTransition } from \"@/lib/ae-dash\"\nimport { AeCard, AeSkeleton } from \"@/components/ui/ae/card-shell\"\n\nexport type StatSparklineCardProps = {\n  label: string\n  value: string\n  change: string\n  direction: \"up\" | \"down\"\n  series: number[]\n  hint?: string\n  /** True when a lower value is good, such as overdue quotes. Flips the tone. */\n  invert?: boolean\n  loading?: boolean\n  className?: string\n}\n\nexport function sparkPath(series: number[], width = 120, height = 40) {\n  if (series.length === 0) return \"\"\n  if (series.length === 1) return `M0 ${height / 2} L${width} ${height / 2}`\n  const min = Math.min(...series)\n  const span = Math.max(...series) - min || 1\n  return series\n    .map((value, index) => {\n      const x = (index / (series.length - 1)) * width\n      const y = height - 4 - ((value - min) / span) * (height - 8)\n      return `${index ? \"L\" : \"M\"}${x.toFixed(1)} ${y.toFixed(1)}`\n    })\n    .join(\" \")\n}\n\nexport function StatSparklineCard({ label, value, change, direction, series, hint, invert = false, loading = false, className }: StatSparklineCardProps) {\n  const reduce = !!useReducedMotion()\n  const id = useId()\n  const good = invert ? direction === \"down\" : direction === \"up\"\n  const Arrow = direction === \"up\" ? ArrowUpRight : ArrowDownRight\n  const path = sparkPath(series)\n  return (\n    <AeCard label={label} className={className}>\n      {loading ? (\n        <AeSkeleton rows={2} />\n      ) : (\n        <div className=\"flex min-w-0 items-end justify-between gap-3\">\n          <div className=\"min-w-0\">\n            <p className=\"truncate text-sm text-muted-foreground\">{label}</p>\n            <p className=\"mt-1 text-3xl font-bold tracking-tight tabular-nums\">{value}</p>\n            <p className=\"mt-2 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground\">\n              <span\n                data-good={good}\n                className={cn(\"inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 font-semibold tabular-nums\", good ? \"bg-primary/10 text-primary\" : \"bg-destructive/10 text-destructive\")}\n              >\n                <Arrow aria-hidden className=\"size-3\" />\n                <span className=\"sr-only\">{direction === \"up\" ? \"Sube\" : \"Baja\"}</span>\n                {change}\n              </span>\n              {hint}\n            </p>\n          </div>\n          <svg viewBox=\"0 0 120 40\" className={cn(\"h-10 w-24 shrink-0 overflow-visible\", good ? \"text-primary\" : \"text-destructive\")} aria-hidden focusable=\"false\">\n            <defs>\n              <linearGradient id={`${id}-f`} x1=\"0\" x2=\"0\" y1=\"0\" y2=\"1\">\n                <stop offset=\"0\" stopColor=\"currentColor\" stopOpacity=\"0.25\" />\n                <stop offset=\"1\" stopColor=\"currentColor\" stopOpacity=\"0\" />\n              </linearGradient>\n            </defs>\n            {path ? <path d={`${path} L120 40 L0 40 Z`} fill={`url(#${id}-f)`} /> : null}\n            <motion.path d={path} fill=\"none\" stroke=\"currentColor\" strokeWidth={2.5} strokeLinecap=\"round\" strokeLinejoin=\"round\" initial={{ pathLength: reduce ? 1 : 0 }} animate={{ pathLength: 1 }} transition={growTransition(reduce)} />\n          </svg>\n        </div>\n      )}\n    </AeCard>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/ae/stat-sparkline-card.tsx"
+    },
+    {
+      "path": "registry/blocks/ae/card-shell.tsx",
+      "content": "\"use client\"\n\n/** Clean-room AE dashboard surface. Theme tokens only. */\n\nimport type { ReactNode } from \"react\"\nimport { motion, useReducedMotion } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { aeCard, liftOnHover, riseItem } from \"@/lib/ae-dash\"\n\nexport type AeCardProps = {\n  title?: ReactNode\n  action?: ReactNode\n  children: ReactNode\n  className?: string\n  /** Section label for screen readers when there is no visible title. */\n  label?: string\n  as?: \"section\" | \"article\"\n}\n\n/** White card with a large radius, soft shadow, staggered rise and hover lift. Put it inside an `AeStagger`. */\nexport function AeCard({ title, action, children, className, label, as = \"section\" }: AeCardProps) {\n  const reduce = !!useReducedMotion()\n  const Tag = as === \"article\" ? motion.article : motion.section\n  return (\n    <Tag\n      data-slot=\"ae-card\"\n      aria-label={typeof title === \"string\" ? title : label}\n      variants={riseItem(reduce)}\n      whileHover={liftOnHover(reduce)}\n      className={cn(aeCard, \"flex min-w-0 flex-col gap-4 p-5 transition-shadow hover:shadow-md\", className)}\n    >\n      {title || action ? (\n        <header className=\"flex min-w-0 items-center justify-between gap-3\">\n          {title ? <h3 className=\"min-w-0 truncate text-base font-semibold\">{title}</h3> : <span />}\n          {action}\n        </header>\n      ) : null}\n      {children}\n    </Tag>\n  )\n}\n\n/** Runs the staggered entrance of every AeCard inside it. */\nexport function AeStagger({ children, className }: { children: ReactNode; className?: string }) {\n  return (\n    <motion.div data-slot=\"ae-stagger\" initial=\"hidden\" animate=\"shown\" variants={{ hidden: {}, shown: { transition: { staggerChildren: 0.07 } } }} className={className}>\n      {children}\n    </motion.div>\n  )\n}\n\nexport function AeEmpty({ children }: { children: ReactNode }) {\n  return <p className=\"rounded-2xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground\">{children}</p>\n}\n\nexport function AeSkeleton({ rows = 3 }: { rows?: number }) {\n  return (\n    <div role=\"status\" aria-label=\"Cargando\" className=\"grid gap-3\">\n      {Array.from({ length: rows }, (_, index) => (\n        <div key={index} className=\"h-6 animate-pulse rounded-full bg-muted motion-reduce:animate-none\" />\n      ))}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/ae/card-shell.tsx"
+    },
+    {
+      "path": "registry/lib/ae-dash.ts",
+      "content": "/**\n * Shared motion and surface helpers for the AE dashboard pieces.\n * Clean-room. Durations only, no colors or theme tokens.\n */\nimport type { Transition, Variants } from \"motion/react\"\n\nimport { motionPresets } from \"@/lib/motion\"\n\n/** Parent of a staggered entrance. Children use `riseItem`. */\nexport const staggerParent: Variants = {\n  hidden: {},\n  shown: { transition: { staggerChildren: motionPresets.stagger.line, delayChildren: 0.04 } },\n}\n\n/** Fade and slide up. With reduced motion the caller passes `reduce` and gets a plain fade. */\nexport function riseItem(reduce: boolean): Variants {\n  return reduce\n    ? { hidden: { opacity: 0 }, shown: { opacity: 1, transition: { duration: motionPresets.duration.instant } } }\n    : {\n        hidden: { opacity: 0, y: 16 },\n        shown: { opacity: 1, y: 0, transition: { duration: motionPresets.duration.considered, ease: [...motionPresets.ease.enter] } },\n      }\n}\n\n/** Grow transition for bars and stroke draws. Zero when motion is reduced. */\nexport function growTransition(reduce: boolean, index = 0): Transition {\n  return reduce ? { duration: 0 } : { duration: motionPresets.duration.considered * 1.5, ease: [...motionPresets.ease.enter], delay: 0.15 + index * motionPresets.stagger.item }\n}\n\n/** Hover lift for a card. Off when motion is reduced. */\nexport function liftOnHover(reduce: boolean) {\n  return reduce ? undefined : { y: -3, transition: motionPresets.spring.gentle }\n}\n\n/** Base card surface: theme card color, very large radius, soft shadow. */\nexport const aeCard = \"rounded-3xl border border-border/60 bg-card text-card-foreground shadow-sm\"\n\n/** Spanish compact number, e.g. 12 400 → \"12.4 mil\". */\nexport function compactEs(value: number) {\n  return new Intl.NumberFormat(\"es-MX\", { notation: \"compact\", maximumFractionDigits: 1 }).format(value)\n}\n\nexport function initials(name: string) {\n  return name\n    .split(/\\s+/)\n    .filter(Boolean)\n    .slice(0, 2)\n    .map((part) => part[0]?.toUpperCase() ?? \"\")\n    .join(\"\")\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/ae-dash.ts"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    // Exit decelerates, the same curve as CSS ease-out.\n    exit: [0, 0, 0.58, 1] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Tarjeta de métrica con minigráfico",
+    "descriptionEs": "Número grande, etiqueta tenue, cambio arriba o abajo y una línea que se dibuja al entrar.",
+    "preview": "app/examples/stat-sparkline-card/preview.tsx",
+    "previewHref": "/examples/stat-sparkline-card",
+    "examples": [
+      {
+        "title": "Tarjeta de métrica con minigráfico",
+        "href": "/examples/stat-sparkline-card",
+        "description": "Datos ficticios de Asesor Experto."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/stat-sparkline-card/stress",
+        "description": "320px, ancho y RTL."
+      }
+    ],
+    "usage": "<StatSparklineCard label=\"Clientes activos\" value=\"1,284\" change=\"+8.2%\" direction=\"up\" series={serie} />",
+    "api": [
+      {
+        "name": "className",
+        "type": "string",
+        "description": "Root class."
+      }
+    ]
+  },
+  "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+  "categories": [
+    "dashboard",
+    "block",
+    "ae"
+  ],
+  "type": "registry:block"
+}
