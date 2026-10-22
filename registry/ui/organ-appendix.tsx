@@ -32,7 +32,7 @@ export const appendixModel: OrganModel = {
       id: "appendix",
       label: "Vermiform appendix",
       group: "Appendix",
-      tone: "chart-1", shade: 0.13,
+      color: "#d67b9a",
       description:
         "A narrow, blind-ended tube that opens into the cecum just below the ileocecal junction. Its wall is rich in lymphoid tissue, and its position varies from person to person.",
     },
@@ -40,7 +40,7 @@ export const appendixModel: OrganModel = {
       id: "colon",
       label: "Cecum and ascending colon",
       group: "Large intestine",
-      tone: "chart-2", shade: 0.16,
+      color: "#d8b08c",
       description:
         "The pouch-like start of the large intestine in the right iliac fossa and the colon rising from it. The three taeniae coli meet at the base of the appendix. Cut above the pelvis.",
     },
@@ -48,7 +48,7 @@ export const appendixModel: OrganModel = {
       id: "ileum",
       label: "Ileum",
       group: "Small intestine",
-      tone: "chart-2", shade: 0.2,
+      color: "#e2c29b",
       description:
         "The last part of the small intestine. It joins the cecum at the ileocecal valve, close to the appendix. Coils outside the right lower abdomen are cut away.",
     },
@@ -56,7 +56,7 @@ export const appendixModel: OrganModel = {
       id: "right-external-iliac-artery",
       label: "Right external iliac artery",
       group: "Iliac vessels",
-      tone: "chart-1", shade: 0.03,
+      color: "#c4544c",
       description:
         "Runs along the pelvic brim toward the leg. The appendix often lies just in front of it.",
     },
@@ -64,7 +64,7 @@ export const appendixModel: OrganModel = {
       id: "right-external-iliac-vein",
       label: "Right external iliac vein",
       group: "Iliac vessels",
-      tone: "chart-4", shade: 0.0,
+      color: "#5f7fa3",
       description:
         "Lies beside its artery and drains the right leg into the common iliac vein.",
     },
@@ -72,7 +72,7 @@ export const appendixModel: OrganModel = {
       id: "right-psoas-major",
       label: "Right psoas major",
       group: "Posterior abdominal wall",
-      tone: "chart-1", shade: 0.01,
+      color: "#a8675e",
       description:
         "A long hip flexor behind the cecum. An inflamed appendix lying against it can make extending the hip painful, the psoas sign. Cut above the pelvis.",
     },
@@ -80,7 +80,7 @@ export const appendixModel: OrganModel = {
       id: "right-iliacus",
       label: "Right iliacus",
       group: "Posterior abdominal wall",
-      tone: "chart-1", shade: 0.07,
+      color: "#b97f72",
       description:
         "Fills the iliac fossa, the hollow of the pelvic bone on which the cecum and appendix usually rest. Shown down to the hip.",
     },

@@ -30,7 +30,7 @@ export const adrenalsModel: OrganModel = {
       id: "right-adrenal-gland",
       label: "Right adrenal gland",
       group: "Adrenal glands",
-      tone: "chart-2", shade: 0.04,
+      color: "#d9a03f",
       description:
         "A small, roughly triangular gland capping the top of the right kidney. It sits close behind the inferior vena cava.",
     },
@@ -38,7 +38,7 @@ export const adrenalsModel: OrganModel = {
       id: "left-adrenal-gland",
       label: "Left adrenal gland",
       group: "Adrenal glands",
-      tone: "chart-2", shade: 0.1,
+      color: "#e3b65a",
       description:
         "A crescent-shaped gland along the upper inner border of the left kidney, reaching down toward the renal hilum.",
     },
@@ -46,7 +46,7 @@ export const adrenalsModel: OrganModel = {
       id: "right-kidney",
       label: "Right kidney",
       group: "Neighbouring organs",
-      tone: "chart-1", shade: 0.03,
+      color: "#a8726b",
       description:
         "Sits a little lower than the left kidney because the liver lies above it. Its adrenal gland rests on its upper pole.",
     },
@@ -54,7 +54,7 @@ export const adrenalsModel: OrganModel = {
       id: "left-kidney",
       label: "Left kidney",
       group: "Neighbouring organs",
-      tone: "chart-1", shade: 0.08,
+      color: "#b5817a",
       description:
         "The left adrenal gland lies against its upper inner border rather than on top of it.",
     },
@@ -62,7 +62,7 @@ export const adrenalsModel: OrganModel = {
       id: "aorta",
       label: "Aorta",
       group: "Arteries",
-      tone: "chart-1", shade: 0.01,
+      color: "#b8564c",
       description:
         "The main artery of the body, running down in front of the spine between the two adrenal glands. The middle suprarenal arteries come straight from it.",
     },
@@ -70,7 +70,7 @@ export const adrenalsModel: OrganModel = {
       id: "middle-suprarenal-arteries",
       label: "Middle suprarenal arteries",
       group: "Arteries",
-      tone: "chart-1", shade: 0.1,
+      color: "#d0836c",
       description:
         "Short branches from the side of the aorta that run outward to each gland.",
     },
@@ -78,7 +78,7 @@ export const adrenalsModel: OrganModel = {
       id: "inferior-suprarenal-arteries",
       label: "Inferior suprarenal arteries",
       group: "Arteries",
-      tone: "chart-1", shade: 0.17,
+      color: "#e3a989",
       description:
         "Branches of the renal arteries that climb to the lower part of each gland.",
     },
@@ -86,7 +86,7 @@ export const adrenalsModel: OrganModel = {
       id: "renal-arteries",
       label: "Renal arteries",
       group: "Arteries",
-      tone: "chart-1", shade: 0.06,
+      color: "#c9725f",
       description:
         "Carry blood from the aorta to each kidney and give off the inferior suprarenal arteries.",
     },
@@ -94,7 +94,7 @@ export const adrenalsModel: OrganModel = {
       id: "right-suprarenal-vein",
       label: "Right suprarenal vein",
       group: "Veins",
-      tone: "chart-4", shade: 0.01,
+      color: "#5f7fa6",
       description:
         "A short vein that drains the right gland straight into the back of the inferior vena cava.",
     },
@@ -102,7 +102,7 @@ export const adrenalsModel: OrganModel = {
       id: "left-suprarenal-vein",
       label: "Left suprarenal vein",
       group: "Veins",
-      tone: "chart-4", shade: 0.1,
+      color: "#7f9fbf",
       description:
         "Runs down from the left gland to join the left renal vein, so the two sides drain differently.",
     },
@@ -110,7 +110,7 @@ export const adrenalsModel: OrganModel = {
       id: "inferior-vena-cava",
       label: "Inferior vena cava",
       group: "Veins",
-      tone: "chart-4", shade: -0.04,
+      color: "#4f6f96",
       description:
         "The large vein carrying blood from the lower body to the heart. It runs to the right of the aorta, in front of the right adrenal gland.",
     },
@@ -118,7 +118,7 @@ export const adrenalsModel: OrganModel = {
       id: "renal-veins",
       label: "Renal veins",
       group: "Veins",
-      tone: "chart-4", shade: 0.15,
+      color: "#93aecb",
       description:
         "Drain each kidney into the inferior vena cava. The longer left renal vein crosses in front of the aorta and receives the left suprarenal vein.",
     },

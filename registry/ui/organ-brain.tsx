@@ -42,7 +42,7 @@ export const brainModel: OrganModel = {
       id: "left-frontal",
       label: "Left frontal lobe",
       group: "Cerebral lobes",
-      tone: "chart-1", shade: 0.12,
+      color: "#c98e83",
       description:
         "The front portion of a cerebral hemisphere; it includes cortical regions involved in planning and voluntary movement.",
     },
@@ -50,7 +50,7 @@ export const brainModel: OrganModel = {
       id: "right-frontal",
       label: "Right frontal lobe",
       group: "Cerebral lobes",
-      tone: "chart-1", shade: 0.18,
+      color: "#d9a096",
       description:
         "The front portion of a cerebral hemisphere; it includes cortical regions involved in planning and voluntary movement.",
     },
@@ -58,7 +58,7 @@ export const brainModel: OrganModel = {
       id: "left-parietal",
       label: "Left parietal lobe",
       group: "Cerebral lobes",
-      tone: "chart-2", shade: 0.1,
+      color: "#c7a577",
       description:
         "A superior-posterior part of a cerebral hemisphere that participates in integrating bodily sensory information.",
     },
@@ -66,7 +66,7 @@ export const brainModel: OrganModel = {
       id: "right-parietal",
       label: "Right parietal lobe",
       group: "Cerebral lobes",
-      tone: "chart-2", shade: 0.15,
+      color: "#d6b486",
       description:
         "A superior-posterior part of a cerebral hemisphere that participates in integrating bodily sensory information.",
     },
@@ -74,7 +74,7 @@ export const brainModel: OrganModel = {
       id: "left-temporal",
       label: "Left temporal lobe",
       group: "Cerebral lobes",
-      tone: "chart-1", shade: 0.06,
+      color: "#aa847d",
       description:
         "A lower lateral part of a cerebral hemisphere that includes regions involved in hearing and memory.",
     },
@@ -82,7 +82,7 @@ export const brainModel: OrganModel = {
       id: "right-temporal",
       label: "Right temporal lobe",
       group: "Cerebral lobes",
-      tone: "chart-1", shade: 0.11,
+      color: "#ba948c",
       description:
         "A lower lateral part of a cerebral hemisphere that includes regions involved in hearing and memory.",
     },
@@ -90,7 +90,7 @@ export const brainModel: OrganModel = {
       id: "left-occipital",
       label: "Left occipital lobe",
       group: "Cerebral lobes",
-      tone: "muted-foreground", shade: 0.05,
+      color: "#9b8d83",
       description:
         "The posterior part of a cerebral hemisphere and the principal cortical region for visual processing.",
     },
@@ -98,7 +98,7 @@ export const brainModel: OrganModel = {
       id: "right-occipital",
       label: "Right occipital lobe",
       group: "Cerebral lobes",
-      tone: "muted-foreground", shade: 0.09,
+      color: "#aa9c91",
       description:
         "The posterior part of a cerebral hemisphere and the principal cortical region for visual processing.",
     },
@@ -106,7 +106,7 @@ export const brainModel: OrganModel = {
       id: "left-hippocampus",
       label: "Left hippocampus",
       group: "Deep structures",
-      tone: "chart-2", shade: 0.1,
+      color: "#d8ad67",
       description:
         "A curved deep structure of the temporal region involved in forming and organizing memories.",
     },
@@ -114,7 +114,7 @@ export const brainModel: OrganModel = {
       id: "right-hippocampus",
       label: "Right hippocampus",
       group: "Deep structures",
-      tone: "chart-2", shade: 0.15,
+      color: "#e4bd7c",
       description:
         "A curved deep structure of the temporal region involved in forming and organizing memories.",
     },
@@ -122,7 +122,7 @@ export const brainModel: OrganModel = {
       id: "midbrain",
       label: "Midbrain",
       group: "Brainstem & cerebellum",
-      tone: "chart-1", shade: 0.01,
+      color: "#9a776d",
       description:
         "The upper portion of the brainstem, between the forebrain and pons.",
     },
@@ -130,7 +130,7 @@ export const brainModel: OrganModel = {
       id: "pons",
       label: "Pons",
       group: "Brainstem & cerebellum",
-      tone: "chart-1", shade: 0.07,
+      color: "#b18779",
       description:
         "The rounded middle portion of the brainstem, anterior to the cerebellum.",
     },
@@ -138,7 +138,7 @@ export const brainModel: OrganModel = {
       id: "medulla",
       label: "Medulla oblongata",
       group: "Brainstem & cerebellum",
-      tone: "muted-foreground", shade: -0.02,
+      color: "#8b6d67",
       description:
         "The lowest portion of the brainstem, continuous inferiorly with the spinal cord.",
     },
@@ -146,7 +146,7 @@ export const brainModel: OrganModel = {
       id: "cerebellum",
       label: "Cerebellum",
       group: "Brainstem & cerebellum",
-      tone: "chart-2", shade: 0.09,
+      color: "#b49b86",
       description:
         "A folded structure behind the brainstem that helps coordinate movement and balance.",
     },
@@ -154,7 +154,7 @@ export const brainModel: OrganModel = {
       id: "left-lateral-ventricle",
       label: "Left lateral ventricle",
       group: "Ventricular spaces",
-      tone: "chart-4", shade: 0.03,
+      color: "#6f9ca3",
       description:
         "One of the paired cavities deep in the cerebrum through which cerebrospinal fluid circulates.",
     },
@@ -162,7 +162,7 @@ export const brainModel: OrganModel = {
       id: "right-lateral-ventricle",
       label: "Right lateral ventricle",
       group: "Ventricular spaces",
-      tone: "chart-4", shade: 0.07,
+      color: "#79aab1",
       description:
         "One of the paired cavities deep in the cerebrum through which cerebrospinal fluid circulates.",
     },
@@ -170,7 +170,7 @@ export const brainModel: OrganModel = {
       id: "third-ventricle",
       label: "Third ventricle",
       group: "Ventricular spaces",
-      tone: "chart-4", shade: -0.01,
+      color: "#628e98",
       description:
         "A narrow midline cavity connected to the lateral ventricles and cerebral aqueduct.",
     },
@@ -178,7 +178,7 @@ export const brainModel: OrganModel = {
       id: "cerebral-aqueduct",
       label: "Cerebral aqueduct",
       group: "Ventricular spaces",
-      tone: "chart-4", shade: -0.06,
+      color: "#527e88",
       description:
         "A narrow channel through the midbrain linking the third and fourth ventricles.",
     },
@@ -186,7 +186,7 @@ export const brainModel: OrganModel = {
       id: "fourth-ventricle",
       label: "Fourth ventricle",
       group: "Ventricular spaces",
-      tone: "chart-4", shade: 0.03,
+      color: "#719aa1",
       description:
         "A cavity between the brainstem and cerebellum that receives fluid from the cerebral aqueduct.",
     },

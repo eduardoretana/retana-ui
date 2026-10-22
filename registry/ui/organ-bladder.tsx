@@ -30,7 +30,7 @@ export const bladderModel: OrganModel = {
       id: "urinary-bladder",
       label: "Urinary bladder",
       group: "Urinary tract",
-      tone: "chart-1", shade: 0.13,
+      color: "#d39a7c",
       description:
         "A hollow, balloon-shaped muscular organ in the pelvis that stores urine until it is released.",
     },
@@ -38,7 +38,7 @@ export const bladderModel: OrganModel = {
       id: "right-ureter",
       label: "Right ureter",
       group: "Urinary tract",
-      tone: "chart-2", shade: 0.16,
+      color: "#dcad86",
       description:
         "A narrow muscular tube that carries urine from the right kidney down to the bladder.",
     },
@@ -46,7 +46,7 @@ export const bladderModel: OrganModel = {
       id: "left-ureter",
       label: "Left ureter",
       group: "Urinary tract",
-      tone: "chart-2", shade: 0.18,
+      color: "#e1b791",
       description:
         "A narrow muscular tube that carries urine from the left kidney down to the bladder.",
     },
@@ -54,7 +54,7 @@ export const bladderModel: OrganModel = {
       id: "urethra",
       label: "Urethra",
       group: "Urinary tract",
-      tone: "chart-1", shade: 0.09,
+      color: "#c98572",
       description:
         "The tube that lets urine leave the body from the bottom of the bladder.",
     },
@@ -62,7 +62,7 @@ export const bladderModel: OrganModel = {
       id: "prostate",
       label: "Prostate",
       group: "Reproductive organs",
-      tone: "muted-foreground", shade: 0.07,
+      color: "#a8828f",
       description:
         "A walnut-sized gland that sits just below the bladder and surrounds the first part of the urethra.",
     },
@@ -70,7 +70,7 @@ export const bladderModel: OrganModel = {
       id: "right-seminal-vesicle",
       label: "Right seminal vesicle",
       group: "Reproductive organs",
-      tone: "muted-foreground", shade: 0.12,
+      color: "#b597a0",
       description:
         "A small gland behind the bladder that adds fluid to semen. It lies close to the bladder’s back wall.",
     },
@@ -78,7 +78,7 @@ export const bladderModel: OrganModel = {
       id: "left-seminal-vesicle",
       label: "Left seminal vesicle",
       group: "Reproductive organs",
-      tone: "muted-foreground", shade: 0.15,
+      color: "#bea2aa",
       description:
         "A small gland behind the bladder that adds fluid to semen. It lies close to the bladder’s back wall.",
     },
@@ -86,7 +86,7 @@ export const bladderModel: OrganModel = {
       id: "right-pubococcygeus",
       label: "Right pubococcygeus",
       group: "Pelvic floor",
-      tone: "chart-1", shade: 0.03,
+      color: "#b0675f",
       description:
         "Part of the pelvic floor muscles, which support the bladder and help hold urine in until it is released.",
     },
@@ -94,7 +94,7 @@ export const bladderModel: OrganModel = {
       id: "left-pubococcygeus",
       label: "Left pubococcygeus",
       group: "Pelvic floor",
-      tone: "chart-1", shade: 0.05,
+      color: "#b8736a",
       description:
         "Part of the pelvic floor muscles, which support the bladder and help hold urine in until it is released.",
     },
@@ -102,7 +102,7 @@ export const bladderModel: OrganModel = {
       id: "right-puborectalis",
       label: "Right puborectalis",
       group: "Pelvic floor",
-      tone: "chart-1", shade: -0.01,
+      color: "#9f5c57",
       description:
         "Part of the pelvic floor muscles. It forms a sling that loops behind the lower rectum.",
     },
@@ -110,7 +110,7 @@ export const bladderModel: OrganModel = {
       id: "left-puborectalis",
       label: "Left puborectalis",
       group: "Pelvic floor",
-      tone: "chart-1", shade: 0.02,
+      color: "#a96862",
       description:
         "Part of the pelvic floor muscles. It forms a sling that loops behind the lower rectum.",
     },
@@ -118,7 +118,7 @@ export const bladderModel: OrganModel = {
       id: "rectum",
       label: "Rectum",
       group: "Neighbouring organs",
-      tone: "muted-foreground", shade: 0.06,
+      color: "#8f9e8a",
       description:
         "The last part of the large intestine, which stores stool. It lies behind the bladder and prostate.",
     },
