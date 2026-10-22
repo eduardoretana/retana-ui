@@ -34,7 +34,7 @@ export const kidneysModel: OrganModel = {
       id: "right-kidney",
       label: "Right kidney",
       group: "Kidneys",
-      tone: "chart-1", shade: -0.04,
+      color: "#9f4e45",
       description:
         "The patient’s right kidney is one of the paired organs that filter blood and produce urine. In this source body it sits slightly lower than the left kidney.",
     },
@@ -42,7 +42,7 @@ export const kidneysModel: OrganModel = {
       id: "left-kidney",
       label: "Left kidney",
       group: "Kidneys",
-      tone: "chart-1", shade: 0.02,
+      color: "#b56256",
       description:
         "The patient’s left kidney is shown in its source alignment beside the spine. This surface mesh does not expose cortex, medulla, or the renal pelvis.",
     },
@@ -50,7 +50,7 @@ export const kidneysModel: OrganModel = {
       id: "right-ureter",
       label: "Right ureter",
       group: "Urinary tract",
-      tone: "chart-2", shade: 0.11,
+      color: "#d09b73",
       description:
         "The right ureter is the narrow muscular tube that carries urine from the right kidney toward the bladder. The bladder is outside this release’s represented scope.",
     },
@@ -58,7 +58,7 @@ export const kidneysModel: OrganModel = {
       id: "left-ureter",
       label: "Left ureter",
       group: "Urinary tract",
-      tone: "chart-2", shade: 0.16,
+      color: "#dcad86",
       description:
         "The left ureter descends from the left kidney toward the bladder. Its lower end is truncated here because the bladder is not included in the selected geometry.",
     },
@@ -66,7 +66,7 @@ export const kidneysModel: OrganModel = {
       id: "right-renal-artery",
       label: "Right renal artery",
       group: "Arterial supply",
-      tone: "chart-1", shade: 0.02,
+      color: "#bd514c",
       description:
         "The right renal artery supplies the right kidney. The source concept combines its represented trunk and mapped branches into one selectable scene object.",
     },
@@ -74,7 +74,7 @@ export const kidneysModel: OrganModel = {
       id: "left-renal-artery",
       label: "Left renal artery",
       group: "Arterial supply",
-      tone: "chart-1", shade: 0.08,
+      color: "#cf6960",
       description:
         "The left renal artery supplies the left kidney. Color is illustrative and is used to distinguish the arterial meshes from adjacent surfaces.",
     },

@@ -190,7 +190,7 @@ export const jointsModel: OrganModel = {
       id: "articular-capsule-of-temporomandibular-joint",
       label: "Articular capsule of temporomandibular joint",
       group: "Jaw and skull base",
-      tone: "chart-4", shade: 0.14,
+      color: "#8fb0c8",
       description:
         "The loose fibrous sleeve around the jaw joint, attached to the temporal bone and the neck of the mandible.",
     },
@@ -198,7 +198,7 @@ export const jointsModel: OrganModel = {
       id: "articular-disc-of-temporomandibular-joint",
       label: "Articular disc of temporomandibular joint",
       group: "Jaw and skull base",
-      tone: "chart-4", shade: -0.1,
+      color: "#2f8f8c",
       description:
         "A fibrous plate dividing the jaw joint into upper and lower compartments, so the condyle can both glide and hinge.",
     },
@@ -206,7 +206,7 @@ export const jointsModel: OrganModel = {
       id: "lateral-temporomandibular-ligament",
       label: "Lateral temporomandibular ligament",
       group: "Jaw and skull base",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "The thickened outer wall of the jaw joint capsule. It stops the condyle from sliding too far back or down.",
     },
@@ -214,7 +214,7 @@ export const jointsModel: OrganModel = {
       id: "sphenomandibular-ligament",
       label: "Sphenomandibular ligament",
       group: "Jaw and skull base",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "A thin band from the sphenoid spine to the lingula of the mandible, inside the jaw joint.",
     },
@@ -222,7 +222,7 @@ export const jointsModel: OrganModel = {
       id: "stylomandibular-ligament",
       label: "Stylomandibular ligament",
       group: "Jaw and skull base",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "A band from the styloid process to the angle of the mandible that limits forward movement of the jaw.",
     },
@@ -230,7 +230,7 @@ export const jointsModel: OrganModel = {
       id: "pterygospinous-ligament",
       label: "Pterygospinous ligament",
       group: "Jaw and skull base",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "A small band between the lateral pterygoid plate and the sphenoid spine. It sometimes ossifies.",
     },
@@ -238,7 +238,7 @@ export const jointsModel: OrganModel = {
       id: "stylohyoid-ligament",
       label: "Stylohyoid ligament",
       group: "Jaw and skull base",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "A fibrous cord from the tip of the styloid process to the lesser horn of the hyoid bone.",
     },
@@ -246,7 +246,7 @@ export const jointsModel: OrganModel = {
       id: "median-thyrohyoid-ligament",
       label: "Median thyrohyoid ligament",
       group: "Larynx",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "The thick middle part of the thyrohyoid membrane, joining the thyroid cartilage to the hyoid bone.",
     },
@@ -254,7 +254,7 @@ export const jointsModel: OrganModel = {
       id: "lateral-thyrohyoid-ligament",
       label: "Lateral thyrohyoid ligament",
       group: "Larynx",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "The rounded back edge of the thyrohyoid membrane, from the superior horn of the thyroid cartilage to the hyoid.",
     },
@@ -262,7 +262,7 @@ export const jointsModel: OrganModel = {
       id: "quadrangular-membrane",
       label: "Quadrangular membrane",
       group: "Larynx",
-      tone: "muted-foreground", shade: 0.05,
+      color: "#7fa37c",
       description:
         "A sheet of connective tissue from the epiglottis to the arytenoid cartilage. Its lower edge forms the vestibular fold.",
     },
@@ -270,7 +270,7 @@ export const jointsModel: OrganModel = {
       id: "median-cricothyroid-ligament",
       label: "Median cricothyroid ligament",
       group: "Larynx",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "The membrane between the thyroid and cricoid cartilages at the front of the neck, the site of an emergency cricothyrotomy.",
     },
@@ -278,7 +278,7 @@ export const jointsModel: OrganModel = {
       id: "cricopharyngeal-ligament",
       label: "Cricopharyngeal ligament",
       group: "Larynx",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "A band from the corniculate cartilages to the back of the cricoid lamina, near the crico-arytenoid joint.",
     },
@@ -286,7 +286,7 @@ export const jointsModel: OrganModel = {
       id: "anterior-longitudinal-ligament",
       label: "Anterior longitudinal ligament",
       group: "Vertebral column",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "A broad band down the front of the vertebral bodies and discs from the skull to the sacrum. It limits bending backward.",
     },
@@ -294,7 +294,7 @@ export const jointsModel: OrganModel = {
       id: "posterior-longitudinal-ligament",
       label: "Posterior longitudinal ligament",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "A band down the backs of the vertebral bodies, inside the vertebral canal. It limits bending forward.",
     },
@@ -302,7 +302,7 @@ export const jointsModel: OrganModel = {
       id: "ligamenta-flava",
       label: "Ligamenta flava",
       group: "Vertebral column",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Elastic yellow ligaments joining the laminae of neighbouring vertebrae. They help straighten the spine after bending.",
     },
@@ -310,14 +310,14 @@ export const jointsModel: OrganModel = {
       id: "interspinous-ligaments",
       label: "Interspinous ligaments",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "Thin sheets joining neighbouring spinous processes.",
     },
     {
       id: "supraspinous-ligament",
       label: "Supraspinous ligament",
       group: "Vertebral column",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "A strong cord along the tips of the spinous processes from C7 to the sacrum.",
     },
@@ -325,7 +325,7 @@ export const jointsModel: OrganModel = {
       id: "nuchal-ligament",
       label: "Nuchal ligament",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "The upward continuation of the supraspinous ligament in the neck, from C7 to the occipital bone. It anchors neck muscles.",
     },
@@ -333,7 +333,7 @@ export const jointsModel: OrganModel = {
       id: "intertransverse-ligaments",
       label: "Intertransverse ligaments",
       group: "Vertebral column",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Thin bands between neighbouring transverse processes, most developed in the lumbar spine.",
     },
@@ -341,7 +341,7 @@ export const jointsModel: OrganModel = {
       id: "intercornual-ligament",
       label: "Intercornual ligament",
       group: "Vertebral column",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Joins the cornua of the sacrum and coccyx at the sacrococcygeal joint.",
     },
@@ -349,7 +349,7 @@ export const jointsModel: OrganModel = {
       id: "cervical-intervertebral-discs",
       label: "Cervical intervertebral discs",
       group: "Vertebral column",
-      tone: "chart-4", shade: -0.1,
+      color: "#2f8f8c",
       description:
         "The 6 discs from C2–C3 to C7–T1. Each has a fibrous ring, the anulus fibrosus, around a soft core.",
     },
@@ -357,7 +357,7 @@ export const jointsModel: OrganModel = {
       id: "thoracic-intervertebral-discs",
       label: "Thoracic intervertebral discs",
       group: "Vertebral column",
-      tone: "chart-4", shade: -0.04,
+      color: "#45a19c",
       description:
         "The 12 discs from T1–T2 to T12–L1. Each has a fibrous ring, the anulus fibrosus, around a soft core.",
     },
@@ -365,7 +365,7 @@ export const jointsModel: OrganModel = {
       id: "lumbar-intervertebral-discs",
       label: "Lumbar intervertebral discs",
       group: "Vertebral column",
-      tone: "chart-4", shade: -0.1,
+      color: "#2f8f8c",
       description:
         "The 5 discs from L1–L2 to L5–S1. Each has a fibrous ring, the anulus fibrosus, around a soft core.",
     },
@@ -373,7 +373,7 @@ export const jointsModel: OrganModel = {
       id: "sacrococcygeal-symphysis",
       label: "Sacrococcygeal symphysis",
       group: "Vertebral column",
-      tone: "chart-4", shade: -0.04,
+      color: "#45a19c",
       description:
         "The fibrocartilaginous joint between the sacrum and the coccyx.",
     },
@@ -381,7 +381,7 @@ export const jointsModel: OrganModel = {
       id: "radiate-ligament-of-head-of-rib",
       label: "Radiate ligament of head of rib",
       group: "Thorax",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "A fan-shaped band from the head of a rib to the two vertebral bodies and the disc it meets.",
     },
@@ -389,7 +389,7 @@ export const jointsModel: OrganModel = {
       id: "intra-articular-ligament-of-head-of-rib",
       label: "Intra-articular ligament of head of rib",
       group: "Thorax",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "A short band inside the joint of the head of a rib, from the crest of the head to the intervertebral disc.",
     },
@@ -397,7 +397,7 @@ export const jointsModel: OrganModel = {
       id: "costotransverse-ligament",
       label: "Costotransverse ligament",
       group: "Thorax",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Joins the neck of a rib to the transverse process of its vertebra.",
     },
@@ -405,7 +405,7 @@ export const jointsModel: OrganModel = {
       id: "external-intercostal-membrane",
       label: "External intercostal membrane",
       group: "Thorax",
-      tone: "muted-foreground", shade: 0.05,
+      color: "#7fa37c",
       description:
         "The thin sheet that replaces the external intercostal muscles near the sternum, between the costal cartilages.",
     },
@@ -413,7 +413,7 @@ export const jointsModel: OrganModel = {
       id: "internal-intercostal-membrane",
       label: "Internal intercostal membrane",
       group: "Thorax",
-      tone: "chart-3", shade: 0.11,
+      color: "#93b48e",
       description:
         "The thin sheet that replaces the internal intercostal muscles near the spine, between the ribs.",
     },
@@ -421,7 +421,7 @@ export const jointsModel: OrganModel = {
       id: "articular-capsule-of-sternoclavicular-joint",
       label: "Articular capsule of sternoclavicular joint",
       group: "Shoulder girdle",
-      tone: "chart-4", shade: 0.14,
+      color: "#8fb0c8",
       description:
         "The fibrous capsule of the joint between the clavicle and the manubrium, the only bony joint between arm and trunk.",
     },
@@ -429,7 +429,7 @@ export const jointsModel: OrganModel = {
       id: "articular-disc-of-sternoclavicular-joint",
       label: "Articular disc of sternoclavicular joint",
       group: "Shoulder girdle",
-      tone: "chart-4", shade: -0.1,
+      color: "#2f8f8c",
       description:
         "A disc dividing the sternoclavicular joint in two. It absorbs force passed along the clavicle.",
     },
@@ -437,21 +437,21 @@ export const jointsModel: OrganModel = {
       id: "anterior-sternoclavicular-ligament",
       label: "Anterior sternoclavicular ligament",
       group: "Shoulder girdle",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "Reinforces the front of the sternoclavicular joint.",
     },
     {
       id: "posterior-sternoclavicular-ligament",
       label: "Posterior sternoclavicular ligament",
       group: "Shoulder girdle",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "Reinforces the back of the sternoclavicular joint.",
     },
     {
       id: "interclavicular-ligament",
       label: "Interclavicular ligament",
       group: "Shoulder girdle",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Joins the inner ends of the two clavicles across the top of the manubrium.",
     },
@@ -459,7 +459,7 @@ export const jointsModel: OrganModel = {
       id: "costoclavicular-ligament",
       label: "Costoclavicular ligament",
       group: "Shoulder girdle",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "A strong band from the first rib to the underside of the clavicle that limits elevation of the shoulder.",
     },
@@ -467,7 +467,7 @@ export const jointsModel: OrganModel = {
       id: "articular-capsule-of-acromioclavicular-joint",
       label: "Articular capsule of acromioclavicular joint",
       group: "Shoulder girdle",
-      tone: "chart-4", shade: 0.19,
+      color: "#a2bfd3",
       description:
         "The fibrous capsule of the joint between the clavicle and the acromion of the scapula.",
     },
@@ -475,7 +475,7 @@ export const jointsModel: OrganModel = {
       id: "articular-disc-of-acromioclavicular-joint",
       label: "Articular disc of acromioclavicular joint",
       group: "Shoulder girdle",
-      tone: "chart-4", shade: -0.04,
+      color: "#45a19c",
       description:
         "An often incomplete disc inside the acromioclavicular joint.",
     },
@@ -483,7 +483,7 @@ export const jointsModel: OrganModel = {
       id: "acromioclavicular-ligament",
       label: "Acromioclavicular ligament",
       group: "Shoulder girdle",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Strengthens the top of the acromioclavicular joint capsule.",
     },
@@ -491,7 +491,7 @@ export const jointsModel: OrganModel = {
       id: "conoid-ligament",
       label: "Conoid ligament",
       group: "Shoulder girdle",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "The cone-shaped inner part of the coracoclavicular ligament, from the coracoid process to the conoid tubercle of the clavicle.",
     },
@@ -499,7 +499,7 @@ export const jointsModel: OrganModel = {
       id: "trapezoid-ligament",
       label: "Trapezoid ligament",
       group: "Shoulder girdle",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "The flat outer part of the coracoclavicular ligament. With the conoid ligament it suspends the scapula from the clavicle.",
     },
@@ -507,7 +507,7 @@ export const jointsModel: OrganModel = {
       id: "coraco-acromial-ligament",
       label: "Coraco-acromial ligament",
       group: "Shoulder girdle",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Spans the coracoid process and the acromion, forming a roof over the shoulder joint.",
     },
@@ -515,7 +515,7 @@ export const jointsModel: OrganModel = {
       id: "superior-transverse-scapular-ligament",
       label: "Superior transverse scapular ligament",
       group: "Shoulder girdle",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Bridges the suprascapular notch. The suprascapular nerve passes beneath it.",
     },
@@ -523,7 +523,7 @@ export const jointsModel: OrganModel = {
       id: "inferior-transverse-scapular-ligament",
       label: "Inferior transverse scapular ligament",
       group: "Shoulder girdle",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Bridges the spinoglenoid notch at the base of the spine of the scapula.",
     },
@@ -531,7 +531,7 @@ export const jointsModel: OrganModel = {
       id: "articular-capsule-of-glenohumeral-joint",
       label: "Articular capsule of glenohumeral joint",
       group: "Shoulder",
-      tone: "chart-4", shade: 0.14,
+      color: "#8fb0c8",
       description:
         "The loose capsule of the shoulder joint, which allows its wide range of movement.",
     },
@@ -539,7 +539,7 @@ export const jointsModel: OrganModel = {
       id: "glenoid-labrum",
       label: "Glenoid labrum",
       group: "Shoulder",
-      tone: "chart-4", shade: -0.1,
+      color: "#2f8f8c",
       description:
         "A fibrocartilage rim that deepens the shallow glenoid cavity of the scapula.",
     },
@@ -547,14 +547,14 @@ export const jointsModel: OrganModel = {
       id: "superior-glenohumeral-ligament",
       label: "Superior glenohumeral ligament",
       group: "Shoulder",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "A thickening of the upper front of the shoulder capsule.",
     },
     {
       id: "middle-glenohumeral-ligament",
       label: "Middle glenohumeral ligament",
       group: "Shoulder",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "A thickening of the front of the shoulder capsule that limits outward rotation.",
     },
@@ -562,7 +562,7 @@ export const jointsModel: OrganModel = {
       id: "inferior-glenohumeral-ligament",
       label: "Inferior glenohumeral ligament",
       group: "Shoulder",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "The strongest glenohumeral ligament. It steadies the raised, outward-rotated arm against dislocation.",
     },
@@ -570,7 +570,7 @@ export const jointsModel: OrganModel = {
       id: "coracohumeral-ligament",
       label: "Coracohumeral ligament",
       group: "Shoulder",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "A broad band from the coracoid process to the greater tubercle of the humerus, over the top of the joint.",
     },
@@ -578,7 +578,7 @@ export const jointsModel: OrganModel = {
       id: "transverse-humeral-ligament",
       label: "Transverse humeral ligament",
       group: "Shoulder",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Bridges the intertubercular groove and holds the long tendon of biceps in place.",
     },
@@ -586,7 +586,7 @@ export const jointsModel: OrganModel = {
       id: "articular-capsule-of-elbow-joint",
       label: "Articular capsule of elbow joint",
       group: "Elbow and forearm",
-      tone: "chart-4", shade: 0.14,
+      color: "#8fb0c8",
       description:
         "The capsule enclosing the humero-ulnar, humeroradial and proximal radio-ulnar joints.",
     },
@@ -594,7 +594,7 @@ export const jointsModel: OrganModel = {
       id: "ulnar-collateral-ligament",
       label: "Ulnar collateral ligament",
       group: "Elbow and forearm",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "A triangular band on the inner side of the elbow that resists sideways force opening the joint.",
     },
@@ -602,7 +602,7 @@ export const jointsModel: OrganModel = {
       id: "radial-collateral-ligament",
       label: "Radial collateral ligament",
       group: "Elbow and forearm",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "A fan-shaped band on the outer side of the elbow, blending with the annular ligament.",
     },
@@ -610,7 +610,7 @@ export const jointsModel: OrganModel = {
       id: "annular-ligament-of-radius",
       label: "Annular ligament of radius",
       group: "Elbow and forearm",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "A ring around the head of the radius that holds it against the ulna while it turns.",
     },
@@ -618,7 +618,7 @@ export const jointsModel: OrganModel = {
       id: "quadrate-ligament",
       label: "Quadrate ligament",
       group: "Elbow and forearm",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "A short band from the radial notch of the ulna to the neck of the radius.",
     },
@@ -626,7 +626,7 @@ export const jointsModel: OrganModel = {
       id: "interosseous-membrane-of-forearm",
       label: "Interosseous membrane of forearm",
       group: "Elbow and forearm",
-      tone: "muted-foreground", shade: 0.05,
+      color: "#7fa37c",
       description:
         "A fibrous sheet joining the radius and ulna. It passes force from the radius to the ulna and anchors forearm muscles.",
     },
@@ -634,7 +634,7 @@ export const jointsModel: OrganModel = {
       id: "oblique-cord",
       label: "Oblique cord",
       group: "Elbow and forearm",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "A small band from the ulnar tuberosity to the radius, above the interosseous membrane.",
     },
@@ -642,7 +642,7 @@ export const jointsModel: OrganModel = {
       id: "articular-disc-of-distal-radio-ulnar-joint",
       label: "Articular disc of distal radio-ulnar joint",
       group: "Wrist",
-      tone: "chart-4", shade: -0.1,
+      color: "#2f8f8c",
       description:
         "The triangular fibrocartilage between the ulna and the carpal bones.",
     },
@@ -650,21 +650,21 @@ export const jointsModel: OrganModel = {
       id: "palmar-radio-ulnar-ligament",
       label: "Palmar radio-ulnar ligament",
       group: "Wrist",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "Reinforces the front of the distal radio-ulnar joint.",
     },
     {
       id: "dorsal-radio-ulnar-ligament",
       label: "Dorsal radio-ulnar ligament",
       group: "Wrist",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "Reinforces the back of the distal radio-ulnar joint.",
     },
     {
       id: "articular-capsule-of-radiocarpal-joint",
       label: "Articular capsule of radiocarpal joint",
       group: "Wrist",
-      tone: "chart-4", shade: 0.14,
+      color: "#8fb0c8",
       description:
         "The capsule of the wrist joint between the radius and the first row of carpal bones.",
     },
@@ -672,7 +672,7 @@ export const jointsModel: OrganModel = {
       id: "radial-collateral-ligament-of-wrist-joint",
       label: "Radial collateral ligament of wrist joint",
       group: "Wrist",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Runs from the radial styloid to the scaphoid on the thumb side of the wrist.",
     },
@@ -680,7 +680,7 @@ export const jointsModel: OrganModel = {
       id: "ulnar-collateral-ligament-of-wrist-joint",
       label: "Ulnar collateral ligament of wrist joint",
       group: "Wrist",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Runs from the ulnar styloid to the triquetrum and pisiform on the little-finger side of the wrist.",
     },
@@ -688,7 +688,7 @@ export const jointsModel: OrganModel = {
       id: "dorsal-radiocarpal-ligament",
       label: "Dorsal radiocarpal ligament",
       group: "Wrist",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Runs obliquely from the back of the radius to the carpal bones.",
     },
@@ -696,7 +696,7 @@ export const jointsModel: OrganModel = {
       id: "radioscaphocapitate-ligament",
       label: "Radioscaphocapitate ligament",
       group: "Wrist",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "A palmar band from the radius across the scaphoid to the capitate.",
     },
@@ -704,14 +704,14 @@ export const jointsModel: OrganModel = {
       id: "radiocapitate-ligament",
       label: "Radiocapitate ligament",
       group: "Wrist",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "A palmar band from the radius to the capitate.",
     },
     {
       id: "ulnolunate-ligament",
       label: "Ulnolunate ligament",
       group: "Wrist",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "A palmar band from the triangular fibrocartilage to the lunate.",
     },
@@ -719,7 +719,7 @@ export const jointsModel: OrganModel = {
       id: "ulnotriquetral-ligament",
       label: "Ulnotriquetral ligament",
       group: "Wrist",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "A palmar band from the triangular fibrocartilage to the triquetrum.",
     },
@@ -727,14 +727,14 @@ export const jointsModel: OrganModel = {
       id: "ulnocapitate-ligament",
       label: "Ulnocapitate ligament",
       group: "Wrist",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "A palmar band from the ulnar head to the capitate.",
     },
     {
       id: "ulnopisiform-ligament",
       label: "Ulnopisiform ligament",
       group: "Wrist",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "A small band from the ulnar side of the wrist to the pisiform.",
     },
@@ -742,7 +742,7 @@ export const jointsModel: OrganModel = {
       id: "dorsal-ulnocarpal-ligament",
       label: "Dorsal ulnocarpal ligament",
       group: "Wrist",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "A band on the back of the wrist from the ulnar side to the carpal bones.",
     },
@@ -750,7 +750,7 @@ export const jointsModel: OrganModel = {
       id: "radiate-carpal-ligament",
       label: "Radiate carpal ligament",
       group: "Wrist",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Fibres radiating from the palmar side of the capitate to the surrounding carpal bones.",
     },
@@ -758,7 +758,7 @@ export const jointsModel: OrganModel = {
       id: "dorsal-intercarpal-ligaments",
       label: "Dorsal intercarpal ligaments",
       group: "Wrist",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Bands joining the carpal bones across the back of the wrist.",
     },
@@ -766,7 +766,7 @@ export const jointsModel: OrganModel = {
       id: "dorsal-scaphotriquetral-ligament",
       label: "Dorsal scaphotriquetral ligament",
       group: "Wrist",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Part of the dorsal intercarpal ligament from the scaphoid to the triquetrum.",
     },
@@ -774,14 +774,14 @@ export const jointsModel: OrganModel = {
       id: "palmar-scaphotriquetral-ligament",
       label: "Palmar scaphotriquetral ligament",
       group: "Wrist",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "A palmar band from the scaphoid to the triquetrum.",
     },
     {
       id: "scapholunate-interosseous-ligament",
       label: "Scapholunate interosseous ligament",
       group: "Wrist",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Joins the scaphoid and lunate. Its tear is the most common cause of carpal instability.",
     },
@@ -789,42 +789,42 @@ export const jointsModel: OrganModel = {
       id: "lunotriquetral-interosseous-ligament",
       label: "Lunotriquetral interosseous ligament",
       group: "Wrist",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "Joins the lunate and triquetrum.",
     },
     {
       id: "palmar-lunotriquetral-ligament",
       label: "Palmar lunotriquetral ligament",
       group: "Wrist",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "Joins the palmar surfaces of the lunate and triquetrum.",
     },
     {
       id: "scaphocapitate-ligament",
       label: "Scaphocapitate ligament",
       group: "Wrist",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "A palmar band from the scaphoid to the capitate.",
     },
     {
       id: "triquetrocapitate-ligament",
       label: "Triquetrocapitate ligament",
       group: "Wrist",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "A palmar band from the triquetrum to the capitate.",
     },
     {
       id: "triquetrohamate-ligament",
       label: "Triquetrohamate ligament",
       group: "Wrist",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "Joins the triquetrum and hamate.",
     },
     {
       id: "scaphotrapeziotrapezoidal-ligament",
       label: "Scaphotrapeziotrapezoidal ligament",
       group: "Wrist",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Joins the scaphoid to the trapezium and trapezoid at the base of the thumb.",
     },
@@ -832,49 +832,49 @@ export const jointsModel: OrganModel = {
       id: "trapeziotrapezoidal-interosseous-ligament",
       label: "Trapeziotrapezoidal interosseous ligament",
       group: "Wrist",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "Joins the trapezium and trapezoid.",
     },
     {
       id: "trapezoideocapitate-interosseous-ligament",
       label: "Trapezoideocapitate interosseous ligament",
       group: "Wrist",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "Joins the trapezoid and capitate inside their joint.",
     },
     {
       id: "palmar-trapezoideocapitate-ligament",
       label: "Palmar trapezoideocapitate ligament",
       group: "Wrist",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "Joins the palmar surfaces of the trapezoid and capitate.",
     },
     {
       id: "capitohamate-interosseous-ligament",
       label: "Capitohamate interosseous ligament",
       group: "Wrist",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "Joins the capitate and hamate inside their joint.",
     },
     {
       id: "palmar-capitohamate-ligament",
       label: "Palmar capitohamate ligament",
       group: "Wrist",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "Joins the palmar surfaces of the capitate and hamate.",
     },
     {
       id: "pisotriquetral-ligament",
       label: "Pisotriquetral ligament",
       group: "Wrist",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "Holds the pisiform against the triquetrum.",
     },
     {
       id: "pisohamate-ligament",
       label: "Pisohamate ligament",
       group: "Wrist",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Continues the pull of flexor carpi ulnaris from the pisiform to the hook of the hamate.",
     },
@@ -882,7 +882,7 @@ export const jointsModel: OrganModel = {
       id: "pisometacarpal-ligament",
       label: "Pisometacarpal ligament",
       group: "Wrist",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Continues the pull of flexor carpi ulnaris from the pisiform to the base of the fifth metacarpal.",
     },
@@ -890,7 +890,7 @@ export const jointsModel: OrganModel = {
       id: "palmar-carpometacarpal-ligaments",
       label: "Palmar carpometacarpal ligaments",
       group: "Hand",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Join the distal carpal bones to the bases of the metacarpals on the palm side.",
     },
@@ -898,7 +898,7 @@ export const jointsModel: OrganModel = {
       id: "dorsal-carpometacarpal-ligaments",
       label: "Dorsal carpometacarpal ligaments",
       group: "Hand",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Join the distal carpal bones to the bases of the metacarpals on the back of the hand.",
     },
@@ -906,7 +906,7 @@ export const jointsModel: OrganModel = {
       id: "palmar-metacarpal-ligaments",
       label: "Palmar metacarpal ligaments",
       group: "Hand",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Join the bases of neighbouring metacarpals on the palm side.",
     },
@@ -914,7 +914,7 @@ export const jointsModel: OrganModel = {
       id: "dorsal-metacarpal-ligaments",
       label: "Dorsal metacarpal ligaments",
       group: "Hand",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Join the bases of neighbouring metacarpals on the back of the hand.",
     },
@@ -922,7 +922,7 @@ export const jointsModel: OrganModel = {
       id: "interosseous-metacarpal-ligaments",
       label: "Interosseous metacarpal ligaments",
       group: "Hand",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Join the bases of neighbouring metacarpals between their joint surfaces.",
     },
@@ -930,7 +930,7 @@ export const jointsModel: OrganModel = {
       id: "articular-capsules-of-metacarpophalangeal-joints",
       label: "Articular capsules of metacarpophalangeal joints",
       group: "Hand",
-      tone: "chart-4", shade: 0.14,
+      color: "#8fb0c8",
       description:
         "The capsules of the knuckle joints between the metacarpals and the proximal phalanges.",
     },
@@ -938,7 +938,7 @@ export const jointsModel: OrganModel = {
       id: "collateral-metacarpophalangeal-ligaments",
       label: "Collateral metacarpophalangeal ligaments",
       group: "Hand",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Strengthen the sides of the knuckle joints. They are tight when the fingers are bent.",
     },
@@ -946,7 +946,7 @@ export const jointsModel: OrganModel = {
       id: "deep-transverse-metacarpal-ligament",
       label: "Deep transverse metacarpal ligament",
       group: "Hand",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Joins the palmar plates of the second to fifth knuckle joints, holding the metacarpal heads together.",
     },
@@ -954,21 +954,21 @@ export const jointsModel: OrganModel = {
       id: "articular-capsules-of-proximal-interphalangeal-joints",
       label: "Articular capsules of proximal interphalangeal joints",
       group: "Hand",
-      tone: "chart-4", shade: 0.19,
+      color: "#a2bfd3",
       description: "The capsules of the middle finger joints.",
     },
     {
       id: "articular-capsules-of-distal-interphalangeal-joints",
       label: "Articular capsules of distal interphalangeal joints",
       group: "Hand",
-      tone: "chart-4", shade: 0.14,
+      color: "#8fb0c8",
       description: "The capsules of the finger joints nearest the fingertips.",
     },
     {
       id: "collateral-interphalangeal-ligaments-of-hand",
       label: "Collateral interphalangeal ligaments of hand",
       group: "Hand",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Strengthen the sides of the finger joints and keep them moving as hinges.",
     },
@@ -976,7 +976,7 @@ export const jointsModel: OrganModel = {
       id: "palmar-interphalangeal-ligaments",
       label: "Palmar interphalangeal ligaments",
       group: "Hand",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Thick palmar plates on the front of the finger joints that stop them bending backward.",
     },
@@ -984,14 +984,14 @@ export const jointsModel: OrganModel = {
       id: "anterior-sacro-iliac-ligament",
       label: "Anterior sacro-iliac ligament",
       group: "Pelvis",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "A thin sheet across the front of the sacro-iliac joint.",
     },
     {
       id: "interosseous-sacro-iliac-ligament",
       label: "Interosseous sacro-iliac ligament",
       group: "Pelvis",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Short, very strong fibres filling the gap between sacrum and ilium behind the joint, the main bond of the sacro-iliac joint.",
     },
@@ -999,7 +999,7 @@ export const jointsModel: OrganModel = {
       id: "posterior-sacro-iliac-ligament",
       label: "Posterior sacro-iliac ligament",
       group: "Pelvis",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Bands from the back of the sacrum to the ilium that cover the interosseous ligament.",
     },
@@ -1007,7 +1007,7 @@ export const jointsModel: OrganModel = {
       id: "iliolumbar-ligament",
       label: "Iliolumbar ligament",
       group: "Pelvis",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Joins the transverse process of L5 to the iliac crest and anchors the lowest vertebra to the pelvis.",
     },
@@ -1015,7 +1015,7 @@ export const jointsModel: OrganModel = {
       id: "sacrotuberous-ligament",
       label: "Sacrotuberous ligament",
       group: "Pelvis",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "A long band from the sacrum and coccyx to the ischial tuberosity. It resists the sacrum tipping forward.",
     },
@@ -1023,7 +1023,7 @@ export const jointsModel: OrganModel = {
       id: "sacrospinous-ligament",
       label: "Sacrospinous ligament",
       group: "Pelvis",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "A triangular band from the sacrum to the ischial spine. It divides the greater and lesser sciatic foramina.",
     },
@@ -1031,7 +1031,7 @@ export const jointsModel: OrganModel = {
       id: "obturator-membrane",
       label: "Obturator membrane",
       group: "Pelvis",
-      tone: "muted-foreground", shade: 0.05,
+      color: "#7fa37c",
       description:
         "A fibrous sheet closing the obturator foramen, leaving a gap above for the obturator vessels and nerve.",
     },
@@ -1039,7 +1039,7 @@ export const jointsModel: OrganModel = {
       id: "pubic-symphysis",
       label: "Pubic symphysis",
       group: "Pelvis",
-      tone: "chart-4", shade: -0.1,
+      color: "#2f8f8c",
       description:
         "The cartilaginous joint between the two pubic bones, built around the fibrocartilage interpubic disc.",
     },
@@ -1047,7 +1047,7 @@ export const jointsModel: OrganModel = {
       id: "superior-pubic-ligament",
       label: "Superior pubic ligament",
       group: "Pelvis",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Runs along the top of the pubic symphysis between the pubic tubercles.",
     },
@@ -1055,7 +1055,7 @@ export const jointsModel: OrganModel = {
       id: "inferior-pubic-ligament",
       label: "Inferior pubic ligament",
       group: "Pelvis",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "An arched band along the lower edge of the pubic symphysis, rounding off the pubic arch.",
     },
@@ -1063,7 +1063,7 @@ export const jointsModel: OrganModel = {
       id: "articular-capsule-of-hip-joint",
       label: "Articular capsule of hip joint",
       group: "Hip",
-      tone: "chart-4", shade: 0.14,
+      color: "#8fb0c8",
       description:
         "The strong capsule of the hip joint, from the rim of the acetabulum to the neck of the femur.",
     },
@@ -1071,7 +1071,7 @@ export const jointsModel: OrganModel = {
       id: "acetabular-labrum",
       label: "Acetabular labrum",
       group: "Hip",
-      tone: "chart-4", shade: -0.1,
+      color: "#2f8f8c",
       description:
         "A fibrocartilage rim that deepens the acetabulum and grips the head of the femur.",
     },
@@ -1079,7 +1079,7 @@ export const jointsModel: OrganModel = {
       id: "transverse-acetabular-ligament",
       label: "Transverse acetabular ligament",
       group: "Hip",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Bridges the acetabular notch, completing the ring of the labrum.",
     },
@@ -1087,7 +1087,7 @@ export const jointsModel: OrganModel = {
       id: "ligament-of-head-of-femur",
       label: "Ligament of head of femur",
       group: "Hip",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "A flat band from the acetabular notch to the fovea of the femoral head. It carries a small artery to the head.",
     },
@@ -1095,7 +1095,7 @@ export const jointsModel: OrganModel = {
       id: "descending-part-of-iliofemoral-ligament",
       label: "Descending part of iliofemoral ligament",
       group: "Hip",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "The inner limb of the Y-shaped iliofemoral ligament, the strongest ligament in the body. It stops the hip extending too far.",
     },
@@ -1103,7 +1103,7 @@ export const jointsModel: OrganModel = {
       id: "transverse-part-of-iliofemoral-ligament",
       label: "Transverse part of iliofemoral ligament",
       group: "Hip",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "The outer limb of the Y-shaped iliofemoral ligament, to the upper intertrochanteric line.",
     },
@@ -1111,7 +1111,7 @@ export const jointsModel: OrganModel = {
       id: "pubofemoral-ligament",
       label: "Pubofemoral ligament",
       group: "Hip",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Strengthens the front and underside of the hip capsule and limits spreading of the legs.",
     },
@@ -1119,7 +1119,7 @@ export const jointsModel: OrganModel = {
       id: "ischiofemoral-ligament",
       label: "Ischiofemoral ligament",
       group: "Hip",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Spirals from the ischium over the back of the hip capsule and limits inward rotation.",
     },
@@ -1127,7 +1127,7 @@ export const jointsModel: OrganModel = {
       id: "zona-orbicularis",
       label: "Zona orbicularis",
       group: "Hip",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Circular fibres of the hip capsule that collar the neck of the femur.",
     },
@@ -1135,7 +1135,7 @@ export const jointsModel: OrganModel = {
       id: "frenula-capsulae",
       label: "Frenula capsulae",
       group: "Hip",
-      tone: "chart-4", shade: 0.19,
+      color: "#a2bfd3",
       description:
         "Folds of synovial membrane running along the neck of the femur inside the hip capsule.",
     },
@@ -1143,7 +1143,7 @@ export const jointsModel: OrganModel = {
       id: "articular-capsule-of-knee-joint",
       label: "Articular capsule of knee joint",
       group: "Knee",
-      tone: "chart-4", shade: 0.14,
+      color: "#8fb0c8",
       description:
         "The thin fibrous capsule of the knee, reinforced by surrounding tendons and ligaments.",
     },
@@ -1151,7 +1151,7 @@ export const jointsModel: OrganModel = {
       id: "anterior-cruciate-ligament",
       label: "Anterior cruciate ligament",
       group: "Knee",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Crosses inside the knee from the front of the tibia to the lateral femoral condyle. It stops the tibia sliding forward.",
     },
@@ -1159,7 +1159,7 @@ export const jointsModel: OrganModel = {
       id: "posterior-cruciate-ligament",
       label: "Posterior cruciate ligament",
       group: "Knee",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Crosses inside the knee from the back of the tibia to the medial femoral condyle. It stops the tibia sliding backward.",
     },
@@ -1167,7 +1167,7 @@ export const jointsModel: OrganModel = {
       id: "medial-meniscus",
       label: "Medial meniscus",
       group: "Knee",
-      tone: "chart-4", shade: -0.1,
+      color: "#2f8f8c",
       description:
         "A C-shaped fibrocartilage on the medial tibial plateau. It is fixed to the capsule, which makes it the meniscus most often torn.",
     },
@@ -1175,7 +1175,7 @@ export const jointsModel: OrganModel = {
       id: "lateral-meniscus",
       label: "Lateral meniscus",
       group: "Knee",
-      tone: "chart-4", shade: -0.04,
+      color: "#45a19c",
       description:
         "A nearly circular fibrocartilage on the lateral tibial plateau, more mobile than the medial meniscus.",
     },
@@ -1183,14 +1183,14 @@ export const jointsModel: OrganModel = {
       id: "transverse-ligament-of-knee",
       label: "Transverse ligament of knee",
       group: "Knee",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "Joins the front edges of the two menisci.",
     },
     {
       id: "anterior-meniscotibial-ligament-medial-meniscus",
       label: "Anterior meniscotibial ligament (medial meniscus)",
       group: "Knee",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Anchors the front horn of the medial meniscus to the tibia.",
     },
@@ -1198,14 +1198,14 @@ export const jointsModel: OrganModel = {
       id: "posterior-meniscotibial-ligament-medial-meniscus",
       label: "Posterior meniscotibial ligament (medial meniscus)",
       group: "Knee",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "Anchors the back horn of the medial meniscus to the tibia.",
     },
     {
       id: "anterior-meniscotibial-ligament-lateral-meniscus",
       label: "Anterior meniscotibial ligament (lateral meniscus)",
       group: "Knee",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Anchors the front horn of the lateral meniscus to the tibia.",
     },
@@ -1213,7 +1213,7 @@ export const jointsModel: OrganModel = {
       id: "posterior-meniscotibial-ligament-lateral-meniscus",
       label: "Posterior meniscotibial ligament (lateral meniscus)",
       group: "Knee",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Anchors the back horn of the lateral meniscus to the tibia.",
     },
@@ -1221,7 +1221,7 @@ export const jointsModel: OrganModel = {
       id: "superficial-part-of-tibial-collateral-ligament",
       label: "Superficial part of tibial collateral ligament",
       group: "Knee",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "The long outer layer of the medial collateral ligament, from the medial femoral epicondyle to the tibia. It resists the knee bending inward.",
     },
@@ -1229,7 +1229,7 @@ export const jointsModel: OrganModel = {
       id: "deep-part-of-tibial-collateral-ligament",
       label: "Deep part of tibial collateral ligament",
       group: "Knee",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "The short inner layer of the medial collateral ligament, attached to the medial meniscus.",
     },
@@ -1237,7 +1237,7 @@ export const jointsModel: OrganModel = {
       id: "fibular-collateral-ligament",
       label: "Fibular collateral ligament",
       group: "Knee",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "A cord from the lateral femoral epicondyle to the head of the fibula. It resists the knee bending outward.",
     },
@@ -1245,7 +1245,7 @@ export const jointsModel: OrganModel = {
       id: "oblique-popliteal-ligament",
       label: "Oblique popliteal ligament",
       group: "Knee",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "An expansion of the semimembranosus tendon across the back of the knee capsule.",
     },
@@ -1253,7 +1253,7 @@ export const jointsModel: OrganModel = {
       id: "arcuate-popliteal-ligament",
       label: "Arcuate popliteal ligament",
       group: "Knee",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "A Y-shaped band arching over the popliteus tendon at the back of the knee.",
     },
@@ -1261,7 +1261,7 @@ export const jointsModel: OrganModel = {
       id: "popliteofibular-ligament",
       label: "Popliteofibular ligament",
       group: "Knee",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Joins the popliteus tendon to the head of the fibula and steadies the back of the outer knee.",
     },
@@ -1269,14 +1269,14 @@ export const jointsModel: OrganModel = {
       id: "meniscopatellar-ligament",
       label: "Meniscopatellar ligament",
       group: "Knee",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "A band from the side of the patella to the meniscus.",
     },
     {
       id: "infrapatellar-fat-pad",
       label: "Infrapatellar fat pad",
       group: "Knee",
-      tone: "chart-2", shade: 0.12,
+      color: "#dfbd6c",
       description:
         "A pad of fat behind the patellar ligament, inside the capsule but outside the synovial cavity.",
     },
@@ -1284,7 +1284,7 @@ export const jointsModel: OrganModel = {
       id: "articular-capsule-of-superior-tibiofibular-joint",
       label: "Articular capsule of superior tibiofibular joint",
       group: "Knee",
-      tone: "chart-4", shade: 0.19,
+      color: "#a2bfd3",
       description:
         "The capsule of the small joint between the head of the fibula and the lateral condyle of the tibia.",
     },
@@ -1292,21 +1292,21 @@ export const jointsModel: OrganModel = {
       id: "anterior-ligament-of-fibular-head",
       label: "Anterior ligament of fibular head",
       group: "Knee",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "Reinforces the front of the superior tibiofibular joint.",
     },
     {
       id: "posterior-ligament-of-fibular-head",
       label: "Posterior ligament of fibular head",
       group: "Knee",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "Reinforces the back of the superior tibiofibular joint.",
     },
     {
       id: "interosseous-membrane-of-leg",
       label: "Interosseous membrane of leg",
       group: "Leg and ankle",
-      tone: "muted-foreground", shade: 0.05,
+      color: "#7fa37c",
       description:
         "A fibrous sheet joining the tibia and fibula that separates the front and back muscles of the leg.",
     },
@@ -1314,7 +1314,7 @@ export const jointsModel: OrganModel = {
       id: "anterior-tibiofibular-ligament",
       label: "Anterior tibiofibular ligament",
       group: "Leg and ankle",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Joins the lower ends of the tibia and fibula at the front of the ankle. It is injured in a high ankle sprain.",
     },
@@ -1322,7 +1322,7 @@ export const jointsModel: OrganModel = {
       id: "posterior-tibiofibular-ligament",
       label: "Posterior tibiofibular ligament",
       group: "Leg and ankle",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Joins the lower ends of the tibia and fibula at the back of the ankle.",
     },
@@ -1330,7 +1330,7 @@ export const jointsModel: OrganModel = {
       id: "transverse-tibiofibular-ligament",
       label: "Transverse tibiofibular ligament",
       group: "Leg and ankle",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "The deep lower part of the posterior tibiofibular ligament, deepening the ankle socket from behind.",
     },
@@ -1338,7 +1338,7 @@ export const jointsModel: OrganModel = {
       id: "anterior-talofibular-ligament",
       label: "Anterior talofibular ligament",
       group: "Leg and ankle",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Joins the lateral malleolus to the talus. It is the ligament most often torn in an ankle sprain.",
     },
@@ -1346,7 +1346,7 @@ export const jointsModel: OrganModel = {
       id: "calcaneofibular-ligament",
       label: "Calcaneofibular ligament",
       group: "Leg and ankle",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "A cord from the tip of the lateral malleolus to the calcaneus.",
     },
@@ -1354,7 +1354,7 @@ export const jointsModel: OrganModel = {
       id: "posterior-talofibular-ligament",
       label: "Posterior talofibular ligament",
       group: "Leg and ankle",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "The strongest of the lateral ankle ligaments, from the lateral malleolus to the back of the talus.",
     },
@@ -1362,7 +1362,7 @@ export const jointsModel: OrganModel = {
       id: "tibionavicular-ligament",
       label: "Tibionavicular ligament",
       group: "Leg and ankle",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "The front part of the deltoid ligament, from the medial malleolus to the navicular.",
     },
@@ -1370,7 +1370,7 @@ export const jointsModel: OrganModel = {
       id: "tibiocalcaneal-ligament",
       label: "Tibiocalcaneal ligament",
       group: "Leg and ankle",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "The middle part of the deltoid ligament, from the medial malleolus to the sustentaculum tali of the calcaneus.",
     },
@@ -1378,7 +1378,7 @@ export const jointsModel: OrganModel = {
       id: "posterior-tibiotalar-ligament",
       label: "Posterior tibiotalar ligament",
       group: "Leg and ankle",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "The back part of the deltoid ligament, from the medial malleolus to the talus.",
     },
@@ -1386,7 +1386,7 @@ export const jointsModel: OrganModel = {
       id: "talocalcaneal-interosseous-ligament",
       label: "Talocalcaneal interosseous ligament",
       group: "Foot",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "A strong band in the tarsal sinus joining the talus and calcaneus.",
     },
@@ -1394,7 +1394,7 @@ export const jointsModel: OrganModel = {
       id: "anterior-talocalcaneal-ligament",
       label: "Anterior talocalcaneal ligament",
       group: "Foot",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Joins the neck of the talus to the calcaneus in front of the subtalar joint.",
     },
@@ -1402,35 +1402,35 @@ export const jointsModel: OrganModel = {
       id: "lateral-talocalcaneal-ligament",
       label: "Lateral talocalcaneal ligament",
       group: "Foot",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "Joins the outer sides of the talus and calcaneus.",
     },
     {
       id: "medial-talocalcaneal-ligament",
       label: "Medial talocalcaneal ligament",
       group: "Foot",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "Joins the inner sides of the talus and calcaneus.",
     },
     {
       id: "posterior-talocalcaneal-ligament",
       label: "Posterior talocalcaneal ligament",
       group: "Foot",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "Joins the back of the talus to the calcaneus.",
     },
     {
       id: "talonavicular-ligament",
       label: "Talonavicular ligament",
       group: "Foot",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "Joins the neck of the talus to the top of the navicular.",
     },
     {
       id: "plantar-calcaneonavicular-ligament",
       label: "Plantar calcaneonavicular ligament",
       group: "Foot",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "The spring ligament, from the sustentaculum tali to the navicular. It supports the head of the talus and the arch.",
     },
@@ -1438,7 +1438,7 @@ export const jointsModel: OrganModel = {
       id: "calcaneonavicular-ligament",
       label: "Calcaneonavicular ligament",
       group: "Foot",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "The inner limb of the bifurcate ligament, from the calcaneus to the navicular.",
     },
@@ -1446,7 +1446,7 @@ export const jointsModel: OrganModel = {
       id: "calcaneocuboid-ligament",
       label: "Calcaneocuboid ligament",
       group: "Foot",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "The outer limb of the bifurcate ligament, from the calcaneus to the cuboid.",
     },
@@ -1454,14 +1454,14 @@ export const jointsModel: OrganModel = {
       id: "dorsal-calcaneocuboid-ligament",
       label: "Dorsal calcaneocuboid ligament",
       group: "Foot",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "Joins the tops of the calcaneus and cuboid.",
     },
     {
       id: "plantar-calcaneocuboid-ligament",
       label: "Plantar calcaneocuboid ligament",
       group: "Foot",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "The short plantar ligament, a deep band from the calcaneus to the cuboid that supports the lateral arch.",
     },
@@ -1469,7 +1469,7 @@ export const jointsModel: OrganModel = {
       id: "long-plantar-ligament",
       label: "Long plantar ligament",
       group: "Foot",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "The longest ligament of the foot, from the calcaneus to the cuboid and the bases of the outer metatarsals.",
     },
@@ -1477,21 +1477,21 @@ export const jointsModel: OrganModel = {
       id: "dorsal-cuboideonavicular-ligament",
       label: "Dorsal cuboideonavicular ligament",
       group: "Foot",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "Joins the tops of the cuboid and navicular.",
     },
     {
       id: "plantar-cuboideonavicular-ligament",
       label: "Plantar cuboideonavicular ligament",
       group: "Foot",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "Joins the soles of the cuboid and navicular.",
     },
     {
       id: "dorsal-cuneonavicular-ligaments",
       label: "Dorsal cuneonavicular ligaments",
       group: "Foot",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Join the navicular to the three cuneiforms on the top of the foot.",
     },
@@ -1499,35 +1499,35 @@ export const jointsModel: OrganModel = {
       id: "plantar-cuneonavicular-ligaments",
       label: "Plantar cuneonavicular ligaments",
       group: "Foot",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "Join the navicular to the three cuneiforms on the sole.",
     },
     {
       id: "dorsal-intercuneiform-ligaments",
       label: "Dorsal intercuneiform ligaments",
       group: "Foot",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "Join neighbouring cuneiforms on the top of the foot.",
     },
     {
       id: "plantar-intercuneiform-ligaments",
       label: "Plantar intercuneiform ligaments",
       group: "Foot",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "Join neighbouring cuneiforms on the sole.",
     },
     {
       id: "intercuneiform-interosseous-ligaments",
       label: "Intercuneiform interosseous ligaments",
       group: "Foot",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "Join neighbouring cuneiforms between their joint surfaces.",
     },
     {
       id: "dorsal-cuneocuboid-ligament",
       label: "Dorsal cuneocuboid ligament",
       group: "Foot",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Joins the lateral cuneiform and cuboid on the top of the foot.",
     },
@@ -1535,14 +1535,14 @@ export const jointsModel: OrganModel = {
       id: "plantar-cuneocuboid-ligament",
       label: "Plantar cuneocuboid ligament",
       group: "Foot",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "Joins the lateral cuneiform and cuboid on the sole.",
     },
     {
       id: "cuneocuboid-interosseous-ligament",
       label: "Cuneocuboid interosseous ligament",
       group: "Foot",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Joins the lateral cuneiform and cuboid between their joint surfaces.",
     },
@@ -1550,7 +1550,7 @@ export const jointsModel: OrganModel = {
       id: "dorsal-tarsometatarsal-ligaments",
       label: "Dorsal tarsometatarsal ligaments",
       group: "Foot",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Join the cuneiforms and cuboid to the bases of the metatarsals on the top of the foot.",
     },
@@ -1558,7 +1558,7 @@ export const jointsModel: OrganModel = {
       id: "plantar-tarsometatarsal-ligaments",
       label: "Plantar tarsometatarsal ligaments",
       group: "Foot",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Join the cuneiforms and cuboid to the bases of the metatarsals on the sole.",
     },
@@ -1566,7 +1566,7 @@ export const jointsModel: OrganModel = {
       id: "cuneometatarsal-interosseous-ligaments",
       label: "Cuneometatarsal interosseous ligaments",
       group: "Foot",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Includes the Lisfranc ligament, from the medial cuneiform to the base of the second metatarsal.",
     },
@@ -1574,7 +1574,7 @@ export const jointsModel: OrganModel = {
       id: "dorsal-metatarsal-ligaments",
       label: "Dorsal metatarsal ligaments",
       group: "Foot",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Join the bases of neighbouring metatarsals on the top of the foot.",
     },
@@ -1582,14 +1582,14 @@ export const jointsModel: OrganModel = {
       id: "plantar-metatarsal-ligaments",
       label: "Plantar metatarsal ligaments",
       group: "Foot",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "Join the bases of neighbouring metatarsals on the sole.",
     },
     {
       id: "metatarsal-interosseous-ligaments",
       label: "Metatarsal interosseous ligaments",
       group: "Foot",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Join the bases of neighbouring metatarsals between their joint surfaces.",
     },
@@ -1597,7 +1597,7 @@ export const jointsModel: OrganModel = {
       id: "intersesamoid-ligament",
       label: "Intersesamoid ligament",
       group: "Foot",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description:
         "Joins the two sesamoid bones under the head of the first metatarsal.",
     },
@@ -1605,7 +1605,7 @@ export const jointsModel: OrganModel = {
       id: "articular-capsules-of-metatarsophalangeal-joints",
       label: "Articular capsules of metatarsophalangeal joints",
       group: "Foot",
-      tone: "chart-4", shade: 0.14,
+      color: "#8fb0c8",
       description:
         "The capsules of the joints between the metatarsals and the proximal phalanges of the toes.",
     },
@@ -1613,21 +1613,21 @@ export const jointsModel: OrganModel = {
       id: "collateral-metatarsophalangeal-ligaments",
       label: "Collateral metatarsophalangeal ligaments",
       group: "Foot",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "Strengthen the sides of the metatarsophalangeal joints.",
     },
     {
       id: "plantar-metatarsophalangeal-ligaments",
       label: "Plantar metatarsophalangeal ligaments",
       group: "Foot",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "Thick plantar plates under the metatarsophalangeal joints.",
     },
     {
       id: "deep-transverse-metatarsal-ligament",
       label: "Deep transverse metatarsal ligament",
       group: "Foot",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description:
         "Joins the plantar plates of all five metatarsophalangeal joints, tying the metatarsal heads together.",
     },
@@ -1635,42 +1635,42 @@ export const jointsModel: OrganModel = {
       id: "articular-capsule-of-interphalangeal-joint-of-great-toe",
       label: "Articular capsule of interphalangeal joint of great toe",
       group: "Foot",
-      tone: "chart-4", shade: 0.19,
+      color: "#a2bfd3",
       description: "The capsule of the single joint of the big toe.",
     },
     {
       id: "articular-capsules-of-proximal-interphalangeal-joints-of-foot",
       label: "Articular capsules of proximal interphalangeal joints of foot",
       group: "Foot",
-      tone: "chart-4", shade: 0.14,
+      color: "#8fb0c8",
       description: "The capsules of the first joints of the lesser toes.",
     },
     {
       id: "articular-capsules-of-distal-interphalangeal-joints-of-foot",
       label: "Articular capsules of distal interphalangeal joints of foot",
       group: "Foot",
-      tone: "chart-4", shade: 0.19,
+      color: "#a2bfd3",
       description: "The capsules of the toe joints nearest the tips.",
     },
     {
       id: "collateral-interphalangeal-ligaments-of-foot",
       label: "Collateral interphalangeal ligaments of foot",
       group: "Foot",
-      tone: "chart-4", shade: -0.04,
+      color: "#3f78a8",
       description: "Strengthen the sides of the toe joints.",
     },
     {
       id: "plantar-interphalangeal-ligaments",
       label: "Plantar interphalangeal ligaments",
       group: "Foot",
-      tone: "chart-4", shade: 0.02,
+      color: "#5689b5",
       description: "Plantar plates under the toe joints.",
     },
     {
       id: "skull-hyoid-and-larynx",
       label: "Skull, hyoid and larynx",
       group: "Bones",
-      tone: "chart-2", shade: 0.3,
+      color: "#ece6d8",
       description:
         "Bones shown for context, simplified from the same Z-Anatomy model. The skeleton component has every bone on its own.",
     },
@@ -1678,7 +1678,7 @@ export const jointsModel: OrganModel = {
       id: "vertebrae",
       label: "Vertebrae",
       group: "Bones",
-      tone: "chart-2", shade: 0.27,
+      color: "#e3dccb",
       description:
         "Bones shown for context, simplified from the same Z-Anatomy model. The skeleton component has every bone on its own.",
     },
@@ -1686,7 +1686,7 @@ export const jointsModel: OrganModel = {
       id: "thoracic-cage",
       label: "Thoracic cage",
       group: "Bones",
-      tone: "chart-2", shade: 0.3,
+      color: "#ece6d8",
       description:
         "Bones shown for context, simplified from the same Z-Anatomy model. The skeleton component has every bone on its own.",
     },
@@ -1694,7 +1694,7 @@ export const jointsModel: OrganModel = {
       id: "bones-of-shoulder-girdle-and-arm",
       label: "Bones of shoulder girdle and arm",
       group: "Bones",
-      tone: "chart-2", shade: 0.27,
+      color: "#e3dccb",
       description:
         "Bones shown for context, simplified from the same Z-Anatomy model. The skeleton component has every bone on its own.",
     },
@@ -1702,7 +1702,7 @@ export const jointsModel: OrganModel = {
       id: "hip-bones",
       label: "Hip bones",
       group: "Bones",
-      tone: "chart-2", shade: 0.3,
+      color: "#ece6d8",
       description:
         "Bones shown for context, simplified from the same Z-Anatomy model. The skeleton component has every bone on its own.",
     },
@@ -1710,7 +1710,7 @@ export const jointsModel: OrganModel = {
       id: "bones-of-leg-and-foot",
       label: "Bones of leg and foot",
       group: "Bones",
-      tone: "chart-2", shade: 0.27,
+      color: "#e3dccb",
       description:
         "Bones shown for context, simplified from the same Z-Anatomy model. The skeleton component has every bone on its own.",
     },

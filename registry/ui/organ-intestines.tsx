@@ -30,7 +30,7 @@ export const intestinesModel: OrganModel = {
       id: "duodenum",
       label: "Duodenum",
       group: "Small intestine",
-      tone: "chart-1", shade: 0.13,
+      color: "#d9a07c",
       description:
         "The first, C-shaped part of the small intestine. It receives food from the stomach along with bile and pancreatic juices.",
     },
@@ -38,7 +38,7 @@ export const intestinesModel: OrganModel = {
       id: "jejunum",
       label: "Jejunum",
       group: "Small intestine",
-      tone: "chart-1", shade: 0.14,
+      color: "#d68b80",
       description:
         "The middle part of the small intestine, where much of the digestion and absorption of nutrients takes place.",
     },
@@ -46,7 +46,7 @@ export const intestinesModel: OrganModel = {
       id: "ileum",
       label: "Ileum",
       group: "Small intestine",
-      tone: "chart-1", shade: 0.09,
+      color: "#c47783",
       description:
         "The last part of the small intestine. It continues absorbing nutrients and joins the large intestine in the lower right abdomen.",
     },
@@ -54,7 +54,7 @@ export const intestinesModel: OrganModel = {
       id: "appendix",
       label: "Appendix",
       group: "Large intestine",
-      tone: "chart-1", shade: 0.09,
+      color: "#b5868f",
       description:
         "A narrow, finger-shaped pouch that projects from the beginning of the large intestine in the lower right abdomen.",
     },
@@ -62,7 +62,7 @@ export const intestinesModel: OrganModel = {
       id: "ascending-colon",
       label: "Ascending colon",
       group: "Large intestine",
-      tone: "chart-2", shade: 0.1,
+      color: "#c2a17a",
       description:
         "Rises along the right side of the abdomen from the start of the large intestine toward the liver. The colon absorbs water and forms stool.",
     },
@@ -70,7 +70,7 @@ export const intestinesModel: OrganModel = {
       id: "transverse-colon",
       label: "Transverse colon",
       group: "Large intestine",
-      tone: "chart-2", shade: 0.06,
+      color: "#b8956c",
       description:
         "Crosses the upper abdomen from right to left, below the liver and stomach.",
     },
@@ -78,7 +78,7 @@ export const intestinesModel: OrganModel = {
       id: "descending-colon",
       label: "Descending colon",
       group: "Large intestine",
-      tone: "chart-2", shade: 0.03,
+      color: "#ad8a63",
       description:
         "Runs down the left side of the abdomen and carries stool toward the rectum.",
     },
@@ -86,7 +86,7 @@ export const intestinesModel: OrganModel = {
       id: "rectum",
       label: "Rectum",
       group: "Large intestine",
-      tone: "chart-2", shade: -0.0,
+      color: "#a07c5e",
       description:
         "The final straight section of the large intestine, in the pelvis, which stores stool until it leaves the body through the anus.",
     },
@@ -94,7 +94,7 @@ export const intestinesModel: OrganModel = {
       id: "mesocolic-taenia",
       label: "Mesocolic taenia",
       group: "Taeniae coli",
-      tone: "chart-2", shade: 0.22,
+      color: "#e3cfa6",
       description:
         "One of three ribbon-like bands of longitudinal muscle on the colon. It runs along the side where the colon is attached by its mesentery.",
     },
@@ -102,7 +102,7 @@ export const intestinesModel: OrganModel = {
       id: "omental-taenia",
       label: "Omental taenia",
       group: "Taeniae coli",
-      tone: "chart-2", shade: 0.16,
+      color: "#d8c08d",
       description:
         "A band of longitudinal colon muscle that, on the transverse colon, runs where the greater omentum attaches.",
     },
@@ -110,7 +110,7 @@ export const intestinesModel: OrganModel = {
       id: "free-taenia",
       label: "Free taenia",
       group: "Taeniae coli",
-      tone: "chart-2", shade: 0.25,
+      color: "#ead9b6",
       description:
         "The band of longitudinal colon muscle with no attachment, visible on the front of the ascending and descending colon.",
     },

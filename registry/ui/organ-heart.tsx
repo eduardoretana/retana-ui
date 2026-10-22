@@ -30,7 +30,7 @@ export const heartModel: OrganModel = {
       id: "right-atrium",
       label: "Right atrium",
       group: "Heart walls",
-      tone: "chart-1", shade: 0.04,
+      color: "#a96d70",
       description:
         "Receives blood returning from the body and passes it to the right ventricle.",
     },
@@ -38,7 +38,7 @@ export const heartModel: OrganModel = {
       id: "left-atrium",
       label: "Left atrium",
       group: "Heart walls",
-      tone: "chart-1", shade: 0.07,
+      color: "#b77c76",
       description:
         "Receives oxygen-rich blood from the lungs and passes it to the left ventricle.",
     },
@@ -46,7 +46,7 @@ export const heartModel: OrganModel = {
       id: "ventricular-wall",
       label: "Ventricular wall",
       group: "Heart walls",
-      tone: "chart-1", shade: 0.01,
+      color: "#ab6159",
       description:
         "Muscular tissue surrounding the two lower pumping chambers of the heart.",
     },
@@ -54,7 +54,7 @@ export const heartModel: OrganModel = {
       id: "right-ventricle",
       label: "Right ventricular cavity",
       group: "Ventricular cavities",
-      tone: "chart-1", shade: 0.04,
+      color: "#b86661",
       description:
         "The space inside the right ventricle, which pumps blood toward the lungs.",
     },
@@ -62,7 +62,7 @@ export const heartModel: OrganModel = {
       id: "left-ventricle",
       label: "Left ventricular cavity",
       group: "Ventricular cavities",
-      tone: "chart-1", shade: 0.11,
+      color: "#d28b72",
       description:
         "The space inside the left ventricle, which pumps blood into the aorta.",
     },
@@ -70,14 +70,14 @@ export const heartModel: OrganModel = {
       id: "ascending-aorta",
       label: "Ascending aorta",
       group: "Great vessels",
-      tone: "chart-1", shade: 0.07,
+      color: "#c37f6a",
       description: "The aorta carries blood away from the heart to the body.",
     },
     {
       id: "aortic-arch",
       label: "Aortic arch",
       group: "Great vessels",
-      tone: "chart-1", shade: 0.11,
+      color: "#ca8d78",
       description:
         "Part of the aorta, the main artery carrying blood from the heart.",
     },
@@ -85,14 +85,14 @@ export const heartModel: OrganModel = {
       id: "pulmonary-trunk",
       label: "Pulmonary trunk",
       group: "Great vessels",
-      tone: "chart-4", shade: 0.06,
+      color: "#789aab",
       description: "Carries blood from the right ventricle toward the lungs.",
     },
     {
       id: "superior-vena-cava",
       label: "Superior vena cava",
       group: "Great vessels",
-      tone: "muted-foreground", shade: 0.09,
+      color: "#8c9fab",
       description:
         "One of the large veins returning blood from the body to the right atrium.",
     },
@@ -100,7 +100,7 @@ export const heartModel: OrganModel = {
       id: "left-coronary",
       label: "Left coronary artery",
       group: "Coronary arteries",
-      tone: "chart-2", shade: 0.17,
+      color: "#dfb58a",
       description:
         "Supplies the heart muscle, including parts of the left heart and ventricular septum.",
     },
@@ -108,7 +108,7 @@ export const heartModel: OrganModel = {
       id: "right-coronary",
       label: "Right coronary artery",
       group: "Coronary arteries",
-      tone: "chart-2", shade: 0.12,
+      color: "#d4a777",
       description: "Supplies the right atrium and parts of both ventricles.",
     },
   ],
