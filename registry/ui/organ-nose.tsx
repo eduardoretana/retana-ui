@@ -30,7 +30,7 @@ export const noseModel: OrganModel = {
       id: "nasal-bones",
       label: "Nasal bones",
       group: "External nose",
-      tone: "chart-2", shade: 0.22,
+      color: "#f0d29c",
       description:
         "Two small bones that meet in the midline and form the bony bridge of the nose.",
     },
@@ -38,7 +38,7 @@ export const noseModel: OrganModel = {
       id: "lateral-cartilages",
       label: "Lateral nasal cartilages",
       group: "External nose",
-      tone: "chart-4", shade: 0.2,
+      color: "#a9c7d4",
       description:
         "Triangular plates of cartilage below the nasal bones that shape the middle of the nose. They are wings of the septal cartilage.",
     },
@@ -46,7 +46,7 @@ export const noseModel: OrganModel = {
       id: "alar-cartilages",
       label: "Major alar cartilages",
       group: "External nose",
-      tone: "chart-4", shade: 0.14,
+      color: "#8fb3c7",
       description:
         "Curved cartilages that form the tip of the nose and hold the nostrils open.",
     },
@@ -54,7 +54,7 @@ export const noseModel: OrganModel = {
       id: "septal-cartilage",
       label: "Septal cartilage",
       group: "Nasal septum",
-      tone: "chart-4", shade: 0.1,
+      color: "#7fa6bd",
       description:
         "The front of the wall between the two nasal passages. It joins the nasal bones above and the vomer and ethmoid behind.",
     },
@@ -62,7 +62,7 @@ export const noseModel: OrganModel = {
       id: "vomer",
       label: "Vomer",
       group: "Nasal septum",
-      tone: "chart-2", shade: 0.14,
+      color: "#cdb48d",
       description:
         "A flat bone that forms the lower back part of the septum, reaching back to the openings into the throat.",
     },
@@ -70,7 +70,7 @@ export const noseModel: OrganModel = {
       id: "nasal-cavity",
       label: "Nasal cavity lining",
       group: "Nasal cavity",
-      tone: "chart-1", shade: 0.16,
+      color: "#d98a8a",
       description:
         "The mucous membrane that lines both nasal passages. It warms, moistens and filters the air, and its outline shows the extent of the nasal passages.",
     },
@@ -78,7 +78,7 @@ export const noseModel: OrganModel = {
       id: "inferior-conchae",
       label: "Inferior nasal conchae",
       group: "Nasal cavity",
-      tone: "chart-2", shade: 0.11,
+      color: "#c99b7a",
       description:
         "Scroll-shaped bones on the side walls of the nasal cavity. With their lining they slow the air so it can be warmed and moistened.",
     },
@@ -86,7 +86,7 @@ export const noseModel: OrganModel = {
       id: "palatine-bones",
       label: "Palatine bones",
       group: "Nasal cavity",
-      tone: "chart-2", shade: 0.12,
+      color: "#bfa98a",
       description:
         "L-shaped bones at the back of the nasal cavity. They form the back of the hard palate, which is the floor of the nose.",
     },
@@ -94,7 +94,7 @@ export const noseModel: OrganModel = {
       id: "lacrimal-bones",
       label: "Lacrimal bones",
       group: "Nasal cavity",
-      tone: "chart-2", shade: 0.18,
+      color: "#d8bf99",
       description:
         "Small, thin bones in the inner wall of each orbit. The tear duct runs past them into the nose.",
     },
@@ -102,7 +102,7 @@ export const noseModel: OrganModel = {
       id: "olfactory-nerves",
       label: "Olfactory nerves",
       group: "Nasal cavity",
-      tone: "chart-2", shade: 0.1,
+      color: "#e3c25a",
       description:
         "Carry smell from the roof of the nasal cavity, through the ethmoid bone, to the olfactory bulbs and tracts under the brain.",
     },
@@ -110,7 +110,7 @@ export const noseModel: OrganModel = {
       id: "frontal-sinuses",
       label: "Frontal sinuses",
       group: "Paranasal sinuses",
-      tone: "chart-4", shade: 0.06,
+      color: "#5fb3c9",
       description:
         "Air spaces in the forehead, above the root of the nose, split by a septum. They drain down into the nose under the middle concha.",
     },
@@ -118,7 +118,7 @@ export const noseModel: OrganModel = {
       id: "anterior-ethmoid-cells",
       label: "Anterior ethmoid cells",
       group: "Paranasal sinuses",
-      tone: "chart-4", shade: 0.1,
+      color: "#6cc0d0",
       description:
         "The front group of small air cells between the nose and the orbits. They drain under the middle concha.",
     },
@@ -126,7 +126,7 @@ export const noseModel: OrganModel = {
       id: "middle-ethmoid-cells",
       label: "Middle ethmoid cells",
       group: "Paranasal sinuses",
-      tone: "chart-4", shade: 0.01,
+      color: "#4fa3b8",
       description:
         "The middle group of ethmoid air cells. They open onto the side wall of the nose under the middle concha.",
     },
@@ -134,7 +134,7 @@ export const noseModel: OrganModel = {
       id: "posterior-ethmoid-cells",
       label: "Posterior ethmoid cells",
       group: "Paranasal sinuses",
-      tone: "chart-4", shade: -0.05,
+      color: "#3d8ea5",
       description:
         "The back group of ethmoid air cells, next to the sphenoid sinus. They drain under the superior concha.",
     },
@@ -142,7 +142,7 @@ export const noseModel: OrganModel = {
       id: "maxillary-sinuses",
       label: "Maxillary sinuses",
       group: "Paranasal sinuses",
-      tone: "chart-4", shade: 0.1,
+      color: "#72c0cf",
       description:
         "The largest sinuses, in the cheekbones beside the nose and under the eyes. Their opening is high on the inner wall, under the middle concha.",
     },
@@ -150,7 +150,7 @@ export const noseModel: OrganModel = {
       id: "sphenoid-sinus",
       label: "Sphenoid sinus",
       group: "Paranasal sinuses",
-      tone: "chart-4", shade: -0.09,
+      color: "#2f7f99",
       description:
         "Air spaces deep in the skull behind the nose, just under the pituitary gland, divided by a septum.",
     },
@@ -158,7 +158,7 @@ export const noseModel: OrganModel = {
       id: "frontal-bone",
       label: "Frontal bone",
       group: "Sinus bones",
-      tone: "chart-2", shade: 0.3,
+      color: "#ece4d2",
       description:
         "The bone of the forehead and the roofs of the orbits. It holds the frontal sinuses.",
     },
@@ -166,7 +166,7 @@ export const noseModel: OrganModel = {
       id: "ethmoid",
       label: "Ethmoid bone",
       group: "Sinus bones",
-      tone: "chart-2", shade: 0.16,
+      color: "#d9bd8c",
       description:
         "A light bone between the orbits. It forms the roof and upper side walls of the nasal cavity, the middle and superior conchae, the back of the septum, and holds the ethmoid cells.",
     },
@@ -174,7 +174,7 @@ export const noseModel: OrganModel = {
       id: "maxillae",
       label: "Maxillae",
       group: "Sinus bones",
-      tone: "chart-2", shade: 0.24,
+      color: "#e6d3b0",
       description:
         "The upper jaw bones. They form the cheeks, the side walls and most of the floor of the nasal cavity, and hold the maxillary sinuses.",
     },
@@ -182,7 +182,7 @@ export const noseModel: OrganModel = {
       id: "sphenoid-bone",
       label: "Sphenoid bone",
       group: "Sinus bones",
-      tone: "chart-2", shade: 0.13,
+      color: "#c8b089",
       description:
         "A bone at the centre of the skull base, behind the nasal cavity. Its body holds the sphenoid sinus.",
     },
@@ -190,7 +190,7 @@ export const noseModel: OrganModel = {
       id: "pituitary",
       label: "Pituitary gland",
       group: "Neighbours",
-      tone: "chart-5", shade: 0.08,
+      color: "#b27fb0",
       description:
         "A hormone gland that sits in a hollow on top of the sphenoid bone, directly above the sphenoid sinus.",
     },
@@ -198,7 +198,7 @@ export const noseModel: OrganModel = {
       id: "nasopharynx",
       label: "Nasopharynx",
       group: "Neighbours",
-      tone: "chart-1", shade: 0.19,
+      color: "#d7a0a0",
       description:
         "The top of the throat, behind the nasal cavity. Air passes into it through the two openings at the back of the nose.",
     },

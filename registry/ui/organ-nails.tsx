@@ -37,7 +37,7 @@ export const nailsModel: OrganModel = {
       id: "nail-plate",
       label: "Nail plate",
       group: "Nail",
-      tone: "chart-1", shade: 0.27,
+      color: "#e9c9c0",
       description:
         "The hard, translucent plate of densely packed keratin. It grows forward from the matrix at about 3 mm a month on the fingers and looks pink because of the vessels in the bed below.",
     },
@@ -45,7 +45,7 @@ export const nailsModel: OrganModel = {
       id: "lunula",
       label: "Lunula",
       group: "Nail",
-      tone: "chart-2", shade: 0.3,
+      color: "#f4efe6",
       description:
         "The pale half-moon at the base of the nail. It is the front edge of the matrix showing through the plate, most obvious on the thumb.",
     },
@@ -53,7 +53,7 @@ export const nailsModel: OrganModel = {
       id: "nail-matrix",
       label: "Nail matrix",
       group: "Nail",
-      tone: "chart-1", shade: 0.07,
+      color: "#b07a8e",
       description:
         "The growth zone under the proximal fold. Its dividing cells keratinise to form the nail plate, so damage here can leave lasting ridges or splits.",
     },
@@ -61,7 +61,7 @@ export const nailsModel: OrganModel = {
       id: "nail-bed",
       label: "Nail bed",
       group: "Nail",
-      tone: "chart-1", shade: 0.12,
+      color: "#d9727a",
       description:
         "The skin beneath the plate from the lunula to the free edge. Its lengthwise ridges lock to the plate and carry the capillaries that make the nail look pink.",
     },
@@ -69,7 +69,7 @@ export const nailsModel: OrganModel = {
       id: "proximal-nail-fold",
       label: "Proximal nail fold",
       group: "Nail folds",
-      tone: "chart-1", shade: 0.15,
+      color: "#d9a586",
       description:
         "The fold of skin that overlies the nail root and matrix and protects the growth zone.",
     },
@@ -77,7 +77,7 @@ export const nailsModel: OrganModel = {
       id: "eponychium",
       label: "Eponychium (cuticle)",
       group: "Nail folds",
-      tone: "chart-1", shade: 0.09,
+      color: "#c79270",
       description:
         "The thin skin at the end of the proximal fold. Its dead layer, the cuticle, sticks to the plate and seals the gap against water and infection.",
     },
@@ -85,7 +85,7 @@ export const nailsModel: OrganModel = {
       id: "lateral-nail-fold",
       label: "Lateral nail fold",
       group: "Nail folds",
-      tone: "chart-1", shade: 0.13,
+      color: "#cf9b80",
       description:
         "The skin fold along each side of the nail plate. Ingrown nails press into it.",
     },
@@ -93,7 +93,7 @@ export const nailsModel: OrganModel = {
       id: "hyponychium",
       label: "Hyponychium",
       group: "Nail folds",
-      tone: "chart-2", shade: 0.16,
+      color: "#e6b27e",
       description:
         "The thickened skin under the free edge, where the nail bed meets the fingertip. It seals the space under the nail.",
     },
@@ -101,7 +101,7 @@ export const nailsModel: OrganModel = {
       id: "distal-phalanx",
       label: "Distal phalanx",
       group: "Fingertip",
-      tone: "chart-2", shade: 0.29,
+      color: "#e8e1cf",
       description:
         "The bone of the fingertip. Its flared tuft supports the pulp and the nail bed, which is bound closely to it.",
     },
@@ -109,7 +109,7 @@ export const nailsModel: OrganModel = {
       id: "middle-phalanx",
       label: "Middle phalanx",
       group: "Fingertip",
-      tone: "chart-2", shade: 0.24,
+      color: "#d9d1bc",
       description:
         "The neighbouring bone. Its head forms the distal interphalangeal joint with the base of the distal phalanx.",
     },
@@ -117,7 +117,7 @@ export const nailsModel: OrganModel = {
       id: "extensor-tendon",
       label: "Extensor tendon",
       group: "Fingertip",
-      tone: "muted-foreground", shade: 0.27,
+      color: "#cfd8dc",
       description:
         "The terminal slip of the extensor tendon, which inserts on the back of the distal phalanx just behind the nail matrix and straightens the fingertip.",
     },
@@ -125,7 +125,7 @@ export const nailsModel: OrganModel = {
       id: "flexor-tendon",
       label: "Flexor digitorum profundus tendon",
       group: "Fingertip",
-      tone: "muted-foreground", shade: 0.21,
+      color: "#b8c7cc",
       description:
         "The deep flexor tendon, which inserts on the palm side of the distal phalanx and bends the fingertip.",
     },
@@ -133,7 +133,7 @@ export const nailsModel: OrganModel = {
       id: "fingertip-pulp",
       label: "Fingertip pulp",
       group: "Fingertip",
-      tone: "chart-2", shade: 0.21,
+      color: "#ecd496",
       description:
         "Fat divided by fibrous septa that anchor the skin to the bone, giving a firm pad for grip. It is dense with touch receptors.",
     },
@@ -141,7 +141,7 @@ export const nailsModel: OrganModel = {
       id: "skin",
       label: "Skin",
       group: "Fingertip",
-      tone: "chart-1", shade: 0.18,
+      color: "#e0ad90",
       description:
         "The skin of the finger, thick and ridged on the palm side where the fingerprints are.",
     },

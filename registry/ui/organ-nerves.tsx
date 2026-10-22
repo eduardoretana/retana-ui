@@ -71,7 +71,7 @@ export const nervesModel: OrganModel = {
       id: "olfactory-nerves",
       label: "Olfactory nerves (I)",
       group: "Cranial nerves",
-      tone: "chart-2", shade: 0.08,
+      color: "#e8b84a",
       description:
         "Carry smell from the roof of the nasal cavity. Shown with the olfactory bulbs and tracts that run back under the frontal lobes.",
     },
@@ -79,7 +79,7 @@ export const nervesModel: OrganModel = {
       id: "optic-nerves",
       label: "Optic nerves (II)",
       group: "Cranial nerves",
-      tone: "chart-2", shade: 0.03,
+      color: "#d9973c",
       description:
         "Carry vision from each retina to the brain. They meet at the optic chiasm, where fibres from the inner half of each retina cross over.",
     },
@@ -87,7 +87,7 @@ export const nervesModel: OrganModel = {
       id: "oculomotor-nerves",
       label: "Oculomotor nerves (III)",
       group: "Cranial nerves",
-      tone: "chart-2", shade: 0.08,
+      color: "#e8b84a",
       description:
         "Move most of the eye muscles, lift the upper eyelid and narrow the pupil.",
     },
@@ -95,7 +95,7 @@ export const nervesModel: OrganModel = {
       id: "trochlear-nerves",
       label: "Trochlear nerves (IV)",
       group: "Cranial nerves",
-      tone: "chart-2", shade: 0.03,
+      color: "#d9973c",
       description:
         "The thinnest cranial nerves. Each works the superior oblique muscle, which turns the eye down and in.",
     },
@@ -103,7 +103,7 @@ export const nervesModel: OrganModel = {
       id: "trigeminal-nerves",
       label: "Trigeminal nerves (V)",
       group: "Cranial nerves",
-      tone: "chart-2", shade: 0.08,
+      color: "#e8b84a",
       description:
         "The main sensory nerves of the face, in three divisions: ophthalmic, maxillary and mandibular. The mandibular division also works the chewing muscles.",
     },
@@ -111,7 +111,7 @@ export const nervesModel: OrganModel = {
       id: "abducens-nerves",
       label: "Abducens nerves (VI)",
       group: "Cranial nerves",
-      tone: "chart-2", shade: 0.03,
+      color: "#d9973c",
       description:
         "Work the lateral rectus, which turns the eye outward. Their long path inside the skull makes them sensitive to raised pressure.",
     },
@@ -119,7 +119,7 @@ export const nervesModel: OrganModel = {
       id: "facial-nerves",
       label: "Facial nerves (VII)",
       group: "Cranial nerves",
-      tone: "chart-2", shade: 0.08,
+      color: "#e8b84a",
       description:
         "Work the muscles of facial expression. The chorda tympani branch carries taste from the front of the tongue.",
     },
@@ -127,7 +127,7 @@ export const nervesModel: OrganModel = {
       id: "vestibulocochlear-nerves",
       label: "Vestibulocochlear nerves (VIII)",
       group: "Cranial nerves",
-      tone: "chart-2", shade: 0.03,
+      color: "#d9973c",
       description:
         "Carry hearing from the cochlea and balance from the vestibular organs of the inner ear.",
     },
@@ -135,7 +135,7 @@ export const nervesModel: OrganModel = {
       id: "glossopharyngeal-nerves",
       label: "Glossopharyngeal nerves (IX)",
       group: "Cranial nerves",
-      tone: "chart-2", shade: 0.08,
+      color: "#e8b84a",
       description:
         "Carry taste and sensation from the back of the tongue and the throat, and help start swallowing.",
     },
@@ -143,7 +143,7 @@ export const nervesModel: OrganModel = {
       id: "vagus-nerves",
       label: "Vagus nerves (X)",
       group: "Cranial nerves",
-      tone: "chart-2", shade: 0.03,
+      color: "#d9973c",
       description:
         "The longest cranial nerves. They leave the skull and run down the neck into the chest and abdomen, slowing the heart and driving digestion.",
     },
@@ -151,7 +151,7 @@ export const nervesModel: OrganModel = {
       id: "accessory-nerves",
       label: "Accessory nerves (XI)",
       group: "Cranial nerves",
-      tone: "chart-2", shade: 0.08,
+      color: "#e8b84a",
       description:
         "Rise from the upper spinal cord, enter the skull and leave it again to work the sternocleidomastoid and trapezius muscles.",
     },
@@ -159,14 +159,14 @@ export const nervesModel: OrganModel = {
       id: "hypoglossal-nerves",
       label: "Hypoglossal nerves (XII)",
       group: "Cranial nerves",
-      tone: "chart-2", shade: 0.03,
+      color: "#d9973c",
       description: "Work the muscles of the tongue.",
     },
     {
       id: "spinal-nerve-roots",
       label: "Spinal nerve roots and ganglia",
       group: "Spinal roots",
-      tone: "chart-2", shade: 0.08,
+      color: "#c9a86a",
       description:
         "Each spinal nerve forms from a front (motor) root and a back (sensory) root. The swelling on each back root, the spinal ganglion, holds the sensory cell bodies.",
     },
@@ -174,7 +174,7 @@ export const nervesModel: OrganModel = {
       id: "cauda-equina",
       label: "Cauda equina",
       group: "Spinal roots",
-      tone: "chart-2", shade: 0.01,
+      color: "#b38f52",
       description:
         "The bundle of lower nerve roots that runs down the spinal canal below the end of the cord, named for its likeness to a horse's tail.",
     },
@@ -182,7 +182,7 @@ export const nervesModel: OrganModel = {
       id: "intercostal-nerves",
       label: "Intercostal nerves",
       group: "Chest and abdomen",
-      tone: "chart-2", shade: 0.11,
+      color: "#e0c068",
       description:
         "The front branches of the thoracic spinal nerves. They run under each rib and supply the chest wall muscles and skin.",
     },
@@ -190,7 +190,7 @@ export const nervesModel: OrganModel = {
       id: "sympathetic-trunks",
       label: "Sympathetic trunks",
       group: "Chest and abdomen",
-      tone: "chart-3", shade: 0.01,
+      color: "#9fae5a",
       description:
         "Chains of ganglia beside the spine that carry the body's fight-or-flight signals to the organs, vessels and sweat glands.",
     },
@@ -198,7 +198,7 @@ export const nervesModel: OrganModel = {
       id: "iliohypogastric-ilio-inguinal-nerves",
       label: "Iliohypogastric and ilio-inguinal nerves",
       group: "Chest and abdomen",
-      tone: "chart-2", shade: 0.04,
+      color: "#cfa54a",
       description:
         "Branches of the first lumbar nerve that supply the lower abdominal wall, the groin and the skin over the hip.",
     },
@@ -206,7 +206,7 @@ export const nervesModel: OrganModel = {
       id: "brachial-plexus",
       label: "Brachial plexuses",
       group: "Shoulder and arm",
-      tone: "chart-2", shade: 0.12,
+      color: "#f0c45c",
       description:
         "A network formed by the lower four cervical nerves and the first thoracic nerve. Its roots, trunks, divisions and cords regroup into the nerves of the arm. Shown with the subclavian nerve.",
     },
@@ -214,7 +214,7 @@ export const nervesModel: OrganModel = {
       id: "dorsal-scapular-nerves",
       label: "Dorsal scapular nerves",
       group: "Shoulder and arm",
-      tone: "chart-2", shade: 0.05,
+      color: "#d6a546",
       description:
         "Supply the rhomboid muscles and levator scapulae, which pull the shoulder blade toward the spine and lift it.",
     },
@@ -222,7 +222,7 @@ export const nervesModel: OrganModel = {
       id: "long-thoracic-nerves",
       label: "Long thoracic nerves",
       group: "Shoulder and arm",
-      tone: "chart-2", shade: 0.12,
+      color: "#f0c45c",
       description:
         "Run down the side of the chest to serratus anterior. Injury lets the shoulder blade stick out, called a winged scapula.",
     },
@@ -230,7 +230,7 @@ export const nervesModel: OrganModel = {
       id: "suprascapular-nerves",
       label: "Suprascapular nerves",
       group: "Shoulder and arm",
-      tone: "chart-2", shade: 0.05,
+      color: "#d6a546",
       description:
         "Pass over the shoulder blade to supraspinatus and infraspinatus, two of the rotator cuff muscles.",
     },
@@ -238,7 +238,7 @@ export const nervesModel: OrganModel = {
       id: "pectoral-nerves",
       label: "Pectoral nerves",
       group: "Shoulder and arm",
-      tone: "chart-2", shade: 0.12,
+      color: "#f0c45c",
       description:
         "The lateral and medial pectoral nerves, which supply pectoralis major and minor.",
     },
@@ -246,7 +246,7 @@ export const nervesModel: OrganModel = {
       id: "subscapular-nerves",
       label: "Subscapular nerves",
       group: "Shoulder and arm",
-      tone: "chart-2", shade: 0.05,
+      color: "#d6a546",
       description:
         "Supply subscapularis and teres major on the front of the shoulder blade.",
     },
@@ -254,14 +254,14 @@ export const nervesModel: OrganModel = {
       id: "thoracodorsal-nerves",
       label: "Thoracodorsal nerves",
       group: "Shoulder and arm",
-      tone: "chart-2", shade: 0.12,
+      color: "#f0c45c",
       description: "Supply latissimus dorsi, the broad muscle of the back.",
     },
     {
       id: "axillary-nerves",
       label: "Axillary nerves",
       group: "Shoulder and arm",
-      tone: "chart-2", shade: 0.05,
+      color: "#d6a546",
       description:
         "Wind around the neck of the humerus to deltoid and teres minor, and supply the skin over the shoulder.",
     },
@@ -269,7 +269,7 @@ export const nervesModel: OrganModel = {
       id: "musculocutaneous-nerves",
       label: "Musculocutaneous nerves",
       group: "Shoulder and arm",
-      tone: "chart-2", shade: 0.12,
+      color: "#f0c45c",
       description:
         "Supply the front muscles of the upper arm, which bend the elbow, then continue as the skin nerve of the outer forearm.",
     },
@@ -277,7 +277,7 @@ export const nervesModel: OrganModel = {
       id: "radial-nerves",
       label: "Radial nerves",
       group: "Shoulder and arm",
-      tone: "chart-2", shade: 0.05,
+      color: "#d6a546",
       description:
         "Spiral around the back of the humerus and supply the muscles that straighten the elbow, wrist and fingers.",
     },
@@ -285,7 +285,7 @@ export const nervesModel: OrganModel = {
       id: "median-nerves",
       label: "Median nerves",
       group: "Shoulder and arm",
-      tone: "chart-2", shade: 0.12,
+      color: "#f0c45c",
       description:
         "Run down the middle of the arm and through the carpal tunnel to the thumb side of the hand. Pressure in the tunnel causes carpal tunnel syndrome.",
     },
@@ -293,7 +293,7 @@ export const nervesModel: OrganModel = {
       id: "ulnar-nerves",
       label: "Ulnar nerves",
       group: "Shoulder and arm",
-      tone: "chart-2", shade: 0.05,
+      color: "#d6a546",
       description:
         "Pass behind the elbow, where they cause the funny bone feeling, and supply most of the small muscles of the hand.",
     },
@@ -301,7 +301,7 @@ export const nervesModel: OrganModel = {
       id: "medial-cutaneous-nerves",
       label: "Medial cutaneous nerves of arm and forearm",
       group: "Shoulder and arm",
-      tone: "chart-2", shade: 0.12,
+      color: "#f0c45c",
       description:
         "Skin nerves from the medial cord that supply the inner side of the arm and forearm.",
     },
@@ -309,7 +309,7 @@ export const nervesModel: OrganModel = {
       id: "femoral-nerves",
       label: "Femoral nerves",
       group: "Hip and leg",
-      tone: "chart-2", shade: 0.08,
+      color: "#e3b04f",
       description:
         "The largest branches of the lumbar plexus. They supply the muscles that straighten the knee, and their saphenous branch reaches the inner leg and foot.",
     },
@@ -317,7 +317,7 @@ export const nervesModel: OrganModel = {
       id: "lateral-femoral-cutaneous-nerves",
       label: "Lateral femoral cutaneous nerves",
       group: "Hip and leg",
-      tone: "chart-2", shade: 0.02,
+      color: "#c99640",
       description:
         "Supply the skin of the outer thigh. Compression near the hip bone causes burning thigh pain.",
     },
@@ -325,7 +325,7 @@ export const nervesModel: OrganModel = {
       id: "obturator-nerves",
       label: "Obturator nerves",
       group: "Hip and leg",
-      tone: "chart-2", shade: 0.08,
+      color: "#e3b04f",
       description:
         "Pass through the obturator foramen of the pelvis to the muscles that pull the thighs together.",
     },
@@ -333,7 +333,7 @@ export const nervesModel: OrganModel = {
       id: "genitofemoral-nerves",
       label: "Genitofemoral nerves",
       group: "Hip and leg",
-      tone: "chart-2", shade: 0.02,
+      color: "#c99640",
       description:
         "Run down the front of psoas and divide into a genital branch and a femoral branch for the skin of the upper thigh.",
     },
@@ -341,7 +341,7 @@ export const nervesModel: OrganModel = {
       id: "superior-gluteal-nerves",
       label: "Superior gluteal nerves",
       group: "Hip and leg",
-      tone: "chart-2", shade: 0.08,
+      color: "#e3b04f",
       description:
         "Supply gluteus medius and minimus, which keep the pelvis level when standing on one leg.",
     },
@@ -349,7 +349,7 @@ export const nervesModel: OrganModel = {
       id: "hip-rotator-nerves",
       label: "Nerves to piriformis and quadratus femoris",
       group: "Hip and leg",
-      tone: "chart-2", shade: 0.02,
+      color: "#c99640",
       description:
         "Small branches of the sacral plexus to the deep muscles that turn the thigh outward.",
     },
@@ -357,7 +357,7 @@ export const nervesModel: OrganModel = {
       id: "posterior-femoral-cutaneous-nerves",
       label: "Posterior femoral cutaneous nerves",
       group: "Hip and leg",
-      tone: "chart-2", shade: 0.08,
+      color: "#e3b04f",
       description:
         "Supply the skin of the back of the thigh and the buttock fold.",
     },
@@ -365,7 +365,7 @@ export const nervesModel: OrganModel = {
       id: "pudendal-nerves",
       label: "Pudendal nerves",
       group: "Hip and leg",
-      tone: "chart-2", shade: 0.02,
+      color: "#c99640",
       description:
         "Supply the perineum, the external genitals and the sphincters that keep urine and stool in.",
     },
@@ -373,7 +373,7 @@ export const nervesModel: OrganModel = {
       id: "sciatic-nerves",
       label: "Sciatic nerves",
       group: "Hip and leg",
-      tone: "chart-2", shade: 0.08,
+      color: "#e3b04f",
       description:
         "The thickest nerves in the body. Each leaves the pelvis below piriformis, supplies the hamstrings and divides above the knee into the tibial and common fibular nerves.",
     },
@@ -381,7 +381,7 @@ export const nervesModel: OrganModel = {
       id: "tibial-nerves",
       label: "Tibial nerves",
       group: "Hip and leg",
-      tone: "chart-2", shade: 0.02,
+      color: "#c99640",
       description:
         "Continue down the back of the leg to the calf muscles and the sole of the foot, where they divide into the plantar nerves. Shown with the sural nerve.",
     },
@@ -389,7 +389,7 @@ export const nervesModel: OrganModel = {
       id: "common-fibular-nerves",
       label: "Common fibular nerves",
       group: "Hip and leg",
-      tone: "chart-2", shade: 0.08,
+      color: "#e3b04f",
       description:
         "Wind around the neck of the fibula, where they are easily injured, and divide into deep and superficial branches that lift the foot and supply its top.",
     },
