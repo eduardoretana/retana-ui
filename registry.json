@@ -21322,6 +21322,1104 @@
         ]
       },
       "docs": "Inspirado en patrones de Affect UI (preview público); reimplementación clean-room; no código ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Instalar también trae @retana/app-shell."
+    },
+    {
+      "name": "stat-sparkline-card",
+      "type": "registry:block",
+      "title": "StatSparklineCard",
+      "description": "Big number, muted label, up/down change and a sparkline that draws in.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de métrica con minigráfico",
+        "descriptionEs": "Número grande, etiqueta tenue, cambio arriba o abajo y una línea que se dibuja al entrar.",
+        "preview": "app/examples/stat-sparkline-card/preview.tsx",
+        "previewHref": "/examples/stat-sparkline-card",
+        "examples": [
+          {
+            "title": "Tarjeta de métrica con minigráfico",
+            "href": "/examples/stat-sparkline-card",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/stat-sparkline-card/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<StatSparklineCard label=\"Clientes activos\" value=\"1,284\" change=\"+8.2%\" direction=\"up\" series={serie} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/stat-sparkline-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/stat-sparkline-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "radial-pair-card",
+      "type": "registry:block",
+      "title": "RadialPairCard",
+      "description": "Two percentage rings side by side; strokes draw in.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Par de anillos radiales",
+        "descriptionEs": "Dos anillos de porcentaje lado a lado, como tiempo de respuesta y resolución. El trazo se dibuja al entrar.",
+        "preview": "app/examples/radial-pair-card/preview.tsx",
+        "previewHref": "/examples/radial-pair-card",
+        "examples": [
+          {
+            "title": "Par de anillos radiales",
+            "href": "/examples/radial-pair-card",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/radial-pair-card/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<RadialPairCard items={[{ label: \"Tiempo de respuesta\", value: 86 }, { label: \"Resolución\", value: 72 }]} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/radial-pair-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/radial-pair-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "highlight-cta-card",
+      "type": "registry:block",
+      "title": "HighlightCtaCard",
+      "description": "Tall accent-gradient card with a big number and a pill call to action.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Tarjeta destacada con acción",
+        "descriptionEs": "Tarjeta alta con degradado del color de acento, número grande y botón píldora para crear.",
+        "preview": "app/examples/highlight-cta-card/preview.tsx",
+        "previewHref": "/examples/highlight-cta-card",
+        "examples": [
+          {
+            "title": "Tarjeta destacada con acción",
+            "href": "/examples/highlight-cta-card",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/highlight-cta-card/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<HighlightCtaCard eyebrow=\"Trámites resueltos\" value=\"84\" onAction={crear} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/highlight-cta-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/highlight-cta-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "quick-notes-card",
+      "type": "registry:block",
+      "title": "QuickNotesCard",
+      "description": "Short note list with accessible add and delete, and an empty state.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Notas rápidas",
+        "descriptionEs": "Lista corta de notas con alta y borrado accesibles, y estado vacío.",
+        "preview": "app/examples/quick-notes-card/preview.tsx",
+        "previewHref": "/examples/quick-notes-card",
+        "examples": [
+          {
+            "title": "Notas rápidas",
+            "href": "/examples/quick-notes-card",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/quick-notes-card/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<QuickNotesCard notes={notas} onChange={guardar} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/quick-notes-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/quick-notes-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "state-distribution-card",
+      "type": "registry:block",
+      "title": "StateDistributionCard",
+      "description": "Ranked states with growing bars; the first uses the accent.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Clientes por estado",
+        "descriptionEs": "Ranking de estados con barras que crecen; el primero lleva el acento.",
+        "preview": "app/examples/state-distribution-card/preview.tsx",
+        "previewHref": "/examples/state-distribution-card",
+        "examples": [
+          {
+            "title": "Clientes por estado",
+            "href": "/examples/state-distribution-card",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/state-distribution-card/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<StateDistributionCard items={[{ label: \"Jalisco\", value: 312 }]} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/state-distribution-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/state-distribution-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "bar-trend-card",
+      "type": "registry:block",
+      "title": "BarTrendCard",
+      "description": "Bars grow from the bottom, a period select, and the last bar in the accent.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Barras por mes",
+        "descriptionEs": "Barras que crecen desde abajo, selector de periodo y la última barra con el acento.",
+        "preview": "app/examples/bar-trend-card/preview.tsx",
+        "previewHref": "/examples/bar-trend-card",
+        "examples": [
+          {
+            "title": "Barras por mes",
+            "href": "/examples/bar-trend-card",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/bar-trend-card/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<BarTrendCard data={meses} defaultRange={7} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/bar-trend-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/bar-trend-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "day-scroller-schedule",
+      "type": "registry:block",
+      "title": "DayScrollerSchedule",
+      "description": "Pill day scroller with arrow keys and the next appointment in a dark nested card.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar"
+      ],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Agenda con carrusel de días",
+        "descriptionEs": "Días en píldoras con flechas del teclado y la próxima cita en una tarjeta oscura con participantes.",
+        "preview": "app/examples/day-scroller-schedule/preview.tsx",
+        "previewHref": "/examples/day-scroller-schedule",
+        "examples": [
+          {
+            "title": "Agenda con carrusel de días",
+            "href": "/examples/day-scroller-schedule",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/day-scroller-schedule/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<DayScrollerSchedule days={dias} items={citas} defaultDay=\"2026-10-22\" />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/day-scroller-schedule.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/day-scroller-schedule.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/ui/avatar-group.tsx",
+          "type": "registry:component",
+          "target": "@ui/avatar-group.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pill-top-nav",
+      "type": "registry:block",
+      "title": "PillTopNav",
+      "description": "Centered pill nav with a sliding indicator, search, bell and avatar.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Navegación superior en píldora",
+        "descriptionEs": "Menú centrado en píldora con indicador que se desliza, búsqueda, avisos y avatar.",
+        "preview": "app/examples/pill-top-nav/preview.tsx",
+        "previewHref": "/examples/pill-top-nav",
+        "examples": [
+          {
+            "title": "Navegación superior en píldora",
+            "href": "/examples/pill-top-nav",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/pill-top-nav/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<PillTopNav items={secciones} active=\"dashboard\" onNavigate={ir} user={{ name: \"Ana Ruiz\" }} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/pill-top-nav.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/pill-top-nav.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "floating-pill-sidebar",
+      "type": "registry:block",
+      "title": "FloatingPillSidebar",
+      "description": "Floating vertical pill of icon links with accessible names.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Barra lateral flotante en píldora",
+        "descriptionEs": "Barra vertical de íconos en píldora, con nombre accesible y página actual marcada.",
+        "preview": "app/examples/floating-pill-sidebar/preview.tsx",
+        "previewHref": "/examples/floating-pill-sidebar",
+        "examples": [
+          {
+            "title": "Barra lateral flotante en píldora",
+            "href": "/examples/floating-pill-sidebar",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/floating-pill-sidebar/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<FloatingPillSidebar items={items} active=\"cursos\" onNavigate={ir} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/floating-pill-sidebar.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/floating-pill-sidebar.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "process-card",
+      "type": "registry:block",
+      "title": "ProcessCard",
+      "description": "Course or process card with avatars, progress and a round CTA.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar"
+      ],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de curso o proceso",
+        "descriptionEs": "Curso o proceso con avatares, avance y botón redondo para continuar.",
+        "preview": "app/examples/process-card/preview.tsx",
+        "previewHref": "/examples/process-card",
+        "examples": [
+          {
+            "title": "Tarjeta de curso o proceso",
+            "href": "/examples/process-card",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/process-card/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<ProcessCard title=\"Ley 73\" progress={72} people={[\"Ana Ruiz\"]} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/process-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/process-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/ui/avatar-group.tsx",
+          "type": "registry:component",
+          "target": "@ui/avatar-group.tsx"
+        }
+      ]
+    },
+    {
+      "name": "multi-area-chart-card",
+      "type": "registry:block",
+      "title": "MultiAreaChartCard",
+      "description": "Multi-series gradient area chart with a toggling legend.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Áreas con degradado",
+        "descriptionEs": "Varias series como áreas con degradado y leyenda que las oculta o muestra.",
+        "preview": "app/examples/multi-area-chart-card/preview.tsx",
+        "previewHref": "/examples/multi-area-chart-card",
+        "examples": [
+          {
+            "title": "Áreas con degradado",
+            "href": "/examples/multi-area-chart-card",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/multi-area-chart-card/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<MultiAreaChartCard labels={meses} series={series} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/multi-area-chart-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/multi-area-chart-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "task-progress-card",
+      "type": "registry:block",
+      "title": "TaskProgressCard",
+      "description": "Task list with progress bars and a done counter.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Tareas con avance",
+        "descriptionEs": "Lista de tareas con barra de progreso, fecha y contador de completas.",
+        "preview": "app/examples/task-progress-card/preview.tsx",
+        "previewHref": "/examples/task-progress-card",
+        "examples": [
+          {
+            "title": "Tareas con avance",
+            "href": "/examples/task-progress-card",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/task-progress-card/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<TaskProgressCard tasks={tareas} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/task-progress-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/task-progress-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "leaderboard-card",
+      "type": "registry:block",
+      "title": "LeaderboardCard",
+      "description": "Leaderboard sorted by score with your row highlighted.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Ranking de asesores",
+        "descriptionEs": "Ranking ordenado por puntos con lugar, región y la fila propia marcada.",
+        "preview": "app/examples/leaderboard-card/preview.tsx",
+        "previewHref": "/examples/leaderboard-card",
+        "examples": [
+          {
+            "title": "Ranking de asesores",
+            "href": "/examples/leaderboard-card",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/leaderboard-card/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<LeaderboardCard leaders={asesores} highlightId=\"a1\" />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/leaderboard-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/leaderboard-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "dashboard-analitico-ae",
+      "type": "registry:block",
+      "title": "DashboardAnaliticoAe",
+      "description": "Full AE analytics screen composed from the AE pieces. Fictional data.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar"
+      ],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Dashboard analítico AE",
+        "descriptionEs": "Pantalla completa para Asesor Experto: métricas, anillos, tarjeta destacada, notas, estados, barras y agenda. Datos ficticios.",
+        "preview": "app/examples/dashboard-analitico-ae/preview.tsx",
+        "previewHref": "/examples/dashboard-analitico-ae",
+        "examples": [
+          {
+            "title": "Dashboard analítico AE",
+            "href": "/examples/dashboard-analitico-ae",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/dashboard-analitico-ae/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<DashboardAnaliticoAe userName=\"Ana Ruiz\" onCreate={crear} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/dashboard-analitico-ae.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/dashboard-analitico-ae.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/blocks/ae/stat-sparkline-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/stat-sparkline-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/radial-pair-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/radial-pair-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/highlight-cta-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/highlight-cta-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/quick-notes-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/quick-notes-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/state-distribution-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/state-distribution-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/bar-trend-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/bar-trend-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/day-scroller-schedule.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/day-scroller-schedule.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/pill-top-nav.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/pill-top-nav.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash-data.ts"
+        },
+        {
+          "path": "registry/ui/avatar-group.tsx",
+          "type": "registry:component",
+          "target": "@ui/avatar-group.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dashboard-capacitacion-ae",
+      "type": "registry:block",
+      "title": "DashboardCapacitacionAe",
+      "description": "Full AE training screen composed from the AE pieces. Fictional data.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar"
+      ],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Dashboard de capacitación AE",
+        "descriptionEs": "Pantalla de capacitación de asesores: barra flotante, cursos, áreas, tareas y ranking. Datos ficticios.",
+        "preview": "app/examples/dashboard-capacitacion-ae/preview.tsx",
+        "previewHref": "/examples/dashboard-capacitacion-ae",
+        "examples": [
+          {
+            "title": "Dashboard de capacitación AE",
+            "href": "/examples/dashboard-capacitacion-ae",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/dashboard-capacitacion-ae/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<DashboardCapacitacionAe userName=\"Ana Ruiz\" />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/dashboard-capacitacion-ae.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/dashboard-capacitacion-ae.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/blocks/ae/floating-pill-sidebar.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/floating-pill-sidebar.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/pill-top-nav.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/pill-top-nav.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/process-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/process-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/multi-area-chart-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/multi-area-chart-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/task-progress-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/task-progress-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/leaderboard-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/leaderboard-card.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash-data.ts"
+        },
+        {
+          "path": "registry/ui/avatar-group.tsx",
+          "type": "registry:component",
+          "target": "@ui/avatar-group.tsx"
+        }
+      ]
     }
   ]
 }
