@@ -30,7 +30,7 @@ export const skinModel: OrganModel = {
       id: "epidermis",
       label: "Epidermis",
       group: "Skin layers",
-      tone: "chart-1", shade: 0.15,
+      color: "#d9a586",
       description:
         "The thin outer layer of the skin. It renews itself constantly and forms a barrier against water loss and infection.",
     },
@@ -38,7 +38,7 @@ export const skinModel: OrganModel = {
       id: "papillary-dermis",
       label: "Papillary dermis",
       group: "Skin layers",
-      tone: "chart-1", shade: 0.22,
+      color: "#e6aba3",
       description:
         "The thin upper part of the dermis. Its finger-like papillae interlock with the epidermis and carry capillary loops close to the surface.",
     },
@@ -46,7 +46,7 @@ export const skinModel: OrganModel = {
       id: "reticular-dermis",
       label: "Reticular dermis",
       group: "Skin layers",
-      tone: "chart-1", shade: 0.14,
+      color: "#cf8f8a",
       description:
         "The thick, dense lower part of the dermis. Its collagen and elastic fibres give skin strength and stretch, and it houses hair follicles and glands.",
     },
@@ -54,7 +54,7 @@ export const skinModel: OrganModel = {
       id: "hypodermis",
       label: "Hypodermis",
       group: "Skin layers",
-      tone: "chart-2", shade: 0.21,
+      color: "#ecd496",
       description:
         "The subcutaneous layer beneath the dermis. Mostly fat, it insulates, cushions and anchors the skin to the tissue below.",
     },
@@ -62,7 +62,7 @@ export const skinModel: OrganModel = {
       id: "hair-shaft",
       label: "Hair shaft",
       group: "Hair and glands",
-      tone: "chart-2", shade: -0.18,
+      color: "#5a4434",
       description:
         "The keratinised strand of hair. It grows from the bulb at the base of the follicle and emerges through the epidermis.",
     },
@@ -70,7 +70,7 @@ export const skinModel: OrganModel = {
       id: "hair-follicle",
       label: "Hair follicle",
       group: "Hair and glands",
-      tone: "chart-1", shade: 0.04,
+      color: "#b48466",
       description:
         "A tube of epidermal cells reaching down into the dermis. Its swollen base, the bulb, produces the growing hair.",
     },
@@ -78,7 +78,7 @@ export const skinModel: OrganModel = {
       id: "sebaceous-gland",
       label: "Sebaceous gland",
       group: "Hair and glands",
-      tone: "chart-3", shade: 0.05,
+      color: "#a7b56b",
       description:
         "Small lobed glands that open into the hair follicle and release sebum, an oily secretion that softens hair and skin.",
     },
@@ -86,7 +86,7 @@ export const skinModel: OrganModel = {
       id: "arrector-pili",
       label: "Arrector pili muscle",
       group: "Hair and glands",
-      tone: "chart-1", shade: 0.01,
+      color: "#b3525a",
       description:
         "A small band of smooth muscle from the follicle to the upper dermis. When it contracts the hair stands up, giving goosebumps.",
     },
@@ -94,7 +94,7 @@ export const skinModel: OrganModel = {
       id: "sweat-gland",
       label: "Eccrine sweat gland",
       group: "Hair and glands",
-      tone: "chart-3", shade: 0.08,
+      color: "#7fb0a2",
       description:
         "A coiled tube deep in the dermis that secretes sweat. Its duct spirals up through the epidermis to a pore on the surface.",
     },
@@ -102,7 +102,7 @@ export const skinModel: OrganModel = {
       id: "arteries",
       label: "Cutaneous arteries",
       group: "Vessels and nerves",
-      tone: "chart-1", shade: 0.0,
+      color: "#c2463e",
       description:
         "Arteries form a deep plexus where the dermis meets the hypodermis and a superficial plexus in the upper dermis, which sends capillary loops into the papillae.",
     },
@@ -110,7 +110,7 @@ export const skinModel: OrganModel = {
       id: "veins",
       label: "Cutaneous veins",
       group: "Vessels and nerves",
-      tone: "chart-4", shade: 0.04,
+      color: "#5f7fb8",
       description:
         "Veins run beside the arteries in the same two plexuses and carry blood back out of the skin.",
     },
@@ -118,7 +118,7 @@ export const skinModel: OrganModel = {
       id: "nerve",
       label: "Cutaneous nerve",
       group: "Vessels and nerves",
-      tone: "chart-2", shade: 0.01,
+      color: "#d9a62e",
       description:
         "Sensory nerve fibres rise through the hypodermis and dermis, ending freely or in receptors that detect touch, pressure, pain and temperature.",
     },
@@ -126,7 +126,7 @@ export const skinModel: OrganModel = {
       id: "lamellar-corpuscle",
       label: "Lamellar corpuscle",
       group: "Vessels and nerves",
-      tone: "chart-5", shade: 0.16,
+      color: "#ad98cc",
       description:
         "Also called a Pacinian corpuscle. A layered, onion-like receptor deep in the skin that responds to pressure and vibration.",
     },

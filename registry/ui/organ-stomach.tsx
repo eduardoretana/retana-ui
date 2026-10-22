@@ -30,7 +30,7 @@ export const stomachModel: OrganModel = {
       id: "stomach",
       label: "Stomach",
       group: "Digestive tract",
-      tone: "chart-1", shade: 0.14,
+      color: "#d39a86",
       description:
         "A muscular J-shaped sac in the upper left abdomen that stores food, mixes it with digestive juices, and passes it on in small amounts.",
     },
@@ -38,7 +38,7 @@ export const stomachModel: OrganModel = {
       id: "esophagus",
       label: "Esophagus (lower part)",
       group: "Digestive tract",
-      tone: "chart-1", shade: 0.11,
+      color: "#c58b7d",
       description:
         "The muscular tube that carries swallowed food down through the chest. It passes through the diaphragm and opens into the stomach at the cardia.",
     },
@@ -46,7 +46,7 @@ export const stomachModel: OrganModel = {
       id: "duodenum",
       label: "Duodenum",
       group: "Digestive tract",
-      tone: "chart-2", shade: 0.14,
+      color: "#d9b27f",
       description:
         "The first part of the small intestine. It receives food from the stomach through the pylorus and curves around the head of the pancreas.",
     },
@@ -54,7 +54,7 @@ export const stomachModel: OrganModel = {
       id: "celiac-trunk",
       label: "Celiac trunk",
       group: "Arteries",
-      tone: "chart-1", shade: 0.01,
+      color: "#b8574f",
       description:
         "A short artery branching from the abdominal aorta. It divides into the left gastric, splenic, and common hepatic arteries, which supply the stomach and its neighbours.",
     },
@@ -62,7 +62,7 @@ export const stomachModel: OrganModel = {
       id: "left-gastric-artery",
       label: "Left gastric artery",
       group: "Arteries",
-      tone: "chart-1", shade: 0.07,
+      color: "#cc6f62",
       description:
         "The smallest celiac branch. It runs up toward the esophagus and along the lesser curvature of the stomach.",
     },
@@ -70,7 +70,7 @@ export const stomachModel: OrganModel = {
       id: "splenic-artery",
       label: "Splenic artery",
       group: "Arteries",
-      tone: "chart-1", shade: -0.02,
+      color: "#a9514c",
       description:
         "A winding branch running left behind the stomach along the pancreas to the spleen. Its branches also supply parts of the stomach.",
     },
@@ -78,7 +78,7 @@ export const stomachModel: OrganModel = {
       id: "common-hepatic-artery",
       label: "Common hepatic artery",
       group: "Arteries",
-      tone: "chart-1", shade: 0.11,
+      color: "#d9826a",
       description:
         "The celiac branch running right toward the liver. Its branches help supply the stomach, duodenum, and pancreas.",
     },
@@ -86,7 +86,7 @@ export const stomachModel: OrganModel = {
       id: "spleen",
       label: "Spleen",
       group: "Neighbouring organs",
-      tone: "muted-foreground", shade: -0.01,
+      color: "#8d6a86",
       description:
         "An organ of the immune and blood systems that sits behind and to the left of the stomach, under the ribs.",
     },
@@ -94,7 +94,7 @@ export const stomachModel: OrganModel = {
       id: "pancreas",
       label: "Pancreas",
       group: "Neighbouring organs",
-      tone: "chart-2", shade: 0.18,
+      color: "#e2c48f",
       description:
         "A gland lying behind the stomach. It releases digestive juices into the duodenum and hormones such as insulin into the blood.",
     },

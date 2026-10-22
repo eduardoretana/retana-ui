@@ -30,7 +30,7 @@ export const spleenModel: OrganModel = {
       id: "spleen",
       label: "Spleen",
       group: "Spleen",
-      tone: "chart-1", shade: -0.05,
+      color: "#8d4f63",
       description:
         "The largest lymphatic organ. It filters blood, removes worn-out red blood cells, and helps the immune system respond to infection.",
     },
@@ -38,7 +38,7 @@ export const spleenModel: OrganModel = {
       id: "splenic-artery",
       label: "Splenic artery",
       group: "Splenic vessels",
-      tone: "chart-1", shade: 0.05,
+      color: "#c46a5c",
       description:
         "Carries blood from the celiac trunk along the upper border of the pancreas to the spleen.",
     },
@@ -46,7 +46,7 @@ export const spleenModel: OrganModel = {
       id: "splenic-vein",
       label: "Splenic vein",
       group: "Splenic vessels",
-      tone: "chart-4", shade: 0.03,
+      color: "#6f8aa6",
       description:
         "Drains blood from the spleen behind the pancreas. It joins the superior mesenteric vein to form the portal vein, which carries it to the liver.",
     },
@@ -54,7 +54,7 @@ export const spleenModel: OrganModel = {
       id: "celiac-trunk",
       label: "Celiac trunk",
       group: "Splenic vessels",
-      tone: "chart-1", shade: 0.1,
+      color: "#d2896f",
       description:
         "A short branch of the abdominal aorta that divides to supply the stomach, liver and spleen. The splenic artery is its largest branch.",
     },
@@ -62,7 +62,7 @@ export const spleenModel: OrganModel = {
       id: "superior-mesenteric-vein",
       label: "Superior mesenteric vein",
       group: "Splenic vessels",
-      tone: "chart-4", shade: 0.11,
+      color: "#8ea3b5",
       description:
         "Drains the small intestine and joins the splenic vein behind the neck of the pancreas.",
     },
@@ -70,7 +70,7 @@ export const spleenModel: OrganModel = {
       id: "stomach",
       label: "Stomach",
       group: "Neighbouring organs",
-      tone: "chart-1", shade: 0.16,
+      color: "#d3ad94",
       description:
         "Lies in front of and to the right of the spleen. The spleen’s front surface rests against the back of the stomach.",
     },
@@ -78,7 +78,7 @@ export const spleenModel: OrganModel = {
       id: "pancreas",
       label: "Pancreas",
       group: "Neighbouring organs",
-      tone: "chart-2", shade: 0.14,
+      color: "#dcbf7d",
       description:
         "Its tail reaches toward the splenic hilum, and the splenic vessels run along its upper border and back.",
     },
@@ -86,7 +86,7 @@ export const spleenModel: OrganModel = {
       id: "left-kidney",
       label: "Left kidney",
       group: "Neighbouring organs",
-      tone: "chart-1", shade: 0.03,
+      color: "#a87268",
       description:
         "Sits behind and below the spleen. The spleen’s inner surface touches the upper part of the left kidney.",
     },
@@ -94,7 +94,7 @@ export const spleenModel: OrganModel = {
       id: "left-adrenal",
       label: "Left adrenal gland",
       group: "Neighbouring organs",
-      tone: "chart-2", shade: 0.06,
+      color: "#c79a5e",
       description:
         "A small hormone-producing gland on top of the left kidney, close to the spleen’s inner surface.",
     },
