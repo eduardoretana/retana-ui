@@ -33,15 +33,16 @@ const topItems = [
   { id: "ranking", label: "Ranking" },
 ]
 
-export type DashboardCapacitacionAeProps = { userName?: string; headerSlot?: ReactNode; className?: string }
+export type DashboardCapacitacionAeProps = { userName?: string; headerSlot?: ReactNode; onOpenProcess?: (id: string) => void; className?: string }
 
-export function DashboardCapacitacionAe({ userName = "Ana Ruiz", headerSlot, className }: DashboardCapacitacionAeProps) {
+export function DashboardCapacitacionAe({ userName = "Ana Ruiz", headerSlot, onOpenProcess, className }: DashboardCapacitacionAeProps) {
   const [side, setSide] = useState("cursos")
   const [top, setTop] = useState("resumen")
   return (
-    <div data-slot="dashboard-capacitacion-ae" className={cn("flex min-w-0 gap-4 rounded-[2rem] bg-muted/50 p-4 text-foreground sm:gap-6 sm:p-6", className)}>
+    <div data-slot="dashboard-capacitacion-ae" className={cn("flex min-w-0 gap-4 rounded-3xl bg-muted/50 p-4 text-foreground sm:gap-6 sm:p-6", className)}>
       <FloatingPillSidebar className="sticky top-6 hidden self-start md:flex" items={sideItems} footer={sideFooter} active={side} onNavigate={setSide} />
       <div className="min-w-0 flex-1">
+        <FloatingPillSidebar orientation="horizontal" className="mb-4 md:hidden" items={sideItems} footer={sideFooter} active={side} onNavigate={setSide} />
         <PillTopNav brand={<span>Academia AE</span>} items={topItems} active={top} onNavigate={setTop} user={{ name: userName }} unread={1} />
         <div className="mt-6 flex flex-wrap items-end justify-between gap-3">
           <div>
@@ -53,7 +54,7 @@ export function DashboardCapacitacionAe({ userName = "Ana Ruiz", headerSlot, cla
         <AeStagger className="mt-6 grid gap-4 xl:grid-cols-12">
           <div className="grid content-start gap-4 xl:col-span-4">
             {aeProcesses.map((process, index) => (
-              <ProcessCard key={process.id} {...process} highlighted={index === 0} />
+              <ProcessCard key={process.id} {...process} highlighted={index === 0} onOpen={onOpenProcess ? () => onOpenProcess(process.id) : undefined} />
             ))}
           </div>
           <div className="grid content-start gap-4 xl:col-span-8">

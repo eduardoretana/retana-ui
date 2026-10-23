@@ -40,6 +40,9 @@ export function compactEs(value: number) {
   return new Intl.NumberFormat("es-MX", { notation: "compact", maximumFractionDigits: 1 }).format(value)
 }
 
+/** Avatar fallback is muted on muted (about 4.3:1). This lifts it to foreground for AA. */
+export const avatarContrast = { avatar: "[&_[data-slot=avatar-fallback]]:text-foreground", overflow: "text-foreground", count: "text-foreground" }
+
 export function initials(name: string) {
   return name
     .split(/\s+/)

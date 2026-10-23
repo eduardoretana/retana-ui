@@ -35,7 +35,7 @@ export type DashboardAnaliticoAeProps = {
 export function DashboardAnaliticoAe({ userName = "Ana Ruiz", onCreate, headerSlot, today = "2026-10-22", className }: DashboardAnaliticoAeProps) {
   const [section, setSection] = useState("dashboard")
   return (
-    <div data-slot="dashboard-analitico-ae" className={cn("min-w-0 rounded-[2rem] bg-muted/50 p-4 text-foreground sm:p-6", className)}>
+    <div data-slot="dashboard-analitico-ae" className={cn("min-w-0 rounded-3xl bg-muted/50 p-4 text-foreground sm:p-6", className)}>
       <PillTopNav
         brand={
           <>

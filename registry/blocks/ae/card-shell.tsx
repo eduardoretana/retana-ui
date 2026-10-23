@@ -6,7 +6,7 @@ import type { ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import { cn } from "@/lib/utils"
-import { aeCard, liftOnHover, riseItem } from "@/registry/retana/lib/ae-dash"
+import { aeCard, liftOnHover, riseItem, staggerParent } from "@/registry/retana/lib/ae-dash"
 
 export type AeCardProps = {
   title?: ReactNode
@@ -44,7 +44,7 @@ export function AeCard({ title, action, children, className, label, as = "sectio
 /** Runs the staggered entrance of every AeCard inside it. */
 export function AeStagger({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <motion.div data-slot="ae-stagger" initial="hidden" animate="shown" variants={{ hidden: {}, shown: { transition: { staggerChildren: 0.07 } } }} className={className}>
+    <motion.div data-slot="ae-stagger" initial="hidden" animate="shown" variants={staggerParent} className={className}>
       {children}
     </motion.div>
   )
