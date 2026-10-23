@@ -144,9 +144,10 @@
 }
 /* Demo-only accent for the AE dashboards (catalog). Registry items never read this. */
 .ae-ember {
-  --primary: oklch(0.68 0.19 45);
+  /* Deep enough for 4.5:1 with white text and as text on white. */
+  --primary: oklch(0.55 0.18 40);
   --primary-foreground: oklch(0.99 0 0);
-  --ring: oklch(0.68 0.19 45);
+  --ring: oklch(0.55 0.18 40);
   --chart-2: oklch(0.45 0.03 260);
   --chart-4: oklch(0.8 0.12 75);
   --chart-5: oklch(0.6 0.1 200);
