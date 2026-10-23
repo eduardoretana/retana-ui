@@ -13,6 +13,8 @@ export type FloatingPillSidebarProps = {
   active: string
   onNavigate?: (id: string) => void
   footer?: FloatingPillItem[]
+  /** "horizontal" lays the pill out as a row, for small screens. */
+  orientation?: "vertical" | "horizontal"
   className?: string
 }
 
@@ -31,7 +33,7 @@ function PillLink({ item, current, onNavigate }: { item: FloatingPillItem; curre
             onNavigate(item.id)
           }
         }}
-        className={cn("grid size-11 place-items-center rounded-full outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none", current ? "bg-primary text-primary-foreground shadow-md" : "text-muted-foreground hover:bg-muted hover:text-foreground")}
+        className={cn("grid size-11 shrink-0 place-items-center rounded-full outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none", current ? "bg-primary text-primary-foreground shadow-md" : "text-muted-foreground hover:bg-muted hover:text-foreground")}
       >
         <Icon aria-hidden className="size-5" />
       </a>
@@ -39,16 +41,16 @@ function PillLink({ item, current, onNavigate }: { item: FloatingPillItem; curre
   )
 }
 
-export function FloatingPillSidebar({ items, active, onNavigate, footer = [], className }: FloatingPillSidebarProps) {
+export function FloatingPillSidebar({ items, active, onNavigate, footer = [], orientation = "vertical", className }: FloatingPillSidebarProps) {
   return (
-    <nav aria-label="Secciones" data-slot="floating-pill-sidebar" className={cn("flex w-fit flex-col items-center justify-between gap-6 rounded-full border border-border/60 bg-card p-2 shadow-md", className)}>
-      <ul className="flex flex-col items-center gap-2">
+    <nav aria-label="Secciones" data-slot="floating-pill-sidebar" data-orientation={orientation} className={cn("flex items-center justify-between rounded-full border border-border/60 bg-card p-2 shadow-md", orientation === "vertical" ? "w-fit flex-col gap-6" : "w-full max-w-full flex-row gap-2 overflow-x-auto", className)}>
+      <ul className={cn("flex items-center gap-2", orientation === "vertical" && "flex-col")}>
         {items.map((item) => (
           <PillLink key={item.id} item={item} current={item.id === active} onNavigate={onNavigate} />
         ))}
       </ul>
       {footer.length ? (
-        <ul className="flex flex-col items-center gap-2">
+        <ul className={cn("flex items-center gap-2", orientation === "vertical" && "flex-col")}>
           {footer.map((item) => (
             <PillLink key={item.id} item={item} current={item.id === active} onNavigate={onNavigate} />
           ))}

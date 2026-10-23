@@ -36,7 +36,7 @@ export function HighlightCtaCard({ eyebrow, value, caption, actionLabel = "Crear
       <button
         type="button"
         onClick={onAction}
-        disabled={disabled}
+        disabled={disabled ?? !onAction}
         className="relative inline-flex w-fit items-center gap-2 rounded-full bg-primary-foreground px-5 py-2.5 text-sm font-semibold text-primary shadow-sm transition-transform outline-none hover:scale-[1.03] focus-visible:ring-2 focus-visible:ring-primary-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-primary active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none motion-reduce:hover:scale-100"
       >
         <Plus aria-hidden className="size-4" />

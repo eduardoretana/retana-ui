@@ -5,10 +5,8 @@
 import { ArrowUpRight, Check } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { avatarContrast } from "@/registry/retana/lib/ae-dash"
 import { AvatarGroup } from "@/registry/retana/ui/avatar-group"
-
-/** The default fallback is muted on muted (4.3:1). Lift it to foreground for AA. */
-const avatarContrast = { avatar: "[&_[data-slot=avatar-fallback]]:text-foreground", overflow: "text-foreground", count: "text-foreground" }
 import { AeCard } from "@/registry/retana/blocks/ae/card-shell"
 
 export type ProcessCardProps = {
@@ -34,8 +32,9 @@ export function ProcessCard({ title, meta, progress, people, onOpen, highlighted
         <button
           type="button"
           onClick={onOpen}
+          disabled={!onOpen}
           aria-label={done ? `Repasar ${title}` : `Continuar ${title}`}
-          className={cn("grid size-11 shrink-0 place-items-center rounded-full outline-none transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:scale-95 motion-reduce:transition-none motion-reduce:hover:scale-100", done ? "bg-muted text-foreground" : "bg-primary text-primary-foreground shadow-md")}
+          className={cn("grid size-11 shrink-0 place-items-center rounded-full outline-none transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:scale-95 disabled:opacity-50 disabled:pointer-events-none motion-reduce:transition-none motion-reduce:hover:scale-100", done ? "bg-muted text-foreground" : "bg-primary text-primary-foreground shadow-md")}
         >
           {done ? <Check aria-hidden className="size-5" /> : <ArrowUpRight aria-hidden className="size-5" />}
         </button>

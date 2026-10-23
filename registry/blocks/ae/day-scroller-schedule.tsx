@@ -7,10 +7,8 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { Clock, MapPin } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { avatarContrast } from "@/registry/retana/lib/ae-dash"
 import { AvatarGroup } from "@/registry/retana/ui/avatar-group"
-
-/** The default fallback is muted on muted (4.3:1). Lift it to foreground for AA. */
-const avatarContrast = { avatar: "[&_[data-slot=avatar-fallback]]:text-foreground", overflow: "text-foreground", count: "text-foreground" }
 import { AeCard, AeEmpty } from "@/registry/retana/blocks/ae/card-shell"
 
 export type ScheduleDay = { id: string; weekday: string; day: number }
@@ -28,6 +26,7 @@ export type DayScrollerScheduleProps = {
 export function DayScrollerSchedule({ title = "Agenda de citas", days, items, defaultDay, onSelectDay, className }: DayScrollerScheduleProps) {
   const reduce = !!useReducedMotion()
   const [selected, setSelected] = useState(defaultDay ?? days[0]?.id ?? "")
+  const focusable = days.some((day) => day.id === selected) ? selected : days[0]?.id
   const refs = useRef<(HTMLButtonElement | null)[]>([])
   const dayItems = items.filter((item) => item.day === selected).sort((a, b) => a.time.localeCompare(b.time))
   const [next, ...rest] = dayItems
@@ -58,7 +57,7 @@ export function DayScrollerSchedule({ title = "Agenda de citas", days, items, de
               role="tab"
               type="button"
               aria-selected={active}
-              tabIndex={active ? 0 : -1}
+              tabIndex={day.id === focusable ? 0 : -1}
               aria-label={`${day.weekday} ${day.day}, ${count} ${count === 1 ? "cita" : "citas"}`}
               onClick={() => pick(day.id)}
               onKeyDown={(event) => onKeyDown(event, index)}
