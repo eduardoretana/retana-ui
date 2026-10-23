@@ -15,7 +15,7 @@ export type TaskProgressCardProps = { title?: string; tasks: ProgressTask[]; cla
 
 export function TaskProgressCard({ title = "Tareas", tasks, className }: TaskProgressCardProps) {
   const reduce = !!useReducedMotion()
-  const done = tasks.filter((task) => task.progress >= 100).length
+  const done = tasks.filter((task) => Math.round(task.progress) >= 100).length
   return (
     <AeCard title={title} className={className} action={<span className="rounded-full bg-muted px-2.5 py-1 text-xs font-medium tabular-nums">{done}/{tasks.length}</span>}>
       {tasks.length === 0 ? (

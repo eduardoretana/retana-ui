@@ -91,9 +91,17 @@ describe("AE dashboard pieces", () => {
   it("both full screens render", () => {
     render(<DashboardAnaliticoAe />)
     expect(screen.getByRole("heading", { name: "Hola, Ana" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Crear nueva" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Crear nueva" })).toBeDisabled()
     render(<DashboardCapacitacionAe />)
-    expect(screen.getByRole("navigation", { name: "Secciones" })).toBeInTheDocument()
+    expect(screen.getAllByRole("navigation", { name: "Secciones" })).toHaveLength(2)
     expect(screen.getByRole("heading", { name: "Ranking de asesores" })).toBeInTheDocument()
+  })
+
+  it("keeps one tab stop when the default day is missing, and counts rounded tasks as done", () => {
+    render(<DayScrollerSchedule days={aeDays} items={aeAppointments} defaultDay="2030-01-01" />)
+    const stops = screen.getAllByRole("tab").filter((tab) => tab.getAttribute("tabindex") === "0")
+    expect(stops).toHaveLength(1)
+    render(<TaskProgressCard tasks={[{ id: "r", title: "Casi", progress: 99.6 }]} />)
+    expect(screen.getByText("1/1")).toBeInTheDocument()
   })
 })
