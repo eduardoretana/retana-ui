@@ -283,6 +283,21 @@ import Preview278 from "@/app/examples/integrations/preview"
 import Preview279 from "@/app/examples/crm/preview"
 import Preview280 from "@/app/examples/analytics/preview"
 import Preview281 from "@/app/examples/evals/preview"
+import Preview282 from "@/app/examples/stat-sparkline-card/preview"
+import Preview283 from "@/app/examples/radial-pair-card/preview"
+import Preview284 from "@/app/examples/highlight-cta-card/preview"
+import Preview285 from "@/app/examples/quick-notes-card/preview"
+import Preview286 from "@/app/examples/state-distribution-card/preview"
+import Preview287 from "@/app/examples/bar-trend-card/preview"
+import Preview288 from "@/app/examples/day-scroller-schedule/preview"
+import Preview289 from "@/app/examples/pill-top-nav/preview"
+import Preview290 from "@/app/examples/floating-pill-sidebar/preview"
+import Preview291 from "@/app/examples/process-card/preview"
+import Preview292 from "@/app/examples/multi-area-chart-card/preview"
+import Preview293 from "@/app/examples/task-progress-card/preview"
+import Preview294 from "@/app/examples/leaderboard-card/preview"
+import Preview295 from "@/app/examples/dashboard-analitico-ae/preview"
+import Preview296 from "@/app/examples/dashboard-capacitacion-ae/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -567,4 +582,19 @@ export const previewMap = {
   "crm": Preview279,
   "analytics": Preview280,
   "evals": Preview281,
+  "stat-sparkline-card": Preview282,
+  "radial-pair-card": Preview283,
+  "highlight-cta-card": Preview284,
+  "quick-notes-card": Preview285,
+  "state-distribution-card": Preview286,
+  "bar-trend-card": Preview287,
+  "day-scroller-schedule": Preview288,
+  "pill-top-nav": Preview289,
+  "floating-pill-sidebar": Preview290,
+  "process-card": Preview291,
+  "multi-area-chart-card": Preview292,
+  "task-progress-card": Preview293,
+  "leaderboard-card": Preview294,
+  "dashboard-analitico-ae": Preview295,
+  "dashboard-capacitacion-ae": Preview296,
 }

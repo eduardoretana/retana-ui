@@ -675,3 +675,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+AE dashboards (stat-sparkline-card, radial-pair-card, highlight-cta-card, quick-notes-card,
+state-distribution-card, bar-trend-card, day-scroller-schedule, pill-top-nav, floating-pill-sidebar,
+process-card, multi-area-chart-card, task-progress-card, leaderboard-card, dashboard-analitico-ae,
+dashboard-capacitacion-ae): clean-room implementation of a dashboard style seen in a public
+"Code XR" video ("Dashboard V15"). Its source code is not published. No code, copy, colors,
+sample data, icons or assets were copied. All sample data is fictional.

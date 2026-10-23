@@ -324,7 +324,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`282` items are in `registry.json` on this branch: `226` components, `45` blocks, `5` hooks, and `6` libraries. A name links to its source file.
+`297` items are in `registry.json` on this branch: `226` components, `60` blocks, `5` hooks, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -596,6 +596,21 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`proposal-dashboard`](registry/blocks/proposal-dashboard.tsx) · block — Greeting, four metric cards, action rows, a quoted-versus-delivered hours chart, a confidence gauge, and recent activity. Install: `npx shadcn@latest add @retana/proposal-dashboard`.
 - [`proposal-builder`](registry/blocks/proposal-builder.tsx) · block — The composed flow: dashboard, pipeline board, new opportunity, analyze, deal tabs, clarify, and send with a toast. Install: `npx shadcn@latest add @retana/proposal-builder`.
 - [`review-desk`](registry/blocks/review-desk.tsx) · block — Configurable review desk. Nav, records, findings, and the final action come from a typed config. Install: `npx shadcn@latest add @retana/review-desk`.
+- [`stat-sparkline-card`](registry/blocks/ae/stat-sparkline-card.tsx) · block — Big number, muted label, up/down change and a sparkline that draws in. Install: `npx shadcn@latest add @retana/stat-sparkline-card`.
+- [`radial-pair-card`](registry/blocks/ae/radial-pair-card.tsx) · block — Two percentage rings side by side; strokes draw in. Install: `npx shadcn@latest add @retana/radial-pair-card`.
+- [`highlight-cta-card`](registry/blocks/ae/highlight-cta-card.tsx) · block — Tall accent-gradient card with a big number and a pill call to action. Install: `npx shadcn@latest add @retana/highlight-cta-card`.
+- [`quick-notes-card`](registry/blocks/ae/quick-notes-card.tsx) · block — Short note list with accessible add and delete, and an empty state. Install: `npx shadcn@latest add @retana/quick-notes-card`.
+- [`state-distribution-card`](registry/blocks/ae/state-distribution-card.tsx) · block — Ranked states with growing bars; the first uses the accent. Install: `npx shadcn@latest add @retana/state-distribution-card`.
+- [`bar-trend-card`](registry/blocks/ae/bar-trend-card.tsx) · block — Bars grow from the bottom, a period select, and the last bar in the accent. Install: `npx shadcn@latest add @retana/bar-trend-card`.
+- [`day-scroller-schedule`](registry/blocks/ae/day-scroller-schedule.tsx) · block — Pill day scroller with arrow keys and the next appointment in a dark nested card. Install: `npx shadcn@latest add @retana/day-scroller-schedule`.
+- [`pill-top-nav`](registry/blocks/ae/pill-top-nav.tsx) · block — Centered pill nav with a sliding indicator, search, bell and avatar. Install: `npx shadcn@latest add @retana/pill-top-nav`.
+- [`floating-pill-sidebar`](registry/blocks/ae/floating-pill-sidebar.tsx) · block — Floating vertical pill of icon links with accessible names. Install: `npx shadcn@latest add @retana/floating-pill-sidebar`.
+- [`process-card`](registry/blocks/ae/process-card.tsx) · block — Course or process card with avatars, progress and a round CTA. Install: `npx shadcn@latest add @retana/process-card`.
+- [`multi-area-chart-card`](registry/blocks/ae/multi-area-chart-card.tsx) · block — Multi-series gradient area chart with a toggling legend. Install: `npx shadcn@latest add @retana/multi-area-chart-card`.
+- [`task-progress-card`](registry/blocks/ae/task-progress-card.tsx) · block — Task list with progress bars and a done counter. Install: `npx shadcn@latest add @retana/task-progress-card`.
+- [`leaderboard-card`](registry/blocks/ae/leaderboard-card.tsx) · block — Leaderboard sorted by score with your row highlighted. Install: `npx shadcn@latest add @retana/leaderboard-card`.
+- [`dashboard-analitico-ae`](registry/blocks/ae/dashboard-analitico-ae.tsx) · block — Full AE analytics screen composed from the AE pieces. Fictional data. Install: `npx shadcn@latest add @retana/dashboard-analitico-ae`.
+- [`dashboard-capacitacion-ae`](registry/blocks/ae/dashboard-capacitacion-ae.tsx) · block — Full AE training screen composed from the AE pieces. Fictional data. Install: `npx shadcn@latest add @retana/dashboard-capacitacion-ae`.
 
 ### Actions and overlays
 
