@@ -8,6 +8,9 @@ import { Clock, MapPin } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { AvatarGroup } from "@/registry/retana/ui/avatar-group"
+
+/** The default fallback is muted on muted (4.3:1). Lift it to foreground for AA. */
+const avatarContrast = { avatar: "[&_[data-slot=avatar-fallback]]:text-foreground", overflow: "text-foreground", count: "text-foreground" }
 import { AeCard, AeEmpty } from "@/registry/retana/blocks/ae/card-shell"
 
 export type ScheduleDay = { id: string; weekday: string; day: number }
@@ -92,7 +95,7 @@ export function DayScrollerSchedule({ title = "Agenda de citas", days, items, de
                       {next.place}
                     </span>
                   </div>
-                  <AvatarGroup members={next.people.map((name) => ({ name }))} max={4} size="sm" label="Participantes" />
+                  <AvatarGroup members={next.people.map((name) => ({ name }))} max={4} size="sm" classNames={avatarContrast} label="Participantes" />
                 </article>
                 {rest.map((item) => (
                   <div key={item.id} className="flex min-w-0 items-center gap-3 rounded-2xl bg-muted/60 px-4 py-3 text-sm">

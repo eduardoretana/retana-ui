@@ -31,8 +31,8 @@ export function AeCard({ title, action, children, className, label, as = "sectio
       className={cn(aeCard, "flex min-w-0 flex-col gap-4 p-5 transition-shadow hover:shadow-md", className)}
     >
       {title || action ? (
-        <header className="flex min-w-0 items-center justify-between gap-3">
-          {title ? <h3 className="min-w-0 truncate text-base font-semibold">{title}</h3> : <span />}
+        <header className="flex min-w-0 flex-wrap items-center justify-between gap-x-3 gap-y-2">
+          {title ? <h3 className="min-w-0 text-base font-semibold break-words">{title}</h3> : <span />}
           {action}
         </header>
       ) : null}

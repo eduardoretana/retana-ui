@@ -6,6 +6,9 @@ import { ArrowUpRight, Check } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { AvatarGroup } from "@/registry/retana/ui/avatar-group"
+
+/** The default fallback is muted on muted (4.3:1). Lift it to foreground for AA. */
+const avatarContrast = { avatar: "[&_[data-slot=avatar-fallback]]:text-foreground", overflow: "text-foreground", count: "text-foreground" }
 import { AeCard } from "@/registry/retana/blocks/ae/card-shell"
 
 export type ProcessCardProps = {
@@ -22,7 +25,7 @@ export function ProcessCard({ title, meta, progress, people, onOpen, highlighted
   const value = Math.max(0, Math.min(100, Math.round(progress)))
   const done = value >= 100
   return (
-    <AeCard as="article" label={title} className={cn(highlighted && "bg-primary/5 ring-1 ring-primary/30", className)}>
+    <AeCard as="article" label={title} className={cn(highlighted && "ring-2 ring-primary/40", className)}>
       <div className="flex min-w-0 items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="text-base leading-snug font-semibold break-words">{title}</h3>
@@ -38,7 +41,7 @@ export function ProcessCard({ title, meta, progress, people, onOpen, highlighted
         </button>
       </div>
       <div className="flex min-w-0 items-center justify-between gap-3">
-        <AvatarGroup members={people.map((name) => ({ name }))} max={3} size="sm" label="Asesores inscritos" />
+        <AvatarGroup members={people.map((name) => ({ name }))} max={3} size="sm" classNames={avatarContrast} label="Asesores inscritos" />
         <span className="text-sm font-semibold tabular-nums">{done ? "Completo" : `${value}%`}</span>
       </div>
       <div role="progressbar" aria-label={`Avance de ${title}`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={value} className="h-2 overflow-hidden rounded-full bg-muted">

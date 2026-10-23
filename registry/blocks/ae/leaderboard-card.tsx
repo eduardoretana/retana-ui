@@ -31,10 +31,10 @@ export function LeaderboardCard({ title = "Ranking de asesores", leaders, scoreL
                 <span aria-hidden className="grid size-9 shrink-0 place-items-center rounded-full bg-foreground text-xs font-semibold text-background">{initials(leader.name)}</span>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-sm font-medium">{leader.name}</span>
-                  {leader.region ? <span className="block truncate text-xs text-muted-foreground">{leader.region}{leader.closed !== undefined ? ` · ${leader.closed} expedientes` : ""}</span> : null}
+                  {leader.region ? <span className={cn("block truncate text-xs", index === 0 ? "text-foreground" : "text-muted-foreground")}>{leader.region}{leader.closed !== undefined ? ` · ${leader.closed} expedientes` : ""}</span> : null}
                 </span>
                 <span className="shrink-0 text-sm font-bold tabular-nums">
-                  {leader.score.toLocaleString("es-MX")} <span className="text-xs font-normal text-muted-foreground">{scoreLabel}</span>
+                  {leader.score.toLocaleString("es-MX")} <span className={cn("text-xs font-normal", index === 0 ? "text-foreground" : "text-muted-foreground")}>{scoreLabel}</span>
                 </span>
               </li>
             )
