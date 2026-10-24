@@ -229,9 +229,23 @@ These pieces are a clean-room reimplementation of the observed arrangement
 only. No Affect source, sample data, icons, assets, or internal strings
 were copied. Colors come from the host shadcn tokens.
 
+agent-tree is a separate clean-room reimplementation of the observed
+agent-tree arrangement (who launched whom), inspired by a public Flo / Affect
+UI preview. No source, sample data, icons, assets, or internal strings were
+copied. Status color uses the host semantic tokens. The demos use an original
+lighthouse-bulletin scenario.
+
 adaptive-table is a clean-room reimplementation from a behavior description
 only. No names, icons, or rows from that reference were copied. Columns drop,
 fold, and stretch to the container width.
+
+data-table-grouping is a clean-room reimplementation of grouped-table
+behavior (group headers, collapse, nested subtotals, master-detail, grand
+total). Shadcn Studio Pro was not purchased, fetched, or ported. No source,
+class names, sample rows, icons, or assets were copied. The obrador, tide
+archive, and pier log in the demo are fictional. Colors come from the host
+shadcn tokens. The table is built on this repo's TanStack Table v8-compatible
+API (useLegacyTable in @tanstack/react-table v9).
 
 The multi-view pieces (multi-view-core, use-multi-view, view-table,
 view-kanban, view-calendar, view-timeline, view-grouped-list, view-gallery,
@@ -239,6 +253,16 @@ record-properties, and the multi-view block) are an independent implementation
 of the common pattern: one collection shown as a table, board, calendar,
 timeline, list, or gallery. No shadcn/studio code, data, or assets were
 consulted.
+
+work-table, work-table-toolbar, work-table-cells, work-table-board,
+work-table-tree, work-table-queue, and work-table-support are a clean-room
+reimplementation of a work table with drag and drop: reorderable columns and
+rows, layout presets, grouped status, a section tree, and a flat queue. The
+behavior was described, not copied. No shadcn/studio or other paid-library
+source, sample rows, icons, screenshots, or assets were used. The Spanish
+rows in the demos are fictional. Tones are the host semantic names from
+status-tone.ts. The pieces use @dnd-kit and @tanstack/react-table, both
+permissively licensed, and they ship no theme.
 
 ---
 
@@ -544,17 +568,25 @@ not needed for these items.
 Scroll vocabulary — clean-room
 
 use-scroll-progress, scroll-progress, reveal-on-scroll, stagger-reveal,
-scroll-snap-rail, sticky-section-list, parallax-layers, and
-horizontal-scroll-rail implement common scroll behaviors: a 0–1 reading
+scroll-snap-rail, sticky-section-list, parallax-layers,
+horizontal-scroll-rail, use-min-width, pinned-steps, scroll-linked, and
+text-reveal (scroll trigger) implement common scroll behaviors: a 0–1 reading
 position, a viewport entrance, staggered children, CSS scroll-snap, sticky
-group headers, transform-only parallax, and a horizontal rail driven by
-vertical scroll. The six names (scroll-triggered, scroll-linked, parallax,
-sticky, scroll snap, horizontal scroll) are industry vocabulary. A public tip
-from @gabriell_lab suggested listing them together. No frames, wireframes, or
-assets from that post were copied. Motion UI and Motion+ are not included.
-Reduced motion shows entrances immediately, holds parallax still, and uses a
-native horizontal scroller. The reading bar still reports scroll position.
-Sticky headers and scroll-snap alignment are CSS, not tweens.
+group headers, transform-only parallax, a horizontal rail driven by vertical
+scroll, a sticky scrollytelling column, and a scroll-linked fade, rise, scale,
+or rotate. The ten names (scroll-triggered, scroll-linked, parallax, sticky,
+pin, scroll snap, horizontal scroll, stagger, text reveal, progress bar) are
+industry vocabulary. A public note from @Voxyz_ai listed those ten terms
+together, and an earlier tip from @gabriell_lab suggested the first six. No
+frames, wireframes, copy, or assets from those posts were copied. Motion UI
+and Motion+ are not included. Supported browsers drive the reading bar with
+animation-timeline scroll(root) and scaleX, parallax with a view() timeline,
+and the scroll-linked presets with view() or scroll(). The hook remains the
+fallback and, for the bar, the source of aria-valuenow. Reduced motion shows
+entrances and text reveals immediately, holds parallax still, stacks pinned
+steps, shows scroll-linked effects in their finished state, and uses a native
+horizontal scroller. The reading bar still reports scroll position. Sticky
+headers and scroll-snap alignment are CSS, not tweens.
 
 ---
 
@@ -676,40 +708,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
----
-
-OrganUI (healthcare and life sciences)
-
-Retana UI includes components adapted from OrganUI (MIT):
-
-  https://organui.com  ·  https://organui.com/docs/licences
-
-Copyright (c) 2026 OrganUI
-
-OrganUI has no paid or Pro tier; every registry item is MIT. The pieces were
-ported from OrganUI's Base UI style onto this registry's Radix primitives.
-By explicit ui-system exception (docs/ui-system-exceptions.md, EX-01), the
-anatomy, imaging and molecular scenes keep OrganUI's original realistic
-colours and 3D lighting (organ-*, organ-viewer, molecule-viewer, dna-helix,
-dermatome-map, image-viewer). UI chrome stays on host theme tokens.
-Interface text stays in English and can be overridden by props.
-
-3D models are NOT copied into this repository. Each organ item loads a GLB at
-runtime from a commit-pinned URL in the matching github.com/organui/*-3d
-repository, and the model keeps its own licence (CC0 1.0, CC BY 4.0,
-CC BY-SA 2.1 JP or CC BY-SA 4.0, per model). The BY licences require credit:
-the viewer shows it by default. If you pass `attribution={false}`, credit the
-model elsewhere in your interface. ShareAlike applies to adapted models.
-
-Sample data: the growth-chart demo uses an illustrative curve, not WHO data
-(WHO standards are GPL-3 and need permission for commercial use). The
-molecule demo fetches PDB 1CRN (wwPDB, CC0). The head phantom, synthetic ECG,
-vitals, lab and medication examples are generated and MIT.
-
-Adapted items:
-
-- anatomy-tree, vital-signs, ecg-trace, body-map, dermatome-map, lab-results,
-  growth-chart, medication-schedule, image-viewer, organ-viewer,
-  molecule-viewer, dna-helix
-- organ-* (43 organ and tissue models)
-- organ-explorer, anatomy-workspace, organ-switcher (blocks)
+AE dashboards (stat-sparkline-card, radial-pair-card, highlight-cta-card, quick-notes-card,
+state-distribution-card, bar-trend-card, day-scroller-schedule, pill-top-nav, floating-pill-sidebar,
+process-card, multi-area-chart-card, task-progress-card, leaderboard-card, dashboard-analitico-ae,
+dashboard-capacitacion-ae): clean-room implementation of a dashboard style seen in a public
+"Code XR" video ("Dashboard V15"). Its source code is not published. No code, copy, colors,
+sample data, icons or assets were copied. All sample data is fictional.
