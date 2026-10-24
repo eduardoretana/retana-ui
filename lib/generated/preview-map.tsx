@@ -298,6 +298,9 @@ import Preview293 from "@/app/examples/task-progress-card/preview"
 import Preview294 from "@/app/examples/leaderboard-card/preview"
 import Preview295 from "@/app/examples/dashboard-analitico-ae/preview"
 import Preview296 from "@/app/examples/dashboard-capacitacion-ae/preview"
+import Preview297 from "@/app/examples/use-min-width/preview"
+import Preview298 from "@/app/examples/pinned-steps/preview"
+import Preview299 from "@/app/examples/scroll-linked/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -597,4 +600,7 @@ export const previewMap = {
   "leaderboard-card": Preview294,
   "dashboard-analitico-ae": Preview295,
   "dashboard-capacitacion-ae": Preview296,
+  "use-min-width": Preview297,
+  "pinned-steps": Preview298,
+  "scroll-linked": Preview299,
 }

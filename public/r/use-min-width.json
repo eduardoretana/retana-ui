@@ -1,0 +1,58 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-min-width",
+  "title": "useMinWidth",
+  "author": "Eduardo Retana",
+  "description": "True when the viewport is at least a given number of CSS pixels wide. The first paint uses the narrow layout.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/hooks/use-min-width.ts",
+      "content": "\"use client\"\n\n/**\n * Viewport width cutoff shared by sticky scroll pieces. Clean-room.\n * The server snapshot is the narrow layout, so the first paint does not pin.\n */\n\nimport { useSyncExternalStore } from \"react\"\n\n/** True when the viewport is at least `px` CSS pixels wide. */\nexport function useMinWidth(px: number) {\n  const width = Number.isFinite(px) ? Math.max(0, Math.round(px)) : 0\n  const query = `(min-width: ${width}px)`\n  return useSyncExternalStore(\n    (onChange) => {\n      const media = window.matchMedia(query)\n      media.addEventListener(\"change\", onChange)\n      return () => media.removeEventListener(\"change\", onChange)\n    },\n    () => window.matchMedia(query).matches,\n    () => false,\n  )\n}\n",
+      "type": "registry:hook",
+      "target": "@hooks/use-min-width.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Ancho mínimo",
+    "descriptionEs": "Verdadero cuando el viewport alcanza un ancho, en píxeles. El primer render usa el layout estrecho.",
+    "preview": "app/examples/use-min-width/preview.tsx",
+    "previewHref": "/examples/use-min-width",
+    "examples": [
+      {
+        "title": "Ancho mínimo",
+        "href": "/examples/use-min-width",
+        "description": "Verdadero cuando el viewport alcanza un ancho, en píxeles."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/use-min-width/stress",
+        "description": "320px, vacío, texto largo y RTL."
+      },
+      {
+        "title": "Glosario",
+        "href": "/examples/animations",
+        "description": "Los diez términos de scroll, con demos propias."
+      }
+    ],
+    "usage": "const wide = useMinWidth(768)",
+    "api": [
+      {
+        "name": "px",
+        "type": "number",
+        "description": "Minimum viewport width. Non-finite values are treated as 0."
+      },
+      {
+        "name": "return",
+        "type": "boolean",
+        "description": "True at or above px. The server snapshot is false, so the first paint does not pin."
+      }
+    ]
+  },
+  "docs": "Clean-room width cutoff shared by horizontal-scroll-rail and pinned-steps. No Motion UI or Motion+ source. The server snapshot is the narrow layout. Answer no if the CLI asks to overwrite a file the host already has. The item ships no theme, cssVars, or fixed colors.",
+  "categories": [
+    "animation"
+  ],
+  "type": "registry:hook"
+}
