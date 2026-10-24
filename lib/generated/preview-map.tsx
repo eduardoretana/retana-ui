@@ -309,6 +309,7 @@ import Preview304 from "@/app/examples/work-table-tree/preview"
 import Preview305 from "@/app/examples/work-table-queue/preview"
 import Preview306 from "@/app/examples/work-table-support/preview"
 import Preview307 from "@/app/examples/agent-tree/preview"
+import Preview308 from "@/app/examples/data-table-grouping/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -619,4 +620,5 @@ export const previewMap = {
   "work-table-queue": Preview305,
   "work-table-support": Preview306,
   "agent-tree": Preview307,
+  "data-table-grouping": Preview308,
 }

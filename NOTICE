@@ -239,6 +239,14 @@ adaptive-table is a clean-room reimplementation from a behavior description
 only. No names, icons, or rows from that reference were copied. Columns drop,
 fold, and stretch to the container width.
 
+data-table-grouping is a clean-room reimplementation of grouped-table
+behavior (group headers, collapse, nested subtotals, master-detail, grand
+total). Shadcn Studio Pro was not purchased, fetched, or ported. No source,
+class names, sample rows, icons, or assets were copied. The obrador, tide
+archive, and pier log in the demo are fictional. Colors come from the host
+shadcn tokens. The table is built on this repo's TanStack Table v8-compatible
+API (useLegacyTable in @tanstack/react-table v9).
+
 The multi-view pieces (multi-view-core, use-multi-view, view-table,
 view-kanban, view-calendar, view-timeline, view-grouped-list, view-gallery,
 record-properties, and the multi-view block) are an independent implementation

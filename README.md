@@ -328,7 +328,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`308` items are in `registry.json` on this branch: `232` components, `64` blocks, `6` hooks, and `6` libraries. A name links to its source file.
+`309` items are in `registry.json` on this branch: `233` components, `64` blocks, `6` hooks, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -534,6 +534,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`work-table`](registry/ui/work-table.tsx) · ui — TanStack table with dnd-kit column and row reorder, layout presets, density, bulk actions, and pagination. Install: `npx shadcn@latest add @retana/work-table`.
 - [`work-table-toolbar`](registry/ui/work-table-toolbar.tsx) · ui — Search, priority toggle, assignee multiselect, cycle select, and sort menu for a work table. Install: `npx shadcn@latest add @retana/work-table-toolbar`.
 - [`work-table-cells`](registry/ui/work-table-cells.tsx) · ui — Title, person, priority, relative date, status, SLA, effort, compact numbers, and rank cells. Install: `npx shadcn@latest add @retana/work-table-cells`.
+- [`data-table-grouping`](registry/ui/data-table-grouping.tsx) · ui — TanStack table with live column grouping that keeps the selection, collapsible group headers, a nested tree with subtotals, master-detail rows, and a pinned grand-total footer. Column order, visibility, density, filters, and page size are in the toolbar. Install: `npx shadcn@latest add @retana/data-table-grouping`.
 
 ### Charts
 
