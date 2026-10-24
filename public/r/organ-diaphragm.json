@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-diaphragm",
+  "title": "Diaphragm",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The diaphragm with the structures that pass through it and the organs above and below: 13 selectable structures and 4 named views. Model licensed CC BY-SA 2.1 JP.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-diaphragm.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// The diaphragm has no explorer repository: scripts/models/diaphragm.ts builds\n// the GLB, served from apps/web/public/models with its attribution beside it.\nexport const diaphragmModel: OrganModel = {\n  name: \"Diaphragm\",\n  src: \"https://organui.com/models/diaphragm.glb\",\n  bytes: 3649120,\n  defaultView: \"Anterior\",\n  hiddenIds: [\"right-lung-lower-lobe\", \"left-lung-lower-lobe\"],\n  views: [\n    {\n      name: \"Anterior\",\n      direction: [0, 0.25, 1],\n    },\n    {\n      name: \"Inferior\",\n      direction: [0, -1, 0.35],\n    },\n    {\n      name: \"Posterior\",\n      direction: [0, 0, -1],\n    },\n    {\n      name: \"Left lateral\",\n      direction: [1, 0, 0],\n    },\n  ],\n  structures: [\n    {\n      id: \"right-hemidiaphragm\",\n      label: \"Right hemidiaphragm\",\n      group: \"Diaphragm\",\n      color: \"#c97f6d\",\n      description:\n        \"The right dome, which rises higher than the left because the liver lies beneath it. Its right crus arises from the first three lumbar vertebrae, and the right phrenic nerve supplies it.\",\n    },\n    {\n      id: \"left-hemidiaphragm\",\n      label: \"Left hemidiaphragm\",\n      group: \"Diaphragm\",\n      color: \"#d6937e\",\n      description:\n        \"The left dome, over the stomach and spleen. The heart rests on the central tendon where the two halves meet, and the left phrenic nerve supplies this side.\",\n    },\n    {\n      id: \"esophagus\",\n      label: \"Esophagus\",\n      group: \"Passing through\",\n      color: \"#d9a88f\",\n      description:\n        \"Passes through the esophageal hiatus at about T10, a sling of the right crus that also helps keep stomach contents from refluxing.\",\n    },\n    {\n      id: \"inferior-vena-cava\",\n      label: \"Inferior vena cava\",\n      group: \"Passing through\",\n      color: \"#5f7fae\",\n      description:\n        \"Passes through the caval opening in the central tendon at about T8. Breathing in widens the opening and helps blood return to the heart.\",\n    },\n    {\n      id: \"descending-aorta\",\n      label: \"Descending aorta\",\n      group: \"Passing through\",\n      color: \"#c0564b\",\n      description:\n        \"Passes behind the diaphragm, under the median arcuate ligament between the crura at about T12, so its flow is not squeezed when the diaphragm contracts.\",\n    },\n    {\n      id: \"heart\",\n      label: \"Heart\",\n      group: \"Above\",\n      color: \"#b98a80\",\n      description:\n        \"Sits on the central tendon inside the pericardium, which is fused to the diaphragm's upper surface.\",\n    },\n    {\n      id: \"right-lung-lower-lobe\",\n      label: \"Lower lobe of right lung\",\n      group: \"Above\",\n      color: \"#b9c3cf\",\n      description:\n        \"Its base rests on the right dome. The pleural recess around the dome's edge is where fluid collects first.\",\n    },\n    {\n      id: \"left-lung-lower-lobe\",\n      label: \"Lower lobe of left lung\",\n      group: \"Above\",\n      color: \"#c4ccd6\",\n      description:\n        \"Its base rests on the left dome and follows it down as the diaphragm contracts in a breath.\",\n    },\n    {\n      id: \"liver\",\n      label: \"Liver\",\n      group: \"Below\",\n      color: \"#9c5a4c\",\n      description:\n        \"Fills the underside of the right dome. Its bare area touches the diaphragm directly, with no peritoneum between them.\",\n    },\n    {\n      id: \"stomach\",\n      label: \"Stomach\",\n      group: \"Below\",\n      color: \"#d4a3a0\",\n      description:\n        \"Its fundus sits under the left dome. Part of it can slide up through a widened esophageal hiatus as a hiatal hernia.\",\n    },\n    {\n      id: \"spleen\",\n      label: \"Spleen\",\n      group: \"Below\",\n      color: \"#8f5a6e\",\n      description:\n        \"Lies against the back of the left dome, over the 9th to 11th ribs.\",\n    },\n    {\n      id: \"right-psoas-major\",\n      label: \"Right psoas major\",\n      group: \"Behind\",\n      color: \"#b46b5e\",\n      description:\n        \"Runs down from the lumbar spine. The medial arcuate ligament, one of the diaphragm's origins, arches over its upper end. Cut below the diaphragm here.\",\n    },\n    {\n      id: \"left-psoas-major\",\n      label: \"Left psoas major\",\n      group: \"Behind\",\n      color: \"#bf7769\",\n      description:\n        \"The left psoas, under the left medial arcuate ligament. Cut below the diaphragm here.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"BodyParts3D / Anatomography, © The Database Center for Life Science. CC BY-SA 2.1 Japan. Adapted by OrganUI.\",\n    license: \"CC BY-SA 2.1 JP\",\n    licenseUrl: \"https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en\",\n    source:\n      \"https://github.com/organui/organui/blob/master/apps/web/public/models/diaphragm.ATTRIBUTION.md\",\n  },\n}\n\nexport type DiaphragmProps = Omit<OrganViewerProps, \"model\">\n\nexport function Diaphragm(props: DiaphragmProps) {\n  return <OrganViewer model={diaphragmModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-diaphragm.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Diafragma",
+    "descriptionEs": "Diafragma en 3D: 13 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+    "preview": "app/examples/organ-diaphragm/preview.tsx",
+    "previewHref": "/examples/organ-diaphragm",
+    "examples": [
+      {
+        "title": "Diafragma",
+        "href": "/examples/organ-diaphragm",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Diaphragm selectedId={id} onSelectionChange={setId} />  // datos: diaphragmModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "diaphragmModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "respiratory"
+  ],
+  "type": "registry:component"
+}

@@ -714,3 +714,41 @@ process-card, multi-area-chart-card, task-progress-card, leaderboard-card, dashb
 dashboard-capacitacion-ae): clean-room implementation of a dashboard style seen in a public
 "Code XR" video ("Dashboard V15"). Its source code is not published. No code, copy, colors,
 sample data, icons or assets were copied. All sample data is fictional.
+
+---
+
+OrganUI (healthcare and life sciences)
+
+Retana UI includes components adapted from OrganUI (MIT):
+
+  https://organui.com  ·  https://organui.com/docs/licences
+
+Copyright (c) 2026 OrganUI
+
+OrganUI has no paid or Pro tier; every registry item is MIT. The pieces were
+ported from OrganUI's Base UI style onto this registry's Radix primitives.
+By explicit ui-system exception (docs/ui-system-exceptions.md, EX-01), the
+anatomy, imaging and molecular scenes keep OrganUI's original realistic
+colours and 3D lighting (organ-*, organ-viewer, molecule-viewer, dna-helix,
+dermatome-map, image-viewer). UI chrome stays on host theme tokens.
+Interface text stays in English and can be overridden by props.
+
+3D models are NOT copied into this repository. Each organ item loads a GLB at
+runtime from a commit-pinned URL in the matching github.com/organui/*-3d
+repository, and the model keeps its own licence (CC0 1.0, CC BY 4.0,
+CC BY-SA 2.1 JP or CC BY-SA 4.0, per model). The BY licences require credit:
+the viewer shows it by default. If you pass `attribution={false}`, credit the
+model elsewhere in your interface. ShareAlike applies to adapted models.
+
+Sample data: the growth-chart demo uses an illustrative curve, not WHO data
+(WHO standards are GPL-3 and need permission for commercial use). The
+molecule demo fetches PDB 1CRN (wwPDB, CC0). The head phantom, synthetic ECG,
+vitals, lab and medication examples are generated and MIT.
+
+Adapted items:
+
+- anatomy-tree, vital-signs, ecg-trace, body-map, dermatome-map, lab-results,
+  growth-chart, medication-schedule, image-viewer, organ-viewer,
+  molecule-viewer, dna-helix
+- organ-* (43 organ and tissue models)
+- organ-explorer, anatomy-workspace, organ-switcher (blocks)

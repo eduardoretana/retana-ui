@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-vestibular",
+  "title": "Vestibular system",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The inner ear's balance organs: the vestibule and three semicircular canals, with the cochlea and vestibular nerve. 6 selectable structures and 4 named views. Model licensed CC BY-SA 4.0.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-vestibular.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\nconst labyrinth = [\n  \"vestibule\",\n  \"anterior-canal\",\n  \"posterior-canal\",\n  \"lateral-canal\",\n  \"cochlea\",\n]\n\n// Built from the right inner ear of Z-Anatomy, the source organui/ear-3d\n// uses, with the vestibule mesh split into its canals. The GLB is hosted by\n// OrganUI; see attribution.source.\nexport const vestibularModel: OrganModel = {\n  name: \"Vestibular system\",\n  src: \"https://organui.com/models/vestibular.glb\",\n  bytes: 503164,\n  defaultView: \"Lateral\",\n  views: [\n    {\n      name: \"Lateral\",\n      direction: [-1, 0.15, 0.2],\n      structureIds: labyrinth,\n    },\n    {\n      name: \"Superior\",\n      direction: [0, 1, 0.2],\n      structureIds: labyrinth,\n    },\n    {\n      name: \"Anterior\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Medial\",\n      direction: [1, 0.1, 0],\n    },\n  ],\n  structures: [\n    {\n      id: \"anterior-canal\",\n      label: \"Anterior semicircular canal\",\n      group: \"Semicircular canals\",\n      color: \"#d98c6a\",\n      description:\n        \"The highest canal, also called the superior canal, standing upright. It senses head rotation in its own plane, working as a pair with the posterior canal of the other ear. Its swollen end, the ampulla, holds the sensor.\",\n    },\n    {\n      id: \"posterior-canal\",\n      label: \"Posterior semicircular canal\",\n      group: \"Semicircular canals\",\n      color: \"#7fb07a\",\n      description:\n        \"Upright and at right angles to the anterior canal, reaching back and down. The two share their non-ampullary limbs as the common crus. Loose crystals most often drift into this canal in benign paroxysmal positional vertigo.\",\n    },\n    {\n      id: \"lateral-canal\",\n      label: \"Lateral semicircular canal\",\n      group: \"Semicircular canals\",\n      color: \"#c9a64f\",\n      description:\n        \"The horizontal canal, tilted about 30 degrees up at the front when the head is upright. It senses turning the head from side to side, as in shaking it no.\",\n    },\n    {\n      id: \"vestibule\",\n      label: \"Vestibule\",\n      group: \"Vestibule\",\n      color: \"#93b4cf\",\n      description:\n        \"The central chamber of the bony labyrinth, where all three canals open. It holds the utricle and saccule, whose sensors register gravity and straight-line acceleration. Those membranous sacs are not modelled; this is the bony wall around them.\",\n    },\n    {\n      id: \"cochlea\",\n      label: \"Cochlea\",\n      group: \"Nearby structures\",\n      color: \"#a99cc9\",\n      description:\n        \"The hearing part of the inner ear, opening from the front of the vestibule. It shares the same fluid spaces, which is why some inner ear disorders affect hearing and balance together.\",\n    },\n    {\n      id: \"vestibular-nerve\",\n      label: \"Vestibular nerve\",\n      group: \"Nearby structures\",\n      color: \"#e9d36f\",\n      description:\n        \"Carries balance signals from the canals, utricle and saccule to the vestibular nuclei in the brainstem. It runs with the cochlear nerve through the internal acoustic meatus as part of cranial nerve VIII.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"Z-Anatomy (CC BY-SA 4.0), based in part on BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan). Adapted by OrganUI.\",\n    license: \"CC BY-SA 4.0\",\n    licenseUrl: \"https://creativecommons.org/licenses/by-sa/4.0/\",\n    source:\n      \"https://github.com/organui/organui/blob/master/apps/web/public/models/vestibular.ATTRIBUTION.md\",\n  },\n}\n\nexport type VestibularProps = Omit<OrganViewerProps, \"model\">\n\nexport function Vestibular(props: VestibularProps) {\n  return <OrganViewer model={vestibularModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-vestibular.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Sistema vestibular",
+    "descriptionEs": "Sistema vestibular en 3D: 6 estructuras seleccionables. Modelo bajo CC BY-SA 4.0; el crédito queda visible.",
+    "preview": "app/examples/organ-vestibular/preview.tsx",
+    "previewHref": "/examples/organ-vestibular",
+    "examples": [
+      {
+        "title": "Sistema vestibular",
+        "href": "/examples/organ-vestibular",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Vestibular selectedId={id} onSelectionChange={setId} />  // datos: vestibularModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "vestibularModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "senses"
+  ],
+  "type": "registry:component"
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-lungs",
+  "title": "Lungs",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The lungs from the OrganUI lungs explorer: 20 selectable structures and 4 named views. Model licensed CC BY-SA 2.1 JP.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-lungs.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Generated from organui/lungs-3d at 5815084. The GLB stays in that\n// repository under its own licence; see attribution.source.\nexport const lungsModel: OrganModel = {\n  name: \"Lungs\",\n  src: \"https://cdn.jsdelivr.net/gh/organui/lungs-3d@5815084f43efe438ebfae3fd889ee2baf343dfbf/public/models/lungs.glb\",\n  bytes: 3901260,\n  defaultView: \"Anterior\",\n  views: [\n    {\n      name: \"Anterior\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Posterior\",\n      direction: [0, 0, -1],\n    },\n    {\n      name: \"Left lateral\",\n      direction: [1, 0, 0],\n    },\n    {\n      name: \"Right lateral\",\n      direction: [-1, 0, 0],\n    },\n  ],\n  structures: [\n    {\n      id: \"FMA7338\",\n      label: \"Right apical segment\",\n      group: \"Right upper lobe\",\n      color: \"#d5a286\",\n      description:\n        \"The tissue assigned to the right apical segment in BodyParts3D. Its shape and boundaries come from the source model.\",\n    },\n    {\n      id: \"FMA7339\",\n      label: \"Right posterior segment\",\n      group: \"Right upper lobe\",\n      color: \"#d5a286\",\n      description:\n        \"The tissue assigned to the right posterior segment in BodyParts3D. Its shape and boundaries come from the source model.\",\n    },\n    {\n      id: \"FMA7359\",\n      label: \"Right anterior segment\",\n      group: \"Right upper lobe\",\n      color: \"#d5a286\",\n      description:\n        \"The tissue assigned to the right anterior segment in BodyParts3D. Its shape and boundaries come from the source model.\",\n    },\n    {\n      id: \"FMA7361\",\n      label: \"Right lateral segment\",\n      group: \"Right middle lobe\",\n      color: \"#91b7a7\",\n      description:\n        \"The tissue assigned to the right lateral segment in BodyParts3D. Its shape and boundaries come from the source model.\",\n    },\n    {\n      id: \"FMA7360\",\n      label: \"Right medial segment\",\n      group: \"Right middle lobe\",\n      color: \"#91b7a7\",\n      description:\n        \"The tissue assigned to the right medial segment in BodyParts3D. Its shape and boundaries come from the source model.\",\n    },\n    {\n      id: \"FMA7366\",\n      label: \"Right superior segment\",\n      group: \"Right lower lobe\",\n      color: \"#b87f75\",\n      description:\n        \"The tissue assigned to the right superior segment in BodyParts3D. Its shape and boundaries come from the source model.\",\n    },\n    {\n      id: \"FMA7364\",\n      label: \"Right anterior basal segment\",\n      group: \"Right lower lobe\",\n      color: \"#b87f75\",\n      description:\n        \"The tissue assigned to the right anterior basal segment in BodyParts3D. Its shape and boundaries come from the source model.\",\n    },\n    {\n      id: \"FMA7363\",\n      label: \"Right lateral basal segment\",\n      group: \"Right lower lobe\",\n      color: \"#b87f75\",\n      description:\n        \"The tissue assigned to the right lateral basal segment in BodyParts3D. Its shape and boundaries come from the source model.\",\n    },\n    {\n      id: \"FMA7362\",\n      label: \"Right posterior basal segment\",\n      group: \"Right lower lobe\",\n      color: \"#b87f75\",\n      description:\n        \"The tissue assigned to the right posterior basal segment in BodyParts3D. Its shape and boundaries come from the source model.\",\n    },\n    {\n      id: \"FMA7372\",\n      label: \"Left apicoposterior segment\",\n      group: \"Left upper lobe\",\n      color: \"#d9b997\",\n      description:\n        \"The tissue assigned to the left apicoposterior segment in BodyParts3D. Its shape and boundaries come from the source model.\",\n    },\n    {\n      id: \"FMA7373\",\n      label: \"Left anterior segment\",\n      group: \"Left upper lobe\",\n      color: \"#d9b997\",\n      description:\n        \"The tissue assigned to the left anterior segment in BodyParts3D. Its shape and boundaries come from the source model.\",\n    },\n    {\n      id: \"FMA7374\",\n      label: \"Superior lingular segment\",\n      group: \"Left upper lobe\",\n      color: \"#d9b997\",\n      description:\n        \"The tissue assigned to the superior lingular segment in BodyParts3D. Its shape and boundaries come from the source model.\",\n    },\n    {\n      id: \"FMA7375\",\n      label: \"Inferior lingular segment\",\n      group: \"Left upper lobe\",\n      color: \"#d9b997\",\n      description:\n        \"The tissue assigned to the inferior lingular segment in BodyParts3D. Its shape and boundaries come from the source model.\",\n    },\n    {\n      id: \"FMA7376\",\n      label: \"Left superior segment\",\n      group: \"Left lower lobe\",\n      color: \"#879fae\",\n      description:\n        \"The tissue assigned to the left superior segment in BodyParts3D. Its shape and boundaries come from the source model.\",\n    },\n    {\n      id: \"FMA7378\",\n      label: \"Left anterior basal segment\",\n      group: \"Left lower lobe\",\n      color: \"#879fae\",\n      description:\n        \"The tissue assigned to the left anterior basal segment in BodyParts3D. Its shape and boundaries come from the source model.\",\n    },\n    {\n      id: \"FMA7379\",\n      label: \"Left lateral basal segment\",\n      group: \"Left lower lobe\",\n      color: \"#879fae\",\n      description:\n        \"The tissue assigned to the left lateral basal segment in BodyParts3D. Its shape and boundaries come from the source model.\",\n    },\n    {\n      id: \"FMA7380\",\n      label: \"Left posterior basal segment\",\n      group: \"Left lower lobe\",\n      color: \"#879fae\",\n      description:\n        \"The tissue assigned to the left posterior basal segment in BodyParts3D. Its shape and boundaries come from the source model.\",\n    },\n    {\n      id: \"FMA7394\",\n      label: \"Trachea\",\n      group: \"Airway tree\",\n      color: \"#dfc6a3\",\n      description:\n        \"The windpipe carries air toward the right and left main bronchi.\",\n    },\n    {\n      id: \"FMA26661\",\n      label: \"Right bronchial tree\",\n      group: \"Airway tree\",\n      color: \"#d8b47e\",\n      description:\n        \"The available branches of the airway entering the right lung, grouped for selection.\",\n    },\n    {\n      id: \"FMA26662\",\n      label: \"Left bronchial tree\",\n      group: \"Airway tree\",\n      color: \"#d8b47e\",\n      description:\n        \"The available branches of the airway entering the left lung, grouped for selection.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"BodyParts3D / Anatomography, © The Database Center for Life Science. CC BY-SA 2.1 Japan. Adapted by OrganUI.\",\n    license: \"CC BY-SA 2.1 JP\",\n    licenseUrl: \"https://lifesciencedb.jp/bp3d/info/index.html#License\",\n    source:\n      \"https://github.com/organui/lungs-3d/blob/5815084f43efe438ebfae3fd889ee2baf343dfbf/public/models/LICENSE.txt\",\n  },\n}\n\nexport type LungsProps = Omit<OrganViewerProps, \"model\">\n\nexport function Lungs(props: LungsProps) {\n  return <OrganViewer model={lungsModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-lungs.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Pulmones",
+    "descriptionEs": "Pulmones en 3D: 20 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+    "preview": "app/examples/organ-lungs/preview.tsx",
+    "previewHref": "/examples/organ-lungs",
+    "examples": [
+      {
+        "title": "Pulmones",
+        "href": "/examples/organ-lungs",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Lungs selectedId={id} onSelectionChange={setId} />  // datos: lungsModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "lungsModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "respiratory"
+  ],
+  "type": "registry:component"
+}

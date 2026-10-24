@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-liver",
+  "title": "Liver",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The liver from the OrganUI liver explorer: 7 selectable structures and 5 named views. Model licensed CC BY 4.0.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-liver.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Generated from organui/liver-3d at 528ee17. The GLB stays in that\n// repository under its own licence; see attribution.source.\nexport const liverModel: OrganModel = {\n  name: \"Liver\",\n  src: \"https://cdn.jsdelivr.net/gh/organui/liver-3d@528ee1794670d3bfa23d581f91ba49d6af585b03/public/models/liver.glb\",\n  bytes: 5579432,\n  defaultView: \"Overview\",\n  views: [\n    {\n      name: \"Overview\",\n      direction: [-0.25, 0.28, 1],\n    },\n    {\n      name: \"Anterior\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Posterior\",\n      direction: [0, 0, -1],\n    },\n    {\n      name: \"Inferior\",\n      direction: [0, -1, 0.01],\n    },\n    {\n      name: \"Superior\",\n      direction: [0, 1, 0.01],\n    },\n  ],\n  structures: [\n    {\n      id: \"liver\",\n      label: \"Liver surface\",\n      group: \"Liver\",\n      color: \"#a85750\",\n      description:\n        \"The liver processes nutrients, stores energy, and makes bile to help digest fats. It sits beneath the diaphragm, mostly on the right side of the abdomen.\",\n    },\n    {\n      id: \"gallbladder\",\n      label: \"Gallbladder\",\n      group: \"Biliary system\",\n      color: \"#86a65f\",\n      description:\n        \"A small organ beneath the liver that stores bile between meals and releases it into the small intestine to support fat digestion.\",\n    },\n    {\n      id: \"portal\",\n      label: \"Portal vein\",\n      group: \"Blood vessels\",\n      color: \"#9783c1\",\n      description:\n        \"The hepatic portal vein brings nutrient-rich blood to the liver from the digestive organs. Its branches distribute this blood through the liver.\",\n    },\n    {\n      id: \"hepatic-veins\",\n      label: \"Hepatic veins\",\n      group: \"Blood vessels\",\n      color: \"#649cbb\",\n      description:\n        \"The hepatic veins carry blood away from the liver toward the inferior vena cava, returning it to the circulation.\",\n    },\n    {\n      id: \"artery\",\n      label: \"Hepatic artery\",\n      group: \"Blood vessels\",\n      color: \"#d99173\",\n      description:\n        \"The hepatic artery supplies oxygenated blood to the liver, alongside the nutrient-rich blood arriving through the portal vein.\",\n    },\n    {\n      id: \"biliary\",\n      label: \"Hepatic bile ducts\",\n      group: \"Biliary system\",\n      color: \"#b1a450\",\n      description:\n        \"A branching network collects bile from the liver. The right and left hepatic ducts join the common hepatic duct.\",\n    },\n    {\n      id: \"cystic\",\n      label: \"Cystic duct\",\n      group: \"Biliary system\",\n      color: \"#6b9d83\",\n      description:\n        \"The cystic duct connects the gallbladder with the bile duct system, providing a passage for stored bile.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International\",\n    license: \"CC BY 4.0\",\n    licenseUrl: \"https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html\",\n    source:\n      \"https://github.com/organui/liver-3d/blob/528ee1794670d3bfa23d581f91ba49d6af585b03/public/models/LICENSE.txt\",\n  },\n}\n\nexport type LiverProps = Omit<OrganViewerProps, \"model\">\n\nexport function Liver(props: LiverProps) {\n  return <OrganViewer model={liverModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-liver.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Hígado",
+    "descriptionEs": "Hígado en 3D: 7 estructuras seleccionables. Modelo bajo CC BY 4.0; el crédito queda visible.",
+    "preview": "app/examples/organ-liver/preview.tsx",
+    "previewHref": "/examples/organ-liver",
+    "examples": [
+      {
+        "title": "Hígado",
+        "href": "/examples/organ-liver",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Liver selectedId={id} onSelectionChange={setId} />  // datos: liverModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "liverModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "digestive"
+  ],
+  "type": "registry:component"
+}

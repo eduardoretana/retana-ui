@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-lymph",
+  "title": "Lymph node",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The lymph node from the OrganUI lymph node explorer: 7 selectable structures and 3 named views. Model licensed CC BY 4.0.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-lymph.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Generated from organui/lymph-3d at ce6d0cf. The GLB stays in that\n// repository under its own licence; see attribution.source.\nexport const lymphModel: OrganModel = {\n  name: \"Lymph node\",\n  src: \"https://cdn.jsdelivr.net/gh/organui/lymph-3d@ce6d0cf9c1b632d0e109fc84139e14d0b5cbd651/public/models/lymph-node.glb\",\n  bytes: 6116076,\n  defaultView: \"Front\",\n  hiddenIds: [\"capsule\"],\n  views: [\n    {\n      name: \"Front\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Hilum\",\n      direction: [0, 1, 0.35],\n    },\n    {\n      name: \"Side\",\n      direction: [1, 0, 0],\n    },\n  ],\n  structures: [\n    {\n      id: \"capsule\",\n      label: \"Capsule\",\n      group: \"Lymph node\",\n      color: \"#d8c3a5\",\n      description:\n        \"A tough layer of connective tissue that wraps the whole node. Strands from it run inward and divide the node into compartments.\",\n    },\n    {\n      id: \"follicles\",\n      label: \"Follicles\",\n      group: \"Lymph node\",\n      color: \"#8a6bb8\",\n      description:\n        \"Round clusters of B cells in the outer cortex. When they meet an antigen they form germinal centres and start making antibodies.\",\n    },\n    {\n      id: \"paracortex\",\n      label: \"Paracortex\",\n      group: \"Lymph node\",\n      color: \"#5a8fbf\",\n      description:\n        \"The deeper cortex, between the follicles and the medulla. It is rich in T cells, which meet antigen-presenting cells here.\",\n    },\n    {\n      id: \"medulla\",\n      label: \"Medulla\",\n      group: \"Lymph node\",\n      color: \"#e0a383\",\n      description:\n        \"The inner part of the node, made of medullary cords of plasma cells and macrophages and the sinuses that carry lymph towards the hilum.\",\n    },\n    {\n      id: \"afferent-vessels\",\n      label: \"Afferent lymphatic vessels\",\n      group: \"Lymphatic vessels\",\n      color: \"#9cc77f\",\n      description:\n        \"Small vessels that bring lymph into the node through its curved outer surface. The lymph then filters through the sinuses.\",\n    },\n    {\n      id: \"efferent-vessel\",\n      label: \"Efferent lymphatic vessel\",\n      group: \"Lymphatic vessels\",\n      color: \"#3f9c8a\",\n      description:\n        \"Carries filtered lymph out of the node at the hilum, the dent in its side, onwards to the next node and eventually back to the blood.\",\n    },\n    {\n      id: \"blood-vessels\",\n      label: \"Blood vessels\",\n      group: \"Blood vessels\",\n      color: \"#c4545a\",\n      description:\n        \"An artery and vein enter and leave at the hilum and branch through the node. Lymphocytes leave the blood into the node through these vessels.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"HuBMAP Human Reference Atlas 3D Reference Object Library (Kristen Browne, Heidi Schlehlein et al.), CC BY 4.0. Adapted by OrganUI.\",\n    license: \"CC BY 4.0\",\n    licenseUrl: \"https://creativecommons.org/licenses/by/4.0/\",\n    source:\n      \"https://github.com/organui/lymph-3d/blob/ce6d0cf9c1b632d0e109fc84139e14d0b5cbd651/public/models/ATTRIBUTION.md\",\n  },\n}\n\nexport type LymphProps = Omit<OrganViewerProps, \"model\">\n\nexport function Lymph(props: LymphProps) {\n  return <OrganViewer model={lymphModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-lymph.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Ganglio linfático",
+    "descriptionEs": "Ganglio linfático en 3D: 7 estructuras seleccionables. Modelo bajo CC BY 4.0; el crédito queda visible.",
+    "preview": "app/examples/organ-lymph/preview.tsx",
+    "previewHref": "/examples/organ-lymph",
+    "examples": [
+      {
+        "title": "Ganglio linfático",
+        "href": "/examples/organ-lymph",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Lymph selectedId={id} onSelectionChange={setId} />  // datos: lymphModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "lymphModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "lymphatic"
+  ],
+  "type": "registry:component"
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-nose",
+  "title": "Nose",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The nose from the OrganUI nose explorer: 22 selectable structures and 3 named views. Model licensed CC BY-SA 4.0.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-nose.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Generated from organui/nose-3d at e8acaad. The GLB stays in that\n// repository under its own licence; see attribution.source.\nexport const noseModel: OrganModel = {\n  name: \"Nose\",\n  src: \"https://cdn.jsdelivr.net/gh/organui/nose-3d@e8acaadd578c9e3b9f7c5cbc6b4e6d8d05dc25f0/public/models/nose.glb\",\n  bytes: 3795692,\n  defaultView: \"Oblique\",\n  views: [\n    {\n      name: \"Anterior\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Oblique\",\n      direction: [0.85, 0.2, 1],\n    },\n    {\n      name: \"Lateral\",\n      direction: [1, 0, 0],\n    },\n  ],\n  structures: [\n    {\n      id: \"nasal-bones\",\n      label: \"Nasal bones\",\n      group: \"External nose\",\n      color: \"#f0d29c\",\n      description:\n        \"Two small bones that meet in the midline and form the bony bridge of the nose.\",\n    },\n    {\n      id: \"lateral-cartilages\",\n      label: \"Lateral nasal cartilages\",\n      group: \"External nose\",\n      color: \"#a9c7d4\",\n      description:\n        \"Triangular plates of cartilage below the nasal bones that shape the middle of the nose. They are wings of the septal cartilage.\",\n    },\n    {\n      id: \"alar-cartilages\",\n      label: \"Major alar cartilages\",\n      group: \"External nose\",\n      color: \"#8fb3c7\",\n      description:\n        \"Curved cartilages that form the tip of the nose and hold the nostrils open.\",\n    },\n    {\n      id: \"septal-cartilage\",\n      label: \"Septal cartilage\",\n      group: \"Nasal septum\",\n      color: \"#7fa6bd\",\n      description:\n        \"The front of the wall between the two nasal passages. It joins the nasal bones above and the vomer and ethmoid behind.\",\n    },\n    {\n      id: \"vomer\",\n      label: \"Vomer\",\n      group: \"Nasal septum\",\n      color: \"#cdb48d\",\n      description:\n        \"A flat bone that forms the lower back part of the septum, reaching back to the openings into the throat.\",\n    },\n    {\n      id: \"nasal-cavity\",\n      label: \"Nasal cavity lining\",\n      group: \"Nasal cavity\",\n      color: \"#d98a8a\",\n      description:\n        \"The mucous membrane that lines both nasal passages. It warms, moistens and filters the air, and its outline shows the extent of the nasal passages.\",\n    },\n    {\n      id: \"inferior-conchae\",\n      label: \"Inferior nasal conchae\",\n      group: \"Nasal cavity\",\n      color: \"#c99b7a\",\n      description:\n        \"Scroll-shaped bones on the side walls of the nasal cavity. With their lining they slow the air so it can be warmed and moistened.\",\n    },\n    {\n      id: \"palatine-bones\",\n      label: \"Palatine bones\",\n      group: \"Nasal cavity\",\n      color: \"#bfa98a\",\n      description:\n        \"L-shaped bones at the back of the nasal cavity. They form the back of the hard palate, which is the floor of the nose.\",\n    },\n    {\n      id: \"lacrimal-bones\",\n      label: \"Lacrimal bones\",\n      group: \"Nasal cavity\",\n      color: \"#d8bf99\",\n      description:\n        \"Small, thin bones in the inner wall of each orbit. The tear duct runs past them into the nose.\",\n    },\n    {\n      id: \"olfactory-nerves\",\n      label: \"Olfactory nerves\",\n      group: \"Nasal cavity\",\n      color: \"#e3c25a\",\n      description:\n        \"Carry smell from the roof of the nasal cavity, through the ethmoid bone, to the olfactory bulbs and tracts under the brain.\",\n    },\n    {\n      id: \"frontal-sinuses\",\n      label: \"Frontal sinuses\",\n      group: \"Paranasal sinuses\",\n      color: \"#5fb3c9\",\n      description:\n        \"Air spaces in the forehead, above the root of the nose, split by a septum. They drain down into the nose under the middle concha.\",\n    },\n    {\n      id: \"anterior-ethmoid-cells\",\n      label: \"Anterior ethmoid cells\",\n      group: \"Paranasal sinuses\",\n      color: \"#6cc0d0\",\n      description:\n        \"The front group of small air cells between the nose and the orbits. They drain under the middle concha.\",\n    },\n    {\n      id: \"middle-ethmoid-cells\",\n      label: \"Middle ethmoid cells\",\n      group: \"Paranasal sinuses\",\n      color: \"#4fa3b8\",\n      description:\n        \"The middle group of ethmoid air cells. They open onto the side wall of the nose under the middle concha.\",\n    },\n    {\n      id: \"posterior-ethmoid-cells\",\n      label: \"Posterior ethmoid cells\",\n      group: \"Paranasal sinuses\",\n      color: \"#3d8ea5\",\n      description:\n        \"The back group of ethmoid air cells, next to the sphenoid sinus. They drain under the superior concha.\",\n    },\n    {\n      id: \"maxillary-sinuses\",\n      label: \"Maxillary sinuses\",\n      group: \"Paranasal sinuses\",\n      color: \"#72c0cf\",\n      description:\n        \"The largest sinuses, in the cheekbones beside the nose and under the eyes. Their opening is high on the inner wall, under the middle concha.\",\n    },\n    {\n      id: \"sphenoid-sinus\",\n      label: \"Sphenoid sinus\",\n      group: \"Paranasal sinuses\",\n      color: \"#2f7f99\",\n      description:\n        \"Air spaces deep in the skull behind the nose, just under the pituitary gland, divided by a septum.\",\n    },\n    {\n      id: \"frontal-bone\",\n      label: \"Frontal bone\",\n      group: \"Sinus bones\",\n      color: \"#ece4d2\",\n      description:\n        \"The bone of the forehead and the roofs of the orbits. It holds the frontal sinuses.\",\n    },\n    {\n      id: \"ethmoid\",\n      label: \"Ethmoid bone\",\n      group: \"Sinus bones\",\n      color: \"#d9bd8c\",\n      description:\n        \"A light bone between the orbits. It forms the roof and upper side walls of the nasal cavity, the middle and superior conchae, the back of the septum, and holds the ethmoid cells.\",\n    },\n    {\n      id: \"maxillae\",\n      label: \"Maxillae\",\n      group: \"Sinus bones\",\n      color: \"#e6d3b0\",\n      description:\n        \"The upper jaw bones. They form the cheeks, the side walls and most of the floor of the nasal cavity, and hold the maxillary sinuses.\",\n    },\n    {\n      id: \"sphenoid-bone\",\n      label: \"Sphenoid bone\",\n      group: \"Sinus bones\",\n      color: \"#c8b089\",\n      description:\n        \"A bone at the centre of the skull base, behind the nasal cavity. Its body holds the sphenoid sinus.\",\n    },\n    {\n      id: \"pituitary\",\n      label: \"Pituitary gland\",\n      group: \"Neighbours\",\n      color: \"#b27fb0\",\n      description:\n        \"A hormone gland that sits in a hollow on top of the sphenoid bone, directly above the sphenoid sinus.\",\n    },\n    {\n      id: \"nasopharynx\",\n      label: \"Nasopharynx\",\n      group: \"Neighbours\",\n      color: \"#d7a0a0\",\n      description:\n        \"The top of the throat, behind the nasal cavity. Air passes into it through the two openings at the back of the nose.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"Z-Anatomy (CC BY-SA 4.0), based in part on BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan). Adapted by OrganUI.\",\n    license: \"CC BY-SA 4.0\",\n    licenseUrl: \"https://creativecommons.org/licenses/by-sa/4.0/\",\n    source:\n      \"https://github.com/organui/nose-3d/blob/e8acaadd578c9e3b9f7c5cbc6b4e6d8d05dc25f0/public/models/ATTRIBUTION.md\",\n  },\n}\n\nexport type NoseProps = Omit<OrganViewerProps, \"model\">\n\nexport function Nose(props: NoseProps) {\n  return <OrganViewer model={noseModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-nose.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Nariz",
+    "descriptionEs": "Nariz en 3D: 22 estructuras seleccionables. Modelo bajo CC BY-SA 4.0; el crédito queda visible.",
+    "preview": "app/examples/organ-nose/preview.tsx",
+    "previewHref": "/examples/organ-nose",
+    "examples": [
+      {
+        "title": "Nariz",
+        "href": "/examples/organ-nose",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Nose selectedId={id} onSelectionChange={setId} />  // datos: noseModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "noseModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "respiratory"
+  ],
+  "type": "registry:component"
+}

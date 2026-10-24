@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-intestines",
+  "title": "Intestines",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The intestines from the OrganUI intestines explorer: 11 selectable structures and 3 named views. Model licensed CC BY-SA 2.1 JP.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-intestines.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Generated from organui/intestines-3d at 8386b23. The GLB stays in that\n// repository under its own licence; see attribution.source.\nexport const intestinesModel: OrganModel = {\n  name: \"Intestines\",\n  src: \"https://cdn.jsdelivr.net/gh/organui/intestines-3d@8386b2327715f32b2ec62b403b94a3e5f6a307e2/public/models/intestines.glb\",\n  bytes: 2366084,\n  defaultView: \"Anterior\",\n  views: [\n    {\n      name: \"Anterior\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Posterior\",\n      direction: [0, 0, -1],\n    },\n    {\n      name: \"Left lateral\",\n      direction: [1, 0, 0],\n    },\n  ],\n  structures: [\n    {\n      id: \"duodenum\",\n      label: \"Duodenum\",\n      group: \"Small intestine\",\n      color: \"#d9a07c\",\n      description:\n        \"The first, C-shaped part of the small intestine. It receives food from the stomach along with bile and pancreatic juices.\",\n    },\n    {\n      id: \"jejunum\",\n      label: \"Jejunum\",\n      group: \"Small intestine\",\n      color: \"#d68b80\",\n      description:\n        \"The middle part of the small intestine, where much of the digestion and absorption of nutrients takes place.\",\n    },\n    {\n      id: \"ileum\",\n      label: \"Ileum\",\n      group: \"Small intestine\",\n      color: \"#c47783\",\n      description:\n        \"The last part of the small intestine. It continues absorbing nutrients and joins the large intestine in the lower right abdomen.\",\n    },\n    {\n      id: \"appendix\",\n      label: \"Appendix\",\n      group: \"Large intestine\",\n      color: \"#b5868f\",\n      description:\n        \"A narrow, finger-shaped pouch that projects from the beginning of the large intestine in the lower right abdomen.\",\n    },\n    {\n      id: \"ascending-colon\",\n      label: \"Ascending colon\",\n      group: \"Large intestine\",\n      color: \"#c2a17a\",\n      description:\n        \"Rises along the right side of the abdomen from the start of the large intestine toward the liver. The colon absorbs water and forms stool.\",\n    },\n    {\n      id: \"transverse-colon\",\n      label: \"Transverse colon\",\n      group: \"Large intestine\",\n      color: \"#b8956c\",\n      description:\n        \"Crosses the upper abdomen from right to left, below the liver and stomach.\",\n    },\n    {\n      id: \"descending-colon\",\n      label: \"Descending colon\",\n      group: \"Large intestine\",\n      color: \"#ad8a63\",\n      description:\n        \"Runs down the left side of the abdomen and carries stool toward the rectum.\",\n    },\n    {\n      id: \"rectum\",\n      label: \"Rectum\",\n      group: \"Large intestine\",\n      color: \"#a07c5e\",\n      description:\n        \"The final straight section of the large intestine, in the pelvis, which stores stool until it leaves the body through the anus.\",\n    },\n    {\n      id: \"mesocolic-taenia\",\n      label: \"Mesocolic taenia\",\n      group: \"Taeniae coli\",\n      color: \"#e3cfa6\",\n      description:\n        \"One of three ribbon-like bands of longitudinal muscle on the colon. It runs along the side where the colon is attached by its mesentery.\",\n    },\n    {\n      id: \"omental-taenia\",\n      label: \"Omental taenia\",\n      group: \"Taeniae coli\",\n      color: \"#d8c08d\",\n      description:\n        \"A band of longitudinal colon muscle that, on the transverse colon, runs where the greater omentum attaches.\",\n    },\n    {\n      id: \"free-taenia\",\n      label: \"Free taenia\",\n      group: \"Taeniae coli\",\n      color: \"#ead9b6\",\n      description:\n        \"The band of longitudinal colon muscle with no attachment, visible on the front of the ascending and descending colon.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"BodyParts3D / Anatomography, © The Database Center for Life Science. CC BY-SA 2.1 Japan. Adapted by OrganUI.\",\n    license: \"CC BY-SA 2.1 JP\",\n    licenseUrl: \"https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en\",\n    source:\n      \"https://github.com/organui/intestines-3d/blob/8386b2327715f32b2ec62b403b94a3e5f6a307e2/public/models/LICENSE.txt\",\n  },\n}\n\nexport type IntestinesProps = Omit<OrganViewerProps, \"model\">\n\nexport function Intestines(props: IntestinesProps) {\n  return <OrganViewer model={intestinesModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-intestines.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Intestinos",
+    "descriptionEs": "Intestinos en 3D: 11 estructuras seleccionables. Modelo bajo CC BY-SA 2.1 JP; el crédito queda visible.",
+    "preview": "app/examples/organ-intestines/preview.tsx",
+    "previewHref": "/examples/organ-intestines",
+    "examples": [
+      {
+        "title": "Intestinos",
+        "href": "/examples/organ-intestines",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Intestines selectedId={id} onSelectionChange={setId} />  // datos: intestinesModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "intestinesModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 2.1 JP.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "digestive"
+  ],
+  "type": "registry:component"
+}

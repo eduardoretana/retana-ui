@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-uterus",
+  "title": "Uterus",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The uterus from the OrganUI uterus explorer: 27 selectable structures and 3 named views. Model licensed CC BY 4.0.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-uterus.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Generated from organui/uterus-3d at 404a603. The GLB stays in that\n// repository under its own licence; see attribution.source.\nexport const uterusModel: OrganModel = {\n  name: \"Uterus\",\n  src: \"https://cdn.jsdelivr.net/gh/organui/uterus-3d@404a6039b2d667e2b4e08ae71d4964cd9b963cf1/public/models/reproductive.glb\",\n  bytes: 4008116,\n  defaultView: \"Anterior\",\n  hiddenIds: [\"broad-ligament\", \"bladder\"],\n  views: [\n    {\n      name: \"Anterior\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Superior\",\n      direction: [0, 1, 0.35],\n    },\n    {\n      name: \"Left lateral\",\n      direction: [1, 0, 0],\n    },\n  ],\n  structures: [\n    {\n      id: \"fundus\",\n      label: \"Fundus\",\n      group: \"Uterus and vagina\",\n      color: \"#c46f74\",\n      description:\n        \"The rounded top of the uterus, above the points where the uterine tubes enter.\",\n    },\n    {\n      id: \"body\",\n      label: \"Body\",\n      group: \"Uterus and vagina\",\n      color: \"#dc958d\",\n      description:\n        \"The main, muscular part of the uterus. A pregnancy develops inside it.\",\n    },\n    {\n      id: \"cornua\",\n      label: \"Cornua\",\n      group: \"Uterus and vagina\",\n      color: \"#e3ab93\",\n      description:\n        \"The upper corners of the uterus, where the uterine tubes join it.\",\n    },\n    {\n      id: \"tubal-ostia\",\n      label: \"Tubal openings\",\n      group: \"Uterus and vagina\",\n      color: \"#a85b62\",\n      description:\n        \"Where each uterine tube opens into the cavity of the uterus.\",\n    },\n    {\n      id: \"lower-segment\",\n      label: \"Lower uterine segment\",\n      group: \"Uterus and vagina\",\n      color: \"#cf9a86\",\n      description:\n        \"The narrow part between the body and the cervix, also called the isthmus of the uterus.\",\n    },\n    {\n      id: \"cervix\",\n      label: \"Cervix\",\n      group: \"Uterus and vagina\",\n      color: \"#b97f86\",\n      description:\n        \"The lower, narrow end of the uterus. Its canal links the cavity of the uterus to the vagina.\",\n    },\n    {\n      id: \"internal-os\",\n      label: \"Internal os\",\n      group: \"Uterus and vagina\",\n      color: \"#8e4f58\",\n      description:\n        \"The upper opening of the cervical canal, into the cavity of the uterus.\",\n    },\n    {\n      id: \"external-os\",\n      label: \"External os\",\n      group: \"Uterus and vagina\",\n      color: \"#7c4450\",\n      description: \"The lower opening of the cervical canal, into the vagina.\",\n    },\n    {\n      id: \"vagina\",\n      label: \"Vagina\",\n      group: \"Uterus and vagina\",\n      color: \"#d6a7a2\",\n      description:\n        \"A muscular canal that runs from the cervix down to the outside of the body.\",\n    },\n    {\n      id: \"cervicovaginal-junction\",\n      label: \"Cervicovaginal junction\",\n      group: \"Uterus and vagina\",\n      color: \"#a87a80\",\n      description: \"Where the cervix meets the upper end of the vagina.\",\n    },\n    {\n      id: \"isthmus\",\n      label: \"Isthmus\",\n      group: \"Uterine tubes\",\n      color: \"#d9a35f\",\n      description:\n        \"The narrow inner third of each uterine tube, next to the uterus.\",\n    },\n    {\n      id: \"ampulla\",\n      label: \"Ampulla\",\n      group: \"Uterine tubes\",\n      color: \"#e3b56f\",\n      description:\n        \"The wide, curving middle part of each tube and the usual place where fertilisation happens.\",\n    },\n    {\n      id: \"infundibulum\",\n      label: \"Infundibulum\",\n      group: \"Uterine tubes\",\n      color: \"#cf9550\",\n      description:\n        \"The funnel-shaped outer end of each tube, which opens beside the ovary.\",\n    },\n    {\n      id: \"fimbriae\",\n      label: \"Fimbriae\",\n      group: \"Uterine tubes\",\n      color: \"#b98345\",\n      description:\n        \"Finger-like fringes around the open end of each tube that sweep a released egg inside.\",\n    },\n    {\n      id: \"left-ovary\",\n      label: \"Left ovary\",\n      group: \"Ovaries\",\n      color: \"#9a7fb8\",\n      description:\n        \"An almond-shaped gland that holds the egg follicles and makes oestrogen and progesterone.\",\n    },\n    {\n      id: \"right-ovary\",\n      label: \"Right ovary\",\n      group: \"Ovaries\",\n      color: \"#8a70aa\",\n      description:\n        \"An almond-shaped gland that holds the egg follicles and makes oestrogen and progesterone.\",\n    },\n    {\n      id: \"broad-ligament\",\n      label: \"Broad ligament\",\n      group: \"Ligaments\",\n      color: \"#d9b4a3\",\n      description:\n        \"A wide fold of peritoneum that drapes over the uterus, tubes and ovaries and joins them to the side walls of the pelvis.\",\n    },\n    {\n      id: \"mesosalpinx\",\n      label: \"Mesosalpinx\",\n      group: \"Ligaments\",\n      color: \"#e9c9a8\",\n      description:\n        \"The upper part of the broad ligament that holds each uterine tube.\",\n    },\n    {\n      id: \"mesovarium\",\n      label: \"Mesovarium\",\n      group: \"Ligaments\",\n      color: \"#c9b3d6\",\n      description:\n        \"The short fold of the broad ligament that attaches each ovary.\",\n    },\n    {\n      id: \"ovarian-ligaments\",\n      label: \"Ovarian ligaments\",\n      group: \"Ligaments\",\n      color: \"#b49ac8\",\n      description:\n        \"Cords that tie each ovary to the side of the uterus, just below the tube.\",\n    },\n    {\n      id: \"suspensory-ligaments\",\n      label: \"Suspensory ligaments of the ovary\",\n      group: \"Ligaments\",\n      color: \"#a68fbf\",\n      description:\n        \"Folds that run from each ovary up to the pelvic wall and carry the ovarian vessels.\",\n    },\n    {\n      id: \"round-ligaments\",\n      label: \"Round ligaments\",\n      group: \"Ligaments\",\n      color: \"#d9a7a0\",\n      description:\n        \"Cords that run from the top corners of the uterus forward and down through the groin.\",\n    },\n    {\n      id: \"cardinal-ligaments\",\n      label: \"Cardinal ligaments\",\n      group: \"Ligaments\",\n      color: \"#cfa58a\",\n      description:\n        \"Bands at the base of the broad ligament that anchor the cervix to the side walls of the pelvis.\",\n    },\n    {\n      id: \"uterosacral-ligaments\",\n      label: \"Uterosacral ligaments\",\n      group: \"Ligaments\",\n      color: \"#bf9a83\",\n      description: \"Bands that run back from the cervix to the sacrum.\",\n    },\n    {\n      id: \"uterine-arteries\",\n      label: \"Uterine arteries\",\n      group: \"Blood vessels\",\n      color: \"#b8564c\",\n      description:\n        \"Branches of the internal iliac arteries that reach the sides of the uterus near the cervix.\",\n    },\n    {\n      id: \"uterine-veins\",\n      label: \"Uterine veins\",\n      group: \"Blood vessels\",\n      color: \"#6d8db0\",\n      description: \"Drain the uterus into the internal iliac veins.\",\n    },\n    {\n      id: \"bladder\",\n      label: \"Urinary bladder\",\n      group: \"Neighbouring structures\",\n      color: \"#d6c27a\",\n      description:\n        \"Sits in front of and below the uterus, which tips forward over it.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"HuBMAP Human Reference Atlas 3D Reference Object Library (Kristen Browne, Heidi Schlehlein et al.), CC BY 4.0. Adapted by OrganUI.\",\n    license: \"CC BY 4.0\",\n    licenseUrl: \"https://creativecommons.org/licenses/by/4.0/\",\n    source:\n      \"https://github.com/organui/uterus-3d/blob/404a6039b2d667e2b4e08ae71d4964cd9b963cf1/public/models/ATTRIBUTION.md\",\n  },\n}\n\nexport type UterusProps = Omit<OrganViewerProps, \"model\">\n\nexport function Uterus(props: UterusProps) {\n  return <OrganViewer model={uterusModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-uterus.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Útero",
+    "descriptionEs": "Útero en 3D: 27 estructuras seleccionables. Modelo bajo CC BY 4.0; el crédito queda visible.",
+    "preview": "app/examples/organ-uterus/preview.tsx",
+    "previewHref": "/examples/organ-uterus",
+    "examples": [
+      {
+        "title": "Útero",
+        "href": "/examples/organ-uterus",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Uterus selectedId={id} onSelectionChange={setId} />  // datos: uterusModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "uterusModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY 4.0.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "reproductive"
+  ],
+  "type": "registry:component"
+}

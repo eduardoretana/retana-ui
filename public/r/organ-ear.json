@@ -1,0 +1,53 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "organ-ear",
+  "title": "Ear",
+  "author": "Eduardo Retana (adapted from OrganUI, MIT)",
+  "description": "The ear from the OrganUI ear explorer: 16 selectable structures and 3 named views. Model licensed CC BY-SA 4.0.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/organ-viewer"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/organ-ear.tsx",
+      "content": "import {\n  OrganViewer,\n  type OrganModel,\n  type OrganViewerProps,\n} from \"@/components/ui/organ-viewer\"\n\n// Generated from organui/ear-3d at 40ace7e. The GLB stays in that\n// repository under its own licence; see attribution.source.\nexport const earModel: OrganModel = {\n  name: \"Ear\",\n  src: \"https://cdn.jsdelivr.net/gh/organui/ear-3d@40ace7ed45cdbf604adda889e5db720ee6b1ce98/public/models/ear.glb\",\n  bytes: 1010340,\n  defaultView: \"Anterior\",\n  views: [\n    {\n      name: \"Anterior\",\n      direction: [0, 0, 1],\n    },\n    {\n      name: \"Lateral\",\n      direction: [-1, 0.1, 0.25],\n    },\n    {\n      name: \"Superior\",\n      direction: [0, 1, 0.3],\n    },\n  ],\n  structures: [\n    {\n      id: \"helix\",\n      label: \"Helix\",\n      group: \"Outer ear\",\n      color: \"#e0a48f\",\n      description:\n        \"The curled outer rim of the auricle. It runs from above the ear canal up and around the top and back of the ear.\",\n    },\n    {\n      id: \"antihelix\",\n      label: \"Antihelix\",\n      group: \"Outer ear\",\n      color: \"#d18f7c\",\n      description:\n        \"A curved ridge inside the helix. At the top it splits into two crura that frame the triangular fossa.\",\n    },\n    {\n      id: \"scapha-and-fossa\",\n      label: \"Scapha and triangular fossa\",\n      group: \"Outer ear\",\n      color: \"#ebbba7\",\n      description:\n        \"Shallow hollows of the auricle: the scapha is the groove between helix and antihelix, the triangular fossa sits between the crura.\",\n    },\n    {\n      id: \"concha\",\n      label: \"Concha\",\n      group: \"Outer ear\",\n      color: \"#bf7d6e\",\n      description:\n        \"The deep bowl at the centre of the auricle. It funnels sound into the ear canal, which opens from its lower part.\",\n    },\n    {\n      id: \"tragus\",\n      label: \"Tragus and antitragus\",\n      group: \"Outer ear\",\n      color: \"#c98f84\",\n      description:\n        \"Two small flaps either side of the opening of the ear canal. The tragus is in front, the antitragus below and behind it.\",\n    },\n    {\n      id: \"lobule\",\n      label: \"Lobule\",\n      group: \"Outer ear\",\n      color: \"#efc2b2\",\n      description:\n        \"The soft earlobe at the bottom of the auricle. It contains fat and no cartilage.\",\n    },\n    {\n      id: \"back-of-auricle\",\n      label: \"Back of the auricle\",\n      group: \"Outer ear\",\n      color: \"#d7a596\",\n      description:\n        \"The surface facing the head. Its bulges mirror the hollows on the front, and a groove joins it to the scalp.\",\n    },\n    {\n      id: \"tympanic-membrane\",\n      label: \"Eardrum\",\n      group: \"Outer ear\",\n      color: \"#c8b6d8\",\n      description:\n        \"A thin membrane at the end of the ear canal. Sound makes it vibrate, and the malleus attached to it passes the vibration on.\",\n    },\n    {\n      id: \"malleus\",\n      label: \"Malleus\",\n      group: \"Middle ear\",\n      color: \"#efe2c4\",\n      description:\n        \"The first and largest ossicle, about 8 mm long. Its handle is attached to the eardrum and its head joins the incus.\",\n    },\n    {\n      id: \"incus\",\n      label: \"Incus\",\n      group: \"Middle ear\",\n      color: \"#e3cf9f\",\n      description:\n        \"The middle ossicle. Its body joins the malleus and its long limb reaches down to the stapes.\",\n    },\n    {\n      id: \"stapes\",\n      label: \"Stapes\",\n      group: \"Middle ear\",\n      color: \"#d5bb7e\",\n      description:\n        \"The smallest bone in the body. Its footplate sits in the oval window and pushes vibrations into the fluid of the inner ear.\",\n    },\n    {\n      id: \"auditory-tube\",\n      label: \"Auditory tube\",\n      group: \"Middle ear\",\n      color: \"#9fb8a0\",\n      description:\n        \"Connects the middle ear to the back of the nose. It opens when you swallow or yawn to balance pressure on both sides of the eardrum.\",\n    },\n    {\n      id: \"chorda-tympani\",\n      label: \"Chorda tympani\",\n      group: \"Middle ear\",\n      color: \"#e39a52\",\n      description:\n        \"A branch of the facial nerve that crosses the middle ear between the malleus and incus, carrying taste from the front of the tongue.\",\n    },\n    {\n      id: \"cochlea\",\n      label: \"Cochlea\",\n      group: \"Inner ear\",\n      color: \"#7f9fc4\",\n      description:\n        \"A fluid-filled spiral of about two and a half turns. Hair cells along it turn vibrations into nerve signals, high pitches at the base and low pitches at the apex.\",\n    },\n    {\n      id: \"vestibule\",\n      label: \"Vestibule and semicircular canals\",\n      group: \"Inner ear\",\n      color: \"#93b4cf\",\n      description:\n        \"The balance organ. The vestibule senses gravity and straight-line motion, and three canals at right angles to each other sense head rotation.\",\n    },\n    {\n      id: \"vestibulocochlear-nerve\",\n      label: \"Vestibulocochlear nerve\",\n      group: \"Inner ear\",\n      color: \"#e9d36f\",\n      description:\n        \"Cranial nerve VIII. Its cochlear part carries hearing and its vestibular part carries balance from the inner ear to the brainstem.\",\n    },\n  ],\n  attribution: {\n    credit:\n      \"Z-Anatomy (CC BY-SA 4.0), based in part on BodyParts3D, © The Database Center for Life Science (CC BY-SA 2.1 Japan). Adapted by OrganUI.\",\n    license: \"CC BY-SA 4.0\",\n    licenseUrl: \"https://creativecommons.org/licenses/by-sa/4.0/\",\n    source:\n      \"https://github.com/organui/ear-3d/blob/40ace7ed45cdbf604adda889e5db720ee6b1ce98/public/models/ATTRIBUTION.md\",\n  },\n}\n\nexport type EarProps = Omit<OrganViewerProps, \"model\">\n\nexport function Ear(props: EarProps) {\n  return <OrganViewer model={earModel} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "@ui/organ-ear.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Oído",
+    "descriptionEs": "Oído en 3D: 16 estructuras seleccionables. Modelo bajo CC BY-SA 4.0; el crédito queda visible.",
+    "preview": "app/examples/organ-ear/preview.tsx",
+    "previewHref": "/examples/organ-ear",
+    "examples": [
+      {
+        "title": "Oído",
+        "href": "/examples/organ-ear",
+        "description": "Modelo GLB fijado a commit."
+      }
+    ],
+    "usage": "<Ear selectedId={id} onSelectionChange={setId} />  // datos: earModel",
+    "api": [
+      {
+        "name": "...OrganViewerProps",
+        "type": "Omit<OrganViewerProps, \"model\">",
+        "description": "Mismas props que organ-viewer."
+      },
+      {
+        "name": "earModel",
+        "type": "OrganModel",
+        "description": "Datos del modelo para bloques y árbol anatómico."
+      }
+    ]
+  },
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE). Model licence: CC BY-SA 4.0.",
+  "categories": [
+    "salud",
+    "anatomia",
+    "organ",
+    "senses"
+  ],
+  "type": "registry:component"
+}
