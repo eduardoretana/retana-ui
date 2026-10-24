@@ -308,6 +308,7 @@ import Preview303 from "@/app/examples/work-table-board/preview"
 import Preview304 from "@/app/examples/work-table-tree/preview"
 import Preview305 from "@/app/examples/work-table-queue/preview"
 import Preview306 from "@/app/examples/work-table-support/preview"
+import Preview307 from "@/app/examples/agent-tree/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -617,4 +618,5 @@ export const previewMap = {
   "work-table-tree": Preview304,
   "work-table-queue": Preview305,
   "work-table-support": Preview306,
+  "agent-tree": Preview307,
 }

@@ -23243,6 +23243,97 @@
         ]
       },
       "docs": "Clean-room support queue. Fictional tickets. Bulk move uses the table selection. Answer no if the CLI asks to overwrite a file the host already has. The item ships no theme."
+    },
+    {
+      "name": "agent-tree",
+      "type": "registry:ui",
+      "title": "Agent tree",
+      "description": "A controlled tree of agents: who launched whom, with live status, cost, orthogonal edges, and a non-destructive retry.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "card",
+        "popover",
+        "tooltip"
+      ],
+      "categories": [
+        "agents"
+      ],
+      "meta": {
+        "titleEs": "Árbol de agentes",
+        "descriptionEs": "Un árbol controlado de agentes: quién lanzó a quién, con estado en vivo, costo, conexiones y reintento.",
+        "preview": "app/examples/agent-tree/preview.tsx",
+        "previewHref": "/examples/agent-tree",
+        "examples": [
+          {
+            "title": "Boletín del faro",
+            "href": "/examples/agent-tree",
+            "description": "Simulación en vivo, un árbol estático y la misma pieza en oscuro."
+          }
+        ],
+        "usage": "<AgentTree nodes={nodes} tick onRetry={retry} onDismiss={dismiss} onToggle={toggle} onAddAgents={add} />",
+        "api": [
+          {
+            "name": "nodes",
+            "type": "AgentNode[]",
+            "description": "id, parentId, role, model, task, status, costUsd, elapsedMs, error. Order is not required."
+          },
+          {
+            "name": "onRetry / onDismiss / onToggle",
+            "type": "(id) => void",
+            "description": "Retry, dismiss, and collapse. The tree does not mutate nodes; withRetrySibling stops the failed node and appends a running sibling."
+          },
+          {
+            "name": "onAddAgents",
+            "type": "() => void",
+            "description": "Header button labeled + Agentes."
+          },
+          {
+            "name": "tick",
+            "type": "boolean",
+            "description": "Visually advances running cost and time between prop updates. Props stay the source of truth."
+          },
+          {
+            "name": "collapsedIds",
+            "type": "string[]",
+            "description": "Controlled collapsed branches. Omit it for internal state."
+          },
+          {
+            "name": "renderNodeExtra",
+            "type": "(node) => ReactNode",
+            "description": "Extra body under the task."
+          },
+          {
+            "name": "locale / labels",
+            "type": "\"es\" | \"en\" / partial",
+            "description": "Spanish by default."
+          },
+          {
+            "name": "loading / error",
+            "type": "boolean / string",
+            "description": "Loading, empty, and error states."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Inspirado en el árbol de agentes de Flo / Affect UI (preview público); reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (avatar, badge, button, card, popover, tooltip), responde no. La pieza no trae tema, cssVars ni colores fijos. El color de estado usa tokens del anfitrión: info en chart-2, éxito en primary, aviso en chart-4, fallo en destructive y detenido en muted.",
+      "files": [
+        {
+          "path": "registry/ui/agent-tree.tsx",
+          "type": "registry:component",
+          "target": "@ui/agent-tree.tsx"
+        }
+      ]
     }
   ]
 }
