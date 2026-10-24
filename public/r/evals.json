@@ -1,0 +1,72 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "evals",
+  "title": "Evals",
+  "author": "Eduardo Retana",
+  "description": "KPIs against the previous version, a pass-rate chart, a prompt diff, and a test-case table.",
+  "dependencies": [],
+  "registryDependencies": [
+    "badge",
+    "@retana/app-shell"
+  ],
+  "files": [
+    {
+      "path": "registry/blocks/evals.tsx",
+      "content": "\"use client\"\n\n/**\n * Prompt evaluation review. The diff is a line comparison written for this\n * registry; it does not vendor a diff library or another product's cases.\n */\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Badge } from \"@/components/ui/badge\"\nimport { ScreenFrame, type AppShellProps, type ShellDensity, type ShellNavItem } from \"@/components/ui/app-shell\"\n\nexport type EvalKpi = {\n  id: string\n  label: string\n  current: string\n  previous: string\n  direction?: \"up\" | \"down\" | \"flat\"\n}\n\nexport type EvalVersion = {\n  id: string\n  label: string\n  passRate: number\n}\n\nexport type EvalPrompt = {\n  before: string\n  after: string\n}\n\nexport type EvalCaseStatus = \"pass\" | \"fail\" | \"skip\"\n\nexport type EvalCase = {\n  id: string\n  name: string\n  status: EvalCaseStatus\n  score: string\n  note: string\n}\n\nexport type EvalReviewClassNames = {\n  root?: string\n  kpis?: string\n  chart?: string\n  diff?: string\n  cases?: string\n}\n\nexport type EvalReviewProps = {\n  title?: string\n  versionLabel?: string\n  kpis?: EvalKpi[]\n  versions?: EvalVersion[]\n  prompt?: EvalPrompt\n  cases?: EvalCase[]\n  shell?: boolean\n  shellProps?: Partial<AppShellProps>\n  density?: ShellDensity\n  className?: string\n  classNames?: EvalReviewClassNames\n}\n\nexport const evalNav: ShellNavItem[] = [\n  { id: \"evals\", label: \"Evaluaciones\" },\n  { id: \"prompts\", label: \"Prompts\" },\n  { id: \"cases\", label: \"Casos\" },\n  { id: \"settings\", label: \"Ajustes\" },\n]\n\nexport const evalKpis: EvalKpi[] = [\n  { id: \"pass\", label: \"Aprobación\", current: \"86%\", previous: \"79%\", direction: \"up\" },\n  { id: \"fail\", label: \"Fallos\", current: \"4\", previous: \"7\", direction: \"down\" },\n  { id: \"latency\", label: \"Latencia\", current: \"1.8 s\", previous: \"2.4 s\", direction: \"down\" },\n  { id: \"cost\", label: \"Costo medio\", current: \"$0.04\", previous: \"$0.05\", direction: \"down\" },\n]\n\nexport const evalVersions: EvalVersion[] = [\n  { id: \"v1\", label: \"v1\", passRate: 71 },\n  { id: \"v2\", label: \"v2\", passRate: 79 },\n  { id: \"v3\", label: \"v3\", passRate: 86 },\n]\n\nexport const evalPrompt: EvalPrompt = {\n  before: \"Describe el producto.\\nIncluye un enlace.\",\n  after: \"Describe la linterna de campo en tres frases.\\nCierra pidiendo una muestra.\\nNo inventes cifras.\",\n}\n\nexport const evalCases: EvalCase[] = [\n  { id: \"greeting\", name: \"Saludo\", status: \"pass\", score: \"1.0\", note: \"Responde en español y no pide datos.\" },\n  { id: \"numbers\", name: \"Cifras\", status: \"pass\", score: \"1.0\", note: \"No agrega precios que no están en el encargo.\" },\n  { id: \"tone\", name: \"Tono\", status: \"fail\", score: \"0.4\", note: \"Usa un trato formal cuando se pidió cercano.\" },\n  { id: \"cite\", name: \"Cita\", status: \"skip\", score: \"—\", note: \"El caso no aplica a esta versión.\" },\n]\n\nconst statusLabel: Record<EvalCaseStatus, string> = {\n  pass: \"Pasa\",\n  fail: \"Falla\",\n  skip: \"Omitido\",\n}\n\nconst directionWord: Record<NonNullable<EvalKpi[\"direction\"]>, string> = {\n  up: \"Sube\",\n  down: \"Baja\",\n  flat: \"Igual\",\n}\n\nfunction promptRows(prompt: EvalPrompt) {\n  const before = prompt.before.split(\"\\n\")\n  const after = prompt.after.split(\"\\n\")\n  const length = Math.max(before.length, after.length)\n  return Array.from({ length }, (_, index) => {\n    const left = before[index]\n    const right = after[index]\n    return { left, right, changed: left !== right }\n  })\n}\n\nexport function EvalReview({\n  title = \"Evaluación del encargo\",\n  versionLabel = \"v3 frente a v2\",\n  kpis = evalKpis,\n  versions = evalVersions,\n  prompt = evalPrompt,\n  cases = evalCases,\n  shell = true,\n  shellProps,\n  density = \"comfortable\",\n  className,\n  classNames,\n}: EvalReviewProps) {\n  const space = density === \"compact\" ? \"gap-3 p-3\" : \"gap-4 p-4\"\n  const maxRate = Math.max(...versions.map((version) => version.passRate), 0)\n  const rows = promptRows(prompt)\n\n  return (\n    <ScreenFrame\n      shell={shell}\n      shellProps={{ activeId: \"evals\", nav: evalNav, contentLabel: \"Evaluaciones\", density, ...shellProps }}\n      className={className}\n    >\n      <div data-slot=\"evals\" data-density={density} className={cn(\"@container flex min-h-0 min-w-0 flex-1 flex-col\", space, classNames?.root)}>\n        <header>\n          <p className=\"text-xs text-muted-foreground\">{versionLabel}</p>\n          <h1 className=\"text-lg font-semibold tracking-tight\">{title}</h1>\n        </header>\n\n        {kpis.length === 0 ? (\n          <p className=\"text-sm text-muted-foreground\">Sin indicadores.</p>\n        ) : (\n          <ul className={cn(\"grid grid-cols-1 gap-3 @min-[640px]:grid-cols-2 @min-[960px]:grid-cols-4\", classNames?.kpis)}>\n            {kpis.map((kpi) => (\n              <li key={kpi.id} className=\"min-w-0 rounded-xl border border-border p-3\">\n                <p className=\"truncate text-xs text-muted-foreground\">{kpi.label}</p>\n                <p className=\"mt-1 truncate text-2xl font-semibold tabular-nums\">{kpi.current}</p>\n                <p className=\"mt-1 text-xs text-muted-foreground\">\n                  <span className=\"font-medium text-foreground\">{directionWord[kpi.direction ?? \"flat\"]}</span>\n                  <span className=\"ml-1\">antes {kpi.previous}</span>\n                </p>\n              </li>\n            ))}\n          </ul>\n        )}\n\n        <section aria-label=\"Aprobación por versión\" className={cn(\"rounded-xl border border-border p-3\", classNames?.chart)}>\n          <h2 className=\"text-sm font-medium\">Aprobación por versión</h2>\n          {versions.length === 0 ? (\n            <p className=\"mt-2 text-sm text-muted-foreground\">Sin versiones.</p>\n          ) : (\n            <div className=\"mt-3 flex h-40 items-end gap-3\" role=\"list\">\n              {versions.map((version) => {\n                const height = maxRate === 0 ? 0 : (version.passRate / Math.max(maxRate, 100)) * 100\n                return (\n                  <div key={version.id} role=\"listitem\" className=\"flex min-w-0 flex-1 flex-col items-center gap-1\">\n                    <span className=\"text-xs tabular-nums\">{version.passRate}%</span>\n                    <div className=\"relative h-24 w-full max-w-16\">\n                      <div\n                        className=\"absolute inset-x-0 bottom-0 rounded-t-md bg-chart-2 motion-safe:transition-[height] motion-reduce:transition-none\"\n                        style={{ height: `${height}%` }}\n                        role=\"meter\"\n                        aria-label={version.label}\n                        aria-valuemin={0}\n                        aria-valuemax={100}\n                        aria-valuenow={version.passRate}\n                      />\n                    </div>\n                    <span className=\"truncate text-xs text-muted-foreground\">{version.label}</span>\n                  </div>\n                )\n              })}\n            </div>\n          )}\n        </section>\n\n        <section aria-label=\"Diferencia del prompt\" className={cn(\"rounded-xl border border-border p-3\", classNames?.diff)}>\n          <h2 className=\"text-sm font-medium\">Diferencia del prompt</h2>\n          {rows.length === 0 ? (\n            <p className=\"mt-2 text-sm text-muted-foreground\">Sin texto.</p>\n          ) : (\n            <div className=\"mt-3 grid gap-3 @min-[720px]:grid-cols-2\">\n              <div>\n                <h3 className=\"mb-1 text-xs text-muted-foreground\">Antes</h3>\n                <ol className=\"overflow-hidden rounded-lg border border-border font-mono text-xs\">\n                  {rows.map((row, index) => (\n                    <li key={`before-${index}`} className={cn(\"px-2 py-1 break-all whitespace-pre-wrap\", row.changed && \"bg-destructive/10\")}>\n                      {row.left ?? \"\"}\n                    </li>\n                  ))}\n                </ol>\n              </div>\n              <div>\n                <h3 className=\"mb-1 text-xs text-muted-foreground\">Después</h3>\n                <ol className=\"overflow-hidden rounded-lg border border-border font-mono text-xs\">\n                  {rows.map((row, index) => (\n                    <li key={`after-${index}`} className={cn(\"px-2 py-1 break-all whitespace-pre-wrap\", row.changed && row.right != null && \"bg-primary/10\")}>\n                      {row.right ?? \"\"}\n                    </li>\n                  ))}\n                </ol>\n              </div>\n            </div>\n          )}\n        </section>\n\n        <section aria-label=\"Casos de prueba\" className={cn(\"rounded-xl border border-border\", classNames?.cases)}>\n          <h2 className=\"px-3 pt-3 text-sm font-medium\">Casos</h2>\n          {cases.length === 0 ? (\n            <p className=\"px-3 py-3 text-sm text-muted-foreground\">Sin casos.</p>\n          ) : (\n            <div className=\"overflow-auto\">\n              <table className=\"w-full min-w-[36rem] text-sm\">\n                <caption className=\"sr-only\">Casos de la evaluación</caption>\n                <thead className=\"text-left text-xs text-muted-foreground\">\n                  <tr>\n                    <th scope=\"col\" className=\"px-3 py-2 font-medium\">Caso</th>\n                    <th scope=\"col\" className=\"px-3 py-2 font-medium\">Estado</th>\n                    <th scope=\"col\" className=\"px-3 py-2 font-medium\">Puntaje</th>\n                    <th scope=\"col\" className=\"px-3 py-2 font-medium\">Nota</th>\n                  </tr>\n                </thead>\n                <tbody>\n                  {cases.map((item) => (\n                    <tr key={item.id} className=\"border-t border-border\">\n                      <th scope=\"row\" className=\"px-3 py-2 text-left font-medium\">{item.name}</th>\n                      <td className=\"px-3 py-2\">\n                        <Badge variant={item.status === \"fail\" ? \"destructive\" : item.status === \"pass\" ? \"secondary\" : \"outline\"}>\n                          {statusLabel[item.status]}\n                        </Badge>\n                      </td>\n                      <td className=\"px-3 py-2 tabular-nums\">{item.score}</td>\n                      <td className=\"px-3 py-2 break-words text-muted-foreground\">{item.note}</td>\n                    </tr>\n                  ))}\n                </tbody>\n              </table>\n            </div>\n          )}\n        </section>\n      </div>\n    </ScreenFrame>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/evals.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Evaluaciones",
+    "descriptionEs": "Indicadores frente a la versión anterior, gráfica de aprobación, diferencia del prompt y tabla de casos.",
+    "preview": "app/examples/evals/preview.tsx",
+    "previewHref": "/examples/evals",
+    "examples": [
+      {
+        "title": "v3 del encargo",
+        "href": "/examples/evals",
+        "description": "Aprobación, diff del prompt y casos."
+      }
+    ],
+    "usage": "<EvalReview kpis={kpis} versions={versions} prompt={prompt} cases={cases} />",
+    "api": [
+      {
+        "name": "kpis",
+        "type": "EvalKpi[]",
+        "description": "Current value, previous value, and a written direction."
+      },
+      {
+        "name": "versions",
+        "type": "EvalVersion[]",
+        "description": "Pass rate by version, drawn as meters."
+      },
+      {
+        "name": "prompt",
+        "type": "EvalPrompt",
+        "description": "Before and after text, compared line by line."
+      },
+      {
+        "name": "cases",
+        "type": "EvalCase[]",
+        "description": "Name, pass/fail/skip, score, and note."
+      },
+      {
+        "name": "versionLabel",
+        "type": "string",
+        "description": "Eyebrow, for example which versions are compared."
+      },
+      {
+        "name": "shell",
+        "type": "boolean",
+        "description": "Default true."
+      }
+    ]
+  },
+  "docs": "Inspirado en patrones de Affect UI (preview público); reimplementación clean-room; no código ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Instalar también trae @retana/app-shell.",
+  "categories": [
+    "interfaces",
+    "block"
+  ],
+  "type": "registry:block"
+}

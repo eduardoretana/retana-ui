@@ -1,0 +1,74 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "integrations",
+  "title": "Integrations",
+  "author": "Eduardo Retana",
+  "description": "Categorized directory with search, connect and connected states, and a request form.",
+  "dependencies": [],
+  "registryDependencies": [
+    "button",
+    "input",
+    "textarea",
+    "@retana/app-shell"
+  ],
+  "files": [
+    {
+      "path": "registry/blocks/integrations.tsx",
+      "content": "\"use client\"\n\n/**\n * Directory of connectable tools. Names and descriptions are fictional so the\n * screen can be installed without borrowing another catalog's listings.\n */\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Button } from \"@/components/ui/button\"\nimport { Input } from \"@/components/ui/input\"\nimport { Textarea } from \"@/components/ui/textarea\"\nimport { ScreenFrame, type AppShellProps, type ShellDensity } from \"@/components/ui/app-shell\"\n\nexport type IntegrationCategory = {\n  id: string\n  label: string\n}\n\nexport type IntegrationItem = {\n  id: string\n  name: string\n  category: string\n  description: string\n  connected?: boolean\n}\n\nexport type IntegrationRequest = {\n  name: string\n  reason: string\n}\n\nexport type IntegrationsClassNames = {\n  root?: string\n  filters?: string\n  grid?: string\n  request?: string\n}\n\nexport type IntegrationsProps = {\n  categories?: IntegrationCategory[]\n  items?: IntegrationItem[]\n  query?: string\n  defaultQuery?: string\n  onQueryChange?: (query: string) => void\n  category?: string\n  defaultCategory?: string\n  onCategoryChange?: (categoryId: string) => void\n  onConnect?: (id: string, connected: boolean) => void\n  onRequest?: (request: IntegrationRequest) => void\n  shell?: boolean\n  shellProps?: Partial<AppShellProps>\n  density?: ShellDensity\n  className?: string\n  classNames?: IntegrationsClassNames\n}\n\nexport const integrationCategories: IntegrationCategory[] = [\n  { id: \"all\", label: \"Todas\" },\n  { id: \"comms\", label: \"Comunicación\" },\n  { id: \"files\", label: \"Archivos\" },\n  { id: \"data\", label: \"Datos\" },\n  { id: \"money\", label: \"Finanzas\" },\n]\n\nexport const integrationItems: IntegrationItem[] = [\n  { id: \"buzon\", name: \"Buzón\", category: \"comms\", description: \"Avisos y respuestas del equipo.\", connected: true },\n  { id: \"sala\", name: \"Sala\", category: \"comms\", description: \"Notas de una reunión corta.\" },\n  { id: \"archivador\", name: \"Archivador\", category: \"files\", description: \"Carpetas compartidas del proyecto.\" },\n  { id: \"plano\", name: \"Plano\", category: \"files\", description: \"Versiones de un dibujo.\" },\n  { id: \"hoja\", name: \"Hoja viva\", category: \"data\", description: \"Filas que el equipo edita junto.\" },\n  { id: \"brujula\", name: \"Brújula\", category: \"data\", description: \"Un tablero de cifras semanales.\", connected: true },\n  { id: \"caja\", name: \"Caja\", category: \"money\", description: \"Cobros y facturas del espacio.\" },\n  { id: \"vale\", name: \"Vale\", category: \"money\", description: \"Gastos pequeños de obra.\" },\n]\n\nexport function Integrations({\n  categories = integrationCategories,\n  items = integrationItems,\n  query,\n  defaultQuery = \"\",\n  onQueryChange,\n  category,\n  defaultCategory = \"all\",\n  onCategoryChange,\n  onConnect,\n  onRequest,\n  shell = true,\n  shellProps,\n  density = \"comfortable\",\n  className,\n  classNames,\n}: IntegrationsProps) {\n  const searchId = React.useId()\n  const nameId = React.useId()\n  const reasonId = React.useId()\n  const space = density === \"compact\" ? \"p-3\" : \"p-5\"\n  const [queryState, setQueryState] = React.useState(defaultQuery)\n  const [categoryState, setCategoryState] = React.useState(defaultCategory)\n  const [itemState, setItemState] = React.useState(items)\n  const [requestName, setRequestName] = React.useState(\"\")\n  const [reason, setReason] = React.useState(\"\")\n  const [requestNote, setRequestNote] = React.useState(\"\")\n  const needle = (query ?? queryState).trim().toLowerCase()\n  const activeCategory = category ?? categoryState\n  const source = onConnect ? items : itemState\n  const visible = source.filter((item) => {\n    const inCategory = activeCategory === \"all\" || item.category === activeCategory\n    const inQuery = !needle || `${item.name} ${item.description}`.toLowerCase().includes(needle)\n    return inCategory && inQuery\n  })\n\n  function setQuery(next: string) {\n    onQueryChange?.(next)\n    if (query === undefined) setQueryState(next)\n  }\n\n  function setCategory(next: string) {\n    onCategoryChange?.(next)\n    if (category === undefined) setCategoryState(next)\n  }\n\n  function toggle(item: IntegrationItem) {\n    const connected = !item.connected\n    onConnect?.(item.id, connected)\n    if (!onConnect) {\n      setItemState((current) => current.map((row) => (row.id === item.id ? { ...row, connected } : row)))\n    }\n  }\n\n  return (\n    <ScreenFrame\n      shell={shell}\n      shellProps={{ activeId: \"settings\", contentLabel: \"Integraciones\", showSearch: false, density, ...shellProps }}\n      className={className}\n    >\n      <div data-slot=\"integrations\" data-density={density} className={cn(\"@container flex min-h-0 min-w-0 flex-1 flex-col gap-4\", space, classNames?.root)}>\n        <header>\n          <p className=\"text-xs text-muted-foreground\">Directorio</p>\n          <h1 className=\"text-lg font-semibold tracking-tight\">Integraciones</h1>\n        </header>\n        <div className={cn(\"flex flex-col gap-3\", classNames?.filters)}>\n          <div className=\"max-w-md\">\n            <label htmlFor={searchId} className=\"sr-only\">\n              Buscar integraciones\n            </label>\n            <Input\n              id={searchId}\n              value={query ?? queryState}\n              placeholder=\"Buscar por nombre\"\n              onChange={(event) => setQuery(event.target.value)}\n            />\n          </div>\n          <div role=\"group\" aria-label=\"Categorías\" className=\"flex flex-wrap gap-1\">\n            {categories.map((item) => (\n              <Button\n                key={item.id}\n                type=\"button\"\n                size=\"sm\"\n                variant={activeCategory === item.id ? \"default\" : \"outline\"}\n                aria-pressed={activeCategory === item.id}\n                onClick={() => setCategory(item.id)}\n              >\n                {item.label}\n              </Button>\n            ))}\n          </div>\n        </div>\n\n        {visible.length === 0 ? (\n          <p className=\"text-sm text-muted-foreground\">Ninguna herramienta coincide con la búsqueda.</p>\n        ) : (\n          <ul className={cn(\"grid gap-3 @min-[640px]:grid-cols-2 @min-[960px]:grid-cols-3\", classNames?.grid)}>\n            {visible.map((item) => (\n              <li key={item.id} className=\"flex min-w-0 flex-col rounded-xl border border-border p-3\">\n                <div className=\"flex items-start justify-between gap-2\">\n                  <h2 className=\"min-w-0 truncate text-sm font-medium\">{item.name}</h2>\n                  <span className=\"shrink-0 text-[11px] text-muted-foreground\">{item.connected ? \"Conectada\" : \"Disponible\"}</span>\n                </div>\n                <p className=\"mt-1 flex-1 text-sm break-words text-muted-foreground\">{item.description}</p>\n                <Button\n                  type=\"button\"\n                  size=\"sm\"\n                  className=\"mt-3 w-fit\"\n                  variant={item.connected ? \"secondary\" : \"default\"}\n                  aria-pressed={Boolean(item.connected)}\n                  onClick={() => toggle(item)}\n                >\n                  {item.connected ? \"Conectada\" : \"Conectar\"}\n                </Button>\n              </li>\n            ))}\n          </ul>\n        )}\n\n        <form\n          aria-label=\"Pedir una integración\"\n          className={cn(\"rounded-xl border border-border p-4\", classNames?.request)}\n          onSubmit={(event) => {\n            event.preventDefault()\n            if (!requestName.trim()) return\n            const payload = { name: requestName.trim(), reason: reason.trim() }\n            onRequest?.(payload)\n            setRequestNote(`Pedido anotado: ${payload.name}.`)\n            setRequestName(\"\")\n            setReason(\"\")\n          }}\n        >\n          <h2 className=\"text-sm font-medium\">Pedir una integración</h2>\n          <p className=\"mt-1 text-sm text-muted-foreground\">El pedido se queda en esta pantalla. No se envía a ningún servicio.</p>\n          <div className=\"mt-3 grid gap-3 @min-[640px]:grid-cols-2\">\n            <label htmlFor={nameId} className=\"grid gap-1 text-sm\">\n              Herramienta\n              <Input id={nameId} value={requestName} onChange={(event) => setRequestName(event.target.value)} />\n            </label>\n            <label htmlFor={reasonId} className=\"grid gap-1 text-sm\">\n              Para qué la necesitas\n              <Textarea id={reasonId} value={reason} className=\"min-h-16\" onChange={(event) => setReason(event.target.value)} />\n            </label>\n          </div>\n          <Button type=\"submit\" size=\"sm\" className=\"mt-3\" disabled={!requestName.trim()}>\n            Pedir\n          </Button>\n          {requestNote ? (\n            <p role=\"status\" className=\"mt-2 text-sm\">\n              {requestNote}\n            </p>\n          ) : null}\n        </form>\n      </div>\n    </ScreenFrame>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/integrations.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Integraciones",
+    "descriptionEs": "Directorio por categorías, con búsqueda, estados conectar o conectada, y un pedido.",
+    "preview": "app/examples/integrations/preview.tsx",
+    "previewHref": "/examples/integrations",
+    "examples": [
+      {
+        "title": "Directorio de Acme",
+        "href": "/examples/integrations",
+        "description": "Categorías, búsqueda y pedido. Los nombres son ficticios."
+      }
+    ],
+    "usage": "<Integrations onConnect={(id, connected) => console.log(id, connected)} onRequest={(request) => console.log(request)} />",
+    "api": [
+      {
+        "name": "categories",
+        "type": "IntegrationCategory[]",
+        "description": "Filter buttons. The id \"all\" clears the category."
+      },
+      {
+        "name": "items",
+        "type": "IntegrationItem[]",
+        "description": "Directory cards. connected toggles the button label."
+      },
+      {
+        "name": "query / category",
+        "type": "string",
+        "description": "Controlled search and category. Omit them for internal state."
+      },
+      {
+        "name": "onRequest",
+        "type": "(IntegrationRequest) => void",
+        "description": "Name and reason. The note stays on the page."
+      },
+      {
+        "name": "shell",
+        "type": "boolean",
+        "description": "Default true."
+      },
+      {
+        "name": "classNames",
+        "type": "IntegrationsClassNames",
+        "description": "Slot classes for filters, the grid, and the request form."
+      }
+    ]
+  },
+  "docs": "Inspirado en patrones de Affect UI (preview público); reimplementación clean-room; no código ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Instalar también trae @retana/app-shell.",
+  "categories": [
+    "interfaces",
+    "block"
+  ],
+  "type": "registry:block"
+}
