@@ -201,7 +201,7 @@ Sound, haptics, squircles, animated theme icons, and a few expressive controls. 
 
 ### Animaciones
 
-Scroll and motion primitives. They inherit the host tokens and follow [`motion-preference`](registry/ui/motion-preference.tsx). The glossary page is [`/examples/animations`](/examples/animations). The six names are industry vocabulary. The demos are original. Motion UI and Motion+ are not in this registry.
+Scroll and motion primitives. They inherit the host tokens and follow [`motion-preference`](registry/ui/motion-preference.tsx). The glossary page is [`/examples/animations`](/examples/animations). The ten names are industry vocabulary. The demos are original. Where the browser supports it, scroll-driven CSS (`view()` and `scroll()`) runs first and the hook is the fallback. Motion UI and Motion+ are not in this registry.
 
 | Piece | Use it for |
 | --- | --- |
@@ -213,6 +213,10 @@ Scroll and motion primitives. They inherit the host tokens and follow [`motion-p
 | [`sticky-section-list`](registry/ui/sticky-section-list.tsx) | Group headers that stick until the next group. |
 | [`parallax-layers`](registry/ui/parallax-layers.tsx) | Layers that travel at different speeds. Still when motion is reduced. |
 | [`horizontal-scroll-rail`](registry/ui/horizontal-scroll-rail.tsx) | Vertical scroll drives a horizontal rail. Native scroll when motion is reduced or the viewport is narrow. |
+| [`use-min-width`](registry/hooks/use-min-width.ts) | Viewport width cutoff shared by the rail and the pinned steps. The first paint stays narrow. |
+| [`pinned-steps`](registry/ui/pinned-steps.tsx) | A sticky visual column that cross-fades as each step crosses the center. Stacked when the viewport is narrow or motion is reduced. |
+| [`scroll-linked`](registry/ui/scroll-linked.tsx) | Fade, rise, scale, or rotate tied to scroll progress. CSS timelines first, then the hook. Reduced motion shows the end state. |
+| [`text-reveal`](registry/ui/text-reveal.tsx) | Word-by-word reveal on mount, or opacity tied to scroll. Full text when motion is reduced. |
 
 ## Install
 
@@ -324,7 +328,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`283` items are in `registry.json` on this branch: `227` components, `45` blocks, `5` hooks, and `6` libraries. A name links to its source file.
+`308` items are in `registry.json` on this branch: `232` components, `64` blocks, `6` hooks, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -414,6 +418,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`language-pair`](registry/ui/language-pair.tsx) · ui — From and to language pickers with a swap. Install: `npx shadcn@latest add @retana/language-pair`.
 - [`install-command`](registry/ui/install-command.tsx) · ui — Package-manager tabs that rewrite one install command and copy it. Install: `npx shadcn@latest add @retana/install-command`.
 - [`demo-collage`](registry/blocks/demo-collage.tsx) · block — A grid of live mini demos that render when they scroll into view. Install: `npx shadcn@latest add @retana/demo-collage`.
+- [`agent-tree`](registry/ui/agent-tree.tsx) · ui — A controlled tree of agents: who launched whom, with live status, cost, orthogonal edges, and a non-destructive retry. Install: `npx shadcn@latest add @retana/agent-tree`.
 
 ### Forms
 
@@ -461,7 +466,6 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`attachment-chip`](registry/ui/attachment-chip.tsx) · ui — File chip with a type icon, size, optional image preview, and remove. Install: `npx shadcn@latest add @retana/attachment-chip`.
 - [`marker`](registry/ui/marker.tsx) · ui — Animated highlighter mark behind a span of text. Install: `npx shadcn@latest add @retana/marker`.
 - [`press-sound`](registry/ui/press-sound.tsx) · ui — tap, tick, and pop on press. The cues come from ui-sounds, and mute is the same shared store. Install: `npx shadcn@latest add @retana/press-sound`.
-- [`text-reveal`](registry/ui/text-reveal.tsx) · ui — Reveals a short line once, word by word, and shows the plain text if motion is reduced. Install: `npx shadcn@latest add @retana/text-reveal`.
 - [`text-morph`](registry/ui/text-morph.tsx) · ui — Morphs one short label into the next. Shared letters glide and the width follows. Install: `npx shadcn@latest add @retana/text-morph`.
 - [`text-shimmer`](registry/ui/text-shimmer.tsx) · ui — A calm light across a short status line while work is ongoing. Sets aria-busy. Install: `npx shadcn@latest add @retana/text-shimmer`.
 - [`in-view-title`](registry/ui/in-view-title.tsx) · ui — A section title that reveals as it scrolls into view: blur, word, line, tracking, or wipe. Install: `npx shadcn@latest add @retana/in-view-title`.
@@ -527,7 +531,9 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`status-banner`](registry/ui/status-banner.tsx) · ui — Status banner that crossfades when the state key changes. Install: `npx shadcn@latest add @retana/status-banner`.
 - [`destination-card`](registry/ui/destination-card.tsx) · ui — Destination, status, and key-value rows. Install: `npx shadcn@latest add @retana/destination-card`.
 - [`next-steps`](registry/ui/next-steps.tsx) · ui — What happens next, plus a pinned action. Install: `npx shadcn@latest add @retana/next-steps`.
-- [`data-table-grouping`](registry/ui/data-table-grouping.tsx) · ui — TanStack table with live column grouping that keeps the selection, collapsible group headers, a nested tree with subtotals, master-detail rows, and a pinned grand-total footer. Column order, visibility, density, filters, and page size are in the toolbar. Install: `npx shadcn@latest add @retana/data-table-grouping`.
+- [`work-table`](registry/ui/work-table.tsx) · ui — TanStack table with dnd-kit column and row reorder, layout presets, density, bulk actions, and pagination. Install: `npx shadcn@latest add @retana/work-table`.
+- [`work-table-toolbar`](registry/ui/work-table-toolbar.tsx) · ui — Search, priority toggle, assignee multiselect, cycle select, and sort menu for a work table. Install: `npx shadcn@latest add @retana/work-table-toolbar`.
+- [`work-table-cells`](registry/ui/work-table-cells.tsx) · ui — Title, person, priority, relative date, status, SLA, effort, compact numbers, and rank cells. Install: `npx shadcn@latest add @retana/work-table-cells`.
 
 ### Charts
 
@@ -597,6 +603,25 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`proposal-dashboard`](registry/blocks/proposal-dashboard.tsx) · block — Greeting, four metric cards, action rows, a quoted-versus-delivered hours chart, a confidence gauge, and recent activity. Install: `npx shadcn@latest add @retana/proposal-dashboard`.
 - [`proposal-builder`](registry/blocks/proposal-builder.tsx) · block — The composed flow: dashboard, pipeline board, new opportunity, analyze, deal tabs, clarify, and send with a toast. Install: `npx shadcn@latest add @retana/proposal-builder`.
 - [`review-desk`](registry/blocks/review-desk.tsx) · block — Configurable review desk. Nav, records, findings, and the final action come from a typed config. Install: `npx shadcn@latest add @retana/review-desk`.
+- [`stat-sparkline-card`](registry/blocks/ae/stat-sparkline-card.tsx) · block — Big number, muted label, up/down change and a sparkline that draws in. Install: `npx shadcn@latest add @retana/stat-sparkline-card`.
+- [`radial-pair-card`](registry/blocks/ae/radial-pair-card.tsx) · block — Two percentage rings side by side; strokes draw in. Install: `npx shadcn@latest add @retana/radial-pair-card`.
+- [`highlight-cta-card`](registry/blocks/ae/highlight-cta-card.tsx) · block — Tall accent-gradient card with a big number and a pill call to action. Install: `npx shadcn@latest add @retana/highlight-cta-card`.
+- [`quick-notes-card`](registry/blocks/ae/quick-notes-card.tsx) · block — Short note list with accessible add and delete, and an empty state. Install: `npx shadcn@latest add @retana/quick-notes-card`.
+- [`state-distribution-card`](registry/blocks/ae/state-distribution-card.tsx) · block — Ranked states with growing bars; the first uses the accent. Install: `npx shadcn@latest add @retana/state-distribution-card`.
+- [`bar-trend-card`](registry/blocks/ae/bar-trend-card.tsx) · block — Bars grow from the bottom, a period select, and the last bar in the accent. Install: `npx shadcn@latest add @retana/bar-trend-card`.
+- [`day-scroller-schedule`](registry/blocks/ae/day-scroller-schedule.tsx) · block — Pill day scroller with arrow keys and the next appointment in a dark nested card. Install: `npx shadcn@latest add @retana/day-scroller-schedule`.
+- [`pill-top-nav`](registry/blocks/ae/pill-top-nav.tsx) · block — Centered pill nav with a sliding indicator, search, bell and avatar. Install: `npx shadcn@latest add @retana/pill-top-nav`.
+- [`floating-pill-sidebar`](registry/blocks/ae/floating-pill-sidebar.tsx) · block — Floating vertical pill of icon links with accessible names. Install: `npx shadcn@latest add @retana/floating-pill-sidebar`.
+- [`process-card`](registry/blocks/ae/process-card.tsx) · block — Course or process card with avatars, progress and a round CTA. Install: `npx shadcn@latest add @retana/process-card`.
+- [`multi-area-chart-card`](registry/blocks/ae/multi-area-chart-card.tsx) · block — Multi-series gradient area chart with a toggling legend. Install: `npx shadcn@latest add @retana/multi-area-chart-card`.
+- [`task-progress-card`](registry/blocks/ae/task-progress-card.tsx) · block — Task list with progress bars and a done counter. Install: `npx shadcn@latest add @retana/task-progress-card`.
+- [`leaderboard-card`](registry/blocks/ae/leaderboard-card.tsx) · block — Leaderboard sorted by score with your row highlighted. Install: `npx shadcn@latest add @retana/leaderboard-card`.
+- [`dashboard-analitico-ae`](registry/blocks/ae/dashboard-analitico-ae.tsx) · block — Full AE analytics screen composed from the AE pieces. Fictional data. Install: `npx shadcn@latest add @retana/dashboard-analitico-ae`.
+- [`dashboard-capacitacion-ae`](registry/blocks/ae/dashboard-capacitacion-ae.tsx) · block — Full AE training screen composed from the AE pieces. Fictional data. Install: `npx shadcn@latest add @retana/dashboard-capacitacion-ae`.
+- [`work-table-board`](registry/blocks/work-table-board.tsx) · block — Work table grouped by status, with collapsible groups, point totals, and cross-group drag. Install: `npx shadcn@latest add @retana/work-table-board`.
+- [`work-table-tree`](registry/blocks/work-table-tree.tsx) · block — Section and article tree with nesting on drop and a summary footer. Install: `npx shadcn@latest add @retana/work-table-tree`.
+- [`work-table-queue`](registry/blocks/work-table-queue.tsx) · block — Flat queue whose rank follows the manual order, with pagination. Install: `npx shadcn@latest add @retana/work-table-queue`.
+- [`work-table-support`](registry/blocks/work-table-support.tsx) · block — Support queue with SLA cells and bulk move. Install: `npx shadcn@latest add @retana/work-table-support`.
 
 ### Actions and overlays
 
@@ -622,6 +647,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 
 ### Animaciones
 
+- [`text-reveal`](registry/ui/text-reveal.tsx) · ui — Reveals a short line word by word on mount, or ties each word's opacity to scroll. Reduced motion shows the plain text. Install: `npx shadcn@latest add @retana/text-reveal`.
 - [`use-scroll-progress`](registry/hooks/use-scroll-progress.ts) · hook — Scroll position as a 0–1 motion value, for the window or for one element. Install: `npx shadcn@latest add @retana/use-scroll-progress`.
 - [`scroll-progress`](registry/ui/scroll-progress.tsx) · ui — A reading bar bound to scroll progress, from 0 to 1. Install: `npx shadcn@latest add @retana/scroll-progress`.
 - [`reveal-on-scroll`](registry/ui/reveal-on-scroll.tsx) · ui — Fades, slides, or scales in once when it enters the viewport. Install: `npx shadcn@latest add @retana/reveal-on-scroll`.
@@ -630,6 +656,9 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`sticky-section-list`](registry/ui/sticky-section-list.tsx) · ui — Grouped rows whose headers stick until the next group pushes them. Install: `npx shadcn@latest add @retana/sticky-section-list`.
 - [`parallax-layers`](registry/ui/parallax-layers.tsx) · ui — Layers that travel at different speeds while their parent crosses the viewport. Transform only. Install: `npx shadcn@latest add @retana/parallax-layers`.
 - [`horizontal-scroll-rail`](registry/ui/horizontal-scroll-rail.tsx) · ui — A sticky section whose vertical scroll drives a horizontal rail. Narrow viewports and reduced motion use a native scroller. Install: `npx shadcn@latest add @retana/horizontal-scroll-rail`.
+- [`use-min-width`](registry/hooks/use-min-width.ts) · hook — True when the viewport is at least a given number of CSS pixels wide. The first paint uses the narrow layout. Install: `npx shadcn@latest add @retana/use-min-width`.
+- [`pinned-steps`](registry/ui/pinned-steps.tsx) · ui — A sticky visual column that cross-fades as each step crosses the center of the viewport. Narrow viewports and reduced motion stack the step with its visual. Install: `npx shadcn@latest add @retana/pinned-steps`.
+- [`scroll-linked`](registry/ui/scroll-linked.tsx) · ui — Maps scroll progress to a fade, rise, scale, or rotate. CSS scroll-driven animations run first. Reduced motion shows the finished state. Install: `npx shadcn@latest add @retana/scroll-linked`.
 
 ### Admin
 
