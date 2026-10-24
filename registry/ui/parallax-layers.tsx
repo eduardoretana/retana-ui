@@ -6,11 +6,12 @@
  * Reduced motion holds every layer still. The first paint matches the server.
  */
 
-import { useRef, useSyncExternalStore, type ReactNode, type RefObject } from "react"
+import { useRef, useSyncExternalStore, type CSSProperties, type ReactNode, type RefObject } from "react"
 import { motion, useTransform, type MotionValue } from "motion/react"
 
 import { cn } from "@/lib/utils"
 import { useScrollProgress } from "@/registry/retana/hooks/use-scroll-progress"
+import { useAnimationTimeline } from "@/registry/retana/lib/scroll-timeline"
 import { useMotionPreference } from "@/registry/retana/ui/motion-preference"
 
 /** Pixels a layer travels, from entry to exit, when speed is 1. */
@@ -22,6 +23,32 @@ export function parallaxOffset(speed: number, distance = PARALLAX_DISTANCE) {
   if (!Number.isFinite(speed) || !Number.isFinite(distance)) return 0
   return speed * distance
 }
+
+export type ParallaxDriver = "static" | "css" | "hook"
+
+/** view() matches the element crossing the viewport. The hook is the fallback. */
+export function parallaxDriver(reduced: boolean, supported: boolean): ParallaxDriver {
+  if (reduced) return "static"
+  if (supported) return "css"
+  return "hook"
+}
+
+export const PARALLAX_CSS = `
+@keyframes retana-parallax-layer {
+  from { transform: translateY(var(--parallax-from, 0px)); }
+  to { transform: translateY(var(--parallax-to, 0px)); }
+}
+@supports (animation-timeline: view()) {
+  [data-slot="parallax-layer"][data-driver="css"] {
+    animation-name: retana-parallax-layer;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+}
+`
 
 export type ParallaxLayer = {
   id: string
@@ -54,6 +81,8 @@ export function ParallaxLayers({
 }: ParallaxLayersProps) {
   const ref = useRef<HTMLDivElement>(null)
   const reduced = useMotionPreference()
+  const viewTimeline = useAnimationTimeline("view()")
+  const driver = parallaxDriver(reduced, viewTimeline)
   const { progress } = useScrollProgress({
     container,
     target: ref,
@@ -69,13 +98,14 @@ export function ParallaxLayers({
       aria-label={label}
       className={cn("relative h-64 overflow-hidden", className)}
     >
+      <style>{PARALLAX_CSS}</style>
       {layers.map((layer) => (
         <ParallaxLayerView
           key={layer.id}
           progress={progress}
           speed={layer.speed ?? layer.depth ?? 0}
           distance={distance}
-          reduced={reduced}
+          driver={driver}
           className={layer.className}
           decorative={layer.decorative}
         >
@@ -90,7 +120,7 @@ function ParallaxLayerView({
   progress,
   speed,
   distance,
-  reduced,
+  driver,
   className,
   decorative,
   children,
@@ -98,7 +128,7 @@ function ParallaxLayerView({
   progress: MotionValue<number>
   speed: number
   distance: number
-  reduced: boolean
+  driver: ParallaxDriver
   className?: string
   decorative?: boolean
   children: ReactNode
@@ -106,14 +136,19 @@ function ParallaxLayerView({
   const offset = parallaxOffset(speed, distance)
   const y = useTransform(progress, [0, 1], [offset, -offset])
   const mounted = useSyncExternalStore(subscribe, () => true, () => false)
+  const cssStyle = {
+    "--parallax-from": `${offset}px`,
+    "--parallax-to": `${-offset}px`,
+  } as CSSProperties
 
   return (
     <motion.div
       data-slot="parallax-layer"
       data-speed={speed}
+      data-driver={driver}
       aria-hidden={decorative ? true : undefined}
       className={cn("absolute inset-0", className)}
-      style={{ y: mounted && !reduced ? y : 0 }}
+      style={driver === "css" ? cssStyle : { y: mounted && driver === "hook" ? y : 0 }}
     >
       {children}
     </motion.div>
