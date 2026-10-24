@@ -301,6 +301,13 @@ import Preview296 from "@/app/examples/dashboard-capacitacion-ae/preview"
 import Preview297 from "@/app/examples/use-min-width/preview"
 import Preview298 from "@/app/examples/pinned-steps/preview"
 import Preview299 from "@/app/examples/scroll-linked/preview"
+import Preview300 from "@/app/examples/work-table/preview"
+import Preview301 from "@/app/examples/work-table-toolbar/preview"
+import Preview302 from "@/app/examples/work-table-cells/preview"
+import Preview303 from "@/app/examples/work-table-board/preview"
+import Preview304 from "@/app/examples/work-table-tree/preview"
+import Preview305 from "@/app/examples/work-table-queue/preview"
+import Preview306 from "@/app/examples/work-table-support/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -603,4 +610,11 @@ export const previewMap = {
   "use-min-width": Preview297,
   "pinned-steps": Preview298,
   "scroll-linked": Preview299,
+  "work-table": Preview300,
+  "work-table-toolbar": Preview301,
+  "work-table-cells": Preview302,
+  "work-table-board": Preview303,
+  "work-table-tree": Preview304,
+  "work-table-queue": Preview305,
+  "work-table-support": Preview306,
 }

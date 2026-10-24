@@ -328,7 +328,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`300` items are in `registry.json` on this branch: `228` components, `60` blocks, `6` hooks, and `6` libraries. A name links to its source file.
+`307` items are in `registry.json` on this branch: `231` components, `64` blocks, `6` hooks, and `6` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -530,6 +530,9 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`status-banner`](registry/ui/status-banner.tsx) · ui — Status banner that crossfades when the state key changes. Install: `npx shadcn@latest add @retana/status-banner`.
 - [`destination-card`](registry/ui/destination-card.tsx) · ui — Destination, status, and key-value rows. Install: `npx shadcn@latest add @retana/destination-card`.
 - [`next-steps`](registry/ui/next-steps.tsx) · ui — What happens next, plus a pinned action. Install: `npx shadcn@latest add @retana/next-steps`.
+- [`work-table`](registry/ui/work-table.tsx) · ui — TanStack table with dnd-kit column and row reorder, layout presets, density, bulk actions, and pagination. Install: `npx shadcn@latest add @retana/work-table`.
+- [`work-table-toolbar`](registry/ui/work-table-toolbar.tsx) · ui — Search, priority toggle, assignee multiselect, cycle select, and sort menu for a work table. Install: `npx shadcn@latest add @retana/work-table-toolbar`.
+- [`work-table-cells`](registry/ui/work-table-cells.tsx) · ui — Title, person, priority, relative date, status, SLA, effort, compact numbers, and rank cells. Install: `npx shadcn@latest add @retana/work-table-cells`.
 
 ### Charts
 
@@ -614,6 +617,10 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`leaderboard-card`](registry/blocks/ae/leaderboard-card.tsx) · block — Leaderboard sorted by score with your row highlighted. Install: `npx shadcn@latest add @retana/leaderboard-card`.
 - [`dashboard-analitico-ae`](registry/blocks/ae/dashboard-analitico-ae.tsx) · block — Full AE analytics screen composed from the AE pieces. Fictional data. Install: `npx shadcn@latest add @retana/dashboard-analitico-ae`.
 - [`dashboard-capacitacion-ae`](registry/blocks/ae/dashboard-capacitacion-ae.tsx) · block — Full AE training screen composed from the AE pieces. Fictional data. Install: `npx shadcn@latest add @retana/dashboard-capacitacion-ae`.
+- [`work-table-board`](registry/blocks/work-table-board.tsx) · block — Work table grouped by status, with collapsible groups, point totals, and cross-group drag. Install: `npx shadcn@latest add @retana/work-table-board`.
+- [`work-table-tree`](registry/blocks/work-table-tree.tsx) · block — Section and article tree with nesting on drop and a summary footer. Install: `npx shadcn@latest add @retana/work-table-tree`.
+- [`work-table-queue`](registry/blocks/work-table-queue.tsx) · block — Flat queue whose rank follows the manual order, with pagination. Install: `npx shadcn@latest add @retana/work-table-queue`.
+- [`work-table-support`](registry/blocks/work-table-support.tsx) · block — Support queue with SLA cells and bulk move. Install: `npx shadcn@latest add @retana/work-table-support`.
 
 ### Actions and overlays
 
