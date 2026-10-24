@@ -43,7 +43,7 @@
       {
         "title": "Glosario",
         "href": "/examples/animations",
-        "description": "Los seis términos de scroll, con demos propias."
+        "description": "Los diez términos de scroll, con demos propias."
       }
     ],
     "usage": "<RevealOnScroll variant=\"slide\" once>{children}</RevealOnScroll>",

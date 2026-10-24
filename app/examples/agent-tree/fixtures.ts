@@ -1,0 +1,105 @@
+import type { AgentNode } from "@/registry/ui/agent-tree"
+
+/** Fictional lighthouse bulletin. Not sample data from any other kit. */
+export const bulletinNodes: AgentNode[] = [
+  {
+    id: "mesa",
+    parentId: null,
+    role: "Mesa del faro",
+    model: "bruma-large",
+    task: "Armar el boletín semanal del faro de Punta Gorda.",
+    status: "running",
+    costUsd: 0.084,
+    elapsedMs: 96_000,
+  },
+  {
+    id: "archivo",
+    parentId: "mesa",
+    role: "Archivo",
+    model: "bruma-mini",
+    task: "Listar diarios de bitácora de marzo.",
+    status: "done",
+    costUsd: 0.021,
+    elapsedMs: 18_000,
+  },
+  {
+    id: "mareas",
+    parentId: "mesa",
+    role: "Mareas",
+    model: "niebla-small",
+    task: "Cruzar la tabla de mareas con los avisos del puerto.",
+    status: "needs-you",
+    costUsd: 0.017,
+    elapsedMs: 24_000,
+  },
+  {
+    id: "redaccion",
+    parentId: "mesa",
+    role: "Redacción",
+    model: "bruma-large",
+    task: "Redactar la nota de apertura sobre el relevo del torrero.",
+    status: "running",
+    costUsd: 0.033,
+    elapsedMs: 41_000,
+  },
+  {
+    id: "citas",
+    parentId: "redaccion",
+    role: "Citas",
+    model: "bruma-mini",
+    task: "Verificar la cita del práctico de guardia.",
+    status: "failed",
+    costUsd: 0.008,
+    elapsedMs: 12_000,
+    error: "La cita del práctico no coincide con el cuaderno de marzo.",
+  },
+  {
+    id: "fotos",
+    parentId: "redaccion",
+    role: "Fotos",
+    model: "niebla-small",
+    task: "Elegir tres fotos del malecón con marea baja.",
+    status: "stopped",
+    costUsd: 0.005,
+    elapsedMs: 9_000,
+  },
+  {
+    id: "imprenta",
+    parentId: "mesa",
+    role: "Imprenta",
+    model: "bruma-mini",
+    task: "Preparar el pliego para la imprenta del ayuntamiento.",
+    status: "done",
+    costUsd: 0.011,
+    elapsedMs: 15_000,
+  },
+]
+
+export const previewNodes: AgentNode[] = [
+  bulletinNodes[0],
+  bulletinNodes[1],
+  { ...bulletinNodes[4], parentId: "mesa" },
+]
+
+export const liveSeed: AgentNode[] = [
+  {
+    id: "faro",
+    parentId: null,
+    role: "Mesa del faro",
+    model: "bruma-large",
+    task: "Coordinar el boletín semanal de Punta Gorda.",
+    status: "running",
+    costUsd: 0.012,
+    elapsedMs: 4_000,
+  },
+  {
+    id: "bitacora",
+    parentId: "faro",
+    role: "Bitácora",
+    model: "bruma-mini",
+    task: "Extraer avisos a navegantes de la semana.",
+    status: "running",
+    costUsd: 0.004,
+    elapsedMs: 2_000,
+  },
+]
