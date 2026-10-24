@@ -3355,16 +3355,21 @@
       "name": "text-reveal",
       "type": "registry:ui",
       "title": "Text reveal",
-      "description": "Reveals a short line once, word by word, and shows the plain text if motion is reduced.",
+      "description": "Reveals a short line word by word on mount, or ties each word's opacity to scroll. Reduced motion shows the plain text.",
       "author": "Eduardo Retana",
-      "dependencies": [],
-      "registryDependencies": [],
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@retana/use-scroll-progress",
+        "@retana/motion-preference"
+      ],
       "categories": [
-        "content"
+        "animation"
       ],
       "meta": {
         "titleEs": "Texto que aparece",
-        "descriptionEs": "Revela una frase corta palabra por palabra. Con movimiento reducido el texto está visible desde el inicio.",
+        "descriptionEs": "Revela una frase corta palabra por palabra, al montarse o con el scroll. Con movimiento reducido el texto está visible desde el inicio.",
         "preview": "app/examples/text-reveal/preview.tsx",
         "previewHref": "/examples/text-reveal",
         "examples": [
@@ -3372,9 +3377,14 @@
             "title": "Texto que aparece",
             "href": "/examples/text-reveal",
             "description": "Revela una frase corta palabra por palabra. Con movimiento reducido el texto está visible desde el inicio."
+          },
+          {
+            "title": "Glosario",
+            "href": "/examples/animations",
+            "description": "Los diez términos de scroll, con demos propias."
           }
         ],
-        "usage": "<TextReveal as=\"h2\" text={\"Kiln open\\nSaturday\"} />",
+        "usage": "<TextReveal as=\"h2\" trigger=\"scroll\" text={\"Kiln open\\nSaturday\"} />",
         "api": [
           {
             "name": "text",
@@ -3387,13 +3397,18 @@
             "description": "Element. Default h2."
           },
           {
+            "name": "trigger",
+            "type": "\"mount\" | \"scroll\"",
+            "description": "mount plays once. scroll ties each word to the viewport. Default mount."
+          },
+          {
             "name": "delay",
             "type": "number",
-            "description": "Seconds before the first word. Default 0."
+            "description": "Seconds before the first word, when trigger is mount. Default 0."
           }
         ]
       },
-      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "docs": "Adapted from Arc UI (MIT) for the mount reveal. The scroll trigger is clean-room: each word fades from about 0.2 to 1 with animation-timeline view() and animation-range entry 20% cover 50% when the browser supports it, and use-scroll-progress otherwise. If progress is not a number, the word stays fully visible. Words are aria-hidden. A screen-reader span keeps the full sentence. Reduced motion, including motion-preference, shows the text at full opacity. Answer no if the CLI asks to overwrite use-scroll-progress, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors. Motion UI and Motion+ are not included.",
       "files": [
         {
           "path": "registry/ui/text-reveal.tsx",
@@ -3404,6 +3419,11 @@
           "path": "registry/lib/motion.ts",
           "type": "registry:lib",
           "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/scroll-timeline.ts",
+          "type": "registry:lib",
+          "target": "@lib/scroll-timeline.ts"
         }
       ]
     },
@@ -18713,11 +18733,6 @@
             "name": "solid / dot / overlay",
             "type": "boolean",
             "description": "Solid fill, a leading dot, or a chip that sits on a cover."
-          },
-          {
-            "name": "appearance",
-            "type": "\"soft\" | \"outline\" | \"text\" | \"solid\"",
-            "description": "Soft is the default wash. Outline and text reuse the same tone map. The solid prop still forces a solid fill."
           }
         ]
       },
@@ -20059,7 +20074,7 @@
           {
             "title": "Glosario",
             "href": "/examples/animations",
-            "description": "Los seis términos de scroll, con demos propias."
+            "description": "Los diez términos de scroll, con demos propias."
           }
         ],
         "usage": "const { progress } = useScrollProgress({ container })",
@@ -20134,7 +20149,7 @@
           {
             "title": "Glosario",
             "href": "/examples/animations",
-            "description": "Los seis términos de scroll, con demos propias."
+            "description": "Los diez términos de scroll, con demos propias."
           }
         ],
         "usage": "<ScrollProgress container={ref} label=\"Reading\" showValue />",
@@ -20166,12 +20181,17 @@
           }
         ]
       },
-      "docs": "Clean-room reading bar. No Motion UI or Motion+ source. The scale follows scroll and does not tween on its own, so reduced motion does not freeze it. A scroller with no overflow reports 0. Answer no if the CLI asks to overwrite use-scroll-progress or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "docs": "Clean-room reading bar. No Motion UI or Motion+ source. When the browser supports scroll-driven animations, a vertical bar with no custom offset scales on the X axis with animation-timeline scroll(root), or scroll(nearest) inside a container. use-scroll-progress is the fallback and the source of aria-valuenow. The scale follows scroll and does not tween on its own, so reduced motion does not freeze it. A scroller with no overflow reports 0. Answer no if the CLI asks to overwrite use-scroll-progress or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
       "files": [
         {
           "path": "registry/ui/scroll-progress.tsx",
           "type": "registry:component",
           "target": "@ui/scroll-progress.tsx"
+        },
+        {
+          "path": "registry/lib/scroll-timeline.ts",
+          "type": "registry:lib",
+          "target": "@lib/scroll-timeline.ts"
         }
       ]
     },
@@ -20209,7 +20229,7 @@
           {
             "title": "Glosario",
             "href": "/examples/animations",
-            "description": "Los seis términos de scroll, con demos propias."
+            "description": "Los diez términos de scroll, con demos propias."
           }
         ],
         "usage": "<RevealOnScroll variant=\"slide\" once>{children}</RevealOnScroll>",
@@ -20294,7 +20314,7 @@
           {
             "title": "Glosario",
             "href": "/examples/animations",
-            "description": "Los seis términos de scroll, con demos propias."
+            "description": "Los diez términos de scroll, con demos propias."
           }
         ],
         "usage": "<StaggerReveal as=\"ul\"><StaggerItem as=\"li\">Row</StaggerItem></StaggerReveal>",
@@ -20367,7 +20387,7 @@
           {
             "title": "Glosario",
             "href": "/examples/animations",
-            "description": "Los seis términos de scroll, con demos propias."
+            "description": "Los diez términos de scroll, con demos propias."
           }
         ],
         "usage": "<ScrollSnapRail label=\"Stages\" className=\"h-64\"><ScrollSnapPanel className=\"h-full\">01</ScrollSnapPanel></ScrollSnapRail>",
@@ -20433,7 +20453,7 @@
           {
             "title": "Glosario",
             "href": "/examples/animations",
-            "description": "Los seis términos de scroll, con demos propias."
+            "description": "Los diez términos de scroll, con demos propias."
           }
         ],
         "usage": "<StickySectionList label=\"Directory\" sections={sections} />",
@@ -20504,7 +20524,7 @@
           {
             "title": "Glosario",
             "href": "/examples/animations",
-            "description": "Los seis términos de scroll, con demos propias."
+            "description": "Los diez términos de scroll, con demos propias."
           }
         ],
         "usage": "<ParallaxLayers label=\"Coast\" layers={[{ id: \"far\", speed: 0.2, children }]} />",
@@ -20531,12 +20551,17 @@
           }
         ]
       },
-      "docs": "Clean-room parallax. No Motion UI or Motion+ source. Movement is translateY from use-scroll-progress, so the layout box does not shift. The first paint matches the server. Reduced motion, via motion-preference, holds every layer at rest. Answer no if the CLI asks to overwrite use-scroll-progress, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "docs": "Clean-room parallax. No Motion UI or Motion+ source. When the browser supports a view timeline, each layer translates on animation-timeline view() across the same entry-to-exit travel as the hook. use-scroll-progress is the fallback. Movement is translateY only, so the layout box does not shift. The first paint matches the server. Reduced motion, via motion-preference, holds every layer at rest. Answer no if the CLI asks to overwrite use-scroll-progress, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
       "files": [
         {
           "path": "registry/ui/parallax-layers.tsx",
           "type": "registry:component",
           "target": "@ui/parallax-layers.tsx"
+        },
+        {
+          "path": "registry/lib/scroll-timeline.ts",
+          "type": "registry:lib",
+          "target": "@lib/scroll-timeline.ts"
         }
       ]
     },
@@ -20553,6 +20578,7 @@
       "registryDependencies": [
         "button",
         "@retana/use-scroll-progress",
+        "@retana/use-min-width",
         "@retana/motion-preference"
       ],
       "categories": [
@@ -20577,7 +20603,7 @@
           {
             "title": "Glosario",
             "href": "/examples/animations",
-            "description": "Los seis términos de scroll, con demos propias."
+            "description": "Los diez términos de scroll, con demos propias."
           }
         ],
         "usage": "<HorizontalScrollRail label=\"Pieces\">{cards}</HorizontalScrollRail>",
@@ -20604,7 +20630,7 @@
           }
         ]
       },
-      "docs": "Clean-room horizontal rail. No Motion UI or Motion+ source. On a wide screen with motion allowed, the pane fills the viewport and the section grows by the track overflow (ResizeObserver). Vertical scroll translates the track until the section end meets the bottom of that pane. Reduced motion, and viewports under minWidth, keep a native horizontal scroller with scroll-snap and the author pane height. Arrow keys move the rail. Focusable items scroll into view. Answer no if the CLI asks to overwrite button, use-scroll-progress, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "docs": "Clean-room horizontal rail. No Motion UI or Motion+ source. On a wide screen with motion allowed, the pane fills the viewport and the section grows by the track overflow (ResizeObserver). Vertical scroll translates the track until the section end meets the bottom of that pane. Reduced motion, and viewports under minWidth, keep a native horizontal scroller with scroll-snap and the author pane height. The width cutoff is use-min-width, shared with pinned-steps. Arrow keys move the rail. Focusable items scroll into view. Answer no if the CLI asks to overwrite button, use-scroll-progress, use-min-width, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
       "files": [
         {
           "path": "registry/ui/horizontal-scroll-rail.tsx",
@@ -20614,580 +20640,2028 @@
       ]
     },
     {
-      "name": "work-table",
-      "type": "registry:ui",
-      "title": "Work table",
-      "description": "TanStack table with dnd-kit column and row reorder, layout presets, density, bulk actions, and pagination.",
+      "author": "Eduardo Retana",
+      "type": "registry:block",
+      "categories": [
+        "interfaces",
+        "block"
+      ],
+      "name": "app-shell",
+      "title": "App shell",
+      "description": "Workspace sidebar with navigation, projects, getting-started progress, and a user footer. Page content sits in a card.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/app-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/app-shell.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Shell de la aplicación",
+        "descriptionEs": "Barra de espacio de trabajo con navegación, proyectos, progreso de primeros pasos y usuario. El contenido va en una tarjeta.",
+        "preview": "app/examples/app-shell/preview.tsx",
+        "previewHref": "/examples/app-shell",
+        "examples": [
+          {
+            "title": "Espacio Acme",
+            "href": "/examples/app-shell",
+            "description": "Barra con proyectos, primeros pasos y una tarjeta de contenido."
+          }
+        ],
+        "usage": "<AppShell>\\n  <p>Hoy en Acme</p>\\n</AppShell>",
+        "api": [
+          {
+            "name": "workspace / workspaces",
+            "type": "ShellWorkspace",
+            "description": "Active workspace and the switcher list."
+          },
+          {
+            "name": "nav / projects",
+            "type": "ShellNavItem[] / ShellProject[]",
+            "description": "Sections and project rows. A matching activeId sets aria-current."
+          },
+          {
+            "name": "gettingStarted",
+            "type": "ShellGettingStarted",
+            "description": "Checklist. The meter counts completed items."
+          },
+          {
+            "name": "user",
+            "type": "ShellUser",
+            "description": "Footer identity. Actions open from the same control."
+          },
+          {
+            "name": "density",
+            "type": "\"comfortable\" | \"compact\"",
+            "description": "Typed density map for padding and type size."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string / AppShellClassNames",
+            "description": "Root class and slot classes for sidebar, nav, projects, progress, user, and card."
+          }
+        ]
+      },
+      "docs": "Inspirado en patrones de Affect UI (preview público); reimplementación clean-room; no código ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos."
+    },
+    {
+      "author": "Eduardo Retana",
+      "type": "registry:block",
+      "categories": [
+        "interfaces",
+        "block"
+      ],
+      "name": "assistant-home",
+      "title": "Assistant home",
+      "description": "Greeting, a prompt composer with plugins, model, microphone, and send, plus connectable apps and action chips.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "textarea",
+        "@retana/app-shell"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/assistant-home.tsx",
+          "type": "registry:component",
+          "target": "@ui/assistant-home.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Inicio del asistente",
+        "descriptionEs": "Saludo, caja de prompt con complementos, modelo, micrófono y envío, más aplicaciones para conectar y chips de acciones.",
+        "preview": "app/examples/assistant-home/preview.tsx",
+        "previewHref": "/examples/assistant-home",
+        "examples": [
+          {
+            "title": "Mesa de Acme",
+            "href": "/examples/assistant-home",
+            "description": "El inicio dentro del shell del espacio."
+          }
+        ],
+        "usage": "<AssistantHome onSubmit={(payload) => console.log(payload)} />",
+        "api": [
+          {
+            "name": "greeting / name",
+            "type": "string",
+            "description": "Headline. Both are props so the host supplies the copy."
+          },
+          {
+            "name": "models / plugins",
+            "type": "AssistantModel[] / AssistantPlugin[]",
+            "description": "Model select and plugin toggles inside the composer."
+          },
+          {
+            "name": "apps / actions",
+            "type": "AssistantApp[] / AssistantAction[]",
+            "description": "Connect row and chips that fill the prompt."
+          },
+          {
+            "name": "onSubmit",
+            "type": "(AssistantSubmit) => void",
+            "description": "Text, model, enabled plugins, and microphone state."
+          },
+          {
+            "name": "shell",
+            "type": "boolean",
+            "description": "Wraps the canvas in AppShell. Default true."
+          },
+          {
+            "name": "density",
+            "type": "\"comfortable\" | \"compact\"",
+            "description": "Typed spacing map."
+          }
+        ]
+      },
+      "docs": "Inspirado en patrones de Affect UI (preview público); reimplementación clean-room; no código ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Instalar también trae @retana/app-shell."
+    },
+    {
+      "author": "Eduardo Retana",
+      "type": "registry:block",
+      "categories": [
+        "interfaces",
+        "block"
+      ],
+      "name": "agent-chat",
+      "title": "Agent chat",
+      "description": "Workspace shell, an orchestrator thread with agents at work, and a brief for product, angle, audience, channels, palette, and call to action.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "textarea",
+        "@retana/app-shell"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/agent-chat.tsx",
+          "type": "registry:component",
+          "target": "@ui/agent-chat.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Chat de agentes",
+        "descriptionEs": "Shell, conversación con coordinación y agentes en curso, y un panel de encargo con producto, ángulo, audiencia, canales, paleta y llamada a la acción.",
+        "preview": "app/examples/agent-chat/preview.tsx",
+        "previewHref": "/examples/agent-chat",
+        "examples": [
+          {
+            "title": "Encargo de la linterna",
+            "href": "/examples/agent-chat",
+            "description": "Tres columnas: barra, hilo y encargo."
+          }
+        ],
+        "usage": "<AgentChat messages={messages} agents={agents} brief={brief} />",
+        "api": [
+          {
+            "name": "messages",
+            "type": "AgentChatMessage[]",
+            "description": "User, orchestrator, and agent turns."
+          },
+          {
+            "name": "agents",
+            "type": "WorkingAgent[]",
+            "description": "Queued, working, or done. The word is visible, not only the color."
+          },
+          {
+            "name": "brief",
+            "type": "AgentBrief",
+            "description": "Product, angle, audience, channels, named palette swatches, and call to action."
+          },
+          {
+            "name": "onSend",
+            "type": "(text: string) => void",
+            "description": "Reply from the composer at the bottom of the thread."
+          },
+          {
+            "name": "shell",
+            "type": "boolean",
+            "description": "Default true. Set false to render only the thread and brief."
+          },
+          {
+            "name": "classNames",
+            "type": "AgentChatClassNames",
+            "description": "Slot classes for the thread, agent list, brief, and composer."
+          }
+        ]
+      },
+      "docs": "Inspirado en patrones de Affect UI (preview público); reimplementación clean-room; no código ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Instalar también trae @retana/app-shell."
+    },
+    {
+      "author": "Eduardo Retana",
+      "type": "registry:block",
+      "categories": [
+        "interfaces",
+        "block"
+      ],
+      "name": "agent-run",
+      "title": "Agent run",
+      "description": "Plan steps with tool chips, a tool-call activity log, a needs-input question, a draft diff with accept and reject, and run cost details.",
+      "dependencies": [],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "@retana/app-shell"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/agent-run.tsx",
+          "type": "registry:component",
+          "target": "@ui/agent-run.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Corrida de agente",
+        "descriptionEs": "Pasos del plan con herramientas, actividad de llamadas, una pregunta pendiente, un diff de borrador con aceptar o rechazar, y el costo de la corrida.",
+        "preview": "app/examples/agent-run/preview.tsx",
+        "previewHref": "/examples/agent-run",
+        "examples": [
+          {
+            "title": "Corrida del encargo",
+            "href": "/examples/agent-run",
+            "description": "Plan, JSON de actividad, tono pendiente y diff."
+          }
+        ],
+        "usage": "<AgentRun onDecision={(decision) => console.log(decision)} onResolveInput={(id) => console.log(id)} />",
+        "api": [
+          {
+            "name": "steps",
+            "type": "PlanStep[]",
+            "description": "Ordered plan. Each step can list tool chips."
+          },
+          {
+            "name": "activity",
+            "type": "ToolActivity[]",
+            "description": "Tool calls. Expanding a row shows the JSON payload."
+          },
+          {
+            "name": "needsInput",
+            "type": "RunNeedsInput | null",
+            "description": "A question with radio options. Null hides the block."
+          },
+          {
+            "name": "draft / onDecision",
+            "type": "RunDraft / (DraftDecision) => void",
+            "description": "Line diff with Accept and Reject."
+          },
+          {
+            "name": "details",
+            "type": "RunDetails",
+            "description": "Model, tokens, cost, and duration. Display only."
+          },
+          {
+            "name": "density",
+            "type": "\"comfortable\" | \"compact\"",
+            "description": "Typed spacing map."
+          }
+        ]
+      },
+      "docs": "Inspirado en patrones de Affect UI (preview público); reimplementación clean-room; no código ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Instalar también trae @retana/app-shell."
+    },
+    {
+      "author": "Eduardo Retana",
+      "type": "registry:block",
+      "categories": [
+        "interfaces",
+        "block"
+      ],
+      "name": "settings-billing",
+      "title": "Settings and billing",
+      "description": "General, members, billing, and API tabs, with segmented credit usage, plans, a payment method, monthly or yearly prices, and invoices.",
+      "dependencies": [],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "input",
+        "tabs",
+        "@retana/app-shell"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/settings-billing.tsx",
+          "type": "registry:component",
+          "target": "@ui/settings-billing.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Ajustes y facturación",
+        "descriptionEs": "Pestañas General, Miembros, Facturación y API, con créditos segmentados, plan, pago, precios mensual o anual, y facturas.",
+        "preview": "app/examples/settings-billing/preview.tsx",
+        "previewHref": "/examples/settings-billing",
+        "examples": [
+          {
+            "title": "Facturación de Acme",
+            "href": "/examples/settings-billing",
+            "description": "Uso, planes, método de pago y facturas."
+          }
+        ],
+        "usage": "<SettingsBilling onChangePlan={(id) => console.log(id)} onIntervalChange={(interval) => console.log(interval)} />",
+        "api": [
+          {
+            "name": "usage",
+            "type": "CreditUsage",
+            "description": "Used, reserved, and total credits. The meter is segmented."
+          },
+          {
+            "name": "plans / interval",
+            "type": "BillingPlan[] / BillingInterval",
+            "description": "Monthly and yearly prices. The switch is a pressed button group."
+          },
+          {
+            "name": "payment",
+            "type": "PaymentMethod",
+            "description": "Brand, last four, expiry, and an alias. The piece does not collect a card number."
+          },
+          {
+            "name": "invoices",
+            "type": "InvoiceRow[]",
+            "description": "Number, date, amount, and status, with a download button for the host."
+          },
+          {
+            "name": "members",
+            "type": "MemberRow[]",
+            "description": "People on the members tab, plus an invite field."
+          },
+          {
+            "name": "defaultTab",
+            "type": "\"general\" | \"members\" | \"billing\" | \"api\"",
+            "description": "Initial tab. Default billing."
+          }
+        ]
+      },
+      "docs": "Inspirado en patrones de Affect UI (preview público); reimplementación clean-room; no código ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. No envía datos de pago. Instalar también trae @retana/app-shell."
+    },
+    {
+      "author": "Eduardo Retana",
+      "type": "registry:block",
+      "categories": [
+        "interfaces",
+        "block"
+      ],
+      "name": "onboarding",
+      "title": "Onboarding",
+      "description": "Four-step setup with connectable tools and a side checklist.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "input",
+        "@retana/app-shell"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/onboarding.tsx",
+          "type": "registry:component",
+          "target": "@ui/onboarding.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Puesta en marcha",
+        "descriptionEs": "Alta en cuatro pasos, con herramientas para conectar y una lista lateral.",
+        "preview": "app/examples/onboarding/preview.tsx",
+        "previewHref": "/examples/onboarding",
+        "examples": [
+          {
+            "title": "Alta de Acme",
+            "href": "/examples/onboarding",
+            "description": "Espacio, herramientas, equipo y resumen."
+          }
+        ],
+        "usage": "<Onboarding onComplete={(payload) => console.log(payload)} />",
+        "api": [
+          {
+            "name": "steps",
+            "type": "OnboardingStep[]",
+            "description": "Stepper entries. The current step uses aria-current=\"step\"."
+          },
+          {
+            "name": "tools",
+            "type": "OnboardingTool[]",
+            "description": "Shown on the tools step. Each one can be connected."
+          },
+          {
+            "name": "checks",
+            "type": "OnboardingCheck[]",
+            "description": "Side checklist, independent of the stepper."
+          },
+          {
+            "name": "onComplete",
+            "type": "(payload) => void",
+            "description": "Workspace name, invite lines, and connected tool ids."
+          },
+          {
+            "name": "shell",
+            "type": "boolean",
+            "description": "Default false. Set true to place the flow inside AppShell."
+          },
+          {
+            "name": "classNames",
+            "type": "OnboardingClassNames",
+            "description": "Slot classes for the stepper, panel, and checklist."
+          }
+        ]
+      },
+      "docs": "Inspirado en patrones de Affect UI (preview público); reimplementación clean-room; no código ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Instalar también trae @retana/app-shell."
+    },
+    {
+      "author": "Eduardo Retana",
+      "type": "registry:block",
+      "categories": [
+        "interfaces",
+        "block"
+      ],
+      "name": "integrations",
+      "title": "Integrations",
+      "description": "Categorized directory with search, connect and connected states, and a request form.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "input",
+        "textarea",
+        "@retana/app-shell"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/integrations.tsx",
+          "type": "registry:component",
+          "target": "@ui/integrations.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Integraciones",
+        "descriptionEs": "Directorio por categorías, con búsqueda, estados conectar o conectada, y un pedido.",
+        "preview": "app/examples/integrations/preview.tsx",
+        "previewHref": "/examples/integrations",
+        "examples": [
+          {
+            "title": "Directorio de Acme",
+            "href": "/examples/integrations",
+            "description": "Categorías, búsqueda y pedido. Los nombres son ficticios."
+          }
+        ],
+        "usage": "<Integrations onConnect={(id, connected) => console.log(id, connected)} onRequest={(request) => console.log(request)} />",
+        "api": [
+          {
+            "name": "categories",
+            "type": "IntegrationCategory[]",
+            "description": "Filter buttons. The id \"all\" clears the category."
+          },
+          {
+            "name": "items",
+            "type": "IntegrationItem[]",
+            "description": "Directory cards. connected toggles the button label."
+          },
+          {
+            "name": "query / category",
+            "type": "string",
+            "description": "Controlled search and category. Omit them for internal state."
+          },
+          {
+            "name": "onRequest",
+            "type": "(IntegrationRequest) => void",
+            "description": "Name and reason. The note stays on the page."
+          },
+          {
+            "name": "shell",
+            "type": "boolean",
+            "description": "Default true."
+          },
+          {
+            "name": "classNames",
+            "type": "IntegrationsClassNames",
+            "description": "Slot classes for filters, the grid, and the request form."
+          }
+        ]
+      },
+      "docs": "Inspirado en patrones de Affect UI (preview público); reimplementación clean-room; no código ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Instalar también trae @retana/app-shell."
+    },
+    {
+      "author": "Eduardo Retana",
+      "type": "registry:block",
+      "categories": [
+        "interfaces",
+        "block"
+      ],
+      "name": "crm",
+      "title": "Sales sheet",
+      "description": "Sales workspace and an editable spreadsheet for company, stage, owner, and value, with selection and a one-step undo.",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "@retana/app-shell"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/crm.tsx",
+          "type": "registry:component",
+          "target": "@ui/crm.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Hoja de ventas",
+        "descriptionEs": "Shell de ventas y una tabla editable para empresa, etapa, responsable y valor, con selección y deshacer.",
+        "preview": "app/examples/crm/preview.tsx",
+        "previewHref": "/examples/crm",
+        "examples": [
+          {
+            "title": "Cartera de Acme",
+            "href": "/examples/crm",
+            "description": "Empresas ficticias. Un cambio se puede deshacer."
+          }
+        ],
+        "usage": "<CrmSheet rows={rows} onRowsChange={setRows} />",
+        "api": [
+          {
+            "name": "rows",
+            "type": "CrmRow[]",
+            "description": "Company, stage id, owner, and numeric value."
+          },
+          {
+            "name": "stages",
+            "type": "CrmStage[]",
+            "description": "Options for the stage select."
+          },
+          {
+            "name": "onRowsChange",
+            "type": "(CrmRow[]) => void",
+            "description": "Fires after an edit or undo."
+          },
+          {
+            "name": "locale / currency",
+            "type": "string",
+            "description": "Passed to Intl.NumberFormat. Defaults es-MX and MXN."
+          },
+          {
+            "name": "readOnly",
+            "type": "boolean",
+            "description": "Disables cell editing and stage changes."
+          },
+          {
+            "name": "shell",
+            "type": "boolean",
+            "description": "Default true, with the sales navigation."
+          }
+        ]
+      },
+      "docs": "Inspirado en patrones de Affect UI (preview público); reimplementación clean-room; no código ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Instalar también trae @retana/app-shell. Es independiente de crm-dashboard."
+    },
+    {
+      "author": "Eduardo Retana",
+      "type": "registry:block",
+      "categories": [
+        "interfaces",
+        "block"
+      ],
+      "name": "analytics",
+      "title": "Analytics",
+      "description": "Four KPIs, revenue by channel, a breakdown, top products, and a weekly trend.",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/app-shell"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/analytics.tsx",
+          "type": "registry:component",
+          "target": "@ui/analytics.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Analítica",
+        "descriptionEs": "Cuatro indicadores, ingresos por canal, desglose, productos destacados y la tendencia de la semana.",
+        "preview": "app/examples/analytics/preview.tsx",
+        "previewHref": "/examples/analytics",
+        "examples": [
+          {
+            "title": "Semana de Acme",
+            "href": "/examples/analytics",
+            "description": "Cifras ficticias pintadas con tokens del tema."
+          }
+        ],
+        "usage": "<AnalyticsOverview kpis={kpis} channels={channels} trends={trends} />",
+        "api": [
+          {
+            "name": "kpis",
+            "type": "AnalyticsKpi[]",
+            "description": "Label, value, and a written delta (sube, baja, or igual)."
+          },
+          {
+            "name": "channels",
+            "type": "AnalyticsAmount[]",
+            "description": "Horizontal meters. Width is the share of the largest channel."
+          },
+          {
+            "name": "breakdown",
+            "type": "AnalyticsShare[]",
+            "description": "Labeled percentages."
+          },
+          {
+            "name": "products",
+            "type": "AnalyticsProduct[]",
+            "description": "Table of name, revenue, and units."
+          },
+          {
+            "name": "trends",
+            "type": "AnalyticsPoint[]",
+            "description": "Weekly columns. Height follows the largest point."
+          },
+          {
+            "name": "locale / currency",
+            "type": "string",
+            "description": "Formatting for channel amounts."
+          }
+        ]
+      },
+      "docs": "Inspirado en patrones de Affect UI (preview público); reimplementación clean-room; no código ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Instalar también trae @retana/app-shell. Las barras no usan una librería de gráficas."
+    },
+    {
+      "author": "Eduardo Retana",
+      "type": "registry:block",
+      "categories": [
+        "interfaces",
+        "block"
+      ],
+      "name": "evals",
+      "title": "Evals",
+      "description": "KPIs against the previous version, a pass-rate chart, a prompt diff, and a test-case table.",
+      "dependencies": [],
+      "registryDependencies": [
+        "badge",
+        "@retana/app-shell"
+      ],
+      "files": [
+        {
+          "path": "registry/blocks/evals.tsx",
+          "type": "registry:component",
+          "target": "@ui/evals.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Evaluaciones",
+        "descriptionEs": "Indicadores frente a la versión anterior, gráfica de aprobación, diferencia del prompt y tabla de casos.",
+        "preview": "app/examples/evals/preview.tsx",
+        "previewHref": "/examples/evals",
+        "examples": [
+          {
+            "title": "v3 del encargo",
+            "href": "/examples/evals",
+            "description": "Aprobación, diff del prompt y casos."
+          }
+        ],
+        "usage": "<EvalReview kpis={kpis} versions={versions} prompt={prompt} cases={cases} />",
+        "api": [
+          {
+            "name": "kpis",
+            "type": "EvalKpi[]",
+            "description": "Current value, previous value, and a written direction."
+          },
+          {
+            "name": "versions",
+            "type": "EvalVersion[]",
+            "description": "Pass rate by version, drawn as meters."
+          },
+          {
+            "name": "prompt",
+            "type": "EvalPrompt",
+            "description": "Before and after text, compared line by line."
+          },
+          {
+            "name": "cases",
+            "type": "EvalCase[]",
+            "description": "Name, pass/fail/skip, score, and note."
+          },
+          {
+            "name": "versionLabel",
+            "type": "string",
+            "description": "Eyebrow, for example which versions are compared."
+          },
+          {
+            "name": "shell",
+            "type": "boolean",
+            "description": "Default true."
+          }
+        ]
+      },
+      "docs": "Inspirado en patrones de Affect UI (preview público); reimplementación clean-room; no código ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Instalar también trae @retana/app-shell."
+    },
+    {
+      "name": "stat-sparkline-card",
+      "type": "registry:block",
+      "title": "StatSparklineCard",
+      "description": "Big number, muted label, up/down change and a sparkline that draws in.",
       "author": "Eduardo Retana",
       "dependencies": [
-        "@dnd-kit/core",
-        "@dnd-kit/sortable",
-        "@dnd-kit/utilities",
-        "@tanstack/react-table",
         "lucide-react",
-        "sonner"
+        "motion"
       ],
-      "registryDependencies": [
-        "button",
-        "checkbox",
-        "dropdown-menu",
-        "input",
-        "select",
-        "skeleton",
-        "table",
-        "tooltip",
-        "@retana/status-pill"
-      ],
+      "registryDependencies": [],
       "categories": [
-        "table"
-      ],
-      "files": [
-        {
-          "path": "registry/ui/work-table.tsx",
-          "type": "registry:component",
-          "target": "@ui/work-table.tsx"
-        },
-        {
-          "path": "registry/hooks/use-work-table.ts",
-          "type": "registry:hook",
-          "target": "@hooks/use-work-table.ts"
-        },
-        {
-          "path": "registry/lib/work-table.ts",
-          "type": "registry:lib",
-          "target": "@lib/work-table.ts"
-        },
-        {
-          "path": "registry/lib/reorder.ts",
-          "type": "registry:lib",
-          "target": "@lib/reorder.ts"
-        },
-        {
-          "path": "registry/lib/status-tone.ts",
-          "type": "registry:lib",
-          "target": "@lib/status-tone.ts"
-        },
-        {
-          "path": "registry/lib/work-table/README.md",
-          "type": "registry:file",
-          "target": "@lib/work-table/README.md"
-        }
+        "dashboard",
+        "block",
+        "ae"
       ],
       "meta": {
-        "titleEs": "Tabla de trabajo",
-        "descriptionEs": "Columnas y filas arrastrables, diseños, densidad, acciones en bloque y paginación. El orden se anuncia y se puede deshacer.",
-        "preview": "app/examples/work-table/preview.tsx",
-        "previewHref": "/examples/work-table",
+        "titleEs": "Tarjeta de métrica con minigráfico",
+        "descriptionEs": "Número grande, etiqueta tenue, cambio arriba o abajo y una línea que se dibuja al entrar.",
+        "preview": "app/examples/stat-sparkline-card/preview.tsx",
+        "previewHref": "/examples/stat-sparkline-card",
         "examples": [
           {
-            "title": "Tabla de trabajo",
-            "href": "/examples/work-table",
-            "description": "Asas, orden en vivo, diseños, selección y paginación."
+            "title": "Tarjeta de métrica con minigráfico",
+            "href": "/examples/stat-sparkline-card",
+            "description": "Datos ficticios de Asesor Experto."
           },
           {
             "title": "Estrés",
-            "href": "/examples/work-table/stress",
-            "description": "Vacío, carga, error, 320px, texto largo y RTL."
+            "href": "/examples/stat-sparkline-card/stress",
+            "description": "320px, ancho y RTL."
           }
         ],
-        "usage": "<WorkTable rows={rows} columns={columns} onMove={(event) => setRows(event.rows)} persistenceKey=\"work\" />",
+        "usage": "<StatSparklineCard label=\"Clientes activos\" value=\"1,284\" change=\"+8.2%\" direction=\"up\" series={serie} />",
         "api": [
           {
-            "name": "rows / columns",
-            "type": "T[] / WorkColumn<T>[]",
-            "description": "Rows need an id. A column cell receives the row and its index."
-          },
-          {
-            "name": "mode",
-            "type": "\"flat\" | \"grouped\" | \"tree\"",
-            "description": "Flat paginates. Grouped buckets by status. Tree indents by parent."
-          },
-          {
-            "name": "onMove / onReorder",
-            "type": "callback",
-            "description": "Adapter. onMove receives the next rows. There is no backend SDK."
-          },
-          {
-            "name": "onAssign / onRemove / onUpdate",
-            "type": "callback",
-            "description": "Bulk assign, destructive row action, and a field patch."
-          },
-          {
-            "name": "persistenceKey / layoutApi",
-            "type": "string / hook",
-            "description": "Optional localStorage key, or a layout hook the host already owns."
-          },
-          {
-            "name": "state",
-            "type": "\"ready\" | \"loading\" | \"error\"",
-            "description": "Empty, loading, and error are built in. onRetry sits on the error state."
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
           }
         ]
       },
-      "docs": "Clean-room work table. Behavior only: no paid-library source, sample rows, icons, or assets. Columns and rows reorder with dnd-kit (pointer and keyboard) and announce through aria-live. Layout presets can persist in localStorage. Reduced motion skips transitions. Status tones come from status-pill and status-tone.ts. Answer no if the CLI asks to overwrite button, checkbox, dropdown-menu, input, select, skeleton, table, tooltip, status-pill, reorder, or status-tone. The item ships no theme."
-    },
-    {
-      "name": "work-table-toolbar",
-      "type": "registry:ui",
-      "title": "Work table toolbar",
-      "description": "Search, priority toggle, assignee multiselect, cycle select, and sort menu for a work table.",
-      "author": "Eduardo Retana",
-      "dependencies": [
-        "lucide-react"
-      ],
-      "registryDependencies": [
-        "avatar",
-        "button",
-        "checkbox",
-        "dropdown-menu",
-        "input",
-        "popover",
-        "select",
-        "tooltip"
-      ],
-      "categories": [
-        "table"
-      ],
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
       "files": [
         {
-          "path": "registry/ui/work-table-toolbar.tsx",
+          "path": "registry/blocks/ae/stat-sparkline-card.tsx",
           "type": "registry:component",
-          "target": "@ui/work-table-toolbar.tsx"
+          "target": "@ui/ae/stat-sparkline-card.tsx"
         },
         {
-          "path": "registry/lib/work-table.ts",
-          "type": "registry:lib",
-          "target": "@lib/work-table.ts"
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
         },
         {
-          "path": "registry/lib/reorder.ts",
+          "path": "registry/lib/ae-dash.ts",
           "type": "registry:lib",
-          "target": "@lib/reorder.ts"
+          "target": "@lib/ae-dash.ts"
         },
         {
-          "path": "registry/lib/status-tone.ts",
+          "path": "registry/lib/motion.ts",
           "type": "registry:lib",
-          "target": "@lib/status-tone.ts"
+          "target": "@lib/motion.ts"
         }
+      ]
+    },
+    {
+      "name": "radial-pair-card",
+      "type": "registry:block",
+      "title": "RadialPairCard",
+      "description": "Two percentage rings side by side; strokes draw in.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
       ],
       "meta": {
-        "titleEs": "Barra de la tabla de trabajo",
-        "descriptionEs": "Búsqueda, prioridades P0–P3, responsables con avatar, ciclo y menú de orden.",
-        "preview": "app/examples/work-table-toolbar/preview.tsx",
-        "previewHref": "/examples/work-table-toolbar",
+        "titleEs": "Par de anillos radiales",
+        "descriptionEs": "Dos anillos de porcentaje lado a lado, como tiempo de respuesta y resolución. El trazo se dibuja al entrar.",
+        "preview": "app/examples/radial-pair-card/preview.tsx",
+        "previewHref": "/examples/radial-pair-card",
         "examples": [
           {
-            "title": "Barra",
-            "href": "/examples/work-table-toolbar",
-            "description": "Filtros controlados y botones de restablecer, expandir y restaurar."
+            "title": "Par de anillos radiales",
+            "href": "/examples/radial-pair-card",
+            "description": "Datos ficticios de Asesor Experto."
           },
           {
             "title": "Estrés",
-            "href": "/examples/work-table-toolbar/stress",
-            "description": "320px, vacío y un nombre largo."
+            "href": "/examples/radial-pair-card/stress",
+            "description": "320px, ancho y RTL."
           }
         ],
-        "usage": "<WorkTableToolbar query={query} onQueryChange={setQuery} priorities={priorities} onPrioritiesChange={setPriorities} people={people} assignees={assignees} onAssigneesChange={setAssignees} cycles={cycles} cycle={cycle} onCycleChange={setCycle} sortKey={sortKey} sortDir={sortDir} onSortChange={setSort} onReset={reset} />",
+        "usage": "<RadialPairCard items={[{ label: \"Tiempo de respuesta\", value: 86 }, { label: \"Resolución\", value: 72 }]} />",
         "api": [
           {
-            "name": "query / priorities",
-            "type": "string / WorkPriority[]",
-            "description": "Search text and the pressed P0–P3 levels."
-          },
-          {
-            "name": "people / assignees",
-            "type": "person[] / string[]",
-            "description": "Multiselect. Avatars show the selected people."
-          },
-          {
-            "name": "cycles / cycle",
-            "type": "WorkCycle[] / string | null",
-            "description": "Single cycle. Null is every cycle."
-          },
-          {
-            "name": "sortKey / sortDir",
-            "type": "manual | date | priority | effort",
-            "description": "Sort menu, including ascending and descending."
-          },
-          {
-            "name": "onReset / onExpand / onRestore",
-            "type": "() => void",
-            "description": "Optional icon buttons. Labels default to Spanish."
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
           }
         ]
       },
-      "docs": "Clean-room filter bar for the work table. No paid-library source or assets. It does not own the rows. Answer no if the CLI asks to overwrite avatar, button, checkbox, dropdown-menu, input, popover, select, tooltip, or the shared work-table helpers. The item ships no theme."
-    },
-    {
-      "name": "work-table-cells",
-      "type": "registry:ui",
-      "title": "Work table cells",
-      "description": "Title, person, priority, relative date, status, SLA, effort, compact numbers, and rank cells.",
-      "author": "Eduardo Retana",
-      "dependencies": [
-        "lucide-react"
-      ],
-      "registryDependencies": [
-        "avatar",
-        "@retana/status-pill"
-      ],
-      "categories": [
-        "table"
-      ],
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
       "files": [
         {
-          "path": "registry/ui/work-table-cells.tsx",
+          "path": "registry/blocks/ae/radial-pair-card.tsx",
           "type": "registry:component",
-          "target": "@ui/work-table-cells.tsx"
+          "target": "@ui/ae/radial-pair-card.tsx"
         },
         {
-          "path": "registry/lib/work-table.ts",
-          "type": "registry:lib",
-          "target": "@lib/work-table.ts"
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
         },
         {
-          "path": "registry/lib/reorder.ts",
+          "path": "registry/lib/ae-dash.ts",
           "type": "registry:lib",
-          "target": "@lib/reorder.ts"
+          "target": "@lib/ae-dash.ts"
         },
         {
-          "path": "registry/lib/status-tone.ts",
+          "path": "registry/lib/motion.ts",
           "type": "registry:lib",
-          "target": "@lib/status-tone.ts"
+          "target": "@lib/motion.ts"
         }
+      ]
+    },
+    {
+      "name": "highlight-cta-card",
+      "type": "registry:block",
+      "title": "HighlightCtaCard",
+      "description": "Tall accent-gradient card with a big number and a pill call to action.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
       ],
       "meta": {
-        "titleEs": "Celdas de la tabla de trabajo",
-        "descriptionEs": "Título compuesto, persona, prioridad, fecha relativa, estado, SLA, esfuerzo, números compactos y rango.",
-        "preview": "app/examples/work-table-cells/preview.tsx",
-        "previewHref": "/examples/work-table-cells",
+        "titleEs": "Tarjeta destacada con acción",
+        "descriptionEs": "Tarjeta alta con degradado del color de acento, número grande y botón píldora para crear.",
+        "preview": "app/examples/highlight-cta-card/preview.tsx",
+        "previewHref": "/examples/highlight-cta-card",
         "examples": [
           {
-            "title": "Celdas",
-            "href": "/examples/work-table-cells",
-            "description": "Vencida, Vencido, 6.3k y pastillas soft, outline y texto."
+            "title": "Tarjeta destacada con acción",
+            "href": "/examples/highlight-cta-card",
+            "description": "Datos ficticios de Asesor Experto."
           },
           {
             "title": "Estrés",
-            "href": "/examples/work-table-cells/stress",
-            "description": "Vacío, texto largo, emoji y RTL."
+            "href": "/examples/highlight-cta-card/stress",
+            "description": "320px, ancho y RTL."
           }
         ],
-        "usage": "<WorkTitleCell title={row.title} code={row.code} kind={row.kind} />",
+        "usage": "<HighlightCtaCard eyebrow=\"Trámites resueltos\" value=\"84\" onAction={crear} />",
         "api": [
           {
-            "name": "WorkTitleCell",
-            "type": "title, code, kind",
-            "description": "Title plus an id and type line."
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/highlight-cta-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/highlight-cta-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "quick-notes-card",
+      "type": "registry:block",
+      "title": "QuickNotesCard",
+      "description": "Short note list with accessible add and delete, and an empty state.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Notas rápidas",
+        "descriptionEs": "Lista corta de notas con alta y borrado accesibles, y estado vacío.",
+        "preview": "app/examples/quick-notes-card/preview.tsx",
+        "previewHref": "/examples/quick-notes-card",
+        "examples": [
+          {
+            "title": "Notas rápidas",
+            "href": "/examples/quick-notes-card",
+            "description": "Datos ficticios de Asesor Experto."
           },
           {
-            "name": "WorkPersonCell",
-            "type": "person",
-            "description": "Avatar and name, or an empty label."
+            "title": "Estrés",
+            "href": "/examples/quick-notes-card/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<QuickNotesCard notes={notas} onChange={guardar} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/quick-notes-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/quick-notes-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "state-distribution-card",
+      "type": "registry:block",
+      "title": "StateDistributionCard",
+      "description": "Ranked states with growing bars; the first uses the accent.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Clientes por estado",
+        "descriptionEs": "Ranking de estados con barras que crecen; el primero lleva el acento.",
+        "preview": "app/examples/state-distribution-card/preview.tsx",
+        "previewHref": "/examples/state-distribution-card",
+        "examples": [
+          {
+            "title": "Clientes por estado",
+            "href": "/examples/state-distribution-card",
+            "description": "Datos ficticios de Asesor Experto."
           },
           {
-            "name": "WorkPriorityCell",
-            "type": "p0–p3",
-            "description": "Flag plus a status pill. Tone names come from priorityTone."
+            "title": "Estrés",
+            "href": "/examples/state-distribution-card/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<StateDistributionCard items={[{ label: \"Jalisco\", value: 312 }]} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/state-distribution-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/state-distribution-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "bar-trend-card",
+      "type": "registry:block",
+      "title": "BarTrendCard",
+      "description": "Bars grow from the bottom, a period select, and the last bar in the accent.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Barras por mes",
+        "descriptionEs": "Barras que crecen desde abajo, selector de periodo y la última barra con el acento.",
+        "preview": "app/examples/bar-trend-card/preview.tsx",
+        "previewHref": "/examples/bar-trend-card",
+        "examples": [
+          {
+            "title": "Barras por mes",
+            "href": "/examples/bar-trend-card",
+            "description": "Datos ficticios de Asesor Experto."
           },
           {
-            "name": "WorkDueCell / WorkSlaCell",
-            "type": "ISO date",
-            "description": "Relative due date (Vencida) and SLA (Vencido or hours left)."
+            "title": "Estrés",
+            "href": "/examples/bar-trend-card/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<BarTrendCard data={meses} defaultRange={7} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/bar-trend-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/bar-trend-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "day-scroller-schedule",
+      "type": "registry:block",
+      "title": "DayScrollerSchedule",
+      "description": "Pill day scroller with arrow keys and the next appointment in a dark nested card.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar"
+      ],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Agenda con carrusel de días",
+        "descriptionEs": "Días en píldoras con flechas del teclado y la próxima cita en una tarjeta oscura con participantes.",
+        "preview": "app/examples/day-scroller-schedule/preview.tsx",
+        "previewHref": "/examples/day-scroller-schedule",
+        "examples": [
+          {
+            "title": "Agenda con carrusel de días",
+            "href": "/examples/day-scroller-schedule",
+            "description": "Datos ficticios de Asesor Experto."
           },
           {
-            "name": "WorkStatusCell",
-            "type": "label, tone, appearance",
-            "description": "soft, outline, or text. The tone map stays in status-pill."
+            "title": "Estrés",
+            "href": "/examples/day-scroller-schedule/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<DayScrollerSchedule days={dias} items={citas} defaultDay=\"2026-10-22\" />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/day-scroller-schedule.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/day-scroller-schedule.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/ui/avatar-group.tsx",
+          "type": "registry:component",
+          "target": "@ui/avatar-group.tsx"
+        }
+      ]
+    },
+    {
+      "name": "pill-top-nav",
+      "type": "registry:block",
+      "title": "PillTopNav",
+      "description": "Centered pill nav with a sliding indicator, search, bell and avatar.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Navegación superior en píldora",
+        "descriptionEs": "Menú centrado en píldora con indicador que se desliza, búsqueda, avisos y avatar.",
+        "preview": "app/examples/pill-top-nav/preview.tsx",
+        "previewHref": "/examples/pill-top-nav",
+        "examples": [
+          {
+            "title": "Navegación superior en píldora",
+            "href": "/examples/pill-top-nav",
+            "description": "Datos ficticios de Asesor Experto."
           },
           {
-            "name": "WorkEffortCell / WorkNumberCell / WorkRankCell",
+            "title": "Estrés",
+            "href": "/examples/pill-top-nav/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<PillTopNav items={secciones} active=\"dashboard\" onNavigate={ir} user={{ name: \"Ana Ruiz\" }} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/pill-top-nav.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/pill-top-nav.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "floating-pill-sidebar",
+      "type": "registry:block",
+      "title": "FloatingPillSidebar",
+      "description": "Floating vertical pill of icon links with accessible names.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Barra lateral flotante en píldora",
+        "descriptionEs": "Barra vertical de íconos en píldora, con nombre accesible y página actual marcada.",
+        "preview": "app/examples/floating-pill-sidebar/preview.tsx",
+        "previewHref": "/examples/floating-pill-sidebar",
+        "examples": [
+          {
+            "title": "Barra lateral flotante en píldora",
+            "href": "/examples/floating-pill-sidebar",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/floating-pill-sidebar/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<FloatingPillSidebar items={items} active=\"cursos\" onNavigate={ir} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/floating-pill-sidebar.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/floating-pill-sidebar.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "process-card",
+      "type": "registry:block",
+      "title": "ProcessCard",
+      "description": "Course or process card with avatars, progress and a round CTA.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar"
+      ],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de curso o proceso",
+        "descriptionEs": "Curso o proceso con avatares, avance y botón redondo para continuar.",
+        "preview": "app/examples/process-card/preview.tsx",
+        "previewHref": "/examples/process-card",
+        "examples": [
+          {
+            "title": "Tarjeta de curso o proceso",
+            "href": "/examples/process-card",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/process-card/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<ProcessCard title=\"Ley 73\" progress={72} people={[\"Ana Ruiz\"]} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/process-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/process-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/ui/avatar-group.tsx",
+          "type": "registry:component",
+          "target": "@ui/avatar-group.tsx"
+        }
+      ]
+    },
+    {
+      "name": "multi-area-chart-card",
+      "type": "registry:block",
+      "title": "MultiAreaChartCard",
+      "description": "Multi-series gradient area chart with a toggling legend.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Áreas con degradado",
+        "descriptionEs": "Varias series como áreas con degradado y leyenda que las oculta o muestra.",
+        "preview": "app/examples/multi-area-chart-card/preview.tsx",
+        "previewHref": "/examples/multi-area-chart-card",
+        "examples": [
+          {
+            "title": "Áreas con degradado",
+            "href": "/examples/multi-area-chart-card",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/multi-area-chart-card/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<MultiAreaChartCard labels={meses} series={series} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/multi-area-chart-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/multi-area-chart-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "task-progress-card",
+      "type": "registry:block",
+      "title": "TaskProgressCard",
+      "description": "Task list with progress bars and a done counter.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Tareas con avance",
+        "descriptionEs": "Lista de tareas con barra de progreso, fecha y contador de completas.",
+        "preview": "app/examples/task-progress-card/preview.tsx",
+        "previewHref": "/examples/task-progress-card",
+        "examples": [
+          {
+            "title": "Tareas con avance",
+            "href": "/examples/task-progress-card",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/task-progress-card/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<TaskProgressCard tasks={tareas} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/task-progress-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/task-progress-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "leaderboard-card",
+      "type": "registry:block",
+      "title": "LeaderboardCard",
+      "description": "Leaderboard sorted by score with your row highlighted.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Ranking de asesores",
+        "descriptionEs": "Ranking ordenado por puntos con lugar, región y la fila propia marcada.",
+        "preview": "app/examples/leaderboard-card/preview.tsx",
+        "previewHref": "/examples/leaderboard-card",
+        "examples": [
+          {
+            "title": "Ranking de asesores",
+            "href": "/examples/leaderboard-card",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/leaderboard-card/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<LeaderboardCard leaders={asesores} highlightId=\"a1\" />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/leaderboard-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/leaderboard-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "dashboard-analitico-ae",
+      "type": "registry:block",
+      "title": "DashboardAnaliticoAe",
+      "description": "Full AE analytics screen composed from the AE pieces. Fictional data.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar"
+      ],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Dashboard analítico AE",
+        "descriptionEs": "Pantalla completa para Asesor Experto: métricas, anillos, tarjeta destacada, notas, estados, barras y agenda. Datos ficticios.",
+        "preview": "app/examples/dashboard-analitico-ae/preview.tsx",
+        "previewHref": "/examples/dashboard-analitico-ae",
+        "examples": [
+          {
+            "title": "Dashboard analítico AE",
+            "href": "/examples/dashboard-analitico-ae",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/dashboard-analitico-ae/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<DashboardAnaliticoAe userName=\"Ana Ruiz\" onCreate={crear} />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/dashboard-analitico-ae.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/dashboard-analitico-ae.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/blocks/ae/stat-sparkline-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/stat-sparkline-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/radial-pair-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/radial-pair-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/highlight-cta-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/highlight-cta-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/quick-notes-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/quick-notes-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/state-distribution-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/state-distribution-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/bar-trend-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/bar-trend-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/day-scroller-schedule.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/day-scroller-schedule.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/pill-top-nav.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/pill-top-nav.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash-data.ts"
+        },
+        {
+          "path": "registry/ui/avatar-group.tsx",
+          "type": "registry:component",
+          "target": "@ui/avatar-group.tsx"
+        }
+      ]
+    },
+    {
+      "name": "dashboard-capacitacion-ae",
+      "type": "registry:block",
+      "title": "DashboardCapacitacionAe",
+      "description": "Full AE training screen composed from the AE pieces. Fictional data.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar"
+      ],
+      "categories": [
+        "dashboard",
+        "block",
+        "ae"
+      ],
+      "meta": {
+        "titleEs": "Dashboard de capacitación AE",
+        "descriptionEs": "Pantalla de capacitación de asesores: barra flotante, cursos, áreas, tareas y ranking. Datos ficticios.",
+        "preview": "app/examples/dashboard-capacitacion-ae/preview.tsx",
+        "previewHref": "/examples/dashboard-capacitacion-ae",
+        "examples": [
+          {
+            "title": "Dashboard de capacitación AE",
+            "href": "/examples/dashboard-capacitacion-ae",
+            "description": "Datos ficticios de Asesor Experto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/dashboard-capacitacion-ae/stress",
+            "description": "320px, ancho y RTL."
+          }
+        ],
+        "usage": "<DashboardCapacitacionAe userName=\"Ana Ruiz\" />",
+        "api": [
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/ae/dashboard-capacitacion-ae.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/dashboard-capacitacion-ae.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/card-shell.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/card-shell.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/blocks/ae/floating-pill-sidebar.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/floating-pill-sidebar.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/pill-top-nav.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/pill-top-nav.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/process-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/process-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/multi-area-chart-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/multi-area-chart-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/task-progress-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/task-progress-card.tsx"
+        },
+        {
+          "path": "registry/blocks/ae/leaderboard-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/ae/leaderboard-card.tsx"
+        },
+        {
+          "path": "registry/lib/ae-dash-data.ts",
+          "type": "registry:lib",
+          "target": "@lib/ae-dash-data.ts"
+        },
+        {
+          "path": "registry/ui/avatar-group.tsx",
+          "type": "registry:component",
+          "target": "@ui/avatar-group.tsx"
+        }
+      ]
+    },
+    {
+      "name": "use-min-width",
+      "type": "registry:hook",
+      "title": "useMinWidth",
+      "description": "True when the viewport is at least a given number of CSS pixels wide. The first paint uses the narrow layout.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "animation"
+      ],
+      "meta": {
+        "titleEs": "Ancho mínimo",
+        "descriptionEs": "Verdadero cuando el viewport alcanza un ancho, en píxeles. El primer render usa el layout estrecho.",
+        "preview": "app/examples/use-min-width/preview.tsx",
+        "previewHref": "/examples/use-min-width",
+        "examples": [
+          {
+            "title": "Ancho mínimo",
+            "href": "/examples/use-min-width",
+            "description": "Verdadero cuando el viewport alcanza un ancho, en píxeles."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/use-min-width/stress",
+            "description": "320px, vacío, texto largo y RTL."
+          },
+          {
+            "title": "Glosario",
+            "href": "/examples/animations",
+            "description": "Los diez términos de scroll, con demos propias."
+          }
+        ],
+        "usage": "const wide = useMinWidth(768)",
+        "api": [
+          {
+            "name": "px",
             "type": "number",
-            "description": "Segmented points, 6.3k / % / min, and a rank badge."
+            "description": "Minimum viewport width. Non-finite values are treated as 0."
+          },
+          {
+            "name": "return",
+            "type": "boolean",
+            "description": "True at or above px. The server snapshot is false, so the first paint does not pin."
           }
         ]
       },
-      "docs": "Clean-room cells. No paid-library source or assets. Semantic tones go through StatusPill and status-tone.ts; this file does not ship a second color map. Answer no if the CLI asks to overwrite avatar, status-pill, or the shared helpers. The item ships no theme."
+      "docs": "Clean-room width cutoff shared by horizontal-scroll-rail and pinned-steps. No Motion UI or Motion+ source. The server snapshot is the narrow layout. Answer no if the CLI asks to overwrite a file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/hooks/use-min-width.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-min-width.ts"
+        }
+      ]
     },
     {
-      "name": "work-table-board",
-      "type": "registry:block",
-      "title": "Grouped work board",
-      "description": "Work table grouped by status, with collapsible groups, point totals, and cross-group drag.",
+      "name": "pinned-steps",
+      "type": "registry:ui",
+      "title": "Pinned steps",
+      "description": "A sticky visual column that cross-fades as each step crosses the center of the viewport. Narrow viewports and reduced motion stack the step with its visual.",
       "author": "Eduardo Retana",
       "dependencies": [],
       "registryDependencies": [
-        "@retana/work-table",
-        "@retana/work-table-toolbar",
-        "@retana/work-table-cells"
+        "@retana/use-min-width",
+        "@retana/motion-preference"
       ],
       "categories": [
-        "block"
-      ],
-      "files": [
-        {
-          "path": "registry/blocks/work-table-board.tsx",
-          "type": "registry:component",
-          "target": "@ui/work-table-board.tsx"
-        },
-        {
-          "path": "registry/blocks/work-table-shared.tsx",
-          "type": "registry:component",
-          "target": "@ui/work-table-shared.tsx"
-        },
-        {
-          "path": "registry/lib/work-table-demo.ts",
-          "type": "registry:lib",
-          "target": "@lib/work-table-demo.ts"
-        }
+        "animation"
       ],
       "meta": {
-        "titleEs": "Tablero agrupado",
-        "descriptionEs": "Grupos por estado, colapsables, con conteo, suma de puntos y arrastre que cambia el estado.",
-        "preview": "app/examples/work-table-board/preview.tsx",
-        "previewHref": "/examples/work-table-board",
+        "titleEs": "Pasos fijos",
+        "descriptionEs": "La columna visual se queda fija y cambia con el paso que cruza el centro. En estrecho, o con movimiento reducido, cada paso lleva su visual.",
+        "preview": "app/examples/pinned-steps/preview.tsx",
+        "previewHref": "/examples/pinned-steps",
         "examples": [
           {
-            "title": "Tablero",
-            "href": "/examples/work-table-board",
-            "description": "Mostrar más por grupo. Soltar en otro grupo cambia el estado."
+            "title": "Pasos fijos",
+            "href": "/examples/pinned-steps",
+            "description": "La columna visual se queda mientras los pasos avanzan."
           },
           {
             "title": "Estrés",
-            "href": "/examples/work-table-board/stress",
-            "description": "Carga, error y 320px."
-          }
-        ],
-        "usage": "<WorkTableBoard />",
-        "api": [
-          {
-            "name": "state",
-            "type": "\"ready\" | \"loading\" | \"error\"",
-            "description": "Passes through to the table."
+            "href": "/examples/pinned-steps/stress",
+            "description": "320px, vacío, texto largo y RTL."
           },
           {
-            "name": "errorMessage",
+            "title": "Glosario",
+            "href": "/examples/animations",
+            "description": "Los diez términos de scroll, con demos propias."
+          }
+        ],
+        "usage": "<PinnedSteps label=\"Firing\" steps={[{ id: \"dry\", title: \"Drying\", body: \"The door stays ajar.\", visual }]} />",
+        "api": [
+          {
+            "name": "steps",
+            "type": "PinnedStep[]",
+            "description": "id, title, body, and visual. decorative hides the visual from assistive tech. A visual with data is a polite live region while it is the active one."
+          },
+          {
+            "name": "minWidth",
+            "type": "number",
+            "description": "Stack below this viewport width. Default 768. Shared with use-min-width."
+          },
+          {
+            "name": "label / emptyLabel",
             "type": "string",
-            "description": "Shown in the error state."
+            "description": "Accessible name of the step region, and the copy for an empty list."
+          },
+          {
+            "name": "className / visualClassName / stepClassName",
+            "type": "string",
+            "description": "Root, sticky visual column, and each step. Defaults are a two-column pin and an 80vh step."
+          }
+        ]
+      },
+      "docs": "Clean-room scrollytelling. No Motion UI or Motion+ source. On a wide screen with motion allowed, the visual column is position sticky and each step is in normal flow. One IntersectionObserver per step uses rootMargin -50% 0px -50% 0px, so the step that crosses the center is active. The cross-fade is opacity and transform only, timed with motionPresets. Below 768px, and when motion-preference says reduce, each step stacks with its visual and nothing sticks. A decorative visual is aria-hidden. A visual that carries data uses aria-live polite while it is showing. Answer no if the CLI asks to overwrite use-min-width, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/pinned-steps.tsx",
+          "type": "registry:component",
+          "target": "@ui/pinned-steps.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "scroll-linked",
+      "type": "registry:ui",
+      "title": "Scroll linked",
+      "description": "Maps scroll progress to a fade, rise, scale, or rotate. CSS scroll-driven animations run first. Reduced motion shows the finished state.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "@retana/use-scroll-progress",
+        "@retana/motion-preference"
+      ],
+      "categories": [
+        "animation"
+      ],
+      "meta": {
+        "titleEs": "Scroll ligado",
+        "descriptionEs": "Fade, subida, escala o giro siguen el avance del scroll. Si el navegador puede, lo hace con CSS. Con movimiento reducido se ve el estado final.",
+        "preview": "app/examples/scroll-linked/preview.tsx",
+        "previewHref": "/examples/scroll-linked",
+        "examples": [
+          {
+            "title": "Scroll ligado",
+            "href": "/examples/scroll-linked",
+            "description": "Fade, subida, escala o giro siguen el avance del scroll."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/scroll-linked/stress",
+            "description": "320px, vacío, texto largo y RTL."
+          },
+          {
+            "title": "Glosario",
+            "href": "/examples/animations",
+            "description": "Los diez términos de scroll, con demos propias."
+          }
+        ],
+        "usage": "<ScrollLinked preset=\"rise\" range={[0, 0.45]}>{children}</ScrollLinked>",
+        "api": [
+          {
+            "name": "preset",
+            "type": "\"fade\" | \"rise\" | \"scale\" | \"rotate\"",
+            "description": "Default rise. Opacity and transform only."
+          },
+          {
+            "name": "range",
+            "type": "[number, number]",
+            "description": "Progress window on the timeline. Default [0, 1]. The CSS animation-range uses the same window."
+          },
+          {
+            "name": "timeline",
+            "type": "\"view\" | \"scroll\"",
+            "description": "view() follows this element. scroll() follows the scrollport, scroll(root) for the document. Default view."
+          },
+          {
+            "name": "container",
+            "type": "RefObject<HTMLElement | null>",
+            "description": "Scrollport for the hook fallback. Omit to use the window."
           },
           {
             "name": "className",
             "type": "string",
-            "description": "Slot on the demo shell."
+            "description": "Classes on the wrapper."
           }
         ]
       },
-      "docs": "Clean-room grouped demo. Fictional Spanish rows. Composes work-table, the toolbar, and the cells. Dragging between groups calls onMove with the new status. Answer no if the CLI asks to overwrite a file the host already has. The item ships no theme."
-    },
-    {
-      "name": "work-table-tree",
-      "type": "registry:block",
-      "title": "Work table tree",
-      "description": "Section and article tree with nesting on drop and a summary footer.",
-      "author": "Eduardo Retana",
-      "dependencies": [],
-      "registryDependencies": [
-        "@retana/work-table",
-        "@retana/work-table-toolbar",
-        "@retana/work-table-cells"
-      ],
-      "categories": [
-        "block"
-      ],
+      "docs": "Clean-room scroll-linked wrapper. No Motion UI or Motion+ source. Supported browsers use animation-timeline view() or scroll() and an animation-range taken from range. Otherwise use-scroll-progress and useTransform map the same window onto opacity and transform. Reduced motion, via motion-preference, shows the finished state and does not animate. Answer no if the CLI asks to overwrite use-scroll-progress, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors.",
       "files": [
         {
-          "path": "registry/blocks/work-table-tree.tsx",
+          "path": "registry/ui/scroll-linked.tsx",
           "type": "registry:component",
-          "target": "@ui/work-table-tree.tsx"
+          "target": "@ui/scroll-linked.tsx"
         },
         {
-          "path": "registry/blocks/work-table-shared.tsx",
-          "type": "registry:component",
-          "target": "@ui/work-table-shared.tsx"
-        },
-        {
-          "path": "registry/lib/work-table-demo.ts",
+          "path": "registry/lib/scroll-timeline.ts",
           "type": "registry:lib",
-          "target": "@lib/work-table-demo.ts"
+          "target": "@lib/scroll-timeline.ts"
         }
-      ],
-      "meta": {
-        "titleEs": "Árbol de secciones",
-        "descriptionEs": "Secciones y artículos. El indicador de soltar muestra el nivel y el pie resume el documento.",
-        "preview": "app/examples/work-table-tree/preview.tsx",
-        "previewHref": "/examples/work-table-tree",
-        "examples": [
-          {
-            "title": "Árbol",
-            "href": "/examples/work-table-tree",
-            "description": "Anidar o subir un nivel. El pie cuenta secciones y artículos."
-          },
-          {
-            "title": "Estrés",
-            "href": "/examples/work-table-tree/stress",
-            "description": "Carga, error y 320px."
-          }
-        ],
-        "usage": "<WorkTableTree />",
-        "api": [
-          {
-            "name": "state",
-            "type": "\"ready\" | \"loading\" | \"error\"",
-            "description": "Passes through to the table."
-          },
-          {
-            "name": "errorMessage",
-            "type": "string",
-            "description": "Shown in the error state."
-          },
-          {
-            "name": "className",
-            "type": "string",
-            "description": "Slot on the demo shell."
-          }
-        ]
-      },
-      "docs": "Clean-room tree demo. Fictional Spanish sections. Drop depth is shown on the indicator; left and right change the level while a keyboard drag is active. Answer no if the CLI asks to overwrite a file the host already has. The item ships no theme."
-    },
-    {
-      "name": "work-table-queue",
-      "type": "registry:block",
-      "title": "Ranked work queue",
-      "description": "Flat queue whose rank follows the manual order, with pagination.",
-      "author": "Eduardo Retana",
-      "dependencies": [],
-      "registryDependencies": [
-        "@retana/work-table",
-        "@retana/work-table-toolbar",
-        "@retana/work-table-cells"
-      ],
-      "categories": [
-        "block"
-      ],
-      "files": [
-        {
-          "path": "registry/blocks/work-table-queue.tsx",
-          "type": "registry:component",
-          "target": "@ui/work-table-queue.tsx"
-        },
-        {
-          "path": "registry/blocks/work-table-shared.tsx",
-          "type": "registry:component",
-          "target": "@ui/work-table-shared.tsx"
-        },
-        {
-          "path": "registry/lib/work-table-demo.ts",
-          "type": "registry:lib",
-          "target": "@lib/work-table-demo.ts"
-        }
-      ],
-      "meta": {
-        "titleEs": "Cola con ranking",
-        "descriptionEs": "Cola plana. El rango se recalcula con el orden manual y la paginación queda abajo.",
-        "preview": "app/examples/work-table-queue/preview.tsx",
-        "previewHref": "/examples/work-table-queue",
-        "examples": [
-          {
-            "title": "Cola",
-            "href": "/examples/work-table-queue",
-            "description": "Mover una fila cambia su rango. Filas por página al pie."
-          },
-          {
-            "title": "Estrés",
-            "href": "/examples/work-table-queue/stress",
-            "description": "Carga, error y 320px."
-          }
-        ],
-        "usage": "<WorkTableQueue />",
-        "api": [
-          {
-            "name": "state",
-            "type": "\"ready\" | \"loading\" | \"error\"",
-            "description": "Passes through to the table."
-          },
-          {
-            "name": "errorMessage",
-            "type": "string",
-            "description": "Shown in the error state."
-          },
-          {
-            "name": "className",
-            "type": "string",
-            "description": "Slot on the demo shell."
-          }
-        ]
-      },
-      "docs": "Clean-room flat queue. Rank is the row index after each move. Answer no if the CLI asks to overwrite a file the host already has. The item ships no theme."
-    },
-    {
-      "name": "work-table-support",
-      "type": "registry:block",
-      "title": "Support work queue",
-      "description": "Support queue with SLA cells and bulk move.",
-      "author": "Eduardo Retana",
-      "dependencies": [],
-      "registryDependencies": [
-        "@retana/work-table",
-        "@retana/work-table-toolbar",
-        "@retana/work-table-cells"
-      ],
-      "categories": [
-        "block"
-      ],
-      "files": [
-        {
-          "path": "registry/blocks/work-table-support.tsx",
-          "type": "registry:component",
-          "target": "@ui/work-table-support.tsx"
-        },
-        {
-          "path": "registry/blocks/work-table-shared.tsx",
-          "type": "registry:component",
-          "target": "@ui/work-table-shared.tsx"
-        },
-        {
-          "path": "registry/lib/work-table-demo.ts",
-          "type": "registry:lib",
-          "target": "@lib/work-table-demo.ts"
-        }
-      ],
-      "meta": {
-        "titleEs": "Cola de soporte",
-        "descriptionEs": "Cola de encargos con SLA y movimiento en bloque.",
-        "preview": "app/examples/work-table-support/preview.tsx",
-        "previewHref": "/examples/work-table-support",
-        "examples": [
-          {
-            "title": "Soporte",
-            "href": "/examples/work-table-support",
-            "description": "Vencido o horas restantes. Selecciona varias filas y muévelas juntas."
-          },
-          {
-            "title": "Estrés",
-            "href": "/examples/work-table-support/stress",
-            "description": "Carga, error y 320px."
-          }
-        ],
-        "usage": "<WorkTableSupport />",
-        "api": [
-          {
-            "name": "state",
-            "type": "\"ready\" | \"loading\" | \"error\"",
-            "description": "Passes through to the table."
-          },
-          {
-            "name": "errorMessage",
-            "type": "string",
-            "description": "Shown in the error state."
-          },
-          {
-            "name": "className",
-            "type": "string",
-            "description": "Slot on the demo shell."
-          }
-        ]
-      },
-      "docs": "Clean-room support queue. Fictional tickets. Bulk move uses the table selection. Answer no if the CLI asks to overwrite a file the host already has. The item ships no theme."
+      ]
     }
   ]
 }

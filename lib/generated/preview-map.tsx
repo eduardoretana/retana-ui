@@ -273,13 +273,34 @@ import Preview268 from "@/app/examples/scroll-snap-rail/preview"
 import Preview269 from "@/app/examples/sticky-section-list/preview"
 import Preview270 from "@/app/examples/parallax-layers/preview"
 import Preview271 from "@/app/examples/horizontal-scroll-rail/preview"
-import Preview272 from "@/app/examples/work-table/preview"
-import Preview273 from "@/app/examples/work-table-toolbar/preview"
-import Preview274 from "@/app/examples/work-table-cells/preview"
-import Preview275 from "@/app/examples/work-table-board/preview"
-import Preview276 from "@/app/examples/work-table-tree/preview"
-import Preview277 from "@/app/examples/work-table-queue/preview"
-import Preview278 from "@/app/examples/work-table-support/preview"
+import Preview272 from "@/app/examples/app-shell/preview"
+import Preview273 from "@/app/examples/assistant-home/preview"
+import Preview274 from "@/app/examples/agent-chat/preview"
+import Preview275 from "@/app/examples/agent-run/preview"
+import Preview276 from "@/app/examples/settings-billing/preview"
+import Preview277 from "@/app/examples/onboarding/preview"
+import Preview278 from "@/app/examples/integrations/preview"
+import Preview279 from "@/app/examples/crm/preview"
+import Preview280 from "@/app/examples/analytics/preview"
+import Preview281 from "@/app/examples/evals/preview"
+import Preview282 from "@/app/examples/stat-sparkline-card/preview"
+import Preview283 from "@/app/examples/radial-pair-card/preview"
+import Preview284 from "@/app/examples/highlight-cta-card/preview"
+import Preview285 from "@/app/examples/quick-notes-card/preview"
+import Preview286 from "@/app/examples/state-distribution-card/preview"
+import Preview287 from "@/app/examples/bar-trend-card/preview"
+import Preview288 from "@/app/examples/day-scroller-schedule/preview"
+import Preview289 from "@/app/examples/pill-top-nav/preview"
+import Preview290 from "@/app/examples/floating-pill-sidebar/preview"
+import Preview291 from "@/app/examples/process-card/preview"
+import Preview292 from "@/app/examples/multi-area-chart-card/preview"
+import Preview293 from "@/app/examples/task-progress-card/preview"
+import Preview294 from "@/app/examples/leaderboard-card/preview"
+import Preview295 from "@/app/examples/dashboard-analitico-ae/preview"
+import Preview296 from "@/app/examples/dashboard-capacitacion-ae/preview"
+import Preview297 from "@/app/examples/use-min-width/preview"
+import Preview298 from "@/app/examples/pinned-steps/preview"
+import Preview299 from "@/app/examples/scroll-linked/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -554,11 +575,32 @@ export const previewMap = {
   "sticky-section-list": Preview269,
   "parallax-layers": Preview270,
   "horizontal-scroll-rail": Preview271,
-  "work-table": Preview272,
-  "work-table-toolbar": Preview273,
-  "work-table-cells": Preview274,
-  "work-table-board": Preview275,
-  "work-table-tree": Preview276,
-  "work-table-queue": Preview277,
-  "work-table-support": Preview278,
+  "app-shell": Preview272,
+  "assistant-home": Preview273,
+  "agent-chat": Preview274,
+  "agent-run": Preview275,
+  "settings-billing": Preview276,
+  "onboarding": Preview277,
+  "integrations": Preview278,
+  "crm": Preview279,
+  "analytics": Preview280,
+  "evals": Preview281,
+  "stat-sparkline-card": Preview282,
+  "radial-pair-card": Preview283,
+  "highlight-cta-card": Preview284,
+  "quick-notes-card": Preview285,
+  "state-distribution-card": Preview286,
+  "bar-trend-card": Preview287,
+  "day-scroller-schedule": Preview288,
+  "pill-top-nav": Preview289,
+  "floating-pill-sidebar": Preview290,
+  "process-card": Preview291,
+  "multi-area-chart-card": Preview292,
+  "task-progress-card": Preview293,
+  "leaderboard-card": Preview294,
+  "dashboard-analitico-ae": Preview295,
+  "dashboard-capacitacion-ae": Preview296,
+  "use-min-width": Preview297,
+  "pinned-steps": Preview298,
+  "scroll-linked": Preview299,
 }
