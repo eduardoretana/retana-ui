@@ -1,0 +1,71 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "analytics",
+  "title": "Analytics",
+  "author": "Eduardo Retana",
+  "description": "Four KPIs, revenue by channel, a breakdown, top products, and a weekly trend.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/app-shell"
+  ],
+  "files": [
+    {
+      "path": "registry/blocks/analytics.tsx",
+      "content": "\"use client\"\n\n/**\n * Revenue overview built from host tokens. Bars use width and height only,\n * so the same component stays readable on a light or dark theme.\n */\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { ScreenFrame, type AppShellProps, type ShellDensity, type ShellNavItem } from \"@/components/ui/app-shell\"\n\nexport type AnalyticsKpi = {\n  id: string\n  label: string\n  value: string\n  delta: string\n  direction?: \"up\" | \"down\" | \"flat\"\n}\n\nexport type AnalyticsAmount = {\n  id: string\n  label: string\n  amount: number\n}\n\nexport type AnalyticsShare = {\n  id: string\n  label: string\n  share: number\n}\n\nexport type AnalyticsProduct = {\n  id: string\n  name: string\n  revenue: string\n  units: number\n}\n\nexport type AnalyticsPoint = {\n  id: string\n  label: string\n  value: number\n}\n\nexport type AnalyticsClassNames = {\n  root?: string\n  kpis?: string\n  channels?: string\n  breakdown?: string\n  products?: string\n  trends?: string\n}\n\nexport type AnalyticsOverviewProps = {\n  kpis?: AnalyticsKpi[]\n  channels?: AnalyticsAmount[]\n  breakdown?: AnalyticsShare[]\n  products?: AnalyticsProduct[]\n  trends?: AnalyticsPoint[]\n  locale?: string\n  currency?: string\n  shell?: boolean\n  shellProps?: Partial<AppShellProps>\n  density?: ShellDensity\n  className?: string\n  classNames?: AnalyticsClassNames\n  title?: string\n}\n\nexport const analyticsNav: ShellNavItem[] = [\n  { id: \"overview\", label: \"Resumen\" },\n  { id: \"revenue\", label: \"Ingresos\" },\n  { id: \"products\", label: \"Productos\" },\n  { id: \"settings\", label: \"Ajustes\" },\n]\n\nexport const analyticsKpis: AnalyticsKpi[] = [\n  { id: \"revenue\", label: \"Ingresos\", value: \"$186,400\", delta: \"8% más\", direction: \"up\" },\n  { id: \"orders\", label: \"Pedidos\", value: \"326\", delta: \"12 menos\", direction: \"down\" },\n  { id: \"ticket\", label: \"Ticket\", value: \"$572\", delta: \"igual\", direction: \"flat\" },\n  { id: \"return\", label: \"Recompra\", value: \"41%\", delta: \"3 puntos más\", direction: \"up\" },\n]\n\nexport const analyticsChannels: AnalyticsAmount[] = [\n  { id: \"shop\", label: \"Tienda\", amount: 82000 },\n  { id: \"mail\", label: \"Correo\", amount: 54000 },\n  { id: \"partners\", label: \"Socios\", amount: 31000 },\n  { id: \"direct\", label: \"Directo\", amount: 19400 },\n]\n\nexport const analyticsBreakdown: AnalyticsShare[] = [\n  { id: \"new\", label: \"Clientes nuevos\", share: 36 },\n  { id: \"return\", label: \"Recompra\", share: 41 },\n  { id: \"sample\", label: \"Muestras\", share: 14 },\n  { id: \"other\", label: \"Otros\", share: 9 },\n]\n\nexport const analyticsProducts: AnalyticsProduct[] = [\n  { id: \"lantern\", name: \"Linterna de campo\", revenue: \"$64,200\", units: 420 },\n  { id: \"notebook\", name: \"Cuaderno de obra\", revenue: \"$28,900\", units: 860 },\n  { id: \"case\", name: \"Estuche\", revenue: \"$19,400\", units: 310 },\n  { id: \"lamp\", name: \"Lámpara de mesa\", revenue: \"$17,100\", units: 96 },\n]\n\nexport const analyticsTrends: AnalyticsPoint[] = [\n  { id: \"mon\", label: \"Lun\", value: 18 },\n  { id: \"tue\", label: \"Mar\", value: 22 },\n  { id: \"wed\", label: \"Mié\", value: 16 },\n  { id: \"thu\", label: \"Jue\", value: 28 },\n  { id: \"fri\", label: \"Vie\", value: 31 },\n  { id: \"sat\", label: \"Sáb\", value: 14 },\n  { id: \"sun\", label: \"Dom\", value: 12 },\n]\n\nconst directionWord: Record<NonNullable<AnalyticsKpi[\"direction\"]>, string> = {\n  up: \"Sube\",\n  down: \"Baja\",\n  flat: \"Igual\",\n}\n\nfunction formatMoney(value: number, locale: string, currency: string) {\n  return new Intl.NumberFormat(locale, { style: \"currency\", currency, maximumFractionDigits: 0 }).format(value)\n}\n\nexport function AnalyticsOverview({\n  kpis = analyticsKpis,\n  channels = analyticsChannels,\n  breakdown = analyticsBreakdown,\n  products = analyticsProducts,\n  trends = analyticsTrends,\n  locale = \"es-MX\",\n  currency = \"MXN\",\n  shell = true,\n  shellProps,\n  density = \"comfortable\",\n  className,\n  classNames,\n  title = \"Esta semana\",\n}: AnalyticsOverviewProps) {\n  const space = density === \"compact\" ? \"gap-3 p-3\" : \"gap-4 p-4\"\n  const channelMax = Math.max(...channels.map((item) => item.amount), 0)\n  const trendMax = Math.max(...trends.map((item) => item.value), 0)\n\n  return (\n    <ScreenFrame\n      shell={shell}\n      shellProps={{ activeId: \"overview\", nav: analyticsNav, contentLabel: \"Analítica\", density, ...shellProps }}\n      className={className}\n    >\n      <div data-slot=\"analytics\" data-density={density} className={cn(\"@container flex min-h-0 min-w-0 flex-1 flex-col\", space, classNames?.root)}>\n        <header>\n          <p className=\"text-xs text-muted-foreground\">Analítica</p>\n          <h1 className=\"text-lg font-semibold tracking-tight\">{title}</h1>\n        </header>\n        {kpis.length === 0 ? (\n          <p className=\"text-sm text-muted-foreground\">Sin indicadores.</p>\n        ) : (\n          <ul className={cn(\"grid grid-cols-1 gap-3 @min-[640px]:grid-cols-2 @min-[960px]:grid-cols-4\", classNames?.kpis)}>\n            {kpis.map((kpi) => (\n              <li key={kpi.id} className=\"min-w-0 rounded-xl border border-border p-3\">\n                <p className=\"truncate text-xs text-muted-foreground\">{kpi.label}</p>\n                <p className=\"mt-1 truncate text-2xl font-semibold tabular-nums\">{kpi.value}</p>\n                <p className=\"mt-1 text-xs text-muted-foreground\">\n                  <span className=\"font-medium text-foreground\">{directionWord[kpi.direction ?? \"flat\"]}</span>\n                  <span className=\"ml-1 break-words\">{kpi.delta}</span>\n                </p>\n              </li>\n            ))}\n          </ul>\n        )}\n\n        <div className=\"grid gap-4 @min-[860px]:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)]\">\n          <section aria-label=\"Ingresos por canal\" className={cn(\"rounded-xl border border-border p-3\", classNames?.channels)}>\n            <h2 className=\"text-sm font-medium\">Ingresos por canal</h2>\n            {channels.length === 0 ? (\n              <p className=\"mt-2 text-sm text-muted-foreground\">Sin canales.</p>\n            ) : (\n              <ul className=\"mt-3 flex flex-col gap-3\">\n                {channels.map((channel) => {\n                  const width = channelMax === 0 ? 0 : (channel.amount / channelMax) * 100\n                  return (\n                    <li key={channel.id}>\n                      <div className=\"mb-1 flex items-baseline justify-between gap-2 text-sm\">\n                        <span className=\"min-w-0 truncate\">{channel.label}</span>\n                        <span className=\"shrink-0 tabular-nums\">{formatMoney(channel.amount, locale, currency)}</span>\n                      </div>\n                      <div\n                        className=\"h-2 overflow-hidden rounded-full bg-muted\"\n                        role=\"meter\"\n                        aria-label={channel.label}\n                        aria-valuemin={0}\n                        aria-valuemax={Math.max(channelMax, 1)}\n                        aria-valuenow={channel.amount}\n                      >\n                        <div\n                          className=\"h-full rounded-full bg-primary motion-safe:transition-[width] motion-reduce:transition-none\"\n                          style={{ width: `${width}%` }}\n                        />\n                      </div>\n                    </li>\n                  )\n                })}\n              </ul>\n            )}\n          </section>\n\n          <section aria-label=\"Desglose\" className={cn(\"rounded-xl border border-border p-3\", classNames?.breakdown)}>\n            <h2 className=\"text-sm font-medium\">Desglose</h2>\n            {breakdown.length === 0 ? (\n              <p className=\"mt-2 text-sm text-muted-foreground\">Sin desglose.</p>\n            ) : (\n              <ul className=\"mt-3 flex flex-col gap-2\">\n                {breakdown.map((item) => (\n                  <li key={item.id} className=\"flex items-center justify-between gap-2 text-sm\">\n                    <span className=\"min-w-0 truncate\">{item.label}</span>\n                    <span className=\"shrink-0 tabular-nums\">{item.share}%</span>\n                  </li>\n                ))}\n              </ul>\n            )}\n          </section>\n        </div>\n\n        <div className=\"grid gap-4 @min-[860px]:grid-cols-2\">\n          <section aria-label=\"Productos destacados\" className={cn(\"rounded-xl border border-border\", classNames?.products)}>\n            <h2 className=\"px-3 pt-3 text-sm font-medium\">Productos destacados</h2>\n            {products.length === 0 ? (\n              <p className=\"px-3 py-3 text-sm text-muted-foreground\">Sin productos.</p>\n            ) : (\n              <div className=\"overflow-auto\">\n                <table className=\"w-full min-w-[20rem] text-sm\">\n                  <caption className=\"sr-only\">Productos con más ingreso</caption>\n                  <thead className=\"text-left text-xs text-muted-foreground\">\n                    <tr>\n                      <th scope=\"col\" className=\"px-3 py-2 font-medium\">Producto</th>\n                      <th scope=\"col\" className=\"px-3 py-2 font-medium\">Ingreso</th>\n                      <th scope=\"col\" className=\"px-3 py-2 text-right font-medium\">Unidades</th>\n                    </tr>\n                  </thead>\n                  <tbody>\n                    {products.map((product) => (\n                      <tr key={product.id} className=\"border-t border-border\">\n                        <th scope=\"row\" className=\"px-3 py-2 text-left font-medium break-words\">{product.name}</th>\n                        <td className=\"px-3 py-2 tabular-nums\">{product.revenue}</td>\n                        <td className=\"px-3 py-2 text-right tabular-nums\">{product.units}</td>\n                      </tr>\n                    ))}\n                  </tbody>\n                </table>\n              </div>\n            )}\n          </section>\n\n          <section aria-label=\"Tendencia semanal\" className={cn(\"rounded-xl border border-border p-3\", classNames?.trends)}>\n            <h2 className=\"text-sm font-medium\">Tendencia semanal</h2>\n            {trends.length === 0 ? (\n              <p className=\"mt-2 text-sm text-muted-foreground\">Sin puntos.</p>\n            ) : (\n              <div className=\"mt-3 flex h-40 items-end gap-2\" role=\"list\">\n                {trends.map((point) => {\n                  const height = trendMax === 0 ? 0 : (point.value / trendMax) * 100\n                  return (\n                    <div key={point.id} role=\"listitem\" className=\"flex min-w-0 flex-1 flex-col items-center gap-1\">\n                      <div className=\"relative h-28 w-full\" title={`${point.label}: ${point.value}`}>\n                        <div\n                          className=\"absolute inset-x-0 bottom-0 rounded-t-md bg-chart-1 motion-safe:transition-[height] motion-reduce:transition-none\"\n                          style={{ height: `${height}%` }}\n                        />\n                      </div>\n                      <span className=\"w-full truncate text-center text-[11px] text-muted-foreground\">{point.label}</span>\n                      <span className=\"sr-only\">{point.value}</span>\n                    </div>\n                  )\n                })}\n              </div>\n            )}\n          </section>\n        </div>\n      </div>\n    </ScreenFrame>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/analytics.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Analítica",
+    "descriptionEs": "Cuatro indicadores, ingresos por canal, desglose, productos destacados y la tendencia de la semana.",
+    "preview": "app/examples/analytics/preview.tsx",
+    "previewHref": "/examples/analytics",
+    "examples": [
+      {
+        "title": "Semana de Acme",
+        "href": "/examples/analytics",
+        "description": "Cifras ficticias pintadas con tokens del tema."
+      }
+    ],
+    "usage": "<AnalyticsOverview kpis={kpis} channels={channels} trends={trends} />",
+    "api": [
+      {
+        "name": "kpis",
+        "type": "AnalyticsKpi[]",
+        "description": "Label, value, and a written delta (sube, baja, or igual)."
+      },
+      {
+        "name": "channels",
+        "type": "AnalyticsAmount[]",
+        "description": "Horizontal meters. Width is the share of the largest channel."
+      },
+      {
+        "name": "breakdown",
+        "type": "AnalyticsShare[]",
+        "description": "Labeled percentages."
+      },
+      {
+        "name": "products",
+        "type": "AnalyticsProduct[]",
+        "description": "Table of name, revenue, and units."
+      },
+      {
+        "name": "trends",
+        "type": "AnalyticsPoint[]",
+        "description": "Weekly columns. Height follows the largest point."
+      },
+      {
+        "name": "locale / currency",
+        "type": "string",
+        "description": "Formatting for channel amounts."
+      }
+    ]
+  },
+  "docs": "Inspirado en patrones de Affect UI (preview público); reimplementación clean-room; no código ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Instalar también trae @retana/app-shell. Las barras no usan una librería de gráficas.",
+  "categories": [
+    "interfaces",
+    "block"
+  ],
+  "type": "registry:block"
+}

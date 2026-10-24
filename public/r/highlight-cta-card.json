@@ -1,0 +1,71 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "highlight-cta-card",
+  "title": "HighlightCtaCard",
+  "author": "Eduardo Retana",
+  "description": "Tall accent-gradient card with a big number and a pill call to action.",
+  "dependencies": [
+    "lucide-react",
+    "motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/blocks/ae/highlight-cta-card.tsx",
+      "content": "\"use client\"\n\n/** Clean-room AE dashboard piece. Theme tokens only: the accent is the host primary. */\n\nimport { motion, useReducedMotion } from \"motion/react\"\nimport { Plus } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { aeCard, liftOnHover, riseItem } from \"@/lib/ae-dash\"\n\nexport type HighlightCtaCardProps = {\n  eyebrow: string\n  value: string\n  caption?: string\n  actionLabel?: string\n  onAction?: () => void\n  disabled?: boolean\n  className?: string\n}\n\nexport function HighlightCtaCard({ eyebrow, value, caption, actionLabel = \"Crear nueva\", onAction, disabled, className }: HighlightCtaCardProps) {\n  const reduce = !!useReducedMotion()\n  return (\n    <motion.section\n      aria-label={eyebrow}\n      variants={riseItem(reduce)}\n      whileHover={liftOnHover(reduce)}\n      className={cn(aeCard, \"relative flex min-h-64 min-w-0 flex-col justify-between gap-6 overflow-hidden border-transparent bg-gradient-to-b from-primary to-primary/75 p-6 text-primary-foreground shadow-lg\", className)}\n    >\n      <span aria-hidden className=\"pointer-events-none absolute -top-16 -right-16 size-48 rounded-full bg-primary-foreground/10\" />\n      <div className=\"relative min-w-0\">\n        <p className=\"text-sm font-medium opacity-90\">{eyebrow}</p>\n        <p className=\"mt-3 text-5xl font-bold tracking-tight tabular-nums\">{value}</p>\n        {caption ? <p className=\"mt-2 text-sm opacity-85\">{caption}</p> : null}\n      </div>\n      <button\n        type=\"button\"\n        onClick={onAction}\n        disabled={disabled ?? !onAction}\n        className=\"relative inline-flex w-fit items-center gap-2 rounded-full bg-primary-foreground px-5 py-2.5 text-sm font-semibold text-primary shadow-sm transition-transform outline-none hover:scale-[1.03] focus-visible:ring-2 focus-visible:ring-primary-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-primary active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none motion-reduce:hover:scale-100\"\n      >\n        <Plus aria-hidden className=\"size-4\" />\n        {actionLabel}\n      </button>\n    </motion.section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/ae/highlight-cta-card.tsx"
+    },
+    {
+      "path": "registry/blocks/ae/card-shell.tsx",
+      "content": "\"use client\"\n\n/** Clean-room AE dashboard surface. Theme tokens only. */\n\nimport type { ReactNode } from \"react\"\nimport { motion, useReducedMotion } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { aeCard, liftOnHover, riseItem, staggerParent } from \"@/lib/ae-dash\"\n\nexport type AeCardProps = {\n  title?: ReactNode\n  action?: ReactNode\n  children: ReactNode\n  className?: string\n  /** Section label for screen readers when there is no visible title. */\n  label?: string\n  as?: \"section\" | \"article\"\n}\n\n/** White card with a large radius, soft shadow, staggered rise and hover lift. Put it inside an `AeStagger`. */\nexport function AeCard({ title, action, children, className, label, as = \"section\" }: AeCardProps) {\n  const reduce = !!useReducedMotion()\n  const Tag = as === \"article\" ? motion.article : motion.section\n  return (\n    <Tag\n      data-slot=\"ae-card\"\n      aria-label={typeof title === \"string\" ? title : label}\n      variants={riseItem(reduce)}\n      whileHover={liftOnHover(reduce)}\n      className={cn(aeCard, \"flex min-w-0 flex-col gap-4 p-5 transition-shadow hover:shadow-md\", className)}\n    >\n      {title || action ? (\n        <header className=\"flex min-w-0 flex-wrap items-center justify-between gap-x-3 gap-y-2\">\n          {title ? <h3 className=\"min-w-0 text-base font-semibold break-words\">{title}</h3> : <span />}\n          {action}\n        </header>\n      ) : null}\n      {children}\n    </Tag>\n  )\n}\n\n/** Runs the staggered entrance of every AeCard inside it. */\nexport function AeStagger({ children, className }: { children: ReactNode; className?: string }) {\n  return (\n    <motion.div data-slot=\"ae-stagger\" initial=\"hidden\" animate=\"shown\" variants={staggerParent} className={className}>\n      {children}\n    </motion.div>\n  )\n}\n\nexport function AeEmpty({ children }: { children: ReactNode }) {\n  return <p className=\"rounded-2xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground\">{children}</p>\n}\n\nexport function AeSkeleton({ rows = 3 }: { rows?: number }) {\n  return (\n    <div role=\"status\" aria-label=\"Cargando\" className=\"grid gap-3\">\n      {Array.from({ length: rows }, (_, index) => (\n        <div key={index} className=\"h-6 animate-pulse rounded-full bg-muted motion-reduce:animate-none\" />\n      ))}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/ae/card-shell.tsx"
+    },
+    {
+      "path": "registry/lib/ae-dash.ts",
+      "content": "/**\n * Shared motion and surface helpers for the AE dashboard pieces.\n * Clean-room. Durations only, no colors or theme tokens.\n */\nimport type { Transition, Variants } from \"motion/react\"\n\nimport { motionPresets } from \"@/lib/motion\"\n\n/** Parent of a staggered entrance. Children use `riseItem`. */\nexport const staggerParent: Variants = {\n  hidden: {},\n  shown: { transition: { staggerChildren: motionPresets.stagger.line, delayChildren: 0.04 } },\n}\n\n/** Fade and slide up. With reduced motion the caller passes `reduce` and gets a plain fade. */\nexport function riseItem(reduce: boolean): Variants {\n  return reduce\n    ? { hidden: { opacity: 0 }, shown: { opacity: 1, transition: { duration: motionPresets.duration.instant } } }\n    : {\n        hidden: { opacity: 0, y: 16 },\n        shown: { opacity: 1, y: 0, transition: { duration: motionPresets.duration.considered, ease: [...motionPresets.ease.enter] } },\n      }\n}\n\n/** Grow transition for bars and stroke draws. Zero when motion is reduced. */\nexport function growTransition(reduce: boolean, index = 0): Transition {\n  return reduce ? { duration: 0 } : { duration: motionPresets.duration.considered * 1.5, ease: [...motionPresets.ease.enter], delay: 0.15 + index * motionPresets.stagger.item }\n}\n\n/** Hover lift for a card. Off when motion is reduced. */\nexport function liftOnHover(reduce: boolean) {\n  return reduce ? undefined : { y: -3, transition: motionPresets.spring.gentle }\n}\n\n/** Base card surface: theme card color, very large radius, soft shadow. */\nexport const aeCard = \"rounded-3xl border border-border/60 bg-card text-card-foreground shadow-sm\"\n\n/** Spanish compact number, e.g. 12 400 → \"12.4 mil\". */\nexport function compactEs(value: number) {\n  return new Intl.NumberFormat(\"es-MX\", { notation: \"compact\", maximumFractionDigits: 1 }).format(value)\n}\n\n/** Avatar fallback is muted on muted (about 4.3:1). This lifts it to foreground for AA. */\nexport const avatarContrast = { avatar: \"[&_[data-slot=avatar-fallback]]:text-foreground\", overflow: \"text-foreground\", count: \"text-foreground\" }\n\nexport function initials(name: string) {\n  return name\n    .split(/\\s+/)\n    .filter(Boolean)\n    .slice(0, 2)\n    .map((part) => part[0]?.toUpperCase() ?? \"\")\n    .join(\"\")\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/ae-dash.ts"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    // Exit decelerates, the same curve as CSS ease-out.\n    exit: [0, 0, 0.58, 1] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Tarjeta destacada con acción",
+    "descriptionEs": "Tarjeta alta con degradado del color de acento, número grande y botón píldora para crear.",
+    "preview": "app/examples/highlight-cta-card/preview.tsx",
+    "previewHref": "/examples/highlight-cta-card",
+    "examples": [
+      {
+        "title": "Tarjeta destacada con acción",
+        "href": "/examples/highlight-cta-card",
+        "description": "Datos ficticios de Asesor Experto."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/highlight-cta-card/stress",
+        "description": "320px, ancho y RTL."
+      }
+    ],
+    "usage": "<HighlightCtaCard eyebrow=\"Trámites resueltos\" value=\"84\" onAction={crear} />",
+    "api": [
+      {
+        "name": "className",
+        "type": "string",
+        "description": "Root class."
+      }
+    ]
+  },
+  "docs": "Clean-room rebuild of a dashboard style seen in a public Code XR video (Dashboard V15); its source is not published, so no code, copy, colors or assets were copied. The accent is the host primary token. All sample data is fictional. Motion is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has.",
+  "categories": [
+    "dashboard",
+    "block",
+    "ae"
+  ],
+  "type": "registry:block"
+}

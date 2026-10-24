@@ -3,13 +3,18 @@
   "name": "text-reveal",
   "title": "Text reveal",
   "author": "Eduardo Retana",
-  "description": "Reveals a short line once, word by word, and shows the plain text if motion is reduced.",
-  "dependencies": [],
-  "registryDependencies": [],
+  "description": "Reveals a short line word by word on mount, or ties each word's opacity to scroll. Reduced motion shows the plain text.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [
+    "@retana/use-scroll-progress",
+    "@retana/motion-preference"
+  ],
   "files": [
     {
       "path": "registry/ui/text-reveal.tsx",
-      "content": "\"use client\"\n\n/** Adapted from Arc UI (MIT). */\n\nimport { Fragment, type CSSProperties } from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\nexport type TextRevealProps = {\n  text: string\n  as?: \"h1\" | \"h2\" | \"h3\" | \"p\"\n  className?: string\n  classNames?: { word?: string; line?: string }\n  id?: string\n  /** Seconds before the first word rises. */\n  delay?: number\n}\n\nconst MAX_STAGGER = motionPresets.duration.considered\n\nconst css = `\n@keyframes retana-text-reveal {\n  from { opacity: 0; transform: translateY(0.35em); filter: blur(var(--reveal-blur, 4px)); }\n  to { opacity: 1; transform: none; filter: none; }\n}\n[data-slot=\"text-reveal-word\"] {\n  display: inline-block;\n  animation: retana-text-reveal 0.48s cubic-bezier(0.16, 1, 0.3, 1) both;\n  animation-delay: var(--reveal-delay, 0s);\n}\n@media (prefers-reduced-motion: reduce) {\n  [data-slot=\"text-reveal-word\"] { animation: none; }\n}\n`\n\nexport function TextReveal({ text, as = \"h2\", className, classNames, id, delay = 0 }: TextRevealProps) {\n  const Tag = as\n  const lines = text.split(\"\\n\").map((line) => line.split(\" \").filter(Boolean))\n  const count = lines.reduce((total, words) => total + words.length, 0)\n  const step = Math.min(motionPresets.stagger.word, MAX_STAGGER / Math.max(count, 1))\n  const blur = as === \"p\" ? motionPresets.blur.soft : motionPresets.blur.text\n  let index = 0\n\n  return (\n    <Tag\n      id={id}\n      data-slot=\"text-reveal\"\n      className={cn(\"max-w-full\", className)}\n      style={{ \"--reveal-blur\": `${blur}px` } as CSSProperties}\n    >\n      <style>{css}</style>\n      <span className=\"sr-only\">{text.replace(/\\n/g, \" \")}</span>\n      {lines.map((words, lineIndex) => (\n        <Fragment key={lineIndex}>\n          <span data-slot=\"text-reveal-line\" className={cn(\"inline\", classNames?.line)} aria-hidden=\"true\">\n            {words.map((word, wordIndex) => {\n              const position = index++\n              return (\n                <Fragment key={`${word}-${position}`}>\n                  <span className=\"inline-block overflow-hidden align-bottom\">\n                    <span\n                      data-slot=\"text-reveal-word\"\n                      className={classNames?.word}\n                      style={{ \"--reveal-delay\": `${delay + position * step + lineIndex * step}s` } as CSSProperties}\n                    >\n                      {word}\n                    </span>\n                  </span>\n                  {wordIndex < words.length - 1 ? \" \" : null}\n                </Fragment>\n              )\n            })}\n          </span>\n          {lineIndex < lines.length - 1 ? \" \" : null}\n        </Fragment>\n      ))}\n    </Tag>\n  )\n}\n",
+      "content": "\"use client\"\n\n/** Adapted from Arc UI (MIT). Scroll trigger is clean-room. */\n\nimport { Fragment, useLayoutEffect, useRef, useState, type CSSProperties, type RefObject } from \"react\"\nimport { useMotionValueEvent, type MotionValue } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { clampUnit, useScrollProgress } from \"@/hooks/use-scroll-progress\"\nimport { motionPresets } from \"@/lib/motion\"\nimport { useAnimationTimeline } from \"@/lib/scroll-timeline\"\nimport { useMotionPreference } from \"@/components/ui/motion-preference\"\n\nexport type TextRevealTrigger = \"mount\" | \"scroll\"\n\nexport type TextRevealProps = {\n  text: string\n  as?: \"h1\" | \"h2\" | \"h3\" | \"p\"\n  className?: string\n  classNames?: { word?: string; line?: string }\n  id?: string\n  /** Seconds before the first word rises. Used when trigger is mount. */\n  delay?: number\n  /** mount plays once. scroll ties each word to the viewport. Default mount. */\n  trigger?: TextRevealTrigger\n}\n\nconst MAX_STAGGER = motionPresets.duration.considered\nconst enter = `cubic-bezier(${motionPresets.ease.enter.join(\", \")})`\n\n/**\n * Opacity for one word along a scroll-linked reveal.\n * A non-finite progress means the fallback could not run, so the word stays fully visible.\n */\nexport function scrollWordOpacity(progress: number) {\n  if (!Number.isFinite(progress)) return 1\n  return 0.2 + clampUnit(progress) * 0.8\n}\n\nexport function textRevealDriver(trigger: TextRevealTrigger, reduced: boolean, viewTimeline: boolean) {\n  if (trigger !== \"scroll\") return \"mount\" as const\n  if (reduced) return \"reduced\" as const\n  if (viewTimeline) return \"css\" as const\n  return \"hook\" as const\n}\n\nexport const TEXT_REVEAL_CSS = `\n@keyframes retana-text-reveal {\n  from { opacity: 0; transform: translateY(0.35em); filter: blur(var(--reveal-blur, 4px)); }\n  to { opacity: 1; transform: none; filter: none; }\n}\n@keyframes retana-text-reveal-scroll {\n  from { opacity: 0.2; }\n  to { opacity: 1; }\n}\n[data-slot=\"text-reveal\"][data-trigger=\"mount\"] [data-slot=\"text-reveal-word\"] {\n  display: inline-block;\n  animation: retana-text-reveal ${motionPresets.duration.considered}s ${enter} both;\n  animation-delay: var(--reveal-delay, 0s);\n}\n@supports (animation-timeline: view()) {\n  [data-slot=\"text-reveal\"][data-trigger=\"scroll\"][data-driver=\"css\"] [data-slot=\"text-reveal-word\"] {\n    display: inline-block;\n    animation-name: retana-text-reveal-scroll;\n    animation-duration: auto;\n    animation-timing-function: linear;\n    animation-fill-mode: both;\n    animation-timeline: view();\n    animation-range: entry 20% cover 50%;\n  }\n}\n[data-slot=\"text-reveal\"][data-reduced=\"true\"] [data-slot=\"text-reveal-word\"] {\n  animation: none;\n  opacity: 1;\n  transform: none;\n  filter: none;\n}\n@media (prefers-reduced-motion: reduce) {\n  [data-slot=\"text-reveal-word\"] { animation: none; opacity: 1; transform: none; filter: none; }\n}\n`\n\nexport function TextReveal({\n  text,\n  as = \"h2\",\n  className,\n  classNames,\n  id,\n  delay = 0,\n  trigger = \"mount\",\n}: TextRevealProps) {\n  const Tag = as\n  const reduced = useMotionPreference()\n  const viewTimeline = useAnimationTimeline(\"view()\")\n  const driver = textRevealDriver(trigger, reduced, viewTimeline)\n  const lines = text.split(\"\\n\").map((line) => line.split(\" \").filter(Boolean))\n  const count = lines.reduce((total, words) => total + words.length, 0)\n  const step = Math.min(motionPresets.stagger.word, MAX_STAGGER / Math.max(count, 1))\n  const blur = as === \"p\" ? motionPresets.blur.soft : motionPresets.blur.text\n  let index = 0\n\n  return (\n    <Tag\n      id={id}\n      data-slot=\"text-reveal\"\n      data-trigger={trigger}\n      data-driver={driver}\n      data-reduced={reduced ? \"true\" : \"false\"}\n      className={cn(\"max-w-full\", className)}\n      style={{ \"--reveal-blur\": `${blur}px` } as CSSProperties}\n    >\n      <style>{TEXT_REVEAL_CSS}</style>\n      <span className=\"sr-only\">{text.replace(/\\n/g, \" \")}</span>\n      {lines.map((words, lineIndex) => (\n        <Fragment key={lineIndex}>\n          <span data-slot=\"text-reveal-line\" className={cn(\"inline\", classNames?.line)} aria-hidden=\"true\">\n            {words.map((word, wordIndex) => {\n              const position = index++\n              const wordStyle = { \"--reveal-delay\": `${delay + position * step + lineIndex * step}s` } as CSSProperties\n              return (\n                <Fragment key={`${word}-${position}`}>\n                  <span className=\"inline-block overflow-hidden align-bottom\">\n                    {driver === \"hook\" ? (\n                      <ScrollRevealWord word={word} className={classNames?.word} />\n                    ) : (\n                      <span\n                        data-slot=\"text-reveal-word\"\n                        className={classNames?.word}\n                        style={driver === \"reduced\" ? { ...wordStyle, opacity: 1 } : wordStyle}\n                      >\n                        {word}\n                      </span>\n                    )}\n                  </span>\n                  {wordIndex < words.length - 1 ? \" \" : null}\n                </Fragment>\n              )\n            })}\n          </span>\n          {lineIndex < lines.length - 1 ? \" \" : null}\n        </Fragment>\n      ))}\n    </Tag>\n  )\n}\n\nfunction ScrollRevealWord({ word, className }: { word: string; className?: string }) {\n  const ref = useRef<HTMLSpanElement>(null)\n  const { progress } = useScrollProgress({\n    target: ref,\n    offset: [\"start end\", \"center center\"],\n  })\n  const opacity = useWordOpacity(progress, ref)\n\n  return (\n    <span ref={ref} data-slot=\"text-reveal-word\" data-driver=\"hook\" className={className} style={{ opacity }}>\n      {word}\n    </span>\n  )\n}\n\nfunction useWordOpacity(progress: MotionValue<number>, ref: RefObject<HTMLElement | null>) {\n  const [opacity, setOpacity] = useState(1)\n  useMotionValueEvent(progress, \"change\", (next) => {\n    if (!ref.current) return\n    setOpacity(scrollWordOpacity(next))\n  })\n  useLayoutEffect(() => {\n    if (!ref.current) return\n    setOpacity(scrollWordOpacity(progress.get()))\n  }, [progress, ref])\n  return opacity\n}\n",
       "type": "registry:component",
       "target": "@ui/text-reveal.tsx"
     },
@@ -18,11 +23,17 @@
       "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    // Exit decelerates, the same curve as CSS ease-out.\n    exit: [0, 0, 0.58, 1] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
       "type": "registry:lib",
       "target": "@lib/motion.ts"
+    },
+    {
+      "path": "registry/lib/scroll-timeline.ts",
+      "content": "\"use client\"\n\n/**\n * Feature detection for CSS scroll-driven animations. Clean-room.\n * The server snapshot is false, so the first paint uses the hook path.\n */\n\nimport { useSyncExternalStore } from \"react\"\n\nexport type AnimationTimelineKind = \"scroll()\" | \"view()\"\n\n/** True when the browser can drive an animation from the named timeline. */\nexport function supportsAnimationTimeline(kind: AnimationTimelineKind) {\n  return typeof CSS !== \"undefined\" && typeof CSS.supports === \"function\" && CSS.supports(\"animation-timeline\", kind)\n}\n\n/** Client-only support flag. Hydration matches the server (unsupported) and then upgrades. */\nexport function useAnimationTimeline(kind: AnimationTimelineKind) {\n  return useSyncExternalStore(\n    () => () => {},\n    () => supportsAnimationTimeline(kind),\n    () => false,\n  )\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/scroll-timeline.ts"
     }
   ],
   "meta": {
     "titleEs": "Texto que aparece",
-    "descriptionEs": "Revela una frase corta palabra por palabra. Con movimiento reducido el texto está visible desde el inicio.",
+    "descriptionEs": "Revela una frase corta palabra por palabra, al montarse o con el scroll. Con movimiento reducido el texto está visible desde el inicio.",
     "preview": "app/examples/text-reveal/preview.tsx",
     "previewHref": "/examples/text-reveal",
     "examples": [
@@ -30,9 +41,14 @@
         "title": "Texto que aparece",
         "href": "/examples/text-reveal",
         "description": "Revela una frase corta palabra por palabra. Con movimiento reducido el texto está visible desde el inicio."
+      },
+      {
+        "title": "Glosario",
+        "href": "/examples/animations",
+        "description": "Los diez términos de scroll, con demos propias."
       }
     ],
-    "usage": "<TextReveal as=\"h2\" text={\"Kiln open\\nSaturday\"} />",
+    "usage": "<TextReveal as=\"h2\" trigger=\"scroll\" text={\"Kiln open\\nSaturday\"} />",
     "api": [
       {
         "name": "text",
@@ -45,15 +61,20 @@
         "description": "Element. Default h2."
       },
       {
+        "name": "trigger",
+        "type": "\"mount\" | \"scroll\"",
+        "description": "mount plays once. scroll ties each word to the viewport. Default mount."
+      },
+      {
         "name": "delay",
         "type": "number",
-        "description": "Seconds before the first word. Default 0."
+        "description": "Seconds before the first word, when trigger is mount. Default 0."
       }
     ]
   },
-  "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+  "docs": "Adapted from Arc UI (MIT) for the mount reveal. The scroll trigger is clean-room: each word fades from about 0.2 to 1 with animation-timeline view() and animation-range entry 20% cover 50% when the browser supports it, and use-scroll-progress otherwise. If progress is not a number, the word stays fully visible. Words are aria-hidden. A screen-reader span keeps the full sentence. Reduced motion, including motion-preference, shows the text at full opacity. Answer no if the CLI asks to overwrite use-scroll-progress, motion-preference, or another file the host already has. The item ships no theme, cssVars, or fixed colors. Motion UI and Motion+ are not included.",
   "categories": [
-    "content"
+    "animation"
   ],
   "type": "registry:ui"
 }

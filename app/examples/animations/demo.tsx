@@ -5,12 +5,15 @@ import Link from "next/link"
 
 import { MotionPreferenceControl } from "@/registry/ui/motion-preference"
 import { ParallaxLayers } from "@/registry/ui/parallax-layers"
+import { PinnedSteps } from "@/registry/ui/pinned-steps"
 import { RevealOnScroll } from "@/registry/ui/reveal-on-scroll"
+import { ScrollLinked } from "@/registry/ui/scroll-linked"
 import { ScrollProgress } from "@/registry/ui/scroll-progress"
 import { ScrollSnapPanel, ScrollSnapRail } from "@/registry/ui/scroll-snap-rail"
 import { StaggerItem, StaggerReveal } from "@/registry/ui/stagger-reveal"
 import { StickySectionList } from "@/registry/ui/sticky-section-list"
 import { HorizontalScrollRail } from "@/registry/ui/horizontal-scroll-rail"
+import { TextReveal } from "@/registry/ui/text-reveal"
 
 const pieces = [
   ["use-scroll-progress", "Hook 0–1"],
@@ -21,6 +24,10 @@ const pieces = [
   ["sticky-section-list", "Encabezados fijos"],
   ["parallax-layers", "Paralaje"],
   ["horizontal-scroll-rail", "Riel horizontal"],
+  ["pinned-steps", "Pasos fijos"],
+  ["scroll-linked", "Efecto ligado al scroll"],
+  ["text-reveal", "Palabras ligadas al scroll"],
+  ["use-min-width", "Corte de ancho"],
 ] as const
 
 const notes = [
@@ -36,7 +43,9 @@ const notes = [
 
 export function Demo() {
   const reader = useRef<HTMLDivElement>(null)
+  const linked = useRef<HTMLDivElement>(null)
   const reveals = useRef<HTMLDivElement>(null)
+  const stagger = useRef<HTMLDivElement>(null)
   const [replay, setReplay] = useState(0)
 
   return (
@@ -44,7 +53,7 @@ export function Demo() {
       <MotionPreferenceControl label="Movimiento" />
 
       <section className="flex flex-col gap-3">
-        <Term kicker="Scroll-triggered" title="Entra al llegar" body="Fade, slide o scale, una sola vez. La cascada reparte la entrada entre las tarjetas." />
+        <Term kicker="Scroll-triggered" title="Entra al llegar" body="Fade, slide o scale, una sola vez, cuando el bloque cruza el recuadro." />
         <button type="button" className="self-start rounded-md border border-border px-3 py-1 text-sm" onClick={() => setReplay((value) => value + 1)}>
           Repetir
         </button>
@@ -61,25 +70,35 @@ export function Demo() {
             <p className="text-sm font-medium">Scale</p>
             <p className="text-sm text-muted-foreground">Crece apenas al entrar.</p>
           </RevealOnScroll>
-          <StaggerReveal root={reveals} className="grid grid-cols-2 gap-3">
-            {["Ceniza", "Feldespato", "Sílice", "Ball clay"].map((name) => (
-              <StaggerItem key={name} className="rounded-xl border border-border bg-muted px-3 py-4 text-sm">
-                {name}
-              </StaggerItem>
-            ))}
-          </StaggerReveal>
         </div>
       </section>
 
       <section className="flex flex-col gap-3">
-        <Term kicker="Scroll-linked" title="Ligado al scroll" body="La barra es la posición, de 0 a 1. No se reproduce: se arrastra con el texto." />
-        <div ref={reader} className="h-64 overflow-y-auto rounded-xl border border-border">
-          <ScrollProgress container={reader} label="Lectura del horno" showValue />
-          <article className="flex flex-col gap-4 p-4 text-sm leading-6">
-            {notes.map((note) => (
-              <p key={note}>{note}</p>
+        <Term kicker="Scroll-linked" title="Ligado al scroll" body="Fade, subida, escala o giro. El avance es la posición, no una reproducción." />
+        <div ref={linked} className="h-72 overflow-y-auto rounded-xl border border-border">
+          <div className="h-36" />
+          <div className="flex flex-col gap-4 px-4">
+            {(
+              [
+                ["fade", "Fade", "Aparece con el avance del recuadro."],
+                ["rise", "Subida", "Termina antes, en un rango más corto."],
+                ["scale", "Escala", "Crece mientras cruza."],
+                ["rotate", "Giro", "Se endereza con el scroll."],
+              ] as const
+            ).map(([preset, title, body]) => (
+              <ScrollLinked
+                key={preset}
+                preset={preset}
+                container={linked}
+                range={preset === "rise" ? [0, 0.45] : [0, 1]}
+                className="rounded-xl border border-border bg-card p-4"
+              >
+                <p className="text-sm font-medium">{title}</p>
+                <p className="text-sm text-muted-foreground">{body}</p>
+              </ScrollLinked>
             ))}
-          </article>
+          </div>
+          <div className="h-36" />
         </div>
       </section>
 
@@ -152,6 +171,47 @@ export function Demo() {
       </section>
 
       <section className="flex flex-col gap-3">
+        <Term
+          kicker="Pin"
+          title="La visual se queda"
+          body="Los pasos siguen en el flujo. La columna de la izquierda se pega y cambia al paso que cruza el centro. En estrecho, o con movimiento reducido, cada paso lleva su visual."
+        />
+        <PinnedSteps
+          label="Quema del sábado"
+          steps={[
+            {
+              id: "dry",
+              title: "Secado",
+              body: "La puerta queda entreabierta hasta que el pie suena seco.",
+              decorative: true,
+              visual: <span className="absolute inset-0 rounded-xl bg-muted" />,
+            },
+            {
+              id: "glaze",
+              title: "Esmalte",
+              body: "La meseta de ceniza dura doce minutos. El cono empieza a doblar.",
+              visual: (
+                <span className="absolute inset-0 flex flex-col justify-end rounded-xl border border-border bg-card p-4">
+                  <span className="text-xs text-muted-foreground">Pirómetro</span>
+                  <span className="text-2xl font-semibold tabular-nums">1.220 °C</span>
+                </span>
+              ),
+            },
+            {
+              id: "cool",
+              title: "Bajada",
+              body: "La puerta sigue cerrada hasta los 200. El choque térmico parte los bordes.",
+              visual: (
+                <span className="absolute inset-0 flex items-end rounded-xl border border-border bg-secondary p-4 text-sm">
+                  Inés firma la bitácora.
+                </span>
+              ),
+            },
+          ]}
+        />
+      </section>
+
+      <section className="flex flex-col gap-3">
         <Term kicker="Scroll snap" title="Se alinea al soltar" body="Tres etapas a pantalla del recuadro. El snap es del navegador." />
         <ScrollSnapRail label="Etapas del horno" className="h-64 rounded-xl border border-border">
           {[
@@ -188,6 +248,41 @@ export function Demo() {
             </article>
           ))}
         </HorizontalScrollRail>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <Term kicker="Stagger" title="Uno después de otro" body="La cascada reparte la entrada entre las tarjetas. No es el mismo gesto que un solo fade." />
+        <div key={`stagger-${replay}`} ref={stagger} className="h-56 overflow-y-auto rounded-xl border border-border p-4">
+          <div className="h-40" />
+          <StaggerReveal root={stagger} className="grid grid-cols-2 gap-3">
+            {["Ceniza", "Feldespato", "Sílice", "Ball clay"].map((name) => (
+              <StaggerItem key={name} className="rounded-xl border border-border bg-muted px-3 py-4 text-sm">
+                {name}
+              </StaggerItem>
+            ))}
+          </StaggerReveal>
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <Term
+          kicker="Text reveal"
+          title="La frase sigue el scroll"
+          body="Cada palabra pasa de casi invisible a opaca al entrar. Al montarse, el mismo componente sube una vez. Con movimiento reducido el texto está completo."
+        />
+        <TextReveal as="h2" trigger="scroll" text={"El horno de Oaxaca\nabre el sábado"} className="text-3xl font-semibold tracking-tight" />
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <Term kicker="Progress bar" title="La barra es la posición" body="De 0 a 1, ligada al texto. No se reproduce: se arrastra. El valor accesible sale del hook." />
+        <div ref={reader} className="h-64 overflow-y-auto rounded-xl border border-border">
+          <ScrollProgress container={reader} label="Lectura del horno" showValue />
+          <article className="flex flex-col gap-4 p-4 text-sm leading-6">
+            {notes.map((note) => (
+              <p key={note}>{note}</p>
+            ))}
+          </article>
+        </div>
       </section>
 
       <section className="flex flex-col gap-3">
