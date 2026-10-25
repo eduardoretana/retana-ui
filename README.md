@@ -71,6 +71,9 @@ Names that sit near each other do different jobs. Install the row that matches t
 | --- | --- |
 | [`sortable-board`](registry/ui/sortable-board.tsx) | The homepage project board: category tabs and counts, search, list or grid, and a homepage switch per row. |
 | [`view-kanban`](registry/ui/view-kanban.tsx) | Status or select columns over a field schema, with counts, sums, drag, a keyboard sensor, and a Move to menu. |
+| [`task-board`](registry/blocks/task-board.tsx) | A CRM task board: priority counts, search, board or list, keyboard drag, and a detail sheet. `task-card` and `task-detail` install alone. |
+
+`task-board` is the task record (assignees, subtasks, comments, reminder, attachments). `view-kanban` stays the schema board inside multi-view. Pass tasks in. `onMove` changes the column. The other saves are `onUpdate`, `onAddSubtask`, `onSubtaskStatusChange`, `onComment`, and `onAttach`. Types live in [`task-board-core`](registry/lib/task-board.ts). The live demo is a fictional workshop, Cooperativa Lumen. No mockup copy or assets were copied.
 
 ### Time
 
@@ -328,7 +331,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`367` items are in `registry.json` on this branch: `288` components, `67` blocks, `6` hooks, and `6` libraries. A name links to its source file.
+`371` items are in `registry.json` on this branch: `290` components, `68` blocks, `6` hooks, and `7` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -535,6 +538,10 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`work-table-toolbar`](registry/ui/work-table-toolbar.tsx) · ui — Search, priority toggle, assignee multiselect, cycle select, and sort menu for a work table. Install: `npx shadcn@latest add @retana/work-table-toolbar`.
 - [`work-table-cells`](registry/ui/work-table-cells.tsx) · ui — Title, person, priority, relative date, status, SLA, effort, compact numbers, and rank cells. Install: `npx shadcn@latest add @retana/work-table-cells`.
 - [`data-table-grouping`](registry/ui/data-table-grouping.tsx) · ui — TanStack table with live column grouping that keeps the selection, collapsible group headers, a nested tree with subtotals, master-detail rows, and a pinned grand-total footer. Column order, visibility, density, filters, and page size are in the toolbar. Install: `npx shadcn@latest add @retana/data-table-grouping`.
+- [`task-board-core`](registry/lib/task-board.ts) · lib — Types and pure helpers for a CRM task board: overdue, priority counts, search, stage groups, comment threads, dates, and position labels. Install: `npx shadcn@latest add @retana/task-board-core`.
+- [`task-card`](registry/ui/task-card.tsx) · ui — A task card with priority, assignee initials and a +N overflow, a due date, subtask and comment counts, and an overdue chip. Install: `npx shadcn@latest add @retana/task-card`.
+- [`task-detail`](registry/ui/task-detail.tsx) · ui — Task fields, subtasks, a comment thread with replies, a reminder, and attachments. Previous and next, including arrow keys outside fields. Install: `npx shadcn@latest add @retana/task-detail`.
+- [`task-board`](registry/blocks/task-board.tsx) · block — A CRM task board: priority counts, search, board or list, keyboard and pointer drag between stages, and a detail sheet that stays on the page. Install: `npx shadcn@latest add @retana/task-board`.
 
 ### Charts
 

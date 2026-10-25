@@ -368,6 +368,10 @@ import Preview363 from "@/app/examples/organ-vestibular/preview"
 import Preview364 from "@/app/examples/organ-explorer/preview"
 import Preview365 from "@/app/examples/anatomy-workspace/preview"
 import Preview366 from "@/app/examples/organ-switcher/preview"
+import Preview367 from "@/app/examples/task-board-core/preview"
+import Preview368 from "@/app/examples/task-card/preview"
+import Preview369 from "@/app/examples/task-detail/preview"
+import Preview370 from "@/app/examples/task-board/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -737,4 +741,8 @@ export const previewMap = {
   "organ-explorer": Preview364,
   "anatomy-workspace": Preview365,
   "organ-switcher": Preview366,
+  "task-board-core": Preview367,
+  "task-card": Preview368,
+  "task-detail": Preview369,
+  "task-board": Preview370,
 }

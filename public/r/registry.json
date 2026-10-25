@@ -26556,6 +26556,315 @@
           }
         ]
       }
+    },
+    {
+      "name": "task-board-core",
+      "type": "registry:lib",
+      "title": "Task board core",
+      "description": "Types and pure helpers for a CRM task board: overdue, priority counts, search, stage groups, comment threads, dates, and position labels.",
+      "author": "Eduardo Retana",
+      "categories": ["table"],
+      "docs": "Clean-room helpers for task-board. No React and no fetching. Spanish labels are the default; taskBoardLabelsEn is the English set. A past due date is overdue unless the stage id is listed as done. Pass a stable now from the host when tests or demos must not follow the clock. No mockup source, copy, or assets were copied.",
+      "files": [
+        {
+          "path": "registry/lib/task-board.ts",
+          "type": "registry:lib",
+          "target": "@lib/task-board.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Núcleo del tablero",
+        "descriptionEs": "Tipos y funciones puras: vencidos, prioridades, búsqueda, columnas, hilos y la posición 01 de 100.",
+        "preview": "app/examples/task-board-core/preview.tsx",
+        "previewHref": "/examples/task-board-core",
+        "examples": [
+          {
+            "title": "Formato y vencidos",
+            "href": "/examples/task-board-core",
+            "description": "01 de 100, una fecha en español y un encargo cerrado que no vence."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/task-board-core/stress",
+            "description": "Fecha vacía, posición ancha y un token de 60 caracteres."
+          }
+        ],
+        "usage": "formatTaskPosition(1, 100, \"de\")\nisTaskOverdue(task, now, doneStageIds)\ncountTasksByPriority(tasks)",
+        "api": [
+          {
+            "name": "TaskRecord<TMeta>",
+            "type": "type",
+            "description": "Task shape. TMeta is the host payload and the board never reads it."
+          },
+          {
+            "name": "isTaskOverdue",
+            "type": "(task, now, doneStageIds) => boolean",
+            "description": "True when dueAt is before now and the stage is not done."
+          },
+          {
+            "name": "formatTaskPosition",
+            "type": "(current, total, ofWord) => string",
+            "description": "1-based label padded to at least two digits, such as 01 de 100."
+          },
+          {
+            "name": "taskBoardLabels / taskBoardLabelsEn",
+            "type": "TaskBoardLabels",
+            "description": "Spanish is the default chrome. Spread either object and override the keys you need."
+          }
+        ]
+      }
+    },
+    {
+      "name": "task-card",
+      "type": "registry:ui",
+      "title": "Task card",
+      "description": "A task card with priority, assignee initials and a +N overflow, a due date, subtask and comment counts, and an overdue chip.",
+      "author": "Eduardo Retana",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["avatar", "button", "dropdown-menu"],
+      "categories": ["table"],
+      "docs": "Clean-room card used by task-board. ArrowLeft and ArrowRight on the title move across the stages you pass. The drag handle stays disabled until a sensor supplies dragHandleProps. Assignees use the host Avatar so a dense board does not add a tab stop per person; avatar-group remains the interactive stack. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/task-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/task-card.tsx"
+        },
+        {
+          "path": "registry/ui/priority-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/priority-badge.tsx"
+        },
+        {
+          "path": "registry/lib/task-board.ts",
+          "type": "registry:lib",
+          "target": "@lib/task-board.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de encargo",
+        "descriptionEs": "Prioridad, responsables con +N, fecha, subtareas, comentarios y vencido.",
+        "preview": "app/examples/task-card/preview.tsx",
+        "previewHref": "/examples/task-card",
+        "examples": [
+          {
+            "title": "Tarjetas",
+            "href": "/examples/task-card",
+            "description": "Flechas en el título cambian la etapa. Datos inventados."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/task-card/stress",
+            "description": "Título vacío, token de 60 caracteres y 320px."
+          }
+        ],
+        "usage": "<TaskCard task={task} people={people} stages={stages} overdue={overdue} onOpen={open} onMoveTo={move} />",
+        "api": [
+          {
+            "name": "task / people / stages",
+            "type": "TaskRecord, TaskPerson[], TaskOption[]",
+            "description": "The card, the people behind assignee ids, and the stages ArrowLeft and ArrowRight walk."
+          },
+          {
+            "name": "onOpen / onMoveTo",
+            "type": "callbacks",
+            "description": "Open from the title or the menu. onMoveTo receives the next stage id."
+          },
+          {
+            "name": "dragHandleProps / readOnly",
+            "type": "button attrs, boolean",
+            "description": "Pass the sensor listeners to enable the handle. readOnly disables drag and the move menu."
+          },
+          {
+            "name": "labels / className",
+            "type": "Partial<TaskBoardLabels>, string",
+            "description": "Override the Spanish chrome. className merges onto the article."
+          }
+        ]
+      }
+    },
+    {
+      "name": "task-detail",
+      "type": "registry:ui",
+      "title": "Task detail",
+      "description": "Task fields, subtasks, a comment thread with replies, a reminder, and attachments. Previous and next, including arrow keys outside fields.",
+      "author": "Eduardo Retana",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["button", "checkbox", "input", "textarea"],
+      "categories": ["table"],
+      "docs": "Clean-room detail surface. It does not fetch and it does not own a route. Put it in task-board's sheet or in the host's own panel. onUpdate, onAddSubtask, onSubtaskStatusChange, onComment, onAttach, and onRemoveAttachment are the save path. Cmd or Ctrl+Enter sends a comment. ArrowLeft and ArrowRight move between tasks when focus is not in a field. Long descriptions clamp until Read more. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/task-detail.tsx",
+          "type": "registry:component",
+          "target": "@ui/task-detail.tsx"
+        },
+        {
+          "path": "registry/ui/priority-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/priority-badge.tsx"
+        },
+        {
+          "path": "registry/lib/task-board.ts",
+          "type": "registry:lib",
+          "target": "@lib/task-board.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Detalle del encargo",
+        "descriptionEs": "Campos, subtareas, comentarios con respuesta, recordatorio y adjuntos.",
+        "preview": "app/examples/task-detail/preview.tsx",
+        "previewHref": "/examples/task-detail",
+        "examples": [
+          {
+            "title": "Detalle",
+            "href": "/examples/task-detail",
+            "description": "Anterior y siguiente. La descripción larga se abre con Leer más."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/task-detail/stress",
+            "description": "320px, token largo, muchos comentarios y solo lectura."
+          }
+        ],
+        "usage": "<TaskDetail task={task} people={people} stages={stages} position={1} total={100} onUpdate={save} onComment={comment} onPrevious={previous} onNext={next} />",
+        "api": [
+          {
+            "name": "onUpdate",
+            "type": "(id, patch) => void",
+            "description": "Date, category, priority, reminder, assignees, and description."
+          },
+          {
+            "name": "onAddSubtask / onSubtaskStatusChange",
+            "type": "callbacks",
+            "description": "Add a subtask or change its status id. Status options come from subtaskStatuses."
+          },
+          {
+            "name": "onComment / onAttach",
+            "type": "callbacks",
+            "description": "A comment can include files. Files without text call onAttach."
+          },
+          {
+            "name": "position / total / onPrevious / onNext",
+            "type": "number, callbacks",
+            "description": "1-based position. Arrow keys call previous and next outside fields."
+          }
+        ]
+      }
+    },
+    {
+      "name": "task-board",
+      "type": "registry:block",
+      "title": "Task board",
+      "description": "A CRM task board: priority counts, search, board or list, keyboard and pointer drag between stages, and a detail sheet that stays on the page.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "checkbox",
+        "dropdown-menu",
+        "input",
+        "sheet",
+        "skeleton",
+        "textarea"
+      ],
+      "categories": ["block", "table"],
+      "docs": "Clean-room task board for any CRM. Pass tasks, stages, people, and categories. onMove is the column change (drag, arrow keys, Move to, and the stage field). When onMove is omitted, that change falls through to onUpdate. The other saves are onUpdate, onAddSubtask, onSubtaskStatusChange, onComment, onAttach, and onRemoveAttachment. The board does not mutate tasks. view-kanban stays the schema board inside multi-view; this one is the task record with subtasks, comments, a reminder, and attachments. Loading, error, empty, and readOnly are props. The sheet is full width below 768px. Reduced motion skips the drop animation. Drag announcements use the label set. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. No mockup source, copy, colors, or assets were copied.",
+      "files": [
+        {
+          "path": "registry/blocks/task-board.tsx",
+          "type": "registry:component",
+          "target": "@ui/task-board.tsx"
+        },
+        {
+          "path": "registry/ui/task-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/task-card.tsx"
+        },
+        {
+          "path": "registry/ui/task-detail.tsx",
+          "type": "registry:component",
+          "target": "@ui/task-detail.tsx"
+        },
+        {
+          "path": "registry/ui/priority-badge.tsx",
+          "type": "registry:component",
+          "target": "@ui/priority-badge.tsx"
+        },
+        {
+          "path": "registry/ui/search-field.tsx",
+          "type": "registry:component",
+          "target": "@ui/search-field.tsx"
+        },
+        {
+          "path": "registry/ui/segmented-control.tsx",
+          "type": "registry:component",
+          "target": "@ui/segmented-control.tsx"
+        },
+        {
+          "path": "registry/lib/task-board.ts",
+          "type": "registry:lib",
+          "target": "@lib/task-board.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tablero de encargos",
+        "descriptionEs": "Conteos por prioridad, búsqueda, tablero o lista, arrastre con teclado y un detalle lateral.",
+        "preview": "app/examples/task-board/preview.tsx",
+        "previewHref": "/examples/task-board",
+        "examples": [
+          {
+            "title": "Cooperativa Lumen",
+            "href": "/examples/task-board",
+            "description": "Demostración con encargos inventados. El panel no cambia de ruta."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/task-board/stress",
+            "description": "320px, vacío, carga, error, token largo y cuarenta encargos."
+          }
+        ],
+        "usage": "<TaskBoard tasks={tasks} stages={stages} people={people} categories={categories} now={now} doneStageIds={done} onMove={move} onUpdate={update} onAddSubtask={addSubtask} onComment={comment} />",
+        "api": [
+          {
+            "name": "tasks / stages / people / categories",
+            "type": "arrays",
+            "description": "Controlled records and the configurable columns, people, and categories."
+          },
+          {
+            "name": "onMove",
+            "type": "(id, toStageId, fromStageId) => void",
+            "description": "Drag, arrow keys, Move to, and the stage field. Falls through to onUpdate when omitted."
+          },
+          {
+            "name": "onUpdate / onAddSubtask / onComment",
+            "type": "callbacks",
+            "description": "Field patches, new subtasks, and comments. onComment receives body, parentId, and files."
+          },
+          {
+            "name": "loading / error / readOnly",
+            "type": "boolean, string, boolean",
+            "description": "Loading hides the columns. error shows a retry. readOnly keeps the board visible and disables edits."
+          },
+          {
+            "name": "labels / locale / now",
+            "type": "Partial labels, string, Date",
+            "description": "Spanish chrome by default. locale formats dates. now decides which due dates are overdue."
+          }
+        ]
+      }
     }
   ]
 }
