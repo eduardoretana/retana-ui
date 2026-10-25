@@ -1,0 +1,69 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "inline-approve-button",
+  "title": "Inline approve button",
+  "author": "Eduardo Retana",
+  "description": "A primary action that becomes a success check in place after confirm, without leaving the page.",
+  "dependencies": [
+    "lucide-react",
+    "motion"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/inline-approve-button.tsx",
+      "content": "\"use client\"\n\n/**\n * Clean-room confirm that turns into a success check in place.\n * The host saves. This button only reports the outcome.\n * Icon motion follows the 0.25 scale recipe and stops when motion is reduced.\n */\n\nimport * as React from \"react\"\nimport { AnimatePresence, motion, useReducedMotion } from \"motion/react\"\nimport { Check, LoaderCircle } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\nexport const INLINE_APPROVE_STATES = [\"idle\", \"pending\", \"success\", \"error\"] as const\n\nexport type InlineApproveState = (typeof INLINE_APPROVE_STATES)[number]\n\nexport type InlineApproveLabels = {\n  idle: string\n  pending: string\n  success: string\n  error: string\n}\n\nexport const inlineApproveLabels: InlineApproveLabels = {\n  idle: \"Aprobar\",\n  pending: \"Aprobando\",\n  success: \"Aprobado\",\n  error: \"Reintentar\",\n}\n\nexport const inlineApproveLabelsEn: InlineApproveLabels = {\n  idle: \"Approve\",\n  pending: \"Approving\",\n  success: \"Approved\",\n  error: \"Try again\",\n}\n\nexport type InlineApproveButtonProps = {\n  onConfirm?: () => void | Promise<unknown>\n  state?: InlineApproveState\n  defaultState?: InlineApproveState\n  onStateChange?: (state: InlineApproveState) => void\n  disabled?: boolean\n  labels?: Partial<InlineApproveLabels>\n  className?: string\n}\n\nconst subscribe = () => () => {}\n\nfunction useReducedFlag() {\n  const hydrated = React.useSyncExternalStore(subscribe, () => true, () => false)\n  return !!useReducedMotion() && hydrated\n}\n\nexport function InlineApproveButton({\n  onConfirm,\n  state: stateProp,\n  defaultState = \"idle\",\n  onStateChange,\n  disabled = false,\n  labels,\n  className,\n}: InlineApproveButtonProps) {\n  const copy = { ...inlineApproveLabels, ...labels }\n  const reduced = useReducedFlag()\n  const [uncontrolled, setUncontrolled] = React.useState<InlineApproveState>(defaultState)\n  const state = stateProp ?? uncontrolled\n  const lock = React.useRef(false)\n\n  function commit(next: InlineApproveState) {\n    if (stateProp === undefined) setUncontrolled(next)\n    onStateChange?.(next)\n  }\n\n  async function confirm() {\n    if (disabled || state === \"pending\" || state === \"success\" || lock.current) return\n    lock.current = true\n    commit(\"pending\")\n    try {\n      await onConfirm?.()\n      commit(\"success\")\n    } catch {\n      commit(\"error\")\n    } finally {\n      lock.current = false\n    }\n  }\n\n  const text = copy[state]\n  const icon =\n    state === \"pending\" ? (\n      <LoaderCircle aria-hidden=\"true\" className=\"animate-spin motion-reduce:animate-none\" data-icon=\"inline-start\" />\n    ) : state === \"success\" ? (\n      <Check aria-hidden=\"true\" data-icon=\"inline-start\" />\n    ) : null\n\n  return (\n    <Button\n      type=\"button\"\n      variant={state === \"error\" ? \"destructive\" : state === \"success\" ? \"outline\" : \"default\"}\n      className={cn(className)}\n      data-slot=\"inline-approve-button\"\n      data-state={state}\n      data-reduced-motion={reduced ? \"true\" : \"false\"}\n      aria-live=\"polite\"\n      aria-busy={state === \"pending\" || undefined}\n      aria-disabled={disabled || state === \"success\" || undefined}\n      disabled={disabled || state === \"pending\"}\n      onClick={() => {\n        void confirm()\n      }}\n    >\n      <span className=\"inline-flex items-center gap-1.5\">\n        <AnimatePresence mode=\"wait\" initial={false}>\n          {icon ? (\n            <motion.span\n              key={state}\n              className=\"inline-flex\"\n              initial={reduced ? { opacity: 1 } : { opacity: 0, scale: 0.25, filter: \"blur(4px)\" }}\n              animate={{ opacity: 1, scale: 1, filter: \"blur(0px)\" }}\n              exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.25, filter: \"blur(4px)\" }}\n              transition={{ duration: reduced ? 0 : motionPresets.duration.fast, ease: motionPresets.ease.enter }}\n            >\n              {icon}\n            </motion.span>\n          ) : null}\n        </AnimatePresence>\n        {text}\n      </span>\n    </Button>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/inline-approve-button.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    // Exit decelerates, the same curve as CSS ease-out.\n    exit: [0, 0, 0.58, 1] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Aprobar en el sitio",
+    "descriptionEs": "El botón primario pasa a un check de éxito en el mismo lugar, sin recargar.",
+    "preview": "app/examples/inline-approve-button/preview.tsx",
+    "previewHref": "/examples/inline-approve-button",
+    "examples": [
+      {
+        "title": "Aprobar",
+        "href": "/examples/inline-approve-button",
+        "description": "Uno confirma. El otro falla y el reintento cierra."
+      },
+      {
+        "title": "Marco de estrés",
+        "href": "/examples/inline-approve-button/stress",
+        "description": "Pendiente, éxito, error, token largo y deshabilitado."
+      }
+    ],
+    "usage": "<InlineApproveButton\n  labels={{ idle: \"Aprobar el catálogo\", success: \"Catálogo aprobado\" }}\n  onConfirm={() => save()}\n/>",
+    "api": [
+      {
+        "name": "onConfirm",
+        "type": "() => void | Promise",
+        "description": "The host save. A resolved promise becomes success. A throw becomes error."
+      },
+      {
+        "name": "state / onStateChange",
+        "type": "idle | pending | success | error",
+        "description": "Controlled or uncontrolled. Success ignores further clicks."
+      },
+      {
+        "name": "labels / disabled",
+        "type": "Partial<InlineApproveLabels>, boolean",
+        "description": "Spanish is the default. inlineApproveLabelsEn is the English set."
+      }
+    ]
+  },
+  "docs": "Clean-room confirm. onConfirm may return a promise. Pending shows a spinner, success keeps the check, and a throw shows the retry label. The icon swap uses scale 0.25 and stops when motion is reduced. The host saves. Answer no if the CLI asks to overwrite button. The item ships no theme. No mockup source, copy, colors, or assets were copied.",
+  "categories": [
+    "table"
+  ],
+  "type": "registry:ui"
+}

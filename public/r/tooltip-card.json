@@ -1,0 +1,73 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tooltip-card",
+  "title": "Tooltip card",
+  "author": "Eduardo Retana",
+  "description": "A floating card with people, metrics, and actions. Focus, Escape, and collision-aware placement. Not a one-line tooltip.",
+  "dependencies": [
+    "radix-ui"
+  ],
+  "registryDependencies": [
+    "avatar",
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/tooltip-card.tsx",
+      "content": "\"use client\"\n\n/**\n * Clean-room rich disclosure card.\n * It is a dialog surface, not a text tooltip, because it can hold actions.\n * Positioning and collision come from the host Hover Card primitive.\n * No theme tokens of its own. Spanish chrome is the default.\n */\n\nimport * as React from \"react\"\nimport { HoverCard } from \"radix-ui\"\n\nimport { Avatar, AvatarFallback, AvatarGroup, AvatarGroupCount } from \"@/components/ui/avatar\"\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\n\nexport type TooltipCardPerson = {\n  id: string\n  name: string\n}\n\nexport type TooltipCardMetric = {\n  id: string\n  label: string\n  value: string\n  hint?: string\n}\n\nexport type TooltipCardAction = {\n  id: string\n  label: string\n  onSelect: () => void\n  disabled?: boolean\n}\n\nexport type TooltipCardLabels = {\n  people: string\n  morePeople: (count: number) => string\n  actions: string\n}\n\nexport const tooltipCardLabels: TooltipCardLabels = {\n  people: \"Personas\",\n  morePeople: (count) => `+${count}`,\n  actions: \"Acciones\",\n}\n\nexport const tooltipCardLabelsEn: TooltipCardLabels = {\n  people: \"People\",\n  morePeople: (count) => `+${count}`,\n  actions: \"Actions\",\n}\n\nexport type TooltipCardClassNames = {\n  content?: string\n  eyebrow?: string\n  title?: string\n  description?: string\n  people?: string\n  metrics?: string\n  actions?: string\n}\n\nexport type TooltipCardProps = {\n  children: React.ReactElement\n  title: string\n  eyebrow?: string\n  description?: string\n  people?: readonly TooltipCardPerson[]\n  metrics?: readonly TooltipCardMetric[]\n  actions?: readonly TooltipCardAction[]\n  /** Extra nodes inside the card, after the metrics. */\n  extra?: React.ReactNode\n  open?: boolean\n  defaultOpen?: boolean\n  onOpenChange?: (open: boolean) => void\n  /** Fires for Escape before the card asks to close, so the host can ignore the pointer falling back onto the trigger. */\n  onEscape?: () => void\n  side?: \"top\" | \"right\" | \"bottom\" | \"left\"\n  align?: \"start\" | \"center\" | \"end\"\n  openDelay?: number\n  closeDelay?: number\n  disabled?: boolean\n  labels?: Partial<TooltipCardLabels>\n  className?: string\n  classNames?: TooltipCardClassNames\n}\n\nconst subscribe = () => () => {}\n\nfunction useHydrated() {\n  return React.useSyncExternalStore(subscribe, () => true, () => false)\n}\n\nexport function personInitials(name: string) {\n  const parts = name.trim().split(/\\s+/).filter(Boolean)\n  if (!parts.length) return \"?\"\n  const first = parts[0]?.[0] ?? \"\"\n  const last = parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? \"\") : \"\"\n  return `${first}${last}`.toLocaleUpperCase(\"es-MX\")\n}\n\nfunction focusables(root: HTMLElement) {\n  return [...root.querySelectorAll<HTMLElement>(\"button:not([disabled]), a[href], input:not([disabled]), textarea:not([disabled]), select:not([disabled])\")]\n}\n\nexport function TooltipCard({\n  children,\n  title,\n  eyebrow,\n  description,\n  people = [],\n  metrics = [],\n  actions = [],\n  extra,\n  open,\n  defaultOpen,\n  onOpenChange,\n  onEscape,\n  side = \"top\",\n  align = \"start\",\n  openDelay = 80,\n  closeDelay = 140,\n  disabled = false,\n  labels,\n  className,\n  classNames,\n}: TooltipCardProps) {\n  const copy = { ...tooltipCardLabels, ...labels }\n  const titleId = React.useId()\n  const contentId = React.useId()\n  const triggerRef = React.useRef<HTMLElement | null>(null)\n  const contentRef = React.useRef<HTMLDivElement | null>(null)\n  const returnFocus = React.useRef(false)\n  const blockOpenUntil = React.useRef(0)\n  const hydrated = useHydrated()\n  const described = Boolean(description)\n  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen ?? false)\n  const currentOpen = open ?? uncontrolledOpen\n\n  React.useEffect(() => {\n    if (!currentOpen || disabled) return\n    function onKey(event: KeyboardEvent) {\n      if (event.key !== \"Escape\") return\n      event.preventDefault()\n      event.stopPropagation()\n      returnFocus.current = true\n      blockOpenUntil.current = performance.now() + 500\n      onEscape?.()\n      if (open === undefined) setUncontrolledOpen(false)\n      onOpenChange?.(false)\n    }\n    document.addEventListener(\"keydown\", onKey, true)\n    return () => document.removeEventListener(\"keydown\", onKey, true)\n  }, [currentOpen, disabled, open, onOpenChange, onEscape])\n\n  if (disabled) return children\n\n  function focusTrigger() {\n    queueMicrotask(() => triggerRef.current?.focus())\n  }\n\n  function handleOpenChange(next: boolean) {\n    if (next && performance.now() < blockOpenUntil.current) return\n    if (open === undefined) setUncontrolledOpen(next)\n    onOpenChange?.(next)\n    if (!next && returnFocus.current) {\n      returnFocus.current = false\n      focusTrigger()\n    }\n  }\n\n  function enterCard(event: React.KeyboardEvent) {\n    if (event.key !== \"Tab\" || event.shiftKey) return\n    const content = contentRef.current\n    if (!content) return\n    const first = focusables(content)[0]\n    if (!first) return\n    event.preventDefault()\n    first.focus()\n  }\n\n  function cycleCard(event: React.KeyboardEvent<HTMLDivElement>) {\n    if (event.key === \"Escape\") {\n      returnFocus.current = true\n      return\n    }\n    if (event.key !== \"Tab\") return\n    const items = focusables(event.currentTarget)\n    if (!items.length) return\n    const first = items[0]\n    const last = items[items.length - 1]\n    if (event.shiftKey && event.target === first) {\n      event.preventDefault()\n      triggerRef.current?.focus()\n    } else if (!event.shiftKey && event.target === last) {\n      event.preventDefault()\n      triggerRef.current?.focus()\n    }\n  }\n\n  const visiblePeople = people.slice(0, 4)\n  const extraPeople = Math.max(0, people.length - visiblePeople.length)\n\n  return (\n    <HoverCard.Root open={currentOpen} onOpenChange={handleOpenChange} openDelay={openDelay} closeDelay={closeDelay}>\n      <HoverCard.Trigger\n        asChild\n        aria-haspopup=\"dialog\"\n        aria-controls={contentId}\n        onKeyDown={enterCard}\n        ref={(node) => {\n          triggerRef.current = node\n        }}\n      >\n        {children}\n      </HoverCard.Trigger>\n      <HoverCard.Portal>\n        <HoverCard.Content\n          ref={contentRef}\n          id={contentId}\n          role=\"dialog\"\n          aria-modal={false}\n          aria-labelledby={titleId}\n          side={side}\n          align={align}\n          sideOffset={8}\n          collisionPadding={12}\n          onEscapeKeyDown={() => {\n            returnFocus.current = true\n          }}\n          onKeyDown={cycleCard}\n          data-slot=\"tooltip-card\"\n          data-hydrated={hydrated ? \"true\" : \"false\"}\n          className={cn(\n            \"z-50 flex w-72 max-w-[min(20rem,calc(100vw-1.5rem))] flex-col gap-3 rounded-lg border border-border bg-popover p-3 text-popover-foreground shadow-md outline-none\",\n            \"data-[state=open]:animate-in data-[state=open]:fade-in-0 motion-reduce:animate-none\",\n            \"focus-visible:ring-3 focus-visible:ring-ring\",\n            className,\n            classNames?.content,\n          )}\n        >\n          <div className=\"flex min-w-0 flex-col gap-1\">\n            {eyebrow ? <p className={cn(\"truncate text-xs text-muted-foreground\", classNames?.eyebrow)}>{eyebrow}</p> : null}\n            <h2 id={titleId} className={cn(\"text-sm font-medium break-words [overflow-wrap:anywhere]\", classNames?.title)}>\n              {title}\n            </h2>\n            {described ? (\n              <p className={cn(\"text-sm text-muted-foreground break-words whitespace-pre-wrap [overflow-wrap:anywhere]\", classNames?.description)}>\n                {description}\n              </p>\n            ) : null}\n          </div>\n          {people.length ? (\n            <div className={cn(\"flex min-w-0 items-center gap-2\", classNames?.people)}>\n              <AvatarGroup role=\"group\" aria-label={copy.people}>\n                {visiblePeople.map((person) => (\n                  <Avatar key={person.id} size=\"sm\">\n                    <AvatarFallback>{personInitials(person.name)}</AvatarFallback>\n                  </Avatar>\n                ))}\n                {extraPeople > 0 ? <AvatarGroupCount>{copy.morePeople(extraPeople)}</AvatarGroupCount> : null}\n              </AvatarGroup>\n              <p className=\"min-w-0 truncate text-xs text-muted-foreground\">{people.map((person) => person.name).join(\", \")}</p>\n            </div>\n          ) : null}\n          {metrics.length ? (\n            <dl className={cn(\"grid grid-cols-2 gap-2\", classNames?.metrics)}>\n              {metrics.map((metric) => (\n                <div key={metric.id} className=\"min-w-0\">\n                  <dt className=\"truncate text-xs text-muted-foreground\">{metric.label}</dt>\n                  <dd className=\"truncate text-sm font-medium tabular-nums\">{metric.value}</dd>\n                  {metric.hint ? <p className=\"truncate text-xs text-muted-foreground\">{metric.hint}</p> : null}\n                </div>\n              ))}\n            </dl>\n          ) : null}\n          {actions.length ? (\n            <div className={cn(\"flex flex-wrap gap-2\", classNames?.actions)} role=\"group\" aria-label={copy.actions}>\n              {actions.map((action) => (\n                <Button key={action.id} type=\"button\" size=\"sm\" variant=\"outline\" disabled={action.disabled} onClick={action.onSelect}>\n                  {action.label}\n                </Button>\n              ))}\n            </div>\n          ) : null}\n          {extra}\n        </HoverCard.Content>\n      </HoverCard.Portal>\n    </HoverCard.Root>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/tooltip-card.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Tarjeta flotante",
+    "descriptionEs": "Tarjeta con personas, métricas y acciones. Se abre con foco, se cierra con Escape y no se sale de la pantalla.",
+    "preview": "app/examples/tooltip-card/preview.tsx",
+    "previewHref": "/examples/tooltip-card",
+    "examples": [
+      {
+        "title": "Tarjeta",
+        "href": "/examples/tooltip-card",
+        "description": "Personas, métricas y una acción. Datos inventados."
+      },
+      {
+        "title": "Marco de estrés",
+        "href": "/examples/tooltip-card/stress",
+        "description": "Token largo, emoji, texto árabe y muchas personas."
+      }
+    ],
+    "usage": "<TooltipCard\n  title=\"Catálogo\"\n  eyebrow=\"Impresión\"\n  people={people}\n  metrics={[{ id: \"sheets\", label: \"Pliegos\", value: \"120\" }]}\n  actions={[{ id: \"open\", label: \"Abrir\", onSelect: open }]}\n>\n  <button type=\"button\">Ver</button>\n</TooltipCard>",
+    "api": [
+      {
+        "name": "title / eyebrow / description",
+        "type": "strings",
+        "description": "The card's name, a quiet line above it, and the body. The title labels the dialog."
+      },
+      {
+        "name": "people / metrics / actions",
+        "type": "arrays",
+        "description": "Initials only, definition pairs, and buttons. Actions stay in the tab loop."
+      },
+      {
+        "name": "open / onOpenChange",
+        "type": "boolean, callback",
+        "description": "Controlled or uncontrolled. Hover and focus request open. Escape requests close."
+      },
+      {
+        "name": "side / align / openDelay / closeDelay",
+        "type": "placement",
+        "description": "Preferred side. The card flips on collision. Delays are milliseconds."
+      },
+      {
+        "name": "labels / disabled / className",
+        "type": "Partial<TooltipCardLabels>, boolean, string",
+        "description": "Spanish is the default. tooltipCardLabelsEn is the English set. disabled renders only the trigger."
+      }
+    ]
+  },
+  "docs": "Clean-room disclosure card. It uses role=dialog because it can contain buttons. Hover and focus open it; Escape closes it and returns focus. Arrow-key movement stays with the trigger; Tab moves into the actions and back. Placement flips when the card would leave the viewport. Answer no if the CLI asks to overwrite avatar or button. The item ships no theme. No mockup source, copy, colors, or assets were copied.",
+  "categories": [
+    "table"
+  ],
+  "type": "registry:ui"
+}

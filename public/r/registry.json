@@ -27821,6 +27821,467 @@
           }
         ]
       }
+    },
+    {
+      "name": "tooltip-card",
+      "type": "registry:ui",
+      "title": "Tooltip card",
+      "description": "A floating card with people, metrics, and actions. Focus, Escape, and collision-aware placement. Not a one-line tooltip.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button"
+      ],
+      "categories": [
+        "table"
+      ],
+      "docs": "Clean-room disclosure card. It uses role=dialog because it can contain buttons. Hover and focus open it; Escape closes it and returns focus. Arrow-key movement stays with the trigger; Tab moves into the actions and back. Placement flips when the card would leave the viewport. Answer no if the CLI asks to overwrite avatar or button. The item ships no theme. No mockup source, copy, colors, or assets were copied.",
+      "files": [
+        {
+          "path": "registry/ui/tooltip-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/tooltip-card.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tarjeta flotante",
+        "descriptionEs": "Tarjeta con personas, métricas y acciones. Se abre con foco, se cierra con Escape y no se sale de la pantalla.",
+        "preview": "app/examples/tooltip-card/preview.tsx",
+        "previewHref": "/examples/tooltip-card",
+        "examples": [
+          {
+            "title": "Tarjeta",
+            "href": "/examples/tooltip-card",
+            "description": "Personas, métricas y una acción. Datos inventados."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/tooltip-card/stress",
+            "description": "Token largo, emoji, texto árabe y muchas personas."
+          }
+        ],
+        "usage": "<TooltipCard\n  title=\"Catálogo\"\n  eyebrow=\"Impresión\"\n  people={people}\n  metrics={[{ id: \"sheets\", label: \"Pliegos\", value: \"120\" }]}\n  actions={[{ id: \"open\", label: \"Abrir\", onSelect: open }]}\n>\n  <button type=\"button\">Ver</button>\n</TooltipCard>",
+        "api": [
+          {
+            "name": "title / eyebrow / description",
+            "type": "strings",
+            "description": "The card's name, a quiet line above it, and the body. The title labels the dialog."
+          },
+          {
+            "name": "people / metrics / actions",
+            "type": "arrays",
+            "description": "Initials only, definition pairs, and buttons. Actions stay in the tab loop."
+          },
+          {
+            "name": "open / onOpenChange",
+            "type": "boolean, callback",
+            "description": "Controlled or uncontrolled. Hover and focus request open. Escape requests close."
+          },
+          {
+            "name": "side / align / openDelay / closeDelay",
+            "type": "placement",
+            "description": "Preferred side. The card flips on collision. Delays are milliseconds."
+          },
+          {
+            "name": "labels / disabled / className",
+            "type": "Partial<TooltipCardLabels>, boolean, string",
+            "description": "Spanish is the default. tooltipCardLabelsEn is the English set. disabled renders only the trigger."
+          }
+        ]
+      }
+    },
+    {
+      "name": "timeline-gantt",
+      "type": "registry:ui",
+      "title": "Timeline gantt",
+      "description": "Workstream Gantt with task bars, dependency curves, a today marker, and a sticky scale. Hover opens a detail card.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "button",
+        "empty",
+        "skeleton",
+        "@retana/tooltip-card"
+      ],
+      "categories": [
+        "table"
+      ],
+      "docs": "Clean-room schedule. Pass items with id, workstream, label, start, end, status, and optional deps. Dates are inclusive YYYY-MM-DD and the day is read in UTC. onSelect and onHover do not write the items. Arrow keys move between bars. The scale header stays pinned while the timeline scrolls sideways. The today line uses now, which should be a stable timestamp in tests. Reduced motion skips the bar fade. Answer no if the CLI asks to overwrite button, empty, skeleton, or tooltip-card. The item ships no theme. No mockup source, copy, colors, or assets were copied.",
+      "files": [
+        {
+          "path": "registry/ui/timeline-gantt.tsx",
+          "type": "registry:component",
+          "target": "@ui/timeline-gantt.tsx"
+        },
+        {
+          "path": "registry/lib/timeline-gantt.ts",
+          "type": "registry:lib",
+          "target": "@lib/timeline-gantt.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Cronograma",
+        "descriptionEs": "Barras por frente, dependencias, línea de hoy y una tarjeta al pasar el puntero. La escala se queda fija.",
+        "preview": "app/examples/timeline-gantt/preview.tsx",
+        "previewHref": "/examples/timeline-gantt",
+        "examples": [
+          {
+            "title": "Taller Bruma",
+            "href": "/examples/timeline-gantt",
+            "description": "Semana, mes o día. Datos inventados. Nada se guarda."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/timeline-gantt/stress",
+            "description": "320px, vacío, carga, error, token largo y cuarenta tareas."
+          }
+        ],
+        "usage": "<TimelineGantt\n  items={items}\n  workstreams={workstreams}\n  scale=\"week\"\n  now=\"2026-10-25T18:00:00.000Z\"\n  onSelect={(item) => open(item.id)}\n  onHover={(item) => preview(item)}\n/>",
+        "api": [
+          {
+            "name": "items / workstreams",
+            "type": "GanttItem<TMeta>[]",
+            "description": "Controlled records. TMeta is never read. deps are ids of other items."
+          },
+          {
+            "name": "scale / onScaleChange",
+            "type": "day | week | month",
+            "description": "Controlled or uncontrolled. The header stays sticky while the scale scrolls."
+          },
+          {
+            "name": "onSelect / onHover",
+            "type": "callbacks",
+            "description": "A bar click selects. Hover and focus open the detail card and report the item."
+          },
+          {
+            "name": "now / locale / weekStartsOn",
+            "type": "string, string, number",
+            "description": "Default locale es-MX and Monday. now places the today line. Pass it in tests."
+          },
+          {
+            "name": "loading / error / disabled",
+            "type": "boolean, string, boolean",
+            "description": "Loading and error replace the grid. disabled keeps it visible and blocks the bars."
+          },
+          {
+            "name": "labels / className",
+            "type": "Partial<TimelineGanttLabels>, string",
+            "description": "Spanish chrome. timelineGanttLabelsEn is the English set."
+          }
+        ]
+      }
+    },
+    {
+      "name": "data-table-reorder",
+      "type": "registry:ui",
+      "title": "Data table reorder",
+      "description": "A dense table that slides rows into place when a column sort changes, with sparkline, meter, and trend slots.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "button",
+        "empty",
+        "skeleton",
+        "@retana/tooltip-card"
+      ],
+      "categories": [
+        "table"
+      ],
+      "docs": "Clean-room dense table. Column sort is a callback plus optional controlled sort. Rows keep their identity and move with a layout animation; reduced motion snaps. Empty values sort last. The detail column can open tooltip-card. Sparkline, meter, and trend are slots, not a second table. The component does not write rows and never reads meta. Answer no if the CLI asks to overwrite button, empty, skeleton, or tooltip-card. The item ships no theme. No mockup source, copy, colors, or assets were copied.",
+      "files": [
+        {
+          "path": "registry/ui/data-table-reorder.tsx",
+          "type": "registry:component",
+          "target": "@ui/data-table-reorder.tsx"
+        },
+        {
+          "path": "registry/lib/data-table-reorder.ts",
+          "type": "registry:lib",
+          "target": "@lib/data-table-reorder.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tabla que se reordena",
+        "descriptionEs": "Orden por columna con filas que se deslizan a su sitio, y celdas para chispa, avance y tendencia.",
+        "preview": "app/examples/data-table-reorder/preview.tsx",
+        "previewHref": "/examples/data-table-reorder",
+        "examples": [
+          {
+            "title": "Piezas del taller",
+            "href": "/examples/data-table-reorder",
+            "description": "Horas, avance y tendencia. Datos inventados."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/data-table-reorder/stress",
+            "description": "Vacío, carga, error, token largo y cuarenta filas."
+          }
+        ],
+        "usage": "<DataTableReorder\n  rows={rows}\n  columns={columns}\n  sort={sort}\n  onSortChange={setSort}\n  detail={(row) => ({ title: row.name, description: row.note })}\n/>",
+        "api": [
+          {
+            "name": "rows / columns",
+            "type": "arrays",
+            "description": "Rows need an id. A column cell is a slot. sortValue enables sorting. TMeta is never read."
+          },
+          {
+            "name": "sort / onSortChange",
+            "type": "DataTableSort, callback",
+            "description": "Controlled or uncontrolled. The live region announces the new order."
+          },
+          {
+            "name": "detail / onRowSelect",
+            "type": "callbacks",
+            "description": "detail opens tooltip-card on the named column. onRowSelect fires from that cell."
+          },
+          {
+            "name": "DataTableSparkline / Meter / Trend",
+            "type": "slots",
+            "description": "Mini drawings for a cell. Trend keeps a text label so color is not the only signal."
+          },
+          {
+            "name": "loading / error / disabled",
+            "type": "boolean, string, boolean",
+            "description": "Loading and error are visible states. disabled blocks sort and row actions."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<DataTableReorderLabels>",
+            "description": "Spanish is the default. dataTableReorderLabelsEn is the English set."
+          }
+        ]
+      }
+    },
+    {
+      "name": "activity-chat",
+      "type": "registry:ui",
+      "title": "Activity chat",
+      "description": "A collaboration log with message bubbles, a calendar block, and a voice note whose waveform comes from numeric peaks.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "empty",
+        "skeleton",
+        "textarea"
+      ],
+      "categories": [
+        "table"
+      ],
+      "docs": "Clean-room thread. Messages, events, and voice notes share one list. onSend receives the trimmed text and does not append it. onPlay fires when a note starts; playback is a local clock over the given duration, not an audio file. Peaks are resampled into a static waveform. Reduced motion skips the entrance and uses an instant scroll. Default locale is es-MX and the default zone is America/Mexico_City. Answer no if the CLI asks to overwrite avatar, button, empty, skeleton, or textarea. The item ships no theme. No mockup source, copy, colors, or assets were copied.",
+      "files": [
+        {
+          "path": "registry/ui/activity-chat.tsx",
+          "type": "registry:component",
+          "target": "@ui/activity-chat.tsx"
+        },
+        {
+          "path": "registry/lib/activity-chat.ts",
+          "type": "registry:lib",
+          "target": "@lib/activity-chat.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Conversación",
+        "descriptionEs": "Burbujas, un bloque de calendario y una nota de voz con onda dibujada a partir de datos.",
+        "preview": "app/examples/activity-chat/preview.tsx",
+        "previewHref": "/examples/activity-chat",
+        "examples": [
+          {
+            "title": "Mesa del taller",
+            "href": "/examples/activity-chat",
+            "description": "Enter envía. La nota no tiene archivo de audio."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/activity-chat/stress",
+            "description": "Vacío, carga, error, token largo y treinta notas."
+          }
+        ],
+        "usage": "<ActivityChat\n  messages={messages}\n  people={people}\n  currentUserId=\"mina\"\n  onSend={(body) => append(body)}\n  onPlay={(id) => markPlayed(id)}\n/>",
+        "api": [
+          {
+            "name": "messages / people",
+            "type": "arrays",
+            "description": "kind is message, event, or voice. TMeta is never read. Entries are ordered by createdAt."
+          },
+          {
+            "name": "onSend / onPlay",
+            "type": "callbacks",
+            "description": "onSend gets the trimmed draft. onPlay gets the note id when playback starts."
+          },
+          {
+            "name": "currentUserId / locale / timeZone",
+            "type": "strings",
+            "description": "Own bubbles sit on the end. Default es-MX and America/Mexico_City."
+          },
+          {
+            "name": "loading / error / disabled",
+            "type": "boolean, string, boolean",
+            "description": "Loading and error replace the log. disabled blocks send and playback."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<ActivityChatLabels>",
+            "description": "Spanish is the default. activityChatLabelsEn is the English set."
+          }
+        ]
+      }
+    },
+    {
+      "name": "inline-approve-button",
+      "type": "registry:ui",
+      "title": "Inline approve button",
+      "description": "A primary action that becomes a success check in place after confirm, without leaving the page.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "table"
+      ],
+      "docs": "Clean-room confirm. onConfirm may return a promise. Pending shows a spinner, success keeps the check, and a throw shows the retry label. The icon swap uses scale 0.25 and stops when motion is reduced. The host saves. Answer no if the CLI asks to overwrite button. The item ships no theme. No mockup source, copy, colors, or assets were copied.",
+      "files": [
+        {
+          "path": "registry/ui/inline-approve-button.tsx",
+          "type": "registry:component",
+          "target": "@ui/inline-approve-button.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Aprobar en el sitio",
+        "descriptionEs": "El botón primario pasa a un check de éxito en el mismo lugar, sin recargar.",
+        "preview": "app/examples/inline-approve-button/preview.tsx",
+        "previewHref": "/examples/inline-approve-button",
+        "examples": [
+          {
+            "title": "Aprobar",
+            "href": "/examples/inline-approve-button",
+            "description": "Uno confirma. El otro falla y el reintento cierra."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/inline-approve-button/stress",
+            "description": "Pendiente, éxito, error, token largo y deshabilitado."
+          }
+        ],
+        "usage": "<InlineApproveButton\n  labels={{ idle: \"Aprobar el catálogo\", success: \"Catálogo aprobado\" }}\n  onConfirm={() => save()}\n/>",
+        "api": [
+          {
+            "name": "onConfirm",
+            "type": "() => void | Promise",
+            "description": "The host save. A resolved promise becomes success. A throw becomes error."
+          },
+          {
+            "name": "state / onStateChange",
+            "type": "idle | pending | success | error",
+            "description": "Controlled or uncontrolled. Success ignores further clicks."
+          },
+          {
+            "name": "labels / disabled",
+            "type": "Partial<InlineApproveLabels>, boolean",
+            "description": "Spanish is the default. inlineApproveLabelsEn is the English set."
+          }
+        ]
+      }
+    },
+    {
+      "name": "portfolio-desk",
+      "type": "registry:block",
+      "title": "Portfolio desk",
+      "description": "A mini portfolio desk that places the schedule, the dense table, the thread, and the in-place approval on one surface.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/timeline-gantt",
+        "@retana/data-table-reorder",
+        "@retana/activity-chat",
+        "@retana/inline-approve-button"
+      ],
+      "categories": [
+        "block",
+        "table"
+      ],
+      "docs": "Clean-room composition. The desk does not fetch and does not merge the three payloads: gantt meta, table meta, and chat meta stay separate. Pass the same props you would pass to each piece. Approval is optional. Answer no if the CLI asks to overwrite a primitive the host already has, or any of the four pieces when they are already installed. The item ships no theme. No mockup source, copy, colors, or assets were copied. The catalog demo is Taller Bruma, a fictional shop.",
+      "files": [
+        {
+          "path": "registry/blocks/portfolio-desk.tsx",
+          "type": "registry:component",
+          "target": "@ui/portfolio-desk.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Mesa de portafolio",
+        "descriptionEs": "Cronograma, tabla, conversación y aprobación en una sola mesa. Los datos los pone el anfitrión.",
+        "preview": "app/examples/portfolio-desk/preview.tsx",
+        "previewHref": "/examples/portfolio-desk",
+        "examples": [
+          {
+            "title": "Taller Bruma",
+            "href": "/examples/portfolio-desk",
+            "description": "Las cuatro piezas con encargos inventados."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/portfolio-desk/stress",
+            "description": "320px, vacío, carga, error y un título de 60 caracteres."
+          }
+        ],
+        "usage": "<PortfolioDesk\n  title=\"Taller Bruma\"\n  gantt={{ items, workstreams, now, onSelect }}\n  table={{ rows, columns, onSortChange }}\n  chat={{ messages, people, currentUserId, onSend, onPlay }}\n  approval={{ onConfirm }}\n/>",
+        "api": [
+          {
+            "name": "gantt / table / chat",
+            "type": "the piece props",
+            "description": "Passed through. Each collection keeps its own meta type."
+          },
+          {
+            "name": "approval",
+            "type": "InlineApproveButtonProps",
+            "description": "Optional. Omit it to hide the approval row."
+          },
+          {
+            "name": "title / subtitle / labels",
+            "type": "strings",
+            "description": "Spanish region names. portfolioDeskLabelsEn is the English set."
+          }
+        ]
+      }
     }
   ]
 }

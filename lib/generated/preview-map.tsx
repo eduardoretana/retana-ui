@@ -383,6 +383,12 @@ import Preview378 from "@/app/examples/candidate-detail/preview"
 import Preview379 from "@/app/examples/assessment-form/preview"
 import Preview380 from "@/app/examples/pipeline-board/preview"
 import Preview381 from "@/app/examples/ats/preview"
+import Preview382 from "@/app/examples/tooltip-card/preview"
+import Preview383 from "@/app/examples/timeline-gantt/preview"
+import Preview384 from "@/app/examples/data-table-reorder/preview"
+import Preview385 from "@/app/examples/activity-chat/preview"
+import Preview386 from "@/app/examples/inline-approve-button/preview"
+import Preview387 from "@/app/examples/portfolio-desk/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -767,4 +773,10 @@ export const previewMap = {
   "assessment-form": Preview379,
   "pipeline-board": Preview380,
   "ats": Preview381,
+  "tooltip-card": Preview382,
+  "timeline-gantt": Preview383,
+  "data-table-reorder": Preview384,
+  "activity-chat": Preview385,
+  "inline-approve-button": Preview386,
+  "portfolio-desk": Preview387,
 }

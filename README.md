@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`382` items are in `registry.json` on this branch: `296` components, `71` blocks, `6` hooks, and `9` libraries. A name links to its source file.
+`388` items are in `registry.json` on this branch: `301` components, `72` blocks, `6` hooks, and `9` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -556,6 +556,12 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`assessment-form`](registry/ui/assessment-form.tsx) · ui — An evaluation form: five stars and a comment per criterion, a verdict, and a scorecard submit. Install: `npx shadcn@latest add @retana/assessment-form`.
 - [`pipeline-board`](registry/blocks/pipeline-board.tsx) · block — A candidate kanban or list with search, date and score filters, keyboard and pointer drag, and an optimistic move that rolls back. Install: `npx shadcn@latest add @retana/pipeline-board`.
 - [`ats`](registry/blocks/ats.tsx) · block — A hiring workspace: funnel counts, kanban or list, a detail sheet, and an evaluation form. Stages are derived and moves can roll back. Install: `npx shadcn@latest add @retana/ats`.
+- [`tooltip-card`](registry/ui/tooltip-card.tsx) · ui — A floating card with people, metrics, and actions. Focus, Escape, and collision-aware placement. Not a one-line tooltip. Install: `npx shadcn@latest add @retana/tooltip-card`.
+- [`timeline-gantt`](registry/ui/timeline-gantt.tsx) · ui — Workstream Gantt with task bars, dependency curves, a today marker, and a sticky scale. Hover opens a detail card. Install: `npx shadcn@latest add @retana/timeline-gantt`.
+- [`data-table-reorder`](registry/ui/data-table-reorder.tsx) · ui — A dense table that slides rows into place when a column sort changes, with sparkline, meter, and trend slots. Install: `npx shadcn@latest add @retana/data-table-reorder`.
+- [`activity-chat`](registry/ui/activity-chat.tsx) · ui — A collaboration log with message bubbles, a calendar block, and a voice note whose waveform comes from numeric peaks. Install: `npx shadcn@latest add @retana/activity-chat`.
+- [`inline-approve-button`](registry/ui/inline-approve-button.tsx) · ui — A primary action that becomes a success check in place after confirm, without leaving the page. Install: `npx shadcn@latest add @retana/inline-approve-button`.
+- [`portfolio-desk`](registry/blocks/portfolio-desk.tsx) · block — A mini portfolio desk that places the schedule, the dense table, the thread, and the in-place approval on one surface. Install: `npx shadcn@latest add @retana/portfolio-desk`.
 
 ### Charts
 
