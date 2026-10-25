@@ -27159,6 +27159,668 @@
           }
         ]
       }
+    },
+    {
+      "name": "ats-core",
+      "type": "registry:lib",
+      "title": "ATS core",
+      "description": "Types and pure helpers for applicant tracking: derived stages, scorecards, funnel percentages, and Spanish labels.",
+      "author": "Eduardo Retana",
+      "categories": [
+        "table"
+      ],
+      "docs": "Clean-room helpers for ats. No React and no fetching. The candidate has no stored stage. Pass getStage. Spanish labels are the default; atsLabelsEn is the English set. Dates use America/Mexico_City and es-MX unless the host passes another zone or locale. Time math reuses date-range. A firm yes is strong_yes or yes. Pass a stable now from the host when tests or demos must not follow the clock. No mockup source, copy, or assets were copied. If the CLI asks to overwrite date-range and the host already has it, answer no.",
+      "files": [
+        {
+          "path": "registry/lib/ats.ts",
+          "type": "registry:lib",
+          "target": "@lib/ats.ts"
+        },
+        {
+          "path": "registry/lib/date-range.ts",
+          "type": "registry:lib",
+          "target": "@lib/date-range.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Núcleo de seguimiento",
+        "descriptionEs": "Tipos y funciones puras: etapa derivada, scorecards, embudo y la posición 02 de 14.",
+        "preview": "app/examples/ats-core/preview.tsx",
+        "previewHref": "/examples/ats-core",
+        "examples": [
+          {
+            "title": "Embudo y recomendación",
+            "href": "/examples/ats-core",
+            "description": "Porcentajes entre etapas y un debrief de 3 de 4 sí."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/ats-core/stress",
+            "description": "Embudo vacío, fecha inválida y un token largo."
+          }
+        ],
+        "usage": "funnelSteps(candidates, stages, getStage)\nrecommendationLine(stageId, scorecards, stages, atsLabels)\nbuildScorecard(criteria, \"yes\")",
+        "api": [
+          {
+            "name": "AtsCandidate<TMeta>",
+            "type": "type",
+            "description": "Candidate shape. There is no stage field. TMeta is the host payload and the pieces never read it."
+          },
+          {
+            "name": "AtsGetStage",
+            "type": "(candidate) => stageId",
+            "description": "The host derives the stage. Columns, the list, and the funnel call this instead of reading a field."
+          },
+          {
+            "name": "buildScorecard",
+            "type": "(criteria, verdict) => { criteria, overall, verdict }",
+            "description": "Verdict is strong_yes, yes, no, or strong_no. overall is the mean of the ratings."
+          },
+          {
+            "name": "atsLabels / atsLabelsEn",
+            "type": "AtsLabels",
+            "description": "Spanish is the default chrome. Spread either object and override the keys you need."
+          }
+        ]
+      }
+    },
+    {
+      "name": "candidate-card",
+      "type": "registry:ui",
+      "title": "Candidate card",
+      "description": "A hiring-board card with an avatar, an applied date, a score, stage progress, tags, and an add-evaluation action.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "dropdown-menu",
+        "tooltip"
+      ],
+      "categories": [
+        "table"
+      ],
+      "docs": "Clean-room card used by pipeline-board. The stage id is a prop. ArrowLeft and ArrowRight on the name call onMoveCandidate. The drag handle stays disabled until a sensor supplies dragHandleProps. renderProgress replaces the dots. renderActions is the slot for WhatsApp or a copied link. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/candidate-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/candidate-card.tsx"
+        },
+        {
+          "path": "registry/ui/stage-progress.tsx",
+          "type": "registry:component",
+          "target": "@ui/stage-progress.tsx"
+        },
+        {
+          "path": "registry/lib/ats.ts",
+          "type": "registry:lib",
+          "target": "@lib/ats.ts"
+        },
+        {
+          "path": "registry/lib/date-range.ts",
+          "type": "registry:lib",
+          "target": "@lib/date-range.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de candidato",
+        "descriptionEs": "Avatar, fecha de aplicación, puntaje, avance por etapa y agregar evaluación.",
+        "preview": "app/examples/candidate-card/preview.tsx",
+        "previewHref": "/examples/candidate-card",
+        "examples": [
+          {
+            "title": "Tarjeta",
+            "href": "/examples/candidate-card",
+            "description": "Flechas en el nombre cambian la etapa si la transición está permitida."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/candidate-card/stress",
+            "description": "Nombre vacío, token largo, emoji y 320px."
+          }
+        ],
+        "usage": "<CandidateCard\n  candidate={candidate}\n  stageId={getStage(candidate)}\n  stages={stages}\n  canMove={canMove}\n  onMoveCandidate={(id, from, to) => save(id, from, to)}\n  onCreateAssessment={openForm}\n  renderActions={({ candidate }) => <CopyLink id={candidate.id} />}\n/>",
+        "api": [
+          {
+            "name": "candidate / stageId / stages",
+            "type": "AtsCandidate, string, AtsStage[]",
+            "description": "The card and the stage the host already derived. stages paints the dots and the move menu."
+          },
+          {
+            "name": "onMoveCandidate / canMove",
+            "type": "(id, from, to) => Promise, (from, to) => boolean",
+            "description": "Arrow keys and the menu. canMove disables a transition that has no RPC."
+          },
+          {
+            "name": "renderProgress / renderActions",
+            "type": "(slot) => node",
+            "description": "Replace the compact dots, or add WhatsApp and copy-link actions. The slot is candidate, stageId, and stages."
+          },
+          {
+            "name": "labels / readOnly",
+            "type": "Partial<AtsLabels>, boolean",
+            "description": "Override the Spanish chrome. readOnly disables drag, moves, and the evaluation button."
+          }
+        ]
+      }
+    },
+    {
+      "name": "candidate-row",
+      "type": "registry:ui",
+      "title": "Candidate row",
+      "description": "A candidate table row and a sortable table: stage pill, score, source, next step, and owner.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "checkbox"
+      ],
+      "categories": [
+        "table"
+      ],
+      "docs": "Clean-room row used by pipeline-board. The table receives getStage and does not read a stage field. The default sort is score, descending, and a missing score stays last. ArrowLeft and ArrowRight on the name call onMoveCandidate. renderProgress and renderActions are the same slots as the card. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/candidate-row.tsx",
+          "type": "registry:component",
+          "target": "@ui/candidate-row.tsx"
+        },
+        {
+          "path": "registry/ui/stage-progress.tsx",
+          "type": "registry:component",
+          "target": "@ui/stage-progress.tsx"
+        },
+        {
+          "path": "registry/lib/ats.ts",
+          "type": "registry:lib",
+          "target": "@lib/ats.ts"
+        },
+        {
+          "path": "registry/lib/date-range.ts",
+          "type": "registry:lib",
+          "target": "@lib/date-range.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Fila de candidato",
+        "descriptionEs": "Selección, etapa, puntaje, fuente, siguiente paso y responsable. Orden inicial por puntaje.",
+        "preview": "app/examples/candidate-row/preview.tsx",
+        "previewHref": "/examples/candidate-row",
+        "examples": [
+          {
+            "title": "Tabla",
+            "href": "/examples/candidate-row",
+            "description": "Encabezados ordenables. El puntaje vacío queda al final."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/candidate-row/stress",
+            "description": "Cero filas, 320px y doscientas filas."
+          }
+        ],
+        "usage": "<CandidateTable\n  candidates={candidates}\n  stages={stages}\n  getStage={getStage}\n  people={people}\n  onOpen={open}\n  onMoveCandidate={(id, from, to) => save(id, from, to)}\n/>",
+        "api": [
+          {
+            "name": "getStage",
+            "type": "(candidate) => stageId",
+            "description": "The row paints whatever this returns. It does not read a stage field."
+          },
+          {
+            "name": "sort / onSortChange",
+            "type": "AtsSort, callback",
+            "description": "Default is score descending. Null scores sort last in either direction."
+          },
+          {
+            "name": "renderProgress / renderActions",
+            "type": "(slot) => node",
+            "description": "Compact dots and extra actions, same slot as the card."
+          },
+          {
+            "name": "layout",
+            "type": "\"table\" | \"stack\"",
+            "description": "Stack is the narrow list. The table keeps a horizontal scroll."
+          }
+        ]
+      }
+    },
+    {
+      "name": "candidate-detail",
+      "type": "registry:ui",
+      "title": "Candidate detail",
+      "description": "Candidate detail with a stage stepper, an aggregated debrief, scorecards, and schedule or note actions.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "tabs",
+        "textarea"
+      ],
+      "categories": [
+        "table"
+      ],
+      "docs": "Clean-room detail surface. It does not fetch and it does not own a route. Put it in ats's sheet or in the host's own panel. The debrief averages every scorecard: bars per criterion and a line such as Mover a Onsite, 3 de 4 sí. Firm yes is strong_yes and yes. canMove disables a stage button that has no transition. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/candidate-detail.tsx",
+          "type": "registry:component",
+          "target": "@ui/candidate-detail.tsx"
+        },
+        {
+          "path": "registry/ui/stage-progress.tsx",
+          "type": "registry:component",
+          "target": "@ui/stage-progress.tsx"
+        },
+        {
+          "path": "registry/lib/ats.ts",
+          "type": "registry:lib",
+          "target": "@lib/ats.ts"
+        },
+        {
+          "path": "registry/lib/date-range.ts",
+          "type": "registry:lib",
+          "target": "@lib/date-range.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Detalle del candidato",
+        "descriptionEs": "Proceso, debrief de varias evaluaciones, scorecards, actividad y una barra para mover o agendar.",
+        "preview": "app/examples/candidate-detail/preview.tsx",
+        "previewHref": "/examples/candidate-detail",
+        "examples": [
+          {
+            "title": "Detalle",
+            "href": "/examples/candidate-detail",
+            "description": "Anterior y siguiente. El debrief junta las scorecards."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/candidate-detail/stress",
+            "description": "320px, token largo, texto no latino y solo lectura."
+          }
+        ],
+        "usage": "<CandidateDetail\n  candidate={candidate}\n  stageId={getStage(candidate)}\n  stages={stages}\n  criteria={criteria}\n  position={2}\n  total={14}\n  canMove={canMove}\n  onMoveCandidate={(id, from, to) => save(id, from, to)}\n  onScheduleInterview={(id, slot) => schedule(id, slot)}\n/>",
+        "api": [
+          {
+            "name": "stageId / canMove / onMoveCandidate",
+            "type": "string, predicate, callback",
+            "description": "The stepper and Mover a use the derived stage. A false canMove disables that button."
+          },
+          {
+            "name": "criteria",
+            "type": "AtsCriterion[]",
+            "description": "Orders the debrief bars. Ratings come from every scorecard on the candidate."
+          },
+          {
+            "name": "onSendEmail / onScheduleInterview / onAddNote",
+            "type": "callbacks",
+            "description": "The detail does not send mail, book a room, or write the note."
+          },
+          {
+            "name": "position / total / onPrevious / onNext",
+            "type": "number, callbacks",
+            "description": "1-based position, such as 02 de 14. Arrow keys move when focus is not in a field."
+          }
+        ]
+      }
+    },
+    {
+      "name": "assessment-form",
+      "type": "registry:ui",
+      "title": "Assessment form",
+      "description": "An evaluation form: five stars and a comment per criterion, a verdict, and a scorecard submit.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "sonner"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "textarea"
+      ],
+      "categories": [
+        "table"
+      ],
+      "docs": "Clean-room evaluation form. onSubmit receives { criteria, overall, verdict }. verdict is strong_yes, yes, no, or strong_no. The form does not write the candidate. A rejected onSubmit does not show the success line. The host Toaster renders the sonner toast. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/assessment-form.tsx",
+          "type": "registry:component",
+          "target": "@ui/assessment-form.tsx"
+        },
+        {
+          "path": "registry/lib/ats.ts",
+          "type": "registry:lib",
+          "target": "@lib/ats.ts"
+        },
+        {
+          "path": "registry/lib/date-range.ts",
+          "type": "registry:lib",
+          "target": "@lib/date-range.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Formulario de evaluación",
+        "descriptionEs": "Cinco estrellas y un comentario por criterio, un veredicto y el envío de la scorecard.",
+        "preview": "app/examples/assessment-form/preview.tsx",
+        "previewHref": "/examples/assessment-form",
+        "examples": [
+          {
+            "title": "Agregar evaluación",
+            "href": "/examples/assessment-form",
+            "description": "El envío muestra el veredicto y el promedio. No escribe al candidato."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/assessment-form/stress",
+            "description": "Sin criterios, token largo y 320px."
+          }
+        ],
+        "usage": "<AssessmentForm\n  candidate={candidate}\n  criteria={criteria}\n  author={author}\n  onSubmit={(scorecard) => save(candidate.id, scorecard)}\n/>",
+        "api": [
+          {
+            "name": "onSubmit",
+            "type": "(scorecard) => Promise",
+            "description": "scorecard is { criteria: [{ key, label, rating, comment }], overall, verdict }."
+          },
+          {
+            "name": "onRateCriterion",
+            "type": "(candidateId, key, rating) => void",
+            "description": "Optional live callback when a star is chosen or a criterion is saved."
+          },
+          {
+            "name": "verdict",
+            "type": "strong_yes | yes | no | strong_no",
+            "description": "Required before submit, together with at least one rating."
+          },
+          {
+            "name": "readOnly / labels",
+            "type": "boolean, partial labels",
+            "description": "Spanish chrome unless labels override it. readOnly keeps the form visible and disables submit."
+          }
+        ]
+      }
+    },
+    {
+      "name": "pipeline-board",
+      "type": "registry:block",
+      "title": "Pipeline board",
+      "description": "A candidate kanban or list with search, date and score filters, keyboard and pointer drag, and an optimistic move that rolls back.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "checkbox",
+        "dropdown-menu",
+        "input",
+        "skeleton",
+        "slider",
+        "tooltip"
+      ],
+      "categories": [
+        "block",
+        "table"
+      ],
+      "docs": "Clean-room pipeline for any CRM. Pass candidates, stages, and getStage. onMoveCandidate(id, from, to) may reject; the card returns to the derived stage. canMove blocks a transition before the callback. Set optimistic to false when a parent already overlays the stage, as ats does. Loading, error, empty, and readOnly are props. Below 768px the kanban becomes a stack and the filters sit behind a button. Drag announcements use the label set. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. No mockup source, copy, colors, or assets were copied.",
+      "files": [
+        {
+          "path": "registry/blocks/pipeline-board.tsx",
+          "type": "registry:component",
+          "target": "@ui/pipeline-board.tsx"
+        },
+        {
+          "path": "registry/ui/candidate-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/candidate-card.tsx"
+        },
+        {
+          "path": "registry/ui/candidate-row.tsx",
+          "type": "registry:component",
+          "target": "@ui/candidate-row.tsx"
+        },
+        {
+          "path": "registry/ui/stage-progress.tsx",
+          "type": "registry:component",
+          "target": "@ui/stage-progress.tsx"
+        },
+        {
+          "path": "registry/ui/search-field.tsx",
+          "type": "registry:component",
+          "target": "@ui/search-field.tsx"
+        },
+        {
+          "path": "registry/ui/segmented-control.tsx",
+          "type": "registry:component",
+          "target": "@ui/segmented-control.tsx"
+        },
+        {
+          "path": "registry/hooks/use-optimistic-stage.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-optimistic-stage.ts"
+        },
+        {
+          "path": "registry/lib/ats.ts",
+          "type": "registry:lib",
+          "target": "@lib/ats.ts"
+        },
+        {
+          "path": "registry/lib/date-range.ts",
+          "type": "registry:lib",
+          "target": "@lib/date-range.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tablero de pipeline",
+        "descriptionEs": "Kanban o lista, búsqueda, filtros, arrastre con teclado y un movimiento que se revierte si falla.",
+        "preview": "app/examples/pipeline-board/preview.tsx",
+        "previewHref": "/examples/pipeline-board",
+        "examples": [
+          {
+            "title": "Pipeline",
+            "href": "/examples/pipeline-board",
+            "description": "La etapa sale de getStage. Solo las transiciones vecinas se pueden mover."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/pipeline-board/stress",
+            "description": "320px, vacío, carga, error y doscientos candidatos."
+          }
+        ],
+        "usage": "<PipelineBoard\n  candidates={candidates}\n  stages={stages}\n  getStage={getStage}\n  canMove={canMove}\n  onMoveCandidate={async (id, from, to) => {\n    await rpc(id, from, to)\n  }}\n/>",
+        "api": [
+          {
+            "name": "stages / getStage",
+            "type": "AtsStage[], (candidate) => stageId",
+            "description": "Stage config is { id, label, tone?, className? }. className overrides the semantic tone."
+          },
+          {
+            "name": "onMoveCandidate",
+            "type": "(id, from, to) => Promise",
+            "description": "Drag, arrow keys, and the menu. A rejection rolls the card back. The board does not write the candidate."
+          },
+          {
+            "name": "canMove / optimistic",
+            "type": "(from, to) => boolean, boolean",
+            "description": "False blocks the transition and announces it. optimistic defaults to true. Pass false when the parent already overlays the stage."
+          },
+          {
+            "name": "loading / error / readOnly",
+            "type": "boolean, string, boolean",
+            "description": "Loading hides the columns. error shows a retry. readOnly keeps the board visible and disables edits."
+          }
+        ]
+      }
+    },
+    {
+      "name": "ats",
+      "type": "registry:block",
+      "title": "ATS",
+      "description": "A hiring workspace: funnel counts, kanban or list, a detail sheet, and an evaluation form. Stages are derived and moves can roll back.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "lucide-react",
+        "motion",
+        "sonner"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "checkbox",
+        "dropdown-menu",
+        "input",
+        "sheet",
+        "skeleton",
+        "slider",
+        "tabs",
+        "textarea",
+        "tooltip"
+      ],
+      "categories": [
+        "block",
+        "table"
+      ],
+      "docs": "Clean-room applicant tracking for any CRM. Pass the job, candidates, stages, and getStage. onMoveCandidate(id, from, to) may reject; the card returns. canMove blocks a transition that has no RPC. onSubmitScorecard receives the candidate id and { criteria, overall, verdict }. The debrief aggregates every scorecard. The sheet is about 80vw and full width below 768px. The board does not mutate candidates and it does not call a backend. Answer no if the CLI asks to overwrite a primitive the host already has, or date-range when the host already has it. The item ships no theme. No mockup source, copy, colors, or assets were copied.",
+      "files": [
+        {
+          "path": "registry/blocks/ats.tsx",
+          "type": "registry:component",
+          "target": "@ui/ats.tsx"
+        },
+        {
+          "path": "registry/blocks/pipeline-board.tsx",
+          "type": "registry:component",
+          "target": "@ui/pipeline-board.tsx"
+        },
+        {
+          "path": "registry/ui/candidate-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/candidate-card.tsx"
+        },
+        {
+          "path": "registry/ui/candidate-row.tsx",
+          "type": "registry:component",
+          "target": "@ui/candidate-row.tsx"
+        },
+        {
+          "path": "registry/ui/candidate-detail.tsx",
+          "type": "registry:component",
+          "target": "@ui/candidate-detail.tsx"
+        },
+        {
+          "path": "registry/ui/assessment-form.tsx",
+          "type": "registry:component",
+          "target": "@ui/assessment-form.tsx"
+        },
+        {
+          "path": "registry/ui/stage-progress.tsx",
+          "type": "registry:component",
+          "target": "@ui/stage-progress.tsx"
+        },
+        {
+          "path": "registry/ui/search-field.tsx",
+          "type": "registry:component",
+          "target": "@ui/search-field.tsx"
+        },
+        {
+          "path": "registry/ui/segmented-control.tsx",
+          "type": "registry:component",
+          "target": "@ui/segmented-control.tsx"
+        },
+        {
+          "path": "registry/hooks/use-optimistic-stage.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-optimistic-stage.ts"
+        },
+        {
+          "path": "registry/lib/ats.ts",
+          "type": "registry:lib",
+          "target": "@lib/ats.ts"
+        },
+        {
+          "path": "registry/lib/date-range.ts",
+          "type": "registry:lib",
+          "target": "@lib/date-range.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Seguimiento de candidatos",
+        "descriptionEs": "Embudo, tablero o lista, detalle lateral y evaluación. La etapa se calcula y el movimiento se puede revertir.",
+        "preview": "app/examples/ats/preview.tsx",
+        "previewHref": "/examples/ats",
+        "examples": [
+          {
+            "title": "Taller Nube",
+            "href": "/examples/ats",
+            "description": "Demostración con una vacante inventada. El panel no cambia de ruta."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/ats/stress",
+            "description": "320px, vacío, carga, error, token largo y doscientos candidatos."
+          },
+          {
+            "title": "Etapas de Eduardo",
+            "href": "/examples/ats/eduardoretana",
+            "description": "Las mismas piezas con las etapas y los colores observados en la app pública. Las personas son inventadas."
+          }
+        ],
+        "usage": "<Ats\n  job={job}\n  candidates={candidates}\n  stages={stages}\n  getStage={(candidate) => deriveStage(candidate)}\n  canMove={(from, to) => hasRpc(from, to)}\n  onMoveCandidate={async (id, from, to) => {\n    await moveCandidate(id, from, to)\n  }}\n  onSubmitScorecard={(id, scorecard) => saveScorecard(id, scorecard)}\n/>",
+        "api": [
+          {
+            "name": "stages / getStage",
+            "type": "AtsStage[], (candidate) => stageId",
+            "description": "Each stage is { id, label, tone?, className? }. The workspace never reads a stored stage."
+          },
+          {
+            "name": "onMoveCandidate / canMove",
+            "type": "(id, from, to) => Promise, (from, to) => boolean",
+            "description": "A rejected promise rolls the card back. canMove blocks a transition that has no RPC."
+          },
+          {
+            "name": "onSubmitScorecard",
+            "type": "(candidateId, scorecard) => Promise",
+            "description": "scorecard is { criteria: [{ key, label, rating, comment }], overall, verdict }. A candidate holds N of these."
+          },
+          {
+            "name": "renderProgress / renderActions",
+            "type": "(slot) => node",
+            "description": "Compact stage dots and extra actions such as WhatsApp or copy link, on the card, the row, and the detail."
+          },
+          {
+            "name": "loading / error / readOnly",
+            "type": "boolean, string, boolean",
+            "description": "Loading and error replace the board. readOnly keeps it visible and disables edits."
+          }
+        ]
+      }
     }
   ]
 }
