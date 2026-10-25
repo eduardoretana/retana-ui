@@ -280,7 +280,7 @@ export function TaskBoard<TMeta extends Record<string, unknown> = Record<string,
         role="region"
         aria-label={labels.boardLabel}
         aria-busy={loading || undefined}
-        className={cn("flex h-full min-h-0 flex-col gap-3", className)}
+        className={cn("flex h-full w-full min-h-0 min-w-0 max-w-full flex-col gap-3", className)}
       >
         <div className={cn("flex shrink-0 flex-col gap-3", toolbarClassName)}>
           <div role="group" aria-label={labels.prioritySummary} className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -334,7 +334,7 @@ export function TaskBoard<TMeta extends Record<string, unknown> = Record<string,
         </div>
 
         {state === "loading" ? (
-          <div role="status" aria-label={labels.loadingLabel} className="flex min-h-0 flex-1 gap-3 overflow-hidden">
+          <div role="status" aria-label={labels.loadingLabel} className="flex min-h-0 w-full min-w-0 flex-1 gap-3 overflow-x-auto">
             {Array.from({ length: 3 }, (_, index) => (
               <div key={index} className="flex w-72 shrink-0 flex-col gap-2 rounded-xl bg-muted/40 p-2">
                 <Skeleton className="h-5 w-24" />
@@ -370,7 +370,7 @@ export function TaskBoard<TMeta extends Record<string, unknown> = Record<string,
         ) : null}
 
         {state === "ready" && view === "board" ? (
-          <div className="flex min-h-0 flex-1 snap-x snap-mandatory gap-3 overflow-x-auto pb-1">
+          <div className="flex min-h-0 w-full min-w-0 flex-1 snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain pb-1">
             {groups.map((group) => (
               <StageColumn key={group.stage.id} id={`${STAGE_PREFIX}${group.stage.id}`} label={group.stage.label} className={cn("h-full", columnClassName)}>
                 <ColumnHeader group={group} />
@@ -418,7 +418,7 @@ export function TaskBoard<TMeta extends Record<string, unknown> = Record<string,
         ) : null}
 
         {state === "ready" && view === "list" ? (
-          <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto">
+          <div className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-4 overflow-y-auto">
             {groups.map((group) => (
               <StageColumn
                 key={group.stage.id}
@@ -590,7 +590,7 @@ function StageColumn({
       data-slot="task-column"
       aria-label={label}
       className={cn(
-        "flex w-72 shrink-0 snap-start flex-col gap-2 rounded-xl bg-muted/40 p-2",
+        "flex w-72 max-w-full shrink-0 snap-start flex-col gap-2 rounded-xl bg-muted/40 p-2",
         isOver && "ring-2 ring-ring",
         className,
       )}

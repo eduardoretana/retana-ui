@@ -174,7 +174,7 @@ function TaskDetailForm<TMeta extends Record<string, unknown> = Record<string, u
   return (
     <div
       data-slot="task-detail"
-      className={cn("flex h-full min-h-0 flex-col bg-popover text-popover-foreground", className)}
+      className={cn("flex h-full w-full min-h-0 min-w-0 flex-col bg-popover text-popover-foreground", className)}
       onKeyDown={onKeyDown}
     >
       <header className="flex shrink-0 items-start gap-2 border-b border-border px-4 py-3">
@@ -219,9 +219,10 @@ function TaskDetailForm<TMeta extends Record<string, unknown> = Record<string, u
       <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
         <div className="grid gap-3">
           <Field icon={<Calendar aria-hidden />} label={labels.due}>
-            <div className="flex items-center gap-2">
+            <div className="flex min-w-0 items-center gap-2">
               <Input
                 type="datetime-local"
+                className="min-w-0 flex-1"
                 aria-label={labels.due}
                 value={toDateTimeLocal(task.dueAt)}
                 disabled={readOnly}
@@ -293,9 +294,10 @@ function TaskDetailForm<TMeta extends Record<string, unknown> = Record<string, u
             </Field>
           ) : null}
           <Field icon={<Bell aria-hidden />} label={labels.reminder}>
-            <div className="flex items-center gap-2">
+            <div className="flex min-w-0 items-center gap-2">
               <Input
                 type="datetime-local"
+                className="min-w-0 flex-1"
                 aria-label={labels.reminder}
                 value={toDateTimeLocal(task.reminderAt)}
                 disabled={readOnly}
@@ -404,8 +406,9 @@ function TaskDetailForm<TMeta extends Record<string, unknown> = Record<string, u
             </h3>
           </div>
           {readOnly ? null : (
-            <form className="mt-2 flex items-center gap-2" onSubmit={addSubtask}>
+            <form className="mt-2 flex min-w-0 items-center gap-2" onSubmit={addSubtask}>
               <Input
+                className="min-w-0 flex-1"
                 value={subtaskTitle}
                 onChange={(event) => setSubtaskTitle(event.target.value)}
                 placeholder={labels.subtaskPlaceholder}
@@ -425,7 +428,12 @@ function TaskDetailForm<TMeta extends Record<string, unknown> = Record<string, u
                     <p className="min-w-0 text-sm font-medium break-all" dir="auto">
                       {subtask.title}
                     </p>
-                    {subtask.priority ? <PriorityBadge level={subtask.priority} /> : null}
+                    {subtask.priority ? (
+                      <PriorityBadge
+                        level={subtask.priority}
+                        label={priorityOptions.find((item) => item.id === subtask.priority)?.label}
+                      />
+                    ) : null}
                   </div>
                   {subtask.description ? (
                     <p className="mt-1 text-xs text-muted-foreground break-all" dir="auto">

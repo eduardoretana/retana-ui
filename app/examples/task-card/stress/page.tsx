@@ -27,7 +27,7 @@ const base: TaskRecord = {
 
 export default function StressPage() {
   return (
-    <main className="mx-auto flex max-w-5xl flex-col gap-8 px-4 py-8">
+    <main className="mx-auto flex w-full min-w-0 max-w-5xl flex-col gap-8 px-4 py-8">
       <h1 className="text-2xl font-semibold">Estrés · Tarjeta</h1>
       <section className="grid gap-2">
         <h2 className="text-sm font-medium">Vacío, una palabra, frases y token</h2>
@@ -46,7 +46,7 @@ export default function StressPage() {
             },
             "max-w-xs",
           )}
-          {card({ ...base, id: "token", title: token, priority: "critical" }, "w-80 max-w-full")}
+          {card({ ...base, id: "token", title: token, priority: "critical" }, "w-full min-w-0 max-w-80")}
         </div>
       </section>
       <section className="grid gap-2" dir="rtl">
@@ -55,9 +55,9 @@ export default function StressPage() {
       </section>
       <section className="grid gap-2">
         <h2 className="text-sm font-medium">320px y fila apretada</h2>
-        <div className="flex gap-2">
+        <div className="flex min-w-0 gap-2">
           <div className="w-16 shrink-0 rounded-lg bg-muted" />
-          {card(base, "w-80 max-w-full min-w-0")}
+          {card(base, "w-full min-w-0 max-w-80")}
         </div>
       </section>
     </main>

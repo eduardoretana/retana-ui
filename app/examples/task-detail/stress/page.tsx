@@ -11,7 +11,7 @@ function panel(task: TaskRecord, label: string, readOnly = false) {
   return (
     <section className="grid gap-2">
       <h2 className="text-sm font-medium">{label}</h2>
-      <div className="h-[32rem] w-80 max-w-full overflow-hidden rounded-xl border border-border">
+      <div className="h-[32rem] w-full min-w-0 max-w-80 overflow-hidden rounded-xl border border-border">
         <TaskDetail
           task={task}
           people={demoPeople}
@@ -39,7 +39,7 @@ const base: TaskRecord = {
 
 export default function StressPage() {
   return (
-    <main className="mx-auto flex max-w-5xl flex-col gap-8 px-4 py-8">
+    <main className="mx-auto flex w-full min-w-0 max-w-5xl flex-col gap-8 px-4 py-8">
       <h1 className="text-2xl font-semibold">Estrés · Detalle</h1>
       <div className="grid gap-6 lg:grid-cols-2">
         {panel(base, "Vacío")}
@@ -65,7 +65,7 @@ export default function StressPage() {
       </div>
       <section className="grid gap-2" dir="rtl">
         <h2 className="text-sm font-medium">Derecha a izquierda</h2>
-        <div className="h-[28rem] max-w-md overflow-hidden rounded-xl border border-border">
+        <div className="h-[28rem] w-full min-w-0 max-w-md overflow-hidden rounded-xl border border-border">
           <TaskDetail
             task={{ ...base, id: "rtl", title: "مهمة", description: "وصف تجريبي" }}
             people={demoPeople}

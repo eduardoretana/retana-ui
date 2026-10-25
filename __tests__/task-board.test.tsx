@@ -163,6 +163,7 @@ describe("task board", () => {
     const dialog = await screen.findByRole("dialog", { name: "Detalle del encargo" })
     expect(within(dialog).getByText("01 de 3")).toBeInTheDocument()
     expect(within(dialog).getByText("Reservo la carga.")).toBeInTheDocument()
+    expect(within(dialog).getByText("Medir temperatura").closest("li")).toHaveTextContent("Baja")
 
     await user.selectOptions(within(dialog).getByRole("combobox", { name: "Prioridad" }), "critical")
     expect(onUpdate).toHaveBeenCalledWith("kiln", { priority: "critical" })

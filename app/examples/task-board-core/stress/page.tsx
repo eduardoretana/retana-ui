@@ -23,7 +23,7 @@ const task: TaskRecord = {
 
 export default function StressPage() {
   return (
-    <main className="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-8">
+    <main className="mx-auto flex w-full min-w-0 max-w-3xl flex-col gap-6 px-4 py-8">
       <h1 className="text-2xl font-semibold">Estrés · Núcleo</h1>
       <ul className="grid gap-2 text-sm break-all">
         <li>Vacío: “{formatTaskDate("", "es")}”</li>
@@ -36,7 +36,7 @@ export default function StressPage() {
         <li>Búsqueda vacía: {taskMatchesQuery(task, "   ") ? "coincide" : "no"}</li>
         <li dir="rtl">{token}</li>
       </ul>
-      <div className="w-80 max-w-full text-sm break-all">{token}</div>
+      <div className="w-full min-w-0 max-w-80 text-sm break-all">{token}</div>
     </main>
   )
 }
