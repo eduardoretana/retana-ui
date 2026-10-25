@@ -376,6 +376,13 @@ import Preview371 from "@/app/examples/agenda-core/preview"
 import Preview372 from "@/app/examples/agenda-event/preview"
 import Preview373 from "@/app/examples/agenda-detail/preview"
 import Preview374 from "@/app/examples/agenda/preview"
+import Preview375 from "@/app/examples/ats-core/preview"
+import Preview376 from "@/app/examples/candidate-card/preview"
+import Preview377 from "@/app/examples/candidate-row/preview"
+import Preview378 from "@/app/examples/candidate-detail/preview"
+import Preview379 from "@/app/examples/assessment-form/preview"
+import Preview380 from "@/app/examples/pipeline-board/preview"
+import Preview381 from "@/app/examples/ats/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -753,4 +760,11 @@ export const previewMap = {
   "agenda-event": Preview372,
   "agenda-detail": Preview373,
   "agenda": Preview374,
+  "ats-core": Preview375,
+  "candidate-card": Preview376,
+  "candidate-row": Preview377,
+  "candidate-detail": Preview378,
+  "assessment-form": Preview379,
+  "pipeline-board": Preview380,
+  "ats": Preview381,
 }
