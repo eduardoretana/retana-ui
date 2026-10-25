@@ -717,6 +717,23 @@ sample data, icons or assets were copied. All sample data is fictional.
 
 ---
 
+Task board
+
+task-board-core, task-card, task-detail, and task-board are a clean-room
+task board for a CRM. The arrangement was observed in an unlicensed
+kanban mock (a public social post of a Dribbble-style board and a task
+detail drawer). No source, markup, copy, colors, icons, photos, or assets
+were copied. Columns, priorities, categories, and labels are props.
+Spanish is the default chrome. taskBoardLabelsEn is the English set.
+The catalog demo is Cooperativa Lumen, a fictional workshop. The people,
+dates, and files are invented. view-kanban remains the schema board
+inside multi-view. The card reuses the host Avatar and priority-badge.
+The board reuses search-field and segmented-control. The sheet is the
+host sheet. Answer no if the CLI asks to overwrite a primitive the host
+already has. The items ship no theme.
+
+---
+
 OrganUI (healthcare and life sciences)
 
 Retana UI includes components adapted from OrganUI (MIT):
