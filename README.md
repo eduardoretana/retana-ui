@@ -81,6 +81,9 @@ Names that sit near each other do different jobs. Install the row that matches t
 | --- | --- |
 | [`timeline`](registry/ui/timeline.tsx) | An activity feed, newest first, grouped by day. |
 | [`view-timeline`](registry/ui/view-timeline.tsx) | A horizontal schedule with a start and an end, zoom, a today line, and keyboard move or resize. |
+| [`agenda`](registry/blocks/agenda.tsx) | A CRM agenda: day, week, and month, a now line, overlap columns, drag or keyboard edits, and a sidebar. `agenda-event` and `agenda-detail` install alone. |
+
+`agenda` is the timed calendar (categories, participants, join and sync callbacks). `view-calendar` stays the date-field month inside multi-view. Pass events in. `onReschedule` moves or resizes. `onCreate` adds. `onSync` is generic and names no provider. `onOpenTask` and `onOpenRecord` hand back opaque ids. Types live in [`agenda-core`](registry/lib/agenda.ts). The live demo is a fictional workshop, Estudio Cálamo. No mockup copy or assets were copied.
 
 ### Editing a record
 
@@ -331,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`371` items are in `registry.json` on this branch: `290` components, `68` blocks, `6` hooks, and `7` libraries. A name links to its source file.
+`375` items are in `registry.json` on this branch: `292` components, `69` blocks, `6` hooks, and `8` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -542,6 +545,10 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`task-card`](registry/ui/task-card.tsx) · ui — A task card with priority, assignee initials and a +N overflow, a due date, subtask and comment counts, and an overdue chip. Install: `npx shadcn@latest add @retana/task-card`.
 - [`task-detail`](registry/ui/task-detail.tsx) · ui — Task fields, subtasks, a comment thread with replies, a reminder, and attachments. Previous and next, including arrow keys outside fields. Install: `npx shadcn@latest add @retana/task-detail`.
 - [`task-board`](registry/blocks/task-board.tsx) · block — A CRM task board: priority counts, search, board or list, keyboard and pointer drag between stages, and a detail sheet that stays on the page. Install: `npx shadcn@latest add @retana/task-board`.
+- [`agenda-core`](registry/lib/agenda.ts) · lib — Types and pure helpers for a CRM agenda: time zones, Monday weeks, overlap columns, all-day and midnight-crossing slices. Install: `npx shadcn@latest add @retana/agenda-core`.
+- [`agenda-event`](registry/ui/agenda-event.tsx) · ui — An agenda card with a category icon, a time range, an in-progress mark, and keyboard or menu reschedule. Install: `npx shadcn@latest add @retana/agenda-event`.
+- [`agenda-detail`](registry/ui/agenda-detail.tsx) · ui — Event detail with Detail and Participants tabs, attendance, and host actions for join, summary, room, task, and record. Install: `npx shadcn@latest add @retana/agenda-detail`.
+- [`agenda`](registry/blocks/agenda.tsx) · block — A CRM agenda: day, week, and month, a now line, overlap columns, drag or keyboard edits, and a sidebar with a mini month, upcoming items, and category filters. Install: `npx shadcn@latest add @retana/agenda`.
 
 ### Charts
 

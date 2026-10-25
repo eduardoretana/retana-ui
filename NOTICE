@@ -734,6 +734,23 @@ already has. The items ship no theme.
 
 ---
 
+Agenda
+
+agenda-core, agenda-event, agenda-detail, and agenda are a clean-room
+time-grid agenda for a CRM. The arrangement was observed in an unlicensed
+calendar mock (a public social post of a week dashboard). No source, markup,
+copy, colors, icons, photos, or assets were copied. Views, categories, time
+zone, and labels are props. Spanish is the default chrome. agendaLabelsEn is
+the English set. The default zone is America/Mexico_City, the week starts on
+Monday, and formats use es-MX. Time zones reuse the existing date-range
+helpers. The catalog demo is Estudio Cálamo, a fictional workshop. The
+people, rooms, and dates are invented. view-calendar remains the date-field
+month inside multi-view. The block reuses the host button, switch, sheet,
+tabs, and scroll area. Answer no if the CLI asks to overwrite a primitive
+the host already has. The items ship no theme.
+
+---
+
 OrganUI (healthcare and life sciences)
 
 Retana UI includes components adapted from OrganUI (MIT):
