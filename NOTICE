@@ -751,6 +751,25 @@ the host already has. The items ship no theme.
 
 ---
 
+Applicant tracking
+
+ats-core, candidate-card, candidate-row, candidate-detail, assessment-form,
+pipeline-board, and ats are a clean-room hiring board for a CRM. The
+arrangement was observed in an unlicensed recruiting mock (a public social
+post of a candidate kanban, a list, and an evaluation drawer). No source,
+markup, copy, colors, icons, photos, or assets were copied. Stages are
+derived by the host with getStage. A move is onMoveCandidate and may
+reject. Tones and extra actions are props. Spanish is the default chrome.
+atsLabelsEn is the English set. The default zone is America/Mexico_City
+and formats use es-MX. Dates reuse the existing date-range helpers. The
+catalog demo is Taller Nube, a fictional studio. The people, jobs, and
+scorecards are invented. The board reuses search-field, segmented-control,
+and the host sheet. Answer no if the CLI asks to overwrite a primitive
+the host already has, or date-range when the host already has it. The
+items ship no theme.
+
+---
+
 OrganUI (healthcare and life sciences)
 
 Retana UI includes components adapted from OrganUI (MIT):
