@@ -376,12 +376,19 @@ import Preview371 from "@/app/examples/agenda-core/preview"
 import Preview372 from "@/app/examples/agenda-event/preview"
 import Preview373 from "@/app/examples/agenda-detail/preview"
 import Preview374 from "@/app/examples/agenda/preview"
-import Preview375 from "@/app/examples/tooltip-card/preview"
-import Preview376 from "@/app/examples/timeline-gantt/preview"
-import Preview377 from "@/app/examples/data-table-reorder/preview"
-import Preview378 from "@/app/examples/activity-chat/preview"
-import Preview379 from "@/app/examples/inline-approve-button/preview"
-import Preview380 from "@/app/examples/portfolio-desk/preview"
+import Preview375 from "@/app/examples/ats-core/preview"
+import Preview376 from "@/app/examples/candidate-card/preview"
+import Preview377 from "@/app/examples/candidate-row/preview"
+import Preview378 from "@/app/examples/candidate-detail/preview"
+import Preview379 from "@/app/examples/assessment-form/preview"
+import Preview380 from "@/app/examples/pipeline-board/preview"
+import Preview381 from "@/app/examples/ats/preview"
+import Preview382 from "@/app/examples/tooltip-card/preview"
+import Preview383 from "@/app/examples/timeline-gantt/preview"
+import Preview384 from "@/app/examples/data-table-reorder/preview"
+import Preview385 from "@/app/examples/activity-chat/preview"
+import Preview386 from "@/app/examples/inline-approve-button/preview"
+import Preview387 from "@/app/examples/portfolio-desk/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -759,10 +766,17 @@ export const previewMap = {
   "agenda-event": Preview372,
   "agenda-detail": Preview373,
   "agenda": Preview374,
-  "tooltip-card": Preview375,
-  "timeline-gantt": Preview376,
-  "data-table-reorder": Preview377,
-  "activity-chat": Preview378,
-  "inline-approve-button": Preview379,
-  "portfolio-desk": Preview380,
+  "ats-core": Preview375,
+  "candidate-card": Preview376,
+  "candidate-row": Preview377,
+  "candidate-detail": Preview378,
+  "assessment-form": Preview379,
+  "pipeline-board": Preview380,
+  "ats": Preview381,
+  "tooltip-card": Preview382,
+  "timeline-gantt": Preview383,
+  "data-table-reorder": Preview384,
+  "activity-chat": Preview385,
+  "inline-approve-button": Preview386,
+  "portfolio-desk": Preview387,
 }

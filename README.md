@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`381` items are in `registry.json` on this branch: `297` components, `70` blocks, `6` hooks, and `8` libraries. A name links to its source file.
+`388` items are in `registry.json` on this branch: `301` components, `72` blocks, `6` hooks, and `9` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -549,6 +549,13 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`agenda-event`](registry/ui/agenda-event.tsx) · ui — An agenda card with a category icon, a time range, an in-progress mark, and keyboard or menu reschedule. Install: `npx shadcn@latest add @retana/agenda-event`.
 - [`agenda-detail`](registry/ui/agenda-detail.tsx) · ui — Event detail with Detail and Participants tabs, attendance, and host actions for join, summary, room, task, and record. Install: `npx shadcn@latest add @retana/agenda-detail`.
 - [`agenda`](registry/blocks/agenda.tsx) · block — A CRM agenda: day, week, and month, a now line, overlap columns, drag or keyboard edits, and a sidebar with a mini month, upcoming items, and category filters. Install: `npx shadcn@latest add @retana/agenda`.
+- [`ats-core`](registry/lib/ats.ts) · lib — Types and pure helpers for applicant tracking: derived stages, scorecards, funnel percentages, and Spanish labels. Install: `npx shadcn@latest add @retana/ats-core`.
+- [`candidate-card`](registry/ui/candidate-card.tsx) · ui — A hiring-board card with an avatar, an applied date, a score, stage progress, tags, and an add-evaluation action. Install: `npx shadcn@latest add @retana/candidate-card`.
+- [`candidate-row`](registry/ui/candidate-row.tsx) · ui — A candidate table row and a sortable table: stage pill, score, source, next step, and owner. Install: `npx shadcn@latest add @retana/candidate-row`.
+- [`candidate-detail`](registry/ui/candidate-detail.tsx) · ui — Candidate detail with a stage stepper, an aggregated debrief, scorecards, and schedule or note actions. Install: `npx shadcn@latest add @retana/candidate-detail`.
+- [`assessment-form`](registry/ui/assessment-form.tsx) · ui — An evaluation form: five stars and a comment per criterion, a verdict, and a scorecard submit. Install: `npx shadcn@latest add @retana/assessment-form`.
+- [`pipeline-board`](registry/blocks/pipeline-board.tsx) · block — A candidate kanban or list with search, date and score filters, keyboard and pointer drag, and an optimistic move that rolls back. Install: `npx shadcn@latest add @retana/pipeline-board`.
+- [`ats`](registry/blocks/ats.tsx) · block — A hiring workspace: funnel counts, kanban or list, a detail sheet, and an evaluation form. Stages are derived and moves can roll back. Install: `npx shadcn@latest add @retana/ats`.
 - [`tooltip-card`](registry/ui/tooltip-card.tsx) · ui — A floating card with people, metrics, and actions. Focus, Escape, and collision-aware placement. Not a one-line tooltip. Install: `npx shadcn@latest add @retana/tooltip-card`.
 - [`timeline-gantt`](registry/ui/timeline-gantt.tsx) · ui — Workstream Gantt with task bars, dependency curves, a today marker, and a sticky scale. Hover opens a detail card. Install: `npx shadcn@latest add @retana/timeline-gantt`.
 - [`data-table-reorder`](registry/ui/data-table-reorder.tsx) · ui — A dense table that slides rows into place when a column sort changes, with sparkline, meter, and trend slots. Install: `npx shadcn@latest add @retana/data-table-reorder`.
