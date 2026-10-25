@@ -119,6 +119,7 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
   const nowIso = now ?? clock
   const [openId, setOpenId] = React.useState<string | null>(null)
   const openRef = React.useRef<string | null>(null)
+  const blockedId = React.useRef<string | null>(null)
   const [cursor, setCursor] = React.useState<string | null>(null)
   const [announcement, setAnnouncement] = React.useState("")
   const headingId = React.useId()
@@ -151,6 +152,7 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
   }
 
   function setOpen(id: string, next: boolean) {
+    if (next && blockedId.current === id) return
     const resolved = next ? id : openRef.current === id ? null : openRef.current
     openRef.current = resolved
     setOpenId(resolved)
@@ -338,6 +340,9 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                           classNames?.bar,
                         )}
                         style={bar ? { left: bar.x, width: bar.width } : undefined}
+                        onPointerEnter={() => {
+                          if (!disabled) setOpen(item.id, true)
+                        }}
                         onClick={() => {
                           setCursor(item.id)
                           setAnnouncement(copy.selected(item.label))
@@ -378,6 +383,15 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                                 <TooltipCard
                                   open={openId === item.id}
                                   onOpenChange={(next) => setOpen(item.id, next)}
+                                  onEscape={() => {
+                                    const id = item.id
+                                    blockedId.current = id
+                                    window.setTimeout(() => {
+                                      if (blockedId.current === id) blockedId.current = null
+                                    }, 450)
+                                  }}
+                                  side="top"
+                                  align="center"
                                   title={item.label}
                                   eyebrow={group.label}
                                   description={description}

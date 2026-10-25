@@ -74,6 +74,8 @@ export type TooltipCardProps = {
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
+  /** Fires for Escape before the card asks to close, so the host can ignore the pointer falling back onto the trigger. */
+  onEscape?: () => void
   side?: "top" | "right" | "bottom" | "left"
   align?: "start" | "center" | "end"
   openDelay?: number
@@ -114,6 +116,7 @@ export function TooltipCard({
   open,
   defaultOpen,
   onOpenChange,
+  onEscape,
   side = "top",
   align = "start",
   openDelay = 80,
@@ -129,8 +132,27 @@ export function TooltipCard({
   const triggerRef = React.useRef<HTMLElement | null>(null)
   const contentRef = React.useRef<HTMLDivElement | null>(null)
   const returnFocus = React.useRef(false)
+  const blockOpenUntil = React.useRef(0)
   const hydrated = useHydrated()
   const described = Boolean(description)
+  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen ?? false)
+  const currentOpen = open ?? uncontrolledOpen
+
+  React.useEffect(() => {
+    if (!currentOpen || disabled) return
+    function onKey(event: KeyboardEvent) {
+      if (event.key !== "Escape") return
+      event.preventDefault()
+      event.stopPropagation()
+      returnFocus.current = true
+      blockOpenUntil.current = performance.now() + 500
+      onEscape?.()
+      if (open === undefined) setUncontrolledOpen(false)
+      onOpenChange?.(false)
+    }
+    document.addEventListener("keydown", onKey, true)
+    return () => document.removeEventListener("keydown", onKey, true)
+  }, [currentOpen, disabled, open, onOpenChange, onEscape])
 
   if (disabled) return children
 
@@ -139,6 +161,8 @@ export function TooltipCard({
   }
 
   function handleOpenChange(next: boolean) {
+    if (next && performance.now() < blockOpenUntil.current) return
+    if (open === undefined) setUncontrolledOpen(next)
     onOpenChange?.(next)
     if (!next && returnFocus.current) {
       returnFocus.current = false
@@ -179,7 +203,7 @@ export function TooltipCard({
   const extraPeople = Math.max(0, people.length - visiblePeople.length)
 
   return (
-    <HoverCard.Root open={open} defaultOpen={defaultOpen} onOpenChange={handleOpenChange} openDelay={openDelay} closeDelay={closeDelay}>
+    <HoverCard.Root open={currentOpen} onOpenChange={handleOpenChange} openDelay={openDelay} closeDelay={closeDelay}>
       <HoverCard.Trigger
         asChild
         aria-haspopup="dialog"

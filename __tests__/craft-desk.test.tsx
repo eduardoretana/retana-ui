@@ -100,6 +100,30 @@ describe("timeline gantt", () => {
     expect(screen.getByRole("button", { name: /Pruebas de tinta/ })).toHaveFocus()
   })
 
+  it("moves the detail card with the pointer and closes it with Escape", async () => {
+    const user = userEvent.setup()
+    const onHover = vi.fn()
+    render(
+      <TimelineGantt
+        items={items}
+        workstreams={[{ id: "print", label: "Impresión" }]}
+        now={now}
+        scale="week"
+        onHover={onHover}
+      />,
+    )
+    await user.hover(screen.getByRole("button", { name: /Catálogo de feria/ }))
+    expect(await screen.findByRole("dialog", { name: "Catálogo de feria" })).toBeInTheDocument()
+    await user.hover(screen.getByRole("button", { name: /Pruebas de tinta/ }))
+    expect(await screen.findByRole("dialog", { name: "Pruebas de tinta" })).toBeInTheDocument()
+    expect(screen.queryByRole("dialog", { name: "Catálogo de feria" })).not.toBeInTheDocument()
+    await user.keyboard("{Escape}")
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+    await new Promise((resolve) => setTimeout(resolve, 200))
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+    expect(onHover).toHaveBeenLastCalledWith(null)
+  })
+
   it("shows empty, loading, and error", () => {
     const { rerender } = render(<TimelineGantt items={[]} now={now} />)
     expect(screen.getByText("No hay tareas en este periodo")).toBeInTheDocument()
@@ -135,6 +159,8 @@ describe("tooltip card", () => {
     await user.tab()
     await user.keyboard("{Enter}")
     expect(onSelect).toHaveBeenCalled()
+    await user.keyboard("{Escape}")
+    expect(screen.queryByRole("dialog", { name: "Catálogo" })).not.toBeInTheDocument()
   })
 })
 
