@@ -13,7 +13,7 @@ export default function Page() {
   return (
     <DeskFrame
       title="Seguimiento de candidatos"
-      description="Datos de Taller Nube, un estudio inventado. La etapa sale de getStage, no de un campo guardado. Flechas en el nombre mueven de columna si la transición está permitida. Nada de esto es un cliente real."
+      description="Datos de Taller Nube, un estudio inventado. La etapa sale de getStage, no de un campo guardado. Flechas en el nombre mueven de columna si la transición está permitida. Nada de esto es un cliente real. El mismo tablero con las etapas de la app pública está en /examples/ats/eduardoretana."
     >
       <AtsDemo />
     </DeskFrame>

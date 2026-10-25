@@ -763,7 +763,10 @@ reject. Tones and extra actions are props. Spanish is the default chrome.
 atsLabelsEn is the English set. The default zone is America/Mexico_City
 and formats use es-MX. Dates reuse the existing date-range helpers. The
 catalog demo is Taller Nube, a fictional studio. The people, jobs, and
-scorecards are invented. The board reuses search-field, segmented-control,
+scorecards are invented. A second example at /examples/ats/eduardoretana
+dresses the same pieces with stage labels and badge classes observed on
+the public eduardoretana.com app. The people, phones, and scorecards on
+that page are invented. The board reuses search-field, segmented-control,
 and the host sheet. Answer no if the CLI asks to overwrite a primitive
 the host already has, or date-range when the host already has it. The
 items ship no theme.

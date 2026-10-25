@@ -27785,6 +27785,11 @@
             "title": "Marco de estrés",
             "href": "/examples/ats/stress",
             "description": "320px, vacío, carga, error, token largo y doscientos candidatos."
+          },
+          {
+            "title": "Etapas de Eduardo",
+            "href": "/examples/ats/eduardoretana",
+            "description": "Las mismas piezas con las etapas y los colores observados en la app pública. Las personas son inventadas."
           }
         ],
         "usage": "<Ats\n  job={job}\n  candidates={candidates}\n  stages={stages}\n  getStage={(candidate) => deriveStage(candidate)}\n  canMove={(from, to) => hasRpc(from, to)}\n  onMoveCandidate={async (id, from, to) => {\n    await moveCandidate(id, from, to)\n  }}\n  onSubmitScorecard={(id, scorecard) => saveScorecard(id, scorecard)}\n/>",
