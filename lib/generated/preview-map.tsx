@@ -372,6 +372,10 @@ import Preview367 from "@/app/examples/task-board-core/preview"
 import Preview368 from "@/app/examples/task-card/preview"
 import Preview369 from "@/app/examples/task-detail/preview"
 import Preview370 from "@/app/examples/task-board/preview"
+import Preview371 from "@/app/examples/agenda-core/preview"
+import Preview372 from "@/app/examples/agenda-event/preview"
+import Preview373 from "@/app/examples/agenda-detail/preview"
+import Preview374 from "@/app/examples/agenda/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -745,4 +749,8 @@ export const previewMap = {
   "task-card": Preview368,
   "task-detail": Preview369,
   "task-board": Preview370,
+  "agenda-core": Preview371,
+  "agenda-event": Preview372,
+  "agenda-detail": Preview373,
+  "agenda": Preview374,
 }

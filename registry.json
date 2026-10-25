@@ -26865,6 +26865,300 @@
           }
         ]
       }
+    },
+    {
+      "name": "agenda-core",
+      "type": "registry:lib",
+      "title": "Agenda core",
+      "description": "Types and pure helpers for a CRM agenda: time zones, Monday weeks, overlap columns, all-day and midnight-crossing slices.",
+      "author": "Eduardo Retana",
+      "categories": ["table"],
+      "docs": "Clean-room helpers for agenda. No React and no fetching. Spanish labels are the default; agendaLabelsEn is the English set. The default time zone is America/Mexico_City and the week starts on Monday. A missing civil hour snaps forward. A repeated hour uses the earlier offset. Time zones reuse date-range (timeZoneOffsetMs, startOfZonedDay, addZonedDays). view-calendar stays the date-field month inside multi-view. Pass a stable now from the host when tests or demos must not follow the clock. No mockup source, copy, or assets were copied. If the CLI asks to overwrite date-range and the host already has it, answer no.",
+      "files": [
+        {
+          "path": "registry/lib/agenda.ts",
+          "type": "registry:lib",
+          "target": "@lib/agenda.ts"
+        },
+        {
+          "path": "registry/lib/date-range.ts",
+          "type": "registry:lib",
+          "target": "@lib/date-range.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Núcleo de la agenda",
+        "descriptionEs": "Tipos y funciones puras: zona horaria, semana en lunes, columnas de traslape y eventos que cruzan la medianoche.",
+        "preview": "app/examples/agenda-core/preview.tsx",
+        "previewHref": "/examples/agenda-core",
+        "examples": [
+          {
+            "title": "Zona y traslape",
+            "href": "/examples/agenda-core",
+            "description": "Un miércoles en Ciudad de México y una hora que no existe en Nueva York."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/agenda-core/stress",
+            "description": "Fecha vacía, token de 60 caracteres y un rango ancho."
+          }
+        ],
+        "usage": "calendarDate(now, \"America/Mexico_City\")\nzonedDateTimeToUtc(2026, 3, 8, 2, 30, \"America/New_York\")\nlayoutTimedSegments(segments, 8, 18)",
+        "api": [
+          {
+            "name": "AgendaEvent<TMeta>",
+            "type": "type",
+            "description": "Event shape. TMeta is the host payload. taskId and recordId are opaque ids the agenda never opens."
+          },
+          {
+            "name": "zonedDateTimeToUtc",
+            "type": "(year, month, day, hour, minute, timeZone) => { instant, snapped }",
+            "description": "Civil time to UTC. A gap snaps forward. A repeated hour keeps the earlier offset."
+          },
+          {
+            "name": "segmentsForEvent / layoutTimedSegments",
+            "type": "functions",
+            "description": "Splits midnight crossings and all-day events, then assigns overlap columns inside the visible hours."
+          },
+          {
+            "name": "agendaLabels / agendaLabelsEn",
+            "type": "AgendaLabels",
+            "description": "Spanish is the default chrome. Spread either object and override the keys you need."
+          }
+        ]
+      }
+    },
+    {
+      "name": "agenda-event",
+      "type": "registry:ui",
+      "title": "Agenda event",
+      "description": "An agenda card with a category icon, a time range, an in-progress mark, and keyboard or menu reschedule.",
+      "author": "Eduardo Retana",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["button", "dropdown-menu"],
+      "categories": ["table"],
+      "docs": "Clean-room card used by agenda. Alt+ArrowUp and Alt+ArrowDown move by the snap. Alt+ArrowLeft and Alt+ArrowRight move a day. Shift+Alt+ArrowUp and Shift+Alt+ArrowDown resize. The actions menu repeats those edits. The card does not mutate the event. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/agenda-event.tsx",
+          "type": "registry:component",
+          "target": "@ui/agenda-event.tsx"
+        },
+        {
+          "path": "registry/lib/agenda.ts",
+          "type": "registry:lib",
+          "target": "@lib/agenda.ts"
+        },
+        {
+          "path": "registry/lib/date-range.ts",
+          "type": "registry:lib",
+          "target": "@lib/date-range.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de evento",
+        "descriptionEs": "Icono de categoría, horario, marca de en curso, y mover o redimensionar con teclado o menú.",
+        "preview": "app/examples/agenda-event/preview.tsx",
+        "previewHref": "/examples/agenda-event",
+        "examples": [
+          {
+            "title": "Prueba en curso",
+            "href": "/examples/agenda-event",
+            "description": "Una tarjeta del Estudio Cálamo, un taller inventado."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/agenda-event/stress",
+            "description": "Título vacío, token largo, emoji y 320px."
+          }
+        ],
+        "usage": "<AgendaEventCard\n  event={event}\n  category={category}\n  timeZone=\"America/Mexico_City\"\n  ongoing\n  onReschedule={(id, move) => save(id, move)}\n/>",
+        "api": [
+          {
+            "name": "event / category",
+            "type": "AgendaEvent, AgendaCategory",
+            "description": "The record and its category. The icon key selects a Lucide icon. Unknown keys use a calendar."
+          },
+          {
+            "name": "onReschedule",
+            "type": "(id, move, source) => void",
+            "description": "Keyboard and menu. source is move, resize, or all-day. Omitted, the card stays read only."
+          },
+          {
+            "name": "ongoing / selected / readOnly",
+            "type": "boolean",
+            "description": "In progress shows the chip. selected draws a ring. readOnly disables edits."
+          },
+          {
+            "name": "timeZone / locale / snapMinutes / labels",
+            "type": "string, string, number, partial labels",
+            "description": "Default America/Mexico_City, es-MX, and 15 minutes. Spanish chrome unless labels override it."
+          }
+        ]
+      }
+    },
+    {
+      "name": "agenda-detail",
+      "type": "registry:ui",
+      "title": "Agenda detail",
+      "description": "Event detail with Detail and Participants tabs, attendance, and host actions for join, summary, room, task, and record.",
+      "author": "Eduardo Retana",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["badge", "button", "tabs"],
+      "categories": ["table"],
+      "docs": "Clean-room detail used by agenda. Participants are confirmed, pending, or declined. Join, summary, room, open task, and open record render only when the callback is passed. taskId and recordId stay opaque: this file does not import a task board or a CRM. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/agenda-detail.tsx",
+          "type": "registry:component",
+          "target": "@ui/agenda-detail.tsx"
+        },
+        {
+          "path": "registry/lib/agenda.ts",
+          "type": "registry:lib",
+          "target": "@lib/agenda.ts"
+        },
+        {
+          "path": "registry/lib/date-range.ts",
+          "type": "registry:lib",
+          "target": "@lib/date-range.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Detalle del evento",
+        "descriptionEs": "Pestañas de detalle y participantes, con unirse, resumen, sala, encargo y registro por callbacks.",
+        "preview": "app/examples/agenda-detail/preview.tsx",
+        "previewHref": "/examples/agenda-detail",
+        "examples": [
+          {
+            "title": "Pieza en curso",
+            "href": "/examples/agenda-detail",
+            "description": "Descripción, participantes y acciones. Nada sale del ejemplo."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/agenda-detail/stress",
+            "description": "Sin texto, token largo, emoji y solo lectura."
+          }
+        ],
+        "usage": "<AgendaDetail\n  event={event}\n  category={category}\n  onJoin={(id) => join(id)}\n  onOpenTask={(id, taskId) => openTask(taskId)}\n/>",
+        "api": [
+          {
+            "name": "onJoin / onOpenSummary / onCreateRoom",
+            "type": "(id) => void",
+            "description": "Optional actions. A missing callback hides its button."
+          },
+          {
+            "name": "onOpenTask / onOpenRecord",
+            "type": "(id, foreignId) => void",
+            "description": "Shown when the event carries taskId or recordId. The detail does not know what they point at."
+          },
+          {
+            "name": "readOnly",
+            "type": "boolean",
+            "description": "Disables join and create room. The tabs stay readable."
+          },
+          {
+            "name": "labels / locale / timeZone",
+            "type": "partial labels, string, string",
+            "description": "Spanish chrome, es-MX, and America/Mexico_City unless you pass something else."
+          }
+        ]
+      }
+    },
+    {
+      "name": "agenda",
+      "type": "registry:block",
+      "title": "Agenda",
+      "description": "A CRM agenda: day, week, and month, a now line, overlap columns, drag or keyboard edits, and a sidebar with a mini month, upcoming items, and category filters.",
+      "author": "Eduardo Retana",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["badge", "button", "dropdown-menu", "scroll-area", "separator", "sheet", "skeleton", "switch", "tabs"],
+      "categories": ["block", "table"],
+      "docs": "Clean-room agenda for any CRM. Pass events and categories. onReschedule is move, resize, and all-day, from drag, Alt+arrows, and the actions menu. onCreate and onCreateRequest receive a draft when someone drags an empty slot, presses Enter on a slot, or uses New event. The agenda does not mutate events. onSync is a generic callback with no provider. onOpenTask and onOpenRecord hand back opaque ids. view-calendar stays the date-field month inside multi-view. Loading, error, empty, and readOnly are props. Below 768px the week becomes a list and the sidebar opens from a button. Reduced motion skips scroll animation. The default time zone is America/Mexico_City, the week starts on Monday, and formats use es-MX. Answer no if the CLI asks to overwrite a primitive the host already has, or date-range when the host already has it. The item ships no theme. No mockup source, copy, colors, or assets were copied.",
+      "files": [
+        {
+          "path": "registry/blocks/agenda.tsx",
+          "type": "registry:component",
+          "target": "@ui/agenda.tsx"
+        },
+        {
+          "path": "registry/ui/agenda-event.tsx",
+          "type": "registry:component",
+          "target": "@ui/agenda-event.tsx"
+        },
+        {
+          "path": "registry/ui/agenda-detail.tsx",
+          "type": "registry:component",
+          "target": "@ui/agenda-detail.tsx"
+        },
+        {
+          "path": "registry/lib/agenda.ts",
+          "type": "registry:lib",
+          "target": "@lib/agenda.ts"
+        },
+        {
+          "path": "registry/lib/date-range.ts",
+          "type": "registry:lib",
+          "target": "@lib/date-range.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Agenda",
+        "descriptionEs": "Día, semana y mes, línea de ahora, traslapes, arrastre o teclado, y una barra con mini calendario y categorías.",
+        "preview": "app/examples/agenda/preview.tsx",
+        "previewHref": "/examples/agenda",
+        "examples": [
+          {
+            "title": "Estudio Cálamo",
+            "href": "/examples/agenda",
+            "description": "Demostración con eventos inventados. Sincronizar no llama a ningún proveedor."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/agenda/stress",
+            "description": "320px, vacío, carga, error, token largo y cuarenta eventos."
+          }
+        ],
+        "usage": "<Agenda\n  events={events}\n  categories={categories}\n  timeZone=\"America/Mexico_City\"\n  onReschedule={(id, move) => save(id, move)}\n  onCreate={(draft) => add(draft)}\n  onSync={() => sync()}\n  onOpenTask={(id, taskId) => openTask(taskId)}\n/>",
+        "api": [
+          {
+            "name": "events / categories",
+            "type": "arrays",
+            "description": "Controlled records. Category icon is a key, tone is a semantic name, and meta is never read."
+          },
+          {
+            "name": "view / anchor / selectedId / hiddenCategoryIds",
+            "type": "controlled or uncontrolled",
+            "description": "Day, week, or month. anchor is YYYY-MM-DD. Hidden categories filter the grid and the sidebar."
+          },
+          {
+            "name": "onReschedule",
+            "type": "(id, move, source) => void",
+            "description": "Drag, Alt+arrows, and the menu. The component does not write the event."
+          },
+          {
+            "name": "onCreate / onCreateRequest / onSync",
+            "type": "callbacks",
+            "description": "Create from a drag, Enter, or New event. Sync is generic and names no provider."
+          },
+          {
+            "name": "onOpenTask / onOpenRecord",
+            "type": "(id, foreignId) => void",
+            "description": "Optional bridges. The agenda does not import a task board or a CRM record."
+          },
+          {
+            "name": "loading / error / readOnly",
+            "type": "boolean, string, boolean",
+            "description": "Loading and error replace the grid. readOnly keeps it visible and disables edits."
+          },
+          {
+            "name": "timeZone / locale / weekStartsOn / hourStart / hourEnd / now",
+            "type": "strings and numbers",
+            "description": "Default America/Mexico_City, es-MX, Monday, and the full day. now is the clock for the now line."
+          }
+        ]
+      }
     }
   ]
 }
