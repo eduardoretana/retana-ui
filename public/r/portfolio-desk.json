@@ -1,0 +1,64 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "portfolio-desk",
+  "title": "Portfolio desk",
+  "author": "Eduardo Retana",
+  "description": "A mini portfolio desk that places the schedule, the dense table, the thread, and the in-place approval on one surface.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/timeline-gantt",
+    "@retana/data-table-reorder",
+    "@retana/activity-chat",
+    "@retana/inline-approve-button"
+  ],
+  "files": [
+    {
+      "path": "registry/blocks/portfolio-desk.tsx",
+      "content": "\"use client\"\n\n/**\n * Clean-room portfolio desk.\n * It composes the schedule, the dense table, the thread, and the in-place approval.\n * Data stays in the props. The desk does not fetch. Spanish region names are the default.\n */\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { ActivityChat, type ActivityChatProps } from \"@/components/ui/activity-chat\"\nimport { DataTableReorder, type DataTableReorderProps, type DataTableReorderRow } from \"@/components/ui/data-table-reorder\"\nimport { InlineApproveButton, type InlineApproveButtonProps } from \"@/components/ui/inline-approve-button\"\nimport { TimelineGantt, type TimelineGanttProps } from \"@/components/ui/timeline-gantt\"\n\nexport type PortfolioDeskLabels = {\n  schedule: string\n  ledger: string\n  conversation: string\n  approval: string\n}\n\nexport const portfolioDeskLabels: PortfolioDeskLabels = {\n  schedule: \"Cronograma\",\n  ledger: \"Tablero\",\n  conversation: \"Conversación\",\n  approval: \"Aprobación\",\n}\n\nexport const portfolioDeskLabelsEn: PortfolioDeskLabels = {\n  schedule: \"Schedule\",\n  ledger: \"Ledger\",\n  conversation: \"Conversation\",\n  approval: \"Approval\",\n}\n\nexport type PortfolioDeskProps<\n  TRow extends DataTableReorderRow<TTableMeta>,\n  TTableMeta = Record<string, unknown>,\n  TGanttMeta = Record<string, unknown>,\n  TChatMeta = Record<string, unknown>,\n> = {\n  title: string\n  subtitle?: string\n  gantt: TimelineGanttProps<TGanttMeta>\n  table: DataTableReorderProps<TRow, TTableMeta>\n  chat: ActivityChatProps<TChatMeta>\n  approval?: InlineApproveButtonProps\n  labels?: Partial<PortfolioDeskLabels>\n  className?: string\n}\n\nexport function PortfolioDesk<\n  TRow extends DataTableReorderRow<TTableMeta>,\n  TTableMeta = Record<string, unknown>,\n  TGanttMeta = Record<string, unknown>,\n  TChatMeta = Record<string, unknown>,\n>({\n  title,\n  subtitle,\n  gantt,\n  table,\n  chat,\n  approval,\n  labels,\n  className,\n}: PortfolioDeskProps<TRow, TTableMeta, TGanttMeta, TChatMeta>) {\n  const copy = { ...portfolioDeskLabels, ...labels }\n  const scheduleId = React.useId()\n  const ledgerId = React.useId()\n  const conversationId = React.useId()\n  const approvalId = React.useId()\n\n  return (\n    <section data-slot=\"portfolio-desk\" className={cn(\"@container flex min-w-0 flex-col gap-4 text-foreground\", className)}>\n      <header className=\"flex min-w-0 flex-col gap-1\">\n        <h2 className=\"text-lg font-semibold tracking-tight break-words [overflow-wrap:anywhere]\">{title}</h2>\n        {subtitle ? <p className=\"max-w-3xl text-sm text-muted-foreground break-words [overflow-wrap:anywhere]\">{subtitle}</p> : null}\n      </header>\n      <div className=\"grid min-w-0 gap-4 @min-[64rem]:grid-cols-[minmax(0,1.45fr)_minmax(18rem,0.8fr)]\">\n        <section aria-labelledby={scheduleId} className=\"min-h-[28rem] min-w-0\">\n          <h3 id={scheduleId} className=\"mb-2 text-sm font-medium\">\n            {copy.schedule}\n          </h3>\n          <TimelineGantt<TGanttMeta> {...gantt} hideHeading className={cn(\"h-[26rem]\", gantt.className)} />\n        </section>\n        <section aria-labelledby={conversationId} className=\"min-h-[28rem] min-w-0\">\n          <h3 id={conversationId} className=\"mb-2 text-sm font-medium\">\n            {copy.conversation}\n          </h3>\n          <ActivityChat<TChatMeta> {...chat} className={cn(\"h-[26rem]\", chat.className)} />\n        </section>\n      </div>\n      <section aria-labelledby={ledgerId} className=\"min-w-0\">\n        <h3 id={ledgerId} className=\"mb-2 text-sm font-medium\">\n          {copy.ledger}\n        </h3>\n        <DataTableReorder<TRow, TTableMeta> {...table} />\n      </section>\n      {approval ? (\n        <section aria-labelledby={approvalId} className=\"flex items-center gap-3\">\n          <h3 id={approvalId} className=\"text-sm font-medium\">\n            {copy.approval}\n          </h3>\n          <InlineApproveButton {...approval} />\n        </section>\n      ) : null}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/portfolio-desk.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Mesa de portafolio",
+    "descriptionEs": "Cronograma, tabla, conversación y aprobación en una sola mesa. Los datos los pone el anfitrión.",
+    "preview": "app/examples/portfolio-desk/preview.tsx",
+    "previewHref": "/examples/portfolio-desk",
+    "examples": [
+      {
+        "title": "Taller Bruma",
+        "href": "/examples/portfolio-desk",
+        "description": "Las cuatro piezas con encargos inventados."
+      },
+      {
+        "title": "Marco de estrés",
+        "href": "/examples/portfolio-desk/stress",
+        "description": "320px, vacío, carga, error y un título de 60 caracteres."
+      }
+    ],
+    "usage": "<PortfolioDesk\n  title=\"Taller Bruma\"\n  gantt={{ items, workstreams, now, onSelect }}\n  table={{ rows, columns, onSortChange }}\n  chat={{ messages, people, currentUserId, onSend, onPlay }}\n  approval={{ onConfirm }}\n/>",
+    "api": [
+      {
+        "name": "gantt / table / chat",
+        "type": "the piece props",
+        "description": "Passed through. Each collection keeps its own meta type."
+      },
+      {
+        "name": "approval",
+        "type": "InlineApproveButtonProps",
+        "description": "Optional. Omit it to hide the approval row."
+      },
+      {
+        "name": "title / subtitle / labels",
+        "type": "strings",
+        "description": "Spanish region names. portfolioDeskLabelsEn is the English set."
+      }
+    ]
+  },
+  "docs": "Clean-room composition. The desk does not fetch and does not merge the three payloads: gantt meta, table meta, and chat meta stay separate. Pass the same props you would pass to each piece. Approval is optional. Answer no if the CLI asks to overwrite a primitive the host already has, or any of the four pieces when they are already installed. The item ships no theme. No mockup source, copy, colors, or assets were copied. The catalog demo is Taller Bruma, a fictional shop.",
+  "categories": [
+    "block",
+    "table"
+  ],
+  "type": "registry:block"
+}
