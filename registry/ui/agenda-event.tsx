@@ -152,7 +152,7 @@ export function AgendaEventCard<TMeta extends Record<string, unknown> = Record<s
       className={cn(
         "relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-md border border-border border-s-2 bg-card text-card-foreground shadow-sm",
         agendaToneEdge(category?.tone),
-        selected && "z-20 h-auto max-h-96 overflow-y-auto ring-2 ring-ring",
+        selected && "z-20 ring-2 ring-ring",
         density === "compact" && "shadow-none",
         className,
       )}

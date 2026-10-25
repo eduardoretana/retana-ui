@@ -378,7 +378,6 @@ export function Agenda<TMeta extends Record<string, unknown> = Record<string, un
               selectedId={selectedId}
               className={gridClassName}
               eventClassName={eventClassName}
-              detail={detail}
               onSelect={select}
               onReschedule={reschedule}
               onCreate={requestCreate}
@@ -407,6 +406,18 @@ export function Agenda<TMeta extends Record<string, unknown> = Record<string, un
             />
           ) : null}
         </div>
+        {!narrow && view !== "month" && selected ? (
+          <aside
+            data-slot="agenda-detail-panel"
+            aria-label={selected.title}
+            className="flex w-80 min-h-0 shrink-0 flex-col overflow-y-auto border-s border-border bg-card"
+          >
+            <h3 className="px-3 pt-3 text-sm font-semibold break-words" dir="auto">
+              {selected.title}
+            </h3>
+            {detail}
+          </aside>
+        ) : null}
         {narrow ? null : sidebar}
       </div>
       {narrow ? (
@@ -456,7 +467,6 @@ function TimeGrid<TMeta extends Record<string, unknown>>({
   selectedId,
   className,
   eventClassName,
-  detail,
   onSelect,
   onReschedule,
   onCreate,
@@ -478,7 +488,6 @@ function TimeGrid<TMeta extends Record<string, unknown>>({
   selectedId: string | null
   className?: string
   eventClassName?: string
-  detail: React.ReactNode
   onSelect: (id: string | null) => void
   onReschedule: (id: string, move: AgendaMove, source: AgendaChangeSource) => void
   onCreate: (draft: AgendaEventDraft) => void
@@ -539,9 +548,7 @@ function TimeGrid<TMeta extends Record<string, unknown>>({
         onSelect={onSelect}
         onReschedule={onReschedule}
         className={eventClassName}
-      >
-        {event.id === selectedId ? detail : null}
-      </AgendaEventCard>
+      />
     )
   }
 
@@ -695,10 +702,11 @@ function TimeGrid<TMeta extends Record<string, unknown>>({
                     const event = events.find((item) => item.id === box.eventId)
                     if (!event) return null
                     const selected = event.id === selectedId
+                    const frame = selected ? { ...box, inlineStart: 0, inlineSize: 1 } : box
                     return (
                       <EventFrame
                         key={event.id}
-                        box={box}
+                        box={frame}
                         selected={selected}
                         readOnly={readOnly}
                         hourHeight={hourHeight}
@@ -720,17 +728,25 @@ function TimeGrid<TMeta extends Record<string, unknown>>({
               className="pointer-events-none absolute z-30"
               style={{ top: `${nowTop * 100}%`, insetInlineStart: 0, insetInlineEnd: 0 }}
             >
-              <span className="absolute start-1 -translate-y-1/2 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-medium text-primary-foreground tabular-nums">
+              <span className="absolute start-1 z-10 -translate-y-1/2 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-medium text-primary-foreground shadow-sm tabular-nums">
                 {formatClock(now, timeZone, locale)}
               </span>
-              <span className={cn("absolute top-0 h-px bg-primary", !reduced && "motion-safe:transition-none")} style={{ insetInlineStart: GUTTER, insetInlineEnd: 0 }} />
+              <span
+                className={cn("absolute top-0 h-0.5 bg-primary", !reduced && "motion-safe:transition-none")}
+                style={{ insetInlineStart: GUTTER, insetInlineEnd: 0 }}
+              />
+              <span
+                className="absolute size-2 -translate-y-1/2 rounded-full bg-primary"
+                style={{
+                  insetInlineStart: `calc(${GUTTER} + (100% - ${GUTTER}) * ${Math.max(dates.indexOf(today), 0)} / ${dates.length})`,
+                }}
+              />
               <span className="sr-only">
                 {labels.now}, {formatClock(now, timeZone, locale)}
               </span>
             </div>
           ) : null}
         </div>
-        {selectedId ? <div aria-hidden className="h-80 shrink-0" /> : null}
       </div>
     </div>
   )
@@ -765,9 +781,8 @@ function EventFrame<TMeta extends Record<string, unknown>>({
       className="pointer-events-auto absolute"
       style={{
         top: `${box.top * 100}%`,
-        height: selected ? "auto" : `${box.height * 100}%`,
-        maxHeight: selected ? "24rem" : undefined,
-        minHeight: selected ? "12rem" : `max(${box.height * 100}%, 1.75rem)`,
+        height: `${box.height * 100}%`,
+        minHeight: `max(${box.height * 100}%, 1.75rem)`,
         insetInlineStart: `calc(${box.inlineStart * 100}% + 2px)`,
         width: `calc(${box.inlineSize * 100}% - 4px)`,
         zIndex: selected ? 20 : 1,
