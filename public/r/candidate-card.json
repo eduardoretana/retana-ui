@@ -44,6 +44,38 @@
     "descriptionEs": "Avatar, fecha de aplicación, puntaje, avance por etapa y agregar evaluación.",
     "preview": "app/examples/candidate-card/preview.tsx",
     "previewHref": "/examples/candidate-card",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "readonly",
+        "label": "Solo lectura",
+        "labelEn": "Read only"
+      },
+      {
+        "id": "offer",
+        "label": "Oferta",
+        "labelEn": "Offer"
+      }
+    ],
     "examples": [
       {
         "title": "Tarjeta",
@@ -54,6 +86,36 @@
         "title": "Marco de estrés",
         "href": "/examples/candidate-card/stress",
         "description": "Nombre vacío, token largo, emoji y 320px."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/candidate-card?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/candidate-card?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/candidate-card?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/candidate-card?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Solo lectura",
+        "href": "/examples/candidate-card?scene=readonly",
+        "description": "Read only"
+      },
+      {
+        "title": "Oferta",
+        "href": "/examples/candidate-card?scene=offer",
+        "description": "Offer"
       }
     ],
     "usage": "<CandidateCard\n  candidate={candidate}\n  stageId={getStage(candidate)}\n  stages={stages}\n  canMove={canMove}\n  onMoveCandidate={(id, from, to) => save(id, from, to)}\n  onCreateAssessment={openForm}\n  renderActions={({ candidate }) => <CopyLink id={candidate.id} />}\n/>",

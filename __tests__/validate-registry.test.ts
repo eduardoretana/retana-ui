@@ -26,15 +26,21 @@ function passingItem(): RegistryItemInput {
   }
 }
 
-function input(item: RegistryItemInput, source = "export const Widget = () => null\n") {
+function input(
+  item: RegistryItemInput,
+  source = "export const Widget = () => null\n",
+  extra: Record<string, string> = {},
+) {
+  const files: Record<string, string> = {
+    "registry/ui/widget.tsx": source,
+    "app/examples/widget/preview.tsx": "export default () => null\n",
+    ...extra,
+  }
   return validateRegistry({
     registry: { name: "retana", items: [item] },
     files: { "registry/ui/widget.tsx": source },
-    existingPaths: [
-      "registry/ui/widget.tsx",
-      "app/examples/widget/preview.tsx",
-      "app/examples/widget/page.tsx",
-    ],
+    existingPaths: ["app/examples/widget/page.tsx", ...Object.keys(files)],
+    readFile: (filePath) => files[filePath] ?? null,
   })
 }
 
@@ -63,6 +69,53 @@ describe("validateRegistry", () => {
     expect(input(passingItem(), "background: oklch(1 0 0)\n").join("\n")).toMatch(/color function/)
     expect(input(passingItem(), "background: color-mix(in oklch, red 18%, white)\n").join("\n")).toMatch(/color function/)
     expect(input(passingItem(), "background: color-mix(in oklch, var(--chart-1) 18%, var(--background))\n")).toEqual([])
+  })
+
+  it("requires fixtures, ScenePreview, and a distinct demo only when meta.scenes is set", () => {
+    const item = passingItem()
+    item.meta = {
+      ...item.meta,
+      scenes: ["filled", "empty", "loading"],
+    }
+    const preview = 'export default () => <ScenePreview scenes={scenes} hero="filled" />\n'
+    const demo = "export const Demo = () => <SceneDeck scenes={scenes} />\n"
+    const fixtures = "export const filled = {}\nexport const empty = {}\nexport const loading = {}\n"
+    const scenes = "export const scenes = []\n"
+    const missing = input(item, "export const Widget = () => null\n", {
+      "app/examples/widget/preview.tsx": preview,
+      "app/examples/widget/demo.tsx": demo,
+      "app/examples/widget/fixtures.ts": fixtures,
+      "app/examples/widget/scenes.tsx": scenes,
+    })
+    expect(missing.join("\n")).toMatch(/missing "error"/)
+    expect(missing.join("\n")).toMatch(/must export error/)
+
+    item.meta = {
+      ...item.meta,
+      scenes: [
+        { id: "filled", label: "Lleno" },
+        { id: "empty", label: "Vacío" },
+        { id: "loading", label: "Cargando" },
+        { id: "error", label: "Error" },
+      ],
+    }
+    expect(
+      input(item, "export const Widget = () => null\n", {
+        "app/examples/widget/preview.tsx": preview,
+        "app/examples/widget/demo.tsx": demo,
+        "app/examples/widget/fixtures.ts": `${fixtures}export const error = {}\n`,
+        "app/examples/widget/scenes.tsx": scenes,
+      }),
+    ).toEqual([])
+
+    expect(
+      input(item, "export const Widget = () => null\n", {
+        "app/examples/widget/preview.tsx": preview,
+        "app/examples/widget/demo.tsx": preview,
+        "app/examples/widget/fixtures.ts": `${fixtures}export { error }\nconst error = {}\n`,
+        "app/examples/widget/scenes.tsx": scenes,
+      }).join("\n"),
+    ).toMatch(/identical/)
   })
 
   it("accepts the repository registry", () => {

@@ -39,6 +39,51 @@ export type UsageMeterClassNames = {
   item?: string
 }
 
+export type UsageMeterLabels = {
+  usedOf: (total: string, limit: string) => string
+  captionUsed: (unit: string, limit: string) => string
+  captionFree: (unit: string) => string
+  captionOver: (unit: string) => string
+  captionSegment: (unit: string, label: string, share: number) => string
+  badgeFree: (amount: string) => string
+  badgeNear: string
+  badgeOver: (amount: string) => string
+  legend: (label: string) => string
+  summary: (input: {
+    label: string
+    total: string
+    limit: string
+    segments: string
+    status: "ok" | "near" | "over"
+    free: string
+    over: string
+  }) => string
+  announcedOver: (amount: string) => string
+  announcedNear: (amount: string) => string
+  announcedOk: (amount: string) => string
+}
+
+export const usageMeterLabels: UsageMeterLabels = {
+  usedOf: (total, limit) => `${total} of ${limit} used`,
+  captionUsed: (unit, limit) => `${unit} of ${limit} used`,
+  captionFree: (unit) => `${unit} free`,
+  captionOver: (unit) => `${unit} over the limit`,
+  captionSegment: (unit, label, share) => `${unit} in ${label} · ${share}% of plan`,
+  badgeFree: (amount) => `${amount} free`,
+  badgeNear: "Almost full",
+  badgeOver: (amount) => `${amount} over`,
+  legend: (label) => `${label} by category`,
+  summary: ({ label, total, limit, segments, status, free, over }) =>
+    `${label}: ${total} of ${limit} used. ${segments}. ${status === "over" ? `Over the limit by ${over}.` : `${free} free${status === "near" ? ", almost full" : ""}.`}`,
+  announcedOver: (amount) => `Over the plan limit by ${amount}.`,
+  announcedNear: (amount) => `Almost full. ${amount} free.`,
+  announcedOk: (amount) => `Under the limit. ${amount} free.`,
+}
+
+function resolveUsageLabels(partial?: Partial<UsageMeterLabels>): UsageMeterLabels {
+  return { ...usageMeterLabels, ...partial }
+}
+
 export type UsageMeterProps = {
   label: string
   segments: UsageMeterSegment[]
@@ -48,6 +93,8 @@ export type UsageMeterProps = {
   freeLabel?: string
   overLabel?: string
   warnAt?: number
+  /** Captions, badge, and announcements. English is the default. */
+  labels?: Partial<UsageMeterLabels>
   className?: string
   classNames?: UsageMeterClassNames
 }
@@ -338,9 +385,11 @@ export function UsageMeter({
   freeLabel = "Free",
   overLabel = "Over limit",
   warnAt = 0.9,
+  labels: labelOverrides,
   className,
   classNames,
 }: UsageMeterProps) {
+  const labels = resolveUsageLabels(labelOverrides)
   const { reduced, hydrated } = useReducedMotionSafe()
   const root = React.useRef<HTMLDivElement>(null)
   const trackRef = React.useRef<HTMLDivElement>(null)
@@ -481,12 +530,22 @@ export function UsageMeter({
   const headline = ready ? (activeItem ? activeItem.value : total) : 0
   const share = activeItem ? Math.round((activeItem.value / limit) * 100) : 0
   const caption = !activeItem
-    ? `${unit} of ${limitText} used`
+    ? labels.captionUsed(unit, limitText)
     : activeItem.id === "free"
-      ? `${unit} ${status === "over" ? "over the limit" : "free"}`
-      : `${unit} in ${activeItem.label} · ${share}% of plan`
-  const badge = status === "over" ? `${format(over)} over` : status === "near" ? "Almost full" : `${format(free)} free`
-  const summary = `${label}: ${format(total)} of ${limitText} used. ${segments.map((segment) => `${segment.label} ${format(segment.value)}`).join(", ")}. ${status === "over" ? `Over the limit by ${format(over)}.` : `${format(free)} free${status === "near" ? ", almost full" : ""}.`}`
+      ? status === "over"
+        ? labels.captionOver(unit)
+        : labels.captionFree(unit)
+      : labels.captionSegment(unit, activeItem.label, share)
+  const badge = status === "over" ? labels.badgeOver(format(over)) : status === "near" ? labels.badgeNear : labels.badgeFree(format(free))
+  const summary = labels.summary({
+    label,
+    total: format(total),
+    limit: limitText,
+    segments: segments.map((segment) => `${segment.label} ${format(segment.value)}`).join(", "),
+    status,
+    free: format(free),
+    over: format(over),
+  })
   const notice = status === "over" ? `over:${over}` : status
   const [announced, setAnnounced] = React.useState({ notice, message: "" })
   if (announced.notice !== notice) {
@@ -494,10 +553,10 @@ export function UsageMeter({
       notice,
       message:
         status === "over"
-          ? `Over the plan limit by ${format(over)}.`
+          ? labels.announcedOver(format(over))
           : status === "near"
-            ? `Almost full. ${format(free)} free.`
-            : `Under the limit. ${format(free)} free.`,
+            ? labels.announcedNear(format(free))
+            : labels.announcedOk(format(free)),
     })
   }
 
@@ -518,7 +577,7 @@ export function UsageMeter({
       </div>
       <p className="m-0 flex min-w-0 items-baseline gap-2">
         <span className="sr-only">
-          {format(total)} of {limitText} used
+          {labels.usedOf(format(total), limitText)}
         </span>
         <span className="shrink-0 text-3xl leading-none font-medium" aria-hidden="true">
           <Ticker value={headline} decimals={decimals} reduced={reduced} />
@@ -564,7 +623,7 @@ export function UsageMeter({
         ref={legend}
         data-slot="usage-meter-legend"
         role="group"
-        aria-label={`${label} by category`}
+        aria-label={labels.legend(label)}
         onKeyDown={onLegendKey}
         className={cn("grid grid-cols-[repeat(auto-fit,minmax(108px,1fr))] gap-0.5", classNames?.legend)}
       >

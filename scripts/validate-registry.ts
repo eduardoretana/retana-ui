@@ -1,6 +1,8 @@
 import fs from "node:fs"
 import path from "node:path"
 
+import { exportedBindings, PLP_REQUIRED_SCENES, plpSceneId, type PlpSceneInput } from "../lib/plp.ts"
+
 const SOURCE_ROOTS = ["registry/ui", "registry/blocks", "registry/hooks", "registry/lib"]
 
 const PALETTE =
@@ -39,6 +41,7 @@ export type RegistryItemInput = {
     preview?: string
     previewHref?: string
     examples?: { title?: string; href?: string; description?: string }[]
+    scenes?: PlpSceneInput[]
     api?: { name?: string; type?: string; description?: string }[]
     usage?: string
   }
@@ -57,6 +60,8 @@ export type ValidateRegistryOptions = {
   files: Record<string, string>
   /** Repo-relative paths that exist (previews, example pages, item sources). */
   existingPaths: Iterable<string>
+  /** Reads a repo-relative file. Required to check PLP fixtures when `meta.scenes` is set. */
+  readFile?: (repoPath: string) => string | null
 }
 
 const ITEM_TYPES = new Set([
@@ -80,7 +85,7 @@ function hasCssVars(value: unknown): boolean {
 }
 
 function examplePagePath(href: string) {
-  const clean = href.replace(/\/$/, "")
+  const clean = href.split(/[?#]/)[0]!.replace(/\/$/, "")
   return `app${clean}/page.tsx`
 }
 
@@ -148,10 +153,68 @@ function scanSource(filePath: string, source: string) {
   return errors
 }
 
+function validatePlp(item: RegistryItemInput, existing: Set<string>, readFile: ValidateRegistryOptions["readFile"], errors: string[]) {
+  const scenes = item.meta?.scenes
+  if (scenes == null) return
+  const label = item.name || "(unnamed item)"
+  if (!Array.isArray(scenes) || scenes.length === 0) {
+    errors.push(`${label} meta.scenes must list the PLP scene ids.`)
+    return
+  }
+  const ids = scenes.map((scene) => plpSceneId(scene)).filter(Boolean)
+  for (const required of PLP_REQUIRED_SCENES) {
+    if (!ids.includes(required)) errors.push(`${label} meta.scenes is missing "${required}".`)
+  }
+  const preview = item.meta?.preview
+  if (!preview) return
+  const dir = preview.split("/").slice(0, -1).join("/")
+  const fixturesPath = `${dir}/fixtures.ts`
+  const scenesPath = `${dir}/scenes.tsx`
+  const demoPath = `${dir}/demo.tsx`
+  const read = (filePath: string) => {
+    if (!existing.has(filePath)) return null
+    return readFile?.(filePath) ?? null
+  }
+  const fixturesSource = read(fixturesPath)
+  const scenesSource = read(scenesPath)
+  const previewSource = read(preview)
+  const demoSource = read(demoPath)
+
+  if (fixturesSource == null) {
+    errors.push(`${label} PLP fixture file does not exist: ${fixturesPath}`)
+  } else {
+    const names = exportedBindings(fixturesSource)
+    for (const required of PLP_REQUIRED_SCENES) {
+      if (!names.has(required)) errors.push(`${label} ${fixturesPath} must export ${required}.`)
+    }
+  }
+  if (scenesSource == null) {
+    errors.push(`${label} PLP scenes file does not exist: ${scenesPath}`)
+  } else if (!/export\s+const\s+scenes\b/.test(scenesSource)) {
+    errors.push(`${label} ${scenesPath} must export const scenes.`)
+  }
+  if (previewSource == null) {
+    errors.push(`${label} PLP preview could not be read: ${preview}`)
+  } else if (!previewSource.includes("ScenePreview")) {
+    errors.push(`${label} ${preview} must render ScenePreview.`)
+  }
+  if (demoSource == null) {
+    errors.push(`${label} PLP demo file does not exist: ${demoPath}`)
+  } else {
+    if (previewSource != null && demoSource === previewSource) {
+      errors.push(`${label} demo.tsx is identical to preview.tsx. The deck and the thumbnail are different files.`)
+    }
+    if (!demoSource.includes("SceneDeck")) {
+      errors.push(`${label} ${demoPath} must render SceneDeck.`)
+    }
+  }
+}
+
 export function validateRegistry({
   registry,
   files,
   existingPaths,
+  readFile,
 }: ValidateRegistryOptions) {
   const errors: string[] = []
   const existing = new Set(existingPaths)
@@ -231,6 +294,8 @@ export function validateRegistry({
     if (!item.files?.length) {
       errors.push(`${label} needs at least one file under registry/.`)
     }
+    validatePlp(item, existing, readFile, errors)
+
     for (const file of item.files ?? []) {
       const filePath = file.path ?? ""
       const allowed = SOURCE_ROOTS.some((root) => filePath.startsWith(`${root}/`))
@@ -281,5 +346,14 @@ export function validateRegistryTree(root: string) {
   const appFiles: string[] = []
   walk(path.join(root, "app"), root, appFiles)
   existing.push(...appFiles)
-  return validateRegistry({ registry, files, existingPaths: existing })
+  return validateRegistry({
+    registry,
+    files,
+    existingPaths: existing,
+    readFile: (repoPath) => {
+      const abs = path.join(root, repoPath)
+      if (!fs.existsSync(abs) || !fs.statSync(abs).isFile()) return null
+      return fs.readFileSync(abs, "utf8")
+    },
+  })
 }
