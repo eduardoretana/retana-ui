@@ -24709,6 +24709,658 @@
       ]
     },
     {
+        "name": "agent-graph",
+        "type": "registry:ui",
+        "title": "Agent graph",
+        "description": "Who is calling whom on one order. Busy links are thicker. An agent waiting on you is marked. This is not the launch tree.",
+        "author": "Eduardo Retana",
+        "registryDependencies": [
+          "badge",
+          "button",
+          "skeleton"
+        ],
+        "categories": [
+          "agents"
+        ],
+        "meta": {
+          "titleEs": "Red de agentes",
+          "descriptionEs": "Quién llama a quién en un pedido. El enlace más cargado se nota, y quien te espera queda marcado. No es el árbol de quién lanzó a quién.",
+          "preview": "app/examples/agent-graph/preview.tsx",
+          "previewHref": "/examples/agent-graph",
+          "scenes": [
+            {
+              "id": "filled",
+              "label": "Lleno",
+              "labelEn": "Filled"
+            },
+            {
+              "id": "empty",
+              "label": "Vacío",
+              "labelEn": "Empty"
+            },
+            {
+              "id": "loading",
+              "label": "Cargando",
+              "labelEn": "Loading"
+            },
+            {
+              "id": "error",
+              "label": "Error",
+              "labelEn": "Error"
+            },
+            {
+              "id": "waiting",
+              "label": "En espera",
+              "labelEn": "Waiting"
+            },
+            {
+              "id": "blocked",
+              "label": "Bloqueada",
+              "labelEn": "Blocked"
+            }
+          ],
+          "examples": [
+            {
+              "title": "La red del viernes",
+              "href": "/examples/agent-graph",
+              "description": "Mariana, Bruma, Horno y Caja alrededor del pedido PED-1048."
+            },
+            {
+              "title": "Estrés",
+              "href": "/examples/agent-graph/stress",
+              "description": "Vacío, textos largos, RTL y diez nodos."
+            }
+          ],
+          "usage": "<AgentGraph nodes={nodes} links={links} onOpen={open} />",
+          "api": [
+            {
+              "name": "nodes",
+              "type": "GraphNode<TMeta>[]",
+              "description": "id, name, kind (person, agent, tool), detail, pulse (quiet, working, waiting, failed), column, row. meta is opaque."
+            },
+            {
+              "name": "links",
+              "type": "GraphLink<TMeta>[]",
+              "description": "id, from, to, calls, tone (call, answer, blocked). Thickness follows the call count. The map does not animate."
+            },
+            {
+              "name": "onOpen",
+              "type": "(id: string) => void",
+              "description": "Opens a node. The piece does not move anyone."
+            },
+            {
+              "name": "loading / error",
+              "type": "boolean / string",
+              "description": "Loading skeleton, or an alert when the map cannot be read."
+            },
+            {
+              "name": "labels",
+              "type": "Partial<AgentGraphLabels>",
+              "description": "Chrome copy. English is the default."
+            },
+            {
+              "name": "className / classNames",
+              "type": "string",
+              "description": "Root class and slot classes for the map and each node."
+            }
+          ]
+        },
+        "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. No es agent-tree: muestra llamadas entre pares, no quién lanzó a quién.",
+        "files": [
+          {
+            "path": "registry/ui/agent-graph.tsx",
+            "type": "registry:component",
+            "target": "@ui/agent-graph.tsx"
+          }
+        ]
+      },
+      {
+        "name": "agent-cursors",
+        "type": "registry:ui",
+        "title": "Agent cursors",
+        "description": "Named pointers on a shared note. A suggestion stays until someone accepts it. Someone can be away.",
+        "author": "Eduardo Retana",
+        "dependencies": [
+          "lucide-react"
+        ],
+        "registryDependencies": [
+          "badge",
+          "button",
+          "skeleton"
+        ],
+        "categories": [
+          "agents"
+        ],
+        "meta": {
+          "titleEs": "Cursores de agentes",
+          "descriptionEs": "Punteros con nombre sobre una nota compartida. La sugerencia se queda hasta que alguien la acepta. Alguien puede estar ausente.",
+          "preview": "app/examples/agent-cursors/preview.tsx",
+          "previewHref": "/examples/agent-cursors",
+          "scenes": [
+            {
+              "id": "filled",
+              "label": "Lleno",
+              "labelEn": "Filled"
+            },
+            {
+              "id": "empty",
+              "label": "Vacío",
+              "labelEn": "Empty"
+            },
+            {
+              "id": "loading",
+              "label": "Cargando",
+              "labelEn": "Loading"
+            },
+            {
+              "id": "error",
+              "label": "Error",
+              "labelEn": "Error"
+            },
+            {
+              "id": "accepted",
+              "label": "Aceptada",
+              "labelEn": "Accepted"
+            },
+            {
+              "id": "away",
+              "label": "Ausentes",
+              "labelEn": "Away"
+            }
+          ],
+          "examples": [
+            {
+              "title": "La nota del pedido",
+              "href": "/examples/agent-cursors",
+              "description": "Bruma propone dejar el anticipo en $18,400.00 MXN. Caja salió a cobrar."
+            },
+            {
+              "title": "Estrés",
+              "href": "/examples/agent-cursors/stress",
+              "description": "Vacío, textos largos, RTL y diez marcas."
+            }
+          ],
+          "usage": "<AgentCursors paragraphs={paragraphs} cursors={cursors} suggestions={suggestions} onAccept={accept} />",
+          "api": [
+            {
+              "name": "paragraphs",
+              "type": "CursorParagraph[]",
+              "description": "id and text. The host owns the note."
+            },
+            {
+              "name": "cursors",
+              "type": "CursorMark<TMeta>[]",
+              "description": "id, name, x and y from 0 to 100, note, away. meta is opaque. The host owns the position."
+            },
+            {
+              "name": "suggestions",
+              "type": "CursorSuggestion<TMeta>[]",
+              "description": "id, cursorId, text, accepted. Accepting does not rewrite the note by itself."
+            },
+            {
+              "name": "onFocus / onAccept",
+              "type": "(id: string) => void",
+              "description": "Focus a pointer, or accept a suggestion."
+            },
+            {
+              "name": "loading / error",
+              "type": "boolean / string",
+              "description": "Loading skeleton, or an alert when the note cannot be opened."
+            },
+            {
+              "name": "labels",
+              "type": "Partial<AgentCursorsLabels>",
+              "description": "Chrome copy. English is the default."
+            }
+          ]
+        },
+        "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos.",
+        "files": [
+          {
+            "path": "registry/ui/agent-cursors.tsx",
+            "type": "registry:component",
+            "target": "@ui/agent-cursors.tsx"
+          }
+        ]
+      },
+      {
+        "name": "fan-out-grid",
+        "type": "registry:ui",
+        "title": "Fan-out grid",
+        "description": "One job split into cells. A failed cell can be tried again. The grid does not shine.",
+        "author": "Eduardo Retana",
+        "dependencies": [
+          "lucide-react"
+        ],
+        "registryDependencies": [
+          "badge",
+          "button",
+          "skeleton"
+        ],
+        "categories": [
+          "agents"
+        ],
+        "meta": {
+          "titleEs": "Abanico de trabajo",
+          "descriptionEs": "Un trabajo partido en celdas. La que falló se puede reintentar. La rejilla no brilla.",
+          "preview": "app/examples/fan-out-grid/preview.tsx",
+          "previewHref": "/examples/fan-out-grid",
+          "scenes": [
+            {
+              "id": "filled",
+              "label": "Lleno",
+              "labelEn": "Filled"
+            },
+            {
+              "id": "empty",
+              "label": "Vacío",
+              "labelEn": "Empty"
+            },
+            {
+              "id": "loading",
+              "label": "Cargando",
+              "labelEn": "Loading"
+            },
+            {
+              "id": "error",
+              "label": "Error",
+              "labelEn": "Error"
+            },
+            {
+              "id": "retrying",
+              "label": "Reintento",
+              "labelEn": "Retry"
+            },
+            {
+              "id": "clear",
+              "label": "Listo",
+              "labelEn": "Clear"
+            }
+          ],
+          "examples": [
+            {
+              "title": "Ocho muestras para León",
+              "href": "/examples/fan-out-grid",
+              "description": "El pedido PED-1051 repartido entre Horno y Caja. La tapa no cerró."
+            },
+            {
+              "title": "Estrés",
+              "href": "/examples/fan-out-grid/stress",
+              "description": "Vacío, textos largos, RTL y diez piezas."
+            }
+          ],
+          "usage": "<FanOutGrid job={job} cells={cells} onOpen={open} onRetry={retry} />",
+          "api": [
+            {
+              "name": "cells",
+              "type": "FanCell<TMeta>[]",
+              "description": "id, title, worker, status (waiting, running, retrying, done, failed), detail. meta is opaque."
+            },
+            {
+              "name": "job",
+              "type": "string",
+              "description": "What the cells belong to."
+            },
+            {
+              "name": "onOpen / onRetry",
+              "type": "(id: string) => void",
+              "description": "Open a cell, or try a failed or retrying one again."
+            },
+            {
+              "name": "loading / error",
+              "type": "boolean / string",
+              "description": "Loading skeleton, or an alert when the grid cannot be read."
+            },
+            {
+              "name": "labels",
+              "type": "Partial<FanOutGridLabels>",
+              "description": "Chrome copy. English is the default."
+            },
+            {
+              "name": "className / classNames",
+              "type": "string",
+              "description": "Root class and slot classes."
+            }
+          ]
+        },
+        "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos.",
+        "files": [
+          {
+            "path": "registry/ui/fan-out-grid.tsx",
+            "type": "registry:component",
+            "target": "@ui/fan-out-grid.tsx"
+          }
+        ]
+      },
+      {
+        "name": "parallel-attempts",
+        "type": "registry:ui",
+        "title": "Parallel attempts",
+        "description": "The same task tried a few ways at once. The best finished score is marked. A tie does not pick a winner.",
+        "author": "Eduardo Retana",
+        "dependencies": [
+          "lucide-react"
+        ],
+        "registryDependencies": [
+          "badge",
+          "button",
+          "progress",
+          "skeleton"
+        ],
+        "categories": [
+          "agents"
+        ],
+        "meta": {
+          "titleEs": "Intentos en paralelo",
+          "descriptionEs": "La misma tarea, de varias maneras a la vez. El mejor puntaje terminado queda marcado. Un empate no elige solo.",
+          "preview": "app/examples/parallel-attempts/preview.tsx",
+          "previewHref": "/examples/parallel-attempts",
+          "scenes": [
+            {
+              "id": "filled",
+              "label": "Lleno",
+              "labelEn": "Filled"
+            },
+            {
+              "id": "empty",
+              "label": "Vacío",
+              "labelEn": "Empty"
+            },
+            {
+              "id": "loading",
+              "label": "Cargando",
+              "labelEn": "Loading"
+            },
+            {
+              "id": "error",
+              "label": "Error",
+              "labelEn": "Error"
+            },
+            {
+              "id": "picked",
+              "label": "Elegido",
+              "labelEn": "Kept"
+            },
+            {
+              "id": "tied",
+              "label": "Empate",
+              "labelEn": "Tied"
+            },
+            {
+              "id": "failed",
+              "label": "Falló",
+              "labelEn": "Failed"
+            }
+          ],
+          "examples": [
+            {
+              "title": "La nota para Celaya",
+              "href": "/examples/parallel-attempts",
+              "description": "Tres maneras de escribir el pedido PED-990. Bruma va adelante."
+            },
+            {
+              "title": "Estrés",
+              "href": "/examples/parallel-attempts/stress",
+              "description": "Vacío, textos largos, RTL y diez intentos."
+            }
+          ],
+          "usage": "<ParallelAttempts task={task} attempts={attempts} pickedId={pickedId} onPick={pick} />",
+          "api": [
+            {
+              "name": "attempts",
+              "type": "Attempt<TMeta>[]",
+              "description": "id, agent, approach, status (running, done, failed), progress from 0 to 1, score from 0 to 100, note. meta is opaque."
+            },
+            {
+              "name": "pickedId",
+              "type": "string | null",
+              "description": "The attempt a person kept. The piece does not store it."
+            },
+            {
+              "name": "onPick",
+              "type": "(id: string) => void",
+              "description": "Keep a finished attempt. A tie leaves the choice open."
+            },
+            {
+              "name": "loading / error",
+              "type": "boolean / string",
+              "description": "Loading skeleton, or an alert when the attempts cannot be read."
+            },
+            {
+              "name": "labels",
+              "type": "Partial<ParallelAttemptsLabels>",
+              "description": "Chrome copy. English is the default."
+            },
+            {
+              "name": "className / classNames",
+              "type": "string",
+              "description": "Root class and slot classes."
+            }
+          ]
+        },
+        "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos.",
+        "files": [
+          {
+            "path": "registry/ui/parallel-attempts.tsx",
+            "type": "registry:component",
+            "target": "@ui/parallel-attempts.tsx"
+          }
+        ]
+      },
+      {
+        "name": "conflict-radar",
+        "type": "registry:ui",
+        "title": "Conflict radar",
+        "description": "Where two agents rewrote the same thing. A person keeps one wording. The order files only when every clash is settled.",
+        "author": "Eduardo Retana",
+        "registryDependencies": [
+          "badge",
+          "button",
+          "skeleton"
+        ],
+        "categories": [
+          "agents"
+        ],
+        "meta": {
+          "titleEs": "Donde se cruzan",
+          "descriptionEs": "Donde dos agentes reescribieron lo mismo. Alguien se queda con una redacción. El pedido se archiva cuando cada cruce está resuelto.",
+          "preview": "app/examples/conflict-radar/preview.tsx",
+          "previewHref": "/examples/conflict-radar",
+          "scenes": [
+            {
+              "id": "filled",
+              "label": "Lleno",
+              "labelEn": "Filled"
+            },
+            {
+              "id": "empty",
+              "label": "Vacío",
+              "labelEn": "Empty"
+            },
+            {
+              "id": "loading",
+              "label": "Cargando",
+              "labelEn": "Loading"
+            },
+            {
+              "id": "error",
+              "label": "Error",
+              "labelEn": "Error"
+            },
+            {
+              "id": "settled",
+              "label": "Resuelto",
+              "labelEn": "Settled"
+            },
+            {
+              "id": "kiln",
+              "label": "Horno",
+              "labelEn": "Kiln"
+            }
+          ],
+          "examples": [
+            {
+              "title": "Anticipo y entrega",
+              "href": "/examples/conflict-radar",
+              "description": "Bruma y Caja no coinciden en el pedido PED-1048."
+            },
+            {
+              "title": "Estrés",
+              "href": "/examples/conflict-radar/stress",
+              "description": "Vacío, textos largos, RTL y diez cruces."
+            }
+          ],
+          "usage": "<ConflictRadar agents={agents} clashes={clashes} onKeep={keep} onFile={file} />",
+          "api": [
+            {
+              "name": "agents",
+              "type": "RadarAgent<TMeta>[]",
+              "description": "id, name, detail, working. meta is opaque."
+            },
+            {
+              "name": "clashes",
+              "type": "RadarClash<TMeta>[]",
+              "description": "id, topic, left and right claims (agentId, text), kept (left, right, or empty)."
+            },
+            {
+              "name": "onKeep",
+              "type": "(id: string, side: \"left\" | \"right\") => void",
+              "description": "Keep one wording. The other claim stays in the data."
+            },
+            {
+              "name": "onFile",
+              "type": "() => void",
+              "description": "File the order. Disabled while any clash is open."
+            },
+            {
+              "name": "loading / error",
+              "type": "boolean / string",
+              "description": "Loading skeleton, or an alert when a wording cannot be saved."
+            },
+            {
+              "name": "labels",
+              "type": "Partial<ConflictRadarLabels>",
+              "description": "Chrome copy. English is the default."
+            }
+          ]
+        },
+        "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos.",
+        "files": [
+          {
+            "path": "registry/ui/conflict-radar.tsx",
+            "type": "registry:component",
+            "target": "@ui/conflict-radar.tsx"
+          }
+        ]
+      },
+      {
+        "name": "decision-tree",
+        "type": "registry:ui",
+        "title": "Decision tree",
+        "description": "A fork the agent will not take alone. A risky option is marked, the agent's preference is marked, and a person can write another way.",
+        "author": "Eduardo Retana",
+        "registryDependencies": [
+          "badge",
+          "button",
+          "input",
+          "skeleton"
+        ],
+        "categories": [
+          "agents"
+        ],
+        "meta": {
+          "titleEs": "Qué camino",
+          "descriptionEs": "Una decisión que el agente no toma solo. La opción arriesgada queda marcada, también la que el agente elegiría, y una persona puede escribir otro camino.",
+          "preview": "app/examples/decision-tree/preview.tsx",
+          "previewHref": "/examples/decision-tree",
+          "scenes": [
+            {
+              "id": "filled",
+              "label": "Lleno",
+              "labelEn": "Filled"
+            },
+            {
+              "id": "empty",
+              "label": "Vacío",
+              "labelEn": "Empty"
+            },
+            {
+              "id": "loading",
+              "label": "Cargando",
+              "labelEn": "Loading"
+            },
+            {
+              "id": "error",
+              "label": "Error",
+              "labelEn": "Error"
+            },
+            {
+              "id": "taken",
+              "label": "Tomado",
+              "labelEn": "Taken"
+            },
+            {
+              "id": "written",
+              "label": "Escrito",
+              "labelEn": "Written"
+            }
+          ],
+          "examples": [
+            {
+              "title": "El horno 2",
+              "href": "/examples/decision-tree",
+              "description": "El viernes de Mariana Ruiz sigue abierto. La preferencia no decide sola."
+            },
+            {
+              "title": "Estrés",
+              "href": "/examples/decision-tree/stress",
+              "description": "Vacío, textos largos, RTL y diez opciones."
+            }
+          ],
+          "usage": "<DecisionTree forks={forks} path={path} onChoose={choose} onCustom={write} />",
+          "api": [
+            {
+              "name": "forks",
+              "type": "DecisionFork<TMeta>[]",
+              "description": "id, prompt, detail, options. An option has title, detail, risk (low, high), preferred, and an optional nextId."
+            },
+            {
+              "name": "path",
+              "type": "DecisionChoice[]",
+              "description": "Choices already taken, in order. A custom sentence ends the path."
+            },
+            {
+              "name": "onChoose",
+              "type": "(forkId: string, optionId: string) => void",
+              "description": "Take an option. The preference is a mark, not a click."
+            },
+            {
+              "name": "onCustom",
+              "type": "(forkId: string, text: string) => void",
+              "description": "Write another way. Empty text is ignored."
+            },
+            {
+              "name": "loading / error",
+              "type": "boolean / string",
+              "description": "Loading skeleton, or an alert when the path cannot be saved."
+            },
+            {
+              "name": "labels",
+              "type": "Partial<DecisionTreeLabels>",
+              "description": "Chrome copy. English is the default."
+            }
+          ]
+        },
+        "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. No es la bandeja de dos respuestas ni la compuerta con reloj.",
+        "files": [
+          {
+            "path": "registry/ui/decision-tree.tsx",
+            "type": "registry:component",
+            "target": "@ui/decision-tree.tsx"
+          }
+        ]
+      },
+    {
       "author": "Eduardo Retana",
       "name": "data-table-grouping",
       "type": "registry:ui",

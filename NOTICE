@@ -259,6 +259,20 @@ icons, assets, or internal strings were copied. The demos continue the same
 Guanajuato workshop scenario. Colors come from the host shadcn tokens.
 approval-card is not a tool receipt; tool calls stay on tool-approval.
 
+agent-graph, agent-cursors, fan-out-grid, parallel-attempts, conflict-radar,
+and decision-tree are a clean-room reading of public behavior descriptions on
+Affect UI (a call network that is not a launch tree, pointers and suggestions
+on a shared note, one job split into cells, several tries of the same task,
+overlaps to settle before filing, and a fork with a marked preference):
+
+  https://www.affectui.com/components
+
+Affect Pro was not purchased, fetched, or ported. No source, sample data,
+icons, assets, or internal strings were copied. The demos continue the same
+Guanajuato workshop scenario. Colors come from the host shadcn tokens.
+agent-graph is not agent-tree: it shows who is calling whom, not who launched
+whom.
+
 adaptive-table is a clean-room reimplementation from a behavior description
 only. No names, icons, or rows from that reference were copied. Columns drop,
 fold, and stretch to the container width.

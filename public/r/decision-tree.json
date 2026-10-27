@@ -1,0 +1,139 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "decision-tree",
+  "title": "Decision tree",
+  "author": "Eduardo Retana",
+  "description": "A fork the agent will not take alone. A risky option is marked, the agent's preference is marked, and a person can write another way.",
+  "registryDependencies": [
+    "badge",
+    "button",
+    "input",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/decision-tree.tsx",
+      "content": "\"use client\"\n\n/**\n * A fork the agent will not take alone. Clean-room reading of a public\n * behavior description: each option shows what would follow, a risky one is\n * marked, the agent's preference is marked, and a person picks the path or\n * writes another. No Affect source, sample data, icons, or assets were copied.\n */\n\nimport * as React from \"react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Input } from \"@/components/ui/input\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport type DecisionOption<TMeta = unknown> = {\n  id: string\n  title: string\n  detail?: string\n  risk?: \"low\" | \"high\"\n  /** The agent would take this one. A person still decides. */\n  preferred?: boolean\n  /** Fork to show after this option is taken. */\n  nextId?: string\n  meta?: TMeta\n}\n\nexport type DecisionFork<TMeta = unknown> = {\n  id: string\n  prompt: string\n  detail?: string\n  options: readonly DecisionOption<TMeta>[]\n}\n\nexport type DecisionChoice = {\n  forkId: string\n  optionId?: string\n  custom?: string\n}\n\nexport type DecisionTreeLabels = {\n  title: string\n  waiting: (count: number) => string\n  done: string\n  preferred: string\n  risk: Record<\"low\" | \"high\", string>\n  path: string\n  choose: (title: string) => string\n  custom: string\n  customNamed: string\n  write: string\n  empty: string\n  loading: string\n  chose: (title: string) => string\n  wrote: (text: string) => string\n}\n\nexport type DecisionTreeClassNames = {\n  root?: string\n  option?: string\n}\n\nexport type DecisionTreeProps<TMeta = unknown> = {\n  forks?: readonly DecisionFork<TMeta>[]\n  /** Choices already on the path, in order. */\n  path?: readonly DecisionChoice[]\n  loading?: boolean\n  error?: string\n  title?: string\n  onChoose?: (forkId: string, optionId: string) => void\n  onCustom?: (forkId: string, text: string) => void\n  className?: string\n  classNames?: DecisionTreeClassNames\n  labels?: Partial<DecisionTreeLabels>\n}\n\nconst treeLabels: DecisionTreeLabels = {\n  title: \"Which way\",\n  waiting: (count) => (count === 1 ? \"1 fork open\" : `${count} forks open`),\n  done: \"Path chosen\",\n  preferred: \"The agent would pick this\",\n  risk: { low: \"Low stakes\", high: \"Hard to undo\" },\n  path: \"Path so far\",\n  choose: (title) => `Choose “${title}”`,\n  custom: \"Write another way\",\n  customNamed: \"Another way\",\n  write: \"Use this wording\",\n  empty: \"Nothing is waiting on a decision.\",\n  loading: \"Loading the forks\",\n  chose: (title) => `Chose “${title}”`,\n  wrote: (text) => `Wrote “${text}”`,\n}\n\nfunction resolveLabels(partial?: Partial<DecisionTreeLabels>): DecisionTreeLabels {\n  return { ...treeLabels, ...partial, risk: { ...treeLabels.risk, ...partial?.risk } }\n}\n\nexport function openFork(forks: readonly DecisionFork[], path: readonly DecisionChoice[]) {\n  const byId = new Map(forks.map((fork) => [fork.id, fork]))\n  let current: DecisionFork | undefined = forks[0]\n  for (const choice of path) {\n    if (!current || choice.forkId !== current.id) break\n    if (choice.custom) return null\n    const option = current.options.find((item) => item.id === choice.optionId)\n    if (!option?.nextId) return null\n    current = byId.get(option.nextId)\n  }\n  return current ?? null\n}\n\nexport function DecisionTree<TMeta = unknown>({\n  forks = [],\n  path = [],\n  loading = false,\n  error,\n  title,\n  onChoose,\n  onCustom,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: DecisionTreeProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const heading = title ?? labels.title\n  const current = openFork(forks, path)\n  const byId = new Map(forks.map((fork) => [fork.id, fork]))\n  const [draft, setDraft] = React.useState(\"\")\n  const [live, setLive] = React.useState(\"\")\n\n  const trail = path.flatMap((choice) => {\n    const fork = byId.get(choice.forkId)\n    if (!fork) return []\n    if (choice.custom) return [{ id: `${choice.forkId}-custom`, title: choice.custom }]\n    const option = fork.options.find((item) => item.id === choice.optionId)\n    return option ? [{ id: option.id, title: option.title }] : []\n  })\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        <Badge variant=\"secondary\">{current ? labels.waiting(1) : forks.length > 0 ? labels.done : labels.waiting(0)}</Badge>\n      </header>\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-28 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && forks.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : forks.length === 0 ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <div className=\"flex flex-col gap-3\">\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          {trail.length > 0 ? (\n            <div>\n              <h3 className=\"text-xs font-medium text-muted-foreground\">{labels.path}</h3>\n              <ol className=\"mt-1 flex flex-col gap-1\">\n                {trail.map((step, index) => (\n                  <li key={step.id} className=\"text-sm\">\n                    {index + 1}. {step.title}\n                  </li>\n                ))}\n              </ol>\n            </div>\n          ) : null}\n          {current ? (\n            <div>\n              <h3 className=\"font-medium\">{current.prompt}</h3>\n              {current.detail ? <p className=\"mt-1 text-xs text-muted-foreground\">{current.detail}</p> : null}\n              <div role=\"radiogroup\" aria-label={current.prompt} className=\"mt-2 flex flex-col gap-2\">\n                {current.options.map((option) => (\n                  <button\n                    key={option.id}\n                    type=\"button\"\n                    role=\"radio\"\n                    aria-checked={false}\n                    className={cn(\n                      \"rounded-lg border border-border px-3 py-2 text-start focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\",\n                      classNames?.option,\n                    )}\n                    aria-label={labels.choose(option.title)}\n                    onClick={() => {\n                      onChoose?.(current.id, option.id)\n                      setLive(labels.chose(option.title))\n                    }}\n                  >\n                    <span className=\"flex flex-wrap items-center gap-2\">\n                      <span className=\"font-medium\">{option.title}</span>\n                      {option.preferred ? <Badge variant=\"secondary\">{labels.preferred}</Badge> : null}\n                      {option.risk ? <Badge variant={option.risk === \"high\" ? \"destructive\" : \"outline\"}>{labels.risk[option.risk]}</Badge> : null}\n                    </span>\n                    {option.detail ? <span className=\"mt-1 block text-xs text-muted-foreground\">{option.detail}</span> : null}\n                  </button>\n                ))}\n              </div>\n              <form\n                className=\"mt-2 flex flex-wrap gap-2\"\n                onSubmit={(event) => {\n                  event.preventDefault()\n                  const text = draft.trim()\n                  if (!text) return\n                  onCustom?.(current.id, text)\n                  setLive(labels.wrote(text))\n                  setDraft(\"\")\n                }}\n              >\n                <Input aria-label={labels.customNamed} value={draft} placeholder={labels.custom} onChange={(event) => setDraft(event.target.value)} className=\"h-8 max-w-sm\" />\n                <Button type=\"submit\" size=\"sm\" variant=\"outline\">\n                  {labels.write}\n                </Button>\n              </form>\n            </div>\n          ) : (\n            <p className=\"text-muted-foreground\">{labels.done}</p>\n          )}\n        </div>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/decision-tree.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Qué camino",
+    "descriptionEs": "Una decisión que el agente no toma solo. La opción arriesgada queda marcada, también la que el agente elegiría, y una persona puede escribir otro camino.",
+    "preview": "app/examples/decision-tree/preview.tsx",
+    "previewHref": "/examples/decision-tree",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "taken",
+        "label": "Tomado",
+        "labelEn": "Taken"
+      },
+      {
+        "id": "written",
+        "label": "Escrito",
+        "labelEn": "Written"
+      }
+    ],
+    "examples": [
+      {
+        "title": "El horno 2",
+        "href": "/examples/decision-tree",
+        "description": "El viernes de Mariana Ruiz sigue abierto. La preferencia no decide sola."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/decision-tree/stress",
+        "description": "Vacío, textos largos, RTL y diez opciones."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/decision-tree?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/decision-tree?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/decision-tree?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/decision-tree?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Tomado",
+        "href": "/examples/decision-tree?scene=taken",
+        "description": "Taken"
+      },
+      {
+        "title": "Escrito",
+        "href": "/examples/decision-tree?scene=written",
+        "description": "Written"
+      }
+    ],
+    "usage": "<DecisionTree forks={forks} path={path} onChoose={choose} onCustom={write} />",
+    "api": [
+      {
+        "name": "forks",
+        "type": "DecisionFork<TMeta>[]",
+        "description": "id, prompt, detail, options. An option has title, detail, risk (low, high), preferred, and an optional nextId."
+      },
+      {
+        "name": "path",
+        "type": "DecisionChoice[]",
+        "description": "Choices already taken, in order. A custom sentence ends the path."
+      },
+      {
+        "name": "onChoose",
+        "type": "(forkId: string, optionId: string) => void",
+        "description": "Take an option. The preference is a mark, not a click."
+      },
+      {
+        "name": "onCustom",
+        "type": "(forkId: string, text: string) => void",
+        "description": "Write another way. Empty text is ignored."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when the path cannot be saved."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<DecisionTreeLabels>",
+        "description": "Chrome copy. English is the default."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. No es la bandeja de dos respuestas ni la compuerta con reloj.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}
