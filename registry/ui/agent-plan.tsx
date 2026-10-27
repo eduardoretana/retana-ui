@@ -306,7 +306,7 @@ export function AgentPlan<TMeta = unknown>({
           })}
         </ol>
       )}
-      {loading ? null : (
+      {loading || (error && steps.length === 0) ? null : (
         <form
           className="flex flex-wrap gap-2"
           onSubmit={(event) => {

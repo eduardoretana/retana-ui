@@ -35,9 +35,12 @@ describe("agent plan", () => {
     const onMove = vi.fn()
     const steps = planSteps(planFilled.seeds, "en")
     expect(planMinutes(steps)).toBe(6 + 20 + 15)
-    render(<AgentPlan steps={steps} onMove={onMove} onRemove={() => {}} />)
+    const view = render(<AgentPlan steps={steps} onMove={onMove} onRemove={() => {}} />)
     await user.click(screen.getByRole("button", { name: "Move “Photo of kiln 2” up" }))
     expect(onMove).toHaveBeenCalledWith("foto", -1)
+    view.unmount()
+    render(<AgentPlan error="The plan could not be read." />)
+    expect(screen.queryByRole("button", { name: "Add a step" })).not.toBeInTheDocument()
   })
 })
 
