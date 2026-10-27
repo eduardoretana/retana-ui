@@ -1,0 +1,146 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-lanes",
+  "title": "Agent lanes",
+  "author": "Eduardo Retana",
+  "description": "One lane per agent on a shared morning clock, with a hand-off and an approval sitting on the block that needs it.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "badge",
+    "button",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/agent-lanes.tsx",
+      "content": "\"use client\"\n\n/**\n * Who is on the floor right now. Clean-room reading of a public behavior\n * description: one lane per agent, blocks on a shared clock, a hand-off to\n * the next agent, and an approval sitting on the block that needs it.\n * No Affect source, sample data, icons, or assets were copied.\n */\n\nimport * as React from \"react\"\nimport { Check } from \"lucide-react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport const LANE_TONES = [\"work\", \"wait\", \"ask\"] as const\n\nexport type LaneTone = (typeof LANE_TONES)[number]\n\nexport type LaneAgent<TMeta = unknown> = {\n  id: string\n  name: string\n  role: string\n  meta?: TMeta\n}\n\nexport type LaneBlock<TMeta = unknown> = {\n  id: string\n  agentId: string\n  title: string\n  /** Minutes from midnight. */\n  startMin: number\n  durationMin: number\n  tone: LaneTone\n  handoffTo?: string\n  meta?: TMeta\n}\n\nexport type LaneWindow = {\n  startMin: number\n  endMin: number\n  nowMin: number\n}\n\nexport type AgentLanesLabels = {\n  title: string\n  working: (count: number) => string\n  asking: (count: number) => string\n  tone: Record<LaneTone | \"idle\", string>\n  handoff: (name: string) => string\n  open: (title: string) => string\n  approve: string\n  approveNamed: (title: string) => string\n  now: string\n  empty: string\n  quiet: string\n  loading: string\n  clock: (minutes: number) => string\n  approved: (title: string) => string\n}\n\nexport type AgentLanesClassNames = {\n  root?: string\n  lane?: string\n  block?: string\n}\n\nexport type AgentLanesProps<TMeta = unknown> = {\n  agents?: readonly LaneAgent<TMeta>[]\n  blocks?: readonly LaneBlock<TMeta>[]\n  window?: LaneWindow\n  loading?: boolean\n  error?: string\n  title?: string\n  onOpen?: (id: string) => void\n  onApprove?: (id: string) => void\n  className?: string\n  classNames?: AgentLanesClassNames\n  labels?: Partial<AgentLanesLabels>\n}\n\nconst laneLabels: AgentLanesLabels = {\n  title: \"Who is on the floor\",\n  working: (count) => (count === 1 ? \"1 working\" : `${count} working`),\n  asking: (count) => (count === 1 ? \"1 waiting on you\" : `${count} waiting on you`),\n  tone: {\n    work: \"Working\",\n    wait: \"Waiting\",\n    ask: \"Waiting on you\",\n    idle: \"Free\",\n  },\n  handoff: (name) => `Then ${name}`,\n  open: (title) => `Open “${title}”`,\n  approve: \"Approve\",\n  approveNamed: (title) => `Approve “${title}”`,\n  now: \"Now\",\n  empty: \"Nobody is on the floor.\",\n  quiet: \"Everyone is free in this window.\",\n  loading: \"Loading the floor\",\n  clock: (minutes) => {\n    const safe = ((Math.round(minutes) % (24 * 60)) + 24 * 60) % (24 * 60)\n    const hour = Math.floor(safe / 60)\n    const minute = safe % 60\n    return `${hour.toString().padStart(2, \"0\")}:${minute.toString().padStart(2, \"0\")}`\n  },\n  approved: (title) => `Approved “${title}”`,\n}\n\nfunction resolveLabels(partial?: Partial<AgentLanesLabels>): AgentLanesLabels {\n  return { ...laneLabels, ...partial, tone: { ...laneLabels.tone, ...partial?.tone } }\n}\n\nexport function laneLoad(\n  agentId: string,\n  blocks: readonly Pick<LaneBlock, \"id\" | \"agentId\" | \"startMin\" | \"durationMin\" | \"tone\">[],\n  nowMin: number,\n): LaneTone | \"idle\" {\n  const hit = blocks.find((block) => block.agentId === agentId && block.startMin <= nowMin && nowMin < block.startMin + block.durationMin)\n  return hit?.tone ?? \"idle\"\n}\n\nconst TONE_BAR: Record<LaneTone, string> = {\n  work: \"bg-primary/70\",\n  wait: \"bg-muted-foreground/40\",\n  ask: \"bg-chart-4\",\n}\n\nexport function AgentLanes<TMeta = unknown>({\n  agents = [],\n  blocks = [],\n  window: laneWindow = { startMin: 0, endMin: 60, nowMin: 0 },\n  loading = false,\n  error,\n  title,\n  onOpen,\n  onApprove,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: AgentLanesProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const heading = title ?? labels.title\n  const [live, setLive] = React.useState(\"\")\n  const span = Math.max(1, laneWindow.endMin - laneWindow.startMin)\n  const working = agents.filter((agent) => laneLoad(agent.id, blocks, laneWindow.nowMin) === \"work\").length\n  const asking = agents.filter((agent) => laneLoad(agent.id, blocks, laneWindow.nowMin) === \"ask\").length\n  const nowLeft = Math.max(0, Math.min(100, ((laneWindow.nowMin - laneWindow.startMin) / span) * 100))\n  const ticks = [laneWindow.startMin, laneWindow.startMin + span / 2, laneWindow.endMin]\n  const byName = new Map(agents.map((agent) => [agent.id, agent.name]))\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        <Badge variant=\"secondary\">{labels.working(working)}</Badge>\n        <Badge variant={asking > 0 ? \"destructive\" : \"outline\"}>{labels.asking(asking)}</Badge>\n        <span className=\"ms-auto text-xs text-muted-foreground\">\n          {labels.now} {labels.clock(laneWindow.nowMin)}\n        </span>\n      </header>\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\" className=\"flex flex-col gap-2\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-14 w-full motion-reduce:animate-none\" />\n          <Skeleton className=\"h-14 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && agents.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : agents.length === 0 ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <div className=\"flex flex-col gap-3\">\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          <div className=\"flex justify-between ps-28 text-xs text-muted-foreground\" aria-hidden=\"true\">\n            {ticks.map((tick) => (\n              <span key={tick}>{labels.clock(tick)}</span>\n            ))}\n          </div>\n          <ul className=\"flex flex-col gap-3\">\n            {agents.map((agent) => {\n              const load = laneLoad(agent.id, blocks, laneWindow.nowMin)\n              const mine = blocks.filter((block) => block.agentId === agent.id)\n              return (\n                <li key={agent.id} className={cn(\"grid grid-cols-[7rem_minmax(0,1fr)] items-start gap-2\", classNames?.lane)}>\n                  <div className=\"min-w-0\">\n                    <p className=\"truncate font-medium\">{agent.name}</p>\n                    <p className=\"truncate text-xs text-muted-foreground\">{labels.tone[load]}</p>\n                  </div>\n                  <div className=\"relative h-12 rounded-lg bg-muted/60\">\n                    <span className=\"absolute inset-y-0 w-px bg-foreground/50\" style={{ left: `${nowLeft}%` }} aria-hidden=\"true\" />\n                    {mine.map((block) => {\n                      const left = ((block.startMin - laneWindow.startMin) / span) * 100\n                      const width = (block.durationMin / span) * 100\n                      return (\n                        <span\n                          key={block.id}\n                          aria-hidden=\"true\"\n                          className={cn(\"absolute top-2 h-4 rounded-md\", TONE_BAR[block.tone], classNames?.block)}\n                          style={{ left: `${left}%`, width: `${Math.max(width, 1.5)}%` }}\n                        />\n                      )\n                    })}\n                  </div>\n                  {mine.length === 0 ? <p className=\"col-start-2 text-xs text-muted-foreground\">{labels.quiet}</p> : null}\n                  {mine.length > 0 ? (\n                    <ul className=\"col-start-2 flex flex-col gap-1\">\n                      {mine.map((block) => {\n                        const next = block.handoffTo ? byName.get(block.handoffTo) : undefined\n                        return (\n                          <li key={`${block.id}-caption`} className=\"flex flex-wrap items-center gap-2\">\n                            <button\n                              type=\"button\"\n                              className=\"rounded-md text-start text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n                              aria-label={labels.open(block.title)}\n                              onClick={() => onOpen?.(block.id)}\n                            >\n                              {block.title}\n                            </button>\n                            <span className=\"text-xs text-muted-foreground\">\n                              {labels.clock(block.startMin)}–{labels.clock(block.startMin + block.durationMin)}\n                            </span>\n                            {next ? <span className=\"text-xs text-muted-foreground\">{labels.handoff(next)}</span> : null}\n                            {block.tone === \"ask\" ? (\n                              <Button\n                                type=\"button\"\n                                size=\"sm\"\n                                variant=\"outline\"\n                                aria-label={labels.approveNamed(block.title)}\n                                onClick={() => {\n                                  onApprove?.(block.id)\n                                  setLive(labels.approved(block.title))\n                                }}\n                              >\n                                <Check aria-hidden=\"true\" />\n                                {labels.approve}\n                              </Button>\n                            ) : null}\n                          </li>\n                        )\n                      })}\n                    </ul>\n                  ) : null}\n                </li>\n              )\n            })}\n          </ul>\n        </div>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/agent-lanes.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Carriles de agentes",
+    "descriptionEs": "Un carril por agente en el reloj de la mañana, con un pase al siguiente y un visto sobre el bloque que lo necesita.",
+    "preview": "app/examples/agent-lanes/preview.tsx",
+    "previewHref": "/examples/agent-lanes",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "ask",
+        "label": "Visto",
+        "labelEn": "Ask"
+      },
+      {
+        "id": "idle",
+        "label": "Libre",
+        "labelEn": "Idle"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Piso del taller",
+        "href": "/examples/agent-lanes",
+        "description": "Bruma pasa la cotización a Horno. Caja espera el visto del anticipo."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/agent-lanes/stress",
+        "description": "Vacío, textos largos, RTL y diez bloques."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/agent-lanes?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/agent-lanes?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/agent-lanes?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/agent-lanes?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Visto",
+        "href": "/examples/agent-lanes?scene=ask",
+        "description": "Ask"
+      },
+      {
+        "title": "Libre",
+        "href": "/examples/agent-lanes?scene=idle",
+        "description": "Idle"
+      }
+    ],
+    "usage": "<AgentLanes agents={agents} blocks={blocks} window={window} onOpen={open} onApprove={approve} />",
+    "api": [
+      {
+        "name": "agents",
+        "type": "LaneAgent<TMeta>[]",
+        "description": "id, name, role. meta is opaque."
+      },
+      {
+        "name": "blocks",
+        "type": "LaneBlock<TMeta>[]",
+        "description": "id, agentId, title, startMin, durationMin, tone (work, wait, ask), handoffTo. Minutes are from midnight."
+      },
+      {
+        "name": "window",
+        "type": "LaneWindow",
+        "description": "startMin, endMin, and nowMin for the shared clock."
+      },
+      {
+        "name": "onOpen / onApprove",
+        "type": "(id: string) => void",
+        "description": "Open a block, or approve one that is waiting."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when the floor cannot be read."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<AgentLanesLabels>",
+        "description": "Chrome copy. English is the default."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de carriles de agentes; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, button, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos. El reloj no se mueve solo: lo pasa el anfitrión.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

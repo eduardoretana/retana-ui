@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`394` items are in `registry.json` on this branch: `307` components, `72` blocks, `6` hooks, and `9` libraries. A name links to its source file.
+`400` items are in `registry.json` on this branch: `313` components, `72` blocks, `6` hooks, and `9` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -431,6 +431,12 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`autonomy-dial`](registry/ui/autonomy-dial.tsx) · ui — Three stops for what an agent may do alone, and a lock for whatever must always ask. Install: `npx shadcn@latest add @retana/autonomy-dial`.
 - [`decision-inbox`](registry/ui/decision-inbox.tsx) · ui — Open calls with a short set of answers. An answered call confirms and can be dismissed. Install: `npx shadcn@latest add @retana/decision-inbox`.
 - [`delegate-board`](registry/ui/delegate-board.tsx) · ui — Hand work to an agent by dragging it or picking a name, or give every waiting task to whoever is free first. Install: `npx shadcn@latest add @retana/delegate-board`.
+- [`agent-inbox`](registry/ui/agent-inbox.tsx) · ui — Background workshop tasks in one list, with age, the last steps, and approve, send back, or try again. Install: `npx shadcn@latest add @retana/agent-inbox`.
+- [`agent-plan`](registry/ui/agent-plan.tsx) · ui — Steps to review before a run: rename, move, drop, add, and try a failed step again. Install: `npx shadcn@latest add @retana/agent-plan`.
+- [`plan-vs-actual`](registry/ui/plan-vs-actual.tsx) · ui — Planned minutes against the minutes a run really spent, with later steps shifted when one runs long. Install: `npx shadcn@latest add @retana/plan-vs-actual`.
+- [`trace-waterfall`](registry/ui/trace-waterfall.tsx) · ui — Spans of one run on a shared clock, with tokens, cost in centavos, the slowest leaf marked, and branches that fold. Install: `npx shadcn@latest add @retana/trace-waterfall`.
+- [`agent-lanes`](registry/ui/agent-lanes.tsx) · ui — One lane per agent on a shared morning clock, with a hand-off and an approval sitting on the block that needs it. Install: `npx shadcn@latest add @retana/agent-lanes`.
+- [`approval-card`](registry/ui/approval-card.tsx) · ui — A gate before something hard to undo leaves the workshop. The warning clock can pause. When it runs out, nothing is sent. Install: `npx shadcn@latest add @retana/approval-card`.
 
 ### Forms
 

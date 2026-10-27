@@ -1,0 +1,132 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "plan-vs-actual",
+  "title": "Plan vs actual",
+  "author": "Eduardo Retana",
+  "description": "Planned minutes against the minutes a run really spent, with later steps shifted when one runs long.",
+  "registryDependencies": [
+    "badge",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/plan-vs-actual.tsx",
+      "content": "\"use client\"\n\n/**\n * What the plan said against what the run actually spent. Clean-room reading\n * of a public behavior description: each step has a planned ghost and a solid\n * bar, an overrun shifts the steps after it, and the finish moves.\n * No Affect source, sample data, icons, or assets were copied.\n */\n\nimport * as React from \"react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport const ACTUAL_STATUSES = [\"pending\", \"running\", \"done\"] as const\n\nexport type ActualStatus = (typeof ACTUAL_STATUSES)[number]\n\nexport type ActualStep<TMeta = unknown> = {\n  id: string\n  title: string\n  detail?: string\n  plannedMin: number\n  actualMin: number\n  status: ActualStatus\n  meta?: TMeta\n}\n\nexport type PlanCourse = {\n  plannedMin: number\n  expectedMin: number\n  slipMin: number\n  placed: {\n    id: string\n    plannedStart: number\n    actualStart: number\n    spent: number\n    overrun: boolean\n  }[]\n}\n\nexport type PlanVsActualLabels = {\n  title: string\n  planned: (minutes: number) => string\n  expected: (minutes: number) => string\n  slip: (minutes: number) => string\n  ahead: (minutes: number) => string\n  onTime: string\n  row: (title: string, planned: number, spent: number) => string\n  ghost: string\n  spent: string\n  status: Record<ActualStatus, string>\n  overrun: string\n  empty: string\n  loading: string\n  minutes: (minutes: number) => string\n}\n\nexport type PlanVsActualClassNames = {\n  root?: string\n  row?: string\n}\n\nexport type PlanVsActualProps<TMeta = unknown> = {\n  steps?: readonly ActualStep<TMeta>[]\n  loading?: boolean\n  error?: string\n  title?: string\n  onOpen?: (id: string) => void\n  className?: string\n  classNames?: PlanVsActualClassNames\n  labels?: Partial<PlanVsActualLabels>\n}\n\nconst planVsActualLabels: PlanVsActualLabels = {\n  title: \"Plan and what happened\",\n  planned: (minutes) => `Plan ${minutes} min`,\n  expected: (minutes) => `Finish at ${minutes} min`,\n  slip: (minutes) => `${minutes} min over`,\n  ahead: (minutes) => `${minutes} min ahead`,\n  onTime: \"On the plan\",\n  row: (title, planned, spent) => `${title}, planned ${planned} min, spent ${spent} min`,\n  ghost: \"Planned\",\n  spent: \"Spent\",\n  status: {\n    pending: \"Not started\",\n    running: \"In progress\",\n    done: \"Done\",\n  },\n  overrun: \"Over the plan\",\n  empty: \"Nothing has been planned yet.\",\n  loading: \"Loading the comparison\",\n  minutes: (minutes) => `${minutes} min`,\n}\n\nfunction resolveLabels(partial?: Partial<PlanVsActualLabels>): PlanVsActualLabels {\n  return { ...planVsActualLabels, ...partial, status: { ...planVsActualLabels.status, ...partial?.status } }\n}\n\nexport function planCourse(steps: readonly Pick<ActualStep, \"id\" | \"plannedMin\" | \"actualMin\" | \"status\">[]): PlanCourse {\n  let plannedCursor = 0\n  let actualCursor = 0\n  const placed = steps.map((step) => {\n    const spent = step.status === \"pending\" ? step.plannedMin : step.actualMin\n    const row = {\n      id: step.id,\n      plannedStart: plannedCursor,\n      actualStart: actualCursor,\n      spent,\n      overrun: spent > step.plannedMin,\n    }\n    plannedCursor += step.plannedMin\n    actualCursor += spent\n    return row\n  })\n  return {\n    plannedMin: plannedCursor,\n    expectedMin: actualCursor,\n    slipMin: actualCursor - plannedCursor,\n    placed,\n  }\n}\n\nfunction pct(value: number, horizon: number) {\n  return Math.max(0, Math.min(100, (value / horizon) * 100))\n}\n\nexport function PlanVsActual<TMeta = unknown>({\n  steps = [],\n  loading = false,\n  error,\n  title,\n  onOpen,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: PlanVsActualProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const heading = title ?? labels.title\n  const course = planCourse(steps)\n  const horizon = Math.max(course.plannedMin, course.expectedMin, 1)\n  const slipLabel = course.slipMin > 0 ? labels.slip(course.slipMin) : course.slipMin < 0 ? labels.ahead(Math.abs(course.slipMin)) : labels.onTime\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        <Badge variant=\"secondary\">{labels.planned(course.plannedMin)}</Badge>\n        <Badge variant=\"outline\">{labels.expected(course.expectedMin)}</Badge>\n        <Badge variant={course.slipMin > 0 ? \"destructive\" : \"outline\"}>{slipLabel}</Badge>\n      </header>\n      {loading ? (\n        <div role=\"status\" className=\"flex flex-col gap-2\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-12 w-full motion-reduce:animate-none\" />\n          <Skeleton className=\"h-12 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && steps.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : steps.length === 0 ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <ol className=\"flex flex-col gap-3\">\n          {error ? (\n            <li role=\"alert\" className=\"text-destructive\">\n              {error}\n            </li>\n          ) : null}\n          <li className=\"flex justify-between text-xs text-muted-foreground\" aria-hidden=\"true\">\n            <span>{labels.minutes(0)}</span>\n            <span>{labels.minutes(Math.round(horizon / 2))}</span>\n            <span>{labels.minutes(horizon)}</span>\n          </li>\n          {steps.map((step) => {\n            const place = course.placed.find((row) => row.id === step.id)!\n            const ghostLeft = pct(place.plannedStart, horizon)\n            const ghostWidth = pct(step.plannedMin, horizon)\n            const barLeft = pct(place.actualStart, horizon)\n            const barWidth = pct(place.spent, horizon)\n            return (\n              <li key={step.id} className={classNames?.row}>\n                <button\n                  type=\"button\"\n                  className=\"flex w-full flex-col gap-1 rounded-md text-start focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n                  aria-label={labels.row(step.title, step.plannedMin, step.status === \"pending\" ? 0 : step.actualMin)}\n                  onClick={() => onOpen?.(step.id)}\n                >\n                  <span className=\"flex flex-wrap items-center gap-2\">\n                    <span className=\"font-medium\">{step.title}</span>\n                    <Badge variant=\"outline\">{labels.status[step.status]}</Badge>\n                    {place.overrun ? <Badge variant=\"destructive\">{labels.overrun}</Badge> : null}\n                    <span className=\"ms-auto text-xs text-muted-foreground\">\n                      {labels.minutes(step.status === \"pending\" ? 0 : step.actualMin)} / {labels.minutes(step.plannedMin)}\n                    </span>\n                  </span>\n                  <span className=\"relative h-3 rounded-full bg-muted\" aria-hidden=\"true\">\n                    <span\n                      className=\"absolute top-0 h-full rounded-full border border-dashed border-foreground/40\"\n                      style={{ left: `${ghostLeft}%`, width: `${Math.max(ghostWidth, 1)}%` }}\n                    />\n                    {step.status === \"pending\" ? null : (\n                      <span\n                        className={cn(\"absolute top-0 h-full rounded-full\", place.overrun ? \"bg-chart-4\" : \"bg-primary/70\")}\n                        style={{ left: `${barLeft}%`, width: `${Math.max(barWidth, place.spent > 0 ? 1 : 0)}%` }}\n                      />\n                    )}\n                  </span>\n                </button>\n                {step.detail ? <p className=\"mt-1 text-xs text-muted-foreground\">{step.detail}</p> : null}\n              </li>\n            )\n          })}\n        </ol>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/plan-vs-actual.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Plan contra lo real",
+    "descriptionEs": "Los minutos planeados contra los que de verdad se usaron, y cómo se corre el cierre cuando uno se alarga.",
+    "preview": "app/examples/plan-vs-actual/preview.tsx",
+    "previewHref": "/examples/plan-vs-actual",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "ahead",
+        "label": "Adelantado",
+        "labelEn": "Ahead"
+      },
+      {
+        "id": "stuck",
+        "label": "Atorado",
+        "labelEn": "Stuck"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Viernes contra el reloj",
+        "href": "/examples/plan-vs-actual",
+        "description": "La cotización salió antes y el anticipo se alargó tres minutos el cierre."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/plan-vs-actual/stress",
+        "description": "Vacío, textos largos, RTL y diez pasos."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/plan-vs-actual?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/plan-vs-actual?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/plan-vs-actual?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/plan-vs-actual?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Adelantado",
+        "href": "/examples/plan-vs-actual?scene=ahead",
+        "description": "Ahead"
+      },
+      {
+        "title": "Atorado",
+        "href": "/examples/plan-vs-actual?scene=stuck",
+        "description": "Stuck"
+      }
+    ],
+    "usage": "<PlanVsActual steps={steps} onOpen={open} />",
+    "api": [
+      {
+        "name": "steps",
+        "type": "ActualStep<TMeta>[]",
+        "description": "id, title, detail, plannedMin, actualMin, status (pending, running, done). meta is opaque. A pending step still reserves its planned minutes."
+      },
+      {
+        "name": "onOpen",
+        "type": "(id: string) => void",
+        "description": "Open a step."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when the comparison cannot be read."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<PlanVsActualLabels>",
+        "description": "Chrome copy. English is the default."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de comparar un plan con lo que pasó; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos. Las barras no se animan.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,142 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-plan",
+  "title": "Agent plan",
+  "author": "Eduardo Retana",
+  "description": "Steps to review before a run: rename, move, drop, add, and try a failed step again.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "badge",
+    "button",
+    "input",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/agent-plan.tsx",
+      "content": "\"use client\"\n\n/**\n * A plan to review before the workshop runs it. Clean-room reading of a public\n * behavior description: rename a step, move it, drop it, add one, then retry\n * a step that failed. No Affect source, sample data, icons, or assets were copied.\n */\n\nimport * as React from \"react\"\nimport { ArrowDown, ArrowUp, Plus, RotateCcw } from \"lucide-react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Input } from \"@/components/ui/input\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport const PLAN_STATUSES = [\"pending\", \"running\", \"done\", \"failed\", \"dropped\"] as const\n\nexport type PlanStepStatus = (typeof PLAN_STATUSES)[number]\n\nexport type PlanStep<TMeta = unknown> = {\n  id: string\n  title: string\n  detail?: string\n  estimateMin: number\n  elapsedMin?: number\n  status: PlanStepStatus\n  meta?: TMeta\n}\n\nexport type AgentPlanLabels = {\n  title: string\n  remaining: (minutes: number) => string\n  status: Record<PlanStepStatus, string>\n  spent: (elapsed: number, estimate: number) => string\n  rename: string\n  renameNamed: (title: string) => string\n  name: (title: string) => string\n  moveUp: (title: string) => string\n  moveDown: (title: string) => string\n  remove: string\n  removeNamed: (title: string) => string\n  retry: string\n  retryNamed: (title: string) => string\n  add: string\n  addNamed: string\n  hint: string\n  empty: string\n  loading: string\n  renamed: (title: string) => string\n  moved: (title: string) => string\n  removed: (title: string) => string\n  added: (title: string) => string\n  retried: (title: string) => string\n}\n\nexport type AgentPlanClassNames = {\n  root?: string\n  step?: string\n}\n\nexport type AgentPlanProps<TMeta = unknown> = {\n  steps?: readonly PlanStep<TMeta>[]\n  goal?: string\n  loading?: boolean\n  error?: string\n  title?: string\n  onRename?: (id: string, title: string) => void\n  onMove?: (id: string, direction: -1 | 1) => void\n  onRemove?: (id: string) => void\n  onAdd?: (title: string) => void\n  onRetry?: (id: string) => void\n  className?: string\n  classNames?: AgentPlanClassNames\n  labels?: Partial<AgentPlanLabels>\n}\n\nconst agentPlanLabels: AgentPlanLabels = {\n  title: \"Plan before it runs\",\n  remaining: (minutes) => (minutes === 1 ? \"1 min still ahead\" : `${minutes} min still ahead`),\n  status: {\n    pending: \"Not started\",\n    running: \"In progress\",\n    done: \"Done\",\n    failed: \"Failed\",\n    dropped: \"Dropped\",\n  },\n  spent: (elapsed, estimate) => `${elapsed} of ${estimate} min`,\n  rename: \"Rename\",\n  renameNamed: (title) => `Rename “${title}”`,\n  name: (title) => `Name for “${title}”`,\n  moveUp: (title) => `Move “${title}” up`,\n  moveDown: (title) => `Move “${title}” down`,\n  remove: \"Drop\",\n  removeNamed: (title) => `Drop “${title}”`,\n  retry: \"Try again\",\n  retryNamed: (title) => `Try “${title}” again`,\n  add: \"Add a step\",\n  addNamed: \"New step\",\n  hint: \"Alt and the arrow keys move a step. Delete drops it.\",\n  empty: \"No steps yet. Add the first one.\",\n  loading: \"Loading the plan\",\n  renamed: (title) => `Renamed to “${title}”`,\n  moved: (title) => `Moved “${title}”`,\n  removed: (title) => `Dropped “${title}”`,\n  added: (title) => `Added “${title}”`,\n  retried: (title) => `Trying “${title}” again`,\n}\n\nfunction resolveLabels(partial?: Partial<AgentPlanLabels>): AgentPlanLabels {\n  return { ...agentPlanLabels, ...partial, status: { ...agentPlanLabels.status, ...partial?.status } }\n}\n\nexport function planMinutes(steps: readonly Pick<PlanStep, \"id\" | \"status\" | \"estimateMin\" | \"elapsedMin\">[]) {\n  return steps.reduce((total, step) => {\n    if (step.status === \"dropped\" || step.status === \"done\" || step.status === \"failed\") return total\n    if (step.status === \"running\") return total + Math.max(0, step.estimateMin - (step.elapsedMin ?? 0))\n    return total + step.estimateMin\n  }, 0)\n}\n\nexport function AgentPlan<TMeta = unknown>({\n  steps = [],\n  goal,\n  loading = false,\n  error,\n  title,\n  onRename,\n  onMove,\n  onRemove,\n  onAdd,\n  onRetry,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: AgentPlanProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const hintId = React.useId()\n  const heading = title ?? labels.title\n  const [editing, setEditing] = React.useState<string | null>(null)\n  const [draft, setDraft] = React.useState(\"\")\n  const skipRename = React.useRef(false)\n  const [adding, setAdding] = React.useState(\"\")\n  const [live, setLive] = React.useState(\"\")\n  const active = steps.filter((step) => step.status !== \"dropped\")\n  const left = planMinutes(steps)\n\n  function commitRename(step: PlanStep<TMeta>) {\n    const next = draft.trim()\n    setEditing(null)\n    if (!next || next === step.title) return\n    onRename?.(step.id, next)\n    setLive(labels.renamed(next))\n  }\n\n  function onStepKey(event: React.KeyboardEvent<HTMLLIElement>, step: PlanStep<TMeta>, index: number) {\n    if (editing === step.id || step.status === \"dropped\") return\n    if (event.altKey && event.key === \"ArrowUp\" && index > 0) {\n      event.preventDefault()\n      onMove?.(step.id, -1)\n      setLive(labels.moved(step.title))\n    }\n    if (event.altKey && event.key === \"ArrowDown\" && index < active.length - 1) {\n      event.preventDefault()\n      onMove?.(step.id, 1)\n      setLive(labels.moved(step.title))\n    }\n    if (event.key === \"Delete\") {\n      event.preventDefault()\n      onRemove?.(step.id)\n      setLive(labels.removed(step.title))\n    }\n  }\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-describedby={hintId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        <Badge variant=\"secondary\">{labels.remaining(left)}</Badge>\n      </header>\n      {goal ? <p className=\"text-xs text-muted-foreground\">{goal}</p> : null}\n      <p id={hintId} className=\"text-xs text-muted-foreground\">\n        {labels.hint}\n      </p>\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\" className=\"flex flex-col gap-2\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-14 w-full motion-reduce:animate-none\" />\n          <Skeleton className=\"h-14 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && steps.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : steps.length === 0 ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <ol className=\"flex flex-col gap-2\">\n          {error ? (\n            <li role=\"alert\" className=\"text-destructive\">\n              {error}\n            </li>\n          ) : null}\n          {steps.map((step) => {\n            const index = active.findIndex((item) => item.id === step.id)\n            const dropped = step.status === \"dropped\"\n            return (\n              <li\n                key={step.id}\n                tabIndex={dropped ? undefined : 0}\n                aria-keyshortcuts={dropped ? undefined : \"Alt+ArrowUp Alt+ArrowDown Delete\"}\n                onKeyDown={(event) => onStepKey(event, step, index)}\n                className={cn(\n                  \"rounded-lg border border-border px-3 py-2 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\",\n                  dropped && \"opacity-60\",\n                  classNames?.step,\n                )}\n              >\n                <div className=\"flex flex-wrap items-center gap-2\">\n                  {editing === step.id ? (\n                    <Input\n                      autoFocus\n                      aria-label={labels.name(step.title)}\n                      value={draft}\n                      onChange={(event) => setDraft(event.target.value)}\n                      onBlur={() => {\n                        if (skipRename.current) {\n                          skipRename.current = false\n                          return\n                        }\n                        commitRename(step)\n                      }}\n                      onKeyDown={(event) => {\n                        if (event.key === \"Enter\") {\n                          event.preventDefault()\n                          event.currentTarget.blur()\n                        }\n                        if (event.key === \"Escape\") {\n                          event.preventDefault()\n                          skipRename.current = true\n                          setEditing(null)\n                          event.currentTarget.blur()\n                        }\n                      }}\n                      className=\"h-8 max-w-sm\"\n                    />\n                  ) : (\n                    <h3 className={cn(\"font-medium\", dropped && \"line-through\")}>{step.title}</h3>\n                  )}\n                  <Badge variant={step.status === \"failed\" ? \"destructive\" : \"outline\"}>{labels.status[step.status]}</Badge>\n                  <span className=\"text-xs text-muted-foreground\">{labels.spent(step.elapsedMin ?? 0, step.estimateMin)}</span>\n                </div>\n                {step.detail ? <p className=\"mt-1 text-xs text-muted-foreground\">{step.detail}</p> : null}\n                {dropped ? null : (\n                  <div className=\"mt-2 flex flex-wrap gap-1\">\n                    <Button\n                      type=\"button\"\n                      size=\"sm\"\n                      variant=\"ghost\"\n                      aria-label={labels.renameNamed(step.title)}\n                      onClick={() => {\n                        setEditing(step.id)\n                        setDraft(step.title)\n                      }}\n                    >\n                      {labels.rename}\n                    </Button>\n                    <Button type=\"button\" size=\"sm\" variant=\"ghost\" aria-label={labels.moveUp(step.title)} disabled={index <= 0} onClick={() => onMove?.(step.id, -1)}>\n                      <ArrowUp aria-hidden=\"true\" />\n                    </Button>\n                    <Button\n                      type=\"button\"\n                      size=\"sm\"\n                      variant=\"ghost\"\n                      aria-label={labels.moveDown(step.title)}\n                      disabled={index < 0 || index >= active.length - 1}\n                      onClick={() => onMove?.(step.id, 1)}\n                    >\n                      <ArrowDown aria-hidden=\"true\" />\n                    </Button>\n                    <Button type=\"button\" size=\"sm\" variant=\"ghost\" aria-label={labels.removeNamed(step.title)} onClick={() => onRemove?.(step.id)}>\n                      {labels.remove}\n                    </Button>\n                    {step.status === \"failed\" ? (\n                      <Button type=\"button\" size=\"sm\" variant=\"outline\" aria-label={labels.retryNamed(step.title)} onClick={() => onRetry?.(step.id)}>\n                        <RotateCcw aria-hidden=\"true\" />\n                        {labels.retry}\n                      </Button>\n                    ) : null}\n                  </div>\n                )}\n              </li>\n            )\n          })}\n        </ol>\n      )}\n      {loading ? null : (\n        <form\n          className=\"flex flex-wrap gap-2\"\n          onSubmit={(event) => {\n            event.preventDefault()\n            const next = adding.trim()\n            if (!next) return\n            onAdd?.(next)\n            setAdding(\"\")\n            setLive(labels.added(next))\n          }}\n        >\n          <Input aria-label={labels.addNamed} value={adding} onChange={(event) => setAdding(event.target.value)} placeholder={labels.add} className=\"h-8 max-w-sm\" />\n          <Button type=\"submit\" size=\"sm\" variant=\"outline\">\n            <Plus aria-hidden=\"true\" />\n            {labels.add}\n          </Button>\n        </form>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/agent-plan.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Plan del agente",
+    "descriptionEs": "Pasos para revisar antes de correr: renombrar, mover, quitar, agregar y reintentar uno que falló.",
+    "preview": "app/examples/agent-plan/preview.tsx",
+    "previewHref": "/examples/agent-plan",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "failed",
+        "label": "Falló",
+        "labelEn": "Failed"
+      },
+      {
+        "id": "trimmed",
+        "label": "Recortado",
+        "labelEn": "Trimmed"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Plan del viernes",
+        "href": "/examples/agent-plan",
+        "description": "Cotización lista, anticipo en curso y la foto todavía sin empezar."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/agent-plan/stress",
+        "description": "Vacío, textos largos, RTL y diez pasos."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/agent-plan?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/agent-plan?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/agent-plan?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/agent-plan?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Falló",
+        "href": "/examples/agent-plan?scene=failed",
+        "description": "Failed"
+      },
+      {
+        "title": "Recortado",
+        "href": "/examples/agent-plan?scene=trimmed",
+        "description": "Trimmed"
+      }
+    ],
+    "usage": "<AgentPlan steps={steps} goal={goal} onRename={rename} onMove={move} onRemove={drop} onAdd={add} onRetry={retry} />",
+    "api": [
+      {
+        "name": "steps",
+        "type": "PlanStep<TMeta>[]",
+        "description": "id, title, detail, estimateMin, elapsedMin, status (pending, running, done, failed, dropped). meta is opaque."
+      },
+      {
+        "name": "onRename / onMove / onRemove / onAdd",
+        "type": "callbacks",
+        "description": "Rename a step, move it by one, drop it, or add a title."
+      },
+      {
+        "name": "onRetry",
+        "type": "(id: string) => void",
+        "description": "Try a failed step again."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when the plan cannot be read."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<AgentPlanLabels>",
+        "description": "Chrome copy. English is the default. Alt+arrows move a focused step. Delete drops it."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de un plan que se revisa antes de correr; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, button, input, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}
