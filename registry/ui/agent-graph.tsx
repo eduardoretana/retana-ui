@@ -89,7 +89,7 @@ const graphLabels: AgentGraphLabels = {
   tone: { call: "Call", answer: "Answer", blocked: "Blocked" },
   open: (name) => `Open ${name}`,
   link: (from, to, calls, tone) => `${from} to ${to}, ${calls} ${calls === 1 ? "call" : "calls"}, ${tone}`,
-  busiest: (from, to, calls) => `Busiest link: ${from} to ${to}, ${calls} calls`,
+  busiest: (from, to, calls) => `Busiest link: ${from} to ${to}, ${calls} ${calls === 1 ? "call" : "calls"}`,
   empty: "Nobody is on the map.",
   loading: "Loading the map",
 }

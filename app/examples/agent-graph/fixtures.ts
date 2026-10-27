@@ -138,7 +138,7 @@ export function graphLabels(locale: SceneLocale): Partial<AgentGraphLabels> {
     tone: { call: "Llamada", answer: "Respuesta", blocked: "Bloqueada" },
     open: (name) => `Abrir ${name}`,
     link: (from, to, calls, tone) => `${from} hacia ${to}, ${calls} ${calls === 1 ? "llamada" : "llamadas"}, ${tone}`,
-    busiest: (from, to, calls) => `El enlace más cargado: ${from} hacia ${to}, ${calls} llamadas`,
+    busiest: (from, to, calls) => `El enlace más cargado: ${from} hacia ${to}, ${calls} ${calls === 1 ? "llamada" : "llamadas"}`,
     empty: "Nadie está en la red.",
     loading: "Cargando la red",
   }

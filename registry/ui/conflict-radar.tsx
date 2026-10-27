@@ -125,7 +125,9 @@ export function ConflictRadar<TMeta = unknown>({
         <h2 id={titleId} className="font-medium">
           {heading}
         </h2>
-        <Badge variant={open > 0 ? "destructive" : "secondary"}>{open > 0 ? labels.open(open) : labels.settled}</Badge>
+        <Badge variant={open > 0 ? "destructive" : "secondary"}>
+          {clashes.length === 0 ? labels.open(0) : open > 0 ? labels.open(open) : labels.settled}
+        </Badge>
       </header>
       {agents.length > 0 ? (
         <ul className="flex flex-wrap gap-2">
