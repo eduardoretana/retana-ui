@@ -183,21 +183,22 @@ export function CitedAnswer<TMeta = unknown>({
                         const number = numbers.get(id)
                         if (!source || !number) return null
                         return (
-                          <button
-                            key={id}
-                            type="button"
-                            aria-expanded={openId === id}
-                            aria-controls={previewId}
-                            aria-label={labels.marker(number, source.title)}
-                            className="mx-0.5 inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-muted px-1 align-super text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-                            onClick={() => toggle(id)}
-                            onFocus={() => setHotId(id)}
-                            onBlur={() => setHotId(null)}
-                            onMouseEnter={() => setHotId(id)}
-                            onMouseLeave={() => setHotId(null)}
-                          >
-                            {number}
-                          </button>
+                          <React.Fragment key={id}>
+                            <button
+                              type="button"
+                              aria-expanded={openId === id}
+                              aria-controls={previewId}
+                              aria-label={labels.marker(number, source.title)}
+                              className="mx-0.5 inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-muted px-1 align-super text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                              onClick={() => toggle(id)}
+                              onFocus={() => setHotId(id)}
+                              onBlur={() => setHotId(null)}
+                              onMouseEnter={() => setHotId(id)}
+                              onMouseLeave={() => setHotId(null)}
+                            >
+                              {number}
+                            </button>{" "}
+                          </React.Fragment>
                         )
                       })}
                     </span>

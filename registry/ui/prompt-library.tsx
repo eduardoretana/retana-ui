@@ -274,7 +274,8 @@ export function PromptLibrary<TMeta = unknown>({
                       value={values[part.name] ?? ""}
                       placeholder={part.name}
                       autoComplete="off"
-                      className="mx-1 inline-block h-8 w-36"
+                      className="mx-1 inline-block h-8 w-auto min-w-24 max-w-full"
+                      style={{ width: `${Math.max((values[part.name] || part.name).length, 8) + 3}ch` }}
                       onChange={(event) => onValue?.(part.name, event.target.value)}
                     />
                   ),

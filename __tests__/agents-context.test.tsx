@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest"
 import { segmentsFrom, skipped, sourcesFrom } from "@/app/examples/cited-answer/fixtures"
 import { blocksFrom, earlier, filled as mapFilled, MAP_LIMIT, open } from "@/app/examples/context-map/fixtures"
 import { filled as windowFilled, full, partsFrom, tight, WINDOW_LIMIT } from "@/app/examples/context-window/fixtures"
-import { filled as memoryFilled, memoriesFrom, paused } from "@/app/examples/memory-panel/fixtures"
+import { filled as memoryFilled, forgotten, memoriesFrom, paused, undoFrom } from "@/app/examples/memory-panel/fixtures"
 import { filled as libraryFilled, ready, templatesFrom } from "@/app/examples/prompt-library/fixtures"
 import { CitedAnswer, visibleCites } from "@/registry/ui/cited-answer"
 import { ContextMap, mapUsage } from "@/registry/ui/context-map"
@@ -58,6 +58,8 @@ describe("memory panel", () => {
     const memories = memoriesFrom(memoryFilled, "en")
     expect(memoryCount(memories)).toMatchObject({ total: 4, paused: 0, active: 4 })
     expect(memoryCount(memoriesFrom(paused, "en")).paused).toBe(1)
+    expect(undoFrom(forgotten, "es", "celaya")?.text).toContain("Celaya")
+    expect(undoFrom(forgotten, "es", null)).toBeNull()
     render(<MemoryPanel memories={memories} enabled onForget={onForget} />)
     await user.click(screen.getByRole("button", { name: "Forget “Mail to Celaya for order PED-990 did not go out.”" }))
     expect(onForget).toHaveBeenCalledWith("celaya")
@@ -73,6 +75,7 @@ describe("cited answer", () => {
     expect(visibleCites(segments[0]?.cite, sources)).toEqual(["cotizacion"])
     render(<CitedAnswer segments={segments} sources={sources} pagesRead={3} onOpen={onOpen} />)
     expect(screen.queryByRole("button", { name: /fantasma/ })).not.toBeInTheDocument()
+    expect(screen.getByText(/before 14:00/).parentElement).toHaveTextContent("14:00. 1 Delivery")
     await user.click(screen.getAllByRole("button", { name: "Source 1: Quote PED-1048" })[0]!)
     expect(onOpen).toHaveBeenCalledWith("cotizacion")
   })
@@ -94,6 +97,7 @@ describe("prompt library", () => {
     const prompt = promptText(done[0]!.body, values)
     expect(prompt).toBe("Write to Celaya about order PED-990. Say that kiln 2 will not light. The tone is plain.")
     render(<PromptLibrary templates={done} selectedId="celaya" values={values} onUse={onUse} />)
+    expect(screen.getByRole("textbox", { name: "asunto. What to say" })).toHaveAttribute("style", expect.stringContaining("width: 24ch"))
     await user.click(screen.getByRole("button", { name: "Use “Note for Celaya”" }))
     expect(onUse).toHaveBeenCalledWith(prompt, "celaya")
   })

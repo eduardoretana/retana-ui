@@ -131,7 +131,8 @@ export function memoriesFrom(
 }
 
 export function undoFrom(fixture: MemoryFixture, locale: SceneLocale, forgottenId?: string | null) {
-  const id = forgottenId ?? fixture.forgottenId
+  const id = forgottenId === undefined ? fixture.forgottenId : forgottenId
+  if (!id) return null
   const seed = fixture.seeds.find((item) => item.id === id)
   return seed ? { text: seed[locale].text } : null
 }
