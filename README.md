@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`406` items are in `registry.json` on this branch: `319` components, `72` blocks, `6` hooks, and `9` libraries. A name links to its source file.
+`411` items are in `registry.json` on this branch: `324` components, `72` blocks, `6` hooks, and `9` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -443,6 +443,11 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`parallel-attempts`](registry/ui/parallel-attempts.tsx) · ui — The same task tried a few ways at once. The best finished score is marked. A tie does not pick a winner. Install: `npx shadcn@latest add @retana/parallel-attempts`.
 - [`conflict-radar`](registry/ui/conflict-radar.tsx) · ui — Where two agents rewrote the same thing. A person keeps one wording. The order files only when every clash is settled. Install: `npx shadcn@latest add @retana/conflict-radar`.
 - [`decision-tree`](registry/ui/decision-tree.tsx) · ui — A fork the agent will not take alone. A risky option is marked, the agent's preference is marked, and a person can write another way. Install: `npx shadcn@latest add @retana/decision-tree`.
+- [`context-map`](registry/ui/context-map.tsx) · ui — What fills one context window, as tiles. Free space stays visible. A compaction can be compared before and after. Tiles do not glide. Install: `npx shadcn@latest add @retana/context-map`.
+- [`context-window`](registry/ui/context-window.tsx) · ui — The window as a decorative field of cells and the list under it. A file can be removed and the conversation can be compacted. Cells do not shimmer. Install: `npx shadcn@latest add @retana/context-window`.
+- [`memory-panel`](registry/ui/memory-panel.tsx) · ui — What the assistant keeps across chats. A switch turns memory off without deleting it. Each memory can be edited, paused, or forgotten. Install: `npx shadcn@latest add @retana/memory-panel`.
+- [`cited-answer`](registry/ui/cited-answer.tsx) · ui — A finished answer wired to its sources. Opening a citation shows the passage that was used. A source id that does not exist is skipped. Install: `npx shadcn@latest add @retana/cited-answer`.
+- [`prompt-library`](registry/ui/prompt-library.tsx) · ui — Saved prompts with blanks in the sentence. The finished sentence assembles underneath. It can be used only once every blank is filled. Install: `npx shadcn@latest add @retana/prompt-library`.
 
 ### Forms
 

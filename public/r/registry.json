@@ -25360,6 +25360,543 @@
           }
         ]
       },
+      {
+          "name": "context-map",
+          "type": "registry:ui",
+          "title": "Context map",
+          "description": "What fills one context window, as tiles. Free space stays visible. A compaction can be compared before and after. Tiles do not glide.",
+          "author": "Eduardo Retana",
+          "registryDependencies": [
+            "badge",
+            "skeleton"
+          ],
+          "categories": [
+            "agents"
+          ],
+          "meta": {
+            "titleEs": "Mapa del contexto",
+            "descriptionEs": "Qué llena una ventana, en mosaico. El espacio libre sigue a la vista y un resumen se puede comparar con lo de antes.",
+            "preview": "app/examples/context-map/preview.tsx",
+            "previewHref": "/examples/context-map",
+            "scenes": [
+              {
+                "id": "filled",
+                "label": "Lleno",
+                "labelEn": "Filled"
+              },
+              {
+                "id": "empty",
+                "label": "Vacío",
+                "labelEn": "Empty"
+              },
+              {
+                "id": "loading",
+                "label": "Cargando",
+                "labelEn": "Loading"
+              },
+              {
+                "id": "error",
+                "label": "Error",
+                "labelEn": "Error"
+              },
+              {
+                "id": "before",
+                "label": "Antes",
+                "labelEn": "Before"
+              },
+              {
+                "id": "open",
+                "label": "Abierto",
+                "labelEn": "Open"
+              }
+            ],
+            "examples": [
+              {
+                "title": "La ventana del viernes",
+                "href": "/examples/context-map",
+                "description": "Archivos, charla y el resumen del pedido PED-1048."
+              },
+              {
+                "title": "Estrés",
+                "href": "/examples/context-map/stress",
+                "description": "Vacío, textos largos, RTL y diez bloques."
+              }
+            ],
+            "usage": "<ContextMap blocks={blocks} limit={24000} compare view={view} onView={setView} onSelect={open} />",
+            "api": [
+              {
+                "name": "blocks",
+                "type": "ContextBlock<TMeta>[]",
+                "description": "id, label, kind (system, tools, memory, file, chat, result, summary), tokens, detail. meta is opaque."
+              },
+              {
+                "name": "limit / view / onView",
+                "type": "number / before | after / (view) => void",
+                "description": "Window size. Before and After show when compare is set. The host passes the blocks for the side that is open."
+              },
+              {
+                "name": "selectedId / onSelect",
+                "type": "string | null / (id: string | null) => void",
+                "description": "The open tile. Null is the free space."
+              },
+              {
+                "name": "note / status",
+                "type": "string",
+                "description": "A line under the title, and a short status such as compacting."
+              },
+              {
+                "name": "loading / error",
+                "type": "boolean / string",
+                "description": "Loading skeleton, or an alert when the map cannot be read."
+              },
+              {
+                "name": "labels",
+                "type": "Partial<ContextMapLabels>",
+                "description": "Chrome copy. English is the default."
+              }
+            ]
+          },
+          "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. No es el anillo de uso: cada parte se ve, con su tipo y sus tokens.",
+          "files": [
+            {
+              "path": "registry/ui/context-map.tsx",
+              "type": "registry:component",
+              "target": "@ui/context-map.tsx"
+            }
+          ]
+        },
+        {
+          "name": "context-window",
+          "type": "registry:ui",
+          "title": "Context window",
+          "description": "The window as a decorative field of cells and the list under it. A file can be removed and the conversation can be compacted. Cells do not shimmer.",
+          "author": "Eduardo Retana",
+          "registryDependencies": [
+            "badge",
+            "button",
+            "skeleton"
+          ],
+          "categories": [
+            "agents"
+          ],
+          "meta": {
+            "titleEs": "Ventana de contexto",
+            "descriptionEs": "La ventana como un campo de celdas y la lista debajo. Se puede quitar un archivo y compactar la charla. Las celdas no brillan.",
+            "preview": "app/examples/context-window/preview.tsx",
+            "previewHref": "/examples/context-window",
+            "scenes": [
+              {
+                "id": "filled",
+                "label": "Lleno",
+                "labelEn": "Filled"
+              },
+              {
+                "id": "empty",
+                "label": "Vacío",
+                "labelEn": "Empty"
+              },
+              {
+                "id": "loading",
+                "label": "Cargando",
+                "labelEn": "Loading"
+              },
+              {
+                "id": "error",
+                "label": "Error",
+                "labelEn": "Error"
+              },
+              {
+                "id": "tight",
+                "label": "Justa",
+                "labelEn": "Tight"
+              },
+              {
+                "id": "full",
+                "label": "Llena",
+                "labelEn": "Full"
+              },
+              {
+                "id": "compacted",
+                "label": "Compacta",
+                "labelEn": "Compact"
+              }
+            ],
+            "examples": [
+              {
+                "title": "24 000 tokens",
+                "href": "/examples/context-window",
+                "description": "Cotización, foto del horno y la charla. En Error el primer quitar se deshace."
+              },
+              {
+                "title": "Estrés",
+                "href": "/examples/context-window/stress",
+                "description": "Vacío, textos largos, RTL y diez partes."
+              }
+            ],
+            "usage": "<ContextWindow parts={parts} limit={24000} onRemove={remove} onCompact={compact} />",
+            "api": [
+              {
+                "name": "parts",
+                "type": "WindowPart<TMeta>[]",
+                "description": "id, label, tokens or items, locked, compactable, compact. An item has id, label and tokens. meta is opaque."
+              },
+              {
+                "name": "limit",
+                "type": "number",
+                "description": "Size of the window. From 80% the caption says it is getting full. From 95% it is full."
+              },
+              {
+                "name": "onRemove / onCompact",
+                "type": "(partId, itemId) => void / (partId) => void",
+                "description": "Drop a file or compact a part. The piece does not change the list itself."
+              },
+              {
+                "name": "note",
+                "type": "string",
+                "description": "A small tag in the header, such as which window this is."
+              },
+              {
+                "name": "loading / error",
+                "type": "boolean / string",
+                "description": "Loading skeleton, or an alert when a removal cannot be saved."
+              },
+              {
+                "name": "labels",
+                "type": "Partial<ContextWindowLabels>",
+                "description": "Chrome copy. English is the default. The cell field is decorative."
+              }
+            ]
+          },
+          "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. El campo de celdas es decorativo: los números viven en la lista.",
+          "files": [
+            {
+              "path": "registry/ui/context-window.tsx",
+              "type": "registry:component",
+              "target": "@ui/context-window.tsx"
+            }
+          ]
+        },
+        {
+          "name": "memory-panel",
+          "type": "registry:ui",
+          "title": "Memory panel",
+          "description": "What the assistant keeps across chats. A switch turns memory off without deleting it. Each memory can be edited, paused, or forgotten.",
+          "author": "Eduardo Retana",
+          "registryDependencies": [
+            "badge",
+            "button",
+            "input",
+            "skeleton",
+            "switch"
+          ],
+          "categories": [
+            "agents"
+          ],
+          "meta": {
+            "titleEs": "Lo que recuerda",
+            "descriptionEs": "Lo que el asistente guarda entre chats. El interruptor lo apaga sin borrar. Cada recuerdo se edita, se pausa o se olvida.",
+            "preview": "app/examples/memory-panel/preview.tsx",
+            "previewHref": "/examples/memory-panel",
+            "scenes": [
+              {
+                "id": "filled",
+                "label": "Lleno",
+                "labelEn": "Filled"
+              },
+              {
+                "id": "empty",
+                "label": "Vacío",
+                "labelEn": "Empty"
+              },
+              {
+                "id": "loading",
+                "label": "Cargando",
+                "labelEn": "Loading"
+              },
+              {
+                "id": "error",
+                "label": "Error",
+                "labelEn": "Error"
+              },
+              {
+                "id": "paused",
+                "label": "En pausa",
+                "labelEn": "Paused"
+              },
+              {
+                "id": "off",
+                "label": "Apagada",
+                "labelEn": "Off"
+              },
+              {
+                "id": "forgotten",
+                "label": "Olvidado",
+                "labelEn": "Forgotten"
+              }
+            ],
+            "examples": [
+              {
+                "title": "Mariana y el horno",
+                "href": "/examples/memory-panel",
+                "description": "Cuatro recuerdos del taller. Olvidar el correo a Celaya se puede deshacer."
+              },
+              {
+                "title": "Estrés",
+                "href": "/examples/memory-panel/stress",
+                "description": "Vacío, textos largos, RTL y diez recuerdos."
+              }
+            ],
+            "usage": "<MemoryPanel memories={memories} enabled={enabled} onEnabledChange={setEnabled} onEdit={edit} onPause={pause} onForget={forget} onRestore={restore} onAdd={add} />",
+            "api": [
+              {
+                "name": "memories",
+                "type": "MemoryEntry<TMeta>[]",
+                "description": "id, text, category, source, date, paused. meta is opaque. Source and date are shown as given."
+              },
+              {
+                "name": "enabled / onEnabledChange",
+                "type": "boolean / (enabled) => void",
+                "description": "The Use memory switch. Off does not delete the list."
+              },
+              {
+                "name": "onEdit / onPause / onForget / onRestore / onAdd",
+                "type": "callbacks",
+                "description": "The host owns the list. Undo is whatever the host passes in undo; the piece does not run a clock."
+              },
+              {
+                "name": "undo",
+                "type": "{ text: string } | null",
+                "description": "The forgotten line, with an Undo button, until the host clears it."
+              },
+              {
+                "name": "categories",
+                "type": "string[]",
+                "description": "Group order and the choices for a new memory."
+              },
+              {
+                "name": "loading / error / labels",
+                "type": "boolean / string / Partial<MemoryPanelLabels>",
+                "description": "Skeleton, alert, and chrome copy. English is the default."
+              }
+            ]
+          },
+          "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. No es la ventana de este chat: es lo que queda para el siguiente.",
+          "files": [
+            {
+              "path": "registry/ui/memory-panel.tsx",
+              "type": "registry:component",
+              "target": "@ui/memory-panel.tsx"
+            }
+          ]
+        },
+        {
+          "name": "cited-answer",
+          "type": "registry:ui",
+          "title": "Cited answer",
+          "description": "A finished answer wired to its sources. Opening a citation shows the passage that was used. A source id that does not exist is skipped.",
+          "author": "Eduardo Retana",
+          "registryDependencies": [
+            "badge",
+            "button",
+            "skeleton"
+          ],
+          "categories": [
+            "agents"
+          ],
+          "meta": {
+            "titleEs": "Respuesta con fuentes",
+            "descriptionEs": "Una respuesta ya hecha, atada a sus fuentes. Abrir una cita muestra el pasaje que se usó. Un id que no existe no deja un número roto.",
+            "preview": "app/examples/cited-answer/preview.tsx",
+            "previewHref": "/examples/cited-answer",
+            "scenes": [
+              {
+                "id": "filled",
+                "label": "Lleno",
+                "labelEn": "Filled"
+              },
+              {
+                "id": "empty",
+                "label": "Vacío",
+                "labelEn": "Empty"
+              },
+              {
+                "id": "loading",
+                "label": "Cargando",
+                "labelEn": "Loading"
+              },
+              {
+                "id": "error",
+                "label": "Error",
+                "labelEn": "Error"
+              },
+              {
+                "id": "open",
+                "label": "Abierta",
+                "labelEn": "Open"
+              },
+              {
+                "id": "skipped",
+                "label": "Sin fuente",
+                "labelEn": "Skipped"
+              }
+            ],
+            "examples": [
+              {
+                "title": "Anticipo y entrega",
+                "href": "/examples/cited-answer",
+                "description": "Tres fuentes del pedido PED-1048. La cita fantasma no se numera."
+              },
+              {
+                "title": "Estrés",
+                "href": "/examples/cited-answer/stress",
+                "description": "Vacío, textos largos, RTL y diez fuentes."
+              }
+            ],
+            "usage": "<CitedAnswer segments={segments} sources={sources} openId={openId} onOpen={setOpen} onOpenSource={open} />",
+            "api": [
+              {
+                "name": "segments",
+                "type": "CitedSegment[]",
+                "description": "id, text, cite (source ids), paragraph. Unknown ids are skipped."
+              },
+              {
+                "name": "sources",
+                "type": "CitedSource<TMeta>[]",
+                "description": "id, title, site, quote, date. Numbers follow this order. meta is opaque."
+              },
+              {
+                "name": "pagesRead",
+                "type": "number",
+                "description": "Shown next to the source count."
+              },
+              {
+                "name": "openId / onOpen / onOpenSource",
+                "type": "string | null / callbacks",
+                "description": "Which passage is open. Open source does not navigate by itself."
+              },
+              {
+                "name": "loading / error",
+                "type": "boolean / string",
+                "description": "Loading skeleton, or an alert when the answer cannot be assembled."
+              },
+              {
+                "name": "labels",
+                "type": "Partial<CitedAnswerLabels>",
+                "description": "Chrome copy. English is the default."
+              }
+            ]
+          },
+          "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. No es una cita suelta ni la lista de fuentes: es la respuesta ya cerrada, frase por frase.",
+          "files": [
+            {
+              "path": "registry/ui/cited-answer.tsx",
+              "type": "registry:component",
+              "target": "@ui/cited-answer.tsx"
+            }
+          ]
+        },
+        {
+          "name": "prompt-library",
+          "type": "registry:ui",
+          "title": "Prompt library",
+          "description": "Saved prompts with blanks in the sentence. The finished sentence assembles underneath. It can be used only once every blank is filled.",
+          "author": "Eduardo Retana",
+          "registryDependencies": [
+            "badge",
+            "button",
+            "input",
+            "skeleton"
+          ],
+          "categories": [
+            "agents"
+          ],
+          "meta": {
+            "titleEs": "Biblioteca de prompts",
+            "descriptionEs": "Prompts guardados con espacios en la frase. Abajo se arma la frase lista. Se usa solo cuando cada espacio está lleno.",
+            "preview": "app/examples/prompt-library/preview.tsx",
+            "previewHref": "/examples/prompt-library",
+            "scenes": [
+              {
+                "id": "filled",
+                "label": "Lleno",
+                "labelEn": "Filled"
+              },
+              {
+                "id": "empty",
+                "label": "Vacío",
+                "labelEn": "Empty"
+              },
+              {
+                "id": "loading",
+                "label": "Cargando",
+                "labelEn": "Loading"
+              },
+              {
+                "id": "error",
+                "label": "Error",
+                "labelEn": "Error"
+              },
+              {
+                "id": "ready",
+                "label": "Listo",
+                "labelEn": "Ready"
+              }
+            ],
+            "examples": [
+              {
+                "title": "Nota para Celaya",
+                "href": "/examples/prompt-library",
+                "description": "Tres prompts del taller. El de Celaya espera asunto y tono."
+              },
+              {
+                "title": "Estrés",
+                "href": "/examples/prompt-library/stress",
+                "description": "Vacío, textos largos, RTL y diez prompts."
+              }
+            ],
+            "usage": "<PromptLibrary templates={templates} selectedId={id} values={values} onSelect={select} onValue={setValue} onUse={use} />",
+            "api": [
+              {
+                "name": "templates",
+                "type": "PromptTemplate<TMeta>[]",
+                "description": "id, title, category, body with {name} blanks, variables (name, description). meta is opaque."
+              },
+              {
+                "name": "selectedId / values",
+                "type": "string | null / Record<string, string>",
+                "description": "The open template and the blanks for it. The host keeps what was typed."
+              },
+              {
+                "name": "onSelect / onValue / onCopy / onUse",
+                "type": "callbacks",
+                "description": "Choose a template, fill a blank, copy the preview, or use it. Use stays disabled while a blank is empty."
+              },
+              {
+                "name": "loading / error",
+                "type": "boolean / string",
+                "description": "Loading skeleton, or an alert when the prompt cannot be used."
+              },
+              {
+                "name": "labels",
+                "type": "Partial<PromptLibraryLabels>",
+                "description": "Chrome copy. English is the default."
+              },
+              {
+                "name": "className / classNames",
+                "type": "string",
+                "description": "Root class and slot classes."
+              }
+            ]
+          },
+          "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. No es una fila de sugerencias: la plantilla se queda y solo cambian los espacios.",
+          "files": [
+            {
+              "path": "registry/ui/prompt-library.tsx",
+              "type": "registry:component",
+              "target": "@ui/prompt-library.tsx"
+            }
+          ]
+        },
     {
       "author": "Eduardo Retana",
       "name": "data-table-grouping",

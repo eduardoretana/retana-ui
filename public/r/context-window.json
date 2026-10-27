@@ -1,0 +1,148 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "context-window",
+  "title": "Context window",
+  "author": "Eduardo Retana",
+  "description": "The window as a decorative field of cells and the list under it. A file can be removed and the conversation can be compacted. Cells do not shimmer.",
+  "registryDependencies": [
+    "badge",
+    "button",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/context-window.tsx",
+      "content": "\"use client\"\n\n/**\n * The same window as a field of cells plus the list under it. Clean-room\n * reading of a public behavior description: a person can drop a file and\n * compact the conversation. The field is decorative. No Affect source, sample\n * data, icons, or assets were copied. Cells do not shimmer.\n */\n\nimport * as React from \"react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport const WINDOW_PRESSURES = [\"room\", \"tight\", \"full\"] as const\n\nexport type WindowPressure = (typeof WINDOW_PRESSURES)[number]\n\nexport type WindowItem<TMeta = unknown> = {\n  id: string\n  label: string\n  tokens: number\n  meta?: TMeta\n}\n\nexport type WindowPart<TMeta = unknown> = {\n  id: string\n  label: string\n  tokens?: number\n  items?: readonly WindowItem<TMeta>[]\n  locked?: boolean\n  compactable?: boolean\n  compact?: boolean\n  meta?: TMeta\n}\n\nexport type ContextWindowLabels = {\n  title: string\n  summary: (used: number, limit: number, percent: number) => string\n  tokens: (count: number) => string\n  pressure: Record<WindowPressure, string>\n  left: (count: number) => string\n  open: (label: string) => string\n  remove: string\n  removeNamed: (label: string) => string\n  compact: string\n  compactNamed: (label: string) => string\n  compacted: string\n  removed: (label: string) => string\n  compacting: (label: string) => string\n  empty: string\n  loading: string\n}\n\nexport type ContextWindowClassNames = {\n  root?: string\n  part?: string\n}\n\nexport type ContextWindowProps<TMeta = unknown> = {\n  parts?: readonly WindowPart<TMeta>[]\n  limit?: number\n  note?: string\n  loading?: boolean\n  error?: string\n  title?: string\n  onRemove?: (partId: string, itemId: string) => void\n  onCompact?: (partId: string) => void\n  className?: string\n  classNames?: ContextWindowClassNames\n  labels?: Partial<ContextWindowLabels>\n}\n\nconst COLUMNS = 12\nconst CELLS = 48\n\nconst TONES = [\"bg-muted\", \"bg-chart-2/70\", \"bg-primary/40\", \"bg-chart-4/70\", \"bg-foreground/25\"] as const\n\nconst windowLabels: ContextWindowLabels = {\n  title: \"Context window\",\n  summary: (used, limit, percent) => `${used.toLocaleString(\"en-US\")} of ${limit.toLocaleString(\"en-US\")} tokens, ${percent}%`,\n  tokens: (count) => `${count.toLocaleString(\"en-US\")} tokens`,\n  pressure: { room: \"Room left\", tight: \"Getting full\", full: \"The window is full\" },\n  left: (count) => `${count.toLocaleString(\"en-US\")} tokens left`,\n  open: (label) => `Open “${label}”`,\n  remove: \"Remove\",\n  removeNamed: (label) => `Remove “${label}”`,\n  compact: \"Compact\",\n  compactNamed: (label) => `Compact “${label}”`,\n  compacted: \"Compacted\",\n  removed: (label) => `Removed “${label}”`,\n  compacting: (label) => `Compacting “${label}”`,\n  empty: \"Nothing is in this window.\",\n  loading: \"Loading the window\",\n}\n\nfunction resolveLabels(partial?: Partial<ContextWindowLabels>): ContextWindowLabels {\n  return { ...windowLabels, ...partial, pressure: { ...windowLabels.pressure, ...partial?.pressure } }\n}\n\nexport function windowTokens(part: Pick<WindowPart, \"id\" | \"tokens\" | \"items\">) {\n  if (part.items && part.items.length > 0) return part.items.reduce((sum, item) => sum + Math.max(0, item.tokens), 0)\n  return Math.max(0, part.tokens ?? 0)\n}\n\nexport function windowUsed(parts: readonly Pick<WindowPart, \"id\" | \"tokens\" | \"items\">[]) {\n  return parts.reduce((sum, part) => sum + windowTokens(part), 0)\n}\n\nexport function windowPressure(used: number, limit: number): WindowPressure {\n  if (limit <= 0) return \"room\"\n  const ratio = used / limit\n  if (ratio >= 0.95) return \"full\"\n  if (ratio >= 0.8) return \"tight\"\n  return \"room\"\n}\n\nfunction cellOwners(parts: readonly WindowPart[], limit: number) {\n  const used = windowUsed(parts)\n  const budget = Math.max(limit, used, 1)\n  const counts = parts.map((part) => {\n    const tokens = windowTokens(part)\n    if (tokens <= 0) return 0\n    return Math.max(1, Math.round((tokens / budget) * CELLS))\n  })\n  let total = counts.reduce((sum, count) => sum + count, 0)\n  while (total > CELLS) {\n    let index = 0\n    for (let cursor = 1; cursor < counts.length; cursor += 1) {\n      if ((counts[cursor] ?? 0) > (counts[index] ?? 0)) index = cursor\n    }\n    if ((counts[index] ?? 0) <= 1) break\n    counts[index] = (counts[index] ?? 1) - 1\n    total -= 1\n  }\n  const cells: Array<{ id: string; tone: string } | null> = []\n  parts.forEach((part, index) => {\n    const tone = TONES[index % TONES.length] ?? \"bg-muted\"\n    for (let cursor = 0; cursor < (counts[index] ?? 0) && cells.length < CELLS; cursor += 1) cells.push({ id: part.id, tone })\n  })\n  while (cells.length < CELLS) cells.push(null)\n  return cells\n}\n\nexport function ContextWindow<TMeta = unknown>({\n  parts = [],\n  limit = 0,\n  note,\n  loading = false,\n  error,\n  title,\n  onRemove,\n  onCompact,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: ContextWindowProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const heading = title ?? labels.title\n  const used = windowUsed(parts)\n  const percent = limit > 0 ? Math.round((used / limit) * 100) : 0\n  const pressure = windowPressure(used, limit)\n  const [openId, setOpenId] = React.useState<string | null>(null)\n  const [hotId, setHotId] = React.useState<string | null>(null)\n  const [live, setLive] = React.useState(\"\")\n  const cells = cellOwners(parts, limit)\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        {note ? <Badge variant=\"outline\">{note}</Badge> : null}\n        <Badge variant={pressure === \"room\" ? \"secondary\" : pressure === \"tight\" ? \"outline\" : \"destructive\"}>{labels.pressure[pressure]}</Badge>\n      </header>\n      <p>{labels.summary(used, limit, percent)}</p>\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-28 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && parts.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : parts.length === 0 ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <div className=\"flex flex-col gap-3\">\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          <div aria-hidden=\"true\" className=\"grid gap-0.5\" style={{ gridTemplateColumns: `repeat(${COLUMNS}, minmax(0, 1fr))` }}>\n            {cells.map((cell, index) => (\n              <span\n                key={index}\n                className={cn(\"h-2 rounded-sm\", cell ? cell.tone : \"border border-dashed border-border\", hotId && cell?.id === hotId && \"ring-1 ring-ring\")}\n              />\n            ))}\n          </div>\n          <ul className=\"flex flex-col gap-2\">\n            {parts.map((part) => {\n              const tokens = windowTokens(part)\n              const open = openId === part.id\n              return (\n                <li\n                  key={part.id}\n                  className={cn(\"rounded-lg border border-border px-3 py-2\", classNames?.part)}\n                  onMouseEnter={() => setHotId(part.id)}\n                  onMouseLeave={() => setHotId(null)}\n                >\n                  <div className=\"flex flex-wrap items-center gap-2\">\n                    {part.items ? (\n                      <button\n                        type=\"button\"\n                        aria-expanded={open}\n                        aria-label={labels.open(part.label)}\n                        className=\"font-medium focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n                        onClick={() => setOpenId(open ? null : part.id)}\n                        onFocus={() => setHotId(part.id)}\n                      >\n                        {part.label}\n                      </button>\n                    ) : (\n                      <h3 className=\"font-medium\">{part.label}</h3>\n                    )}\n                    <span className=\"text-xs text-muted-foreground\">{labels.tokens(tokens)}</span>\n                    {part.compact ? <Badge variant=\"secondary\">{labels.compacted}</Badge> : null}\n                    {part.compactable && !part.compact ? (\n                      <Button\n                        type=\"button\"\n                        size=\"sm\"\n                        variant=\"outline\"\n                        className=\"ms-auto\"\n                        aria-label={labels.compactNamed(part.label)}\n                        onClick={() => {\n                          onCompact?.(part.id)\n                          setLive(labels.compacting(part.label))\n                        }}\n                      >\n                        {labels.compact}\n                      </Button>\n                    ) : null}\n                  </div>\n                  {open && part.items ? (\n                    <ul className=\"mt-2 flex flex-col gap-1\">\n                      {part.items.map((item) => (\n                        <li key={item.id} className=\"flex flex-wrap items-center gap-2\">\n                          <span>{item.label}</span>\n                          <span className=\"text-xs text-muted-foreground\">{labels.tokens(item.tokens)}</span>\n                          {part.locked ? null : (\n                            <Button\n                              type=\"button\"\n                              size=\"sm\"\n                              variant=\"outline\"\n                              className=\"ms-auto\"\n                              aria-label={labels.removeNamed(item.label)}\n                              onClick={() => {\n                                onRemove?.(part.id, item.id)\n                                setLive(labels.removed(item.label))\n                              }}\n                            >\n                              {labels.remove}\n                            </Button>\n                          )}\n                        </li>\n                      ))}\n                    </ul>\n                  ) : null}\n                </li>\n              )\n            })}\n          </ul>\n          {pressure !== \"room\" ? <p className=\"text-xs text-muted-foreground\">{labels.left(Math.max(0, limit - used))}</p> : null}\n        </div>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/context-window.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Ventana de contexto",
+    "descriptionEs": "La ventana como un campo de celdas y la lista debajo. Se puede quitar un archivo y compactar la charla. Las celdas no brillan.",
+    "preview": "app/examples/context-window/preview.tsx",
+    "previewHref": "/examples/context-window",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "tight",
+        "label": "Justa",
+        "labelEn": "Tight"
+      },
+      {
+        "id": "full",
+        "label": "Llena",
+        "labelEn": "Full"
+      },
+      {
+        "id": "compacted",
+        "label": "Compacta",
+        "labelEn": "Compact"
+      }
+    ],
+    "examples": [
+      {
+        "title": "24 000 tokens",
+        "href": "/examples/context-window",
+        "description": "Cotización, foto del horno y la charla. En Error el primer quitar se deshace."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/context-window/stress",
+        "description": "Vacío, textos largos, RTL y diez partes."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/context-window?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/context-window?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/context-window?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/context-window?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Justa",
+        "href": "/examples/context-window?scene=tight",
+        "description": "Tight"
+      },
+      {
+        "title": "Llena",
+        "href": "/examples/context-window?scene=full",
+        "description": "Full"
+      },
+      {
+        "title": "Compacta",
+        "href": "/examples/context-window?scene=compacted",
+        "description": "Compact"
+      }
+    ],
+    "usage": "<ContextWindow parts={parts} limit={24000} onRemove={remove} onCompact={compact} />",
+    "api": [
+      {
+        "name": "parts",
+        "type": "WindowPart<TMeta>[]",
+        "description": "id, label, tokens or items, locked, compactable, compact. An item has id, label and tokens. meta is opaque."
+      },
+      {
+        "name": "limit",
+        "type": "number",
+        "description": "Size of the window. From 80% the caption says it is getting full. From 95% it is full."
+      },
+      {
+        "name": "onRemove / onCompact",
+        "type": "(partId, itemId) => void / (partId) => void",
+        "description": "Drop a file or compact a part. The piece does not change the list itself."
+      },
+      {
+        "name": "note",
+        "type": "string",
+        "description": "A small tag in the header, such as which window this is."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when a removal cannot be saved."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<ContextWindowLabels>",
+        "description": "Chrome copy. English is the default. The cell field is decorative."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. El campo de celdas es decorativo: los números viven en la lista.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

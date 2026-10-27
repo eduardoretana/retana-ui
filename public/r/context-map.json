@@ -1,0 +1,137 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "context-map",
+  "title": "Context map",
+  "author": "Eduardo Retana",
+  "description": "What fills one context window, as tiles. Free space stays visible. A compaction can be compared before and after. Tiles do not glide.",
+  "registryDependencies": [
+    "badge",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/context-map.tsx",
+      "content": "\"use client\"\n\n/**\n * What fills one context window, as tiles. Clean-room reading of a public\n * behavior description: each part shows its kind and tokens, free space stays\n * visible, and a compaction can be compared before and after. No Affect\n * source, sample data, icons, or assets were copied. Tiles do not glide or shine.\n */\n\nimport * as React from \"react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport const MAP_KINDS = [\"system\", \"tools\", \"memory\", \"file\", \"chat\", \"result\", \"summary\"] as const\n\nexport type MapKind = (typeof MAP_KINDS)[number]\n\nexport type MapView = \"before\" | \"after\"\n\nexport type ContextBlock<TMeta = unknown> = {\n  id: string\n  label: string\n  kind: MapKind\n  tokens: number\n  detail?: string\n  meta?: TMeta\n}\n\nexport type MapUsage = {\n  used: number\n  free: number\n  over: boolean\n}\n\nexport type ContextMapLabels = {\n  title: string\n  kind: Record<MapKind, string>\n  tokens: (count: number) => string\n  used: (used: number, limit: number) => string\n  over: string\n  free: string\n  freeNamed: (tokens: number) => string\n  before: string\n  after: string\n  select: (label: string, kind: string, tokens: number) => string\n  empty: string\n  loading: string\n  none: string\n}\n\nexport type ContextMapClassNames = {\n  root?: string\n  tile?: string\n}\n\nexport type ContextMapProps<TMeta = unknown> = {\n  blocks?: readonly ContextBlock<TMeta>[]\n  limit?: number\n  /** When set, Before and After can be compared. The host owns which blocks are showing. */\n  view?: MapView\n  onView?: (view: MapView) => void\n  compare?: boolean\n  note?: string\n  status?: string\n  /** A block id, or null when the free space is the one open. */\n  selectedId?: string | null\n  loading?: boolean\n  error?: string\n  title?: string\n  onSelect?: (id: string | null) => void\n  className?: string\n  classNames?: ContextMapClassNames\n  labels?: Partial<ContextMapLabels>\n}\n\nconst mapLabels: ContextMapLabels = {\n  title: \"Context\",\n  kind: {\n    system: \"System\",\n    tools: \"Tools\",\n    memory: \"Memory\",\n    file: \"File\",\n    chat: \"Chat\",\n    result: \"Result\",\n    summary: \"Summary\",\n  },\n  tokens: (count) => `${count.toLocaleString(\"en-US\")} tokens`,\n  used: (used, limit) => `${used.toLocaleString(\"en-US\")} of ${limit.toLocaleString(\"en-US\")}`,\n  over: \"Over the window\",\n  free: \"Free\",\n  freeNamed: (tokens) => `Free space, ${tokens.toLocaleString(\"en-US\")} tokens`,\n  before: \"Before\",\n  after: \"After\",\n  select: (label, kind, tokens) => `${label}, ${kind}, ${tokens.toLocaleString(\"en-US\")} tokens`,\n  empty: \"Nothing is in the window.\",\n  loading: \"Loading the context\",\n  none: \"Not compacted yet\",\n}\n\nconst KIND_CLASS: Record<MapKind, string> = {\n  system: \"border-border bg-muted\",\n  tools: \"border-chart-2 bg-chart-2/15\",\n  memory: \"border-chart-4 bg-chart-4/20\",\n  file: \"border-primary/40 bg-primary/10\",\n  chat: \"border-border bg-card\",\n  result: \"border-chart-2/60 bg-chart-2/10\",\n  summary: \"border-primary bg-primary/15\",\n}\n\nfunction resolveLabels(partial?: Partial<ContextMapLabels>): ContextMapLabels {\n  return { ...mapLabels, ...partial, kind: { ...mapLabels.kind, ...partial?.kind } }\n}\n\nexport function mapUsage(blocks: readonly Pick<ContextBlock, \"id\" | \"tokens\">[], limit: number): MapUsage {\n  const used = blocks.reduce((sum, block) => sum + Math.max(0, block.tokens), 0)\n  return { used, free: Math.max(0, limit - used), over: limit > 0 && used > limit }\n}\n\nexport function ContextMap<TMeta = unknown>({\n  blocks = [],\n  limit = 0,\n  view,\n  onView,\n  compare = false,\n  note,\n  status,\n  selectedId,\n  loading = false,\n  error,\n  title,\n  onSelect,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: ContextMapProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const heading = title ?? labels.title\n  const usage = mapUsage(blocks, limit)\n  const caption = note ?? (compare ? undefined : labels.none)\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        <Badge variant=\"secondary\">{labels.used(usage.used, limit)}</Badge>\n        {usage.over ? <Badge variant=\"destructive\">{labels.over}</Badge> : null}\n        {status ? <Badge variant=\"outline\">{status}</Badge> : null}\n        {compare ? (\n          <div role=\"group\" aria-label={heading} className=\"ms-auto flex gap-1\">\n            {([\"before\", \"after\"] as const).map((option) => (\n              <button\n                key={option}\n                type=\"button\"\n                aria-pressed={view === option}\n                className={cn(\n                  \"rounded-md px-2 py-1 text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\",\n                  view === option ? \"bg-foreground text-background\" : \"text-muted-foreground\",\n                )}\n                onClick={() => onView?.(option)}\n              >\n                {option === \"before\" ? labels.before : labels.after}\n              </button>\n            ))}\n          </div>\n        ) : null}\n      </header>\n      {caption ? <p className=\"text-xs text-muted-foreground\">{caption}</p> : null}\n      {loading ? (\n        <div role=\"status\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-40 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && blocks.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : blocks.length === 0 ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <div className=\"flex flex-col gap-2\">\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          <ul aria-label={heading} className=\"flex min-h-44 flex-wrap gap-1\">\n            {blocks.map((block) => {\n              const open = selectedId === block.id\n              return (\n                <li key={block.id} className=\"min-w-32 flex-1\" style={{ flexGrow: Math.max(block.tokens, 1) }}>\n                  <button\n                    type=\"button\"\n                    aria-pressed={open}\n                    aria-label={labels.select(block.label, labels.kind[block.kind], block.tokens)}\n                    className={cn(\n                      \"h-full w-full rounded-md border px-2 py-2 text-start focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\",\n                      KIND_CLASS[block.kind],\n                      open && \"ring-2 ring-ring\",\n                      classNames?.tile,\n                    )}\n                    onClick={() => onSelect?.(block.id)}\n                  >\n                    <span className=\"block font-medium\">{block.label}</span>\n                    <span className=\"mt-1 block text-xs text-muted-foreground\">\n                      {labels.kind[block.kind]} · {labels.tokens(block.tokens)}\n                    </span>\n                    {open && block.detail ? <span className=\"mt-1 block text-xs\">{block.detail}</span> : null}\n                  </button>\n                </li>\n              )\n            })}\n            {usage.free > 0 ? (\n              <li className=\"min-w-32 flex-1\" style={{ flexGrow: usage.free }}>\n                <button\n                  type=\"button\"\n                  aria-pressed={selectedId === null}\n                  aria-label={labels.freeNamed(usage.free)}\n                  className=\"h-full w-full rounded-md border border-dashed border-border px-2 py-2 text-start text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n                  onClick={() => onSelect?.(null)}\n                >\n                  <span className=\"block font-medium\">{labels.free}</span>\n                  <span className=\"mt-1 block text-xs\">{labels.tokens(usage.free)}</span>\n                </button>\n              </li>\n            ) : null}\n          </ul>\n        </div>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/context-map.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Mapa del contexto",
+    "descriptionEs": "Qué llena una ventana, en mosaico. El espacio libre sigue a la vista y un resumen se puede comparar con lo de antes.",
+    "preview": "app/examples/context-map/preview.tsx",
+    "previewHref": "/examples/context-map",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "before",
+        "label": "Antes",
+        "labelEn": "Before"
+      },
+      {
+        "id": "open",
+        "label": "Abierto",
+        "labelEn": "Open"
+      }
+    ],
+    "examples": [
+      {
+        "title": "La ventana del viernes",
+        "href": "/examples/context-map",
+        "description": "Archivos, charla y el resumen del pedido PED-1048."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/context-map/stress",
+        "description": "Vacío, textos largos, RTL y diez bloques."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/context-map?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/context-map?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/context-map?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/context-map?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Antes",
+        "href": "/examples/context-map?scene=before",
+        "description": "Before"
+      },
+      {
+        "title": "Abierto",
+        "href": "/examples/context-map?scene=open",
+        "description": "Open"
+      }
+    ],
+    "usage": "<ContextMap blocks={blocks} limit={24000} compare view={view} onView={setView} onSelect={open} />",
+    "api": [
+      {
+        "name": "blocks",
+        "type": "ContextBlock<TMeta>[]",
+        "description": "id, label, kind (system, tools, memory, file, chat, result, summary), tokens, detail. meta is opaque."
+      },
+      {
+        "name": "limit / view / onView",
+        "type": "number / before | after / (view) => void",
+        "description": "Window size. Before and After show when compare is set. The host passes the blocks for the side that is open."
+      },
+      {
+        "name": "selectedId / onSelect",
+        "type": "string | null / (id: string | null) => void",
+        "description": "The open tile. Null is the free space."
+      },
+      {
+        "name": "note / status",
+        "type": "string",
+        "description": "A line under the title, and a short status such as compacting."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when the map cannot be read."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<ContextMapLabels>",
+        "description": "Chrome copy. English is the default."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. No es el anillo de uso: cada parte se ve, con su tipo y sus tokens.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}
