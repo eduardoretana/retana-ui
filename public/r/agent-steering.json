@@ -1,0 +1,151 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-steering",
+  "title": "Agent steering",
+  "author": "Eduardo Retana",
+  "description": "Leave a note for an agent's next step, or apply it to the step that is running now.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button",
+    "skeleton",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/agent-steering.tsx",
+      "content": "\"use client\"\n\n/**\n * Notes for an agent that is already working. Clean-room reading of a public\n * behavior description: a note can wait for the next step, or land on the\n * active step immediately. No Affect source, sample data, icons, or assets\n * were copied.\n */\n\nimport * as React from \"react\"\nimport { Pause, Play, Send, X, Zap } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { Textarea } from \"@/components/ui/textarea\"\nimport { cn } from \"@/lib/utils\"\n\nexport const STEER_STEP_STATUSES = [\"done\", \"active\", \"pending\"] as const\nexport const STEER_RUN_STATUSES = [\"running\", \"paused\", \"done\"] as const\n\nexport type SteerStepStatus = (typeof STEER_STEP_STATUSES)[number]\nexport type SteerRunStatus = (typeof STEER_RUN_STATUSES)[number]\n\nexport type SteerNote<TMeta = unknown> = {\n  id: string\n  text: string\n  meta?: TMeta\n}\n\nexport type SteerStep<TMeta = unknown> = {\n  id: string\n  title: string\n  status?: SteerStepStatus\n  notes?: readonly SteerNote<TMeta>[]\n  meta?: TMeta\n}\n\nexport type AgentSteeringLabels = {\n  plan: string\n  queue: string\n  field: string\n  hint: string\n  placeholder: string\n  queueAction: string\n  interrupt: string\n  pause: string\n  resume: string\n  remove: (text: string) => string\n  now: string\n  emptyPlan: string\n  loading: string\n  done: string\n  paused: string\n  running: string\n  active: string\n  pending: string\n  stepDone: string\n  queuedLive: (text: string) => string\n  interruptLive: (text: string) => string\n  removedLive: (text: string) => string\n}\n\nexport type AgentSteeringClassNames = {\n  root?: string\n  step?: string\n  note?: string\n  field?: string\n}\n\nexport type AgentSteeringProps<TMeta = unknown> = {\n  title: string\n  agent?: string\n  steps?: readonly SteerStep<TMeta>[]\n  queue?: readonly SteerNote<TMeta>[]\n  status?: SteerRunStatus\n  draft?: string\n  defaultDraft?: string\n  loading?: boolean\n  error?: string\n  placeholder?: string\n  onDraftChange?: (text: string) => void\n  onQueue?: (text: string) => void\n  onInterrupt?: (text: string, queuedId?: string) => void\n  onRemove?: (id: string) => void\n  onPause?: () => void\n  onResume?: () => void\n  className?: string\n  classNames?: AgentSteeringClassNames\n  labels?: Partial<AgentSteeringLabels>\n}\n\nconst agentSteeringLabels: AgentSteeringLabels = {\n  plan: \"Plan\",\n  queue: \"Waiting for the next step\",\n  field: \"Note for the agent\",\n  hint: \"Enter queues the note. Ctrl or Cmd Enter applies it now. Shift Enter adds a line.\",\n  placeholder: \"Add a note for the next step\",\n  queueAction: \"Queue for the next step\",\n  interrupt: \"Apply now\",\n  pause: \"Pause\",\n  resume: \"Resume\",\n  remove: (text) => `Remove “${text}”`,\n  now: \"Now\",\n  emptyPlan: \"This run has no steps yet.\",\n  loading: \"Loading the plan\",\n  done: \"The run is finished.\",\n  paused: \"Paused\",\n  running: \"Working\",\n  active: \"Current step\",\n  pending: \"Upcoming\",\n  stepDone: \"Done\",\n  queuedLive: (text) => `Queued “${text}” for the next step`,\n  interruptLive: (text) => `Applied “${text}” to the current step`,\n  removedLive: (text) => `Removed “${text}”`,\n}\n\nfunction resolveLabels(partial?: Partial<AgentSteeringLabels>): AgentSteeringLabels {\n  return { ...agentSteeringLabels, ...partial }\n}\n\nexport function AgentSteering<TMeta = unknown>({\n  title,\n  agent,\n  steps = [],\n  queue = [],\n  status = \"running\",\n  draft: draftProp,\n  defaultDraft = \"\",\n  loading = false,\n  error,\n  placeholder,\n  onDraftChange,\n  onQueue,\n  onInterrupt,\n  onRemove,\n  onPause,\n  onResume,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: AgentSteeringProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const hintId = React.useId()\n  const liveId = React.useId()\n  const [internalDraft, setInternalDraft] = React.useState(defaultDraft)\n  const [live, setLive] = React.useState(\"\")\n  const draft = draftProp ?? internalDraft\n  const closed = status === \"done\" || loading\n\n  function setDraft(next: string) {\n    if (draftProp === undefined) setInternalDraft(next)\n    onDraftChange?.(next)\n  }\n\n  function submit(mode: \"queue\" | \"interrupt\", text: string, queuedId?: string) {\n    const trimmed = text.trim()\n    if (!trimmed || closed) return\n    if (mode === \"queue\") {\n      onQueue?.(trimmed)\n      setLive(labels.queuedLive(trimmed))\n    } else {\n      onInterrupt?.(trimmed, queuedId)\n      setLive(labels.interruptLive(trimmed))\n    }\n    if (!queuedId) setDraft(\"\")\n  }\n\n  function onKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {\n    if (event.key === \"Escape\") {\n      event.preventDefault()\n      setDraft(\"\")\n      return\n    }\n    if (event.key !== \"Enter\" || event.shiftKey) return\n    event.preventDefault()\n    submit(event.metaKey || event.ctrlKey ? \"interrupt\" : \"queue\", draft)\n  }\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-start gap-2\">\n        <div className=\"min-w-0 flex-1\">\n          <h2 id={titleId} className=\"font-medium\">\n            {title}\n          </h2>\n          {agent ? <p className=\"text-xs text-muted-foreground\">{agent}</p> : null}\n        </div>\n        <p className=\"text-xs text-muted-foreground\">{status === \"paused\" ? labels.paused : status === \"done\" ? labels.done : labels.running}</p>\n        {status === \"running\" && onPause ? (\n          <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={onPause}>\n            <Pause aria-hidden=\"true\" />\n            {labels.pause}\n          </Button>\n        ) : null}\n        {status === \"paused\" && onResume ? (\n          <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={onResume}>\n            <Play aria-hidden=\"true\" />\n            {labels.resume}\n          </Button>\n        ) : null}\n      </header>\n      <p id={liveId} className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\" className=\"flex flex-col gap-2\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-10 w-full\" />\n          <Skeleton className=\"h-10 w-full\" />\n        </div>\n      ) : error && steps.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : (\n        <>\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          {steps.length === 0 ? (\n            <p className=\"text-muted-foreground\">{labels.emptyPlan}</p>\n          ) : (\n            <ol aria-label={labels.plan} className=\"flex flex-col gap-2\">\n              {steps.map((step, index) => {\n                const stepStatus = step.status ?? \"pending\"\n                return (\n                  <li\n                    key={step.id}\n                    aria-current={stepStatus === \"active\" ? \"step\" : undefined}\n                    className={cn(\n                      \"rounded-lg border border-border px-2 py-2\",\n                      stepStatus === \"active\" && \"bg-chart-2/10\",\n                      classNames?.step,\n                    )}\n                  >\n                    <div className=\"flex items-baseline gap-2\">\n                      <span className=\"text-xs text-muted-foreground tabular-nums\">{index + 1}</span>\n                      <span className={cn(\"font-medium\", stepStatus === \"done\" && \"text-muted-foreground\")}>{step.title}</span>\n                      <span className=\"ms-auto text-xs text-muted-foreground\">\n                        {stepStatus === \"active\" ? labels.active : stepStatus === \"done\" ? labels.stepDone : labels.pending}\n                      </span>\n                    </div>\n                    {step.notes && step.notes.length > 0 ? (\n                      <ul className=\"mt-2 flex flex-col gap-1\">\n                        {step.notes.map((note) => (\n                          <li key={note.id} className={cn(\"rounded-md bg-muted px-2 py-1 text-xs\", classNames?.note)}>\n                            {note.text}\n                          </li>\n                        ))}\n                      </ul>\n                    ) : null}\n                  </li>\n                )\n              })}\n            </ol>\n          )}\n\n          {queue.length > 0 ? (\n            <div className=\"flex flex-col gap-2\">\n              <h3 className=\"text-xs font-medium text-muted-foreground\">{labels.queue}</h3>\n              <ul className=\"flex flex-col gap-2\">\n                {queue.map((note) => (\n                  <li key={note.id} className=\"flex items-start gap-2 rounded-lg border border-dashed border-border px-2 py-2\">\n                    <p className=\"min-w-0 flex-1 text-sm\">{note.text}</p>\n                    {onInterrupt && status === \"running\" ? (\n                      <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={() => submit(\"interrupt\", note.text, note.id)}>\n                        <Zap aria-hidden=\"true\" />\n                        {labels.now}\n                      </Button>\n                    ) : null}\n                    {onRemove ? (\n                      <Button\n                        type=\"button\"\n                        size=\"icon-sm\"\n                        variant=\"ghost\"\n                        aria-label={labels.remove(note.text)}\n                        onClick={() => {\n                          onRemove(note.id)\n                          setLive(labels.removedLive(note.text))\n                        }}\n                      >\n                        <X aria-hidden=\"true\" />\n                      </Button>\n                    ) : null}\n                  </li>\n                ))}\n              </ul>\n            </div>\n          ) : null}\n\n          <div className=\"flex flex-col gap-2\">\n            <label htmlFor={`${titleId}-note`} className=\"text-xs font-medium text-muted-foreground\">\n              {labels.field}\n            </label>\n            <Textarea\n              id={`${titleId}-note`}\n              value={draft}\n              placeholder={placeholder ?? labels.placeholder}\n              disabled={closed}\n              aria-describedby={hintId}\n              className={classNames?.field}\n              onChange={(event) => setDraft(event.target.value)}\n              onKeyDown={onKeyDown}\n            />\n            <p id={hintId} className=\"text-xs text-muted-foreground\">\n              {labels.hint}\n            </p>\n            <div className=\"flex flex-wrap gap-2\">\n              <Button type=\"button\" size=\"sm\" variant=\"outline\" disabled={closed || draft.trim().length === 0} onClick={() => submit(\"queue\", draft)}>\n                <Send aria-hidden=\"true\" />\n                {labels.queueAction}\n              </Button>\n              {onInterrupt ? (\n                <Button type=\"button\" size=\"sm\" disabled={closed || draft.trim().length === 0} onClick={() => submit(\"interrupt\", draft)}>\n                  <Zap aria-hidden=\"true\" />\n                  {labels.interrupt}\n                </Button>\n              ) : null}\n            </div>\n          </div>\n        </>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/agent-steering.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Dirección en vivo",
+    "descriptionEs": "Deja una nota para el siguiente paso de un agente, o aplícala al paso que va en curso.",
+    "preview": "app/examples/agent-steering/preview.tsx",
+    "previewHref": "/examples/agent-steering",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "paused",
+        "label": "Pausa",
+        "labelEn": "Paused"
+      },
+      {
+        "id": "done",
+        "label": "Cerrado",
+        "labelEn": "Done"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Cotización en curso",
+        "href": "/examples/agent-steering",
+        "description": "Un plan de cuatro pasos y notas que esperan o entran ahora."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/agent-steering/stress",
+        "description": "Vacío, textos largos, RTL y diez pasos."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/agent-steering?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/agent-steering?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/agent-steering?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/agent-steering?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Pausa",
+        "href": "/examples/agent-steering?scene=paused",
+        "description": "Paused"
+      },
+      {
+        "title": "Cerrado",
+        "href": "/examples/agent-steering?scene=done",
+        "description": "Done"
+      }
+    ],
+    "usage": "<AgentSteering title={title} agent={agent} steps={steps} queue={queue} status={status} onQueue={queueNote} onInterrupt={applyNow} onPause={pause} onResume={resume} />",
+    "api": [
+      {
+        "name": "steps",
+        "type": "SteerStep<TMeta>[]",
+        "description": "id, title, status (done, active, pending), and notes already on the step. meta is opaque."
+      },
+      {
+        "name": "queue",
+        "type": "SteerNote<TMeta>[]",
+        "description": "Notes waiting for the next step."
+      },
+      {
+        "name": "onQueue / onInterrupt / onRemove",
+        "type": "callbacks",
+        "description": "Enter queues. Ctrl or Cmd Enter applies now. Remove drops a waiting note."
+      },
+      {
+        "name": "status / onPause / onResume",
+        "type": "running | paused | done",
+        "description": "A finished run closes the field."
+      },
+      {
+        "name": "draft / onDraftChange",
+        "type": "string / (text) => void",
+        "description": "Controlled field. Omitted, the field keeps its own text."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when a note does not land."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<AgentSteeringLabels>",
+        "description": "Chrome copy. English is the default."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de dirigir un agente mientras trabaja; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (button, skeleton, textarea), responde no. La pieza no trae tema, cssVars ni colores fijos.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

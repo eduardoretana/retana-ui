@@ -1,0 +1,152 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "delegate-board",
+  "title": "Delegate board",
+  "author": "Eduardo Retana",
+  "description": "Hand work to an agent by dragging it or picking a name, or give every waiting task to whoever is free first.",
+  "dependencies": [
+    "@dnd-kit/core",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "badge",
+    "button",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/delegate-board.tsx",
+      "content": "\"use client\"\n\n/**\n * Hand work to agents. Clean-room reading of a public behavior description:\n * a task can be dragged onto an agent, or given to whoever is free first.\n * No Affect source, sample data, icons, or assets were copied.\n */\n\nimport * as React from \"react\"\nimport {\n  DndContext,\n  KeyboardSensor,\n  PointerSensor,\n  useDraggable,\n  useDroppable,\n  useSensor,\n  useSensors,\n  type DragEndEvent,\n} from \"@dnd-kit/core\"\nimport { GripVertical } from \"lucide-react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport const DELEGATE_MODES = [\"manual\", \"auto\"] as const\n\nexport type DelegateMode = (typeof DELEGATE_MODES)[number]\n\nexport type DelegateTask<TMeta = unknown> = {\n  id: string\n  title: string\n  detail?: string\n  /** Minutes of work. */\n  minutes: number\n  agentId?: string | null\n  meta?: TMeta\n}\n\nexport type DelegateAgent<TMeta = unknown> = {\n  id: string\n  name: string\n  role: string\n  /** Minutes already booked before these tasks. */\n  bookedMinutes: number\n  meta?: TMeta\n}\n\nexport type DelegateAssignment = {\n  taskId: string\n  agentId: string\n}\n\nexport type DelegateBoardLabels = {\n  title: string\n  waiting: string\n  manual: string\n  auto: string\n  place: string\n  assign: (title: string) => string\n  unassigned: string\n  drag: (title: string) => string\n  freeAt: (clock: string) => string\n  previewAt: (clock: string) => string\n  minutes: (count: number) => string\n  empty: string\n  loading: string\n  noAgents: string\n  picked: (title: string) => string\n  moved: (title: string, agent: string) => string\n  cancelled: string\n}\n\nexport type DelegateBoardClassNames = {\n  root?: string\n  column?: string\n  task?: string\n}\n\nexport type DelegateBoardProps<TMeta = unknown> = {\n  tasks?: readonly DelegateTask<TMeta>[]\n  agents?: readonly DelegateAgent<TMeta>[]\n  /** Minutes from midnight used to render \"free at\". */\n  clockMinutes?: number\n  mode?: DelegateMode\n  defaultMode?: DelegateMode\n  loading?: boolean\n  error?: string\n  title?: string\n  onModeChange?: (mode: DelegateMode) => void\n  onAssign?: (taskId: string, agentId: string) => void\n  onUnassign?: (taskId: string) => void\n  onPlace?: (assignments: readonly DelegateAssignment[]) => void\n  className?: string\n  classNames?: DelegateBoardClassNames\n  labels?: Partial<DelegateBoardLabels>\n}\n\nconst delegateBoardLabels: DelegateBoardLabels = {\n  title: \"Hand-off\",\n  waiting: \"Not handed off\",\n  manual: \"Choose who\",\n  auto: \"Whoever is free\",\n  place: \"Hand waiting work to whoever is free\",\n  assign: (title) => `Hand off “${title}”`,\n  unassigned: \"Leave unassigned\",\n  drag: (title) => `Drag “${title}”`,\n  freeAt: (clock) => `Free at ${clock}`,\n  previewAt: (clock) => `Would be free at ${clock}`,\n  minutes: (count) => `${count} min`,\n  empty: \"No work is waiting to be handed off.\",\n  loading: \"Loading the hand-off\",\n  noAgents: \"No agents are available.\",\n  picked: (title) => `Picked up ${title}.`,\n  moved: (title, agent) => `Moved ${title} to ${agent}.`,\n  cancelled: \"Cancelled.\",\n}\n\nexport function formatClock(minutesFromMidnight: number) {\n  const day = ((Math.round(minutesFromMidnight) % 1440) + 1440) % 1440\n  const hours = Math.floor(day / 60)\n  const minutes = day % 60\n  return `${String(hours).padStart(2, \"0\")}:${String(minutes).padStart(2, \"0\")}`\n}\n\nexport function agentLoad(\n  agentId: string,\n  tasks: readonly Pick<DelegateTask, \"agentId\" | \"minutes\">[],\n  bookedMinutes: number,\n) {\n  return tasks.reduce((sum, task) => (task.agentId === agentId ? sum + task.minutes : sum), bookedMinutes)\n}\n\nexport function firstFreeAssignments(\n  tasks: readonly Pick<DelegateTask, \"id\" | \"minutes\" | \"agentId\">[],\n  agents: readonly Pick<DelegateAgent, \"id\" | \"bookedMinutes\">[],\n): DelegateAssignment[] {\n  if (agents.length === 0) return []\n  const load = new Map(agents.map((agent) => [agent.id, agentLoad(agent.id, tasks, agent.bookedMinutes)]))\n  const assignments: DelegateAssignment[] = []\n  for (const task of tasks) {\n    if (task.agentId) continue\n    let best = agents[0]!\n    let bestLoad = load.get(best.id) ?? 0\n    for (const agent of agents) {\n      const current = load.get(agent.id) ?? 0\n      if (current < bestLoad) {\n        best = agent\n        bestLoad = current\n      }\n    }\n    assignments.push({ taskId: task.id, agentId: best.id })\n    load.set(best.id, bestLoad + task.minutes)\n  }\n  return assignments\n}\n\nfunction resolveLabels(partial?: Partial<DelegateBoardLabels>): DelegateBoardLabels {\n  return { ...delegateBoardLabels, ...partial }\n}\n\nconst TRAY = \"tray\"\n\nexport function DelegateBoard<TMeta = unknown>({\n  tasks = [],\n  agents = [],\n  clockMinutes = 11 * 60 + 40,\n  mode: modeProp,\n  defaultMode = \"manual\",\n  loading = false,\n  error,\n  title,\n  onModeChange,\n  onAssign,\n  onUnassign,\n  onPlace,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: DelegateBoardProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const heading = title ?? labels.title\n  const [internalMode, setInternalMode] = React.useState<DelegateMode>(defaultMode)\n  const [previewId, setPreviewId] = React.useState<string | null>(null)\n  const mode = modeProp ?? internalMode\n  const sensors = useSensors(\n    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),\n    useSensor(KeyboardSensor),\n  )\n  const names = React.useMemo(() => new Map(tasks.map((task) => [task.id, task.title])), [tasks])\n\n  function setMode(next: DelegateMode) {\n    if (modeProp === undefined) setInternalMode(next)\n    onModeChange?.(next)\n  }\n\n  function onDragEnd(event: DragEndEvent) {\n    setPreviewId(null)\n    const taskId = String(event.active.id)\n    const overId = event.over ? String(event.over.id) : \"\"\n    if (!overId) return\n    if (overId === TRAY) {\n      onUnassign?.(taskId)\n      return\n    }\n    if (overId.startsWith(\"agent:\")) onAssign?.(taskId, overId.slice(\"agent:\".length))\n  }\n\n  const waiting = tasks.filter((task) => !task.agentId)\n  const preview = tasks.find((task) => task.id === previewId)\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        <div role=\"group\" aria-label={heading} className=\"ms-auto flex gap-1\">\n          {DELEGATE_MODES.map((option) => (\n            <Button key={option} type=\"button\" size=\"sm\" variant={mode === option ? \"secondary\" : \"ghost\"} aria-pressed={mode === option} onClick={() => setMode(option)}>\n              {option === \"auto\" ? labels.auto : labels.manual}\n            </Button>\n          ))}\n        </div>\n      </header>\n      {loading ? (\n        <div role=\"status\" className=\"flex gap-2\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-28 flex-1\" />\n          <Skeleton className=\"h-28 flex-1\" />\n        </div>\n      ) : error && tasks.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : (\n        <DndContext\n          sensors={sensors}\n          onDragStart={(event) => setPreviewId(String(event.active.id))}\n          onDragCancel={() => setPreviewId(null)}\n          onDragEnd={onDragEnd}\n          accessibility={{\n            announcements: {\n              onDragStart({ active }) {\n                return labels.picked(names.get(String(active.id)) ?? String(active.id))\n              },\n              onDragOver({ over }) {\n                if (!over) return \"\"\n                const id = String(over.id)\n                if (id === TRAY) return labels.waiting\n                const agent = agents.find((item) => `agent:${item.id}` === id)\n                return agent?.name ?? \"\"\n              },\n              onDragEnd({ active, over }) {\n                const task = names.get(String(active.id)) ?? String(active.id)\n                if (!over) return labels.cancelled\n                const id = String(over.id)\n                if (id === TRAY) return labels.moved(task, labels.waiting)\n                const agent = agents.find((item) => `agent:${item.id}` === id)\n                return labels.moved(task, agent?.name ?? id)\n              },\n              onDragCancel() {\n                return labels.cancelled\n              },\n            },\n          }}\n        >\n          {error ? (\n            <p role=\"alert\" className=\"mb-2 text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          {mode === \"auto\" && waiting.length > 0 ? (\n            <Button\n              type=\"button\"\n              size=\"sm\"\n              variant=\"outline\"\n              disabled={agents.length === 0}\n              onClick={() => onPlace?.(firstFreeAssignments(tasks, agents))}\n            >\n              {labels.place}\n            </Button>\n          ) : null}\n          <div className=\"flex gap-2 overflow-x-auto pb-1\">\n            <Column id={TRAY} title={labels.waiting} count={waiting.length} className={classNames?.column}>\n              {waiting.length === 0 ? <p className=\"text-xs text-muted-foreground\">{labels.empty}</p> : null}\n              {waiting.map((task) => (\n                <TaskCard\n                  key={task.id}\n                  task={task}\n                  agents={agents}\n                  labels={labels}\n                  className={classNames?.task}\n                  onAssign={onAssign}\n                  onUnassign={onUnassign}\n                  onPreview={setPreviewId}\n                />\n              ))}\n            </Column>\n            {agents.length === 0 ? (\n              <p className=\"self-center text-xs text-muted-foreground\">{labels.noAgents}</p>\n            ) : (\n              agents.map((agent) => {\n                const mine = tasks.filter((task) => task.agentId === agent.id)\n                const load = agentLoad(agent.id, tasks, agent.bookedMinutes)\n                const extra = preview && preview.agentId !== agent.id ? preview.minutes : 0\n                const when = formatClock(clockMinutes + load + extra)\n                return (\n                  <Column\n                    key={agent.id}\n                    id={`agent:${agent.id}`}\n                    title={agent.name}\n                    detail={agent.role}\n                    count={mine.length}\n                    when={extra > 0 ? labels.previewAt(when) : labels.freeAt(when)}\n                    className={classNames?.column}\n                  >\n                    {mine.map((task) => (\n                      <TaskCard\n                        key={task.id}\n                        task={task}\n                        agents={agents}\n                        labels={labels}\n                        className={classNames?.task}\n                        onAssign={onAssign}\n                        onUnassign={onUnassign}\n                        onPreview={setPreviewId}\n                      />\n                    ))}\n                  </Column>\n                )\n              })\n            )}\n          </div>\n        </DndContext>\n      )}\n    </section>\n  )\n}\n\nfunction Column({\n  id,\n  title,\n  detail,\n  count,\n  when,\n  className,\n  children,\n}: {\n  id: string\n  title: string\n  detail?: string\n  count: number\n  when?: string\n  className?: string\n  children: React.ReactNode\n}) {\n  const { setNodeRef, isOver } = useDroppable({ id })\n  return (\n    <div\n      ref={setNodeRef}\n      className={cn(\n        \"flex w-56 shrink-0 flex-col gap-2 rounded-lg border border-border bg-muted/30 p-2\",\n        isOver && \"ring-2 ring-ring\",\n        className,\n      )}\n    >\n      <header>\n        <div className=\"flex items-center gap-2\">\n          <h3 className=\"truncate text-sm font-medium\">{title}</h3>\n          <Badge variant=\"secondary\">{count}</Badge>\n        </div>\n        {detail ? <p className=\"truncate text-xs text-muted-foreground\">{detail}</p> : null}\n        {when ? <p className=\"text-xs text-muted-foreground tabular-nums\">{when}</p> : null}\n      </header>\n      {children}\n    </div>\n  )\n}\n\nfunction TaskCard({\n  task,\n  agents,\n  labels,\n  className,\n  onAssign,\n  onUnassign,\n  onPreview,\n}: {\n  task: DelegateTask\n  agents: readonly DelegateAgent[]\n  labels: DelegateBoardLabels\n  className?: string\n  onAssign?: (taskId: string, agentId: string) => void\n  onUnassign?: (taskId: string) => void\n  onPreview: (id: string | null) => void\n}) {\n  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: task.id })\n  const style = transform ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` } : undefined\n  return (\n    <article\n      ref={setNodeRef}\n      style={style}\n      className={cn(\"rounded-md border border-border bg-card p-2\", isDragging && \"opacity-70\", className)}\n      onPointerEnter={() => onPreview(task.id)}\n      onPointerLeave={() => onPreview(null)}\n      onFocus={() => onPreview(task.id)}\n      onBlur={() => onPreview(null)}\n    >\n      <div className=\"flex items-start gap-1\">\n        <button type=\"button\" className=\"mt-0.5 text-muted-foreground\" aria-label={labels.drag(task.title)} {...listeners} {...attributes}>\n          <GripVertical aria-hidden=\"true\" className=\"size-4\" />\n        </button>\n        <div className=\"min-w-0 flex-1\">\n          <p className=\"font-medium\">{task.title}</p>\n          {task.detail ? <p className=\"text-xs text-muted-foreground\">{task.detail}</p> : null}\n          <p className=\"text-xs text-muted-foreground tabular-nums\">{labels.minutes(task.minutes)}</p>\n        </div>\n      </div>\n      <label className=\"mt-2 block text-xs text-muted-foreground\">\n        <span className=\"sr-only\">{labels.assign(task.title)}</span>\n        <select\n          className=\"h-8 w-full rounded-md border border-input bg-background px-2 text-sm text-foreground\"\n          value={task.agentId ?? \"\"}\n          onChange={(event) => {\n            const next = event.target.value\n            if (!next) onUnassign?.(task.id)\n            else onAssign?.(task.id, next)\n          }}\n        >\n          <option value=\"\">{labels.unassigned}</option>\n          {agents.map((agent) => (\n            <option key={agent.id} value={agent.id}>\n              {agent.name}\n            </option>\n          ))}\n        </select>\n      </label>\n    </article>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/delegate-board.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Tablero de delegación",
+    "descriptionEs": "Entrega trabajo a un agente arrastrándolo o eligiendo su nombre, o dáselo a quien esté libre primero.",
+    "preview": "app/examples/delegate-board/preview.tsx",
+    "previewHref": "/examples/delegate-board",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "auto",
+        "label": "Automático",
+        "labelEn": "Auto"
+      },
+      {
+        "id": "crowded",
+        "label": "Cargado",
+        "labelEn": "Crowded"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Entrega del taller",
+        "href": "/examples/delegate-board",
+        "description": "Cotización y muestras sin dueño. Caja y Horno ya tienen trabajo."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/delegate-board/stress",
+        "description": "Vacío, textos largos, RTL y diez tareas."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/delegate-board?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/delegate-board?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/delegate-board?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/delegate-board?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Automático",
+        "href": "/examples/delegate-board?scene=auto",
+        "description": "Auto"
+      },
+      {
+        "title": "Cargado",
+        "href": "/examples/delegate-board?scene=crowded",
+        "description": "Crowded"
+      }
+    ],
+    "usage": "<DelegateBoard tasks={tasks} agents={agents} mode={mode} clockMinutes={11 * 60 + 40} onAssign={assign} onUnassign={clear} onPlace={place} />",
+    "api": [
+      {
+        "name": "tasks",
+        "type": "DelegateTask<TMeta>[]",
+        "description": "id, title, detail, minutes, agentId. meta is opaque."
+      },
+      {
+        "name": "agents",
+        "type": "DelegateAgent<TMeta>[]",
+        "description": "id, name, role, and minutes already booked."
+      },
+      {
+        "name": "onAssign / onUnassign / onPlace",
+        "type": "callbacks",
+        "description": "Hand a task to an agent, take it back, or place every waiting task with whoever is free first."
+      },
+      {
+        "name": "mode / onModeChange",
+        "type": "manual | auto",
+        "description": "Choose who, or show the free-first action."
+      },
+      {
+        "name": "clockMinutes",
+        "type": "number",
+        "description": "Minutes from midnight used to render when an agent is free."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when a hand-off cannot be saved."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<DelegateBoardLabels>",
+        "description": "Chrome copy. English is the default."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de un tablero para entregar trabajo a agentes; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, button, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos. El arrastre anuncia el origen y el destino.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}
