@@ -1,9 +1,10 @@
-# Excepciones a ui-system v3.2.2
+# Excepciones de color
+
+Las piezas del registry usan solo tokens del tema del host. Este documento lista los únicos archivos que pueden fijar colores.
 
 ## EX-01 · Colores realistas en piezas anatómicas, de imagen médica y moleculares (OrganUI)
 
-- **Decisión:** Eduardo Retana, 2026-10-21 (PR #37).
-- **Motivo:** Sana Sana (fisioterapia) necesita un aspecto hiperrealista. Los tokens del tema no pueden representar tejido, hueso, piel ni la convención CPK de los elementos químicos. Además, la radiología se muestra sobre negro.
+- **Motivo:** las escenas anatómicas necesitan un aspecto realista. Los tokens del tema no pueden representar tejido, hueso, piel ni la convención CPK de los elementos químicos. Además, la radiología se muestra sobre negro.
 - **Qué se permite:** colores fijos (hex, `oklch()`, `#000`) e iluminación 3D original de OrganUI, **solo** en la escena y en los datos de estas piezas:
   - `registry/ui/organ-*.tsx` (43 modelos) y `registry/ui/organ-viewer.tsx`
   - `registry/ui/molecule-viewer.tsx` (colores CPK, cadenas, estructura secundaria)

@@ -397,7 +397,7 @@ export function ImageViewer({
     const context = element.getContext("2d")
     if (!context) return
     context.setTransform(1, 0, 0, 1, 0, 0)
-    // Radiology convention: images sit on true black (ui-system exception).
+    // Radiology convention: images sit on true black (colour exception EX-01).
     context.fillStyle = "#000"
     context.fillRect(0, 0, element.width, element.height)
     if (!bitmap) return

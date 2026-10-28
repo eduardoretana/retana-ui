@@ -111,9 +111,9 @@ function isHostTokenMix(args: string) {
 }
 
 /**
- * ui-system exception (Eduardo, 2026-10-21): OrganUI anatomy, imaging and
+ * Colour exception EX-01: OrganUI anatomy, imaging and
  * molecular scenes keep their original realistic colours and lighting.
- * Scoped to these files only; see docs/ui-system-exceptions.md.
+ * Scoped to these files only; see docs/color-exceptions.md.
  */
 const ORGAN_MODELS =
   "adrenals|appendix|bladder|brain|breast|cell|diaphragm|ear|esophagus|eye|gallbladder|hair|heart|intestines|joints|kidneys|larynx|liver|lungs|lymph|muscles|nails|nerves|nose|pancreas|parathyroid|pharynx|pineal|pituitary|prostate|salivary-glands|skeleton|skin|spinal-cord|spleen|stomach|teeth|thymus|thyroid|tongue|uterus|vessels|vestibular"

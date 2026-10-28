@@ -50,7 +50,7 @@
       }
     ]
   },
-  "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (ui-system exception EX-01, docs/ui-system-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE).",
+  "docs": "Adapted from OrganUI (MIT, https://organui.com). Scene colours are OrganUI originals (colour exception EX-01, docs/color-exceptions.md); UI chrome uses host tokens; 3D models load at runtime under their own licence (see NOTICE).",
   "categories": [
     "salud",
     "clinical"
