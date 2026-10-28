@@ -210,6 +210,19 @@ export type AgendaLabels = {
   miniMonthLabel: string
   gapHour: string
   listLabel: string
+  manage: string
+  edit: string
+  duplicate: string
+  remove: string
+  eventMenu: (title: string) => string
+  duplicated: (title: string) => string
+  deleted: (title: string) => string
+  holiday: (title: string) => string
+}
+
+export type AgendaHoliday = {
+  date: string
+  title: string
 }
 
 export const agendaLabels: AgendaLabels = {
@@ -291,6 +304,14 @@ export const agendaLabels: AgendaLabels = {
   miniMonthLabel: "Mes en miniatura",
   gapHour: "Esta hora no existe en esta zona",
   listLabel: "Lista de la semana",
+  manage: "Acciones",
+  edit: "Editar",
+  duplicate: "Duplicar",
+  remove: "Borrar",
+  eventMenu: (title) => `Editar, duplicar o borrar ${title}`,
+  duplicated: () => "Evento duplicado",
+  deleted: () => "Evento eliminado",
+  holiday: (title) => `Festivo: ${title}`,
 }
 
 export const agendaLabelsEn: AgendaLabels = {
@@ -372,6 +393,14 @@ export const agendaLabelsEn: AgendaLabels = {
   miniMonthLabel: "Mini month",
   gapHour: "This hour does not exist in this time zone",
   listLabel: "Week list",
+  manage: "Actions",
+  edit: "Edit",
+  duplicate: "Duplicate",
+  remove: "Delete",
+  eventMenu: (title) => `Edit, duplicate, or delete ${title}`,
+  duplicated: () => "Event duplicated",
+  deleted: () => "Event deleted",
+  holiday: (title) => `Holiday: ${title}`,
 }
 
 export function resolveAgendaLabels(partial?: Partial<AgendaLabels>): AgendaLabels {

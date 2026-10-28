@@ -29,6 +29,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import {
   allDayMove,
   formatInterval,
@@ -94,6 +95,9 @@ export type AgendaEventCardProps<TMeta = Record<string, unknown>> = {
   density?: "regular" | "compact"
   onSelect?: (id: string) => void
   onReschedule?: (id: string, move: AgendaMove, source: AgendaChangeSource) => void
+  onEdit?: () => void
+  onDuplicate?: () => void
+  onDelete?: () => void
   className?: string
   children?: React.ReactNode
 }
@@ -113,6 +117,9 @@ export function AgendaEventCard<TMeta extends Record<string, unknown> = Record<s
   density = "regular",
   onSelect,
   onReschedule,
+  onEdit,
+  onDuplicate,
+  onDelete,
   className,
   children,
 }: AgendaEventCardProps<TMeta>) {
@@ -225,6 +232,32 @@ export function AgendaEventCard<TMeta extends Record<string, unknown> = Record<s
             ) : null}
           </DropdownMenuContent>
         </DropdownMenu>
+        {onEdit || onDuplicate || onDelete ? (
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button type="button" size="sm" variant="outline" className="h-auto whitespace-normal px-2" aria-label={labels.eventMenu(event.title)}>
+                {labels.manage}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-44 gap-1">
+              {onEdit ? (
+                <Button type="button" size="sm" variant="ghost" className="h-auto justify-start whitespace-normal" onClick={onEdit}>
+                  {labels.edit}
+                </Button>
+              ) : null}
+              {onDuplicate ? (
+                <Button type="button" size="sm" variant="ghost" className="h-auto justify-start whitespace-normal" onClick={onDuplicate}>
+                  {labels.duplicate}
+                </Button>
+              ) : null}
+              {onDelete ? (
+                <Button type="button" size="sm" variant="ghost" className="h-auto justify-start whitespace-normal text-destructive" onClick={onDelete}>
+                  {labels.remove}
+                </Button>
+              ) : null}
+            </PopoverContent>
+          </Popover>
+        ) : null}
       </div>
       {selected && children ? (
         <div data-agenda-ignore-drag="" className="min-h-0 border-t border-border">

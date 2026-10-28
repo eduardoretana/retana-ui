@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`417` items are in `registry.json` on this branch: `330` components, `72` blocks, `6` hooks, and `9` libraries. A name links to its source file.
+`421` items are in `registry.json` on this branch: `332` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -679,6 +679,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`work-table-tree`](registry/blocks/work-table-tree.tsx) · block — Section and article tree with nesting on drop and a summary footer. Install: `npx shadcn@latest add @retana/work-table-tree`.
 - [`work-table-queue`](registry/blocks/work-table-queue.tsx) · block — Flat queue whose rank follows the manual order, with pagination. Install: `npx shadcn@latest add @retana/work-table-queue`.
 - [`work-table-support`](registry/blocks/work-table-support.tsx) · block — Support queue with SLA cells and bulk move. Install: `npx shadcn@latest add @retana/work-table-support`.
+- [`time-off`](registry/blocks/time-off.tsx) · block — An agenda with holiday chips, a table of requests, and approve or decline. Duplicating or deleting an event announces it. Install: `npx shadcn@latest add @retana/time-off`.
 
 ### Actions and overlays
 
@@ -745,6 +746,9 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`shortcut-button`](registry/ui/shortcut-button.tsx) · ui — A button whose keycaps depress while its keyboard shortcut is held, then runs the command. Install: `npx shadcn@latest add @retana/shortcut-button`.
 - [`spotlight-button`](registry/ui/spotlight-button.tsx) · ui — A host button with a cursor spotlight and a border that lights up near the pointer. Install: `npx shadcn@latest add @retana/spotlight-button`.
 - [`slide-to-confirm`](registry/ui/slide-to-confirm.tsx) · ui — Slide the handle, or hold Arrow Right, past a threshold before the action runs. Install: `npx shadcn@latest add @retana/slide-to-confirm`.
+- [`time-off-core`](registry/lib/time-off.ts) · lib — Business days excluding weekends and a configurable holiday calendar, plus the balance that would remain. Install: `npx shadcn@latest add @retana/time-off-core`.
+- [`time-off-stats`](registry/ui/time-off-stats.tsx) · ui — Available balance, days already pending, and granted versus used by year. Install: `npx shadcn@latest add @retana/time-off-stats`.
+- [`time-off-request`](registry/ui/time-off-request.tsx) · ui — Pick a type, a date range, and a note. The summary counts business days and shows what would remain of the balance. Install: `npx shadcn@latest add @retana/time-off-request`.
 - [`anatomy-tree`](registry/ui/anatomy-tree.tsx) · ui — Search, select and control visibility in hierarchical anatomy data. Install: `npx shadcn@latest add @retana/anatomy-tree`.
 - [`vital-signs`](registry/ui/vital-signs.tsx) · ui — Heart rate, blood pressure, SpO₂ and temperature, each flagged against a configurable normal range. Install: `npx shadcn@latest add @retana/vital-signs`.
 - [`ecg-trace`](registry/ui/ecg-trace.tsx) · ui — A recorded or live ECG rhythm strip on standard paper, with labelled P, QRS and T waves. Not for diagnostic use. Install: `npx shadcn@latest add @retana/ecg-trace`.

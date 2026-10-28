@@ -1,0 +1,116 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "time-off-stats",
+  "title": "Time off stats",
+  "author": "Eduardo Retana",
+  "description": "Available balance, days already pending, and granted versus used by year.",
+  "registryDependencies": [
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/time-off-stats.tsx",
+      "content": "\"use client\"\n\n/** Balance, pending requests, and use by year. The host owns the numbers. */\n\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport type TimeOffYear = {\n  year: number\n  granted: number\n  used: number\n}\n\nexport type TimeOffStatsLabels = {\n  title: string\n  available: string\n  pending: string\n  left: string\n  year: string\n  granted: string\n  used: string\n  empty: string\n  loading: string\n  amount: (value: number) => string\n}\n\nconst statsLabels: TimeOffStatsLabels = {\n  title: \"Balance\",\n  available: \"Available\",\n  pending: \"Pending\",\n  left: \"Left this year\",\n  year: \"Year\",\n  granted: \"Granted\",\n  used: \"Used\",\n  empty: \"No balance to show.\",\n  loading: \"Loading the balance\",\n  amount: (value) => String(value),\n}\n\nexport type TimeOffStatsProps = {\n  available?: number | null\n  pending?: number\n  years?: readonly TimeOffYear[]\n  loading?: boolean\n  error?: string\n  labels?: Partial<TimeOffStatsLabels>\n  className?: string\n}\n\nexport function TimeOffStats({\n  available = null,\n  pending = 0,\n  years = [],\n  loading = false,\n  error,\n  labels: labelOverrides,\n  className,\n}: TimeOffStatsProps) {\n  const labels = { ...statsLabels, ...labelOverrides }\n  const left = available == null ? null : available - pending\n\n  return (\n    <section className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className)} aria-busy={loading || undefined}>\n      <h2 className=\"font-medium\">{labels.title}</h2>\n      {error ? <p role=\"alert\" className=\"text-destructive\">{error}</p> : null}\n      {loading ? (\n        <div aria-label={labels.loading} className=\"grid gap-2\">\n          <Skeleton className=\"h-14 w-full motion-reduce:animate-none\" />\n          <Skeleton className=\"h-8 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : available == null && years.length === 0 ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <>\n          <dl className=\"grid grid-cols-3 gap-2\">\n            <Stat label={labels.available} value={labels.amount(available ?? 0)} />\n            <Stat label={labels.pending} value={labels.amount(pending)} />\n            <Stat label={labels.left} value={labels.amount(left ?? 0)} />\n          </dl>\n          {years.length > 0 ? (\n            <table className=\"w-full text-xs\">\n              <thead className=\"text-muted-foreground\">\n                <tr>\n                  <th className=\"py-1 text-start font-medium\">{labels.year}</th>\n                  <th className=\"py-1 text-end font-medium\">{labels.granted}</th>\n                  <th className=\"py-1 text-end font-medium\">{labels.used}</th>\n                </tr>\n              </thead>\n              <tbody>\n                {years.map((year) => {\n                  const width = year.granted <= 0 ? 0 : Math.min(100, Math.round((year.used / year.granted) * 100))\n                  return (\n                    <tr key={year.year} className=\"border-t border-border\">\n                      <td className=\"py-1.5\">\n                        <div className=\"font-medium tabular-nums\">{year.year}</div>\n                        <div className=\"mt-1 h-1.5 overflow-hidden rounded-full bg-muted\">\n                          <div className=\"h-full rounded-full bg-primary\" style={{ width: `${width}%` }} />\n                        </div>\n                      </td>\n                      <td className=\"py-1.5 text-end tabular-nums\">{labels.amount(year.granted)}</td>\n                      <td className=\"py-1.5 text-end tabular-nums\">{labels.amount(year.used)}</td>\n                    </tr>\n                  )\n                })}\n              </tbody>\n            </table>\n          ) : null}\n        </>\n      )}\n    </section>\n  )\n}\n\nfunction Stat({ label, value }: { label: string; value: string }) {\n  return (\n    <div className=\"rounded-lg bg-muted/60 px-2 py-2\">\n      <dt className=\"text-[11px] text-muted-foreground\">{label}</dt>\n      <dd className=\"text-lg font-medium tabular-nums\">{value}</dd>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/time-off-stats.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Saldo de ausencias",
+    "descriptionEs": "Saldo disponible, días ya pendientes y, por año, lo otorgado contra lo usado.",
+    "preview": "app/examples/time-off-stats/preview.tsx",
+    "previewHref": "/examples/time-off-stats",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "zero",
+        "label": "Saldo en cero",
+        "labelEn": "Zero balance"
+      },
+      {
+        "id": "pending",
+        "label": "Pendiente",
+        "labelEn": "Pending"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Doce días",
+        "href": "/examples/time-off-stats",
+        "description": "Doce disponibles, dos pendientes, y el uso de 2025 y 2026."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/time-off-stats/stress",
+        "description": "Vacío, 320 px y diez años."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/time-off-stats?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/time-off-stats?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/time-off-stats?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/time-off-stats?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Saldo en cero",
+        "href": "/examples/time-off-stats?scene=zero",
+        "description": "Zero balance"
+      },
+      {
+        "title": "Pendiente",
+        "href": "/examples/time-off-stats?scene=pending",
+        "description": "Pending"
+      }
+    ],
+    "usage": "<TimeOffStats available={12} pending={2} years={years} />",
+    "api": [
+      {
+        "name": "available / pending / years",
+        "type": "number | null, number, TimeOffYear[]",
+        "description": "Null available with no years is empty. Zero is a real balance."
+      },
+      {
+        "name": "loading / error / labels",
+        "type": "boolean, string, Partial labels",
+        "description": "Skeleton, alert, and English chrome."
+      }
+    ]
+  },
+  "docs": "The host owns the numbers. Answer no if the CLI asks to overwrite skeleton. No theme or fixed colors.",
+  "categories": [
+    "calendar"
+  ],
+  "type": "registry:ui"
+}
