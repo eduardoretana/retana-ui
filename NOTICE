@@ -317,6 +317,13 @@ archive, and pier log in the demo are fictional. Colors come from the host
 shadcn tokens. The table is built on this repo's TanStack Table v8-compatible
 API (useLegacyTable in @tanstack/react-table v9).
 
+expandable-table is a clean-room reading of an expandable datatable: a row
+opens into a checklist, a nested total, or subtasks on an L rail. Shadcn
+Studio Pro was not purchased, fetched, or ported. No source, sample rows,
+icons, or assets were copied. The orders belong to the same fictional
+Guanajuato workshop. Colors come from the host shadcn tokens. The piece uses
+useLegacyTable and getExpandedRowModel. The host owns which rows are open.
+
 The multi-view pieces (multi-view-core, use-multi-view, view-table,
 view-kanban, view-calendar, view-timeline, view-grouped-list, view-gallery,
 record-properties, and the multi-view block) are an independent implementation

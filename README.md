@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`416` items are in `registry.json` on this branch: `329` components, `72` blocks, `6` hooks, and `9` libraries. A name links to its source file.
+`417` items are in `registry.json` on this branch: `330` components, `72` blocks, `6` hooks, and `9` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -569,6 +569,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`work-table-toolbar`](registry/ui/work-table-toolbar.tsx) · ui — Search, priority toggle, assignee multiselect, cycle select, and sort menu for a work table. Install: `npx shadcn@latest add @retana/work-table-toolbar`.
 - [`work-table-cells`](registry/ui/work-table-cells.tsx) · ui — Title, person, priority, relative date, status, SLA, effort, compact numbers, and rank cells. Install: `npx shadcn@latest add @retana/work-table-cells`.
 - [`data-table-grouping`](registry/ui/data-table-grouping.tsx) · ui — TanStack table with live column grouping that keeps the selection, collapsible group headers, a nested tree with subtotals, master-detail rows, and a pinned grand-total footer. Column order, visibility, density, filters, and page size are in the toolbar. Install: `npx shadcn@latest add @retana/data-table-grouping`.
+- [`expandable-table`](registry/ui/expandable-table.tsx) · ui — A row opens into a checklist, a nested total, or a tree of subtasks. Several rows can stay open. Arrow keys, selection, filters, density, and pages stay on the host table. Install: `npx shadcn@latest add @retana/expandable-table`.
 - [`task-board-core`](registry/lib/task-board.ts) · lib — Types and pure helpers for a CRM task board: overdue, priority counts, search, stage groups, comment threads, dates, and position labels. Install: `npx shadcn@latest add @retana/task-board-core`.
 - [`task-card`](registry/ui/task-card.tsx) · ui — A task card with priority, assignee initials and a +N overflow, a due date, subtask and comment counts, and an overdue chip. Install: `npx shadcn@latest add @retana/task-card`.
 - [`task-detail`](registry/ui/task-detail.tsx) · ui — Task fields, subtasks, a comment thread with replies, a reminder, and attachments. Previous and next, including arrow keys outside fields. Install: `npx shadcn@latest add @retana/task-detail`.
