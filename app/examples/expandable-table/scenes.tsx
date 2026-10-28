@@ -56,7 +56,10 @@ function TableScene({
     : spec.openId
       ? { [spec.openId]: true }
       : undefined
-  const sim = useSceneSim({ expanded: initial ?? {}, subtasks: spec.mode === "tasks" && Boolean(spec.all) }, log)
+  const sim = useSceneSim<{ expanded: ExpandedState; subtasks: boolean }>(
+    { expanded: initial ?? {}, subtasks: spec.mode === "tasks" && Boolean(spec.all) },
+    log,
+  )
   const attempt = useRef(0)
   return (
     <div className="flex flex-col gap-3">
