@@ -1,0 +1,141 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "decision-inbox",
+  "title": "Decision inbox",
+  "author": "Eduardo Retana",
+  "description": "Open calls with a short set of answers. An answered call confirms and can be dismissed.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "badge",
+    "button",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/decision-inbox.tsx",
+      "content": "\"use client\"\n\n/**\n * Open calls that need one of two answers. Clean-room reading of a public\n * behavior description: an answered call confirms and can fold away.\n * No Affect source, sample data, icons, or assets were copied.\n */\n\nimport * as React from \"react\"\nimport { Check } from \"lucide-react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport type DecisionChoice = {\n  id: string\n  label: string\n}\n\nexport type DecisionItem<TMeta = unknown> = {\n  id: string\n  title: string\n  detail?: string\n  agent?: string\n  choices: readonly DecisionChoice[]\n  /** Set when a person already answered. */\n  answerId?: string | null\n  meta?: TMeta\n}\n\nexport type DecisionInboxLabels = {\n  title: string\n  open: (count: number) => string\n  empty: string\n  loading: string\n  answered: (choice: string) => string\n  dismiss: string\n  dismissNamed: (title: string) => string\n  choose: (title: string, choice: string) => string\n  from: (agent: string) => string\n}\n\nexport type DecisionInboxClassNames = {\n  root?: string\n  item?: string\n  choice?: string\n}\n\nexport type DecisionInboxProps<TMeta = unknown> = {\n  items?: readonly DecisionItem<TMeta>[]\n  title?: string\n  loading?: boolean\n  error?: string\n  onAnswer?: (id: string, choiceId: string) => void\n  onDismiss?: (id: string) => void\n  className?: string\n  classNames?: DecisionInboxClassNames\n  labels?: Partial<DecisionInboxLabels>\n}\n\nconst decisionInboxLabels: DecisionInboxLabels = {\n  title: \"Open calls\",\n  open: (count) => (count === 1 ? \"1 still open\" : `${count} still open`),\n  empty: \"Nothing is waiting on you.\",\n  loading: \"Loading open calls\",\n  answered: (choice) => `Answered: ${choice}`,\n  dismiss: \"Dismiss\",\n  dismissNamed: (title) => `Dismiss “${title}”`,\n  choose: (title, choice) => `${choice} for “${title}”`,\n  from: (agent) => `From ${agent}`,\n}\n\nfunction resolveLabels(partial?: Partial<DecisionInboxLabels>): DecisionInboxLabels {\n  return { ...decisionInboxLabels, ...partial }\n}\n\nexport function openDecisionCount(items: readonly Pick<DecisionItem, \"id\" | \"answerId\">[]) {\n  return items.filter((item) => !item.answerId).length\n}\n\nexport function DecisionInbox<TMeta = unknown>({\n  items = [],\n  title,\n  loading = false,\n  error,\n  onAnswer,\n  onDismiss,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: DecisionInboxProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const heading = title ?? labels.title\n  const open = openDecisionCount(items)\n  const [live, setLive] = React.useState(\"\")\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        <Badge variant=\"secondary\">{labels.open(open)}</Badge>\n      </header>\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\" className=\"flex flex-col gap-2\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-16 w-full\" />\n          <Skeleton className=\"h-16 w-full\" />\n        </div>\n      ) : error && items.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : items.length === 0 ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <ul className=\"flex flex-col gap-2\">\n          {error ? (\n            <li role=\"alert\" className=\"text-destructive\">\n              {error}\n            </li>\n          ) : null}\n          {items.map((item) => {\n            const answer = item.choices.find((choice) => choice.id === item.answerId)\n            return (\n              <li key={item.id} className={cn(\"rounded-lg border border-border px-3 py-2\", classNames?.item)}>\n                <div className=\"flex flex-wrap items-baseline gap-2\">\n                  <h3 className=\"font-medium\">{item.title}</h3>\n                  {item.agent ? <p className=\"text-xs text-muted-foreground\">{labels.from(item.agent)}</p> : null}\n                </div>\n                {item.detail && !answer ? <p className=\"mt-1 text-xs text-muted-foreground\">{item.detail}</p> : null}\n                {answer ? (\n                  <div className=\"mt-2 flex items-center gap-2\">\n                    <Check aria-hidden=\"true\" className=\"size-4 text-primary\" />\n                    <p>{labels.answered(answer.label)}</p>\n                    {onDismiss ? (\n                      <Button\n                        type=\"button\"\n                        size=\"sm\"\n                        variant=\"ghost\"\n                        className=\"ms-auto\"\n                        aria-label={labels.dismissNamed(item.title)}\n                        onClick={() => onDismiss(item.id)}\n                      >\n                        {labels.dismiss}\n                      </Button>\n                    ) : null}\n                  </div>\n                ) : (\n                  <div className=\"mt-2 flex flex-wrap gap-2\">\n                    {item.choices.map((choice) => (\n                      <Button\n                        key={choice.id}\n                        type=\"button\"\n                        size=\"sm\"\n                        variant=\"outline\"\n                        className={classNames?.choice}\n                        aria-label={labels.choose(item.title, choice.label)}\n                        onClick={() => {\n                          onAnswer?.(item.id, choice.id)\n                          setLive(labels.answered(choice.label))\n                        }}\n                      >\n                        {choice.label}\n                      </Button>\n                    ))}\n                  </div>\n                )}\n              </li>\n            )\n          })}\n        </ul>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/decision-inbox.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Bandeja de decisiones",
+    "descriptionEs": "Llamadas abiertas con respuestas cortas. La elegida se confirma y se puede cerrar.",
+    "preview": "app/examples/decision-inbox/preview.tsx",
+    "previewHref": "/examples/decision-inbox",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "answered",
+        "label": "Respondida",
+        "labelEn": "Answered"
+      },
+      {
+        "id": "folded",
+        "label": "Cerradas",
+        "labelEn": "Folded"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Anticipo y muestras",
+        "href": "/examples/decision-inbox",
+        "description": "Dos llamadas del taller, cada una con dos respuestas."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/decision-inbox/stress",
+        "description": "Vacío, textos largos, RTL y diez llamadas."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/decision-inbox?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/decision-inbox?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/decision-inbox?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/decision-inbox?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Respondida",
+        "href": "/examples/decision-inbox?scene=answered",
+        "description": "Answered"
+      },
+      {
+        "title": "Cerradas",
+        "href": "/examples/decision-inbox?scene=folded",
+        "description": "Folded"
+      }
+    ],
+    "usage": "<DecisionInbox items={items} onAnswer={answer} onDismiss={dismiss} />",
+    "api": [
+      {
+        "name": "items",
+        "type": "DecisionItem<TMeta>[]",
+        "description": "id, title, detail, agent, choices, answerId. meta is opaque."
+      },
+      {
+        "name": "onAnswer",
+        "type": "(id, choiceId) => void",
+        "description": "A person picked one answer. The piece does not hide the call by itself."
+      },
+      {
+        "name": "onDismiss",
+        "type": "(id) => void",
+        "description": "Shown once a call has an answer."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when an answer cannot be saved."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<DecisionInboxLabels>",
+        "description": "Chrome copy. English is the default."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de una bandeja de decisiones; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, button, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

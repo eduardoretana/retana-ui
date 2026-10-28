@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`388` items are in `registry.json` on this branch: `301` components, `72` blocks, `6` hooks, and `9` libraries. A name links to its source file.
+`394` items are in `registry.json` on this branch: `307` components, `72` blocks, `6` hooks, and `9` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -425,6 +425,12 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`install-command`](registry/ui/install-command.tsx) · ui — Package-manager tabs that rewrite one install command and copy it. Install: `npx shadcn@latest add @retana/install-command`.
 - [`demo-collage`](registry/blocks/demo-collage.tsx) · block — A grid of live mini demos that render when they scroll into view. Install: `npx shadcn@latest add @retana/demo-collage`.
 - [`agent-tree`](registry/ui/agent-tree.tsx) · ui — A controlled tree of agents: who launched whom, with live status, cost, orthogonal edges, and a non-destructive retry. Install: `npx shadcn@latest add @retana/agent-tree`.
+- [`agent-queue`](registry/ui/agent-queue.tsx) · ui — Jobs waiting on agents, the slots they occupy, and how the backlog grows when the workers are held. Install: `npx shadcn@latest add @retana/agent-queue`.
+- [`agent-ledger`](registry/ui/agent-ledger.tsx) · ui — Changes an agent already made, with the later changes that revert too and the ones that have to stay. Install: `npx shadcn@latest add @retana/agent-ledger`.
+- [`agent-steering`](registry/ui/agent-steering.tsx) · ui — Leave a note for an agent's next step, or apply it to the step that is running now. Install: `npx shadcn@latest add @retana/agent-steering`.
+- [`autonomy-dial`](registry/ui/autonomy-dial.tsx) · ui — Three stops for what an agent may do alone, and a lock for whatever must always ask. Install: `npx shadcn@latest add @retana/autonomy-dial`.
+- [`decision-inbox`](registry/ui/decision-inbox.tsx) · ui — Open calls with a short set of answers. An answered call confirms and can be dismissed. Install: `npx shadcn@latest add @retana/decision-inbox`.
+- [`delegate-board`](registry/ui/delegate-board.tsx) · ui — Hand work to an agent by dragging it or picking a name, or give every waiting task to whoever is free first. Install: `npx shadcn@latest add @retana/delegate-board`.
 
 ### Forms
 

@@ -235,6 +235,17 @@ UI preview. No source, sample data, icons, assets, or internal strings were
 copied. Status color uses the host semantic tokens. The demos use an original
 lighthouse-bulletin scenario.
 
+agent-queue, agent-ledger, agent-steering, autonomy-dial, decision-inbox, and
+delegate-board are a clean-room reading of public behavior descriptions on
+Affect UI (a queue with worker slots, a reversible change log, notes during a
+run, a three-stop permission dial, open calls, and handing work to agents):
+
+  https://www.affectui.com/components
+
+Affect Pro was not purchased, fetched, or ported. No source, sample data,
+icons, assets, or internal strings were copied. The demos use an original
+Guanajuato workshop scenario. Colors come from the host shadcn tokens.
+
 adaptive-table is a clean-room reimplementation from a behavior description
 only. No names, icons, or rows from that reference were copied. Columns drop,
 fold, and stretch to the container width.

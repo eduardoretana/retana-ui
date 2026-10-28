@@ -23362,6 +23362,702 @@
       ]
     },
     {
+      "name": "agent-queue",
+      "type": "registry:ui",
+      "title": "Agent queue",
+      "description": "Jobs waiting on agents, the slots they occupy, and how the backlog grows when the workers are held.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "progress",
+        "skeleton"
+      ],
+      "categories": [
+        "agents"
+      ],
+      "meta": {
+        "titleEs": "Cola de agentes",
+        "descriptionEs": "Trabajo en espera, los lugares que ocupa y cómo crece la cola cuando los agentes se detienen.",
+        "preview": "app/examples/agent-queue/preview.tsx",
+        "previewHref": "/examples/agent-queue",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "paused",
+            "label": "Detenida",
+            "labelEn": "Held"
+          },
+          {
+            "id": "failed",
+            "label": "Falló",
+            "labelEn": "Failed"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Cola del taller",
+            "href": "/examples/agent-queue",
+            "description": "Pedidos en espera, un agente ocupado y un aviso que se puede reintentar."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/agent-queue/stress",
+            "description": "Vacío, textos largos, RTL, carga y diez pedidos."
+          }
+        ],
+        "usage": "<AgentQueue jobs={jobs} workers={workers} depth={depth} paused={paused} onPause={hold} onResume={release} onRetry={retry} onMoveUp={promote} />",
+        "api": [
+          {
+            "name": "jobs",
+            "type": "QueueJob<TMeta>[]",
+            "description": "id, title, detail, lane (queued, running, done, failed), workerId, progress, waitedMs. meta is opaque."
+          },
+          {
+            "name": "workers",
+            "type": "QueueWorker<TMeta>[]",
+            "description": "id, name, and how many slots the worker can hold."
+          },
+          {
+            "name": "depth",
+            "type": "number[]",
+            "description": "Recent backlog samples, oldest first."
+          },
+          {
+            "name": "paused / onPause / onResume",
+            "type": "boolean / () => void",
+            "description": "Hold the workers, or let them continue."
+          },
+          {
+            "name": "onRetry / onMoveUp / onOpen",
+            "type": "(id: string) => void",
+            "description": "Try a failed job again, move a waiting job up, or open it."
+          },
+          {
+            "name": "loading / error",
+            "type": "boolean / string",
+            "description": "Loading skeleton, or an alert when the queue cannot be read."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<AgentQueueLabels>",
+            "description": "Chrome copy. English is the default."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Inspirado en el comportamiento público de una cola de agentes; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, button, progress, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos.",
+      "files": [
+        {
+          "path": "registry/ui/agent-queue.tsx",
+          "type": "registry:component",
+          "target": "@ui/agent-queue.tsx"
+        }
+      ]
+    },
+    {
+      "name": "agent-ledger",
+      "type": "registry:ui",
+      "title": "Agent ledger",
+      "description": "Changes an agent already made, with the later changes that revert too and the ones that have to stay.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "skeleton"
+      ],
+      "categories": [
+        "agents"
+      ],
+      "meta": {
+        "titleEs": "Libro de cambios",
+        "descriptionEs": "Lo que un agente ya cambió, qué se revierte con ello y qué no se puede recoger.",
+        "preview": "app/examples/agent-ledger/preview.tsx",
+        "previewHref": "/examples/agent-ledger",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "undone",
+            "label": "Deshecho",
+            "labelEn": "Undone"
+          },
+          {
+            "id": "chain",
+            "label": "Cadena",
+            "labelEn": "Chain"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Libro del pedido",
+            "href": "/examples/agent-ledger",
+            "description": "Precio, borrador, factura enviada y una nota que se queda."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/agent-ledger/stress",
+            "description": "Vacío, textos largos, RTL y una cadena de diez cambios."
+          }
+        ],
+        "usage": "<AgentLedger changes={changes} now={now} undone={undone} onUndo={undo} onRedo={redo} />",
+        "api": [
+          {
+            "name": "changes",
+            "type": "LedgerChange<TMeta>[]",
+            "description": "id, summary, system, before, after, note, at, reversible, follows. meta is opaque. Newest shows first."
+          },
+          {
+            "name": "onUndo / onRedo",
+            "type": "(ids: string[]) => void",
+            "description": "The change and the later reversible changes that go with it."
+          },
+          {
+            "name": "undone / pointedId",
+            "type": "string[] / string",
+            "description": "Controlled undone ids, and a row lit as if its undo were pointed at."
+          },
+          {
+            "name": "now",
+            "type": "number",
+            "description": "Epoch milliseconds for relative times."
+          },
+          {
+            "name": "loading / error",
+            "type": "boolean / string",
+            "description": "Loading skeleton, or an alert when the log cannot be read."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<AgentLedgerLabels>",
+            "description": "Chrome copy, including relative time. English is the default."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Inspirado en el comportamiento público de un libro de cambios con deshacer; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, button, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos.",
+      "files": [
+        {
+          "path": "registry/ui/agent-ledger.tsx",
+          "type": "registry:component",
+          "target": "@ui/agent-ledger.tsx"
+        }
+      ]
+    },
+    {
+      "name": "agent-steering",
+      "type": "registry:ui",
+      "title": "Agent steering",
+      "description": "Leave a note for an agent's next step, or apply it to the step that is running now.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "skeleton",
+        "textarea"
+      ],
+      "categories": [
+        "agents"
+      ],
+      "meta": {
+        "titleEs": "Dirección en vivo",
+        "descriptionEs": "Deja una nota para el siguiente paso de un agente, o aplícala al paso que va en curso.",
+        "preview": "app/examples/agent-steering/preview.tsx",
+        "previewHref": "/examples/agent-steering",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "paused",
+            "label": "Pausa",
+            "labelEn": "Paused"
+          },
+          {
+            "id": "done",
+            "label": "Cerrado",
+            "labelEn": "Done"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Cotización en curso",
+            "href": "/examples/agent-steering",
+            "description": "Un plan de cuatro pasos y notas que esperan o entran ahora."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/agent-steering/stress",
+            "description": "Vacío, textos largos, RTL y diez pasos."
+          }
+        ],
+        "usage": "<AgentSteering title={title} agent={agent} steps={steps} queue={queue} status={status} onQueue={queueNote} onInterrupt={applyNow} onPause={pause} onResume={resume} />",
+        "api": [
+          {
+            "name": "steps",
+            "type": "SteerStep<TMeta>[]",
+            "description": "id, title, status (done, active, pending), and notes already on the step. meta is opaque."
+          },
+          {
+            "name": "queue",
+            "type": "SteerNote<TMeta>[]",
+            "description": "Notes waiting for the next step."
+          },
+          {
+            "name": "onQueue / onInterrupt / onRemove",
+            "type": "callbacks",
+            "description": "Enter queues. Ctrl or Cmd Enter applies now. Remove drops a waiting note."
+          },
+          {
+            "name": "status / onPause / onResume",
+            "type": "running | paused | done",
+            "description": "A finished run closes the field."
+          },
+          {
+            "name": "draft / onDraftChange",
+            "type": "string / (text) => void",
+            "description": "Controlled field. Omitted, the field keeps its own text."
+          },
+          {
+            "name": "loading / error",
+            "type": "boolean / string",
+            "description": "Loading skeleton, or an alert when a note does not land."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<AgentSteeringLabels>",
+            "description": "Chrome copy. English is the default."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Inspirado en el comportamiento público de dirigir un agente mientras trabaja; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (button, skeleton, textarea), responde no. La pieza no trae tema, cssVars ni colores fijos.",
+      "files": [
+        {
+          "path": "registry/ui/agent-steering.tsx",
+          "type": "registry:component",
+          "target": "@ui/agent-steering.tsx"
+        }
+      ]
+    },
+    {
+      "name": "autonomy-dial",
+      "type": "registry:ui",
+      "title": "Autonomy dial",
+      "description": "Three stops for what an agent may do alone, and a lock for whatever must always ask.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "button",
+        "skeleton"
+      ],
+      "categories": [
+        "agents"
+      ],
+      "meta": {
+        "titleEs": "Dial de autonomía",
+        "descriptionEs": "Tres paradas para lo que un agente puede hacer solo, y un candado para lo que siempre pregunta.",
+        "preview": "app/examples/autonomy-dial/preview.tsx",
+        "previewHref": "/examples/autonomy-dial",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "locked",
+            "label": "Candado",
+            "labelEn": "Locked"
+          },
+          {
+            "id": "open",
+            "label": "Abierta",
+            "labelEn": "Open"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Permisos de Bruma",
+            "href": "/examples/autonomy-dial",
+            "description": "Borrador y lectura siguen solos. El correo y el anticipo preguntan."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/autonomy-dial/stress",
+            "description": "Vacío, textos largos, RTL y diez acciones."
+          }
+        ],
+        "usage": "<AutonomyDial actions={actions} level={level} pinned={pinned} onLevelChange={setLevel} onPinnedChange={setPinned} />",
+        "api": [
+          {
+            "name": "actions",
+            "type": "AutonomyAction<TMeta>[]",
+            "description": "id, label, detail, risk (safe, guarded, destructive). meta is opaque."
+          },
+          {
+            "name": "level",
+            "type": "0 | 1 | 2",
+            "description": "Ask every time, ask unless it is safe, or act except for locks."
+          },
+          {
+            "name": "pinned / onPinnedChange",
+            "type": "string[] / (ids) => void",
+            "description": "Locks that always ask, whatever the level."
+          },
+          {
+            "name": "onLevelChange",
+            "type": "(level) => void",
+            "description": "Another stop was picked. Arrow keys move between stops."
+          },
+          {
+            "name": "loading / error",
+            "type": "boolean / string",
+            "description": "Loading skeleton, or an alert when the level cannot be saved."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<AutonomyDialLabels>",
+            "description": "Chrome copy. English is the default."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Inspirado en el comportamiento público de un dial de autonomía; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (button, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos. El movimiento se apaga con reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/autonomy-dial.tsx",
+          "type": "registry:component",
+          "target": "@ui/autonomy-dial.tsx"
+        }
+      ]
+    },
+    {
+      "name": "decision-inbox",
+      "type": "registry:ui",
+      "title": "Decision inbox",
+      "description": "Open calls with a short set of answers. An answered call confirms and can be dismissed.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "skeleton"
+      ],
+      "categories": [
+        "agents"
+      ],
+      "meta": {
+        "titleEs": "Bandeja de decisiones",
+        "descriptionEs": "Llamadas abiertas con respuestas cortas. La elegida se confirma y se puede cerrar.",
+        "preview": "app/examples/decision-inbox/preview.tsx",
+        "previewHref": "/examples/decision-inbox",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "answered",
+            "label": "Respondida",
+            "labelEn": "Answered"
+          },
+          {
+            "id": "folded",
+            "label": "Cerradas",
+            "labelEn": "Folded"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Anticipo y muestras",
+            "href": "/examples/decision-inbox",
+            "description": "Dos llamadas del taller, cada una con dos respuestas."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/decision-inbox/stress",
+            "description": "Vacío, textos largos, RTL y diez llamadas."
+          }
+        ],
+        "usage": "<DecisionInbox items={items} onAnswer={answer} onDismiss={dismiss} />",
+        "api": [
+          {
+            "name": "items",
+            "type": "DecisionItem<TMeta>[]",
+            "description": "id, title, detail, agent, choices, answerId. meta is opaque."
+          },
+          {
+            "name": "onAnswer",
+            "type": "(id, choiceId) => void",
+            "description": "A person picked one answer. The piece does not hide the call by itself."
+          },
+          {
+            "name": "onDismiss",
+            "type": "(id) => void",
+            "description": "Shown once a call has an answer."
+          },
+          {
+            "name": "loading / error",
+            "type": "boolean / string",
+            "description": "Loading skeleton, or an alert when an answer cannot be saved."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<DecisionInboxLabels>",
+            "description": "Chrome copy. English is the default."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Inspirado en el comportamiento público de una bandeja de decisiones; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, button, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos.",
+      "files": [
+        {
+          "path": "registry/ui/decision-inbox.tsx",
+          "type": "registry:component",
+          "target": "@ui/decision-inbox.tsx"
+        }
+      ]
+    },
+    {
+      "name": "delegate-board",
+      "type": "registry:ui",
+      "title": "Delegate board",
+      "description": "Hand work to an agent by dragging it or picking a name, or give every waiting task to whoever is free first.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "@dnd-kit/core",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "skeleton"
+      ],
+      "categories": [
+        "agents"
+      ],
+      "meta": {
+        "titleEs": "Tablero de delegación",
+        "descriptionEs": "Entrega trabajo a un agente arrastrándolo o eligiendo su nombre, o dáselo a quien esté libre primero.",
+        "preview": "app/examples/delegate-board/preview.tsx",
+        "previewHref": "/examples/delegate-board",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "auto",
+            "label": "Automático",
+            "labelEn": "Auto"
+          },
+          {
+            "id": "crowded",
+            "label": "Cargado",
+            "labelEn": "Crowded"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Entrega del taller",
+            "href": "/examples/delegate-board",
+            "description": "Cotización y muestras sin dueño. Caja y Horno ya tienen trabajo."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/delegate-board/stress",
+            "description": "Vacío, textos largos, RTL y diez tareas."
+          }
+        ],
+        "usage": "<DelegateBoard tasks={tasks} agents={agents} mode={mode} clockMinutes={11 * 60 + 40} onAssign={assign} onUnassign={clear} onPlace={place} />",
+        "api": [
+          {
+            "name": "tasks",
+            "type": "DelegateTask<TMeta>[]",
+            "description": "id, title, detail, minutes, agentId. meta is opaque."
+          },
+          {
+            "name": "agents",
+            "type": "DelegateAgent<TMeta>[]",
+            "description": "id, name, role, and minutes already booked."
+          },
+          {
+            "name": "onAssign / onUnassign / onPlace",
+            "type": "callbacks",
+            "description": "Hand a task to an agent, take it back, or place every waiting task with whoever is free first."
+          },
+          {
+            "name": "mode / onModeChange",
+            "type": "manual | auto",
+            "description": "Choose who, or show the free-first action."
+          },
+          {
+            "name": "clockMinutes",
+            "type": "number",
+            "description": "Minutes from midnight used to render when an agent is free."
+          },
+          {
+            "name": "loading / error",
+            "type": "boolean / string",
+            "description": "Loading skeleton, or an alert when a hand-off cannot be saved."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<DelegateBoardLabels>",
+            "description": "Chrome copy. English is the default."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Inspirado en el comportamiento público de un tablero para entregar trabajo a agentes; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, button, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos. El arrastre anuncia el origen y el destino.",
+      "files": [
+        {
+          "path": "registry/ui/delegate-board.tsx",
+          "type": "registry:component",
+          "target": "@ui/delegate-board.tsx"
+        }
+      ]
+    },
+    {
       "author": "Eduardo Retana",
       "name": "data-table-grouping",
       "type": "registry:ui",

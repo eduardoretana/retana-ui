@@ -1,0 +1,146 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-ledger",
+  "title": "Agent ledger",
+  "author": "Eduardo Retana",
+  "description": "Changes an agent already made, with the later changes that revert too and the ones that have to stay.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "badge",
+    "button",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/agent-ledger.tsx",
+      "content": "\"use client\"\n\n/**\n * Changes an agent already made, and which of them can be taken back.\n * Clean-room reading of a public behavior description. No Affect source,\n * sample data, icons, or assets were copied.\n */\n\nimport * as React from \"react\"\nimport { RotateCcw, Undo2 } from \"lucide-react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport type LedgerChange<TMeta = unknown> = {\n  id: string\n  summary: string\n  system: string\n  before?: string\n  after?: string\n  note?: string\n  /** Epoch milliseconds. */\n  at: number\n  /** False when the change cannot be taken back. Defaults to reversible. */\n  reversible?: boolean\n  /** Earlier change ids this one builds on. */\n  follows?: readonly string[]\n  meta?: TMeta\n}\n\nexport type LedgerImpact = {\n  /** The change and later reversible changes that revert with it. */\n  revert: string[]\n  /** Later changes that stay, because they cannot be taken back. */\n  stays: string[]\n}\n\nexport type AgentLedgerLabels = {\n  title: string\n  undo: string\n  redo: string\n  undoNamed: (summary: string) => string\n  redoNamed: (summary: string) => string\n  also: (count: number) => string\n  stays: (count: number) => string\n  staysFlag: string\n  empty: string\n  loading: string\n  to: string\n  age: (minutes: number) => string\n}\n\nexport type AgentLedgerClassNames = {\n  root?: string\n  row?: string\n  change?: string\n  empty?: string\n}\n\nexport type AgentLedgerProps<TMeta = unknown> = {\n  changes?: readonly LedgerChange<TMeta>[]\n  agent?: string\n  /** Epoch milliseconds for relative times. Omit it and the age stays blank. */\n  now?: number\n  undone?: readonly string[]\n  defaultUndone?: readonly string[]\n  /** Lights a row as if its undo were pointed at. */\n  pointedId?: string | null\n  loading?: boolean\n  error?: string\n  title?: string\n  onUndo?: (ids: string[]) => void\n  onRedo?: (ids: string[]) => void\n  onPoint?: (id: string | null) => void\n  className?: string\n  classNames?: AgentLedgerClassNames\n  labels?: Partial<AgentLedgerLabels>\n}\n\nconst agentLedgerLabels: AgentLedgerLabels = {\n  title: \"Change log\",\n  undo: \"Undo\",\n  redo: \"Redo\",\n  undoNamed: (summary) => `Undo ${summary}`,\n  redoNamed: (summary) => `Redo ${summary}`,\n  also: (count) => (count === 1 ? \"Also reverts 1 later change\" : `Also reverts ${count} later changes`),\n  stays: (count) => (count === 1 ? \"1 later change stays\" : `${count} later changes stay`),\n  staysFlag: \"Stays\",\n  empty: \"No changes yet.\",\n  loading: \"Loading the change log\",\n  to: \"to\",\n  age: (minutes) => {\n    if (minutes < 1) return \"just now\"\n    if (minutes < 60) return `${minutes}m ago`\n    const hours = Math.floor(minutes / 60)\n    if (hours < 24) return `${hours}h ago`\n    return `${Math.floor(hours / 24)}d ago`\n  },\n}\n\nexport function ledgerAgeMinutes(at: number, now: number) {\n  if (!Number.isFinite(at) || !Number.isFinite(now)) return 0\n  return Math.max(0, Math.round((now - at) / 60000))\n}\n\nexport function ledgerImpact(\n  changes: readonly Pick<LedgerChange, \"id\" | \"reversible\" | \"follows\">[],\n  rootId: string,\n): LedgerImpact {\n  const known = new Set(changes.map((change) => change.id))\n  const children = new Map<string, string[]>()\n  for (const change of changes) {\n    for (const parent of change.follows ?? []) {\n      const list = children.get(parent) ?? []\n      list.push(change.id)\n      children.set(parent, list)\n    }\n  }\n  const reversible = new Map(changes.map((change) => [change.id, change.reversible !== false]))\n  const revert: string[] = []\n  const stays: string[] = []\n  const seen = new Set<string>()\n\n  const visit = (id: string, blocked: boolean) => {\n    if (seen.has(id) || !known.has(id)) return\n    seen.add(id)\n    const canRevert = reversible.get(id) !== false\n    if (id === rootId) {\n      if (canRevert) revert.push(id)\n    } else if (blocked || !canRevert) {\n      stays.push(id)\n    } else {\n      revert.push(id)\n    }\n    const nextBlocked = id === rootId ? !canRevert : blocked || !canRevert\n    for (const child of children.get(id) ?? []) visit(child, nextBlocked)\n  }\n\n  visit(rootId, false)\n  return { revert, stays }\n}\n\nfunction resolveLabels(partial?: Partial<AgentLedgerLabels>): AgentLedgerLabels {\n  return { ...agentLedgerLabels, ...partial }\n}\n\nexport function AgentLedger<TMeta = unknown>({\n  changes = [],\n  agent,\n  now,\n  undone: undoneProp,\n  defaultUndone = [],\n  pointedId,\n  loading = false,\n  error,\n  title,\n  onUndo,\n  onRedo,\n  onPoint,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: AgentLedgerProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const heading = title ?? labels.title\n  const [internalUndone, setInternalUndone] = React.useState<string[]>(() => [...defaultUndone])\n  const [hoverId, setHoverId] = React.useState<string | null>(null)\n  const undone = undoneProp ?? internalUndone\n  const undoneSet = React.useMemo(() => new Set(undone), [undone])\n  const pointed = pointedId !== undefined ? pointedId : hoverId\n  const impact = pointed ? ledgerImpact(changes, pointed) : null\n  const ordered = React.useMemo(() => {\n    return changes.map((change, index) => ({ change, index })).sort((a, b) => b.change.at - a.change.at || a.index - b.index)\n  }, [changes])\n\n  function point(id: string | null) {\n    if (pointedId === undefined) setHoverId(id)\n    onPoint?.(id)\n  }\n\n  function undo(ids: string[]) {\n    if (undoneProp === undefined) {\n      setInternalUndone((current) => [...new Set([...current, ...ids])])\n    }\n    onUndo?.(ids)\n  }\n\n  function redo(ids: string[]) {\n    if (undoneProp === undefined) {\n      const drop = new Set(ids)\n      setInternalUndone((current) => current.filter((id) => !drop.has(id)))\n    }\n    onRedo?.(ids)\n  }\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-baseline gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        {agent ? <p className=\"text-xs text-muted-foreground\">{agent}</p> : null}\n      </header>\n      {loading ? (\n        <div role=\"status\" className=\"flex flex-col gap-2\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-12 w-full\" />\n          <Skeleton className=\"h-12 w-full\" />\n        </div>\n      ) : error && changes.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : ordered.length === 0 ? (\n        <p className={cn(\"text-muted-foreground\", classNames?.empty)}>{labels.empty}</p>\n      ) : (\n        <ol aria-label={heading} className=\"flex flex-col gap-2\">\n          {error ? (\n            <li role=\"alert\" className=\"text-destructive\">\n              {error}\n            </li>\n          ) : null}\n          {ordered.map(({ change }) => {\n            const isUndone = undoneSet.has(change.id)\n            const chain = ledgerImpact(changes, change.id)\n            const lit = impact?.revert.includes(change.id)\n            const stuck = impact?.stays.includes(change.id)\n            const extra = Math.max(0, chain.revert.length - 1)\n            const canUndo = change.reversible !== false && !isUndone\n            return (\n              <li\n                key={change.id}\n                className={cn(\n                  \"grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 rounded-lg border border-border px-2 py-2\",\n                  isUndone && \"opacity-60\",\n                  lit && \"bg-primary/5\",\n                  stuck && \"bg-chart-4/10\",\n                  classNames?.row,\n                )}\n              >\n                <div className={cn(\"min-w-0\", classNames?.change)}>\n                  <div className=\"flex flex-wrap items-center gap-2\">\n                    <Badge variant=\"outline\">{change.system}</Badge>\n                    {now != null ? (\n                      <span className=\"text-xs text-muted-foreground\">{labels.age(ledgerAgeMinutes(change.at, now))}</span>\n                    ) : null}\n                    {stuck ? <Badge variant=\"outline\">{labels.staysFlag}</Badge> : null}\n                  </div>\n                  <p className={cn(\"mt-1 font-medium\", isUndone && \"line-through\")}>{change.summary}</p>\n                  {change.before != null || change.after != null ? (\n                    <p className=\"mt-1 text-xs\">\n                      {change.before != null ? <span className=\"text-muted-foreground line-through\">{change.before}</span> : null}\n                      {change.before != null && change.after != null ? (\n                        <>\n                          <span className=\"sr-only\"> {labels.to} </span>\n                          <span aria-hidden=\"true\"> → </span>\n                        </>\n                      ) : null}\n                      {change.after != null ? <span>{change.after}</span> : null}\n                    </p>\n                  ) : null}\n                  {change.note ? <p className=\"mt-1 text-xs text-muted-foreground\">{change.note}</p> : null}\n                </div>\n                <div className=\"flex flex-col items-end gap-1\">\n                  {canUndo ? (\n                    <Button\n                      type=\"button\"\n                      size=\"sm\"\n                      variant=\"outline\"\n                      aria-label={labels.undoNamed(change.summary)}\n                      onClick={() => undo(chain.revert)}\n                      onFocus={() => point(change.id)}\n                      onBlur={() => point(null)}\n                      onPointerEnter={() => point(change.id)}\n                      onPointerLeave={() => point(null)}\n                    >\n                      <Undo2 aria-hidden=\"true\" />\n                      {labels.undo}\n                    </Button>\n                  ) : null}\n                  {isUndone ? (\n                    <Button type=\"button\" size=\"sm\" variant=\"ghost\" aria-label={labels.redoNamed(change.summary)} onClick={() => redo(chain.revert)}>\n                      <RotateCcw aria-hidden=\"true\" />\n                      {labels.redo}\n                    </Button>\n                  ) : null}\n                  {canUndo && extra > 0 ? <span className=\"max-w-36 text-end text-xs text-muted-foreground\">{labels.also(extra)}</span> : null}\n                  {canUndo && chain.stays.length > 0 ? (\n                    <span className=\"max-w-36 text-end text-xs text-muted-foreground\">{labels.stays(chain.stays.length)}</span>\n                  ) : null}\n                </div>\n              </li>\n            )\n          })}\n        </ol>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/agent-ledger.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Libro de cambios",
+    "descriptionEs": "Lo que un agente ya cambió, qué se revierte con ello y qué no se puede recoger.",
+    "preview": "app/examples/agent-ledger/preview.tsx",
+    "previewHref": "/examples/agent-ledger",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "undone",
+        "label": "Deshecho",
+        "labelEn": "Undone"
+      },
+      {
+        "id": "chain",
+        "label": "Cadena",
+        "labelEn": "Chain"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Libro del pedido",
+        "href": "/examples/agent-ledger",
+        "description": "Precio, borrador, factura enviada y una nota que se queda."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/agent-ledger/stress",
+        "description": "Vacío, textos largos, RTL y una cadena de diez cambios."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/agent-ledger?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/agent-ledger?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/agent-ledger?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/agent-ledger?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Deshecho",
+        "href": "/examples/agent-ledger?scene=undone",
+        "description": "Undone"
+      },
+      {
+        "title": "Cadena",
+        "href": "/examples/agent-ledger?scene=chain",
+        "description": "Chain"
+      }
+    ],
+    "usage": "<AgentLedger changes={changes} now={now} undone={undone} onUndo={undo} onRedo={redo} />",
+    "api": [
+      {
+        "name": "changes",
+        "type": "LedgerChange<TMeta>[]",
+        "description": "id, summary, system, before, after, note, at, reversible, follows. meta is opaque. Newest shows first."
+      },
+      {
+        "name": "onUndo / onRedo",
+        "type": "(ids: string[]) => void",
+        "description": "The change and the later reversible changes that go with it."
+      },
+      {
+        "name": "undone / pointedId",
+        "type": "string[] / string",
+        "description": "Controlled undone ids, and a row lit as if its undo were pointed at."
+      },
+      {
+        "name": "now",
+        "type": "number",
+        "description": "Epoch milliseconds for relative times."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when the log cannot be read."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<AgentLedgerLabels>",
+        "description": "Chrome copy, including relative time. English is the default."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de un libro de cambios con deshacer; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, button, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

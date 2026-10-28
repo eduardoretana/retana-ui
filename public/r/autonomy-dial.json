@@ -1,0 +1,146 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "autonomy-dial",
+  "title": "Autonomy dial",
+  "author": "Eduardo Retana",
+  "description": "Three stops for what an agent may do alone, and a lock for whatever must always ask.",
+  "dependencies": [
+    "lucide-react",
+    "motion"
+  ],
+  "registryDependencies": [
+    "button",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/autonomy-dial.tsx",
+      "content": "\"use client\"\n\n/**\n * How much an agent may do without asking. Clean-room reading of a public\n * behavior description: three stops, and each action either runs or waits,\n * with a lock that always asks. No Affect source, sample data, icons, or\n * assets were copied.\n */\n\nimport * as React from \"react\"\nimport { Lock, LockOpen } from \"lucide-react\"\nimport { useReducedMotion } from \"motion/react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport const AUTONOMY_LEVELS = [0, 1, 2] as const\nexport const ACTION_RISKS = [\"safe\", \"guarded\", \"destructive\"] as const\n\nexport type AutonomyLevel = (typeof AUTONOMY_LEVELS)[number]\nexport type ActionRisk = (typeof ACTION_RISKS)[number]\n\nexport type AutonomyAction<TMeta = unknown> = {\n  id: string\n  label: string\n  detail?: string\n  risk: ActionRisk\n  meta?: TMeta\n}\n\nexport type AutonomyDialLabels = {\n  title: string\n  subtitle: string\n  group: string\n  level: (level: AutonomyLevel) => string\n  levelDetail: (level: AutonomyLevel) => string\n  runs: string\n  asks: string\n  lock: (label: string) => string\n  unlock: (label: string) => string\n  risk: (risk: ActionRisk) => string\n  summary: (runs: number, asks: number) => string\n  none: string\n  empty: string\n  loading: string\n  changed: (level: AutonomyLevel, runs: number, asks: number) => string\n}\n\nexport type AutonomyDialClassNames = {\n  root?: string\n  level?: string\n  action?: string\n  group?: string\n}\n\nexport type AutonomyDialProps<TMeta = unknown> = {\n  actions?: readonly AutonomyAction<TMeta>[]\n  level?: AutonomyLevel\n  defaultLevel?: AutonomyLevel\n  pinned?: readonly string[]\n  defaultPinned?: readonly string[]\n  title?: string\n  subtitle?: string\n  loading?: boolean\n  error?: string\n  onLevelChange?: (level: AutonomyLevel) => void\n  onPinnedChange?: (pinned: string[]) => void\n  className?: string\n  classNames?: AutonomyDialClassNames\n  labels?: Partial<AutonomyDialLabels>\n}\n\nconst autonomyDialLabels: AutonomyDialLabels = {\n  title: \"What it may do alone\",\n  subtitle: \"Safe work can run. Locks always stop to ask.\",\n  group: \"Autonomy\",\n  level: (level) => [\"Ask every time\", \"Ask unless it is safe\", \"Act, except locks\"][level] ?? \"Ask every time\",\n  levelDetail: (level) =>\n    [\n      \"Every action waits for a person.\",\n      \"Safe actions run. Guarded and destructive ones ask.\",\n      \"Actions run on their own, except the ones you lock.\",\n    ][level] ?? \"Every action waits for a person.\",\n  runs: \"Runs on its own\",\n  asks: \"Stops to ask\",\n  lock: (label) => `Always ask before ${label}`,\n  unlock: (label) => `Let ${label} follow the dial`,\n  risk: (risk) => ({ safe: \"Safe\", guarded: \"Guarded\", destructive: \"Destructive\" })[risk],\n  summary: (runs, asks) => `${runs} run alone, ${asks} ask first`,\n  none: \"None in this group\",\n  empty: \"This agent has no actions to govern.\",\n  loading: \"Loading permissions\",\n  changed: (level, runs, asks) => `${[\"Ask every time\", \"Ask unless it is safe\", \"Act, except locks\"][level]}. ${runs} run alone, ${asks} ask first.`,\n}\n\nexport function actionAsksFirst(\n  action: Pick<AutonomyAction, \"id\" | \"risk\">,\n  level: AutonomyLevel,\n  pinned: readonly string[],\n) {\n  if (pinned.includes(action.id)) return true\n  if (level <= 0) return true\n  if (level >= 2) return false\n  return action.risk !== \"safe\"\n}\n\nfunction resolveLabels(partial?: Partial<AutonomyDialLabels>): AutonomyDialLabels {\n  return { ...autonomyDialLabels, ...partial }\n}\n\nexport function AutonomyDial<TMeta = unknown>({\n  actions = [],\n  level: levelProp,\n  defaultLevel = 1,\n  pinned: pinnedProp,\n  defaultPinned = [],\n  title,\n  subtitle,\n  loading = false,\n  error,\n  onLevelChange,\n  onPinnedChange,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: AutonomyDialProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const detailId = React.useId()\n  const reduced = useReducedMotion()\n  const levelButtons = React.useRef<Partial<Record<AutonomyLevel, HTMLButtonElement | null>>>({})\n  const [internalLevel, setInternalLevel] = React.useState<AutonomyLevel>(defaultLevel)\n  const [internalPinned, setInternalPinned] = React.useState<string[]>(() => [...defaultPinned])\n  const [live, setLive] = React.useState(\"\")\n  const level = levelProp ?? internalLevel\n  const pinned = pinnedProp ?? internalPinned\n  const heading = title ?? labels.title\n  const runs = actions.filter((action) => !actionAsksFirst(action, level, pinned))\n  const asks = actions.filter((action) => actionAsksFirst(action, level, pinned))\n\n  function choose(next: AutonomyLevel, focus = false) {\n    if (levelProp === undefined) setInternalLevel(next)\n    onLevelChange?.(next)\n    const nextRuns = actions.filter((action) => !actionAsksFirst(action, next, pinned)).length\n    setLive(labels.changed(next, nextRuns, actions.length - nextRuns))\n    if (focus) levelButtons.current[next]?.focus()\n  }\n\n  function togglePin(id: string) {\n    const next = pinned.includes(id) ? pinned.filter((item) => item !== id) : [...pinned, id]\n    if (pinnedProp === undefined) setInternalPinned(next)\n    onPinnedChange?.(next)\n    const nextRuns = actions.filter((action) => !actionAsksFirst(action, level, next)).length\n    setLive(labels.changed(level, nextRuns, actions.length - nextRuns))\n  }\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      data-reduced-motion={reduced ? \"true\" : \"false\"}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header>\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        <p className=\"text-xs text-muted-foreground\">{subtitle ?? labels.subtitle}</p>\n      </header>\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\" className=\"flex flex-col gap-2\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-8 w-full\" />\n          <Skeleton className=\"h-16 w-full\" />\n        </div>\n      ) : error && actions.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : (\n        <>\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          <div role=\"radiogroup\" aria-label={labels.group} aria-describedby={detailId} className=\"grid gap-1 sm:grid-cols-3\">\n            {AUTONOMY_LEVELS.map((option) => {\n              const selected = option === level\n              return (\n                <button\n                  key={option}\n                  ref={(node) => {\n                    levelButtons.current[option] = node\n                  }}\n                  type=\"button\"\n                  role=\"radio\"\n                  aria-checked={selected}\n                  tabIndex={selected ? 0 : -1}\n                  className={cn(\n                    \"rounded-lg border px-2 py-2 text-start text-xs transition-colors motion-reduce:transition-none\",\n                    selected ? \"border-foreground bg-foreground text-background\" : \"border-border text-muted-foreground hover:bg-muted hover:text-foreground\",\n                    classNames?.level,\n                  )}\n                  onClick={() => choose(option)}\n                  onKeyDown={(event) => {\n                    if (event.key !== \"ArrowRight\" && event.key !== \"ArrowLeft\" && event.key !== \"ArrowUp\" && event.key !== \"ArrowDown\") return\n                    event.preventDefault()\n                    const forward = event.key === \"ArrowRight\" || event.key === \"ArrowDown\"\n                    const index = AUTONOMY_LEVELS.indexOf(level)\n                    const next = AUTONOMY_LEVELS[(index + (forward ? 1 : AUTONOMY_LEVELS.length - 1)) % AUTONOMY_LEVELS.length]!\n                    choose(next, true)\n                  }}\n                >\n                  {labels.level(option)}\n                </button>\n              )\n            })}\n          </div>\n          <p id={detailId} className=\"text-xs text-muted-foreground\">\n            {labels.levelDetail(level)} {labels.summary(runs.length, asks.length)}\n          </p>\n          {actions.length === 0 ? (\n            <p className=\"text-muted-foreground\">{labels.empty}</p>\n          ) : (\n            <div className=\"grid gap-3 sm:grid-cols-2\">\n              <ActionGroup title={labels.runs} actions={runs} pinned={pinned} labels={labels} className={classNames?.group} actionClassName={classNames?.action} onToggle={togglePin} />\n              <ActionGroup title={labels.asks} actions={asks} pinned={pinned} labels={labels} className={classNames?.group} actionClassName={classNames?.action} onToggle={togglePin} />\n            </div>\n          )}\n        </>\n      )}\n    </section>\n  )\n}\n\nfunction ActionGroup({\n  title,\n  actions,\n  pinned,\n  labels,\n  className,\n  actionClassName,\n  onToggle,\n}: {\n  title: string\n  actions: readonly AutonomyAction[]\n  pinned: readonly string[]\n  labels: AutonomyDialLabels\n  className?: string\n  actionClassName?: string\n  onToggle: (id: string) => void\n}) {\n  const labelId = React.useId()\n  return (\n    <section aria-labelledby={labelId} className={cn(\"flex flex-col gap-2 rounded-lg bg-muted/40 p-2\", className)}>\n      <h3 id={labelId} className=\"text-xs font-medium text-muted-foreground\">\n        {title}\n      </h3>\n      {actions.length === 0 ? <p className=\"text-xs text-muted-foreground\">{labels.none}</p> : null}\n      <ul className=\"flex flex-col gap-2\">\n        {actions.map((action) => {\n          const locked = pinned.includes(action.id)\n          return (\n            <li key={action.id} className={cn(\"flex items-start gap-2 rounded-md bg-card px-2 py-2\", actionClassName)}>\n              <div className=\"min-w-0 flex-1\">\n                <p className=\"font-medium\">{action.label}</p>\n                {action.detail ? <p className=\"text-xs text-muted-foreground\">{action.detail}</p> : null}\n                <p className={cn(\"text-xs\", action.risk === \"destructive\" ? \"text-destructive\" : \"text-muted-foreground\")}>{labels.risk(action.risk)}</p>\n              </div>\n              <Button\n                type=\"button\"\n                size=\"icon-sm\"\n                variant={locked ? \"secondary\" : \"ghost\"}\n                aria-pressed={locked}\n                aria-label={locked ? labels.unlock(action.label) : labels.lock(action.label)}\n                onClick={() => onToggle(action.id)}\n              >\n                {locked ? <Lock aria-hidden=\"true\" /> : <LockOpen aria-hidden=\"true\" />}\n              </Button>\n            </li>\n          )\n        })}\n      </ul>\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/autonomy-dial.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Dial de autonomía",
+    "descriptionEs": "Tres paradas para lo que un agente puede hacer solo, y un candado para lo que siempre pregunta.",
+    "preview": "app/examples/autonomy-dial/preview.tsx",
+    "previewHref": "/examples/autonomy-dial",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "locked",
+        "label": "Candado",
+        "labelEn": "Locked"
+      },
+      {
+        "id": "open",
+        "label": "Abierta",
+        "labelEn": "Open"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Permisos de Bruma",
+        "href": "/examples/autonomy-dial",
+        "description": "Borrador y lectura siguen solos. El correo y el anticipo preguntan."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/autonomy-dial/stress",
+        "description": "Vacío, textos largos, RTL y diez acciones."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/autonomy-dial?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/autonomy-dial?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/autonomy-dial?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/autonomy-dial?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Candado",
+        "href": "/examples/autonomy-dial?scene=locked",
+        "description": "Locked"
+      },
+      {
+        "title": "Abierta",
+        "href": "/examples/autonomy-dial?scene=open",
+        "description": "Open"
+      }
+    ],
+    "usage": "<AutonomyDial actions={actions} level={level} pinned={pinned} onLevelChange={setLevel} onPinnedChange={setPinned} />",
+    "api": [
+      {
+        "name": "actions",
+        "type": "AutonomyAction<TMeta>[]",
+        "description": "id, label, detail, risk (safe, guarded, destructive). meta is opaque."
+      },
+      {
+        "name": "level",
+        "type": "0 | 1 | 2",
+        "description": "Ask every time, ask unless it is safe, or act except for locks."
+      },
+      {
+        "name": "pinned / onPinnedChange",
+        "type": "string[] / (ids) => void",
+        "description": "Locks that always ask, whatever the level."
+      },
+      {
+        "name": "onLevelChange",
+        "type": "(level) => void",
+        "description": "Another stop was picked. Arrow keys move between stops."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when the level cannot be saved."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<AutonomyDialLabels>",
+        "description": "Chrome copy. English is the default."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de un dial de autonomía; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (button, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos. El movimiento se apaga con reduced motion.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

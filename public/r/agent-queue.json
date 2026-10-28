@@ -1,0 +1,152 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-queue",
+  "title": "Agent queue",
+  "author": "Eduardo Retana",
+  "description": "Jobs waiting on agents, the slots they occupy, and how the backlog grows when the workers are held.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "badge",
+    "button",
+    "progress",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/agent-queue.tsx",
+      "content": "\"use client\"\n\n/**\n * Work waiting on agents. Clean-room reading of a public behavior\n * description: jobs sit in a queue, occupy worker slots, and land done or\n * failed, with a backlog shape when the workers are held.\n * No Affect source, sample data, icons, or assets were copied.\n */\n\nimport * as React from \"react\"\nimport { ArrowUp, Check, Pause, Play, RotateCcw } from \"lucide-react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Progress } from \"@/components/ui/progress\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport const QUEUE_LANES = [\"queued\", \"running\", \"done\", \"failed\"] as const\n\nexport type QueueLane = (typeof QUEUE_LANES)[number]\n\nexport type QueueJob<TMeta = unknown> = {\n  id: string\n  title: string\n  detail?: string\n  lane: QueueLane\n  workerId?: string\n  /** 0 to 1 while a worker holds the job. */\n  progress?: number\n  waitedMs?: number\n  meta?: TMeta\n}\n\nexport type QueueWorker<TMeta = unknown> = {\n  id: string\n  name: string\n  /** How many jobs this worker can hold at once. */\n  slots: number\n  meta?: TMeta\n}\n\nexport type AgentQueueLabels = {\n  title: string\n  waiting: (count: number) => string\n  pause: string\n  resume: string\n  backlog: (latest: number) => string\n  workers: string\n  slots: (used: number, total: number) => string\n  free: string\n  held: string\n  queue: string\n  settled: string\n  moveUp: (title: string) => string\n  retry: string\n  open: string\n  done: string\n  failed: string\n  running: string\n  queued: string\n  wait: (ms: number) => string\n  empty: string\n  loading: string\n  orphan: string\n}\n\nexport type AgentQueueClassNames = {\n  root?: string\n  header?: string\n  depth?: string\n  worker?: string\n  job?: string\n  empty?: string\n}\n\nexport type AgentQueueProps<TMeta = unknown> = {\n  jobs?: readonly QueueJob<TMeta>[]\n  workers?: readonly QueueWorker<TMeta>[]\n  /** Recent backlog counts, oldest first. The last sample is the current depth. */\n  depth?: readonly number[]\n  paused?: boolean\n  loading?: boolean\n  error?: string\n  title?: string\n  onPause?: () => void\n  onResume?: () => void\n  onRetry?: (id: string) => void\n  onMoveUp?: (id: string) => void\n  onOpen?: (id: string) => void\n  className?: string\n  classNames?: AgentQueueClassNames\n  labels?: Partial<AgentQueueLabels>\n}\n\nconst agentQueueLabels: AgentQueueLabels = {\n  title: \"Work queue\",\n  waiting: (count) => (count === 1 ? \"1 waiting\" : `${count} waiting`),\n  pause: \"Hold workers\",\n  resume: \"Let workers continue\",\n  backlog: (latest) => `Backlog, latest sample ${latest}`,\n  workers: \"Workers\",\n  slots: (used, total) => `${used} of ${total} slots`,\n  free: \"Free\",\n  held: \"Held\",\n  queue: \"Waiting\",\n  settled: \"Settled\",\n  moveUp: (title) => `Move “${title}” up`,\n  retry: \"Try again\",\n  open: \"Open\",\n  done: \"Done\",\n  failed: \"Failed\",\n  running: \"In progress\",\n  queued: \"Waiting\",\n  wait: (ms) => {\n    const minutes = Math.max(0, Math.round(ms / 60000))\n    if (minutes < 1) return \"<1m\"\n    if (minutes < 60) return `${minutes}m`\n    const hours = Math.floor(minutes / 60)\n    const rest = minutes % 60\n    return rest ? `${hours}h ${rest}m` : `${hours}h`\n  },\n  empty: \"Nothing is waiting on the workers.\",\n  loading: \"Loading the queue\",\n  orphan: \"No worker assigned\",\n}\n\nexport function queueBacklog(jobs: readonly Pick<QueueJob, \"lane\">[]) {\n  return jobs.filter((job) => job.lane === \"queued\").length\n}\n\nexport function workerUsage(workerId: string, jobs: readonly Pick<QueueJob, \"lane\" | \"workerId\">[]) {\n  return jobs.filter((job) => job.lane === \"running\" && job.workerId === workerId).length\n}\n\nfunction resolveLabels(partial?: Partial<AgentQueueLabels>): AgentQueueLabels {\n  return { ...agentQueueLabels, ...partial }\n}\n\nfunction Depth({ samples, label, className }: { samples: readonly number[]; label: string; className?: string }) {\n  const max = Math.max(1, ...samples)\n  return (\n    <div role=\"img\" aria-label={label} className={cn(\"flex h-8 items-end gap-0.5\", className)}>\n      {samples.map((value, index) => (\n        <span\n          key={`${index}-${value}`}\n          className=\"min-w-1 flex-1 rounded-sm bg-primary/70\"\n          style={{ height: `${Math.max(12, Math.round((value / max) * 100))}%` }}\n        />\n      ))}\n    </div>\n  )\n}\n\nexport function AgentQueue<TMeta = unknown>({\n  jobs = [],\n  workers = [],\n  depth = [],\n  paused = false,\n  loading = false,\n  error,\n  title,\n  onPause,\n  onResume,\n  onRetry,\n  onMoveUp,\n  onOpen,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: AgentQueueProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const heading = title ?? labels.title\n  const titleId = React.useId()\n  const waiting = queueBacklog(jobs)\n  const queued = jobs.filter((job) => job.lane === \"queued\")\n  const running = jobs.filter((job) => job.lane === \"running\")\n  const settled = jobs.filter((job) => job.lane === \"done\" || job.lane === \"failed\")\n  const orphans = running.filter((job) => !job.workerId || !workers.some((worker) => worker.id === job.workerId))\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className={cn(\"flex flex-wrap items-center gap-2\", classNames?.header)}>\n        <h2 id={titleId} className=\"text-sm font-medium\">\n          {heading}\n        </h2>\n        <Badge variant=\"secondary\">{labels.waiting(waiting)}</Badge>\n        {paused ? <Badge variant=\"outline\">{labels.held}</Badge> : null}\n        <div className=\"ms-auto\">\n          {paused ? (\n            <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={onResume} disabled={!onResume}>\n              <Play aria-hidden=\"true\" />\n              {labels.resume}\n            </Button>\n          ) : (\n            <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={onPause} disabled={!onPause || loading}>\n              <Pause aria-hidden=\"true\" />\n              {labels.pause}\n            </Button>\n          )}\n        </div>\n      </header>\n\n      {loading ? (\n        <div className=\"flex flex-col gap-2\" role=\"status\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-8 w-full\" />\n          <Skeleton className=\"h-14 w-full\" />\n          <Skeleton className=\"h-14 w-full\" />\n        </div>\n      ) : error && jobs.length === 0 ? (\n        <p role=\"alert\" className=\"text-sm text-destructive\">\n          {error}\n        </p>\n      ) : jobs.length === 0 && workers.length === 0 ? (\n        <p className={cn(\"text-sm text-muted-foreground\", classNames?.empty)}>{labels.empty}</p>\n      ) : (\n        <>\n          {error ? (\n            <p role=\"alert\" className=\"text-sm text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          {depth.length > 0 ? (\n            <Depth samples={depth} label={labels.backlog(depth[depth.length - 1] ?? 0)} className={classNames?.depth} />\n          ) : null}\n\n          <div className=\"flex flex-col gap-2\">\n            <h3 className=\"text-xs font-medium text-muted-foreground\">{labels.workers}</h3>\n            {workers.length === 0 ? (\n              <p className=\"text-sm text-muted-foreground\">{labels.free}</p>\n            ) : (\n              <ul className=\"flex flex-col gap-2\">\n                {workers.map((worker) => {\n                  const used = workerUsage(worker.id, jobs)\n                  const mine = running.filter((job) => job.workerId === worker.id)\n                  return (\n                    <li key={worker.id} className={cn(\"rounded-lg border border-border p-2\", classNames?.worker)}>\n                      <div className=\"flex items-center gap-2\">\n                        <span className=\"font-medium\">{worker.name}</span>\n                        <span className=\"text-xs text-muted-foreground\">{labels.slots(used, worker.slots)}</span>\n                        {paused ? (\n                          <Badge variant=\"outline\" className=\"ms-auto bg-chart-4/15\">\n                            {labels.held}\n                          </Badge>\n                        ) : used === 0 ? (\n                          <span className=\"ms-auto text-xs text-muted-foreground\">{labels.free}</span>\n                        ) : null}\n                      </div>\n                      {mine.map((job) => (\n                        <JobRow key={job.id} job={job} labels={labels} onOpen={onOpen} className={classNames?.job} />\n                      ))}\n                    </li>\n                  )\n                })}\n              </ul>\n            )}\n            {orphans.map((job) => (\n              <JobRow key={job.id} job={job} labels={labels} onOpen={onOpen} className={classNames?.job} kicker={labels.orphan} />\n            ))}\n          </div>\n\n          <div className=\"flex flex-col gap-2\">\n            <h3 className=\"text-xs font-medium text-muted-foreground\">{labels.queue}</h3>\n            {queued.length === 0 ? (\n              <p className=\"text-sm text-muted-foreground\">{labels.empty}</p>\n            ) : (\n              <ul className=\"flex flex-col gap-2\">\n                {queued.map((job, index) => (\n                  <li key={job.id}>\n                    <JobRow\n                      job={job}\n                      labels={labels}\n                      onOpen={onOpen}\n                      className={classNames?.job}\n                      action={\n                        index > 0 && onMoveUp ? (\n                          <Button type=\"button\" size=\"sm\" variant=\"ghost\" aria-label={labels.moveUp(job.title)} onClick={() => onMoveUp(job.id)}>\n                            <ArrowUp aria-hidden=\"true\" />\n                          </Button>\n                        ) : null\n                      }\n                    />\n                  </li>\n                ))}\n              </ul>\n            )}\n          </div>\n\n          {settled.length > 0 ? (\n            <div className=\"flex flex-col gap-2\">\n              <h3 className=\"text-xs font-medium text-muted-foreground\">{labels.settled}</h3>\n              <ul className=\"flex flex-col gap-2\">\n                {settled.map((job) => (\n                  <li key={job.id}>\n                    <JobRow\n                      job={job}\n                      labels={labels}\n                      onOpen={onOpen}\n                      className={classNames?.job}\n                      action={\n                        job.lane === \"failed\" && onRetry ? (\n                          <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={() => onRetry(job.id)}>\n                            <RotateCcw aria-hidden=\"true\" />\n                            {labels.retry}\n                          </Button>\n                        ) : null\n                      }\n                    />\n                  </li>\n                ))}\n              </ul>\n            </div>\n          ) : null}\n        </>\n      )}\n    </section>\n  )\n}\n\nfunction JobRow({\n  job,\n  labels,\n  onOpen,\n  action,\n  kicker,\n  className,\n}: {\n  job: QueueJob\n  labels: AgentQueueLabels\n  onOpen?: (id: string) => void\n  action?: React.ReactNode\n  kicker?: string\n  className?: string\n}) {\n  const laneLabel = labels[job.lane]\n  return (\n    <div className={cn(\"flex flex-wrap items-center gap-2 py-1\", className)}>\n      {job.lane === \"done\" ? <Check aria-hidden=\"true\" className=\"size-4 text-primary\" /> : null}\n      <div className=\"min-w-0 flex-1\">\n        <p className=\"truncate font-medium\">\n          {kicker ? <span className=\"me-2 text-xs font-normal text-muted-foreground\">{kicker}</span> : null}\n          {onOpen ? (\n            <button type=\"button\" className=\"truncate underline-offset-2 hover:underline\" onClick={() => onOpen(job.id)}>\n              {job.title}\n            </button>\n          ) : (\n            job.title\n          )}\n        </p>\n        {job.detail ? <p className=\"truncate text-xs text-muted-foreground\">{job.detail}</p> : null}\n        {job.lane === \"running\" ? (\n          <Progress\n            className=\"mt-1\"\n            value={Math.round((job.progress ?? 0) * 100)}\n            aria-label={labels.running}\n            aria-valuenow={Math.round((job.progress ?? 0) * 100)}\n            aria-valuemin={0}\n            aria-valuemax={100}\n          />\n        ) : null}\n      </div>\n      <Badge variant={job.lane === \"failed\" ? \"destructive\" : \"outline\"} className={job.lane === \"running\" ? \"bg-chart-2/15\" : undefined}>\n        {laneLabel}\n      </Badge>\n      {job.lane === \"queued\" && job.waitedMs != null ? (\n        <span className=\"text-xs text-muted-foreground tabular-nums\">{labels.wait(job.waitedMs)}</span>\n      ) : null}\n      {action}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/agent-queue.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Cola de agentes",
+    "descriptionEs": "Trabajo en espera, los lugares que ocupa y cómo crece la cola cuando los agentes se detienen.",
+    "preview": "app/examples/agent-queue/preview.tsx",
+    "previewHref": "/examples/agent-queue",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "paused",
+        "label": "Detenida",
+        "labelEn": "Held"
+      },
+      {
+        "id": "failed",
+        "label": "Falló",
+        "labelEn": "Failed"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Cola del taller",
+        "href": "/examples/agent-queue",
+        "description": "Pedidos en espera, un agente ocupado y un aviso que se puede reintentar."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/agent-queue/stress",
+        "description": "Vacío, textos largos, RTL, carga y diez pedidos."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/agent-queue?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/agent-queue?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/agent-queue?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/agent-queue?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Detenida",
+        "href": "/examples/agent-queue?scene=paused",
+        "description": "Held"
+      },
+      {
+        "title": "Falló",
+        "href": "/examples/agent-queue?scene=failed",
+        "description": "Failed"
+      }
+    ],
+    "usage": "<AgentQueue jobs={jobs} workers={workers} depth={depth} paused={paused} onPause={hold} onResume={release} onRetry={retry} onMoveUp={promote} />",
+    "api": [
+      {
+        "name": "jobs",
+        "type": "QueueJob<TMeta>[]",
+        "description": "id, title, detail, lane (queued, running, done, failed), workerId, progress, waitedMs. meta is opaque."
+      },
+      {
+        "name": "workers",
+        "type": "QueueWorker<TMeta>[]",
+        "description": "id, name, and how many slots the worker can hold."
+      },
+      {
+        "name": "depth",
+        "type": "number[]",
+        "description": "Recent backlog samples, oldest first."
+      },
+      {
+        "name": "paused / onPause / onResume",
+        "type": "boolean / () => void",
+        "description": "Hold the workers, or let them continue."
+      },
+      {
+        "name": "onRetry / onMoveUp / onOpen",
+        "type": "(id: string) => void",
+        "description": "Try a failed job again, move a waiting job up, or open it."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when the queue cannot be read."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<AgentQueueLabels>",
+        "description": "Chrome copy. English is the default."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de una cola de agentes; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, button, progress, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}
