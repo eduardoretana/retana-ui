@@ -25897,6 +25897,512 @@
             }
           ]
         },
+        {
+          "name": "review-center",
+          "type": "registry:ui",
+          "title": "Review center",
+          "description": "The queue of what an agent wants signed, highest risk first. One item at a time, with the shaky span marked. Approve, edit, reject, or skip.",
+          "author": "Eduardo Retana",
+          "registryDependencies": [
+            "badge",
+            "button",
+            "skeleton",
+            "textarea"
+          ],
+          "categories": [
+            "agents"
+          ],
+          "meta": {
+            "titleEs": "Centro de revisión",
+            "descriptionEs": "La fila de lo que un agente quiere firmar, primero lo de más riesgo. Una pieza a la vez, con el tramo dudoso marcado. Aprobar, editar, rechazar o saltar.",
+            "preview": "app/examples/review-center/preview.tsx",
+            "previewHref": "/examples/review-center",
+            "scenes": [
+              {
+                "id": "filled",
+                "label": "Lleno",
+                "labelEn": "Filled"
+              },
+              {
+                "id": "empty",
+                "label": "Vacío",
+                "labelEn": "Empty"
+              },
+              {
+                "id": "loading",
+                "label": "Cargando",
+                "labelEn": "Loading"
+              },
+              {
+                "id": "error",
+                "label": "Error",
+                "labelEn": "Error"
+              },
+              {
+                "id": "files",
+                "label": "Archivo",
+                "labelEn": "File"
+              },
+              {
+                "id": "unsure",
+                "label": "En duda",
+                "labelEn": "Unsure"
+              },
+              {
+                "id": "skipped",
+                "label": "Saltado",
+                "labelEn": "Skipped"
+              }
+            ],
+            "examples": [
+              {
+                "title": "Correo a Celaya",
+                "href": "/examples/review-center",
+                "description": "Tres piezas del taller. El anticipo dudoso queda marcado."
+              },
+              {
+                "title": "Estrés",
+                "href": "/examples/review-center/stress",
+                "description": "Vacío, textos largos, RTL y diez piezas."
+              }
+            ],
+            "usage": "<ReviewCenter items={items} selectedId={id} onSelect={setId} onDecide={decide} onSkip={skip} onUndo={undo} />",
+            "api": [
+              {
+                "name": "items",
+                "type": "ReviewItem<TMeta>[]",
+                "description": "id, title, agent, type, risk, confidence, waiting, body, files. meta is opaque. The host formats the wait; the piece does not run a clock."
+              },
+              {
+                "name": "onDecide / onSkip / onUndo",
+                "type": "callbacks",
+                "description": "The host owns the queue. A decision result is approve or reject, plus an optional reason or edited text."
+              },
+              {
+                "name": "filter / selectedId",
+                "type": "all | high | unsure / string",
+                "description": "High risk sorts first. Unsure is below the confidence line, 0.7 by default."
+              },
+              {
+                "name": "reasons / undo",
+                "type": "string[] / { title }",
+                "description": "Rejection reasons are the host's. Undo shows whatever the host passes back."
+              },
+              {
+                "name": "loading / error / labels",
+                "type": "boolean / string / Partial<ReviewCenterLabels>",
+                "description": "Skeleton, alert, and chrome copy. English is the default."
+              }
+            ]
+          },
+          "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. No es la bandeja de tareas ni una sola compuerta: es la fila de lo que todavía no se firma.",
+          "files": [
+            {
+              "path": "registry/ui/review-center.tsx",
+              "type": "registry:component",
+              "target": "@ui/review-center.tsx"
+            }
+          ]
+        },
+        {
+          "name": "permission-request",
+          "type": "registry:ui",
+          "title": "Permission request",
+          "description": "An agent asks for one right. The card says who, why, and exactly what will happen. Allow it once, for a while, or always. A destructive ask cannot be kept forever.",
+          "author": "Eduardo Retana",
+          "registryDependencies": [
+            "badge",
+            "button",
+            "skeleton"
+          ],
+          "categories": [
+            "agents"
+          ],
+          "meta": {
+            "titleEs": "Petición de permiso",
+            "descriptionEs": "Un agente pide un solo derecho. La tarjeta dice quién, por qué y qué va a pasar. Se permite una vez, un rato o siempre. Lo destructivo no se deja para siempre.",
+            "preview": "app/examples/permission-request/preview.tsx",
+            "previewHref": "/examples/permission-request",
+            "scenes": [
+              {
+                "id": "filled",
+                "label": "Lleno",
+                "labelEn": "Filled"
+              },
+              {
+                "id": "empty",
+                "label": "Vacío",
+                "labelEn": "Empty"
+              },
+              {
+                "id": "loading",
+                "label": "Cargando",
+                "labelEn": "Loading"
+              },
+              {
+                "id": "error",
+                "label": "Error",
+                "labelEn": "Error"
+              },
+              {
+                "id": "allowed",
+                "label": "Permitido",
+                "labelEn": "Allowed"
+              },
+              {
+                "id": "denied",
+                "label": "Negado",
+                "labelEn": "Denied"
+              },
+              {
+                "id": "destructive",
+                "label": "Destructivo",
+                "labelEn": "Destructive"
+              },
+              {
+                "id": "timed",
+                "label": "Un rato",
+                "labelEn": "Timed"
+              }
+            ],
+            "examples": [
+              {
+                "title": "Correo a Celaya",
+                "href": "/examples/permission-request",
+                "description": "Bruma pide mandar el pedido PED-990. Lo destructivo no ofrece siempre."
+              },
+              {
+                "title": "Estrés",
+                "href": "/examples/permission-request/stress",
+                "description": "Vacío, textos largos, RTL y diez filas."
+              }
+            ],
+            "usage": "<PermissionRequest agent={agent} action={action} risk={risk} preview={preview} scope={scope} decision={decision} onDecisionChange={setDecision} />",
+            "api": [
+              {
+                "name": "agent / action / target / reason",
+                "type": "who and what",
+                "description": "The title reads as the agent wanting the action. The reason is the agent's own words."
+              },
+              {
+                "name": "preview",
+                "type": "PermissionPreview<TMeta>[]",
+                "description": "The concrete rows: who receives it, the subject, the file. meta on a row is the side note. itemMeta is opaque."
+              },
+              {
+                "name": "risk / scope",
+                "type": "safe | risky | destructive / once | timed | always",
+                "description": "Destructive drops Always even if the host lists it."
+              },
+              {
+                "name": "decision / onDecisionChange",
+                "type": "PermissionDecision | null",
+                "description": "Null means it is still asking. Revoke and ask again pass null. The host stores the grant and the time left."
+              },
+              {
+                "name": "loading / error / labels",
+                "type": "boolean / string / Partial<PermissionRequestLabels>",
+                "description": "Skeleton, alert, and chrome copy. English is the default."
+              }
+            ]
+          },
+          "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. No es el recibo de una herramienta: pide un derecho antes de actuar.",
+          "files": [
+            {
+              "path": "registry/ui/permission-request.tsx",
+              "type": "registry:component",
+              "target": "@ui/permission-request.tsx"
+            }
+          ]
+        },
+        {
+          "name": "inline-diff",
+          "type": "registry:ui",
+          "title": "Inline diff",
+          "description": "A finished prose rewrite, word by word. Accept or reject each change. Until it is accepted, the original words stay.",
+          "author": "Eduardo Retana",
+          "registryDependencies": [
+            "button",
+            "skeleton"
+          ],
+          "categories": [
+            "agents"
+          ],
+          "meta": {
+            "titleEs": "Diff en la prosa",
+            "descriptionEs": "Una reescritura ya hecha, palabra por palabra. Cada cambio se acepta o se rechaza. Mientras no se acepte, se quedan las palabras de origen.",
+            "preview": "app/examples/inline-diff/preview.tsx",
+            "previewHref": "/examples/inline-diff",
+            "scenes": [
+              {
+                "id": "filled",
+                "label": "Lleno",
+                "labelEn": "Filled"
+              },
+              {
+                "id": "empty",
+                "label": "Vacío",
+                "labelEn": "Empty"
+              },
+              {
+                "id": "loading",
+                "label": "Cargando",
+                "labelEn": "Loading"
+              },
+              {
+                "id": "error",
+                "label": "Error",
+                "labelEn": "Error"
+              },
+              {
+                "id": "settled",
+                "label": "Revisado",
+                "labelEn": "Settled"
+              }
+            ],
+            "examples": [
+              {
+                "title": "Entrega y esmalte",
+                "href": "/examples/inline-diff",
+                "description": "Quita el cobalto que se queda y mueve el viernes al lunes."
+              },
+              {
+                "title": "Estrés",
+                "href": "/examples/inline-diff/stress",
+                "description": "Vacío, textos largos, RTL y diez cambios."
+              }
+            ],
+            "usage": "<InlineDiff original={original} suggested={suggested} decisions={decisions} onDecide={decide} onUndo={undo} />",
+            "api": [
+              {
+                "name": "original / suggested / changes",
+                "type": "string / DiffSegment[]",
+                "description": "Pass the two texts, or segments you already split. diffWords groups a removal and the words that replace it."
+              },
+              {
+                "name": "decisions / onDecide / onDecideAll / onUndo",
+                "type": "callbacks",
+                "description": "The host owns each accept or reject. Pending changes keep the original words. Accept all uses the suggestion."
+              },
+              {
+                "name": "loading / error / labels",
+                "type": "boolean / string / Partial<InlineDiffLabels>",
+                "description": "Skeleton, alert, and chrome copy. English is the default."
+              }
+            ]
+          },
+          "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Es prosa, no un diff de código con números de línea.",
+          "files": [
+            {
+              "path": "registry/ui/inline-diff.tsx",
+              "type": "registry:component",
+              "target": "@ui/inline-diff.tsx"
+            }
+          ]
+        },
+        {
+          "name": "email-draft",
+          "type": "registry:ui",
+          "title": "Email draft",
+          "description": "An agent-written letter waiting for a person. Switch the recipient and the tone, edit the words, remove the file, then send or discard.",
+          "author": "Eduardo Retana",
+          "registryDependencies": [
+            "badge",
+            "button",
+            "skeleton",
+            "textarea"
+          ],
+          "categories": [
+            "agents"
+          ],
+          "meta": {
+            "titleEs": "Borrador de correo",
+            "descriptionEs": "Una carta escrita por un agente, esperando a una persona. Cambia destinatario y tono, edita, quita el archivo, envía o descarta.",
+            "preview": "app/examples/email-draft/preview.tsx",
+            "previewHref": "/examples/email-draft",
+            "scenes": [
+              {
+                "id": "filled",
+                "label": "Lleno",
+                "labelEn": "Filled"
+              },
+              {
+                "id": "empty",
+                "label": "Vacío",
+                "labelEn": "Empty"
+              },
+              {
+                "id": "loading",
+                "label": "Cargando",
+                "labelEn": "Loading"
+              },
+              {
+                "id": "error",
+                "label": "Error",
+                "labelEn": "Error"
+              },
+              {
+                "id": "sent",
+                "label": "Enviado",
+                "labelEn": "Sent"
+              },
+              {
+                "id": "discarded",
+                "label": "Descartado",
+                "labelEn": "Discarded"
+              },
+              {
+                "id": "short",
+                "label": "Breve",
+                "labelEn": "Short"
+              }
+            ],
+            "examples": [
+              {
+                "title": "Carta a Celaya",
+                "href": "/examples/email-draft",
+                "description": "PED-990 para Ramón Solís, con tono claro, breve o formal."
+              },
+              {
+                "title": "Estrés",
+                "href": "/examples/email-draft/stress",
+                "description": "Vacío, textos largos, RTL y diez destinatarios."
+              }
+            ],
+            "usage": "<EmailDraft contacts={contacts} contactId={id} tones={tones} toneId={tone} body={body} attachment={file} onSend={send} onDiscard={discard} onUndo={undo} />",
+            "api": [
+              {
+                "name": "contacts / tones / body",
+                "type": "DraftContact<TMeta>[] / DraftTone[] / string",
+                "description": "The host picks the recipient and the tone, and passes the body already written. meta on a contact is opaque."
+              },
+              {
+                "name": "attachment / onAttachment",
+                "type": "string | null",
+                "description": "Remove passes null. Put the file back by passing the name the host kept."
+              },
+              {
+                "name": "onSend / onDiscard / onUndo / status",
+                "type": "callbacks / sent | discarded | null",
+                "description": "The host sends. Undo is the host clearing the status. The piece does not run a clock."
+              },
+              {
+                "name": "loading / error / labels",
+                "type": "boolean / string / Partial<EmailDraftLabels>",
+                "description": "Skeleton, alert, and chrome copy. English is the default."
+              }
+            ]
+          },
+          "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. No escribe la carta sola ni la manda: espera a la persona.",
+          "files": [
+            {
+              "path": "registry/ui/email-draft.tsx",
+              "type": "registry:component",
+              "target": "@ui/email-draft.tsx"
+            }
+          ]
+        },
+        {
+          "name": "message-actions",
+          "type": "registry:ui",
+          "title": "Message actions",
+          "description": "The bar under a finished answer. Copy, try again, keep the versions, say why a thumb went down, or read it aloud. The host speaks and stores the note.",
+          "author": "Eduardo Retana",
+          "registryDependencies": [
+            "button",
+            "input",
+            "skeleton"
+          ],
+          "categories": [
+            "agents"
+          ],
+          "meta": {
+            "titleEs": "Acciones del mensaje",
+            "descriptionEs": "La barra bajo una respuesta ya cerrada. Copiar, pedir otra, conservar las versiones, decir por qué no convence o leerla. El anfitrión habla y guarda la nota.",
+            "preview": "app/examples/message-actions/preview.tsx",
+            "previewHref": "/examples/message-actions",
+            "scenes": [
+              {
+                "id": "filled",
+                "label": "Lleno",
+                "labelEn": "Filled"
+              },
+              {
+                "id": "empty",
+                "label": "Vacío",
+                "labelEn": "Empty"
+              },
+              {
+                "id": "loading",
+                "label": "Cargando",
+                "labelEn": "Loading"
+              },
+              {
+                "id": "error",
+                "label": "Error",
+                "labelEn": "Error"
+              },
+              {
+                "id": "down",
+                "label": "En contra",
+                "labelEn": "Down"
+              },
+              {
+                "id": "speaking",
+                "label": "Leyendo",
+                "labelEn": "Speaking"
+              },
+              {
+                "id": "quiet",
+                "label": "Quieta",
+                "labelEn": "Quiet"
+              }
+            ],
+            "examples": [
+              {
+                "title": "Respuesta del pedido",
+                "href": "/examples/message-actions",
+                "description": "Dos versiones del anticipo y de la entrega en León."
+              },
+              {
+                "title": "Estrés",
+                "href": "/examples/message-actions/stress",
+                "description": "Vacío, textos largos, RTL y diez versiones."
+              }
+            ],
+            "usage": "<MessageActions versions={versions} version={version} onVersionChange={setVersion} onCopy={copy} onRegenerate={again} onFeedback={note} speaking={speaking} onSpeak={setSpeaking} />",
+            "api": [
+              {
+                "name": "text / versions / version",
+                "type": "string / string[] | number / number",
+                "description": "From two versions on, the switcher appears. The host adds a version after regenerate."
+              },
+              {
+                "name": "onCopy / onRegenerate / onFeedback / onSpeak",
+                "type": "callbacks",
+                "description": "Copy does not touch the clipboard. Speech does not start a timer. A down vote can carry a reason."
+              },
+              {
+                "name": "quiet / regenerating / speaking",
+                "type": "boolean",
+                "description": "Quiet fades until hover or focus on a device that hovers. The bars stay still when motion is reduced."
+              },
+              {
+                "name": "loading / error / labels",
+                "type": "boolean / string / Partial<MessageActionsLabels>",
+                "description": "Skeleton, alert, and chrome copy. English is the default."
+              }
+            ]
+          },
+          "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Va bajo una respuesta ya cerrada, no mientras se está escribiendo.",
+          "files": [
+            {
+              "path": "registry/ui/message-actions.tsx",
+              "type": "registry:component",
+              "target": "@ui/message-actions.tsx"
+            }
+          ]
+        },
     {
       "author": "Eduardo Retana",
       "name": "data-table-grouping",

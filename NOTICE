@@ -290,6 +290,21 @@ the cells are decorative and the list is what can be changed. memory-panel
 is what lasts across chats. cited-answer is not inline-citation and not
 source-list. prompt-library is not a row of suggestion chips.
 
+review-center, permission-request, inline-diff, email-draft, and
+message-actions are a clean-room reading of public behavior descriptions on
+Affect UI (a queue of what an agent wants signed, highest risk first; one
+asked right with a concrete preview; a word-level prose edit; a letter that
+waits for a person; and the bar under a finished answer):
+
+  https://www.affectui.com/components
+
+Affect Pro was not purchased, fetched, or ported. No source, sample data,
+icons, assets, or internal strings were copied. The demos continue the same
+Guanajuato workshop scenario. Colors come from the host shadcn tokens.
+review-center is not agent-inbox and not approval-card. permission-request
+is not tool-approval: it asks for one right before the action. inline-diff
+is prose, not a code gutter. The host owns the clock, the grant, and undo.
+
 adaptive-table is a clean-room reimplementation from a behavior description
 only. No names, icons, or rows from that reference were copied. Columns drop,
 fold, and stretch to the container width.

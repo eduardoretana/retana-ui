@@ -1,0 +1,139 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "email-draft",
+  "title": "Email draft",
+  "author": "Eduardo Retana",
+  "description": "An agent-written letter waiting for a person. Switch the recipient and the tone, edit the words, remove the file, then send or discard.",
+  "registryDependencies": [
+    "badge",
+    "button",
+    "skeleton",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/email-draft.tsx",
+      "content": "\"use client\"\n\n/**\n * An agent-written letter waiting for a person. Clean-room reading of a public\n * behavior description. No Affect source, sample data, icons, or assets were\n * copied. Sending and discarding stay with the host, including undo.\n */\n\nimport * as React from \"react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { Textarea } from \"@/components/ui/textarea\"\nimport { cn } from \"@/lib/utils\"\n\nexport type DraftContact<TMeta = unknown> = {\n  id: string\n  name: string\n  email: string\n  meta?: TMeta\n}\n\nexport type DraftTone = { id: string; label: string }\n\nexport type DraftStatus = \"sent\" | \"discarded\"\n\nexport type EmailDraftLabels = {\n  title: string\n  to: string\n  recipients: string\n  tone: string\n  edit: string\n  send: string\n  discard: string\n  undo: string\n  sent: (name: string) => string\n  discarded: string\n  remove: string\n  removeNamed: (name: string) => string\n  restore: string\n  attachment: string\n  empty: string\n  loading: string\n  from: (agent: string) => string\n  open: string\n  message: string\n}\n\nconst draftLabels: EmailDraftLabels = {\n  title: \"Draft\",\n  to: \"To\",\n  recipients: \"Recipients\",\n  tone: \"Tone\",\n  edit: \"Edit the message\",\n  send: \"Send\",\n  discard: \"Discard\",\n  undo: \"Undo\",\n  sent: (name) => `Sent to ${name}`,\n  discarded: \"Draft discarded\",\n  remove: \"Remove\",\n  removeNamed: (name) => `Remove “${name}”`,\n  restore: \"Put the file back\",\n  attachment: \"Attachment\",\n  empty: \"No draft to review.\",\n  loading: \"Loading the draft\",\n  from: (agent) => `Draft by ${agent}`,\n  open: \"Open the order\",\n  message: \"Message\",\n}\n\nfunction resolveLabels(partial?: Partial<EmailDraftLabels>): EmailDraftLabels {\n  return { ...draftLabels, ...partial }\n}\n\nexport function EmailDraft<TMeta = unknown>({\n  reference,\n  account,\n  amount,\n  statusLabel,\n  agent,\n  contacts = [],\n  contactId,\n  onContact,\n  tones = [],\n  toneId,\n  onTone,\n  body = \"\",\n  onBody,\n  attachment,\n  removedAttachment,\n  onAttachment,\n  linkLabel,\n  onOpen,\n  status = null,\n  onSend,\n  onDiscard,\n  onUndo,\n  loading = false,\n  error,\n  className,\n  labels: labelOverrides,\n}: {\n  reference?: string\n  account?: string\n  amount?: string\n  statusLabel?: string\n  agent?: string\n  contacts?: readonly DraftContact<TMeta>[]\n  contactId?: string | null\n  onContact?: (id: string) => void\n  tones?: readonly DraftTone[]\n  toneId?: string | null\n  onTone?: (id: string) => void\n  body?: string\n  onBody?: (body: string) => void\n  attachment?: string | null\n  removedAttachment?: string | null\n  onAttachment?: (name: string | null) => void\n  linkLabel?: string\n  onOpen?: () => void\n  status?: DraftStatus | null\n  onSend?: (email: { to: string; body: string; attachment: string | null }) => void\n  onDiscard?: () => void\n  onUndo?: () => void\n  loading?: boolean\n  error?: string\n  className?: string\n  labels?: Partial<EmailDraftLabels>\n}) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const contact = contacts.find((item) => item.id === contactId) ?? contacts[0] ?? null\n  const [menu, setMenu] = React.useState(false)\n  const [editing, setEditing] = React.useState(false)\n  const [draft, setDraft] = React.useState(body)\n  const [source, setSource] = React.useState(body)\n  if (source !== body) {\n    setSource(body)\n    setDraft(body)\n  }\n\n  function send() {\n    if (!contact) return\n    const next = editing ? draft : body\n    if (editing) onBody?.(next)\n    onSend?.({ to: contact.email, body: next, attachment: attachment ?? null })\n    setEditing(false)\n  }\n\n  const quiet = !reference && contacts.length === 0 && !body\n\n  return (\n    <section aria-labelledby={titleId} aria-busy={loading || undefined} className={cn(\"flex w-full max-w-lg flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className)}>\n      {loading ? (\n        <div role=\"status\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-36 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && quiet ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : quiet ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : status ? (\n        <div className=\"flex flex-wrap items-center gap-2\">\n          <h2 id={titleId} className=\"font-medium\">\n            {reference ?? labels.title}\n          </h2>\n          <p role=\"status\">{status === \"sent\" ? labels.sent(contact?.name ?? \"\") : labels.discarded}</p>\n          <Button type=\"button\" size=\"sm\" variant=\"outline\" className=\"ms-auto\" onClick={() => onUndo?.()}>\n            {labels.undo}\n          </Button>\n        </div>\n      ) : (\n        <div className=\"flex flex-col gap-3\">\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          <header className=\"flex flex-wrap items-start gap-2\">\n            <div className=\"min-w-0 flex-1\">\n              <h2 id={titleId} className=\"font-medium\">\n                {reference}\n              </h2>\n              {account ? <p className=\"text-xs text-muted-foreground\">{account}</p> : null}\n            </div>\n            {statusLabel ? <Badge variant=\"outline\">{statusLabel}</Badge> : null}\n            {amount ? <p className=\"font-medium\">{amount}</p> : null}\n          </header>\n          <div className=\"flex flex-col gap-1\">\n            <p className=\"text-xs text-muted-foreground\">{labels.to}</p>\n            {contact ? (\n              <div className=\"relative\">\n                <button\n                  type=\"button\"\n                  aria-expanded={menu}\n                  aria-haspopup=\"listbox\"\n                  className=\"w-full rounded-md border border-border px-2 py-1 text-start focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n                  onClick={() => setMenu((value) => !value)}\n                  onKeyDown={(event) => {\n                    if (event.key === \"Escape\") setMenu(false)\n                  }}\n                >\n                  <span className=\"font-medium\">{contact.name}</span>\n                  <span className=\"mt-0.5 block text-xs break-all text-muted-foreground\">{contact.email}</span>\n                </button>\n                {menu ? (\n                  <ul role=\"listbox\" aria-label={labels.recipients} className=\"mt-1 flex flex-col gap-1 rounded-md border border-border p-1\">\n                    {contacts.map((item) => (\n                      <li key={item.id}>\n                        <button\n                          type=\"button\"\n                          role=\"option\"\n                          aria-selected={item.id === contact.id}\n                          className=\"w-full rounded-md px-2 py-1 text-start focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none hover:bg-muted\"\n                          onClick={() => {\n                            onContact?.(item.id)\n                            setMenu(false)\n                          }}\n                        >\n                          {item.name}\n                          <span className=\"mt-0.5 block text-xs break-all text-muted-foreground\">{item.email}</span>\n                        </button>\n                      </li>\n                    ))}\n                  </ul>\n                ) : null}\n              </div>\n            ) : null}\n          </div>\n          {tones.length > 0 ? (\n            <div role=\"group\" aria-label={labels.tone} className=\"flex flex-wrap gap-1\">\n              {tones.map((tone) => (\n                <button\n                  key={tone.id}\n                  type=\"button\"\n                  aria-pressed={tone.id === toneId}\n                  className={cn(\n                    \"rounded-md border px-2 py-1 text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\",\n                    tone.id === toneId ? \"border-ring bg-muted\" : \"border-border\",\n                  )}\n                  onClick={() => onTone?.(tone.id)}\n                >\n                  {tone.label}\n                </button>\n              ))}\n            </div>\n          ) : null}\n          {editing ? (\n            <Textarea\n              aria-label={labels.message}\n              value={draft}\n              onChange={(event) => setDraft(event.target.value)}\n              onKeyDown={(event) => {\n                if (event.key === \"Escape\") setEditing(false)\n                if (event.key === \"Enter\" && (event.metaKey || event.ctrlKey)) {\n                  event.preventDefault()\n                  send()\n                }\n              }}\n            />\n          ) : (\n            <button type=\"button\" className=\"rounded-md text-start leading-6 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\" onClick={() => setEditing(true)}>\n              <span className=\"sr-only\">{labels.edit}. </span>\n              {body}\n            </button>\n          )}\n          {linkLabel ? (\n            <Button type=\"button\" size=\"sm\" variant=\"outline\" className=\"self-start\" onClick={() => onOpen?.()}>\n              {linkLabel}\n            </Button>\n          ) : null}\n          {attachment ? (\n            <div className=\"flex flex-wrap items-center gap-2 rounded-md border border-border px-2 py-1\">\n              <span className=\"text-xs text-muted-foreground\">{labels.attachment}</span>\n              <span className=\"min-w-0 break-all\">{attachment}</span>\n              <Button type=\"button\" size=\"sm\" variant=\"outline\" className=\"ms-auto\" aria-label={labels.removeNamed(attachment)} onClick={() => onAttachment?.(null)}>\n                {labels.remove}\n              </Button>\n            </div>\n          ) : removedAttachment ? (\n            <Button type=\"button\" size=\"sm\" variant=\"outline\" className=\"self-start\" onClick={() => onAttachment?.(removedAttachment)}>\n              {labels.restore}\n            </Button>\n          ) : null}\n          <div className=\"flex flex-wrap items-center gap-2\">\n            {agent ? <p className=\"text-xs text-muted-foreground\">{labels.from(agent)}</p> : null}\n            <Button type=\"button\" size=\"sm\" className=\"ms-auto\" onClick={send} disabled={!contact}>\n              {labels.send}\n            </Button>\n            <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={() => onDiscard?.()}>\n              {labels.discard}\n            </Button>\n          </div>\n        </div>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/email-draft.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Borrador de correo",
+    "descriptionEs": "Una carta escrita por un agente, esperando a una persona. Cambia destinatario y tono, edita, quita el archivo, envía o descarta.",
+    "preview": "app/examples/email-draft/preview.tsx",
+    "previewHref": "/examples/email-draft",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "sent",
+        "label": "Enviado",
+        "labelEn": "Sent"
+      },
+      {
+        "id": "discarded",
+        "label": "Descartado",
+        "labelEn": "Discarded"
+      },
+      {
+        "id": "short",
+        "label": "Breve",
+        "labelEn": "Short"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Carta a Celaya",
+        "href": "/examples/email-draft",
+        "description": "PED-990 para Ramón Solís, con tono claro, breve o formal."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/email-draft/stress",
+        "description": "Vacío, textos largos, RTL y diez destinatarios."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/email-draft?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/email-draft?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/email-draft?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/email-draft?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Enviado",
+        "href": "/examples/email-draft?scene=sent",
+        "description": "Sent"
+      },
+      {
+        "title": "Descartado",
+        "href": "/examples/email-draft?scene=discarded",
+        "description": "Discarded"
+      },
+      {
+        "title": "Breve",
+        "href": "/examples/email-draft?scene=short",
+        "description": "Short"
+      }
+    ],
+    "usage": "<EmailDraft contacts={contacts} contactId={id} tones={tones} toneId={tone} body={body} attachment={file} onSend={send} onDiscard={discard} onUndo={undo} />",
+    "api": [
+      {
+        "name": "contacts / tones / body",
+        "type": "DraftContact<TMeta>[] / DraftTone[] / string",
+        "description": "The host picks the recipient and the tone, and passes the body already written. meta on a contact is opaque."
+      },
+      {
+        "name": "attachment / onAttachment",
+        "type": "string | null",
+        "description": "Remove passes null. Put the file back by passing the name the host kept."
+      },
+      {
+        "name": "onSend / onDiscard / onUndo / status",
+        "type": "callbacks / sent | discarded | null",
+        "description": "The host sends. Undo is the host clearing the status. The piece does not run a clock."
+      },
+      {
+        "name": "loading / error / labels",
+        "type": "boolean / string / Partial<EmailDraftLabels>",
+        "description": "Skeleton, alert, and chrome copy. English is the default."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. No escribe la carta sola ni la manda: espera a la persona.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}
