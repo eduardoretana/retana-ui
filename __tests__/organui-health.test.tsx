@@ -20,7 +20,7 @@ describe("clinical-tone", () => {
 })
 
 describe("organ models", () => {
-  it("keep OrganUI's realistic colours (ui-system exception) and their credit", () => {
+  it("keep OrganUI's realistic colours (colour exception EX-01) and their credit", () => {
     for (const model of [musclesModel, skeletonModel]) {
       expect(model.src).toMatch(/@[0-9a-f]{40}\//)
       expect(model.attribution.license).toMatch(/CC/)
