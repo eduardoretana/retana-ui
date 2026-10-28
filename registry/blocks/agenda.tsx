@@ -24,6 +24,8 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { Switch } from "@/components/ui/switch"
 import { AgendaDetail } from "@/registry/retana/ui/agenda-detail"
+import { toast } from "sonner"
+
 import { AgendaCategoryIcon, AgendaEventCard } from "@/registry/retana/ui/agenda-event"
 import {
   DEFAULT_AGENDA_LOCALE,
@@ -59,6 +61,7 @@ import {
   type AgendaChangeSource,
   type AgendaEvent,
   type AgendaEventDraft,
+  type AgendaHoliday,
   type AgendaLabels,
   type AgendaMove,
   type AgendaView,
@@ -95,6 +98,11 @@ export type AgendaProps<TMeta = Record<string, unknown>> = {
   onOpenRecord?: (id: string, recordId: string) => void
   onSync?: () => void | Promise<void>
   onRetry?: () => void
+  /** All-day chips. The host supplies the dates; the agenda does not invent a calendar. */
+  holidays?: readonly AgendaHoliday[]
+  onEdit?: (event: AgendaEvent<TMeta>) => void
+  onDuplicate?: (event: AgendaEvent<TMeta>) => void
+  onDelete?: (id: string) => void
   syncing?: boolean
   readOnly?: boolean
   loading?: boolean
@@ -143,6 +151,10 @@ export function Agenda<TMeta extends Record<string, unknown> = Record<string, un
   onOpenRecord,
   onSync,
   onRetry,
+  holidays = [],
+  onEdit,
+  onDuplicate,
+  onDelete,
   syncing = false,
   readOnly = false,
   loading = false,
@@ -194,6 +206,25 @@ export function Agenda<TMeta extends Record<string, unknown> = Record<string, un
     if (!event) return
     const when = formatInterval(move.startsAt, move.endsAt, timeZone, locale, move.allDay)
     setAnnouncement(source === "resize" ? labels.resized(event.title, when) : labels.moved(event.title, when))
+  }
+
+  function editEvent(event: AgendaEvent<TMeta>) {
+    onEdit?.(event)
+  }
+
+  function duplicateEvent(event: AgendaEvent<TMeta>) {
+    onDuplicate?.(event)
+    const line = labels.duplicated(event.title)
+    toast(line)
+    setAnnouncement(line)
+  }
+
+  function deleteEvent(event: AgendaEvent<TMeta>) {
+    onDelete?.(event.id)
+    const line = labels.deleted(event.title)
+    toast(line)
+    setAnnouncement(line)
+    if (event.id === selectedId) select(null)
   }
 
   function requestCreate(draft: AgendaEventDraft) {
@@ -357,6 +388,10 @@ export function Agenda<TMeta extends Record<string, unknown> = Record<string, un
               detail={detail}
               onSelect={select}
               onReschedule={reschedule}
+              holidays={holidays}
+              onEdit={editEvent}
+              onDuplicate={duplicateEvent}
+              onDelete={deleteEvent}
             />
           ) : null}
           {showGrid && !listWeek && view !== "month" ? (
@@ -381,6 +416,10 @@ export function Agenda<TMeta extends Record<string, unknown> = Record<string, un
               onSelect={select}
               onReschedule={reschedule}
               onCreate={requestCreate}
+              holidays={holidays}
+              onEdit={editEvent}
+              onDuplicate={duplicateEvent}
+              onDelete={deleteEvent}
             />
           ) : null}
           {showGrid && view === "month" ? (
@@ -403,6 +442,10 @@ export function Agenda<TMeta extends Record<string, unknown> = Record<string, un
               onReschedule={reschedule}
               onAnchorChange={setAnchor}
               onViewChange={setView}
+              holidays={holidays}
+              onEdit={editEvent}
+              onDuplicate={duplicateEvent}
+              onDelete={deleteEvent}
             />
           ) : null}
         </div>
@@ -449,6 +492,20 @@ export function Agenda<TMeta extends Record<string, unknown> = Record<string, un
   )
 }
 
+function HolidayNotes({ date, holidays, labels }: { date: string; holidays: readonly AgendaHoliday[]; labels: AgendaLabels }) {
+  const marks = holidays.filter((holiday) => holiday.date === date)
+  if (marks.length === 0) return null
+  return (
+    <>
+      {marks.map((holiday) => (
+        <p key={`${holiday.date}-${holiday.title}`} className="rounded-md bg-muted px-1.5 py-0.5 text-[11px] text-foreground">
+          {labels.holiday(holiday.title)}
+        </p>
+      ))}
+    </>
+  )
+}
+
 function TimeGrid<TMeta extends Record<string, unknown>>({
   dates,
   events,
@@ -470,6 +527,10 @@ function TimeGrid<TMeta extends Record<string, unknown>>({
   onSelect,
   onReschedule,
   onCreate,
+  holidays = [],
+  onEdit,
+  onDuplicate,
+  onDelete,
 }: {
   dates: string[]
   events: readonly AgendaEvent<TMeta>[]
@@ -491,6 +552,10 @@ function TimeGrid<TMeta extends Record<string, unknown>>({
   onSelect: (id: string | null) => void
   onReschedule: (id: string, move: AgendaMove, source: AgendaChangeSource) => void
   onCreate: (draft: AgendaEventDraft) => void
+  holidays?: readonly AgendaHoliday[]
+  onEdit?: (event: AgendaEvent<TMeta>) => void
+  onDuplicate?: (event: AgendaEvent<TMeta>) => void
+  onDelete?: (event: AgendaEvent<TMeta>) => void
 }) {
   const scroller = React.useRef<HTMLDivElement>(null)
   const hours = Array.from({ length: Math.max(hourEnd - hourStart, 1) }, (_, index) => hourStart + index)
@@ -547,6 +612,9 @@ function TimeGrid<TMeta extends Record<string, unknown>>({
         density={options.density}
         onSelect={onSelect}
         onReschedule={onReschedule}
+        onEdit={onEdit ? () => onEdit(event) : undefined}
+        onDuplicate={onDuplicate ? () => onDuplicate(event) : undefined}
+        onDelete={onDelete ? () => onDelete(event) : undefined}
         className={eventClassName}
       />
     )
@@ -597,6 +665,7 @@ function TimeGrid<TMeta extends Record<string, unknown>>({
           return (
             <div key={date} role="gridcell" className={cn("min-h-8 border-s border-border p-1", date === today && "bg-accent/40")}>
               <div className="grid gap-1">
+                <HolidayNotes date={date} holidays={holidays} labels={labels} />
                 {extras.map((segment) => {
                   const event = events.find((item) => item.id === segment.eventId)
                   if (!event) return null
@@ -838,6 +907,10 @@ function WeekList<TMeta extends Record<string, unknown>>({
   detail,
   onSelect,
   onReschedule,
+  holidays = [],
+  onEdit,
+  onDuplicate,
+  onDelete,
 }: {
   dates: string[]
   events: readonly AgendaEvent<TMeta>[]
@@ -853,6 +926,10 @@ function WeekList<TMeta extends Record<string, unknown>>({
   detail: React.ReactNode
   onSelect: (id: string | null) => void
   onReschedule: (id: string, move: AgendaMove, source: AgendaChangeSource) => void
+  holidays?: readonly AgendaHoliday[]
+  onEdit?: (event: AgendaEvent<TMeta>) => void
+  onDuplicate?: (event: AgendaEvent<TMeta>) => void
+  onDelete?: (event: AgendaEvent<TMeta>) => void
 }) {
   return (
     <div role="list" aria-label={labels.listLabel} className="min-h-0 flex-1 overflow-auto p-3">
@@ -863,6 +940,7 @@ function WeekList<TMeta extends Record<string, unknown>>({
           return (
             <section key={date} aria-label={heading.full} className="grid gap-2">
               <h3 className="text-sm font-medium">{heading.full}</h3>
+              <HolidayNotes date={date} holidays={holidays} labels={labels} />
               {dayEvents.length === 0 ? <p className="text-xs text-muted-foreground">{labels.emptyHint}</p> : null}
               <div className="grid gap-2">
                 {dayEvents.map((event) => (
@@ -879,6 +957,9 @@ function WeekList<TMeta extends Record<string, unknown>>({
                       snapMinutes={snapMinutes}
                       onSelect={onSelect}
                       onReschedule={onReschedule}
+                      onEdit={onEdit ? () => onEdit(event) : undefined}
+                      onDuplicate={onDuplicate ? () => onDuplicate(event) : undefined}
+                      onDelete={onDelete ? () => onDelete(event) : undefined}
                       className={eventClassName}
                     >
                       {event.id === selectedId ? detail : null}
@@ -913,6 +994,10 @@ function MonthGrid<TMeta extends Record<string, unknown>>({
   onReschedule,
   onAnchorChange,
   onViewChange,
+  holidays = [],
+  onEdit,
+  onDuplicate,
+  onDelete,
 }: {
   anchor: string
   events: readonly AgendaEvent<TMeta>[]
@@ -932,6 +1017,10 @@ function MonthGrid<TMeta extends Record<string, unknown>>({
   onReschedule: (id: string, move: AgendaMove, source: AgendaChangeSource) => void
   onAnchorChange: (anchor: string) => void
   onViewChange: (view: AgendaView) => void
+  holidays?: readonly AgendaHoliday[]
+  onEdit?: (event: AgendaEvent<TMeta>) => void
+  onDuplicate?: (event: AgendaEvent<TMeta>) => void
+  onDelete?: (event: AgendaEvent<TMeta>) => void
 }) {
   const cells = monthGrid(anchor, weekStartsOn)
   const weeks = Array.from({ length: 6 }, (_, index) => cells.slice(index * 7, index * 7 + 7))
@@ -986,6 +1075,7 @@ function MonthGrid<TMeta extends Record<string, unknown>>({
                   {heading.day}
                 </button>
                 <div className="grid gap-1">
+                  <HolidayNotes date={cell.iso} holidays={holidays} labels={labels} />
                   {shown.map((event) => (
                     <div
                       key={event.id}
@@ -1006,6 +1096,9 @@ function MonthGrid<TMeta extends Record<string, unknown>>({
                         density="compact"
                         onSelect={onSelect}
                         onReschedule={onReschedule}
+                        onEdit={onEdit ? () => onEdit(event) : undefined}
+                        onDuplicate={onDuplicate ? () => onDuplicate(event) : undefined}
+                        onDelete={onDelete ? () => onDelete(event) : undefined}
                         className={eventClassName}
                       />
                     </div>

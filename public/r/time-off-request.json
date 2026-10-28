@@ -1,0 +1,146 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "time-off-request",
+  "title": "Time off request",
+  "author": "Eduardo Retana",
+  "description": "Pick a type, a date range, and a note. The summary counts business days and shows what would remain of the balance.",
+  "registryDependencies": [
+    "button",
+    "input",
+    "select",
+    "skeleton",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/time-off-request.tsx",
+      "content": "\"use client\"\n\n/**\n * Absence request. Counts business days only and shows requested days against\n * the balance that is still free. The host owns submit and the holiday list.\n */\n\nimport * as React from \"react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Input } from \"@/components/ui/input\"\nimport {\n  Select,\n  SelectContent,\n  SelectItem,\n  SelectTrigger,\n  SelectValue,\n} from \"@/components/ui/select\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { Textarea } from \"@/components/ui/textarea\"\nimport { cn } from \"@/lib/utils\"\nimport { balanceLeft, businessSpan, requestedUnits, type AbsencePortion, type Holiday } from \"@/lib/time-off\"\n\nexport type AbsenceKind = {\n  id: string\n  label: string\n  portion: AbsencePortion\n}\n\nexport type TimeOffDraft = {\n  kindId: string\n  start: string\n  end: string\n  note: string\n  requested: number\n  remaining: number\n}\n\nexport type TimeOffRequestLabels = {\n  title: string\n  kind: string\n  start: string\n  end: string\n  note: string\n  notePlaceholder: string\n  summary: string\n  requested: string\n  available: string\n  pending: string\n  remaining: string\n  skipped: string\n  weekend: string\n  shortfall: string\n  none: string\n  submit: string\n  empty: string\n  loading: string\n  vacation: string\n  personal: string\n  sick: string\n  half: string\n  amount: (value: number) => string\n}\n\nconst requestLabels: TimeOffRequestLabels = {\n  title: \"Request time away\",\n  kind: \"Type\",\n  start: \"From\",\n  end: \"To\",\n  note: \"Notes\",\n  notePlaceholder: \"Optional\",\n  summary: \"Requested days vs available balance\",\n  requested: \"Requested\",\n  available: \"Available\",\n  pending: \"Already pending\",\n  remaining: \"Would remain\",\n  skipped: \"Not counted\",\n  weekend: \"Weekend\",\n  shortfall: \"The balance does not cover this request.\",\n  none: \"That range has no business day.\",\n  submit: \"Send request\",\n  empty: \"There is no balance to request against.\",\n  loading: \"Loading the request\",\n  vacation: \"Vacation\",\n  personal: \"Personal\",\n  sick: \"Sick\",\n  half: \"Half day\",\n  amount: (value) => String(value),\n}\n\nexport function defaultAbsenceKinds(labels: Pick<TimeOffRequestLabels, \"vacation\" | \"personal\" | \"sick\" | \"half\">): AbsenceKind[] {\n  return [\n    { id: \"vacation\", label: labels.vacation, portion: \"day\" },\n    { id: \"personal\", label: labels.personal, portion: \"day\" },\n    { id: \"sick\", label: labels.sick, portion: \"day\" },\n    { id: \"half\", label: labels.half, portion: \"half\" },\n  ]\n}\n\nexport type TimeOffRequestProps = {\n  available?: number | null\n  pending?: number\n  holidays?: readonly Holiday[]\n  kinds?: readonly AbsenceKind[]\n  defaultKindId?: string\n  defaultStart?: string\n  defaultEnd?: string\n  defaultNote?: string\n  loading?: boolean\n  error?: string\n  onSubmit?: (draft: TimeOffDraft) => void\n  labels?: Partial<TimeOffRequestLabels>\n  className?: string\n}\n\nexport function TimeOffRequest({\n  available = null,\n  pending = 0,\n  holidays = [],\n  kinds,\n  defaultKindId,\n  defaultStart = \"\",\n  defaultEnd = \"\",\n  defaultNote = \"\",\n  loading = false,\n  error,\n  onSubmit,\n  labels: labelOverrides,\n  className,\n}: TimeOffRequestProps) {\n  const labels = { ...requestLabels, ...labelOverrides }\n  const options = kinds ?? defaultAbsenceKinds(labels)\n  const [kindId, setKindId] = React.useState(defaultKindId || options[0]?.id || \"vacation\")\n  const [start, setStart] = React.useState(defaultStart)\n  const [end, setEnd] = React.useState(defaultEnd)\n  const [note, setNote] = React.useState(defaultNote)\n  const kind = options.find((item) => item.id === kindId) ?? options[0]\n  const portion = kind?.portion ?? \"day\"\n  const span = start ? businessSpan(start, portion === \"half\" ? start : end || start, holidays) : null\n  const requested = start ? requestedUnits(start, end || start, holidays, portion) : 0\n  const remaining = available == null ? null : balanceLeft(available, pending, requested)\n  const blocked = requested <= 0 || (remaining != null && remaining < 0)\n\n  function submit(event: React.FormEvent) {\n    event.preventDefault()\n    if (blocked || available == null || !kind) return\n    onSubmit?.({\n      kindId: kind.id,\n      start,\n      end: portion === \"half\" ? start : end || start,\n      note,\n      requested,\n      remaining: remaining ?? 0,\n    })\n  }\n\n  return (\n    <section className={cn(\"rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className)} aria-busy={loading || undefined}>\n      <h2 className=\"font-medium\">{labels.title}</h2>\n      {error ? <p role=\"alert\" className=\"mt-2 text-destructive\">{error}</p> : null}\n      {loading ? (\n        <div aria-label={labels.loading} className=\"mt-3 grid gap-2\">\n          <Skeleton className=\"h-8 w-full motion-reduce:animate-none\" />\n          <Skeleton className=\"h-16 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : available == null ? (\n        <p className=\"mt-3 text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <form className=\"mt-3 flex flex-col gap-3\" onSubmit={submit}>\n          <label className=\"grid gap-1\">\n            <span className=\"text-xs text-muted-foreground\">{labels.kind}</span>\n            <Select value={kindId} onValueChange={setKindId}>\n              <SelectTrigger aria-label={labels.kind} className=\"w-full\">\n                <SelectValue />\n              </SelectTrigger>\n              <SelectContent>\n                {options.map((option) => (\n                  <SelectItem key={option.id} value={option.id}>\n                    {option.label}\n                  </SelectItem>\n                ))}\n              </SelectContent>\n            </Select>\n          </label>\n          <div className=\"grid gap-2 sm:grid-cols-2\">\n            <label className=\"grid gap-1\">\n              <span className=\"text-xs text-muted-foreground\">{labels.start}</span>\n              <Input type=\"date\" value={start} aria-label={labels.start} onChange={(event) => setStart(event.target.value)} required />\n            </label>\n            {portion === \"day\" ? (\n              <label className=\"grid gap-1\">\n                <span className=\"text-xs text-muted-foreground\">{labels.end}</span>\n                <Input type=\"date\" value={end} min={start || undefined} aria-label={labels.end} onChange={(event) => setEnd(event.target.value)} required />\n              </label>\n            ) : null}\n          </div>\n          <label className=\"grid gap-1\">\n            <span className=\"text-xs text-muted-foreground\">{labels.note}</span>\n            <Textarea value={note} placeholder={labels.notePlaceholder} aria-label={labels.note} onChange={(event) => setNote(event.target.value)} />\n          </label>\n          <div className=\"rounded-lg border border-border bg-muted/40 p-3\" role=\"region\" aria-label={labels.summary}>\n            <p className=\"text-xs font-medium\">{labels.summary}</p>\n            <dl className=\"mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-xs\">\n              <dt className=\"text-muted-foreground\">{labels.requested}</dt>\n              <dd className=\"text-end tabular-nums\">{labels.amount(requested)}</dd>\n              <dt className=\"text-muted-foreground\">{labels.available}</dt>\n              <dd className=\"text-end tabular-nums\">{labels.amount(available)}</dd>\n              <dt className=\"text-muted-foreground\">{labels.pending}</dt>\n              <dd className=\"text-end tabular-nums\">{labels.amount(pending)}</dd>\n              <dt className=\"text-muted-foreground\">{labels.remaining}</dt>\n              <dd className=\"text-end font-medium tabular-nums\">{labels.amount(remaining ?? 0)}</dd>\n            </dl>\n            {span && span.skipped.length > 0 ? (\n              <ul className=\"mt-2 text-xs text-muted-foreground\">\n                {span.skipped.map((day) => (\n                  <li key={`${day.date}-${day.reason}`}>\n                    {labels.skipped}: {day.date} · {day.name ?? labels.weekend}\n                  </li>\n                ))}\n              </ul>\n            ) : null}\n            {requested <= 0 && start ? <p className=\"mt-2 text-xs\">{labels.none}</p> : null}\n            {remaining != null && remaining < 0 ? <p className=\"mt-2 text-xs text-destructive\">{labels.shortfall}</p> : null}\n          </div>\n          <Button type=\"submit\" disabled={blocked} className=\"h-auto whitespace-normal\">\n            {labels.submit}\n          </Button>\n        </form>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/time-off-request.tsx"
+    },
+    {
+      "path": "registry/lib/time-off.ts",
+      "content": "/** Business days, balances, and a configurable holiday calendar. No React. */\n\nexport type IsoDay = string\n\nexport type Holiday = {\n  date: IsoDay\n  name: string\n}\n\nexport type SkippedDay = {\n  date: IsoDay\n  reason: \"weekend\" | \"holiday\"\n  name?: string\n}\n\nexport type BusinessSpan = {\n  days: number\n  counted: IsoDay[]\n  skipped: SkippedDay[]\n}\n\nexport type AbsencePortion = \"day\" | \"half\"\n\nconst ISO = /^(\\d{4})-(\\d{2})-(\\d{2})$/\n\nexport function parseIsoDay(value: string) {\n  const match = ISO.exec(value)\n  if (!match) return null\n  const year = Number(match[1])\n  const month = Number(match[2])\n  const day = Number(match[3])\n  if (month < 1 || month > 12 || day < 1 || day > 31) return null\n  const probe = new Date(Date.UTC(year, month - 1, day))\n  if (probe.getUTCFullYear() !== year || probe.getUTCMonth() !== month - 1 || probe.getUTCDate() !== day) return null\n  return { year, month, day }\n}\n\nexport function isoDay(year: number, month: number, day: number) {\n  return `${year}-${String(month).padStart(2, \"0\")}-${String(day).padStart(2, \"0\")}`\n}\n\nexport function weekdayIndex(value: IsoDay) {\n  const parts = parseIsoDay(value)\n  if (!parts) return null\n  return new Date(Date.UTC(parts.year, parts.month - 1, parts.day)).getUTCDay()\n}\n\nexport function isWeekend(value: IsoDay) {\n  const weekday = weekdayIndex(value)\n  return weekday === 0 || weekday === 6\n}\n\nexport function eachDay(start: IsoDay, end: IsoDay): IsoDay[] {\n  const from = parseIsoDay(start)\n  const to = parseIsoDay(end)\n  if (!from || !to) return []\n  const cursor = new Date(Date.UTC(from.year, from.month - 1, from.day))\n  const last = Date.UTC(to.year, to.month - 1, to.day)\n  if (cursor.getTime() > last) return []\n  const days: IsoDay[] = []\n  while (cursor.getTime() <= last && days.length < 366) {\n    days.push(isoDay(cursor.getUTCFullYear(), cursor.getUTCMonth() + 1, cursor.getUTCDate()))\n    cursor.setUTCDate(cursor.getUTCDate() + 1)\n  }\n  return days\n}\n\nfunction nthWeekday(year: number, month: number, weekday: number, nth: number) {\n  const first = new Date(Date.UTC(year, month - 1, 1))\n  const offset = (weekday - first.getUTCDay() + 7) % 7\n  return isoDay(year, month, 1 + offset + (nth - 1) * 7)\n}\n\n/**\n * Statutory rest days in Mexico under LFT article 74.\n * The federal inauguration is 1 December every sixth year (2018, 2024, 2030…).\n * Election days are not implied: pass them in as extra holidays.\n */\nexport function mexicoStatutoryHolidays(year: number): Holiday[] {\n  const holidays: Holiday[] = [\n    { date: isoDay(year, 1, 1), name: \"Año Nuevo\" },\n    { date: nthWeekday(year, 2, 1, 1), name: \"Día de la Constitución\" },\n    { date: nthWeekday(year, 3, 1, 3), name: \"Natalicio de Benito Juárez\" },\n    { date: isoDay(year, 5, 1), name: \"Día del Trabajo\" },\n    { date: isoDay(year, 9, 16), name: \"Día de la Independencia\" },\n    { date: nthWeekday(year, 11, 1, 3), name: \"Día de la Revolución\" },\n    { date: isoDay(year, 12, 25), name: \"Navidad\" },\n  ]\n  if (year % 6 === 2) {\n    holidays.push({ date: isoDay(year, 12, 1), name: \"Transmisión del Poder Ejecutivo Federal\" })\n  }\n  return holidays.sort((a, b) => a.date.localeCompare(b.date))\n}\n\nexport function businessSpan(start: IsoDay, end: IsoDay, holidays: readonly Holiday[] = []): BusinessSpan {\n  const named = new Map(holidays.map((holiday) => [holiday.date, holiday.name]))\n  const counted: IsoDay[] = []\n  const skipped: SkippedDay[] = []\n  for (const date of eachDay(start, end)) {\n    if (isWeekend(date)) {\n      skipped.push({ date, reason: \"weekend\" })\n      continue\n    }\n    const name = named.get(date)\n    if (name) {\n      skipped.push({ date, reason: \"holiday\", name })\n      continue\n    }\n    counted.push(date)\n  }\n  return { days: counted.length, counted, skipped }\n}\n\n/** A half-day absence counts 0.5 only when the start date itself is a business day. */\nexport function requestedUnits(start: IsoDay, end: IsoDay, holidays: readonly Holiday[], portion: AbsencePortion) {\n  const span = businessSpan(portion === \"half\" ? start : start, portion === \"half\" ? start : end, holidays)\n  if (portion === \"half\") return span.counted.includes(start) ? 0.5 : 0\n  return span.days\n}\n\nexport function balanceLeft(available: number, pending: number, requested: number) {\n  return roundHalf(available - pending - requested)\n}\n\nfunction roundHalf(value: number) {\n  return Math.round(value * 2) / 2\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/time-off.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Solicitud de ausencia",
+    "descriptionEs": "Tipo, rango y notas. El resumen cuenta solo días hábiles y muestra lo que quedaría del saldo.",
+    "preview": "app/examples/time-off-request/preview.tsx",
+    "previewHref": "/examples/time-off-request",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "zero",
+        "label": "Saldo en cero",
+        "labelEn": "Zero balance"
+      },
+      {
+        "id": "holiday",
+        "label": "Festivo",
+        "labelEn": "Holiday"
+      },
+      {
+        "id": "half",
+        "label": "Medio día",
+        "labelEn": "Half day"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Vacaciones de septiembre",
+        "href": "/examples/time-off-request",
+        "description": "Del 14 al 18 el 16 de septiembre no se descuenta."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/time-off-request/stress",
+        "description": "Vacío, 320 px y diez tipos."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/time-off-request?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/time-off-request?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/time-off-request?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/time-off-request?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Saldo en cero",
+        "href": "/examples/time-off-request?scene=zero",
+        "description": "Zero balance"
+      },
+      {
+        "title": "Festivo",
+        "href": "/examples/time-off-request?scene=holiday",
+        "description": "Holiday"
+      },
+      {
+        "title": "Medio día",
+        "href": "/examples/time-off-request?scene=half",
+        "description": "Half day"
+      }
+    ],
+    "usage": "<TimeOffRequest available={12} pending={2} holidays={holidays} onSubmit={send} />",
+    "api": [
+      {
+        "name": "available / pending / holidays",
+        "type": "number | null, number, Holiday[]",
+        "description": "Null available is empty. Holidays are ISO dates with a name."
+      },
+      {
+        "name": "kinds",
+        "type": "AbsenceKind[]",
+        "description": "Defaults are vacation, personal, sick, and half day. Half day counts 0.5 and hides the end date."
+      },
+      {
+        "name": "onSubmit",
+        "type": "(TimeOffDraft) => void",
+        "description": "Disabled when nothing is countable or the balance would go negative."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<TimeOffRequestLabels>",
+        "description": "English chrome. The summary is requested days versus available balance."
+      }
+    ]
+  },
+  "docs": "Counts with time-off-core. Answer no if the CLI asks to overwrite button, input, select, skeleton, or textarea. github.com/kargulstudio/calender-app-design (MIT) was a behavior reference only; no source was copied.",
+  "categories": [
+    "calendar"
+  ],
+  "type": "registry:ui"
+}

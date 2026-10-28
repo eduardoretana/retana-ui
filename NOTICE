@@ -324,6 +324,15 @@ icons, or assets were copied. The orders belong to the same fictional
 Guanajuato workshop. Colors come from the host shadcn tokens. The piece uses
 useLegacyTable and getExpandedRowModel. The host owns which rows are open.
 
+time-off-core, time-off-stats, time-off-request, and the time-off block
+count business days and show a balance, a request, and an agenda of
+requests. The holiday list for Mexico follows the Ley Federal del Trabajo,
+article 74, and the host can replace it. The event popover can edit,
+duplicate, or delete; duplicate and delete toast. The calendar at
+https://github.com/kargulstudio/calender-app-design is MIT and was used as a
+behavior reference only. No source, sample data, or assets were copied.
+approval-card stays the countdown gate.
+
 The multi-view pieces (multi-view-core, use-multi-view, view-table,
 view-kanban, view-calendar, view-timeline, view-grouped-list, view-gallery,
 record-properties, and the multi-view block) are an independent implementation

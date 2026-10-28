@@ -26644,6 +26644,422 @@
       ]
     },
     {
+      "name": "time-off-core",
+      "type": "registry:lib",
+      "title": "Time off core",
+      "description": "Business days excluding weekends and a configurable holiday calendar, plus the balance that would remain.",
+      "author": "Eduardo Retana",
+      "categories": [
+        "calendar"
+      ],
+      "meta": {
+        "titleEs": "Días hábiles",
+        "descriptionEs": "Días de ausencia sin fines de semana ni festivos, y el saldo que quedaría. El calendario de México es reemplazable.",
+        "preview": "app/examples/time-off-core/preview.tsx",
+        "previewHref": "/examples/time-off-core",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "holiday",
+            "label": "Festivo",
+            "labelEn": "Holiday"
+          },
+          {
+            "id": "zero",
+            "label": "Saldo en cero",
+            "labelEn": "Zero balance"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Una semana de septiembre",
+            "href": "/examples/time-off-core",
+            "description": "Del 14 al 18 de septiembre de 2026, el 16 no cuenta."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/time-off-core/stress",
+            "description": "Rango vacío, fecha inválida y diez años."
+          }
+        ],
+        "usage": "businessSpan(start, end, holidays)\nrequestedUnits(start, end, holidays, \"half\")\nbalanceLeft(available, pending, requested)",
+        "api": [
+          {
+            "name": "businessSpan",
+            "type": "(start, end, holidays) => BusinessSpan",
+            "description": "Inclusive ISO dates. Weekends and matching holidays are skipped."
+          },
+          {
+            "name": "requestedUnits",
+            "type": "(start, end, holidays, portion) => number",
+            "description": "day uses the span. half is 0.5 only when the start date is a business day."
+          },
+          {
+            "name": "balanceLeft",
+            "type": "(available, pending, requested) => number",
+            "description": "Can be negative when the request does not fit."
+          },
+          {
+            "name": "mexicoStatutoryHolidays",
+            "type": "(year) => Holiday[]",
+            "description": "LFT article 74. 1 December is included every sixth year. Election days are extra."
+          }
+        ]
+      },
+      "docs": "Pure helpers. The Mexico list follows LFT article 74 and the host can replace it. github.com/kargulstudio/calender-app-design (MIT) was a behavior reference only; no source was copied.",
+      "files": [
+        {
+          "path": "registry/lib/time-off.ts",
+          "type": "registry:lib",
+          "target": "@lib/time-off.ts"
+        }
+      ]
+    },
+    {
+      "name": "time-off-stats",
+      "type": "registry:ui",
+      "title": "Time off stats",
+      "description": "Available balance, days already pending, and granted versus used by year.",
+      "author": "Eduardo Retana",
+      "registryDependencies": [
+        "skeleton"
+      ],
+      "categories": [
+        "calendar"
+      ],
+      "meta": {
+        "titleEs": "Saldo de ausencias",
+        "descriptionEs": "Saldo disponible, días ya pendientes y, por año, lo otorgado contra lo usado.",
+        "preview": "app/examples/time-off-stats/preview.tsx",
+        "previewHref": "/examples/time-off-stats",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "zero",
+            "label": "Saldo en cero",
+            "labelEn": "Zero balance"
+          },
+          {
+            "id": "pending",
+            "label": "Pendiente",
+            "labelEn": "Pending"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Doce días",
+            "href": "/examples/time-off-stats",
+            "description": "Doce disponibles, dos pendientes, y el uso de 2025 y 2026."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/time-off-stats/stress",
+            "description": "Vacío, 320 px y diez años."
+          }
+        ],
+        "usage": "<TimeOffStats available={12} pending={2} years={years} />",
+        "api": [
+          {
+            "name": "available / pending / years",
+            "type": "number | null, number, TimeOffYear[]",
+            "description": "Null available with no years is empty. Zero is a real balance."
+          },
+          {
+            "name": "loading / error / labels",
+            "type": "boolean, string, Partial labels",
+            "description": "Skeleton, alert, and English chrome."
+          }
+        ]
+      },
+      "docs": "The host owns the numbers. Answer no if the CLI asks to overwrite skeleton. No theme or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/time-off-stats.tsx",
+          "type": "registry:component",
+          "target": "@ui/time-off-stats.tsx"
+        }
+      ]
+    },
+    {
+      "name": "time-off-request",
+      "type": "registry:ui",
+      "title": "Time off request",
+      "description": "Pick a type, a date range, and a note. The summary counts business days and shows what would remain of the balance.",
+      "author": "Eduardo Retana",
+      "registryDependencies": [
+        "button",
+        "input",
+        "select",
+        "skeleton",
+        "textarea"
+      ],
+      "categories": [
+        "calendar"
+      ],
+      "meta": {
+        "titleEs": "Solicitud de ausencia",
+        "descriptionEs": "Tipo, rango y notas. El resumen cuenta solo días hábiles y muestra lo que quedaría del saldo.",
+        "preview": "app/examples/time-off-request/preview.tsx",
+        "previewHref": "/examples/time-off-request",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "zero",
+            "label": "Saldo en cero",
+            "labelEn": "Zero balance"
+          },
+          {
+            "id": "holiday",
+            "label": "Festivo",
+            "labelEn": "Holiday"
+          },
+          {
+            "id": "half",
+            "label": "Medio día",
+            "labelEn": "Half day"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Vacaciones de septiembre",
+            "href": "/examples/time-off-request",
+            "description": "Del 14 al 18 el 16 de septiembre no se descuenta."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/time-off-request/stress",
+            "description": "Vacío, 320 px y diez tipos."
+          }
+        ],
+        "usage": "<TimeOffRequest available={12} pending={2} holidays={holidays} onSubmit={send} />",
+        "api": [
+          {
+            "name": "available / pending / holidays",
+            "type": "number | null, number, Holiday[]",
+            "description": "Null available is empty. Holidays are ISO dates with a name."
+          },
+          {
+            "name": "kinds",
+            "type": "AbsenceKind[]",
+            "description": "Defaults are vacation, personal, sick, and half day. Half day counts 0.5 and hides the end date."
+          },
+          {
+            "name": "onSubmit",
+            "type": "(TimeOffDraft) => void",
+            "description": "Disabled when nothing is countable or the balance would go negative."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<TimeOffRequestLabels>",
+            "description": "English chrome. The summary is requested days versus available balance."
+          }
+        ]
+      },
+      "docs": "Counts with time-off-core. Answer no if the CLI asks to overwrite button, input, select, skeleton, or textarea. github.com/kargulstudio/calender-app-design (MIT) was a behavior reference only; no source was copied.",
+      "files": [
+        {
+          "path": "registry/ui/time-off-request.tsx",
+          "type": "registry:component",
+          "target": "@ui/time-off-request.tsx"
+        },
+        {
+          "path": "registry/lib/time-off.ts",
+          "type": "registry:lib",
+          "target": "@lib/time-off.ts"
+        }
+      ]
+    },
+    {
+      "name": "time-off",
+      "type": "registry:block",
+      "title": "Time off",
+      "description": "An agenda with holiday chips, a table of requests, and approve or decline. Duplicating or deleting an event announces it.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "sonner"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "dropdown-menu",
+        "popover",
+        "scroll-area",
+        "separator",
+        "sheet",
+        "skeleton",
+        "switch",
+        "tabs"
+      ],
+      "categories": [
+        "block",
+        "calendar"
+      ],
+      "meta": {
+        "titleEs": "Ausencias",
+        "descriptionEs": "Agenda con festivos, tabla de solicitudes y aprobar o rechazar. Duplicar o borrar un evento lo anuncia.",
+        "preview": "app/examples/time-off/preview.tsx",
+        "previewHref": "/examples/time-off",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "declined",
+            "label": "Rechazo",
+            "labelEn": "Declined"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Semana del 16 de septiembre",
+            "href": "/examples/time-off",
+            "description": "La independencia queda en todo el día. Mariana sigue pendiente."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/time-off/stress",
+            "description": "Vacío, 320 px y diez solicitudes."
+          }
+        ],
+        "usage": "<TimeOffBlock requests={requests} events={events} holidays={holidays} onApprove={approve} onDecline={decline} />",
+        "api": [
+          {
+            "name": "requests",
+            "type": "TimeOffRow[]",
+            "description": "who, kind, range, days, and status. The host changes status in onApprove and onDecline."
+          },
+          {
+            "name": "events / holidays",
+            "type": "AgendaEvent[], AgendaHoliday[]",
+            "description": "Holidays render in the all-day row. The host supplies the dates."
+          },
+          {
+            "name": "onEditEvent / onDuplicateEvent / onDeleteEvent",
+            "type": "callbacks",
+            "description": "Event popover. Duplicate and delete toast. The agenda does not mutate the list."
+          },
+          {
+            "name": "loading / error / locale",
+            "type": "boolean, string, string",
+            "description": "Skeleton, alert, and agenda locale. approval-card remains the countdown gate."
+          }
+        ]
+      },
+      "docs": "Composes the agenda. Duplicate and delete toast through sonner. Approve and decline do not start a clock. github.com/kargulstudio/calender-app-design (MIT) was a behavior reference only; no source was copied. Answer no if the CLI asks to overwrite an agenda primitive the host already has.",
+      "files": [
+        {
+          "path": "registry/blocks/time-off.tsx",
+          "type": "registry:component",
+          "target": "@ui/time-off.tsx"
+        },
+        {
+          "path": "registry/blocks/agenda.tsx",
+          "type": "registry:component",
+          "target": "@ui/agenda.tsx"
+        },
+        {
+          "path": "registry/ui/agenda-event.tsx",
+          "type": "registry:component",
+          "target": "@ui/agenda-event.tsx"
+        },
+        {
+          "path": "registry/ui/agenda-detail.tsx",
+          "type": "registry:component",
+          "target": "@ui/agenda-detail.tsx"
+        },
+        {
+          "path": "registry/lib/agenda.ts",
+          "type": "registry:lib",
+          "target": "@lib/agenda.ts"
+        },
+        {
+          "path": "registry/lib/date-range.ts",
+          "type": "registry:lib",
+          "target": "@lib/date-range.ts"
+        },
+        {
+          "path": "registry/lib/time-off.ts",
+          "type": "registry:lib",
+          "target": "@lib/time-off.ts"
+        }
+      ]
+    },
+    {
       "author": "Eduardo Retana (adapted from OrganUI, MIT)",
       "dependencies": [
         "class-variance-authority",
@@ -30133,9 +30549,9 @@
       "description": "An agenda card with a category icon, a time range, an in-progress mark, and keyboard or menu reschedule.",
       "author": "Eduardo Retana",
       "dependencies": ["lucide-react"],
-      "registryDependencies": ["button", "dropdown-menu"],
+      "registryDependencies": ["button", "dropdown-menu", "popover"],
       "categories": ["table"],
-      "docs": "Clean-room card used by agenda. Alt+ArrowUp and Alt+ArrowDown move by the snap. Alt+ArrowLeft and Alt+ArrowRight move a day. Shift+Alt+ArrowUp and Shift+Alt+ArrowDown resize. The actions menu repeats those edits. The card does not mutate the event. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "docs": "Clean-room card used by agenda. When onEdit, onDuplicate, or onDelete is set, a popover offers those three actions. Alt+ArrowUp and Alt+ArrowDown move by the snap. Alt+ArrowLeft and Alt+ArrowRight move a day. Shift+Alt+ArrowUp and Shift+Alt+ArrowDown resize. The actions menu repeats those edits. The card does not mutate the event. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
       "files": [
         {
           "path": "registry/ui/agenda-event.tsx",
@@ -30270,8 +30686,8 @@
       "title": "Agenda",
       "description": "A CRM agenda: day, week, and month, a now line, overlap columns, drag or keyboard edits, and a sidebar with a mini month, upcoming items, and category filters.",
       "author": "Eduardo Retana",
-      "dependencies": ["lucide-react"],
-      "registryDependencies": ["badge", "button", "dropdown-menu", "scroll-area", "separator", "sheet", "skeleton", "switch", "tabs"],
+      "dependencies": ["lucide-react", "sonner"],
+      "registryDependencies": ["badge", "button", "dropdown-menu", "popover", "scroll-area", "separator", "sheet", "skeleton", "switch", "tabs"],
       "categories": ["block", "table"],
       "docs": "Clean-room agenda for any CRM. Pass events and categories. onReschedule is move, resize, and all-day, from drag, Alt+arrows, and the actions menu. onCreate and onCreateRequest receive a draft when someone drags an empty slot, presses Enter on a slot, or uses New event. The agenda does not mutate events. onSync is a generic callback with no provider. onOpenTask and onOpenRecord hand back opaque ids. view-calendar stays the date-field month inside multi-view. On a wide screen the selected event opens a side panel with Detail and Participants. Month opens that detail in a sheet. Loading, error, empty, and readOnly are props. Below 768px the week becomes a list, the detail sits in the card, and the sidebar opens from a button. Reduced motion skips scroll animation. The default time zone is America/Mexico_City, the week starts on Monday, and formats use es-MX. Answer no if the CLI asks to overwrite a primitive the host already has, or date-range when the host already has it. The item ships no theme. No mockup source, copy, colors, or assets were copied.",
       "files": [
