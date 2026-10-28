@@ -26514,6 +26514,136 @@
       "docs": "Clean-room reimplementation of grouped-table behavior. No Shadcn Studio source, sample data, icons, or assets were copied. The rows in the demos are fictional. This repo depends on @tanstack/react-table v9; the piece uses its v8-compatible useLegacyTable, getGroupedRowModel, and getExpandedRowModel. Answer no if the CLI asks to overwrite avatar, badge, button, checkbox, dropdown-menu, input, progress, select, skeleton, or table. The piece ships no theme, cssVars, or palette colors. Chevron and meter motion is skipped when the reader prefers reduced motion. Selection keys are getRowId values, so changing the group-by column keeps the checked rows."
     },
     {
+      "name": "expandable-table",
+      "type": "registry:ui",
+      "title": "Expandable table",
+      "description": "A row opens into a checklist, a nested total, or a tree of subtasks. Several rows can stay open. Arrow keys, selection, filters, density, and pages stay on the host table.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "@tanstack/react-table",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "checkbox",
+        "dropdown-menu",
+        "input",
+        "select",
+        "skeleton",
+        "switch"
+      ],
+      "categories": [
+        "table"
+      ],
+      "meta": {
+        "titleEs": "Tabla expansible",
+        "descriptionEs": "Una fila se abre en tareas, en partidas con total o en subtareas. Pueden quedar varias abiertas. Flechas, selección, filtros, densidad y páginas siguen en la tabla del anfitrión.",
+        "preview": "app/examples/expandable-table/preview.tsx",
+        "previewHref": "/examples/expandable-table",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "nested",
+            "label": "Partidas",
+            "labelEn": "Lines"
+          },
+          {
+            "id": "subtasks",
+            "label": "Subtareas",
+            "labelEn": "Subtasks"
+          },
+          {
+            "id": "all-expanded",
+            "label": "Todas abiertas",
+            "labelEn": "All open"
+          },
+          {
+            "id": "nested-3-levels",
+            "label": "Tres niveles",
+            "labelEn": "Three levels"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Pedidos del taller",
+            "href": "/examples/expandable-table",
+            "description": "PED-1048 se abre en tareas del horno, en partidas de $18,400.00 MXN o en subtareas."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/expandable-table/stress",
+            "description": "Vacío, 320 px, RTL y diez filas."
+          }
+        ],
+        "usage": "<ExpandableTable rows={rows} columns={columns} renderDetail={detail} getSubRows={subRows} onExpandedChange={setExpanded} />",
+        "api": [
+          {
+            "name": "rows / columns",
+            "type": "T[] / ExpandableColumn<T>[]",
+            "description": "Each row has an id. A column renders header and cell. rowTitle names the row for buttons."
+          },
+          {
+            "name": "renderDetail / getSubRows",
+            "type": "(row) => ReactNode / (row) => T[]",
+            "description": "A panel under the row, or child rows drawn with an L rail. Both can exist."
+          },
+          {
+            "name": "expanded / onExpandedChange",
+            "type": "ExpandedState",
+            "description": "Which rows are open. Arrow right opens the focused chevron and arrow left closes it. Open all and close all use the same callback."
+          },
+          {
+            "name": "filters / searchText / actions",
+            "type": "ExpandableFilter / (row) => string / ExpandableAction[]",
+            "description": "A select keeps rows that pass. Search keeps a parent when a child matches. The row menu calls onAction."
+          },
+          {
+            "name": "onSubtasksChange / density / pageSize",
+            "type": "boolean callback / regular | compact / number",
+            "description": "The subtask switch opens every nested row. Density and page size are host-controlled when the callbacks are set."
+          },
+          {
+            "name": "loading / error / labels",
+            "type": "boolean / string / Partial<ExpandableTableLabels>",
+            "description": "Skeleton, alert, and English chrome. ExpansionChecklist and ExpansionLines are the two panel formats."
+          }
+        ]
+      },
+      "docs": "Clean-room reading of an expandable datatable. Shadcn Studio Pro was not purchased, fetched, or ported. No source, sample rows, icons, or assets were copied. The workshop orders are fictional. The piece uses useLegacyTable and getExpandedRowModel from @tanstack/react-table. Answer no if the CLI asks to overwrite badge, button, checkbox, dropdown-menu, input, select, skeleton, or switch. No theme, cssVars, or palette colors. The open animation is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/expandable-table.tsx",
+          "type": "registry:component",
+          "target": "@ui/expandable-table.tsx"
+        },
+        {
+          "path": "registry/lib/expandable-table.ts",
+          "type": "registry:lib",
+          "target": "@lib/expandable-table.ts"
+        }
+      ]
+    },
+    {
       "author": "Eduardo Retana (adapted from OrganUI, MIT)",
       "dependencies": [
         "class-variance-authority",

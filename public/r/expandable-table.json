@@ -1,0 +1,173 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "expandable-table",
+  "title": "Expandable table",
+  "author": "Eduardo Retana",
+  "description": "A row opens into a checklist, a nested total, or a tree of subtasks. Several rows can stay open. Arrow keys, selection, filters, density, and pages stay on the host table.",
+  "dependencies": [
+    "@tanstack/react-table",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "badge",
+    "button",
+    "checkbox",
+    "dropdown-menu",
+    "input",
+    "select",
+    "skeleton",
+    "switch"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/expandable-table.tsx",
+      "content": "\"use client\"\n\n/**\n * Clean-room expandable table. A row can open a panel or a nested tree.\n * Shadcn Studio Pro was not purchased, fetched, or ported. No source, sample\n * rows, icons, or assets were copied. Built on this repo's TanStack Table\n * v8-compatible API (useLegacyTable and getExpandedRowModel).\n */\n\nimport * as React from \"react\"\nimport { flexRender } from \"@tanstack/react-table\"\nimport type { ExpandedState, RowSelectionState, Updater } from \"@tanstack/react-table\"\nimport {\n  getCoreRowModel,\n  getExpandedRowModel,\n  getPaginationRowModel,\n  useLegacyTable,\n  type LegacyColumnDef,\n} from \"@tanstack/react-table/legacy\"\nimport { ChevronLeft, ChevronRight, MoreHorizontal } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Checkbox } from \"@/components/ui/checkbox\"\nimport {\n  DropdownMenu,\n  DropdownMenuContent,\n  DropdownMenuItem,\n  DropdownMenuRadioGroup,\n  DropdownMenuRadioItem,\n  DropdownMenuTrigger,\n} from \"@/components/ui/dropdown-menu\"\nimport { Input } from \"@/components/ui/input\"\nimport {\n  Select,\n  SelectContent,\n  SelectItem,\n  SelectTrigger,\n  SelectValue,\n} from \"@/components/ui/select\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { Switch } from \"@/components/ui/switch\"\nimport {\n  expandAll,\n  expandableIds,\n  filterExpandableRows,\n  type ExpandableMap,\n  type ExpandableNode,\n} from \"@/lib/expandable-table\"\n\nexport type { ExpandableMap, ExpandableNode }\n\nexport const EXPANDABLE_DENSITIES = [\"regular\", \"compact\"] as const\nexport type ExpandableDensity = (typeof EXPANDABLE_DENSITIES)[number]\n\nexport type ExpandableColumn<T> = {\n  id: string\n  header: string\n  cell: (row: T) => React.ReactNode\n  align?: \"start\" | \"end\"\n}\n\nexport type ExpandableFilter<T> = {\n  id: string\n  label: string\n  all: string\n  options: readonly { value: string; label: string }[]\n  predicate: (row: T, value: string) => boolean\n}\n\nexport type ExpandableAction = {\n  id: string\n  label: string\n}\n\nexport type ChecklistItem = {\n  id: string\n  title: string\n  status: string\n  owner: string\n  date: string\n  comment?: string\n}\n\nexport type ExpansionLine = {\n  id: string\n  name: string\n  qty: string\n  price: string\n  amount: string\n  kind?: \"line\" | \"subtotal\" | \"total\"\n}\n\nexport type ExpandableTableLabels = {\n  expand: (title: string) => string\n  collapse: (title: string) => string\n  expandAll: string\n  collapseAll: string\n  search: string\n  density: string\n  regular: string\n  compact: string\n  subtasks: string\n  select: (title: string) => string\n  selectPage: string\n  actions: (title: string) => string\n  previous: string\n  next: string\n  page: (current: number, total: number) => string\n  empty: string\n  noMatches: string\n  loading: string\n  rows: (count: number) => string\n}\n\nconst tableLabels: ExpandableTableLabels = {\n  expand: (title) => `Open ${title}`,\n  collapse: (title) => `Close ${title}`,\n  expandAll: \"Open all\",\n  collapseAll: \"Close all\",\n  search: \"Search\",\n  density: \"Density\",\n  regular: \"Regular\",\n  compact: \"Compact\",\n  subtasks: \"Show subtasks\",\n  select: (title) => `Select ${title}`,\n  selectPage: \"Select the rows on this page\",\n  actions: (title) => `Actions for ${title}`,\n  previous: \"Previous page\",\n  next: \"Next page\",\n  page: (current, total) => `Page ${current} of ${total}`,\n  empty: \"Nothing to show.\",\n  noMatches: \"Nothing matches.\",\n  loading: \"Loading the table\",\n  rows: (count) => `${count} selected`,\n}\n\nfunction resolveLabels(partial?: Partial<ExpandableTableLabels>): ExpandableTableLabels {\n  return { ...tableLabels, ...partial }\n}\n\nfunction applyUpdater<T>(updater: Updater<T>, current: T): T {\n  return typeof updater === \"function\" ? (updater as (value: T) => T)(current) : updater\n}\n\nexport type ExpandableTableProps<T extends ExpandableNode> = {\n  rows: readonly T[]\n  columns: readonly ExpandableColumn<T>[]\n  getSubRows?: (row: T) => readonly T[] | undefined\n  setSubRows?: (row: T, children: T[]) => T\n  renderDetail?: (row: T) => React.ReactNode\n  rowTitle: (row: T) => string\n  searchText?: (row: T) => string\n  filters?: readonly ExpandableFilter<T>[]\n  actions?: readonly ExpandableAction[]\n  onAction?: (actionId: string, row: T) => void\n  expanded?: ExpandedState\n  defaultExpanded?: ExpandedState\n  onExpandedChange?: (expanded: ExpandedState) => void\n  rowSelection?: RowSelectionState\n  defaultRowSelection?: RowSelectionState\n  onRowSelectionChange?: (selection: RowSelectionState) => void\n  density?: ExpandableDensity\n  defaultDensity?: ExpandableDensity\n  onDensityChange?: (density: ExpandableDensity) => void\n  subtasksOpen?: boolean\n  onSubtasksChange?: (open: boolean) => void\n  pageSize?: number\n  loading?: boolean\n  error?: string\n  labels?: Partial<ExpandableTableLabels>\n  className?: string\n}\n\nexport function ExpandableTable<T extends ExpandableNode>({\n  rows,\n  columns,\n  getSubRows,\n  setSubRows,\n  renderDetail,\n  rowTitle,\n  searchText,\n  filters,\n  actions,\n  onAction,\n  expanded: expandedProp,\n  defaultExpanded = {},\n  onExpandedChange,\n  rowSelection: selectionProp,\n  defaultRowSelection = {},\n  onRowSelectionChange,\n  density: densityProp,\n  defaultDensity = \"regular\",\n  onDensityChange,\n  subtasksOpen = false,\n  onSubtasksChange,\n  pageSize = 5,\n  loading = false,\n  error,\n  labels: labelOverrides,\n  className,\n}: ExpandableTableProps<T>) {\n  const labels = resolveLabels(labelOverrides)\n  const [query, setQuery] = React.useState(\"\")\n  const [filterValues, setFilterValues] = React.useState<Record<string, string>>({})\n  const [innerExpanded, setInnerExpanded] = React.useState<ExpandedState>(defaultExpanded)\n  const [innerSelection, setInnerSelection] = React.useState<RowSelectionState>(defaultRowSelection)\n  const [innerDensity, setInnerDensity] = React.useState<ExpandableDensity>(defaultDensity)\n  const expanded = expandedProp ?? innerExpanded\n  const rowSelection = selectionProp ?? innerSelection\n  const density = densityProp ?? innerDensity\n  const hasDetail = Boolean(renderDetail)\n\n  const data = React.useMemo(() => {\n    const predicates = (filters ?? [])\n      .filter((filter) => filterValues[filter.id])\n      .map((filter) => (row: T) => filter.predicate(row, filterValues[filter.id] ?? \"\"))\n    return filterExpandableRows(rows, { query, searchText, getSubRows, setSubRows, predicates })\n  }, [filterValues, filters, getSubRows, query, rows, searchText, setSubRows])\n\n  function commitExpanded(updater: Updater<ExpandedState>) {\n    const next = applyUpdater(updater, expanded)\n    if (expandedProp === undefined) setInnerExpanded(next)\n    onExpandedChange?.(next)\n  }\n\n  function commitSelection(updater: Updater<RowSelectionState>) {\n    const next = applyUpdater(updater, rowSelection)\n    if (selectionProp === undefined) setInnerSelection(next)\n    onRowSelectionChange?.(next)\n  }\n\n  const tanstackColumns = React.useMemo<LegacyColumnDef<T>[]>(() => {\n    const defined: LegacyColumnDef<T>[] = columns.map((column) => ({\n      id: column.id,\n      header: column.header,\n      cell: ({ row }) => column.cell(row.original),\n      meta: { align: column.align },\n    }))\n    return [\n      { id: \"select\", header: () => null, cell: () => null, enableHiding: false },\n      { id: \"expand\", header: () => null, cell: () => null, enableHiding: false },\n      ...defined,\n      { id: \"actions\", header: () => null, cell: () => null, enableHiding: false },\n    ]\n  }, [columns])\n\n  const table = useLegacyTable({\n    data: data as T[],\n    columns: tanstackColumns,\n    state: { expanded, rowSelection },\n    onExpandedChange: commitExpanded,\n    onRowSelectionChange: commitSelection,\n    getRowId: (row) => row.id,\n    getSubRows: getSubRows ? (row) => [...(getSubRows(row) ?? [])] : undefined,\n    getRowCanExpand: (row) => hasDetail || row.subRows.length > 0,\n    getCoreRowModel: getCoreRowModel(),\n    getExpandedRowModel: getExpandedRowModel(),\n    getPaginationRowModel: getPaginationRowModel(),\n    autoResetAll: false,\n    autoResetExpanded: false,\n    autoResetPageIndex: false,\n    paginateExpandedRows: false,\n    initialState: { pagination: { pageIndex: 0, pageSize } },\n  })\n\n  const pageRows = table.getRowModel().rows\n  const selectedCount = Object.values(rowSelection).filter(Boolean).length\n  const pageCount = Math.max(table.getPageCount(), 1)\n  const pageIndex = table.getState().pagination.pageIndex\n\n  function openEvery(open: boolean) {\n    commitExpanded(open ? expandAll(expandableIds(data, getSubRows, hasDetail)) : {})\n  }\n\n  function toggleSubtasks(open: boolean) {\n    onSubtasksChange?.(open)\n    openEvery(open)\n  }\n\n  const pad = density === \"compact\" ? \"px-2 py-1\" : \"px-3 py-2\"\n\n  return (\n    <section className={cn(\"flex flex-col gap-3 text-sm text-card-foreground\", className)} aria-busy={loading || undefined}>\n      <div className=\"flex flex-wrap items-center gap-2\">\n        <Input\n          value={query}\n          onChange={(event) => {\n            setQuery(event.target.value)\n            table.setPageIndex(0)\n          }}\n          placeholder={labels.search}\n          aria-label={labels.search}\n          className=\"h-8 w-full sm:w-48\"\n        />\n        {(filters ?? []).map((filter) => (\n          <Select\n            key={filter.id}\n            value={filterValues[filter.id] || \"all\"}\n            onValueChange={(value) => {\n              setFilterValues((current) => ({ ...current, [filter.id]: value === \"all\" ? \"\" : value }))\n              table.setPageIndex(0)\n            }}\n          >\n            <SelectTrigger className=\"h-8 w-full sm:w-40\" aria-label={filter.label}>\n              <SelectValue placeholder={filter.label} />\n            </SelectTrigger>\n            <SelectContent>\n              <SelectItem value=\"all\">{filter.all}</SelectItem>\n              {filter.options.map((option) => (\n                <SelectItem key={option.value} value={option.value}>\n                  {option.label}\n                </SelectItem>\n              ))}\n            </SelectContent>\n          </Select>\n        ))}\n        {onSubtasksChange ? (\n          <label className=\"inline-flex items-center gap-2 text-xs\">\n            <Switch checked={subtasksOpen} onCheckedChange={toggleSubtasks} aria-label={labels.subtasks} />\n            {labels.subtasks}\n          </label>\n        ) : null}\n        <div className=\"ms-auto flex flex-wrap gap-2\">\n          <Button type=\"button\" size=\"sm\" variant=\"outline\" className=\"h-auto whitespace-normal\" onClick={() => openEvery(true)}>\n            {labels.expandAll}\n          </Button>\n          <Button type=\"button\" size=\"sm\" variant=\"outline\" className=\"h-auto whitespace-normal\" onClick={() => openEvery(false)}>\n            {labels.collapseAll}\n          </Button>\n          <DropdownMenu>\n            <DropdownMenuTrigger asChild>\n              <Button type=\"button\" size=\"sm\" variant=\"outline\">\n                {labels.density}\n              </Button>\n            </DropdownMenuTrigger>\n            <DropdownMenuContent align=\"end\">\n              <DropdownMenuRadioGroup\n                value={density}\n                onValueChange={(value) => {\n                  const next = value as ExpandableDensity\n                  if (densityProp === undefined) setInnerDensity(next)\n                  onDensityChange?.(next)\n                }}\n              >\n                <DropdownMenuRadioItem value=\"regular\">{labels.regular}</DropdownMenuRadioItem>\n                <DropdownMenuRadioItem value=\"compact\">{labels.compact}</DropdownMenuRadioItem>\n              </DropdownMenuRadioGroup>\n            </DropdownMenuContent>\n          </DropdownMenu>\n        </div>\n      </div>\n      {error ? (\n        <p role=\"alert\" className=\"rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-destructive\">\n          {error}\n        </p>\n      ) : null}\n      {loading ? (\n        <div className=\"flex flex-col gap-2\" aria-label={labels.loading}>\n          <Skeleton className=\"h-8 w-full motion-reduce:animate-none\" />\n          <Skeleton className=\"h-8 w-full motion-reduce:animate-none\" />\n          <Skeleton className=\"h-8 w-2/3 motion-reduce:animate-none\" />\n        </div>\n      ) : data.length === 0 ? (\n        <p className=\"rounded-lg border border-dashed border-border px-3 py-6 text-center text-muted-foreground\">\n          {rows.length === 0 ? labels.empty : labels.noMatches}\n        </p>\n      ) : (\n        <div className=\"overflow-x-auto rounded-xl border border-border\">\n          <table className=\"w-full min-w-[36rem] border-collapse text-start\">\n            <thead className=\"bg-muted/50 text-xs text-muted-foreground\">\n              {table.getHeaderGroups().map((group) => (\n                <tr key={group.id}>\n                  {group.headers.map((header) => (\n                    <th key={header.id} className={cn(\"font-medium\", pad, header.column.id === \"select\" && \"w-10\", header.column.id === \"expand\" && \"w-10\")}>\n                      {header.column.id === \"select\" ? (\n                        <Checkbox\n                          aria-label={labels.selectPage}\n                          checked={table.getIsAllPageRowsSelected() ? true : table.getIsSomePageRowsSelected() ? \"indeterminate\" : false}\n                          onCheckedChange={(value) => table.toggleAllPageRowsSelected(value === true)}\n                        />\n                      ) : header.column.id === \"expand\" || header.column.id === \"actions\" ? null : (\n                        flexRender(header.column.columnDef.header, header.getContext())\n                      )}\n                    </th>\n                  ))}\n                </tr>\n              ))}\n            </thead>\n            <tbody>\n              {pageRows.map((row) => {\n                const title = rowTitle(row.original)\n                const open = row.getIsExpanded()\n                const canOpen = row.getCanExpand()\n                return (\n                  <React.Fragment key={row.id}>\n                    <tr className=\"border-t border-border\" data-depth={row.depth}>\n                      <td className={pad}>\n                        <Checkbox\n                          aria-label={labels.select(title)}\n                          checked={row.getIsSelected()}\n                          onCheckedChange={(value) => row.toggleSelected(value === true)}\n                        />\n                      </td>\n                      <td className={pad}>\n                        {canOpen ? (\n                          <Button\n                            type=\"button\"\n                            size=\"icon-sm\"\n                            variant=\"ghost\"\n                            className=\"size-7\"\n                            aria-expanded={open}\n                            aria-label={open ? labels.collapse(title) : labels.expand(title)}\n                            onClick={() => row.toggleExpanded()}\n                            onKeyDown={(event) => {\n                              if (event.key !== \"ArrowRight\" && event.key !== \"ArrowLeft\") return\n                              event.preventDefault()\n                              row.toggleExpanded(event.key === \"ArrowRight\")\n                            }}\n                          >\n                            <ChevronRight className={cn(\"size-4 transition-transform duration-200 motion-reduce:transition-none\", open && \"rotate-90\")} aria-hidden />\n                          </Button>\n                        ) : null}\n                      </td>\n                      {row.getVisibleCells().filter((cell) => ![\"select\", \"expand\", \"actions\"].includes(cell.column.id)).map((cell) => {\n                        const align = (cell.column.columnDef.meta as { align?: string } | undefined)?.align\n                        return (\n                          <td key={cell.id} className={cn(pad, align === \"end\" && \"text-end tabular-nums\")}>\n                            <span className=\"inline-flex min-w-0 items-center\" style={{ paddingInlineStart: cell.column.id === columns[0]?.id ? `${row.depth * 1.1}rem` : undefined }}>\n                              {row.depth > 0 && cell.column.id === columns[0]?.id ? (\n                                <span className=\"me-2 inline-block size-3 border-b border-s border-border\" aria-hidden />\n                              ) : null}\n                              {flexRender(cell.column.columnDef.cell, cell.getContext())}\n                            </span>\n                          </td>\n                        )\n                      })}\n                      <td className={cn(pad, \"text-end\")}>\n                        {actions && actions.length > 0 ? (\n                          <DropdownMenu>\n                            <DropdownMenuTrigger asChild>\n                              <Button type=\"button\" size=\"icon-sm\" variant=\"ghost\" className=\"size-7\" aria-label={labels.actions(title)}>\n                                <MoreHorizontal className=\"size-4\" aria-hidden />\n                              </Button>\n                            </DropdownMenuTrigger>\n                            <DropdownMenuContent align=\"end\">\n                              {actions.map((action) => (\n                                <DropdownMenuItem key={action.id} onSelect={() => onAction?.(action.id, row.original)}>\n                                  {action.label}\n                                </DropdownMenuItem>\n                              ))}\n                            </DropdownMenuContent>\n                          </DropdownMenu>\n                        ) : null}\n                      </td>\n                    </tr>\n                    {hasDetail ? (\n                      <tr>\n                        <td colSpan={columns.length + 3} className=\"p-0\">\n                          <div\n                            className={cn(\n                              \"grid transition-[grid-template-rows] duration-200 motion-reduce:transition-none\",\n                              open ? \"grid-rows-[1fr]\" : \"grid-rows-[0fr]\",\n                            )}\n                          >\n                            <div className=\"overflow-hidden\" aria-hidden={open ? undefined : true}>\n                              <div className=\"border-t border-border bg-muted/30 p-3\">{open ? renderDetail?.(row.original) : null}</div>\n                            </div>\n                          </div>\n                        </td>\n                      </tr>\n                    ) : null}\n                  </React.Fragment>\n                )\n              })}\n            </tbody>\n          </table>\n        </div>\n      )}\n      <div className=\"flex flex-wrap items-center gap-2 text-xs text-muted-foreground\">\n        <span>{labels.rows(selectedCount)}</span>\n        <div className=\"ms-auto flex items-center gap-1\">\n          <Button type=\"button\" size=\"icon-sm\" variant=\"outline\" className=\"size-7\" aria-label={labels.previous} disabled={!table.getCanPreviousPage()} onClick={() => table.previousPage()}>\n            <ChevronLeft className=\"size-4\" aria-hidden />\n          </Button>\n          <span className=\"tabular-nums\">{labels.page(pageIndex + 1, pageCount)}</span>\n          <Button type=\"button\" size=\"icon-sm\" variant=\"outline\" className=\"size-7\" aria-label={labels.next} disabled={!table.getCanNextPage()} onClick={() => table.nextPage()}>\n            <ChevronRight className=\"size-4\" aria-hidden />\n          </Button>\n        </div>\n      </div>\n    </section>\n  )\n}\n\nexport function ExpansionChecklist({ items, label }: { items: readonly ChecklistItem[]; label: string }) {\n  return (\n    <ul aria-label={label} className=\"grid gap-2 sm:grid-cols-2\">\n      {items.map((item) => (\n        <li key={item.id} className=\"flex min-w-0 flex-col gap-1 rounded-lg border border-border bg-card p-3\">\n          <div className=\"flex flex-wrap items-center gap-2\">\n            <Badge variant=\"secondary\">{item.status}</Badge>\n            <span className=\"text-xs text-muted-foreground\">{item.date}</span>\n          </div>\n          <p className=\"font-medium break-words\">{item.title}</p>\n          <p className=\"text-xs text-muted-foreground\">{item.owner}</p>\n          {item.comment ? <p className=\"text-xs break-words\">{item.comment}</p> : null}\n        </li>\n      ))}\n    </ul>\n  )\n}\n\nexport function ExpansionLines({\n  lines,\n  caption,\n}: {\n  lines: readonly ExpansionLine[]\n  caption: string\n}) {\n  return (\n    <table className=\"w-full text-xs\" aria-label={caption}>\n      <tbody>\n        {lines.map((line) => (\n          <tr key={line.id} className={cn(\"border-t border-border\", line.kind === \"total\" && \"font-medium\")}>\n            <td className=\"py-1 pe-3\">{line.name}</td>\n            <td className=\"py-1 pe-3 text-end tabular-nums text-muted-foreground\">{line.kind === \"line\" ? line.qty : \"\"}</td>\n            <td className=\"py-1 pe-3 text-end tabular-nums text-muted-foreground\">{line.kind === \"line\" ? line.price : \"\"}</td>\n            <td className=\"py-1 text-end tabular-nums\">{line.amount}</td>\n          </tr>\n        ))}\n      </tbody>\n    </table>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/expandable-table.tsx"
+    },
+    {
+      "path": "registry/lib/expandable-table.ts",
+      "content": "export type ExpandableNode = {\n  id: string\n}\n\nexport type ExpandableMap = Record<string, boolean>\n\nexport function childRows<T>(row: T, getSubRows?: (row: T) => readonly T[] | undefined) {\n  return getSubRows?.(row) ?? []\n}\n\n/** Ids that can open: a detail panel, or a row that has children. */\nexport function expandableIds<T extends ExpandableNode>(\n  rows: readonly T[],\n  getSubRows?: (row: T) => readonly T[] | undefined,\n  hasDetail = false,\n): string[] {\n  const ids: string[] = []\n  const walk = (list: readonly T[]) => {\n    for (const row of list) {\n      const children = childRows(row, getSubRows)\n      if (hasDetail || children.length > 0) ids.push(row.id)\n      if (children.length > 0) walk(children)\n    }\n  }\n  walk(rows)\n  return ids\n}\n\nexport function expandAll(ids: readonly string[]): ExpandableMap {\n  const next: ExpandableMap = {}\n  for (const id of ids) next[id] = true\n  return next\n}\n\nexport function isRowOpen(expanded: ExpandableMap | true | undefined, id: string) {\n  if (expanded === true) return true\n  return Boolean(expanded?.[id])\n}\n\ntype FilterOptions<T> = {\n  query: string\n  searchText?: (row: T) => string\n  getSubRows?: (row: T) => readonly T[] | undefined\n  setSubRows?: (row: T, children: T[]) => T\n  predicates?: readonly ((row: T) => boolean)[]\n}\n\nfunction defaultSetSubRows<T>(row: T, children: T[]): T {\n  return { ...(row as object), subRows: children } as T\n}\n\n/**\n * Keeps a row when it matches the query and every predicate.\n * A parent stays when any descendant matches, even if the parent text does not.\n */\nexport function filterExpandableRows<T>(rows: readonly T[], options: FilterOptions<T>): T[] {\n  const needle = options.query.trim().toLowerCase()\n  const predicates = options.predicates ?? []\n  const getSubRows = options.getSubRows\n  const write = options.setSubRows ?? defaultSetSubRows\n\n  const passesFilters = (row: T) => predicates.every((predicate) => predicate(row))\n  const passesSearch = (row: T) => !needle || !options.searchText || options.searchText(row).toLowerCase().includes(needle)\n\n  if (!getSubRows) return rows.filter((row) => passesFilters(row) && passesSearch(row))\n\n  const visit = (row: T, searchRequired: boolean): T | null => {\n    const children = getSubRows(row) ?? []\n    const selfOk = passesFilters(row) && (!searchRequired || passesSearch(row))\n    if (children.length === 0) return selfOk ? row : null\n    const nextRequired = passesSearch(row) ? false : searchRequired\n    const kept = children.map((child) => visit(child, nextRequired)).filter((child): child is T => child != null)\n    if (kept.length === 0) return selfOk ? write(row, []) : null\n    if (kept.length === children.length && kept.every((child, index) => child === children[index])) return row\n    return write(row, kept)\n  }\n\n  return rows.map((row) => visit(row, true)).filter((row): row is T => row != null)\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/expandable-table.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Tabla expansible",
+    "descriptionEs": "Una fila se abre en tareas, en partidas con total o en subtareas. Pueden quedar varias abiertas. Flechas, selección, filtros, densidad y páginas siguen en la tabla del anfitrión.",
+    "preview": "app/examples/expandable-table/preview.tsx",
+    "previewHref": "/examples/expandable-table",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "nested",
+        "label": "Partidas",
+        "labelEn": "Lines"
+      },
+      {
+        "id": "subtasks",
+        "label": "Subtareas",
+        "labelEn": "Subtasks"
+      },
+      {
+        "id": "all-expanded",
+        "label": "Todas abiertas",
+        "labelEn": "All open"
+      },
+      {
+        "id": "nested-3-levels",
+        "label": "Tres niveles",
+        "labelEn": "Three levels"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Pedidos del taller",
+        "href": "/examples/expandable-table",
+        "description": "PED-1048 se abre en tareas del horno, en partidas de $18,400.00 MXN o en subtareas."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/expandable-table/stress",
+        "description": "Vacío, 320 px, RTL y diez filas."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/expandable-table?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/expandable-table?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/expandable-table?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/expandable-table?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Partidas",
+        "href": "/examples/expandable-table?scene=nested",
+        "description": "Lines"
+      },
+      {
+        "title": "Subtareas",
+        "href": "/examples/expandable-table?scene=subtasks",
+        "description": "Subtasks"
+      },
+      {
+        "title": "Todas abiertas",
+        "href": "/examples/expandable-table?scene=all-expanded",
+        "description": "All open"
+      },
+      {
+        "title": "Tres niveles",
+        "href": "/examples/expandable-table?scene=nested-3-levels",
+        "description": "Three levels"
+      }
+    ],
+    "usage": "<ExpandableTable rows={rows} columns={columns} renderDetail={detail} getSubRows={subRows} onExpandedChange={setExpanded} />",
+    "api": [
+      {
+        "name": "rows / columns",
+        "type": "T[] / ExpandableColumn<T>[]",
+        "description": "Each row has an id. A column renders header and cell. rowTitle names the row for buttons."
+      },
+      {
+        "name": "renderDetail / getSubRows",
+        "type": "(row) => ReactNode / (row) => T[]",
+        "description": "A panel under the row, or child rows drawn with an L rail. Both can exist."
+      },
+      {
+        "name": "expanded / onExpandedChange",
+        "type": "ExpandedState",
+        "description": "Which rows are open. Arrow right opens the focused chevron and arrow left closes it. Open all and close all use the same callback."
+      },
+      {
+        "name": "filters / searchText / actions",
+        "type": "ExpandableFilter / (row) => string / ExpandableAction[]",
+        "description": "A select keeps rows that pass. Search keeps a parent when a child matches. The row menu calls onAction."
+      },
+      {
+        "name": "onSubtasksChange / density / pageSize",
+        "type": "boolean callback / regular | compact / number",
+        "description": "The subtask switch opens every nested row. Density and page size are host-controlled when the callbacks are set."
+      },
+      {
+        "name": "loading / error / labels",
+        "type": "boolean / string / Partial<ExpandableTableLabels>",
+        "description": "Skeleton, alert, and English chrome. ExpansionChecklist and ExpansionLines are the two panel formats."
+      }
+    ]
+  },
+  "docs": "Clean-room reading of an expandable datatable. Shadcn Studio Pro was not purchased, fetched, or ported. No source, sample rows, icons, or assets were copied. The workshop orders are fictional. The piece uses useLegacyTable and getExpandedRowModel from @tanstack/react-table. Answer no if the CLI asks to overwrite badge, button, checkbox, dropdown-menu, input, select, skeleton, or switch. No theme, cssVars, or palette colors. The open animation is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "table"
+  ],
+  "type": "registry:ui"
+}
