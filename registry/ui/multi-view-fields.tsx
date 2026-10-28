@@ -31,7 +31,7 @@ import {
   type MultiRecord,
 } from "@/registry/retana/lib/multi-view"
 
-const ICONS: Record<FieldIconName, React.ComponentType<{ className?: string }>> = {
+const ICONS: Record<FieldIconName, React.ComponentType<{ className?: string | undefined }>> = {
   text: Type,
   hash: Hash,
   currency: DollarSign,
@@ -63,8 +63,8 @@ export function FieldIcon({
   name,
   className,
 }: {
-  name?: FieldIconName
-  className?: string
+  name?: FieldIconName | undefined
+  className?: string | undefined
 }) {
   if (!name) return null
   const Icon = ICONS[name]
@@ -83,7 +83,7 @@ export function PersonFace({
   className,
 }: {
   name: string
-  className?: string
+  className?: string | undefined
 }) {
   return (
     <Avatar size="sm" className={className}>
@@ -99,7 +99,7 @@ export function StatusPill({
 }: {
   field: FieldDef
   value: unknown
-  className?: string
+  className?: string | undefined
 }) {
   if (isEmptyValue(value)) return <span className="text-muted-foreground">—</span>
   const text = formatFieldValue(value, field)
@@ -121,8 +121,8 @@ export function FieldDisplay({
 }: {
   field: FieldDef
   value: unknown
-  locale?: string
-  className?: string
+  locale?: string | undefined
+  className?: string | undefined
 }) {
   if (isEmptyValue(value)) {
     return <span className={cn("text-muted-foreground", className)}>—</span>
@@ -168,7 +168,7 @@ export function FieldDisplay({
   )
 }
 
-export function ProgressRing({ value, className }: { value: number; className?: string }) {
+export function ProgressRing({ value, className }: { value: number; className?: string | undefined }) {
   const pct = Math.max(0, Math.min(100, value))
   return (
     <svg viewBox="0 0 16 16" className={cn("size-4 shrink-0", className)} aria-hidden>

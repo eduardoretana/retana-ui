@@ -1,0 +1,28 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "incremental": false,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true
+  },
+  "include": [],
+  "files": [
+    "registry/ui/record-header.tsx",
+    "registry/ui/record-properties.tsx",
+    "registry/ui/record-timeline.tsx",
+    "registry/ui/view-kanban.tsx",
+    "registry/ui/view-table.tsx",
+    "registry/ui/multi-view-fields.tsx",
+    "registry/ui/filter-toolbar.tsx",
+    "registry/ui/layered-panel.tsx",
+    "registry/ui/priority-badge.tsx",
+    "registry/ui/empty-state.tsx",
+    "registry/ui/attention-list.tsx",
+    "registry/ui/next-steps.tsx",
+    "registry/lib/multi-view.ts",
+    "registry/lib/csv.ts",
+    "registry/lib/motion.ts",
+    "registry/lib/dashboard-format.ts",
+    "registry/hooks/use-layered-panel-url-state.ts"
+  ]
+}

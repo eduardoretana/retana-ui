@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
+    "typecheck:strict-host": "node scripts/check-strict-host.mjs",
     "registry:build": "node --experimental-strip-types scripts/build-registry.ts",
     "readme:catalog": "node scripts/sync-readme-catalog.mjs"
   },

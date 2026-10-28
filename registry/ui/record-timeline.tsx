@@ -15,34 +15,34 @@ export type RecordTimelineEvent = {
   id: string
   title: string
   date: string | number | Date
-  description?: string
-  meta?: string
-  status?: RecordTimelineStatus
-  chips?: readonly { id: string; label: string; tone?: "neutral" | "accent" }[]
+  description?: string | undefined
+  meta?: string | undefined
+  status?: RecordTimelineStatus | undefined
+  chips?: readonly { id: string; label: string; tone?: "neutral" | "accent" | undefined }[] | undefined
 }
 
 export type RecordTimelineClassNames = {
-  root?: string
-  item?: string
-  title?: string
-  description?: string
+  root?: string | undefined
+  item?: string | undefined
+  title?: string | undefined
+  description?: string | undefined
 }
 
 export type RecordTimelineProps = {
   events: readonly RecordTimelineEvent[]
-  label?: string
-  context?: string
-  rangeLabel?: string
-  order?: "asc" | "desc"
-  locale?: string
-  collapseAfter?: number
-  moreLabel?: (hidden: number) => string
-  onSelect?: (event: RecordTimelineEvent) => void
-  filters?: readonly { id: string; label: string }[]
-  filter?: string
-  onFilterChange?: (id: string) => void
-  className?: string
-  classNames?: RecordTimelineClassNames
+  label?: string | undefined
+  context?: string | undefined
+  rangeLabel?: string | undefined
+  order?: "asc" | "desc" | undefined
+  locale?: string | undefined
+  collapseAfter?: number | undefined
+  moreLabel?: ((hidden: number) => string) | undefined
+  onSelect?: ((event: RecordTimelineEvent) => void) | undefined
+  filters?: readonly { id: string; label: string }[] | undefined
+  filter?: string | undefined
+  onFilterChange?: ((id: string) => void) | undefined
+  className?: string | undefined
+  classNames?: RecordTimelineClassNames | undefined
 }
 
 function timeValue(value: string | number | Date) {
@@ -158,9 +158,9 @@ function EventCopy({
 }: {
   event: RecordTimelineEvent
   when: string
-  dateTime?: string
+  dateTime?: string | undefined
   statusText: string
-  classNames?: RecordTimelineClassNames
+  classNames?: RecordTimelineClassNames | undefined
 }) {
   return (
     <>

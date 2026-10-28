@@ -14,19 +14,19 @@ import { motionPresets } from "@/registry/retana/lib/motion"
 export interface FilterChip {
   id: string
   label: string
-  value?: string
+  value?: string | undefined
 }
 /** One value a field can take. `hint` sits at the end of the row, for example a count. */
 export interface FilterOption {
   value: string
-  label?: string
-  hint?: string | number
-  icon?: ReactNode
+  label?: string | undefined
+  hint?: string | number | undefined
+  icon?: ReactNode | undefined
 }
 export interface FilterField {
   id: string
   label: string
-  icon?: ReactNode
+  icon?: ReactNode | undefined
   options: (string | FilterOption)[]
 }
 export interface FilterMenuProps {
@@ -34,45 +34,45 @@ export interface FilterMenuProps {
   /** Receives a chip whose id is the field id, so a second pick for a field replaces the first. */
   onSelect: (filter: FilterChip, field: FilterField) => void
   /** Applied filters. Each field shows its current value and the value step marks it. */
-  active?: FilterChip[]
-  label?: string
+  active?: FilterChip[] | undefined
+  label?: string | undefined
   /** The trigger edge the panel lines up with. It flips or shifts when the viewport, or a clipping ancestor, has no room. */
-  align?: "start" | "end"
-  className?: string
-  classNames?: FilterMenuClassNames
+  align?: "start" | "end" | undefined
+  className?: string | undefined
+  classNames?: FilterMenuClassNames | undefined
 }
 export interface FilterToolbarProps {
   filters: FilterChip[]
   onRemove: (id: string) => void
-  onClearAll?: () => void
-  children?: ReactNode
+  onClearAll?: (() => void) | undefined
+  children?: ReactNode | undefined
   /** Replaces the chip row. Use it for a count-tab bar. */
-  leading?: ReactNode
+  leading?: ReactNode | undefined
   /** Outer shape. panel is the default bordered card. */
-  variant?: "panel" | "pill"
-  emptyLabel?: string
-  label?: string
+  variant?: "panel" | "pill" | undefined
+  emptyLabel?: string | undefined
+  label?: string | undefined
   /** Adds an Add filter trigger that morphs into a two step field and value menu. */
-  addFilter?: { fields: FilterField[]; onAdd: (filter: FilterChip, field: FilterField) => void; label?: string; align?: "start" | "end" }
-  className?: string
-  classNames?: FilterToolbarClassNames
+  addFilter?: { fields: FilterField[]; onAdd: (filter: FilterChip, field: FilterField) => void; label?: string | undefined; align?: "start" | "end" | undefined } | undefined
+  className?: string | undefined
+  classNames?: FilterToolbarClassNames | undefined
 }
 
 export type FilterMenuClassNames = {
-  root?: string
-  trigger?: string
-  panel?: string
-  item?: string
+  root?: string | undefined
+  trigger?: string | undefined
+  panel?: string | undefined
+  item?: string | undefined
 }
 
 export type FilterToolbarClassNames = {
-  root?: string
-  frame?: string
-  chips?: string
-  chip?: string
-  actions?: string
-  clear?: string
-  menu?: string
+  root?: string | undefined
+  frame?: string | undefined
+  chips?: string | undefined
+  chip?: string | undefined
+  actions?: string | undefined
+  clear?: string | undefined
+  menu?: string | undefined
 }
 
 const enter = { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.enter] as const }
@@ -99,7 +99,7 @@ function MorphText({ text }: { text: string }) {
     if (!node || typeof ResizeObserver === "undefined") return
     let last: string | null = null
     const observer = new ResizeObserver(([entry]) => {
-      const next = Math.ceil(entry.borderBoxSize?.[0]?.inlineSize ?? node.offsetWidth)
+      const next = Math.ceil(entry?.borderBoxSize?.[0]?.inlineSize ?? node.offsetWidth)
       const changed = last !== null && last !== node.textContent
       last = node.textContent
       if (changed && !reduced) animate(width as MotionValue<number>, next, motionPresets.spring.morph)
@@ -143,7 +143,7 @@ function useReflowGlide(list: RefObject<HTMLElement | null>, armed: RefObject<nu
   useLayoutEffect(() => {
     const node = list.current
     if (!node || typeof ResizeObserver === "undefined") return
-    type Track = { x: number; y: number; dx: number; dy: number; stop?: () => void }
+    type Track = { x: number; y: number; dx: number; dy: number; stop?: (() => void) | undefined }
     const tracks = new Map<Element, Track>()
     const check = () => {
       const now = performance.now()
@@ -201,10 +201,10 @@ function describeChange(before: FilterChip[], after: FilterChip[]) {
   return [...added.map((filter) => `Added ${text(filter)}`), ...changed.map((filter) => `${filter.label} changed to ${filter.value ?? "any"}`), ...removed.map((filter) => `Removed ${text(filter)}`)].join(". ")
 }
 
-type Row = { key: string; label: string; icon?: ReactNode; meta?: ReactNode; checked?: boolean; drill?: boolean }
+type Row = { key: string; label: string; icon?: ReactNode | undefined; meta?: ReactNode | undefined; checked?: boolean | undefined; drill?: boolean | undefined }
 type FocusRequest = "first" | "last" | "checked" | "panel" | { key: string }
 
-function MenuList({ rows, labelledBy, onChoose, onBack, onLeave, radio, className }: { rows: Row[]; labelledBy: string; onChoose: (row: Row, keyboard: boolean) => void; onBack?: (keyboard: boolean) => void; onLeave: () => void; radio?: boolean; className?: string }) {
+function MenuList({ rows, labelledBy, onChoose, onBack, onLeave, radio, className }: { rows: Row[]; labelledBy: string; onChoose: (row: Row, keyboard: boolean) => void; onBack?: ((keyboard: boolean) => void) | undefined; onLeave: () => void; radio?: boolean | undefined; className?: string | undefined }) {
   const reduced = useReducedMotion() ?? false
   const present = useIsPresent()
   const list = useRef<HTMLDivElement>(null)

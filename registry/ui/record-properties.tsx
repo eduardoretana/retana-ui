@@ -24,13 +24,13 @@ import { FieldDisplay, FieldIcon } from "@/registry/retana/ui/multi-view-fields"
 export type RecordPropertiesProps = {
   record: MultiRecord
   fields: readonly FieldDef[]
-  locale?: string
-  onChange?: (id: string, patch: Record<string, unknown>) => Promise<void> | void
-  className?: string
-  sectionClassName?: string
-  rowClassName?: string
-  labelClassName?: string
-  valueClassName?: string
+  locale?: string | undefined
+  onChange?: ((id: string, patch: Record<string, unknown>) => Promise<void> | void) | undefined
+  className?: string | undefined
+  sectionClassName?: string | undefined
+  rowClassName?: string | undefined
+  labelClassName?: string | undefined
+  valueClassName?: string | undefined
 }
 
 export function RecordProperties({
@@ -91,11 +91,11 @@ function PropertyRow({
 }: {
   record: MultiRecord
   field: FieldDef
-  locale?: string
-  onChange?: (id: string, patch: Record<string, unknown>) => Promise<void> | void
-  className?: string
-  labelClassName?: string
-  valueClassName?: string
+  locale?: string | undefined
+  onChange?: ((id: string, patch: Record<string, unknown>) => Promise<void> | void) | undefined
+  className?: string | undefined
+  labelClassName?: string | undefined
+  valueClassName?: string | undefined
 }) {
   const [editing, setEditing] = React.useState(false)
   const [draft, setDraft] = React.useState("")
@@ -224,7 +224,7 @@ function DateEditor({
 }: {
   field: FieldDef
   value: unknown
-  locale?: string
+  locale?: string | undefined
   onCommit: (value: string | null) => void
 }) {
   const iso = typeof value === "string" && parseDateOnly(value) ? value : ""
