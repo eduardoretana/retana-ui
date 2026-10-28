@@ -27060,6 +27060,152 @@
       ]
     },
     {
+      "name": "planning-grid",
+      "type": "registry:ui",
+      "title": "Planning grid",
+      "description": "Hierarchical plan by period. Actual stays solid, forecast stays light, and a growth slider spreads the forecast without touching locked cells.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "@tanstack/react-table",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "dropdown-menu",
+        "input",
+        "skeleton"
+      ],
+      "categories": [
+        "table"
+      ],
+      "meta": {
+        "titleEs": "Cuadrícula de plan",
+        "descriptionEs": "Plan jerárquico por periodo. El real queda sólido, el pronóstico claro, y el deslizador reparte sin tocar celdas bloqueadas.",
+        "preview": "app/examples/planning-grid/preview.tsx",
+        "previewHref": "/examples/planning-grid",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "reforecast-mid-year",
+            "label": "Recorte a mitad de año",
+            "labelEn": "Mid-year reforecast"
+          },
+          {
+            "id": "top-down-spread",
+            "label": "Reparto",
+            "labelEn": "Top-down spread"
+          },
+          {
+            "id": "locked-cells",
+            "label": "Celdas bloqueadas",
+            "labelEn": "Locked cells"
+          },
+          {
+            "id": "changed-cells-undo",
+            "label": "Cambios",
+            "labelEn": "Changed cells"
+          },
+          {
+            "id": "new-row",
+            "label": "Nueva fila",
+            "labelEn": "New row"
+          },
+          {
+            "id": "heat-by-row",
+            "label": "Calor por fila",
+            "labelEn": "Heat by row"
+          },
+          {
+            "id": "heat-by-column",
+            "label": "Calor por columna",
+            "labelEn": "Heat by column"
+          },
+          {
+            "id": "keyboard",
+            "label": "Teclado",
+            "labelEn": "Keyboard"
+          },
+          {
+            "id": "390px",
+            "label": "390 px",
+            "labelEn": "390 px"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Metas por responsable",
+            "href": "/examples/planning-grid",
+            "description": "Norte y Sur, de enero a diciembre, en pesos."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/planning-grid/stress",
+            "description": "Vacío, 320 px y diez grupos."
+          }
+        ],
+        "usage": "<PlanningGrid rows={rows} periods={periods} onRowsChange={setRows} onSave={save} />",
+        "api": [
+          {
+            "name": "rows / periods",
+            "type": "PlanNode[], PlanPeriod[]",
+            "description": "Groups contain children. A period is actual or forecast. The first forecast column is the cutoff."
+          },
+          {
+            "name": "spread / outlookOf / applyGrowth",
+            "type": "pure functions",
+            "description": "spread(total, weights, locks) keeps locked numbers. outlook is actual plus forecast. applyGrowth pushes a percent onto unlocked forecast cells."
+          },
+          {
+            "name": "baseline / onSave / onRowsChange",
+            "type": "PlanNode[] callbacks",
+            "description": "A cell that differs from baseline shows a dot. Save, revert, undo, and redo stay on the host's copy."
+          },
+          {
+            "name": "heat",
+            "type": "all | row | column",
+            "description": "Heat scale for the whole view, each row, or each column."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<PlanningGridLabels>",
+            "description": "English chrome. money formats the values. fresh is the label of a line added with Enter."
+          }
+        ]
+      },
+      "docs": "Clean-room planning grid. No ReUI source, sample rows, or assets were copied. Uses useLegacyTable and getExpandedRowModel. Arrow keys move, Enter edits, Escape cancels, and the host owns paste when the clipboard is available. Answer no if the CLI asks to overwrite button, dropdown-menu, input, or skeleton. No theme, cssVars, or palette colors. Motion on the chevron is skipped when reduced motion is set.",
+      "files": [
+        {
+          "path": "registry/ui/planning-grid.tsx",
+          "type": "registry:component",
+          "target": "@ui/planning-grid.tsx"
+        },
+        {
+          "path": "registry/lib/planning-grid.ts",
+          "type": "registry:lib",
+          "target": "@lib/planning-grid.ts"
+        }
+      ]
+    },
+    {
       "author": "Eduardo Retana (adapted from OrganUI, MIT)",
       "dependencies": [
         "class-variance-authority",
