@@ -1,0 +1,150 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "memory-panel",
+  "title": "Memory panel",
+  "author": "Eduardo Retana",
+  "description": "What the assistant keeps across chats. A switch turns memory off without deleting it. Each memory can be edited, paused, or forgotten.",
+  "registryDependencies": [
+    "badge",
+    "button",
+    "input",
+    "skeleton",
+    "switch"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/memory-panel.tsx",
+      "content": "\"use client\"\n\n/**\n * What the assistant keeps across chats. Clean-room reading of a public\n * behavior description: memories sit in groups, a switch turns them off\n * without deleting them, and each one can be edited, paused, or forgotten.\n * No Affect source, sample data, icons, or assets were copied. The host owns\n * the undo clock.\n */\n\nimport * as React from \"react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Input } from \"@/components/ui/input\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { Switch } from \"@/components/ui/switch\"\nimport { cn } from \"@/lib/utils\"\n\nexport type MemoryEntry<TMeta = unknown> = {\n  id: string\n  text: string\n  category: string\n  source?: string\n  date?: string\n  paused?: boolean\n  meta?: TMeta\n}\n\nexport type MemoryUndo = {\n  text: string\n}\n\nexport type MemoryPanelLabels = {\n  title: string\n  count: (count: number) => string\n  use: string\n  off: string\n  all: string\n  paused: string\n  pause: string\n  pauseNamed: (text: string) => string\n  resume: string\n  resumeNamed: (text: string) => string\n  edit: string\n  editNamed: (text: string) => string\n  save: string\n  cancel: string\n  forget: string\n  forgetNamed: (text: string) => string\n  forgot: (text: string) => string\n  restore: string\n  add: string\n  addNamed: string\n  added: (text: string) => string\n  empty: string\n  emptyGroup: string\n  loading: string\n  saved: (text: string) => string\n}\n\nexport type MemoryPanelClassNames = {\n  root?: string\n  entry?: string\n}\n\nexport type MemoryPanelProps<TMeta = unknown> = {\n  memories?: readonly MemoryEntry<TMeta>[]\n  enabled?: boolean\n  categories?: readonly string[]\n  undo?: MemoryUndo | null\n  loading?: boolean\n  error?: string\n  title?: string\n  onEnabledChange?: (enabled: boolean) => void\n  onEdit?: (id: string, text: string) => void\n  onPause?: (id: string, paused: boolean) => void\n  onForget?: (id: string) => void\n  onRestore?: () => void\n  onAdd?: (text: string, category: string) => void\n  className?: string\n  classNames?: MemoryPanelClassNames\n  labels?: Partial<MemoryPanelLabels>\n}\n\nconst memoryLabels: MemoryPanelLabels = {\n  title: \"Memory\",\n  count: (count) => (count === 1 ? \"1 memory\" : `${count} memories`),\n  use: \"Use memory\",\n  off: \"New chats will not use these memories. Nothing here is deleted.\",\n  all: \"All\",\n  paused: \"Paused\",\n  pause: \"Pause\",\n  pauseNamed: (text) => `Pause “${text}”`,\n  resume: \"Resume\",\n  resumeNamed: (text) => `Resume “${text}”`,\n  edit: \"Edit\",\n  editNamed: (text) => `Edit “${text}”`,\n  save: \"Save\",\n  cancel: \"Cancel\",\n  forget: \"Forget\",\n  forgetNamed: (text) => `Forget “${text}”`,\n  forgot: (text) => `Forgot “${text}”`,\n  restore: \"Undo\",\n  add: \"New memory\",\n  addNamed: \"Memory text\",\n  added: (text) => `Added “${text}”`,\n  empty: \"Nothing is remembered yet.\",\n  emptyGroup: \"No memories in this group.\",\n  loading: \"Loading memories\",\n  saved: (text) => `Saved “${text}”`,\n}\n\nfunction resolveLabels(partial?: Partial<MemoryPanelLabels>): MemoryPanelLabels {\n  return { ...memoryLabels, ...partial }\n}\n\nexport function memoryCount(memories: readonly Pick<MemoryEntry, \"id\" | \"paused\">[]) {\n  return {\n    total: memories.length,\n    paused: memories.filter((memory) => memory.paused).length,\n    active: memories.filter((memory) => !memory.paused).length,\n  }\n}\n\nexport function MemoryPanel<TMeta = unknown>({\n  memories = [],\n  enabled = true,\n  categories,\n  undo,\n  loading = false,\n  error,\n  title,\n  onEnabledChange,\n  onEdit,\n  onPause,\n  onForget,\n  onRestore,\n  onAdd,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: MemoryPanelProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const heading = title ?? labels.title\n  const groups = categories ?? [...new Set(memories.map((memory) => memory.category))]\n  const [filter, setFilter] = React.useState(\"all\")\n  const [editing, setEditing] = React.useState<string | null>(null)\n  const [draft, setDraft] = React.useState(\"\")\n  const [adding, setAdding] = React.useState(false)\n  const [nextText, setNextText] = React.useState(\"\")\n  const [nextGroup, setNextGroup] = React.useState(groups[0] ?? \"\")\n  const [live, setLive] = React.useState(\"\")\n  const visible = memories.filter((memory) => filter === \"all\" || memory.category === filter)\n  const shownGroups = groups.filter((group) => filter === \"all\" || filter === group)\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        <Badge variant=\"secondary\">{labels.count(memories.length)}</Badge>\n        <label className=\"ms-auto inline-flex items-center gap-2 text-xs\">\n          <Switch checked={enabled} onCheckedChange={(value) => onEnabledChange?.(value)} />\n          {labels.use}\n        </label>\n      </header>\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\" className=\"flex flex-col gap-2\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-16 w-full motion-reduce:animate-none\" />\n          <Skeleton className=\"h-16 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && memories.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : (\n        <div className=\"flex flex-col gap-3\">\n          {!enabled ? <p className=\"text-xs text-muted-foreground\">{labels.off}</p> : null}\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          {memories.length === 0 && !undo ? <p className=\"text-muted-foreground\">{labels.empty}</p> : null}\n          {groups.length > 0 ? (\n            <div role=\"radiogroup\" aria-label={heading} className=\"flex flex-wrap gap-1\">\n              {[\"all\", ...groups].map((group) => (\n                <button\n                  key={group}\n                  type=\"button\"\n                  role=\"radio\"\n                  aria-checked={filter === group}\n                  className={cn(\n                    \"rounded-md border border-border px-2 py-1 text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\",\n                    filter === group && \"border-primary\",\n                  )}\n                  onClick={() => setFilter(group)}\n                >\n                  {group === \"all\" ? labels.all : group}\n                </button>\n              ))}\n            </div>\n          ) : null}\n          {visible.length === 0 && memories.length > 0 ? <p className=\"text-xs text-muted-foreground\">{labels.emptyGroup}</p> : null}\n          {shownGroups.map((group) => {\n            const rows = visible.filter((memory) => memory.category === group)\n            if (rows.length === 0) return null\n            return (\n              <section key={group} aria-label={group} className=\"flex flex-col gap-2\">\n                <h3 className=\"text-xs font-medium text-muted-foreground\">{group}</h3>\n                <ul className=\"flex flex-col gap-2\">\n                  {rows.map((memory) => {\n                    const open = editing === memory.id\n                    return (\n                      <li key={memory.id} className={cn(\"rounded-lg border border-border px-3 py-2\", memory.paused && \"border-dashed\", classNames?.entry)}>\n                        {open ? (\n                          <form\n                            className=\"flex flex-wrap gap-2\"\n                            onSubmit={(event) => {\n                              event.preventDefault()\n                              const text = draft.trim()\n                              if (!text) return\n                              onEdit?.(memory.id, text)\n                              setLive(labels.saved(text))\n                              setEditing(null)\n                            }}\n                          >\n                            <Input aria-label={labels.editNamed(memory.text)} value={draft} onChange={(event) => setDraft(event.target.value)} className=\"h-8 min-w-48 flex-1\" />\n                            <Button type=\"submit\" size=\"sm\">\n                              {labels.save}\n                            </Button>\n                            <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={() => setEditing(null)}>\n                              {labels.cancel}\n                            </Button>\n                          </form>\n                        ) : (\n                          <p>{memory.text}</p>\n                        )}\n                        <p className=\"mt-1 text-xs text-muted-foreground\">\n                          {[memory.source, memory.date].filter(Boolean).join(\" · \")}\n                        </p>\n                        <div className=\"mt-2 flex flex-wrap gap-2\">\n                          {memory.paused ? <Badge variant=\"outline\">{labels.paused}</Badge> : null}\n                          <Button\n                            type=\"button\"\n                            size=\"sm\"\n                            variant=\"outline\"\n                            aria-label={labels.editNamed(memory.text)}\n                            onClick={() => {\n                              setEditing(memory.id)\n                              setDraft(memory.text)\n                            }}\n                          >\n                            {labels.edit}\n                          </Button>\n                          <Button\n                            type=\"button\"\n                            size=\"sm\"\n                            variant=\"outline\"\n                            aria-label={memory.paused ? labels.resumeNamed(memory.text) : labels.pauseNamed(memory.text)}\n                            onClick={() => onPause?.(memory.id, !memory.paused)}\n                          >\n                            {memory.paused ? labels.resume : labels.pause}\n                          </Button>\n                          <Button\n                            type=\"button\"\n                            size=\"sm\"\n                            variant=\"outline\"\n                            aria-label={labels.forgetNamed(memory.text)}\n                            onClick={() => {\n                              onForget?.(memory.id)\n                              setLive(labels.forgot(memory.text))\n                            }}\n                          >\n                            {labels.forget}\n                          </Button>\n                        </div>\n                      </li>\n                    )\n                  })}\n                </ul>\n              </section>\n            )\n          })}\n          {undo ? (\n            <div className=\"flex flex-wrap items-center gap-2 rounded-lg border border-border px-3 py-2\">\n              <p className=\"text-xs\">{labels.forgot(undo.text)}</p>\n              <Button type=\"button\" size=\"sm\" variant=\"outline\" className=\"ms-auto\" onClick={() => onRestore?.()}>\n                {labels.restore}\n              </Button>\n            </div>\n          ) : null}\n          {adding ? (\n            <form\n              className=\"flex flex-col gap-2\"\n              onSubmit={(event) => {\n                event.preventDefault()\n                const text = nextText.trim()\n                if (!text || !nextGroup) return\n                onAdd?.(text, nextGroup)\n                setLive(labels.added(text))\n                setNextText(\"\")\n                setAdding(false)\n              }}\n            >\n              <Input aria-label={labels.addNamed} value={nextText} onChange={(event) => setNextText(event.target.value)} className=\"h-8\" />\n              <div role=\"radiogroup\" aria-label={labels.add} className=\"flex flex-wrap gap-1\">\n                {groups.map((group) => (\n                  <button\n                    key={group}\n                    type=\"button\"\n                    role=\"radio\"\n                    aria-checked={nextGroup === group}\n                    className={cn(\"rounded-md border border-border px-2 py-1 text-xs\", nextGroup === group && \"border-primary\")}\n                    onClick={() => setNextGroup(group)}\n                  >\n                    {group}\n                  </button>\n                ))}\n              </div>\n              <div className=\"flex gap-2\">\n                <Button type=\"submit\" size=\"sm\">\n                  {labels.save}\n                </Button>\n                <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={() => setAdding(false)}>\n                  {labels.cancel}\n                </Button>\n              </div>\n            </form>\n          ) : (\n            <Button type=\"button\" size=\"sm\" variant=\"outline\" className=\"self-start\" onClick={() => setAdding(true)}>\n              {labels.add}\n            </Button>\n          )}\n        </div>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/memory-panel.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Lo que recuerda",
+    "descriptionEs": "Lo que el asistente guarda entre chats. El interruptor lo apaga sin borrar. Cada recuerdo se edita, se pausa o se olvida.",
+    "preview": "app/examples/memory-panel/preview.tsx",
+    "previewHref": "/examples/memory-panel",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "paused",
+        "label": "En pausa",
+        "labelEn": "Paused"
+      },
+      {
+        "id": "off",
+        "label": "Apagada",
+        "labelEn": "Off"
+      },
+      {
+        "id": "forgotten",
+        "label": "Olvidado",
+        "labelEn": "Forgotten"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Mariana y el horno",
+        "href": "/examples/memory-panel",
+        "description": "Cuatro recuerdos del taller. Olvidar el correo a Celaya se puede deshacer."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/memory-panel/stress",
+        "description": "Vacío, textos largos, RTL y diez recuerdos."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/memory-panel?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/memory-panel?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/memory-panel?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/memory-panel?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "En pausa",
+        "href": "/examples/memory-panel?scene=paused",
+        "description": "Paused"
+      },
+      {
+        "title": "Apagada",
+        "href": "/examples/memory-panel?scene=off",
+        "description": "Off"
+      },
+      {
+        "title": "Olvidado",
+        "href": "/examples/memory-panel?scene=forgotten",
+        "description": "Forgotten"
+      }
+    ],
+    "usage": "<MemoryPanel memories={memories} enabled={enabled} onEnabledChange={setEnabled} onEdit={edit} onPause={pause} onForget={forget} onRestore={restore} onAdd={add} />",
+    "api": [
+      {
+        "name": "memories",
+        "type": "MemoryEntry<TMeta>[]",
+        "description": "id, text, category, source, date, paused. meta is opaque. Source and date are shown as given."
+      },
+      {
+        "name": "enabled / onEnabledChange",
+        "type": "boolean / (enabled) => void",
+        "description": "The Use memory switch. Off does not delete the list."
+      },
+      {
+        "name": "onEdit / onPause / onForget / onRestore / onAdd",
+        "type": "callbacks",
+        "description": "The host owns the list. Undo is whatever the host passes in undo; the piece does not run a clock."
+      },
+      {
+        "name": "undo",
+        "type": "{ text: string } | null",
+        "description": "The forgotten line, with an Undo button, until the host clears it."
+      },
+      {
+        "name": "categories",
+        "type": "string[]",
+        "description": "Group order and the choices for a new memory."
+      },
+      {
+        "name": "loading / error / labels",
+        "type": "boolean / string / Partial<MemoryPanelLabels>",
+        "description": "Skeleton, alert, and chrome copy. English is the default."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. No es la ventana de este chat: es lo que queda para el siguiente.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

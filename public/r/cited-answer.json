@@ -1,0 +1,138 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "cited-answer",
+  "title": "Cited answer",
+  "author": "Eduardo Retana",
+  "description": "A finished answer wired to its sources. Opening a citation shows the passage that was used. A source id that does not exist is skipped.",
+  "registryDependencies": [
+    "badge",
+    "button",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/cited-answer.tsx",
+      "content": "\"use client\"\n\n/**\n * A finished answer wired to its sources. Clean-room reading of a public\n * behavior description: a citation marks the sentence it supports, and opening\n * it shows the passage that was actually used. No Affect source, sample data,\n * icons, or assets were copied. Unknown source ids are skipped.\n */\n\nimport * as React from \"react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport type CitedSegment = {\n  id: string\n  text: string\n  cite?: readonly string[]\n  paragraph?: boolean\n}\n\nexport type CitedSource<TMeta = unknown> = {\n  id: string\n  title: string\n  site: string\n  quote?: string\n  date?: string\n  meta?: TMeta\n}\n\nexport type CitedAnswerLabels = {\n  title: string\n  sources: (count: number) => string\n  pages: (count: number) => string\n  marker: (number: number, title: string) => string\n  chip: (number: number, title: string) => string\n  quote: string\n  noQuote: string\n  open: string\n  empty: string\n  loading: string\n  opened: (title: string) => string\n}\n\nexport type CitedAnswerClassNames = {\n  root?: string\n  segment?: string\n}\n\nexport type CitedAnswerProps<TMeta = unknown> = {\n  segments?: readonly CitedSegment[]\n  sources?: readonly CitedSource<TMeta>[]\n  pagesRead?: number\n  openId?: string | null\n  loading?: boolean\n  error?: string\n  title?: string\n  onOpen?: (id: string | null) => void\n  onOpenSource?: (id: string) => void\n  className?: string\n  classNames?: CitedAnswerClassNames\n  labels?: Partial<CitedAnswerLabels>\n}\n\nconst answerLabels: CitedAnswerLabels = {\n  title: \"Answer\",\n  sources: (count) => (count === 1 ? \"1 source\" : `${count} sources`),\n  pages: (count) => (count === 1 ? \"1 page read\" : `${count} pages read`),\n  marker: (number, title) => `Source ${number}: ${title}`,\n  chip: (number, title) => `Source ${number}: ${title}`,\n  quote: \"Passage used\",\n  noQuote: \"This source has no passage attached.\",\n  open: \"Open source\",\n  empty: \"No answer to check yet.\",\n  loading: \"Loading the answer\",\n  opened: (title) => `Opened “${title}”`,\n}\n\nfunction resolveLabels(partial?: Partial<CitedAnswerLabels>): CitedAnswerLabels {\n  return { ...answerLabels, ...partial }\n}\n\nexport function citedNumbers(sources: readonly Pick<CitedSource, \"id\">[]) {\n  return new Map(sources.map((source, index) => [source.id, index + 1]))\n}\n\nexport function visibleCites(cite: readonly string[] | undefined, sources: readonly Pick<CitedSource, \"id\">[]) {\n  if (!cite) return []\n  const known = new Set(sources.map((source) => source.id))\n  return cite.filter((id) => known.has(id))\n}\n\nfunction paragraphsOf(segments: readonly CitedSegment[]) {\n  const paragraphs: CitedSegment[][] = []\n  for (const segment of segments) {\n    const current = paragraphs[paragraphs.length - 1]\n    if (segment.paragraph || !current) paragraphs.push([segment])\n    else current.push(segment)\n  }\n  return paragraphs\n}\n\nexport function CitedAnswer<TMeta = unknown>({\n  segments = [],\n  sources = [],\n  pagesRead,\n  openId,\n  loading = false,\n  error,\n  title,\n  onOpen,\n  onOpenSource,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: CitedAnswerProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const previewId = React.useId()\n  const heading = title ?? labels.title\n  const numbers = citedNumbers(sources)\n  const byId = new Map(sources.map((source) => [source.id, source]))\n  const open = openId ? byId.get(openId) : undefined\n  const [hotId, setHotId] = React.useState<string | null>(null)\n  const [live, setLive] = React.useState(\"\")\n  const paragraphs = paragraphsOf(segments)\n  const lit = hotId ?? openId ?? null\n\n  function toggle(id: string) {\n    const next = openId === id ? null : id\n    onOpen?.(next)\n    const source = byId.get(id)\n    if (next && source) setLive(labels.opened(source.title))\n  }\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        <Badge variant=\"secondary\">{labels.sources(sources.length)}</Badge>\n        {typeof pagesRead === \"number\" ? <Badge variant=\"outline\">{labels.pages(pagesRead)}</Badge> : null}\n      </header>\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-28 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && segments.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : segments.length === 0 ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <div className=\"flex flex-col gap-3\">\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          <div className=\"flex flex-col gap-3 leading-6\">\n            {paragraphs.map((paragraph, index) => (\n              <p key={paragraph[0]?.id ?? index}>\n                {paragraph.map((segment) => {\n                  const cites = visibleCites(segment.cite, sources)\n                  const active = lit != null && cites.includes(lit)\n                  return (\n                    <span key={segment.id} className={cn(active && \"bg-primary/10\", classNames?.segment)}>\n                      {segment.text}{\" \"}\n                      {cites.map((id) => {\n                        const source = byId.get(id)\n                        const number = numbers.get(id)\n                        if (!source || !number) return null\n                        return (\n                          <React.Fragment key={id}>\n                            <button\n                              type=\"button\"\n                              aria-expanded={openId === id}\n                              aria-controls={previewId}\n                              aria-label={labels.marker(number, source.title)}\n                              className=\"mx-0.5 inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-muted px-1 align-super text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n                              onClick={() => toggle(id)}\n                              onFocus={() => setHotId(id)}\n                              onBlur={() => setHotId(null)}\n                              onMouseEnter={() => setHotId(id)}\n                              onMouseLeave={() => setHotId(null)}\n                            >\n                              {number}\n                            </button>{\" \"}\n                          </React.Fragment>\n                        )\n                      })}\n                    </span>\n                  )\n                })}\n              </p>\n            ))}\n          </div>\n          {sources.length > 0 ? (\n            <ul className=\"flex flex-wrap gap-1\">\n              {sources.map((source) => {\n                const number = numbers.get(source.id) ?? 0\n                return (\n                  <li key={source.id}>\n                    <button\n                      type=\"button\"\n                      aria-expanded={openId === source.id}\n                      aria-controls={previewId}\n                      aria-label={labels.chip(number, source.title)}\n                      className={cn(\n                        \"rounded-full border border-border px-2 py-1 text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\",\n                        (openId === source.id || hotId === source.id) && \"border-primary bg-primary/10\",\n                      )}\n                      onClick={() => toggle(source.id)}\n                      onFocus={() => setHotId(source.id)}\n                      onBlur={() => setHotId(null)}\n                      onMouseEnter={() => setHotId(source.id)}\n                      onMouseLeave={() => setHotId(null)}\n                    >\n                      {number}. {source.title}\n                    </button>\n                  </li>\n                )\n              })}\n            </ul>\n          ) : null}\n          <div id={previewId} role=\"region\" aria-label={open ? labels.marker(numbers.get(open.id) ?? 0, open.title) : labels.quote} hidden={!open}>\n            {open ? (\n              <div className=\"rounded-lg border border-border px-3 py-2\">\n                <p className=\"text-xs text-muted-foreground\">\n                  {labels.quote} · {open.site}\n                  {open.date ? ` · ${open.date}` : \"\"}\n                </p>\n                <p className=\"mt-1\">{open.quote ?? labels.noQuote}</p>\n                <Button type=\"button\" size=\"sm\" variant=\"outline\" className=\"mt-2\" onClick={() => onOpenSource?.(open.id)}>\n                  {labels.open}\n                </Button>\n              </div>\n            ) : null}\n          </div>\n        </div>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/cited-answer.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Respuesta con fuentes",
+    "descriptionEs": "Una respuesta ya hecha, atada a sus fuentes. Abrir una cita muestra el pasaje que se usó. Un id que no existe no deja un número roto.",
+    "preview": "app/examples/cited-answer/preview.tsx",
+    "previewHref": "/examples/cited-answer",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "open",
+        "label": "Abierta",
+        "labelEn": "Open"
+      },
+      {
+        "id": "skipped",
+        "label": "Sin fuente",
+        "labelEn": "Skipped"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Anticipo y entrega",
+        "href": "/examples/cited-answer",
+        "description": "Tres fuentes del pedido PED-1048. La cita fantasma no se numera."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/cited-answer/stress",
+        "description": "Vacío, textos largos, RTL y diez fuentes."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/cited-answer?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/cited-answer?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/cited-answer?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/cited-answer?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Abierta",
+        "href": "/examples/cited-answer?scene=open",
+        "description": "Open"
+      },
+      {
+        "title": "Sin fuente",
+        "href": "/examples/cited-answer?scene=skipped",
+        "description": "Skipped"
+      }
+    ],
+    "usage": "<CitedAnswer segments={segments} sources={sources} openId={openId} onOpen={setOpen} onOpenSource={open} />",
+    "api": [
+      {
+        "name": "segments",
+        "type": "CitedSegment[]",
+        "description": "id, text, cite (source ids), paragraph. Unknown ids are skipped."
+      },
+      {
+        "name": "sources",
+        "type": "CitedSource<TMeta>[]",
+        "description": "id, title, site, quote, date. Numbers follow this order. meta is opaque."
+      },
+      {
+        "name": "pagesRead",
+        "type": "number",
+        "description": "Shown next to the source count."
+      },
+      {
+        "name": "openId / onOpen / onOpenSource",
+        "type": "string | null / callbacks",
+        "description": "Which passage is open. Open source does not navigate by itself."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when the answer cannot be assembled."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<CitedAnswerLabels>",
+        "description": "Chrome copy. English is the default."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. No es una cita suelta ni la lista de fuentes: es la respuesta ya cerrada, frase por frase.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

@@ -273,6 +273,23 @@ Guanajuato workshop scenario. Colors come from the host shadcn tokens.
 agent-graph is not agent-tree: it shows who is calling whom, not who launched
 whom.
 
+context-map, context-window, memory-panel, cited-answer, and prompt-library
+are a clean-room reading of public behavior descriptions on Affect UI (tiles
+of what fills one window, including free space and a before/after of
+compaction; a cell field where a file can be dropped and the chat compacted;
+memories kept across chats; a finished answer wired to the passage behind
+each sentence; and saved prompts with blanks):
+
+  https://www.affectui.com/components
+
+Affect Pro was not purchased, fetched, or ported. No source, sample data,
+icons, assets, or internal strings were copied. The demos continue the same
+Guanajuato workshop scenario. Colors come from the host shadcn tokens.
+context-map is not the usage ring. context-window is not that ring either:
+the cells are decorative and the list is what can be changed. memory-panel
+is what lasts across chats. cited-answer is not inline-citation and not
+source-list. prompt-library is not a row of suggestion chips.
+
 adaptive-table is a clean-room reimplementation from a behavior description
 only. No names, icons, or rows from that reference were copied. Columns drop,
 fold, and stretch to the container width.

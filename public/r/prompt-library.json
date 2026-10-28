@@ -1,0 +1,129 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "prompt-library",
+  "title": "Prompt library",
+  "author": "Eduardo Retana",
+  "description": "Saved prompts with blanks in the sentence. The finished sentence assembles underneath. It can be used only once every blank is filled.",
+  "registryDependencies": [
+    "badge",
+    "button",
+    "input",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/prompt-library.tsx",
+      "content": "\"use client\"\n\n/**\n * Saved prompts with blanks in the sentence. Clean-room reading of a public\n * behavior description: each blank is a field, the finished sentence assembles\n * underneath, and it can be used only once every blank is filled. No Affect\n * source, sample data, icons, or assets were copied.\n */\n\nimport * as React from \"react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Input } from \"@/components/ui/input\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport type PromptVariable<TMeta = unknown> = {\n  name: string\n  description?: string\n  meta?: TMeta\n}\n\nexport type PromptTemplate<TMeta = unknown> = {\n  id: string\n  title: string\n  category?: string\n  body: string\n  variables?: readonly PromptVariable<TMeta>[]\n  meta?: TMeta\n}\n\nexport type PromptPart = { type: \"text\"; text: string } | { type: \"slot\"; name: string }\n\nexport type PromptLibraryLabels = {\n  title: string\n  list: string\n  search: string\n  empty: string\n  emptySearch: string\n  loading: string\n  field: (name: string, description?: string) => string\n  progress: (filled: number, total: number) => string\n  ready: string\n  preview: string\n  copy: string\n  copied: string\n  use: string\n  useNamed: (title: string) => string\n  used: (title: string) => string\n  missing: (count: number) => string\n}\n\nexport type PromptLibraryClassNames = {\n  root?: string\n  template?: string\n}\n\nexport type PromptLibraryProps<TMeta = unknown> = {\n  templates?: readonly PromptTemplate<TMeta>[]\n  selectedId?: string | null\n  values?: Readonly<Record<string, string>>\n  loading?: boolean\n  error?: string\n  title?: string\n  onSelect?: (id: string) => void\n  onValue?: (name: string, value: string) => void\n  onCopy?: (prompt: string) => void\n  onUse?: (prompt: string, templateId: string) => void\n  className?: string\n  classNames?: PromptLibraryClassNames\n  labels?: Partial<PromptLibraryLabels>\n}\n\nconst SLOT = /\\{([A-Za-z][A-Za-z0-9_-]*)\\}/g\n\nconst libraryLabels: PromptLibraryLabels = {\n  title: \"Prompts\",\n  list: \"Saved prompts\",\n  search: \"Search prompts\",\n  empty: \"No prompts saved yet.\",\n  emptySearch: \"No prompt matches that search.\",\n  loading: \"Loading prompts\",\n  field: (name, description) => (description ? `${name}. ${description}` : name),\n  progress: (filled, total) => `${filled} of ${total} filled`,\n  ready: \"Ready to use\",\n  preview: \"Preview\",\n  copy: \"Copy\",\n  copied: \"Prompt copied\",\n  use: \"Use prompt\",\n  useNamed: (title) => `Use “${title}”`,\n  used: (title) => `Used “${title}”`,\n  missing: (count) => (count === 1 ? \"1 blank still open\" : `${count} blanks still open`),\n}\n\nfunction resolveLabels(partial?: Partial<PromptLibraryLabels>): PromptLibraryLabels {\n  return { ...libraryLabels, ...partial }\n}\n\nexport function promptParts(body: string): PromptPart[] {\n  const parts: PromptPart[] = []\n  let last = 0\n  for (const match of body.matchAll(SLOT)) {\n    const index = match.index ?? 0\n    if (index > last) parts.push({ type: \"text\", text: body.slice(last, index) })\n    parts.push({ type: \"slot\", name: match[1] ?? \"\" })\n    last = index + match[0].length\n  }\n  if (last < body.length) parts.push({ type: \"text\", text: body.slice(last) })\n  return parts\n}\n\nexport function promptNames(template: Pick<PromptTemplate, \"body\" | \"variables\">) {\n  const fromBody = promptParts(template.body).flatMap((part) => (part.type === \"slot\" ? [part.name] : []))\n  const declared = template.variables?.map((variable) => variable.name) ?? []\n  return [...new Set([...declared, ...fromBody])]\n}\n\nexport function promptText(body: string, values: Readonly<Record<string, string>>) {\n  return body.replace(SLOT, (_match, name: string) => {\n    const value = values[name]?.trim()\n    return value ? value : `{${name}}`\n  })\n}\n\nexport function promptMissing(template: Pick<PromptTemplate, \"body\" | \"variables\">, values: Readonly<Record<string, string>>) {\n  return promptNames(template).filter((name) => !values[name]?.trim())\n}\n\nexport function PromptLibrary<TMeta = unknown>({\n  templates = [],\n  selectedId,\n  values = {},\n  loading = false,\n  error,\n  title,\n  onSelect,\n  onValue,\n  onCopy,\n  onUse,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: PromptLibraryProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const heading = title ?? labels.title\n  const [query, setQuery] = React.useState(\"\")\n  const [live, setLive] = React.useState(\"\")\n  const needle = query.trim().toLocaleLowerCase()\n  const shown = templates.filter((template) => {\n    if (!needle) return true\n    return template.title.toLocaleLowerCase().includes(needle) || (template.category ?? \"\").toLocaleLowerCase().includes(needle)\n  })\n  const selected = templates.find((template) => template.id === selectedId) ?? shown[0]\n  const names = selected ? promptNames(selected) : []\n  const descriptions = new Map(selected?.variables?.map((variable) => [variable.name, variable.description]) ?? [])\n  const missing = selected ? promptMissing(selected, values) : []\n  const filled = names.length - missing.length\n  const ready = selected != null && missing.length === 0\n  const preview = selected ? promptText(selected.body, values) : \"\"\n\n  function move(to: \"next\" | \"prev\" | \"first\" | \"last\") {\n    if (shown.length === 0) return\n    const index = shown.findIndex((template) => template.id === selected?.id)\n    const nextIndex = to === \"first\" ? 0 : to === \"last\" ? shown.length - 1 : to === \"next\" ? Math.min(shown.length - 1, index + 1) : Math.max(0, index - 1)\n    const next = shown[nextIndex]\n    if (next) onSelect?.(next.id)\n  }\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        {selected && names.length > 0 ? <Badge variant={ready ? \"secondary\" : \"outline\"}>{ready ? labels.ready : labels.progress(filled, names.length)}</Badge> : null}\n      </header>\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\" className=\"flex flex-col gap-2\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-8 w-full motion-reduce:animate-none\" />\n          <Skeleton className=\"h-24 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && templates.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : templates.length === 0 ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <div className=\"flex flex-col gap-3\">\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          <Input\n            aria-label={labels.search}\n            value={query}\n            placeholder={labels.search}\n            className=\"h-8\"\n            onChange={(event) => setQuery(event.target.value)}\n            onKeyDown={(event) => {\n              if (event.key === \"Escape\") setQuery(\"\")\n              if (event.key === \"ArrowDown\") {\n                event.preventDefault()\n                move(\"next\")\n              }\n            }}\n          />\n          {shown.length === 0 ? (\n            <p className=\"text-xs text-muted-foreground\">{labels.emptySearch}</p>\n          ) : (\n            <div role=\"listbox\" aria-label={labels.list} className=\"flex flex-col gap-1\">\n              {shown.map((template) => {\n                const chosen = template.id === selected?.id\n                return (\n                  <button\n                    key={template.id}\n                    type=\"button\"\n                    role=\"option\"\n                    aria-selected={chosen}\n                    tabIndex={chosen ? 0 : -1}\n                    className={cn(\n                      \"rounded-md border border-border px-2 py-1.5 text-start focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\",\n                      chosen && \"border-primary\",\n                      classNames?.template,\n                    )}\n                    onClick={() => onSelect?.(template.id)}\n                    onKeyDown={(event) => {\n                      if (event.key === \"ArrowDown\") {\n                        event.preventDefault()\n                        move(\"next\")\n                      }\n                      if (event.key === \"ArrowUp\") {\n                        event.preventDefault()\n                        move(\"prev\")\n                      }\n                      if (event.key === \"Home\") {\n                        event.preventDefault()\n                        move(\"first\")\n                      }\n                      if (event.key === \"End\") {\n                        event.preventDefault()\n                        move(\"last\")\n                      }\n                    }}\n                  >\n                    <span className=\"font-medium\">{template.title}</span>\n                    {template.category ? <span className=\"mt-0.5 block text-xs text-muted-foreground\">{template.category}</span> : null}\n                  </button>\n                )\n              })}\n            </div>\n          )}\n          {selected ? (\n            <div className=\"flex flex-col gap-3\">\n              <p className=\"leading-8\">\n                {promptParts(selected.body).map((part, index) =>\n                  part.type === \"text\" ? (\n                    <span key={`${part.text}-${index}`}>{part.text}</span>\n                  ) : (\n                    <Input\n                      key={`${part.name}-${index}`}\n                      aria-label={labels.field(part.name, descriptions.get(part.name))}\n                      value={values[part.name] ?? \"\"}\n                      placeholder={part.name}\n                      autoComplete=\"off\"\n                      className=\"mx-1 inline-block h-8 w-auto min-w-24 max-w-full\"\n                      style={{ width: `${Math.max((values[part.name] || part.name).length, 8) + 3}ch` }}\n                      onChange={(event) => onValue?.(part.name, event.target.value)}\n                    />\n                  ),\n                )}\n              </p>\n              {names.length > 0 ? (\n                <ul className=\"flex flex-col gap-1\">\n                  {names.map((name) =>\n                    descriptions.get(name) ? (\n                      <li key={name} className=\"text-xs text-muted-foreground\">\n                        {name}: {descriptions.get(name)}\n                      </li>\n                    ) : null,\n                  )}\n                </ul>\n              ) : null}\n              <div>\n                <h3 className=\"text-xs font-medium text-muted-foreground\">{labels.preview}</h3>\n                <p className=\"mt-1\">{preview}</p>\n              </div>\n              <p className=\"text-xs text-muted-foreground\">{ready ? labels.ready : labels.missing(missing.length)}</p>\n              <div className=\"flex flex-wrap gap-2\">\n                <Button\n                  type=\"button\"\n                  size=\"sm\"\n                  variant=\"outline\"\n                  onClick={() => {\n                    onCopy?.(preview)\n                    setLive(labels.copied)\n                  }}\n                >\n                  {labels.copy}\n                </Button>\n                <Button\n                  type=\"button\"\n                  size=\"sm\"\n                  disabled={!ready}\n                  aria-label={labels.useNamed(selected.title)}\n                  onClick={() => {\n                    if (!ready) return\n                    onUse?.(preview, selected.id)\n                    setLive(labels.used(selected.title))\n                  }}\n                >\n                  {labels.use}\n                </Button>\n              </div>\n            </div>\n          ) : null}\n        </div>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/prompt-library.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Biblioteca de prompts",
+    "descriptionEs": "Prompts guardados con espacios en la frase. Abajo se arma la frase lista. Se usa solo cuando cada espacio está lleno.",
+    "preview": "app/examples/prompt-library/preview.tsx",
+    "previewHref": "/examples/prompt-library",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "ready",
+        "label": "Listo",
+        "labelEn": "Ready"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Nota para Celaya",
+        "href": "/examples/prompt-library",
+        "description": "Tres prompts del taller. El de Celaya espera asunto y tono."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/prompt-library/stress",
+        "description": "Vacío, textos largos, RTL y diez prompts."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/prompt-library?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/prompt-library?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/prompt-library?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/prompt-library?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Listo",
+        "href": "/examples/prompt-library?scene=ready",
+        "description": "Ready"
+      }
+    ],
+    "usage": "<PromptLibrary templates={templates} selectedId={id} values={values} onSelect={select} onValue={setValue} onUse={use} />",
+    "api": [
+      {
+        "name": "templates",
+        "type": "PromptTemplate<TMeta>[]",
+        "description": "id, title, category, body with {name} blanks, variables (name, description). meta is opaque."
+      },
+      {
+        "name": "selectedId / values",
+        "type": "string | null / Record<string, string>",
+        "description": "The open template and the blanks for it. The host keeps what was typed."
+      },
+      {
+        "name": "onSelect / onValue / onCopy / onUse",
+        "type": "callbacks",
+        "description": "Choose a template, fill a blank, copy the preview, or use it. Use stays disabled while a blank is empty."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when the prompt cannot be used."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<PromptLibraryLabels>",
+        "description": "Chrome copy. English is the default."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. No es una fila de sugerencias: la plantilla se queda y solo cambian los espacios.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

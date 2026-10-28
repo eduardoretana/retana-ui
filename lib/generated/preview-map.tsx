@@ -327,86 +327,91 @@ import Preview322 from "@/app/examples/fan-out-grid/preview"
 import Preview323 from "@/app/examples/parallel-attempts/preview"
 import Preview324 from "@/app/examples/conflict-radar/preview"
 import Preview325 from "@/app/examples/decision-tree/preview"
-import Preview326 from "@/app/examples/data-table-grouping/preview"
-import Preview327 from "@/app/examples/anatomy-tree/preview"
-import Preview328 from "@/app/examples/vital-signs/preview"
-import Preview329 from "@/app/examples/ecg-trace/preview"
-import Preview330 from "@/app/examples/body-map/preview"
-import Preview331 from "@/app/examples/organ-viewer/preview"
-import Preview332 from "@/app/examples/molecule-viewer/preview"
-import Preview333 from "@/app/examples/dna-helix/preview"
-import Preview334 from "@/app/examples/lab-results/preview"
-import Preview335 from "@/app/examples/growth-chart/preview"
-import Preview336 from "@/app/examples/medication-schedule/preview"
-import Preview337 from "@/app/examples/dermatome-map/preview"
-import Preview338 from "@/app/examples/image-viewer/preview"
-import Preview339 from "@/app/examples/organ-adrenals/preview"
-import Preview340 from "@/app/examples/organ-appendix/preview"
-import Preview341 from "@/app/examples/organ-bladder/preview"
-import Preview342 from "@/app/examples/organ-brain/preview"
-import Preview343 from "@/app/examples/organ-breast/preview"
-import Preview344 from "@/app/examples/organ-cell/preview"
-import Preview345 from "@/app/examples/organ-diaphragm/preview"
-import Preview346 from "@/app/examples/organ-ear/preview"
-import Preview347 from "@/app/examples/organ-esophagus/preview"
-import Preview348 from "@/app/examples/organ-eye/preview"
-import Preview349 from "@/app/examples/organ-gallbladder/preview"
-import Preview350 from "@/app/examples/organ-hair/preview"
-import Preview351 from "@/app/examples/organ-heart/preview"
-import Preview352 from "@/app/examples/organ-intestines/preview"
-import Preview353 from "@/app/examples/organ-joints/preview"
-import Preview354 from "@/app/examples/organ-kidneys/preview"
-import Preview355 from "@/app/examples/organ-larynx/preview"
-import Preview356 from "@/app/examples/organ-liver/preview"
-import Preview357 from "@/app/examples/organ-lungs/preview"
-import Preview358 from "@/app/examples/organ-lymph/preview"
-import Preview359 from "@/app/examples/organ-muscles/preview"
-import Preview360 from "@/app/examples/organ-nails/preview"
-import Preview361 from "@/app/examples/organ-nerves/preview"
-import Preview362 from "@/app/examples/organ-nose/preview"
-import Preview363 from "@/app/examples/organ-pancreas/preview"
-import Preview364 from "@/app/examples/organ-parathyroid/preview"
-import Preview365 from "@/app/examples/organ-pharynx/preview"
-import Preview366 from "@/app/examples/organ-pineal/preview"
-import Preview367 from "@/app/examples/organ-pituitary/preview"
-import Preview368 from "@/app/examples/organ-prostate/preview"
-import Preview369 from "@/app/examples/organ-salivary-glands/preview"
-import Preview370 from "@/app/examples/organ-skeleton/preview"
-import Preview371 from "@/app/examples/organ-skin/preview"
-import Preview372 from "@/app/examples/organ-spinal-cord/preview"
-import Preview373 from "@/app/examples/organ-spleen/preview"
-import Preview374 from "@/app/examples/organ-stomach/preview"
-import Preview375 from "@/app/examples/organ-teeth/preview"
-import Preview376 from "@/app/examples/organ-thymus/preview"
-import Preview377 from "@/app/examples/organ-thyroid/preview"
-import Preview378 from "@/app/examples/organ-tongue/preview"
-import Preview379 from "@/app/examples/organ-uterus/preview"
-import Preview380 from "@/app/examples/organ-vessels/preview"
-import Preview381 from "@/app/examples/organ-vestibular/preview"
-import Preview382 from "@/app/examples/organ-explorer/preview"
-import Preview383 from "@/app/examples/anatomy-workspace/preview"
-import Preview384 from "@/app/examples/organ-switcher/preview"
-import Preview385 from "@/app/examples/task-board-core/preview"
-import Preview386 from "@/app/examples/task-card/preview"
-import Preview387 from "@/app/examples/task-detail/preview"
-import Preview388 from "@/app/examples/task-board/preview"
-import Preview389 from "@/app/examples/agenda-core/preview"
-import Preview390 from "@/app/examples/agenda-event/preview"
-import Preview391 from "@/app/examples/agenda-detail/preview"
-import Preview392 from "@/app/examples/agenda/preview"
-import Preview393 from "@/app/examples/ats-core/preview"
-import Preview394 from "@/app/examples/candidate-card/preview"
-import Preview395 from "@/app/examples/candidate-row/preview"
-import Preview396 from "@/app/examples/candidate-detail/preview"
-import Preview397 from "@/app/examples/assessment-form/preview"
-import Preview398 from "@/app/examples/pipeline-board/preview"
-import Preview399 from "@/app/examples/ats/preview"
-import Preview400 from "@/app/examples/tooltip-card/preview"
-import Preview401 from "@/app/examples/timeline-gantt/preview"
-import Preview402 from "@/app/examples/data-table-reorder/preview"
-import Preview403 from "@/app/examples/activity-chat/preview"
-import Preview404 from "@/app/examples/inline-approve-button/preview"
-import Preview405 from "@/app/examples/portfolio-desk/preview"
+import Preview326 from "@/app/examples/context-map/preview"
+import Preview327 from "@/app/examples/context-window/preview"
+import Preview328 from "@/app/examples/memory-panel/preview"
+import Preview329 from "@/app/examples/cited-answer/preview"
+import Preview330 from "@/app/examples/prompt-library/preview"
+import Preview331 from "@/app/examples/data-table-grouping/preview"
+import Preview332 from "@/app/examples/anatomy-tree/preview"
+import Preview333 from "@/app/examples/vital-signs/preview"
+import Preview334 from "@/app/examples/ecg-trace/preview"
+import Preview335 from "@/app/examples/body-map/preview"
+import Preview336 from "@/app/examples/organ-viewer/preview"
+import Preview337 from "@/app/examples/molecule-viewer/preview"
+import Preview338 from "@/app/examples/dna-helix/preview"
+import Preview339 from "@/app/examples/lab-results/preview"
+import Preview340 from "@/app/examples/growth-chart/preview"
+import Preview341 from "@/app/examples/medication-schedule/preview"
+import Preview342 from "@/app/examples/dermatome-map/preview"
+import Preview343 from "@/app/examples/image-viewer/preview"
+import Preview344 from "@/app/examples/organ-adrenals/preview"
+import Preview345 from "@/app/examples/organ-appendix/preview"
+import Preview346 from "@/app/examples/organ-bladder/preview"
+import Preview347 from "@/app/examples/organ-brain/preview"
+import Preview348 from "@/app/examples/organ-breast/preview"
+import Preview349 from "@/app/examples/organ-cell/preview"
+import Preview350 from "@/app/examples/organ-diaphragm/preview"
+import Preview351 from "@/app/examples/organ-ear/preview"
+import Preview352 from "@/app/examples/organ-esophagus/preview"
+import Preview353 from "@/app/examples/organ-eye/preview"
+import Preview354 from "@/app/examples/organ-gallbladder/preview"
+import Preview355 from "@/app/examples/organ-hair/preview"
+import Preview356 from "@/app/examples/organ-heart/preview"
+import Preview357 from "@/app/examples/organ-intestines/preview"
+import Preview358 from "@/app/examples/organ-joints/preview"
+import Preview359 from "@/app/examples/organ-kidneys/preview"
+import Preview360 from "@/app/examples/organ-larynx/preview"
+import Preview361 from "@/app/examples/organ-liver/preview"
+import Preview362 from "@/app/examples/organ-lungs/preview"
+import Preview363 from "@/app/examples/organ-lymph/preview"
+import Preview364 from "@/app/examples/organ-muscles/preview"
+import Preview365 from "@/app/examples/organ-nails/preview"
+import Preview366 from "@/app/examples/organ-nerves/preview"
+import Preview367 from "@/app/examples/organ-nose/preview"
+import Preview368 from "@/app/examples/organ-pancreas/preview"
+import Preview369 from "@/app/examples/organ-parathyroid/preview"
+import Preview370 from "@/app/examples/organ-pharynx/preview"
+import Preview371 from "@/app/examples/organ-pineal/preview"
+import Preview372 from "@/app/examples/organ-pituitary/preview"
+import Preview373 from "@/app/examples/organ-prostate/preview"
+import Preview374 from "@/app/examples/organ-salivary-glands/preview"
+import Preview375 from "@/app/examples/organ-skeleton/preview"
+import Preview376 from "@/app/examples/organ-skin/preview"
+import Preview377 from "@/app/examples/organ-spinal-cord/preview"
+import Preview378 from "@/app/examples/organ-spleen/preview"
+import Preview379 from "@/app/examples/organ-stomach/preview"
+import Preview380 from "@/app/examples/organ-teeth/preview"
+import Preview381 from "@/app/examples/organ-thymus/preview"
+import Preview382 from "@/app/examples/organ-thyroid/preview"
+import Preview383 from "@/app/examples/organ-tongue/preview"
+import Preview384 from "@/app/examples/organ-uterus/preview"
+import Preview385 from "@/app/examples/organ-vessels/preview"
+import Preview386 from "@/app/examples/organ-vestibular/preview"
+import Preview387 from "@/app/examples/organ-explorer/preview"
+import Preview388 from "@/app/examples/anatomy-workspace/preview"
+import Preview389 from "@/app/examples/organ-switcher/preview"
+import Preview390 from "@/app/examples/task-board-core/preview"
+import Preview391 from "@/app/examples/task-card/preview"
+import Preview392 from "@/app/examples/task-detail/preview"
+import Preview393 from "@/app/examples/task-board/preview"
+import Preview394 from "@/app/examples/agenda-core/preview"
+import Preview395 from "@/app/examples/agenda-event/preview"
+import Preview396 from "@/app/examples/agenda-detail/preview"
+import Preview397 from "@/app/examples/agenda/preview"
+import Preview398 from "@/app/examples/ats-core/preview"
+import Preview399 from "@/app/examples/candidate-card/preview"
+import Preview400 from "@/app/examples/candidate-row/preview"
+import Preview401 from "@/app/examples/candidate-detail/preview"
+import Preview402 from "@/app/examples/assessment-form/preview"
+import Preview403 from "@/app/examples/pipeline-board/preview"
+import Preview404 from "@/app/examples/ats/preview"
+import Preview405 from "@/app/examples/tooltip-card/preview"
+import Preview406 from "@/app/examples/timeline-gantt/preview"
+import Preview407 from "@/app/examples/data-table-reorder/preview"
+import Preview408 from "@/app/examples/activity-chat/preview"
+import Preview409 from "@/app/examples/inline-approve-button/preview"
+import Preview410 from "@/app/examples/portfolio-desk/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -735,84 +740,89 @@ export const previewMap = {
   "parallel-attempts": Preview323,
   "conflict-radar": Preview324,
   "decision-tree": Preview325,
-  "data-table-grouping": Preview326,
-  "anatomy-tree": Preview327,
-  "vital-signs": Preview328,
-  "ecg-trace": Preview329,
-  "body-map": Preview330,
-  "organ-viewer": Preview331,
-  "molecule-viewer": Preview332,
-  "dna-helix": Preview333,
-  "lab-results": Preview334,
-  "growth-chart": Preview335,
-  "medication-schedule": Preview336,
-  "dermatome-map": Preview337,
-  "image-viewer": Preview338,
-  "organ-adrenals": Preview339,
-  "organ-appendix": Preview340,
-  "organ-bladder": Preview341,
-  "organ-brain": Preview342,
-  "organ-breast": Preview343,
-  "organ-cell": Preview344,
-  "organ-diaphragm": Preview345,
-  "organ-ear": Preview346,
-  "organ-esophagus": Preview347,
-  "organ-eye": Preview348,
-  "organ-gallbladder": Preview349,
-  "organ-hair": Preview350,
-  "organ-heart": Preview351,
-  "organ-intestines": Preview352,
-  "organ-joints": Preview353,
-  "organ-kidneys": Preview354,
-  "organ-larynx": Preview355,
-  "organ-liver": Preview356,
-  "organ-lungs": Preview357,
-  "organ-lymph": Preview358,
-  "organ-muscles": Preview359,
-  "organ-nails": Preview360,
-  "organ-nerves": Preview361,
-  "organ-nose": Preview362,
-  "organ-pancreas": Preview363,
-  "organ-parathyroid": Preview364,
-  "organ-pharynx": Preview365,
-  "organ-pineal": Preview366,
-  "organ-pituitary": Preview367,
-  "organ-prostate": Preview368,
-  "organ-salivary-glands": Preview369,
-  "organ-skeleton": Preview370,
-  "organ-skin": Preview371,
-  "organ-spinal-cord": Preview372,
-  "organ-spleen": Preview373,
-  "organ-stomach": Preview374,
-  "organ-teeth": Preview375,
-  "organ-thymus": Preview376,
-  "organ-thyroid": Preview377,
-  "organ-tongue": Preview378,
-  "organ-uterus": Preview379,
-  "organ-vessels": Preview380,
-  "organ-vestibular": Preview381,
-  "organ-explorer": Preview382,
-  "anatomy-workspace": Preview383,
-  "organ-switcher": Preview384,
-  "task-board-core": Preview385,
-  "task-card": Preview386,
-  "task-detail": Preview387,
-  "task-board": Preview388,
-  "agenda-core": Preview389,
-  "agenda-event": Preview390,
-  "agenda-detail": Preview391,
-  "agenda": Preview392,
-  "ats-core": Preview393,
-  "candidate-card": Preview394,
-  "candidate-row": Preview395,
-  "candidate-detail": Preview396,
-  "assessment-form": Preview397,
-  "pipeline-board": Preview398,
-  "ats": Preview399,
-  "tooltip-card": Preview400,
-  "timeline-gantt": Preview401,
-  "data-table-reorder": Preview402,
-  "activity-chat": Preview403,
-  "inline-approve-button": Preview404,
-  "portfolio-desk": Preview405,
+  "context-map": Preview326,
+  "context-window": Preview327,
+  "memory-panel": Preview328,
+  "cited-answer": Preview329,
+  "prompt-library": Preview330,
+  "data-table-grouping": Preview331,
+  "anatomy-tree": Preview332,
+  "vital-signs": Preview333,
+  "ecg-trace": Preview334,
+  "body-map": Preview335,
+  "organ-viewer": Preview336,
+  "molecule-viewer": Preview337,
+  "dna-helix": Preview338,
+  "lab-results": Preview339,
+  "growth-chart": Preview340,
+  "medication-schedule": Preview341,
+  "dermatome-map": Preview342,
+  "image-viewer": Preview343,
+  "organ-adrenals": Preview344,
+  "organ-appendix": Preview345,
+  "organ-bladder": Preview346,
+  "organ-brain": Preview347,
+  "organ-breast": Preview348,
+  "organ-cell": Preview349,
+  "organ-diaphragm": Preview350,
+  "organ-ear": Preview351,
+  "organ-esophagus": Preview352,
+  "organ-eye": Preview353,
+  "organ-gallbladder": Preview354,
+  "organ-hair": Preview355,
+  "organ-heart": Preview356,
+  "organ-intestines": Preview357,
+  "organ-joints": Preview358,
+  "organ-kidneys": Preview359,
+  "organ-larynx": Preview360,
+  "organ-liver": Preview361,
+  "organ-lungs": Preview362,
+  "organ-lymph": Preview363,
+  "organ-muscles": Preview364,
+  "organ-nails": Preview365,
+  "organ-nerves": Preview366,
+  "organ-nose": Preview367,
+  "organ-pancreas": Preview368,
+  "organ-parathyroid": Preview369,
+  "organ-pharynx": Preview370,
+  "organ-pineal": Preview371,
+  "organ-pituitary": Preview372,
+  "organ-prostate": Preview373,
+  "organ-salivary-glands": Preview374,
+  "organ-skeleton": Preview375,
+  "organ-skin": Preview376,
+  "organ-spinal-cord": Preview377,
+  "organ-spleen": Preview378,
+  "organ-stomach": Preview379,
+  "organ-teeth": Preview380,
+  "organ-thymus": Preview381,
+  "organ-thyroid": Preview382,
+  "organ-tongue": Preview383,
+  "organ-uterus": Preview384,
+  "organ-vessels": Preview385,
+  "organ-vestibular": Preview386,
+  "organ-explorer": Preview387,
+  "anatomy-workspace": Preview388,
+  "organ-switcher": Preview389,
+  "task-board-core": Preview390,
+  "task-card": Preview391,
+  "task-detail": Preview392,
+  "task-board": Preview393,
+  "agenda-core": Preview394,
+  "agenda-event": Preview395,
+  "agenda-detail": Preview396,
+  "agenda": Preview397,
+  "ats-core": Preview398,
+  "candidate-card": Preview399,
+  "candidate-row": Preview400,
+  "candidate-detail": Preview401,
+  "assessment-form": Preview402,
+  "pipeline-board": Preview403,
+  "ats": Preview404,
+  "tooltip-card": Preview405,
+  "timeline-gantt": Preview406,
+  "data-table-reorder": Preview407,
+  "activity-chat": Preview408,
+  "inline-approve-button": Preview409,
+  "portfolio-desk": Preview410,
 }
