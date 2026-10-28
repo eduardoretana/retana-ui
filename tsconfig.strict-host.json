@@ -12,6 +12,7 @@
     "registry/ui/record-timeline.tsx",
     "registry/ui/view-kanban.tsx",
     "registry/ui/view-table.tsx",
+    "registry/ui/view-calendar.tsx",
     "registry/ui/multi-view-fields.tsx",
     "registry/ui/filter-toolbar.tsx",
     "registry/ui/layered-panel.tsx",
