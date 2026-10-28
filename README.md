@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`411` items are in `registry.json` on this branch: `324` components, `72` blocks, `6` hooks, and `9` libraries. A name links to its source file.
+`416` items are in `registry.json` on this branch: `329` components, `72` blocks, `6` hooks, and `9` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -448,6 +448,11 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`memory-panel`](registry/ui/memory-panel.tsx) · ui — What the assistant keeps across chats. A switch turns memory off without deleting it. Each memory can be edited, paused, or forgotten. Install: `npx shadcn@latest add @retana/memory-panel`.
 - [`cited-answer`](registry/ui/cited-answer.tsx) · ui — A finished answer wired to its sources. Opening a citation shows the passage that was used. A source id that does not exist is skipped. Install: `npx shadcn@latest add @retana/cited-answer`.
 - [`prompt-library`](registry/ui/prompt-library.tsx) · ui — Saved prompts with blanks in the sentence. The finished sentence assembles underneath. It can be used only once every blank is filled. Install: `npx shadcn@latest add @retana/prompt-library`.
+- [`review-center`](registry/ui/review-center.tsx) · ui — The queue of what an agent wants signed, highest risk first. One item at a time, with the shaky span marked. Approve, edit, reject, or skip. Install: `npx shadcn@latest add @retana/review-center`.
+- [`permission-request`](registry/ui/permission-request.tsx) · ui — An agent asks for one right. The card says who, why, and exactly what will happen. Allow it once, for a while, or always. A destructive ask cannot be kept forever. Install: `npx shadcn@latest add @retana/permission-request`.
+- [`inline-diff`](registry/ui/inline-diff.tsx) · ui — A finished prose rewrite, word by word. Accept or reject each change. Until it is accepted, the original words stay. Install: `npx shadcn@latest add @retana/inline-diff`.
+- [`email-draft`](registry/ui/email-draft.tsx) · ui — An agent-written letter waiting for a person. Switch the recipient and the tone, edit the words, remove the file, then send or discard. Install: `npx shadcn@latest add @retana/email-draft`.
+- [`message-actions`](registry/ui/message-actions.tsx) · ui — The bar under a finished answer. Copy, try again, keep the versions, say why a thumb went down, or read it aloud. The host speaks and stores the note. Install: `npx shadcn@latest add @retana/message-actions`.
 
 ### Forms
 

@@ -1,0 +1,144 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "review-center",
+  "title": "Review center",
+  "author": "Eduardo Retana",
+  "description": "The queue of what an agent wants signed, highest risk first. One item at a time, with the shaky span marked. Approve, edit, reject, or skip.",
+  "registryDependencies": [
+    "badge",
+    "button",
+    "skeleton",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/review-center.tsx",
+      "content": "\"use client\"\n\n/**\n * One waiting item at a time, highest risk first, with the shaky spans marked.\n * Clean-room reading of a public behavior description. No Affect source, sample\n * data, icons, or assets were copied. The host owns the clock and the queue.\n */\n\nimport * as React from \"react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { Textarea } from \"@/components/ui/textarea\"\nimport { cn } from \"@/lib/utils\"\n\nexport const REVIEW_RISKS = [\"high\", \"medium\", \"low\"] as const\nexport const REVIEW_FILTERS = [\"all\", \"high\", \"unsure\"] as const\n\nexport type ReviewRisk = (typeof REVIEW_RISKS)[number]\nexport type ReviewFilter = (typeof REVIEW_FILTERS)[number]\nexport type ReviewDecision = \"approve\" | \"reject\"\n\nexport type ReviewSpan = { text: string; note?: string }\n\nexport type ReviewLine = { kind: \"same\" | \"add\" | \"remove\"; text: string; number?: number }\n\nexport type ReviewFile<TMeta = unknown> = {\n  path: string\n  added?: number\n  removed?: number\n  lines?: readonly ReviewLine[]\n  meta?: TMeta\n}\n\nexport type ReviewItem<TMeta = unknown> = {\n  id: string\n  title: string\n  agent: string\n  type: string\n  risk: ReviewRisk\n  confidence: number\n  waiting: string\n  late?: boolean\n  skipped?: boolean\n  reasoning?: string\n  body?: readonly ReviewSpan[]\n  files?: readonly ReviewFile<TMeta>[]\n  meta?: TMeta\n}\n\nexport type ReviewCenterLabels = {\n  title: string\n  progress: (done: number, total: number) => string\n  filter: string\n  filters: Record<ReviewFilter, string>\n  risk: Record<ReviewRisk, string>\n  confidence: (percent: number) => string\n  unsure: string\n  row: (title: string, type: string, risk: string, percent: number, waiting: string) => string\n  why: string\n  flags: (count: number) => string\n  files: string\n  approve: string\n  edit: string\n  save: string\n  cancel: string\n  reject: string\n  skip: string\n  undo: string\n  reasons: string\n  skipped: string\n  empty: string\n  emptyFilter: string\n  loading: string\n  approved: (title: string) => string\n  rejected: (title: string) => string\n  skippedNamed: (title: string) => string\n  undone: (title: string) => string\n  draft: string\n}\n\nexport type ReviewResult = { decision: ReviewDecision; reason?: string; text?: string }\n\nconst RISK_RANK: Record<ReviewRisk, number> = { high: 0, medium: 1, low: 2 }\n\nconst reviewLabels: ReviewCenterLabels = {\n  title: \"Review\",\n  progress: (done, total) => `${done} of ${total} reviewed`,\n  filter: \"Queue\",\n  filters: { all: \"All\", high: \"High risk\", unsure: \"Unsure\" },\n  risk: { high: \"High risk\", medium: \"Medium risk\", low: \"Low risk\" },\n  confidence: (percent) => `${percent}% sure`,\n  unsure: \"Unsure\",\n  row: (title, type, risk, percent, waiting) => `${title}, ${type}, ${risk}, ${percent}% sure, waiting ${waiting}`,\n  why: \"Why\",\n  flags: (count) => (count === 1 ? \"1 flagged span\" : `${count} flagged spans`),\n  files: \"Files\",\n  approve: \"Approve\",\n  edit: \"Edit\",\n  save: \"Save and approve\",\n  cancel: \"Cancel\",\n  reject: \"Reject\",\n  skip: \"Skip\",\n  undo: \"Undo\",\n  reasons: \"Why not\",\n  skipped: \"Skipped\",\n  empty: \"Nothing is waiting for review.\",\n  emptyFilter: \"Nothing in this queue matches.\",\n  loading: \"Loading the queue\",\n  approved: (title) => `Approved “${title}”`,\n  rejected: (title) => `Rejected “${title}”`,\n  skippedNamed: (title) => `Skipped “${title}”`,\n  undone: (title) => `Brought “${title}” back`,\n  draft: \"Edited text\",\n}\n\nfunction resolveLabels(partial?: Partial<ReviewCenterLabels>): ReviewCenterLabels {\n  return {\n    ...reviewLabels,\n    ...partial,\n    filters: { ...reviewLabels.filters, ...partial?.filters },\n    risk: { ...reviewLabels.risk, ...partial?.risk },\n  }\n}\n\nexport function reviewQueue<T extends Pick<ReviewItem, \"id\" | \"risk\" | \"confidence\">>(\n  items: readonly T[],\n  filter: ReviewFilter = \"all\",\n  lowConfidence = 0.7,\n) {\n  return items\n    .filter((item) => {\n      if (filter === \"high\") return item.risk === \"high\"\n      if (filter === \"unsure\") return item.confidence < lowConfidence\n      return true\n    })\n    .slice()\n    .sort((a, b) => RISK_RANK[a.risk] - RISK_RANK[b.risk])\n}\n\nfunction percentOf(confidence: number) {\n  return Math.round(Math.min(1, Math.max(0, confidence)) * 100)\n}\n\nfunction plainText(body: readonly ReviewSpan[] | undefined) {\n  return (body ?? []).map((span) => span.text).join(\"\")\n}\n\nexport function ReviewCenter<TMeta = unknown>({\n  items = [],\n  reviewed = 0,\n  total,\n  filter: filterProp,\n  defaultFilter = \"all\",\n  onFilterChange,\n  selectedId,\n  onSelect,\n  lowConfidence = 0.7,\n  reasons = [\"The deposit does not match\", \"The tone is off\", \"It should not go out yet\", \"Another reason\"],\n  undo,\n  loading = false,\n  error,\n  title,\n  onDecide,\n  onSkip,\n  onUndo,\n  className,\n  labels: labelOverrides,\n}: {\n  items?: readonly ReviewItem<TMeta>[]\n  reviewed?: number\n  total?: number\n  filter?: ReviewFilter\n  defaultFilter?: ReviewFilter\n  onFilterChange?: (filter: ReviewFilter) => void\n  selectedId?: string | null\n  onSelect?: (id: string) => void\n  lowConfidence?: number\n  reasons?: readonly string[]\n  undo?: { title: string } | null\n  loading?: boolean\n  error?: string\n  title?: string\n  onDecide?: (id: string, result: ReviewResult) => void\n  onSkip?: (id: string) => void\n  onUndo?: () => void\n  className?: string\n  labels?: Partial<ReviewCenterLabels>\n}) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const heading = title ?? labels.title\n  const [localFilter, setLocalFilter] = React.useState(defaultFilter)\n  const filter = filterProp ?? localFilter\n  const queue = reviewQueue(items, filter, lowConfidence)\n  const active = queue.find((item) => item.id === selectedId) ?? queue[0] ?? null\n  const [rejecting, setRejecting] = React.useState(false)\n  const [editing, setEditing] = React.useState(false)\n  const [draft, setDraft] = React.useState(\"\")\n  const [noteId, setNoteId] = React.useState<number | null>(null)\n  const [live, setLive] = React.useState(\"\")\n  const count = total ?? reviewed + items.length\n  const flagIndexes = (active?.body ?? []).flatMap((span, index) => (span.note ? [index] : []))\n\n  function chooseFilter(next: ReviewFilter) {\n    if (filterProp == null) setLocalFilter(next)\n    onFilterChange?.(next)\n    setRejecting(false)\n    setEditing(false)\n  }\n\n  function choose(id: string) {\n    onSelect?.(id)\n    setRejecting(false)\n    setEditing(false)\n    setNoteId(null)\n  }\n\n  function move(step: number) {\n    if (!active) return\n    const index = queue.findIndex((item) => item.id === active.id)\n    const next = queue[index + step]\n    if (next) choose(next.id)\n  }\n\n  function approve(text?: string) {\n    if (!active) return\n    onDecide?.(active.id, { decision: \"approve\", text })\n    setLive(labels.approved(active.title))\n    setEditing(false)\n    setRejecting(false)\n  }\n\n  function reject(reason: string) {\n    if (!active) return\n    onDecide?.(active.id, { decision: \"reject\", reason })\n    setLive(labels.rejected(active.title))\n    setRejecting(false)\n  }\n\n  function skip() {\n    if (!active) return\n    onSkip?.(active.id)\n    setLive(labels.skippedNamed(active.title))\n  }\n\n  function onKeyDown(event: React.KeyboardEvent<HTMLElement>) {\n    const target = event.target as HTMLElement\n    if (target.closest(\"textarea, input\")) {\n      if (event.key === \"Escape\") {\n        event.preventDefault()\n        setEditing(false)\n      }\n      if (event.key === \"Enter\" && (event.metaKey || event.ctrlKey)) {\n        event.preventDefault()\n        approve(draft)\n      }\n      return\n    }\n    if (event.key === \"Escape\") {\n      event.preventDefault()\n      setRejecting(false)\n      setEditing(false)\n      setNoteId(null)\n      return\n    }\n    if (rejecting && /^[1-9]$/.test(event.key)) {\n      const reason = reasons[Number(event.key) - 1]\n      if (reason) {\n        event.preventDefault()\n        reject(reason)\n      }\n      return\n    }\n    const key = event.key.toLowerCase()\n    if (key === \"a\") {\n      event.preventDefault()\n      approve(editing ? draft : undefined)\n    } else if (key === \"e\") {\n      event.preventDefault()\n      setDraft(plainText(active?.body))\n      setEditing(true)\n      setRejecting(false)\n    } else if (key === \"r\") {\n      event.preventDefault()\n      setRejecting(true)\n      setEditing(false)\n    } else if (key === \"s\") {\n      event.preventDefault()\n      skip()\n    } else if (key === \"z\") {\n      event.preventDefault()\n      onUndo?.()\n      if (undo) setLive(labels.undone(undo.title))\n    } else if (key === \"j\" || event.key === \"ArrowDown\") {\n      event.preventDefault()\n      move(1)\n    } else if (key === \"k\" || event.key === \"ArrowUp\") {\n      event.preventDefault()\n      move(-1)\n    } else if (key === \"f\" && flagIndexes.length > 0) {\n      event.preventDefault()\n      setNoteId((current) => {\n        const place = flagIndexes.indexOf(current ?? -1)\n        return flagIndexes[(place + 1) % flagIndexes.length] ?? null\n      })\n    }\n  }\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      onKeyDown={onKeyDown}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className)}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        <Badge variant=\"secondary\">{labels.progress(reviewed, count)}</Badge>\n      </header>\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-40 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && items.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : items.length === 0 ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <div className=\"flex flex-col gap-3\">\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          <div role=\"radiogroup\" aria-label={labels.filter} className=\"flex flex-wrap gap-1\">\n            {REVIEW_FILTERS.map((option) => (\n              <button\n                key={option}\n                type=\"button\"\n                role=\"radio\"\n                aria-checked={filter === option}\n                className={cn(\n                  \"rounded-md px-2 py-1 text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\",\n                  filter === option ? \"bg-foreground text-background\" : \"text-muted-foreground hover:bg-muted\",\n                )}\n                onClick={() => chooseFilter(option)}\n              >\n                {labels.filters[option]}\n              </button>\n            ))}\n          </div>\n          {queue.length === 0 ? (\n            <p className=\"text-muted-foreground\">{labels.emptyFilter}</p>\n          ) : (\n            <div className=\"flex flex-col gap-3 md:flex-row\">\n              <ul aria-label={heading} className=\"flex max-h-48 flex-col gap-1 overflow-auto md:w-60 md:max-h-80\">\n                {queue.map((item) => {\n                  const percent = percentOf(item.confidence)\n                  const current = item.id === active?.id\n                  return (\n                    <li key={item.id}>\n                      <button\n                        type=\"button\"\n                        aria-current={current ? \"true\" : undefined}\n                        aria-label={labels.row(item.title, item.type, labels.risk[item.risk], percent, item.waiting)}\n                        className={cn(\n                          \"flex w-full flex-col gap-1 rounded-md border px-2 py-2 text-start focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\",\n                          current ? \"border-ring bg-muted\" : \"border-border\",\n                        )}\n                        onClick={() => choose(item.id)}\n                      >\n                        <span className=\"font-medium\">{item.title}</span>\n                        <span className=\"flex flex-wrap items-center gap-1 text-xs text-muted-foreground\">\n                          <span>{item.type}</span>\n                          <span className={item.late ? \"text-destructive\" : undefined}>{item.waiting}</span>\n                          {item.skipped ? <Badge variant=\"outline\">{labels.skipped}</Badge> : null}\n                        </span>\n                      </button>\n                    </li>\n                  )\n                })}\n              </ul>\n              {active ? (\n                <div className=\"flex min-w-0 flex-1 flex-col gap-3\">\n                  <div className=\"flex flex-wrap items-center gap-2\">\n                    <p className=\"font-medium\">{active.agent}</p>\n                    <Badge variant={active.risk === \"high\" ? \"destructive\" : \"outline\"}>{labels.risk[active.risk]}</Badge>\n                    {active.confidence < lowConfidence ? <Badge variant=\"outline\">{labels.unsure}</Badge> : null}\n                    <span className=\"text-xs text-muted-foreground\">{labels.confidence(percentOf(active.confidence))}</span>\n                  </div>\n                  {active.reasoning ? (\n                    <p>\n                      <span className=\"text-muted-foreground\">{labels.why}. </span>\n                      {active.reasoning}\n                    </p>\n                  ) : null}\n                  {flagIndexes.length > 0 ? <p className=\"text-xs text-muted-foreground\">{labels.flags(flagIndexes.length)}</p> : null}\n                  {editing ? (\n                    <Textarea aria-label={labels.draft} value={draft} onChange={(event) => setDraft(event.target.value)} />\n                  ) : active.body && active.body.length > 0 ? (\n                    <p className=\"leading-6\">\n                      {active.body.map((span, index) =>\n                        span.note ? (\n                          <React.Fragment key={`${span.text}-${index}`}>\n                            <button\n                              type=\"button\"\n                              className=\"rounded-sm bg-chart-4/20 underline decoration-chart-4 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n                              aria-describedby={`${titleId}-note-${index}`}\n                              onClick={() => setNoteId(noteId === index ? null : index)}\n                            >\n                              {span.text}\n                            </button>\n                            <span id={`${titleId}-note-${index}`} className={noteId === index ? \"mt-1 block text-xs\" : \"sr-only\"}>\n                              {span.note}\n                            </span>\n                          </React.Fragment>\n                        ) : (\n                          <span key={`${span.text}-${index}`}>{span.text}</span>\n                        ),\n                      )}\n                    </p>\n                  ) : null}\n                  {active.files && active.files.length > 0 ? (\n                    <div className=\"flex flex-col gap-2\">\n                      <h3 className=\"text-xs font-medium text-muted-foreground\">{labels.files}</h3>\n                      <ul className=\"flex flex-col gap-2\">\n                        {active.files.map((file) => (\n                          <li key={file.path} className=\"min-w-0\">\n                            <p className=\"flex flex-wrap gap-2 text-xs\">\n                              <span className=\"font-medium\">{file.path}</span>\n                              <span className=\"text-primary\">+{file.added ?? 0}</span>\n                              <span className=\"text-destructive\">−{file.removed ?? 0}</span>\n                            </p>\n                            {file.lines ? (\n                              <pre className=\"mt-1 overflow-x-auto rounded-md border border-border p-2 text-xs\">\n                                {file.lines.map((line, index) => (\n                                  <div\n                                    key={`${line.kind}-${index}`}\n                                    className={cn(\n                                      \"flex gap-2\",\n                                      line.kind === \"add\" && \"bg-primary/10\",\n                                      line.kind === \"remove\" && \"bg-destructive/10\",\n                                    )}\n                                  >\n                                    <span className=\"w-6 shrink-0 text-end text-muted-foreground\">{line.number ?? \"\"}</span>\n                                    <span>\n                                      {line.kind === \"add\" ? \"+\" : line.kind === \"remove\" ? \"−\" : \" \"} {line.text}\n                                    </span>\n                                  </div>\n                                ))}\n                              </pre>\n                            ) : null}\n                          </li>\n                        ))}\n                      </ul>\n                    </div>\n                  ) : null}\n                  {rejecting ? (\n                    <div role=\"group\" aria-label={labels.reasons} className=\"flex flex-wrap gap-1\">\n                      {reasons.map((reason, index) => (\n                        <Button key={reason} type=\"button\" size=\"sm\" variant=\"outline\" className=\"h-auto whitespace-normal\" onClick={() => reject(reason)}>\n                          {index + 1}. {reason}\n                        </Button>\n                      ))}\n                    </div>\n                  ) : null}\n                  <div className=\"flex flex-wrap gap-2\">\n                    {editing ? (\n                      <Button type=\"button\" size=\"sm\" aria-keyshortcuts=\"Control+Enter\" onClick={() => approve(draft)}>\n                        {labels.save}\n                      </Button>\n                    ) : (\n                      <Button type=\"button\" size=\"sm\" aria-keyshortcuts=\"A\" onClick={() => approve()}>\n                        {labels.approve}\n                      </Button>\n                    )}\n                    <Button\n                      type=\"button\"\n                      size=\"sm\"\n                      variant=\"outline\"\n                      aria-keyshortcuts=\"E\"\n                      onClick={() => {\n                        setDraft(plainText(active.body))\n                        setEditing((value) => !value)\n                        setRejecting(false)\n                      }}\n                    >\n                      {editing ? labels.cancel : labels.edit}\n                    </Button>\n                    <Button type=\"button\" size=\"sm\" variant=\"outline\" aria-keyshortcuts=\"R\" aria-expanded={rejecting} onClick={() => setRejecting((value) => !value)}>\n                      {labels.reject}\n                    </Button>\n                    <Button type=\"button\" size=\"sm\" variant=\"outline\" aria-keyshortcuts=\"S\" onClick={skip}>\n                      {labels.skip}\n                    </Button>\n                  </div>\n                </div>\n              ) : null}\n            </div>\n          )}\n          {undo ? (\n            <div className=\"flex flex-wrap items-center gap-2 rounded-lg border border-border px-3 py-2\">\n              <p className=\"text-xs\">{labels.undone(undo.title)}</p>\n              <Button type=\"button\" size=\"sm\" variant=\"outline\" className=\"ms-auto\" aria-keyshortcuts=\"Control+Z\" onClick={() => onUndo?.()}>\n                {labels.undo}\n              </Button>\n            </div>\n          ) : null}\n        </div>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/review-center.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Centro de revisión",
+    "descriptionEs": "La fila de lo que un agente quiere firmar, primero lo de más riesgo. Una pieza a la vez, con el tramo dudoso marcado. Aprobar, editar, rechazar o saltar.",
+    "preview": "app/examples/review-center/preview.tsx",
+    "previewHref": "/examples/review-center",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "files",
+        "label": "Archivo",
+        "labelEn": "File"
+      },
+      {
+        "id": "unsure",
+        "label": "En duda",
+        "labelEn": "Unsure"
+      },
+      {
+        "id": "skipped",
+        "label": "Saltado",
+        "labelEn": "Skipped"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Correo a Celaya",
+        "href": "/examples/review-center",
+        "description": "Tres piezas del taller. El anticipo dudoso queda marcado."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/review-center/stress",
+        "description": "Vacío, textos largos, RTL y diez piezas."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/review-center?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/review-center?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/review-center?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/review-center?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Archivo",
+        "href": "/examples/review-center?scene=files",
+        "description": "File"
+      },
+      {
+        "title": "En duda",
+        "href": "/examples/review-center?scene=unsure",
+        "description": "Unsure"
+      },
+      {
+        "title": "Saltado",
+        "href": "/examples/review-center?scene=skipped",
+        "description": "Skipped"
+      }
+    ],
+    "usage": "<ReviewCenter items={items} selectedId={id} onSelect={setId} onDecide={decide} onSkip={skip} onUndo={undo} />",
+    "api": [
+      {
+        "name": "items",
+        "type": "ReviewItem<TMeta>[]",
+        "description": "id, title, agent, type, risk, confidence, waiting, body, files. meta is opaque. The host formats the wait; the piece does not run a clock."
+      },
+      {
+        "name": "onDecide / onSkip / onUndo",
+        "type": "callbacks",
+        "description": "The host owns the queue. A decision result is approve or reject, plus an optional reason or edited text."
+      },
+      {
+        "name": "filter / selectedId",
+        "type": "all | high | unsure / string",
+        "description": "High risk sorts first. Unsure is below the confidence line, 0.7 by default."
+      },
+      {
+        "name": "reasons / undo",
+        "type": "string[] / { title }",
+        "description": "Rejection reasons are the host's. Undo shows whatever the host passes back."
+      },
+      {
+        "name": "loading / error / labels",
+        "type": "boolean / string / Partial<ReviewCenterLabels>",
+        "description": "Skeleton, alert, and chrome copy. English is the default."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. No es la bandeja de tareas ni una sola compuerta: es la fila de lo que todavía no se firma.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

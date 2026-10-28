@@ -1,0 +1,138 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "message-actions",
+  "title": "Message actions",
+  "author": "Eduardo Retana",
+  "description": "The bar under a finished answer. Copy, try again, keep the versions, say why a thumb went down, or read it aloud. The host speaks and stores the note.",
+  "registryDependencies": [
+    "button",
+    "input",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/message-actions.tsx",
+      "content": "\"use client\"\n\n/**\n * The bar under a finished assistant message. Clean-room reading of a public\n * behavior description. No Affect source, sample data, icons, or assets were\n * copied. Copy, speech, and the next version stay with the host. No timer.\n */\n\nimport * as React from \"react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Input } from \"@/components/ui/input\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport const MESSAGE_ACTIONS = [\"copy\", \"regenerate\", \"feedback\", \"speak\"] as const\n\nexport type MessageActionKey = (typeof MESSAGE_ACTIONS)[number]\nexport type MessageVote = \"up\" | \"down\" | null\n\nexport type MessageActionsLabels = {\n  bar: string\n  copy: string\n  copied: string\n  again: string\n  againBusy: string\n  up: string\n  down: string\n  why: string\n  send: string\n  other: string\n  otherField: string\n  speak: string\n  stop: string\n  reading: string\n  version: (current: number, total: number) => string\n  previous: string\n  next: string\n  thanks: string\n  empty: string\n  loading: string\n  ready: string\n}\n\nconst actionLabels: MessageActionsLabels = {\n  bar: \"Message actions\",\n  copy: \"Copy\",\n  copied: \"Copied\",\n  again: \"Try again\",\n  againBusy: \"Writing another version\",\n  up: \"Good answer\",\n  down: \"Poor answer\",\n  why: \"Why\",\n  send: \"Send the note\",\n  other: \"Other\",\n  otherField: \"Your own reason\",\n  speak: \"Read aloud\",\n  stop: \"Stop reading\",\n  reading: \"Reading aloud\",\n  version: (current, total) => `Version ${current} of ${total}`,\n  previous: \"Previous version\",\n  next: \"Next version\",\n  thanks: \"Thanks, the note was saved\",\n  empty: \"No message to act on.\",\n  loading: \"Loading the message\",\n  ready: \"Another version is ready\",\n}\n\nfunction resolveLabels(partial?: Partial<MessageActionsLabels>): MessageActionsLabels {\n  return { ...actionLabels, ...partial }\n}\n\nexport function messageCount(versions: number | readonly string[] | undefined) {\n  if (typeof versions === \"number\") return versions\n  return versions?.length ?? 0\n}\n\nexport function messageText(text: string, versions: number | readonly string[] | undefined, version: number) {\n  if (Array.isArray(versions)) return versions[version] ?? text\n  return text\n}\n\nexport function MessageActions({\n  text = \"\",\n  versions = 1,\n  version = 0,\n  onVersionChange,\n  actions = MESSAGE_ACTIONS,\n  onCopy,\n  onRegenerate,\n  regenerating = false,\n  feedback = null,\n  onFeedback,\n  reasons = [\"The deposit is wrong\", \"It runs long\", \"It misses the kiln\", \"Other\"],\n  speaking = false,\n  onSpeak,\n  quiet = false,\n  loading = false,\n  error,\n  className,\n  labels: labelOverrides,\n}: {\n  text?: string\n  versions?: number | readonly string[]\n  version?: number\n  onVersionChange?: (index: number) => void\n  actions?: readonly MessageActionKey[]\n  onCopy?: (text: string) => void\n  onRegenerate?: () => void\n  regenerating?: boolean\n  feedback?: MessageVote\n  onFeedback?: (kind: MessageVote, reason?: string) => void\n  reasons?: readonly string[]\n  speaking?: boolean\n  onSpeak?: (playing: boolean) => void\n  quiet?: boolean\n  loading?: boolean\n  error?: string\n  className?: string\n  labels?: Partial<MessageActionsLabels>\n}) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const total = Math.max(messageCount(versions), text ? 1 : 0)\n  const shown = messageText(text, versions, version)\n  const [live, setLive] = React.useState(\"\")\n  const [reason, setReason] = React.useState(reasons[0] ?? \"\")\n  const [custom, setCustom] = React.useState(\"\")\n  const other = reasons[reasons.length - 1] ?? \"\"\n  const down = feedback === \"down\"\n\n  function copy() {\n    onCopy?.(shown)\n    setLive(labels.copied)\n  }\n\n  function vote(kind: MessageVote) {\n    const next = feedback === kind ? null : kind\n    onFeedback?.(next)\n    if (next !== \"down\") setLive(next === \"up\" ? labels.up : \"\")\n  }\n\n  function sendReason() {\n    const note = reason === other ? custom.trim() || other : reason\n    onFeedback?.(\"down\", note)\n    setLive(labels.thanks)\n  }\n\n  return (\n    <section aria-labelledby={titleId} aria-busy={loading || undefined} className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className)}>\n      <h2 id={titleId} className=\"sr-only\">\n        {labels.bar}\n      </h2>\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-16 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && !shown ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : !shown ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <div className=\"flex flex-col gap-3\">\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          <p className=\"leading-6\">{shown}</p>\n          <div\n            role=\"toolbar\"\n            aria-label={labels.bar}\n            className={cn(\"flex flex-wrap items-center gap-1\", quiet && \"opacity-100 [@media(hover:hover)]:opacity-40 hover:opacity-100 focus-within:opacity-100\")}\n          >\n            {actions.includes(\"copy\") ? (\n              <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={copy}>\n                {labels.copy}\n              </Button>\n            ) : null}\n            {actions.includes(\"regenerate\") ? (\n              <Button type=\"button\" size=\"sm\" variant=\"outline\" aria-busy={regenerating || undefined} onClick={() => onRegenerate?.()}>\n                {regenerating ? <span className=\"size-3 animate-spin rounded-full border border-current border-t-transparent motion-reduce:animate-none\" aria-hidden=\"true\" /> : null}\n                {regenerating ? labels.againBusy : labels.again}\n              </Button>\n            ) : null}\n            {actions.includes(\"regenerate\") && total > 1 ? (\n              <span className=\"inline-flex items-center gap-1\">\n                <Button type=\"button\" size=\"sm\" variant=\"outline\" aria-label={labels.previous} disabled={version <= 0} onClick={() => onVersionChange?.(version - 1)}>\n                  ‹\n                </Button>\n                <span className=\"text-xs\">{labels.version(version + 1, total)}</span>\n                <Button type=\"button\" size=\"sm\" variant=\"outline\" aria-label={labels.next} disabled={version >= total - 1} onClick={() => onVersionChange?.(version + 1)}>\n                  ›\n                </Button>\n              </span>\n            ) : null}\n            {actions.includes(\"feedback\") ? (\n              <>\n                <Button type=\"button\" size=\"sm\" variant={feedback === \"up\" ? \"default\" : \"outline\"} aria-pressed={feedback === \"up\"} onClick={() => vote(\"up\")}>\n                  {labels.up}\n                </Button>\n                <Button type=\"button\" size=\"sm\" variant={feedback === \"down\" ? \"default\" : \"outline\"} aria-pressed={feedback === \"down\"} aria-expanded={down} onClick={() => vote(\"down\")}>\n                  {labels.down}\n                </Button>\n              </>\n            ) : null}\n            {actions.includes(\"speak\") ? (\n              <Button type=\"button\" size=\"sm\" variant={speaking ? \"default\" : \"outline\"} aria-pressed={speaking} onClick={() => onSpeak?.(!speaking)}>\n                {speaking ? (\n                  <span aria-hidden=\"true\" className=\"inline-flex items-end gap-0.5\">\n                    {Array.from({ length: 4 }, (_, index) => (\n                      <span key={index} className=\"h-3 w-0.5 bg-chart-2 motion-safe:animate-pulse motion-reduce:animate-none\" />\n                    ))}\n                  </span>\n                ) : null}\n                {speaking ? labels.stop : labels.speak}\n              </Button>\n            ) : null}\n          </div>\n          {speaking ? <p role=\"status\">{labels.reading}</p> : null}\n          {down ? (\n            <div className=\"flex flex-col gap-2\">\n              <div role=\"group\" aria-label={labels.why} className=\"flex flex-wrap gap-1\">\n                {reasons.map((item) => (\n                  <button\n                    key={item}\n                    type=\"button\"\n                    aria-pressed={reason === item}\n                    className={cn(\n                      \"rounded-md border px-2 py-1 text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\",\n                      reason === item ? \"border-ring bg-muted\" : \"border-border\",\n                    )}\n                    onClick={() => setReason(item)}\n                  >\n                    {item}\n                  </button>\n                ))}\n              </div>\n              {reason === other ? (\n                <Input aria-label={labels.otherField} value={custom} onChange={(event) => setCustom(event.target.value)} onKeyDown={(event) => event.key === \"Enter\" && sendReason()} />\n              ) : null}\n              <Button type=\"button\" size=\"sm\" className=\"self-start\" onClick={sendReason}>\n                {labels.send}\n              </Button>\n            </div>\n          ) : null}\n        </div>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/message-actions.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Acciones del mensaje",
+    "descriptionEs": "La barra bajo una respuesta ya cerrada. Copiar, pedir otra, conservar las versiones, decir por qué no convence o leerla. El anfitrión habla y guarda la nota.",
+    "preview": "app/examples/message-actions/preview.tsx",
+    "previewHref": "/examples/message-actions",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "down",
+        "label": "En contra",
+        "labelEn": "Down"
+      },
+      {
+        "id": "speaking",
+        "label": "Leyendo",
+        "labelEn": "Speaking"
+      },
+      {
+        "id": "quiet",
+        "label": "Quieta",
+        "labelEn": "Quiet"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Respuesta del pedido",
+        "href": "/examples/message-actions",
+        "description": "Dos versiones del anticipo y de la entrega en León."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/message-actions/stress",
+        "description": "Vacío, textos largos, RTL y diez versiones."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/message-actions?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/message-actions?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/message-actions?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/message-actions?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "En contra",
+        "href": "/examples/message-actions?scene=down",
+        "description": "Down"
+      },
+      {
+        "title": "Leyendo",
+        "href": "/examples/message-actions?scene=speaking",
+        "description": "Speaking"
+      },
+      {
+        "title": "Quieta",
+        "href": "/examples/message-actions?scene=quiet",
+        "description": "Quiet"
+      }
+    ],
+    "usage": "<MessageActions versions={versions} version={version} onVersionChange={setVersion} onCopy={copy} onRegenerate={again} onFeedback={note} speaking={speaking} onSpeak={setSpeaking} />",
+    "api": [
+      {
+        "name": "text / versions / version",
+        "type": "string / string[] | number / number",
+        "description": "From two versions on, the switcher appears. The host adds a version after regenerate."
+      },
+      {
+        "name": "onCopy / onRegenerate / onFeedback / onSpeak",
+        "type": "callbacks",
+        "description": "Copy does not touch the clipboard. Speech does not start a timer. A down vote can carry a reason."
+      },
+      {
+        "name": "quiet / regenerating / speaking",
+        "type": "boolean",
+        "description": "Quiet fades until hover or focus on a device that hovers. The bars stay still when motion is reduced."
+      },
+      {
+        "name": "loading / error / labels",
+        "type": "boolean / string / Partial<MessageActionsLabels>",
+        "description": "Skeleton, alert, and chrome copy. English is the default."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Va bajo una respuesta ya cerrada, no mientras se está escribiendo.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

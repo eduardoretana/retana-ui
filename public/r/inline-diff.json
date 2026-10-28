@@ -1,0 +1,112 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "inline-diff",
+  "title": "Inline diff",
+  "author": "Eduardo Retana",
+  "description": "A finished prose rewrite, word by word. Accept or reject each change. Until it is accepted, the original words stay.",
+  "registryDependencies": [
+    "button",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/inline-diff.tsx",
+      "content": "\"use client\"\n\n/**\n * A finished prose rewrite, word by word. Each change is accepted or rejected.\n * Clean-room reading of a public behavior description. No Affect source, sample\n * data, icons, or assets were copied. Pending words stay the original ones.\n */\n\nimport * as React from \"react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport type DiffDecision = \"accept\" | \"reject\"\n\nexport type DiffSegment =\n  | { type: \"same\"; text: string }\n  | { type: \"change\"; id: string; remove: string; insert: string }\n\nexport type InlineDiffLabels = {\n  label: string\n  suggestion: (index: number, total: number, remove: string, insert: string) => string\n  accept: string\n  reject: string\n  acceptAll: string\n  rejectAll: string\n  undo: string\n  previous: string\n  next: string\n  done: string\n  empty: string\n  loading: string\n  accepted: (left: number) => string\n  rejected: (left: number) => string\n}\n\nconst diffLabels: InlineDiffLabels = {\n  label: \"Suggested edit\",\n  suggestion: (index, total, remove, insert) => {\n    const from = remove.trim() || \"nothing\"\n    const to = insert.trim() || \"nothing\"\n    return `Suggestion ${index} of ${total}: replace “${from}” with “${to}”. Press Y to accept, N to reject`\n  },\n  accept: \"Accept\",\n  reject: \"Reject\",\n  acceptAll: \"Accept all\",\n  rejectAll: \"Reject all\",\n  undo: \"Undo\",\n  previous: \"Previous change\",\n  next: \"Next change\",\n  done: \"All changes reviewed\",\n  empty: \"Nothing to review.\",\n  loading: \"Loading the suggestion\",\n  accepted: (left) => (left === 0 ? \"Accepted. None left\" : `Accepted. ${left} left`),\n  rejected: (left) => (left === 0 ? \"Rejected. None left\" : `Rejected. ${left} left`),\n}\n\nfunction resolveLabels(partial?: Partial<InlineDiffLabels>): InlineDiffLabels {\n  return { ...diffLabels, ...partial }\n}\n\nfunction tokens(value: string) {\n  return value.match(/\\s+|[^\\s]+/g) ?? []\n}\n\nexport function diffWords(original: string, suggested: string): DiffSegment[] {\n  const left = tokens(original)\n  const right = tokens(suggested)\n  const rows = left.length\n  const cols = right.length\n  const scores: number[][] = Array.from({ length: rows + 1 }, () => Array(cols + 1).fill(0))\n  for (let row = rows - 1; row >= 0; row -= 1) {\n    for (let col = cols - 1; col >= 0; col -= 1) {\n      scores[row]![col] = left[row] === right[col] ? (scores[row + 1]![col + 1] ?? 0) + 1 : Math.max(scores[row + 1]![col] ?? 0, scores[row]![col + 1] ?? 0)\n    }\n  }\n  const raw: Array<{ type: \"same\" | \"remove\" | \"insert\"; text: string }> = []\n  let row = 0\n  let col = 0\n  while (row < rows && col < cols) {\n    if (left[row] === right[col]) {\n      raw.push({ type: \"same\", text: left[row]! })\n      row += 1\n      col += 1\n    } else if ((scores[row + 1]![col] ?? 0) >= (scores[row]![col + 1] ?? 0)) {\n      raw.push({ type: \"remove\", text: left[row]! })\n      row += 1\n    } else {\n      raw.push({ type: \"insert\", text: right[col]! })\n      col += 1\n    }\n  }\n  while (row < rows) {\n    raw.push({ type: \"remove\", text: left[row]! })\n    row += 1\n  }\n  while (col < cols) {\n    raw.push({ type: \"insert\", text: right[col]! })\n    col += 1\n  }\n  const segments: DiffSegment[] = []\n  let change = 0\n  for (let cursor = 0; cursor < raw.length; ) {\n    if (raw[cursor]?.type === \"same\") {\n      let text = \"\"\n      while (raw[cursor]?.type === \"same\") {\n        text += raw[cursor]!.text\n        cursor += 1\n      }\n      segments.push({ type: \"same\", text })\n      continue\n    }\n    let remove = \"\"\n    let insert = \"\"\n    while (cursor < raw.length && raw[cursor]?.type !== \"same\") {\n      if (raw[cursor]?.type === \"remove\") remove += raw[cursor]!.text\n      else insert += raw[cursor]!.text\n      cursor += 1\n    }\n    segments.push({ type: \"change\", id: `c${change}`, remove, insert })\n    change += 1\n  }\n  return segments\n}\n\nexport function diffText(segments: readonly DiffSegment[], decisions: Readonly<Record<string, DiffDecision>> = {}) {\n  return segments\n    .map((segment) => {\n      if (segment.type === \"same\") return segment.text\n      return decisions[segment.id] === \"accept\" ? segment.insert : segment.remove\n    })\n    .join(\"\")\n}\n\nexport function InlineDiff({\n  original = \"\",\n  suggested = \"\",\n  changes,\n  decisions = {},\n  label,\n  loading = false,\n  error,\n  onDecide,\n  onDecideAll,\n  onUndo,\n  className,\n  labels: labelOverrides,\n}: {\n  original?: string\n  suggested?: string\n  changes?: readonly DiffSegment[]\n  decisions?: Readonly<Record<string, DiffDecision>>\n  label?: string\n  loading?: boolean\n  error?: string\n  onDecide?: (id: string, decision: DiffDecision | \"undo\") => void\n  onDecideAll?: (decision: DiffDecision) => void\n  onUndo?: () => void\n  className?: string\n  labels?: Partial<InlineDiffLabels>\n}) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const segments = changes ?? diffWords(original, suggested)\n  const edits = segments.filter((segment): segment is Extract<DiffSegment, { type: \"change\" }> => segment.type === \"change\")\n  const pending = edits.filter((segment) => !decisions[segment.id])\n  const [hot, setHot] = React.useState<string | null>(pending[0]?.id ?? null)\n  const active = pending.find((segment) => segment.id === hot) ?? pending[0] ?? null\n  const [live, setLive] = React.useState(\"\")\n  const refs = React.useRef(new Map<string, HTMLButtonElement>())\n\n  function focusId(id: string | null) {\n    if (!id) return\n    requestAnimationFrame(() => refs.current.get(id)?.focus())\n  }\n\n  function decide(id: string, decision: DiffDecision) {\n    onDecide?.(id, decision)\n    const left = pending.filter((segment) => segment.id !== id)\n    setLive((decision === \"accept\" ? labels.accepted : labels.rejected)(left.length))\n    const next = left[0]?.id ?? null\n    setHot(next)\n    focusId(next)\n  }\n\n  function step(direction: number) {\n    if (pending.length === 0) return\n    const index = Math.max(0, pending.findIndex((segment) => segment.id === active?.id))\n    const next = pending[(index + direction + pending.length) % pending.length]\n    if (!next) return\n    setHot(next.id)\n    focusId(next.id)\n  }\n\n  return (\n    <section aria-labelledby={titleId} aria-busy={loading || undefined} className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className)}>\n      <h2 id={titleId} className=\"text-xs font-medium text-muted-foreground\">\n        {label ?? labels.label}\n      </h2>\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-24 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && edits.length === 0 && !original ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : edits.length === 0 ? (\n        <p className=\"text-muted-foreground\">{error || labels.empty}</p>\n      ) : (\n        <div className=\"flex flex-col gap-3\">\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          <p className=\"leading-7\">\n            {segments.map((segment, index) => {\n              if (segment.type === \"same\") return <span key={`same-${index}`}>{segment.text}</span>\n              const decision = decisions[segment.id]\n              if (decision === \"accept\") return <span key={segment.id}>{segment.insert}</span>\n              if (decision === \"reject\") return <span key={segment.id}>{segment.remove}</span>\n              const place = edits.findIndex((edit) => edit.id === segment.id) + 1\n              return (\n                <button\n                  key={segment.id}\n                  type=\"button\"\n                  ref={(node) => {\n                    if (node) refs.current.set(segment.id, node)\n                    else refs.current.delete(segment.id)\n                  }}\n                  tabIndex={segment.id === active?.id ? 0 : -1}\n                  aria-label={labels.suggestion(place, edits.length, segment.remove, segment.insert)}\n                  className=\"mx-0.5 rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n                  onClick={() => setHot(segment.id)}\n                  onKeyDown={(event) => {\n                    const key = event.key.toLowerCase()\n                    if (key === \"y\" || event.key === \"Enter\") {\n                      event.preventDefault()\n                      decide(segment.id, \"accept\")\n                    } else if (key === \"n\" || event.key === \"Backspace\") {\n                      event.preventDefault()\n                      decide(segment.id, \"reject\")\n                    } else if (event.key === \"Escape\") {\n                      event.preventDefault()\n                      setHot(null)\n                    }\n                  }}\n                >\n                  {segment.remove ? <del className=\"rounded-sm bg-destructive/10 text-destructive no-underline line-through\">{segment.remove}</del> : null}\n                  {segment.insert ? <ins className=\"rounded-sm bg-primary/10 text-foreground no-underline\">{segment.insert}</ins> : null}\n                </button>\n              )\n            })}\n          </p>\n          {pending.length === 0 ? (\n            <p role=\"status\">{labels.done}</p>\n          ) : active ? (\n            <p className=\"text-xs text-muted-foreground\">{labels.suggestion(edits.findIndex((edit) => edit.id === active.id) + 1, edits.length, active.remove, active.insert)}</p>\n          ) : null}\n          <div className=\"flex flex-wrap gap-2\">\n            <Button type=\"button\" size=\"sm\" variant=\"outline\" aria-label={labels.previous} onClick={() => step(-1)} disabled={pending.length === 0}>\n              {labels.previous}\n            </Button>\n            <Button type=\"button\" size=\"sm\" variant=\"outline\" aria-label={labels.next} onClick={() => step(1)} disabled={pending.length === 0}>\n              {labels.next}\n            </Button>\n            <Button type=\"button\" size=\"sm\" onClick={() => active && decide(active.id, \"accept\")} disabled={!active}>\n              {labels.accept}\n            </Button>\n            <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={() => active && decide(active.id, \"reject\")} disabled={!active}>\n              {labels.reject}\n            </Button>\n            <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={() => onDecideAll?.(\"accept\")} disabled={pending.length === 0}>\n              {labels.acceptAll}\n            </Button>\n            <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={() => onDecideAll?.(\"reject\")} disabled={pending.length === 0}>\n              {labels.rejectAll}\n            </Button>\n            <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={() => onUndo?.()} disabled={Object.keys(decisions).length === 0}>\n              {labels.undo}\n            </Button>\n          </div>\n        </div>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/inline-diff.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Diff en la prosa",
+    "descriptionEs": "Una reescritura ya hecha, palabra por palabra. Cada cambio se acepta o se rechaza. Mientras no se acepte, se quedan las palabras de origen.",
+    "preview": "app/examples/inline-diff/preview.tsx",
+    "previewHref": "/examples/inline-diff",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "settled",
+        "label": "Revisado",
+        "labelEn": "Settled"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Entrega y esmalte",
+        "href": "/examples/inline-diff",
+        "description": "Quita el cobalto que se queda y mueve el viernes al lunes."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/inline-diff/stress",
+        "description": "Vacío, textos largos, RTL y diez cambios."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/inline-diff?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/inline-diff?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/inline-diff?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/inline-diff?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Revisado",
+        "href": "/examples/inline-diff?scene=settled",
+        "description": "Settled"
+      }
+    ],
+    "usage": "<InlineDiff original={original} suggested={suggested} decisions={decisions} onDecide={decide} onUndo={undo} />",
+    "api": [
+      {
+        "name": "original / suggested / changes",
+        "type": "string / DiffSegment[]",
+        "description": "Pass the two texts, or segments you already split. diffWords groups a removal and the words that replace it."
+      },
+      {
+        "name": "decisions / onDecide / onDecideAll / onUndo",
+        "type": "callbacks",
+        "description": "The host owns each accept or reject. Pending changes keep the original words. Accept all uses the suggestion."
+      },
+      {
+        "name": "loading / error / labels",
+        "type": "boolean / string / Partial<InlineDiffLabels>",
+        "description": "Skeleton, alert, and chrome copy. English is the default."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Es prosa, no un diff de código con números de línea.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,153 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "permission-request",
+  "title": "Permission request",
+  "author": "Eduardo Retana",
+  "description": "An agent asks for one right. The card says who, why, and exactly what will happen. Allow it once, for a while, or always. A destructive ask cannot be kept forever.",
+  "registryDependencies": [
+    "badge",
+    "button",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/permission-request.tsx",
+      "content": "\"use client\"\n\n/**\n * An agent asks for one right: who, why, and what will happen. Clean-room\n * reading of a public behavior description. No Affect source, sample data,\n * icons, or assets were copied. The host owns the grant and the clock.\n */\n\nimport * as React from \"react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport const PERMISSION_SCOPES = [\"once\", \"timed\", \"always\"] as const\nexport const PERMISSION_RISKS = [\"safe\", \"risky\", \"destructive\"] as const\n\nexport type PermissionScope = (typeof PERMISSION_SCOPES)[number]\nexport type PermissionRisk = (typeof PERMISSION_RISKS)[number]\n\nexport type PermissionPreview<TMeta = unknown> = {\n  id: string\n  label: string\n  meta?: string\n  itemMeta?: TMeta\n}\n\nexport type PermissionDecision = {\n  allow: boolean\n  scope?: PermissionScope\n  left?: string\n}\n\nexport type PermissionRequestLabels = {\n  title: (name: string, action: string) => string\n  reason: string\n  preview: string\n  more: (count: number) => string\n  less: string\n  scope: string\n  scopes: Record<PermissionScope, string>\n  allowNamed: (scope: PermissionScope, duration: string) => string\n  deny: string\n  allowed: (scope: PermissionScope, duration: string) => string\n  denied: string\n  left: (label: string) => string\n  revoke: string\n  again: string\n  empty: string\n  loading: string\n  risk: Record<PermissionRisk, string>\n}\n\nconst permissionLabels: PermissionRequestLabels = {\n  title: (name, action) => `${name} wants to ${action}`,\n  reason: \"Why\",\n  preview: \"What will happen\",\n  more: (count) => (count === 1 ? \"1 more\" : `${count} more`),\n  less: \"Show less\",\n  scope: \"How long\",\n  scopes: { once: \"Once\", timed: \"For a while\", always: \"Always\" },\n  allowNamed: (scope, duration) => (scope === \"once\" ? \"Allow once\" : scope === \"always\" ? \"Allow always\" : `Allow for ${duration}`),\n  deny: \"Don't allow\",\n  allowed: (scope, duration) => (scope === \"once\" ? \"Allowed once\" : scope === \"always\" ? \"Allowed always\" : `Allowed for ${duration}`),\n  denied: \"Not allowed\",\n  left: (label) => `${label} left`,\n  revoke: \"Revoke\",\n  again: \"Ask again\",\n  empty: \"Nothing is asking for permission.\",\n  loading: \"Loading the request\",\n  risk: { safe: \"Safe\", risky: \"Risky\", destructive: \"Destructive\" },\n}\n\nfunction resolveLabels(partial?: Partial<PermissionRequestLabels>): PermissionRequestLabels {\n  return {\n    ...permissionLabels,\n    ...partial,\n    scopes: { ...permissionLabels.scopes, ...partial?.scopes },\n    risk: { ...permissionLabels.risk, ...partial?.risk },\n  }\n}\n\nexport function permissionScopes(risk: PermissionRisk, scopes: readonly PermissionScope[] = PERMISSION_SCOPES) {\n  const next = scopes.filter((scope) => risk !== \"destructive\" || scope !== \"always\")\n  return next.length > 0 ? next : ([\"once\"] as PermissionScope[])\n}\n\nexport function PermissionRequest<TMeta = unknown>({\n  agent,\n  action,\n  target,\n  risk = \"risky\",\n  reason,\n  preview = [],\n  previewLimit = 3,\n  scopes,\n  scope: scopeProp,\n  defaultScope = \"once\",\n  onScopeChange,\n  duration = \"1 hour\",\n  decision = null,\n  onDecisionChange,\n  loading = false,\n  error,\n  className,\n  labels: labelOverrides,\n}: {\n  agent?: { name: string; meta?: TMeta }\n  action?: string\n  target?: string\n  risk?: PermissionRisk\n  reason?: string\n  preview?: readonly PermissionPreview<TMeta>[]\n  previewLimit?: number\n  scopes?: readonly PermissionScope[]\n  scope?: PermissionScope\n  defaultScope?: PermissionScope\n  onScopeChange?: (scope: PermissionScope) => void\n  duration?: string\n  decision?: PermissionDecision | null\n  onDecisionChange?: (decision: PermissionDecision | null) => void\n  loading?: boolean\n  error?: string\n  className?: string\n  labels?: Partial<PermissionRequestLabels>\n}) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const choices = permissionScopes(risk, scopes ?? PERMISSION_SCOPES)\n  const [localScope, setLocalScope] = React.useState(choices.includes(defaultScope) ? defaultScope : (choices[0] ?? \"once\"))\n  const scope = choices.includes(scopeProp ?? localScope) ? (scopeProp ?? localScope) : (choices[0] ?? \"once\")\n  const [open, setOpen] = React.useState(false)\n  const shown = open ? preview : preview.slice(0, previewLimit)\n  const hidden = Math.max(0, preview.length - shown.length)\n  const heading = agent && action ? labels.title(agent.name, action) : labels.empty\n\n  function choose(next: PermissionScope) {\n    if (!choices.includes(next)) return\n    if (scopeProp == null) setLocalScope(next)\n    onScopeChange?.(next)\n  }\n\n  function allow() {\n    onDecisionChange?.({ allow: true, scope })\n  }\n\n  function deny() {\n    onDecisionChange?.({ allow: false })\n  }\n\n  function onKeyDown(event: React.KeyboardEvent<HTMLElement>) {\n    const targetNode = event.target as HTMLElement\n    if (targetNode.closest(\"textarea, input\")) return\n    if (event.key === \"Escape\") {\n      event.preventDefault()\n      deny()\n      return\n    }\n    if ((event.key === \"ArrowRight\" || event.key === \"ArrowLeft\") && choices.length > 1) {\n      event.preventDefault()\n      const index = choices.indexOf(scope)\n      const step = event.key === \"ArrowRight\" ? 1 : -1\n      const next = choices[(index + step + choices.length) % choices.length]\n      if (next) choose(next)\n      return\n    }\n    if (event.key === \"Enter\" && !targetNode.closest(\"button\")) {\n      event.preventDefault()\n      allow()\n    }\n  }\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      onKeyDown={decision ? undefined : onKeyDown}\n      className={cn(\"flex w-full max-w-md flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className)}\n    >\n      {loading ? (\n        <div role=\"status\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-28 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && !action ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : !action || !agent ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : decision ? (\n        <div className=\"flex flex-wrap items-center gap-2\">\n          <h2 id={titleId} className=\"font-medium\">\n            {heading}\n          </h2>\n          <p role=\"status\" className=\"text-xs\">\n            {decision.allow ? labels.allowed(decision.scope ?? \"once\", duration) : labels.denied}\n            {decision.allow && decision.left ? ` · ${labels.left(decision.left)}` : \"\"}\n          </p>\n          <Button type=\"button\" size=\"sm\" variant=\"outline\" className=\"ms-auto\" onClick={() => onDecisionChange?.(null)}>\n            {decision.allow ? labels.revoke : labels.again}\n          </Button>\n        </div>\n      ) : (\n        <div className=\"flex flex-col gap-3\">\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          <header className=\"flex flex-col gap-1\">\n            <h2 id={titleId} className=\"font-medium\">\n              {heading}\n            </h2>\n            {target ? <p className=\"text-xs text-muted-foreground\">{target}</p> : null}\n            <Badge variant={risk === \"destructive\" ? \"destructive\" : risk === \"safe\" ? \"secondary\" : \"outline\"} className=\"self-start\">\n              {labels.risk[risk]}\n            </Badge>\n          </header>\n          {reason ? (\n            <p>\n              <span className=\"text-muted-foreground\">{labels.reason}. </span>\n              {reason}\n            </p>\n          ) : null}\n          {preview.length > 0 ? (\n            <div className=\"flex flex-col gap-1\">\n              <h3 className=\"text-xs font-medium text-muted-foreground\">\n                {labels.preview} {preview.length}\n              </h3>\n              <ul className=\"flex flex-col gap-1\">\n                {shown.map((row) => (\n                  <li key={row.id} className=\"flex flex-wrap items-baseline justify-between gap-2 rounded-md border border-border px-2 py-1\">\n                    <span className=\"min-w-0\">{row.label}</span>\n                    {row.meta ? <span className=\"text-xs text-muted-foreground\">{row.meta}</span> : null}\n                  </li>\n                ))}\n              </ul>\n              {preview.length > previewLimit ? (\n                <Button type=\"button\" size=\"sm\" variant=\"outline\" className=\"self-start\" onClick={() => setOpen((value) => !value)}>\n                  {open ? labels.less : labels.more(hidden)}\n                </Button>\n              ) : null}\n            </div>\n          ) : null}\n          {choices.length > 1 ? (\n            <div role=\"radiogroup\" aria-label={labels.scope} className=\"flex flex-wrap gap-1\">\n              {choices.map((option) => (\n                <button\n                  key={option}\n                  type=\"button\"\n                  role=\"radio\"\n                  aria-checked={scope === option}\n                  className={cn(\n                    \"rounded-md border px-2 py-1 text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\",\n                    scope === option ? \"border-ring bg-muted\" : \"border-border\",\n                  )}\n                  onClick={() => choose(option)}\n                >\n                  {labels.scopes[option]}\n                </button>\n              ))}\n            </div>\n          ) : null}\n          <div className=\"flex flex-wrap gap-2\">\n            <Button type=\"button\" size=\"sm\" variant={risk === \"destructive\" ? \"destructive\" : \"default\"} className=\"h-auto whitespace-normal\" aria-keyshortcuts=\"Enter\" onClick={allow}>\n              {labels.allowNamed(scope, duration)}\n            </Button>\n            <Button type=\"button\" size=\"sm\" variant=\"outline\" aria-keyshortcuts=\"Escape\" onClick={deny}>\n              {labels.deny}\n            </Button>\n          </div>\n        </div>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/permission-request.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Petición de permiso",
+    "descriptionEs": "Un agente pide un solo derecho. La tarjeta dice quién, por qué y qué va a pasar. Se permite una vez, un rato o siempre. Lo destructivo no se deja para siempre.",
+    "preview": "app/examples/permission-request/preview.tsx",
+    "previewHref": "/examples/permission-request",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "allowed",
+        "label": "Permitido",
+        "labelEn": "Allowed"
+      },
+      {
+        "id": "denied",
+        "label": "Negado",
+        "labelEn": "Denied"
+      },
+      {
+        "id": "destructive",
+        "label": "Destructivo",
+        "labelEn": "Destructive"
+      },
+      {
+        "id": "timed",
+        "label": "Un rato",
+        "labelEn": "Timed"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Correo a Celaya",
+        "href": "/examples/permission-request",
+        "description": "Bruma pide mandar el pedido PED-990. Lo destructivo no ofrece siempre."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/permission-request/stress",
+        "description": "Vacío, textos largos, RTL y diez filas."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/permission-request?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/permission-request?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/permission-request?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/permission-request?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Permitido",
+        "href": "/examples/permission-request?scene=allowed",
+        "description": "Allowed"
+      },
+      {
+        "title": "Negado",
+        "href": "/examples/permission-request?scene=denied",
+        "description": "Denied"
+      },
+      {
+        "title": "Destructivo",
+        "href": "/examples/permission-request?scene=destructive",
+        "description": "Destructive"
+      },
+      {
+        "title": "Un rato",
+        "href": "/examples/permission-request?scene=timed",
+        "description": "Timed"
+      }
+    ],
+    "usage": "<PermissionRequest agent={agent} action={action} risk={risk} preview={preview} scope={scope} decision={decision} onDecisionChange={setDecision} />",
+    "api": [
+      {
+        "name": "agent / action / target / reason",
+        "type": "who and what",
+        "description": "The title reads as the agent wanting the action. The reason is the agent's own words."
+      },
+      {
+        "name": "preview",
+        "type": "PermissionPreview<TMeta>[]",
+        "description": "The concrete rows: who receives it, the subject, the file. meta on a row is the side note. itemMeta is opaque."
+      },
+      {
+        "name": "risk / scope",
+        "type": "safe | risky | destructive / once | timed | always",
+        "description": "Destructive drops Always even if the host lists it."
+      },
+      {
+        "name": "decision / onDecisionChange",
+        "type": "PermissionDecision | null",
+        "description": "Null means it is still asking. Revoke and ask again pass null. The host stores the grant and the time left."
+      },
+      {
+        "name": "loading / error / labels",
+        "type": "boolean / string / Partial<PermissionRequestLabels>",
+        "description": "Skeleton, alert, and chrome copy. English is the default."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. No es el recibo de una herramienta: pide un derecho antes de actuar.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}
