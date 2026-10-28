@@ -333,6 +333,12 @@ https://github.com/kargulstudio/calender-app-design is MIT and was used as a
 behavior reference only. No source, sample data, or assets were copied.
 approval-card stays the countdown gate.
 
+planning-grid is a clean-room planning sheet: groups, actual and forecast
+periods, a top-down growth slider, spreadsheet editing, and a heat map.
+A public post about a planning block was the behavior reference only. No
+ReUI source, sample rows, icons, or assets were copied. The host owns the
+numbers. Colors come from the host shadcn tokens.
+
 The multi-view pieces (multi-view-core, use-multi-view, view-table,
 view-kanban, view-calendar, view-timeline, view-grouped-list, view-gallery,
 record-properties, and the multi-view block) are an independent implementation
