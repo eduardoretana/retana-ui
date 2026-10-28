@@ -246,6 +246,19 @@ Affect Pro was not purchased, fetched, or ported. No source, sample data,
 icons, assets, or internal strings were copied. The demos use an original
 Guanajuato workshop scenario. Colors come from the host shadcn tokens.
 
+agent-inbox, agent-plan, plan-vs-actual, trace-waterfall, agent-lanes, and
+approval-card are a clean-room reading of public behavior descriptions on
+Affect UI (a calm list of background tasks, a plan reviewed before it runs,
+planned time against what happened, a trace of one run, a lane per agent, and
+a gate with a countdown that does not send on its own):
+
+  https://www.affectui.com/components
+
+Affect Pro was not purchased, fetched, or ported. No source, sample data,
+icons, assets, or internal strings were copied. The demos continue the same
+Guanajuato workshop scenario. Colors come from the host shadcn tokens.
+approval-card is not a tool receipt; tool calls stay on tool-approval.
+
 adaptive-table is a clean-room reimplementation from a behavior description
 only. No names, icons, or rows from that reference were copied. Columns drop,
 fold, and stretch to the container width.

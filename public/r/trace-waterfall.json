@@ -1,0 +1,141 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "trace-waterfall",
+  "title": "Trace waterfall",
+  "author": "Eduardo Retana",
+  "description": "Spans of one run on a shared clock, with tokens, cost in centavos, the slowest leaf marked, and branches that fold.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "badge",
+    "button",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/trace-waterfall.tsx",
+      "content": "\"use client\"\n\n/**\n * Where a run spent its time. Clean-room reading of a public behavior\n * description: each call is a bar on one clock, the slowest is marked, and a\n * branch can fold into its parent. No Affect source, sample data, icons, or\n * assets were copied.\n */\n\nimport * as React from \"react\"\nimport { ChevronDown } from \"lucide-react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport const TRACE_KINDS = [\"run\", \"note\", \"tool\"] as const\nexport const TRACE_STATUSES = [\"ok\", \"slow\", \"error\", \"running\"] as const\n\nexport type TraceKind = (typeof TRACE_KINDS)[number]\nexport type TraceStatus = (typeof TRACE_STATUSES)[number]\n\nexport type TraceSpan<TMeta = unknown> = {\n  id: string\n  parentId?: string\n  title: string\n  agent: string\n  kind: TraceKind\n  startMs: number\n  durationMs: number\n  tokens?: number\n  /** Centavos MXN. */\n  costCents?: number\n  status: TraceStatus\n  meta?: TMeta\n}\n\nexport type TraceTotals = {\n  durationMs: number\n  tokens: number\n  costCents: number\n  slowestId: string | null\n  errors: number\n}\n\nexport type TraceWaterfallLabels = {\n  title: string\n  duration: (seconds: string) => string\n  tokens: (count: number) => string\n  cost: (cents: number) => string\n  errors: (count: number) => string\n  kind: Record<TraceKind, string>\n  status: Record<TraceStatus, string>\n  slowest: string\n  fold: (title: string, open: boolean) => string\n  open: (title: string) => string\n  empty: string\n  loading: string\n  axis: (seconds: string) => string\n}\n\nexport type TraceWaterfallClassNames = {\n  root?: string\n  span?: string\n}\n\nexport type TraceWaterfallProps<TMeta = unknown> = {\n  spans?: readonly TraceSpan<TMeta>[]\n  collapsed?: readonly string[]\n  onCollapsedChange?: (ids: string[]) => void\n  loading?: boolean\n  error?: string\n  title?: string\n  onOpen?: (id: string) => void\n  className?: string\n  classNames?: TraceWaterfallClassNames\n  labels?: Partial<TraceWaterfallLabels>\n}\n\nconst traceLabels: TraceWaterfallLabels = {\n  title: \"Run trace\",\n  duration: (seconds) => `${seconds} s`,\n  tokens: (count) => `${count} tokens`,\n  cost: (cents) => {\n    const sign = cents < 0 ? \"-\" : \"\"\n    const abs = Math.abs(Math.round(cents))\n    return `${sign}$${Math.floor(abs / 100)}.${(abs % 100).toString().padStart(2, \"0\")} MXN`\n  },\n  errors: (count) => (count === 1 ? \"1 error\" : `${count} errors`),\n  kind: { run: \"Run\", note: \"Note\", tool: \"Tool\" },\n  status: { ok: \"Ok\", slow: \"Slow\", error: \"Error\", running: \"In progress\" },\n  slowest: \"Slowest step\",\n  fold: (title, open) => (open ? `Fold “${title}”` : `Unfold “${title}”`),\n  open: (title) => `Open “${title}”`,\n  empty: \"This run has no spans yet.\",\n  loading: \"Loading the trace\",\n  axis: (seconds) => seconds,\n}\n\nfunction resolveLabels(partial?: Partial<TraceWaterfallLabels>): TraceWaterfallLabels {\n  return {\n    ...traceLabels,\n    ...partial,\n    kind: { ...traceLabels.kind, ...partial?.kind },\n    status: { ...traceLabels.status, ...partial?.status },\n  }\n}\n\nexport function formatTraceSeconds(ms: number) {\n  return (Math.max(0, ms) / 1000).toFixed(1)\n}\n\nexport function traceTotals(spans: readonly Pick<TraceSpan, \"id\" | \"parentId\" | \"startMs\" | \"durationMs\" | \"tokens\" | \"costCents\" | \"status\">[]): TraceTotals {\n  const parents = new Set(spans.flatMap((span) => (span.parentId ? [span.parentId] : [])))\n  const leaves = spans.filter((span) => !parents.has(span.id))\n  const pool = leaves.length > 0 ? leaves : spans\n  let slowestId: string | null = null\n  let slowest = -1\n  for (const span of pool) {\n    if (span.durationMs > slowest) {\n      slowest = span.durationMs\n      slowestId = span.id\n    }\n  }\n  let tokens = 0\n  let costCents = 0\n  let errors = 0\n  let end = 0\n  for (const span of spans) {\n    tokens += span.tokens ?? 0\n    costCents += span.costCents ?? 0\n    if (span.status === \"error\") errors += 1\n    end = Math.max(end, span.startMs + span.durationMs)\n  }\n  return { durationMs: end, tokens, costCents, slowestId, errors }\n}\n\nfunction childrenOf(spans: readonly TraceSpan[], id: string) {\n  return spans.filter((span) => span.parentId === id)\n}\n\nfunction hiddenBy(spans: readonly TraceSpan[], collapsed: readonly string[]) {\n  const hidden = new Set<string>()\n  const walk = (id: string) => {\n    for (const child of spans) {\n      if (child.parentId !== id || hidden.has(child.id)) continue\n      hidden.add(child.id)\n      walk(child.id)\n    }\n  }\n  for (const id of collapsed) walk(id)\n  return hidden\n}\n\nfunction depthOf(spans: readonly TraceSpan[], id: string) {\n  let depth = 0\n  let current = spans.find((span) => span.id === id)\n  const seen = new Set<string>()\n  while (current?.parentId && !seen.has(current.id)) {\n    seen.add(current.id)\n    depth += 1\n    current = spans.find((span) => span.id === current?.parentId)\n  }\n  return depth\n}\n\nconst BAR: Record<TraceStatus, string> = {\n  ok: \"bg-primary/70\",\n  slow: \"bg-chart-4\",\n  error: \"bg-destructive\",\n  running: \"bg-chart-2\",\n}\n\nexport function TraceWaterfall<TMeta = unknown>({\n  spans = [],\n  collapsed: collapsedProp,\n  onCollapsedChange,\n  loading = false,\n  error,\n  title,\n  onOpen,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: TraceWaterfallProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const heading = title ?? labels.title\n  const [collapsedState, setCollapsedState] = React.useState<string[]>([])\n  const collapsed = collapsedProp ?? collapsedState\n  const totals = traceTotals(spans)\n  const hidden = hiddenBy(spans, collapsed)\n  const windowMs = Math.max(totals.durationMs, 1)\n  const rootsFirst = [...spans].sort((a, b) => a.startMs - b.startMs || a.title.localeCompare(b.title))\n\n  function toggle(id: string) {\n    const next = collapsed.includes(id) ? collapsed.filter((item) => item !== id) : [...collapsed, id]\n    if (collapsedProp === undefined) setCollapsedState(next)\n    onCollapsedChange?.(next)\n  }\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        <Badge variant=\"secondary\">{labels.duration(formatTraceSeconds(totals.durationMs))}</Badge>\n        <Badge variant=\"outline\">{labels.tokens(totals.tokens)}</Badge>\n        <Badge variant=\"outline\">{labels.cost(totals.costCents)}</Badge>\n        {totals.errors > 0 ? <Badge variant=\"destructive\">{labels.errors(totals.errors)}</Badge> : null}\n      </header>\n      {loading ? (\n        <div role=\"status\" className=\"flex flex-col gap-2\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-10 w-full motion-reduce:animate-none\" />\n          <Skeleton className=\"h-10 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && spans.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : spans.length === 0 ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <div className=\"flex flex-col gap-2\">\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          <div className=\"flex justify-between text-xs text-muted-foreground\" aria-hidden=\"true\">\n            <span>{labels.axis(\"0.0\")}</span>\n            <span>{labels.axis(formatTraceSeconds(windowMs / 2))}</span>\n            <span>{labels.axis(formatTraceSeconds(windowMs))}</span>\n          </div>\n          <ul className=\"flex flex-col gap-1.5\">\n            {rootsFirst.map((span) => {\n              if (hidden.has(span.id)) return null\n              const kids = childrenOf(spans, span.id)\n              const open = !collapsed.includes(span.id)\n              const depth = depthOf(spans, span.id)\n              const left = ((span.startMs / windowMs) * 100).toFixed(2)\n              const width = Math.max(1.5, (span.durationMs / windowMs) * 100).toFixed(2)\n              const slowest = span.id === totals.slowestId\n              return (\n                <li key={span.id} className={cn(\"flex flex-col gap-1\", classNames?.span)} style={{ paddingInlineStart: `${depth * 0.75}rem` }}>\n                  <div className=\"flex flex-wrap items-center gap-2\">\n                    {kids.length > 0 ? (\n                      <Button type=\"button\" size=\"sm\" variant=\"ghost\" aria-expanded={open} aria-label={labels.fold(span.title, open)} onClick={() => toggle(span.id)}>\n                        <ChevronDown aria-hidden=\"true\" className={cn(\"transition-transform motion-reduce:transition-none\", open && \"rotate-180\")} />\n                      </Button>\n                    ) : (\n                      <span className=\"size-8\" aria-hidden=\"true\" />\n                    )}\n                    <button\n                      type=\"button\"\n                      className=\"min-w-0 flex-1 rounded-md text-start focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n                      aria-label={labels.open(span.title)}\n                      onClick={() => onOpen?.(span.id)}\n                    >\n                      <span className=\"flex flex-wrap items-center gap-2\">\n                        <span className=\"font-medium\">{span.title}</span>\n                        <Badge variant=\"outline\">{labels.kind[span.kind]}</Badge>\n                        <Badge variant={span.status === \"error\" ? \"destructive\" : \"secondary\"}>{labels.status[span.status]}</Badge>\n                        {slowest ? <Badge variant=\"outline\">{labels.slowest}</Badge> : null}\n                        <span className=\"text-xs text-muted-foreground\">{span.agent}</span>\n                        <span className=\"ms-auto text-xs text-muted-foreground\">\n                          {labels.duration(formatTraceSeconds(span.durationMs))}\n                          {span.costCents ? ` · ${labels.cost(span.costCents)}` : \"\"}\n                        </span>\n                      </span>\n                    </button>\n                  </div>\n                  <div className=\"relative h-2 rounded-full bg-muted\" aria-hidden=\"true\">\n                    <span className={cn(\"absolute top-0 h-full rounded-full\", BAR[span.status])} style={{ left: `${left}%`, width: `${width}%` }} />\n                  </div>\n                </li>\n              )\n            })}\n          </ul>\n        </div>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/trace-waterfall.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Trazo de la corrida",
+    "descriptionEs": "Tramos de una corrida en un solo reloj, con tokens, costo en centavos, el paso más lento y ramas que se pliegan.",
+    "preview": "app/examples/trace-waterfall/preview.tsx",
+    "previewHref": "/examples/trace-waterfall",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "failed",
+        "label": "Falló",
+        "labelEn": "Failed"
+      },
+      {
+        "id": "folded",
+        "label": "Plegado",
+        "labelEn": "Folded"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Cotización del cobalto",
+        "href": "/examples/trace-waterfall",
+        "description": "Leer, poner precio, redactar y archivar. El precio es el tramo lento."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/trace-waterfall/stress",
+        "description": "Vacío, textos largos, RTL y diez tramos."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/trace-waterfall?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/trace-waterfall?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/trace-waterfall?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/trace-waterfall?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Falló",
+        "href": "/examples/trace-waterfall?scene=failed",
+        "description": "Failed"
+      },
+      {
+        "title": "Plegado",
+        "href": "/examples/trace-waterfall?scene=folded",
+        "description": "Folded"
+      }
+    ],
+    "usage": "<TraceWaterfall spans={spans} collapsed={collapsed} onCollapsedChange={setCollapsed} onOpen={open} />",
+    "api": [
+      {
+        "name": "spans",
+        "type": "TraceSpan<TMeta>[]",
+        "description": "id, parentId, title, agent, kind (run, note, tool), startMs, durationMs, tokens, costCents, status (ok, slow, error, running). meta is opaque."
+      },
+      {
+        "name": "collapsed / onCollapsedChange",
+        "type": "string[]",
+        "description": "Parents whose children are hidden."
+      },
+      {
+        "name": "onOpen",
+        "type": "(id: string) => void",
+        "description": "Open a span."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when the trace cannot be read."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<TraceWaterfallLabels>",
+        "description": "Chrome copy. English is the default. Cost is centavos MXN."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de un trazo en cascada; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, button, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos. El paso más lento es una hoja, no el tramo que las envuelve.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

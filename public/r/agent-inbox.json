@@ -1,0 +1,146 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-inbox",
+  "title": "Agent inbox",
+  "author": "Eduardo Retana",
+  "description": "Background workshop tasks in one list, with age, the last steps, and approve, send back, or try again.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "badge",
+    "button",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/agent-inbox.tsx",
+      "content": "\"use client\"\n\n/**\n * Background work the workshop is watching. Clean-room reading of a public\n * behavior description: a calm list with status, age, and a row that opens\n * onto the last steps, where a person can approve, send back, or try again.\n * No Affect source, sample data, icons, or assets were copied.\n */\n\nimport * as React from \"react\"\nimport { Check, ChevronDown, RotateCcw, Undo2 } from \"lucide-react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport const INBOX_STATUSES = [\"needs-you\", \"running\", \"failed\", \"done\"] as const\n\nexport type InboxStatus = (typeof INBOX_STATUSES)[number]\n\nexport type InboxFilter = \"all\" | InboxStatus\n\nexport type InboxStep = {\n  id: string\n  label: string\n  /** Epoch milliseconds. */\n  at: number\n}\n\nexport type InboxTask<TMeta = unknown> = {\n  id: string\n  title: string\n  summary: string\n  agent: string\n  status: InboxStatus\n  /** Epoch milliseconds when the task started. */\n  startedAt: number\n  steps?: readonly InboxStep[]\n  meta?: TMeta\n}\n\nexport type AgentInboxLabels = {\n  title: string\n  waiting: (count: number) => string\n  filters: Record<InboxFilter, string>\n  count: (label: string, count: number) => string\n  status: Record<InboxStatus, string>\n  age: (minutes: number) => string\n  steps: string\n  toggle: (title: string, open: boolean) => string\n  open: string\n  approve: string\n  approveNamed: (title: string) => string\n  sendBack: string\n  sendBackNamed: (title: string) => string\n  retry: string\n  retryNamed: (title: string) => string\n  from: (agent: string) => string\n  empty: string\n  noneInFilter: string\n  loading: string\n  approved: (title: string) => string\n  sentBack: (title: string) => string\n  retried: (title: string) => string\n}\n\nexport type AgentInboxClassNames = {\n  root?: string\n  task?: string\n  steps?: string\n}\n\nexport type AgentInboxProps<TMeta = unknown> = {\n  tasks?: readonly InboxTask<TMeta>[]\n  /** Minutes are measured against this clock. Omit it and the age stays hidden. */\n  now?: number\n  filter?: InboxFilter\n  onFilterChange?: (filter: InboxFilter) => void\n  openIds?: readonly string[]\n  onOpenChange?: (ids: string[]) => void\n  loading?: boolean\n  error?: string\n  title?: string\n  onOpen?: (id: string) => void\n  onApprove?: (id: string) => void\n  onSendBack?: (id: string) => void\n  onRetry?: (id: string) => void\n  className?: string\n  classNames?: AgentInboxClassNames\n  labels?: Partial<AgentInboxLabels>\n}\n\nconst agentInboxLabels: AgentInboxLabels = {\n  title: \"Workshop inbox\",\n  waiting: (count) => (count === 1 ? \"1 waiting on you\" : `${count} waiting on you`),\n  filters: {\n    all: \"All\",\n    \"needs-you\": \"Waiting on you\",\n    running: \"In progress\",\n    failed: \"Failed\",\n    done: \"Filed\",\n  },\n  count: (label, count) => `${label}, ${count}`,\n  status: {\n    \"needs-you\": \"Waiting on you\",\n    running: \"In progress\",\n    failed: \"Failed\",\n    done: \"Filed\",\n  },\n  age: (minutes) => {\n    if (minutes < 1) return \"just now\"\n    if (minutes < 60) return `${minutes} min ago`\n    const hours = Math.floor(minutes / 60)\n    return hours === 1 ? \"1 hour ago\" : `${hours} hours ago`\n  },\n  steps: \"Last steps\",\n  toggle: (title, open) => (open ? `Fold “${title}”` : `Unfold “${title}”`),\n  open: \"Open\",\n  approve: \"Approve\",\n  approveNamed: (title) => `Approve “${title}”`,\n  sendBack: \"Send back\",\n  sendBackNamed: (title) => `Send “${title}” back`,\n  retry: \"Try again\",\n  retryNamed: (title) => `Try “${title}” again`,\n  from: (agent) => `With ${agent}`,\n  empty: \"The workshop inbox is clear.\",\n  noneInFilter: \"Nothing in this group.\",\n  loading: \"Loading the inbox\",\n  approved: (title) => `Approved “${title}”`,\n  sentBack: (title) => `Sent “${title}” back`,\n  retried: (title) => `Trying “${title}” again`,\n}\n\nfunction resolveLabels(partial?: Partial<AgentInboxLabels>): AgentInboxLabels {\n  return { ...agentInboxLabels, ...partial, filters: { ...agentInboxLabels.filters, ...partial?.filters }, status: { ...agentInboxLabels.status, ...partial?.status } }\n}\n\nexport function inboxCount(tasks: readonly Pick<InboxTask, \"id\" | \"status\">[], status?: InboxStatus) {\n  return tasks.filter((task) => !status || task.status === status).length\n}\n\nexport function inboxAgeMinutes(at: number, now: number) {\n  return Math.max(0, Math.round((now - at) / 60_000))\n}\n\nconst FILTERS: readonly InboxFilter[] = [\"all\", ...INBOX_STATUSES]\n\nexport function AgentInbox<TMeta = unknown>({\n  tasks = [],\n  now,\n  filter: filterProp,\n  onFilterChange,\n  openIds: openProp,\n  onOpenChange,\n  loading = false,\n  error,\n  title,\n  onOpen,\n  onApprove,\n  onSendBack,\n  onRetry,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: AgentInboxProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const heading = title ?? labels.title\n  const [filterState, setFilterState] = React.useState<InboxFilter>(\"all\")\n  const [openState, setOpenState] = React.useState<string[]>([])\n  const [live, setLive] = React.useState(\"\")\n  const filter = filterProp ?? filterState\n  const openIds = openProp ?? openState\n  const waiting = inboxCount(tasks, \"needs-you\")\n  const visible = tasks.filter((task) => filter === \"all\" || task.status === filter)\n\n  function setFilter(next: InboxFilter) {\n    if (filterProp === undefined) setFilterState(next)\n    onFilterChange?.(next)\n  }\n\n  function toggle(id: string) {\n    const next = openIds.includes(id) ? openIds.filter((item) => item !== id) : [...openIds, id]\n    if (openProp === undefined) setOpenState(next)\n    onOpenChange?.(next)\n  }\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        <Badge variant=\"secondary\">{labels.waiting(waiting)}</Badge>\n      </header>\n      <div role=\"group\" aria-label={labels.title} className=\"flex flex-wrap gap-1\">\n        {FILTERS.map((item) => {\n          const count = inboxCount(tasks, item === \"all\" ? undefined : item)\n          const pressed = filter === item\n          return (\n            <Button key={item} type=\"button\" size=\"sm\" variant={pressed ? \"default\" : \"outline\"} aria-pressed={pressed} onClick={() => setFilter(item)}>\n              {labels.count(labels.filters[item], count)}\n            </Button>\n          )\n        })}\n      </div>\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\" className=\"flex flex-col gap-2\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-16 w-full motion-reduce:animate-none\" />\n          <Skeleton className=\"h-16 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && tasks.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : tasks.length === 0 ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <ul className=\"flex flex-col gap-2\">\n          {error ? (\n            <li role=\"alert\" className=\"text-destructive\">\n              {error}\n            </li>\n          ) : null}\n          {visible.length === 0 ? <li className=\"text-muted-foreground\">{labels.noneInFilter}</li> : null}\n          {visible.map((task) => {\n            const open = openIds.includes(task.id)\n            const age = now == null ? null : labels.age(inboxAgeMinutes(task.startedAt, now))\n            return (\n              <li key={task.id} className={cn(\"rounded-lg border border-border px-3 py-2\", classNames?.task)}>\n                <div className=\"flex flex-wrap items-start gap-2\">\n                  <div className=\"min-w-0 flex-1\">\n                    <div className=\"flex flex-wrap items-center gap-2\">\n                      <h3 className=\"font-medium\">{task.title}</h3>\n                      <Badge variant={task.status === \"failed\" ? \"destructive\" : \"outline\"}>{labels.status[task.status]}</Badge>\n                    </div>\n                    <p className=\"mt-1 text-xs text-muted-foreground\">\n                      {labels.from(task.agent)}\n                      {age ? ` · ${age}` : \"\"}\n                    </p>\n                    <p className=\"mt-1 text-xs text-muted-foreground\">{task.summary}</p>\n                  </div>\n                  <Button type=\"button\" size=\"sm\" variant=\"ghost\" aria-expanded={open} aria-label={labels.toggle(task.title, open)} onClick={() => toggle(task.id)}>\n                    <ChevronDown aria-hidden=\"true\" className={cn(\"transition-transform motion-reduce:transition-none\", open && \"rotate-180\")} />\n                  </Button>\n                </div>\n                {open ? (\n                  <div className={cn(\"mt-2 border-t border-border pt-2\", classNames?.steps)}>\n                    <p className=\"text-xs font-medium text-muted-foreground\">{labels.steps}</p>\n                    <ol className=\"mt-1 flex flex-col gap-1\">\n                      {(task.steps ?? []).map((step) => (\n                        <li key={step.id} className=\"text-xs\">\n                          {step.label}\n                          {now != null ? <span className=\"text-muted-foreground\"> · {labels.age(inboxAgeMinutes(step.at, now))}</span> : null}\n                        </li>\n                      ))}\n                    </ol>\n                  </div>\n                ) : null}\n                <div className=\"mt-2 flex flex-wrap gap-2\">\n                  <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={() => onOpen?.(task.id)}>\n                    {labels.open}\n                  </Button>\n                  {task.status === \"needs-you\" ? (\n                    <>\n                      <Button\n                        type=\"button\"\n                        size=\"sm\"\n                        aria-label={labels.approveNamed(task.title)}\n                        onClick={() => {\n                          onApprove?.(task.id)\n                          setLive(labels.approved(task.title))\n                        }}\n                      >\n                        <Check aria-hidden=\"true\" />\n                        {labels.approve}\n                      </Button>\n                      <Button\n                        type=\"button\"\n                        size=\"sm\"\n                        variant=\"outline\"\n                        aria-label={labels.sendBackNamed(task.title)}\n                        onClick={() => {\n                          onSendBack?.(task.id)\n                          setLive(labels.sentBack(task.title))\n                        }}\n                      >\n                        <Undo2 aria-hidden=\"true\" />\n                        {labels.sendBack}\n                      </Button>\n                    </>\n                  ) : null}\n                  {task.status === \"failed\" ? (\n                    <Button\n                      type=\"button\"\n                      size=\"sm\"\n                      variant=\"outline\"\n                      aria-label={labels.retryNamed(task.title)}\n                      onClick={() => {\n                        onRetry?.(task.id)\n                        setLive(labels.retried(task.title))\n                      }}\n                    >\n                      <RotateCcw aria-hidden=\"true\" />\n                      {labels.retry}\n                    </Button>\n                  ) : null}\n                </div>\n              </li>\n            )\n          })}\n        </ul>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/agent-inbox.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Bandeja de agentes",
+    "descriptionEs": "Trabajo de fondo del taller en una lista, con la edad, los últimos pasos y aprobar, devolver o reintentar.",
+    "preview": "app/examples/agent-inbox/preview.tsx",
+    "previewHref": "/examples/agent-inbox",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "failed",
+        "label": "Falló",
+        "labelEn": "Failed"
+      },
+      {
+        "id": "quiet",
+        "label": "En calma",
+        "labelEn": "Quiet"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Bandeja del taller",
+        "href": "/examples/agent-inbox",
+        "description": "El anticipo espera un visto y el aviso a Celaya se puede reintentar."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/agent-inbox/stress",
+        "description": "Vacío, textos largos, RTL, carga y diez tareas."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/agent-inbox?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/agent-inbox?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/agent-inbox?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/agent-inbox?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Falló",
+        "href": "/examples/agent-inbox?scene=failed",
+        "description": "Failed"
+      },
+      {
+        "title": "En calma",
+        "href": "/examples/agent-inbox?scene=quiet",
+        "description": "Quiet"
+      }
+    ],
+    "usage": "<AgentInbox tasks={tasks} now={now} filter={filter} openIds={openIds} onApprove={approve} onSendBack={sendBack} onRetry={retry} />",
+    "api": [
+      {
+        "name": "tasks",
+        "type": "InboxTask<TMeta>[]",
+        "description": "id, title, summary, agent, status (needs-you, running, failed, done), startedAt, steps. meta is opaque."
+      },
+      {
+        "name": "now",
+        "type": "number",
+        "description": "Epoch milliseconds used for ages. Omit it and the age stays hidden."
+      },
+      {
+        "name": "filter / openIds",
+        "type": "InboxFilter / string[]",
+        "description": "Which group is showing, and which rows are unfolded."
+      },
+      {
+        "name": "onApprove / onSendBack / onRetry / onOpen",
+        "type": "(id: string) => void",
+        "description": "Approve work that is waiting, send it back, try a failed task again, or open it."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when the inbox cannot be read."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<AgentInboxLabels>",
+        "description": "Chrome copy. English is the default."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de una bandeja de tareas de fondo; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, button, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos. No anima el cambio de lugar.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

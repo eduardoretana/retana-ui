@@ -24058,6 +24058,657 @@
       ]
     },
     {
+      "name": "agent-inbox",
+      "type": "registry:ui",
+      "title": "Agent inbox",
+      "description": "Background workshop tasks in one list, with age, the last steps, and approve, send back, or try again.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "skeleton"
+      ],
+      "categories": [
+        "agents"
+      ],
+      "meta": {
+        "titleEs": "Bandeja de agentes",
+        "descriptionEs": "Trabajo de fondo del taller en una lista, con la edad, los últimos pasos y aprobar, devolver o reintentar.",
+        "preview": "app/examples/agent-inbox/preview.tsx",
+        "previewHref": "/examples/agent-inbox",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "failed",
+            "label": "Falló",
+            "labelEn": "Failed"
+          },
+          {
+            "id": "quiet",
+            "label": "En calma",
+            "labelEn": "Quiet"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Bandeja del taller",
+            "href": "/examples/agent-inbox",
+            "description": "El anticipo espera un visto y el aviso a Celaya se puede reintentar."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/agent-inbox/stress",
+            "description": "Vacío, textos largos, RTL, carga y diez tareas."
+          }
+        ],
+        "usage": "<AgentInbox tasks={tasks} now={now} filter={filter} openIds={openIds} onApprove={approve} onSendBack={sendBack} onRetry={retry} />",
+        "api": [
+          {
+            "name": "tasks",
+            "type": "InboxTask<TMeta>[]",
+            "description": "id, title, summary, agent, status (needs-you, running, failed, done), startedAt, steps. meta is opaque."
+          },
+          {
+            "name": "now",
+            "type": "number",
+            "description": "Epoch milliseconds used for ages. Omit it and the age stays hidden."
+          },
+          {
+            "name": "filter / openIds",
+            "type": "InboxFilter / string[]",
+            "description": "Which group is showing, and which rows are unfolded."
+          },
+          {
+            "name": "onApprove / onSendBack / onRetry / onOpen",
+            "type": "(id: string) => void",
+            "description": "Approve work that is waiting, send it back, try a failed task again, or open it."
+          },
+          {
+            "name": "loading / error",
+            "type": "boolean / string",
+            "description": "Loading skeleton, or an alert when the inbox cannot be read."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<AgentInboxLabels>",
+            "description": "Chrome copy. English is the default."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Inspirado en el comportamiento público de una bandeja de tareas de fondo; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, button, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos. No anima el cambio de lugar.",
+      "files": [
+        {
+          "path": "registry/ui/agent-inbox.tsx",
+          "type": "registry:component",
+          "target": "@ui/agent-inbox.tsx"
+        }
+      ]
+    },
+    {
+      "name": "agent-plan",
+      "type": "registry:ui",
+      "title": "Agent plan",
+      "description": "Steps to review before a run: rename, move, drop, add, and try a failed step again.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "input",
+        "skeleton"
+      ],
+      "categories": [
+        "agents"
+      ],
+      "meta": {
+        "titleEs": "Plan del agente",
+        "descriptionEs": "Pasos para revisar antes de correr: renombrar, mover, quitar, agregar y reintentar uno que falló.",
+        "preview": "app/examples/agent-plan/preview.tsx",
+        "previewHref": "/examples/agent-plan",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "failed",
+            "label": "Falló",
+            "labelEn": "Failed"
+          },
+          {
+            "id": "trimmed",
+            "label": "Recortado",
+            "labelEn": "Trimmed"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Plan del viernes",
+            "href": "/examples/agent-plan",
+            "description": "Cotización lista, anticipo en curso y la foto todavía sin empezar."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/agent-plan/stress",
+            "description": "Vacío, textos largos, RTL y diez pasos."
+          }
+        ],
+        "usage": "<AgentPlan steps={steps} goal={goal} onRename={rename} onMove={move} onRemove={drop} onAdd={add} onRetry={retry} />",
+        "api": [
+          {
+            "name": "steps",
+            "type": "PlanStep<TMeta>[]",
+            "description": "id, title, detail, estimateMin, elapsedMin, status (pending, running, done, failed, dropped). meta is opaque."
+          },
+          {
+            "name": "onRename / onMove / onRemove / onAdd",
+            "type": "callbacks",
+            "description": "Rename a step, move it by one, drop it, or add a title."
+          },
+          {
+            "name": "onRetry",
+            "type": "(id: string) => void",
+            "description": "Try a failed step again."
+          },
+          {
+            "name": "loading / error",
+            "type": "boolean / string",
+            "description": "Loading skeleton, or an alert when the plan cannot be read."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<AgentPlanLabels>",
+            "description": "Chrome copy. English is the default. Alt+arrows move a focused step. Delete drops it."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Inspirado en el comportamiento público de un plan que se revisa antes de correr; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, button, input, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos.",
+      "files": [
+        {
+          "path": "registry/ui/agent-plan.tsx",
+          "type": "registry:component",
+          "target": "@ui/agent-plan.tsx"
+        }
+      ]
+    },
+    {
+      "name": "plan-vs-actual",
+      "type": "registry:ui",
+      "title": "Plan vs actual",
+      "description": "Planned minutes against the minutes a run really spent, with later steps shifted when one runs long.",
+      "author": "Eduardo Retana",
+      "registryDependencies": [
+        "badge",
+        "skeleton"
+      ],
+      "categories": [
+        "agents"
+      ],
+      "meta": {
+        "titleEs": "Plan contra lo real",
+        "descriptionEs": "Los minutos planeados contra los que de verdad se usaron, y cómo se corre el cierre cuando uno se alarga.",
+        "preview": "app/examples/plan-vs-actual/preview.tsx",
+        "previewHref": "/examples/plan-vs-actual",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "ahead",
+            "label": "Adelantado",
+            "labelEn": "Ahead"
+          },
+          {
+            "id": "stuck",
+            "label": "Atorado",
+            "labelEn": "Stuck"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Viernes contra el reloj",
+            "href": "/examples/plan-vs-actual",
+            "description": "La cotización salió antes y el anticipo se alargó tres minutos el cierre."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/plan-vs-actual/stress",
+            "description": "Vacío, textos largos, RTL y diez pasos."
+          }
+        ],
+        "usage": "<PlanVsActual steps={steps} onOpen={open} />",
+        "api": [
+          {
+            "name": "steps",
+            "type": "ActualStep<TMeta>[]",
+            "description": "id, title, detail, plannedMin, actualMin, status (pending, running, done). meta is opaque. A pending step still reserves its planned minutes."
+          },
+          {
+            "name": "onOpen",
+            "type": "(id: string) => void",
+            "description": "Open a step."
+          },
+          {
+            "name": "loading / error",
+            "type": "boolean / string",
+            "description": "Loading skeleton, or an alert when the comparison cannot be read."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<PlanVsActualLabels>",
+            "description": "Chrome copy. English is the default."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Inspirado en el comportamiento público de comparar un plan con lo que pasó; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos. Las barras no se animan.",
+      "files": [
+        {
+          "path": "registry/ui/plan-vs-actual.tsx",
+          "type": "registry:component",
+          "target": "@ui/plan-vs-actual.tsx"
+        }
+      ]
+    },
+    {
+      "name": "trace-waterfall",
+      "type": "registry:ui",
+      "title": "Trace waterfall",
+      "description": "Spans of one run on a shared clock, with tokens, cost in centavos, the slowest leaf marked, and branches that fold.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "skeleton"
+      ],
+      "categories": [
+        "agents"
+      ],
+      "meta": {
+        "titleEs": "Trazo de la corrida",
+        "descriptionEs": "Tramos de una corrida en un solo reloj, con tokens, costo en centavos, el paso más lento y ramas que se pliegan.",
+        "preview": "app/examples/trace-waterfall/preview.tsx",
+        "previewHref": "/examples/trace-waterfall",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "failed",
+            "label": "Falló",
+            "labelEn": "Failed"
+          },
+          {
+            "id": "folded",
+            "label": "Plegado",
+            "labelEn": "Folded"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Cotización del cobalto",
+            "href": "/examples/trace-waterfall",
+            "description": "Leer, poner precio, redactar y archivar. El precio es el tramo lento."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/trace-waterfall/stress",
+            "description": "Vacío, textos largos, RTL y diez tramos."
+          }
+        ],
+        "usage": "<TraceWaterfall spans={spans} collapsed={collapsed} onCollapsedChange={setCollapsed} onOpen={open} />",
+        "api": [
+          {
+            "name": "spans",
+            "type": "TraceSpan<TMeta>[]",
+            "description": "id, parentId, title, agent, kind (run, note, tool), startMs, durationMs, tokens, costCents, status (ok, slow, error, running). meta is opaque."
+          },
+          {
+            "name": "collapsed / onCollapsedChange",
+            "type": "string[]",
+            "description": "Parents whose children are hidden."
+          },
+          {
+            "name": "onOpen",
+            "type": "(id: string) => void",
+            "description": "Open a span."
+          },
+          {
+            "name": "loading / error",
+            "type": "boolean / string",
+            "description": "Loading skeleton, or an alert when the trace cannot be read."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<TraceWaterfallLabels>",
+            "description": "Chrome copy. English is the default. Cost is centavos MXN."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Inspirado en el comportamiento público de un trazo en cascada; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, button, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos. El paso más lento es una hoja, no el tramo que las envuelve.",
+      "files": [
+        {
+          "path": "registry/ui/trace-waterfall.tsx",
+          "type": "registry:component",
+          "target": "@ui/trace-waterfall.tsx"
+        }
+      ]
+    },
+    {
+      "name": "agent-lanes",
+      "type": "registry:ui",
+      "title": "Agent lanes",
+      "description": "One lane per agent on a shared morning clock, with a hand-off and an approval sitting on the block that needs it.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "skeleton"
+      ],
+      "categories": [
+        "agents"
+      ],
+      "meta": {
+        "titleEs": "Carriles de agentes",
+        "descriptionEs": "Un carril por agente en el reloj de la mañana, con un pase al siguiente y un visto sobre el bloque que lo necesita.",
+        "preview": "app/examples/agent-lanes/preview.tsx",
+        "previewHref": "/examples/agent-lanes",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "ask",
+            "label": "Visto",
+            "labelEn": "Ask"
+          },
+          {
+            "id": "idle",
+            "label": "Libre",
+            "labelEn": "Idle"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Piso del taller",
+            "href": "/examples/agent-lanes",
+            "description": "Bruma pasa la cotización a Horno. Caja espera el visto del anticipo."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/agent-lanes/stress",
+            "description": "Vacío, textos largos, RTL y diez bloques."
+          }
+        ],
+        "usage": "<AgentLanes agents={agents} blocks={blocks} window={window} onOpen={open} onApprove={approve} />",
+        "api": [
+          {
+            "name": "agents",
+            "type": "LaneAgent<TMeta>[]",
+            "description": "id, name, role. meta is opaque."
+          },
+          {
+            "name": "blocks",
+            "type": "LaneBlock<TMeta>[]",
+            "description": "id, agentId, title, startMin, durationMin, tone (work, wait, ask), handoffTo. Minutes are from midnight."
+          },
+          {
+            "name": "window",
+            "type": "LaneWindow",
+            "description": "startMin, endMin, and nowMin for the shared clock."
+          },
+          {
+            "name": "onOpen / onApprove",
+            "type": "(id: string) => void",
+            "description": "Open a block, or approve one that is waiting."
+          },
+          {
+            "name": "loading / error",
+            "type": "boolean / string",
+            "description": "Loading skeleton, or an alert when the floor cannot be read."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<AgentLanesLabels>",
+            "description": "Chrome copy. English is the default."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Inspirado en el comportamiento público de carriles de agentes; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, button, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos. El reloj no se mueve solo: lo pasa el anfitrión.",
+      "files": [
+        {
+          "path": "registry/ui/agent-lanes.tsx",
+          "type": "registry:component",
+          "target": "@ui/agent-lanes.tsx"
+        }
+      ]
+    },
+    {
+      "name": "approval-card",
+      "type": "registry:ui",
+      "title": "Approval card",
+      "description": "A gate before something hard to undo leaves the workshop. The warning clock can pause. When it runs out, nothing is sent.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "skeleton"
+      ],
+      "categories": [
+        "agents"
+      ],
+      "meta": {
+        "titleEs": "Compuerta de aprobación",
+        "descriptionEs": "Una compuerta antes de que salga algo difícil de deshacer. El reloj se puede pausar y, si se acaba, no manda nada.",
+        "preview": "app/examples/approval-card/preview.tsx",
+        "previewHref": "/examples/approval-card",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "held",
+            "label": "En pausa",
+            "labelEn": "Paused"
+          },
+          {
+            "id": "elapsed",
+            "label": "Venció",
+            "labelEn": "Elapsed"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Anticipo del pedido",
+            "href": "/examples/approval-card",
+            "description": "La SPEI de $18,400.00 MXN espera un visto. El reloj no la manda solo."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/approval-card/stress",
+            "description": "Vacío, textos largos, RTL y una compuerta ya resuelta."
+          }
+        ],
+        "usage": "<ApprovalCard proposal={proposal} onApprove={approve} onDecline={decline} onHold={hold} onRelease={release} />",
+        "api": [
+          {
+            "name": "proposal",
+            "type": "ApprovalProposal<TMeta> | null",
+            "description": "id, title, preview, detail, risk (low, guarded, high), secondsLeft, status (open, held, approved, declined). meta is opaque. The host owns the tick."
+          },
+          {
+            "name": "onApprove / onDecline / onHold / onRelease",
+            "type": "(id: string) => void",
+            "description": "Approve, decline, pause the clock, or let it run. Enter, Escape, and H do the same when the card itself is focused."
+          },
+          {
+            "name": "loading / error",
+            "type": "boolean / string",
+            "description": "Loading skeleton, or an alert when the gate cannot be saved."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<ApprovalCardLabels>",
+            "description": "Chrome copy. English is the default."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Inspirado en el comportamiento público de una compuerta con cuenta atrás; reimplementación clean-room; no código, datos, iconos ni assets de Affect. No es un recibo de herramienta: eso sigue en tool-approval. Si el reloj llega a cero, la acción no sale sola. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, button, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos.",
+      "files": [
+        {
+          "path": "registry/ui/approval-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/approval-card.tsx"
+        }
+      ]
+    },
+    {
       "author": "Eduardo Retana",
       "name": "data-table-grouping",
       "type": "registry:ui",

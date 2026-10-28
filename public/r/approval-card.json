@@ -1,0 +1,136 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "approval-card",
+  "title": "Approval card",
+  "author": "Eduardo Retana",
+  "description": "A gate before something hard to undo leaves the workshop. The warning clock can pause. When it runs out, nothing is sent.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "badge",
+    "button",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/approval-card.tsx",
+      "content": "\"use client\"\n\n/**\n * A gate before something hard to undo leaves the workshop. Clean-room reading\n * of a public behavior description: a risk mark, a preview, approve and decline\n * shortcuts, and a countdown that can be paused. The clock running out does\n * not send the action. No Affect source, sample data, icons, or assets were copied.\n * This is not a tool receipt. Tool calls stay on tool-approval.\n */\n\nimport * as React from \"react\"\nimport { Check, Pause, Play, X } from \"lucide-react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport const GATE_RISKS = [\"low\", \"guarded\", \"high\"] as const\nexport const GATE_STATUSES = [\"open\", \"held\", \"approved\", \"declined\"] as const\n\nexport type GateRisk = (typeof GATE_RISKS)[number]\nexport type GateStatus = (typeof GATE_STATUSES)[number]\n\nexport type ApprovalProposal<TMeta = unknown> = {\n  id: string\n  title: string\n  preview: string\n  detail?: string\n  risk: GateRisk\n  /** Seconds left on the warning clock. The host owns the tick. */\n  secondsLeft: number\n  status: GateStatus\n  meta?: TMeta\n}\n\nexport type ApprovalCardLabels = {\n  title: string\n  risk: Record<GateRisk, string>\n  held: string\n  approved: string\n  declined: string\n  expired: string\n  expiredDetail: string\n  approve: string\n  approveAnyway: string\n  decline: string\n  leave: string\n  hold: string\n  release: string\n  clock: (label: string) => string\n  empty: string\n  loading: string\n  approvedLive: (title: string) => string\n  declinedLive: (title: string) => string\n  heldLive: string\n  releasedLive: string\n}\n\nexport type ApprovalCardClassNames = {\n  root?: string\n  preview?: string\n  actions?: string\n}\n\nexport type ApprovalCardProps<TMeta = unknown> = {\n  proposal?: ApprovalProposal<TMeta> | null\n  loading?: boolean\n  error?: string\n  title?: string\n  hotkeys?: boolean\n  onApprove?: (id: string) => void\n  onDecline?: (id: string) => void\n  onHold?: (id: string) => void\n  onRelease?: (id: string) => void\n  className?: string\n  classNames?: ApprovalCardClassNames\n  labels?: Partial<ApprovalCardLabels>\n}\n\nconst approvalLabels: ApprovalCardLabels = {\n  title: \"Before it goes out\",\n  risk: {\n    low: \"Low stakes\",\n    guarded: \"Worth a look\",\n    high: \"Hard to undo\",\n  },\n  held: \"Clock paused\",\n  approved: \"Approved\",\n  declined: \"Declined\",\n  expired: \"Clock ran out\",\n  expiredDetail: \"Nothing was sent. It stays here until you approve it.\",\n  approve: \"Approve\",\n  approveAnyway: \"Approve anyway\",\n  decline: \"Decline\",\n  leave: \"Leave it\",\n  hold: \"Pause the clock\",\n  release: \"Resume the clock\",\n  clock: (label) => `${label} left`,\n  empty: \"Nothing is waiting to go out.\",\n  loading: \"Loading the gate\",\n  approvedLive: (title) => `Approved “${title}”`,\n  declinedLive: (title) => `Declined “${title}”`,\n  heldLive: \"Clock paused\",\n  releasedLive: \"Clock running\",\n}\n\nfunction resolveLabels(partial?: Partial<ApprovalCardLabels>): ApprovalCardLabels {\n  return { ...approvalLabels, ...partial, risk: { ...approvalLabels.risk, ...partial?.risk } }\n}\n\nexport function gateClock(seconds: number) {\n  const safe = Math.max(0, Math.floor(seconds))\n  const minutes = Math.floor(safe / 60)\n  const rest = safe % 60\n  return `${minutes}:${rest.toString().padStart(2, \"0\")}`\n}\n\nexport function gateExpired(proposal: Pick<ApprovalProposal, \"id\" | \"status\" | \"secondsLeft\"> | null | undefined) {\n  return Boolean(proposal && proposal.status === \"open\" && proposal.secondsLeft <= 0)\n}\n\nexport function ApprovalCard<TMeta = unknown>({\n  proposal,\n  loading = false,\n  error,\n  title,\n  hotkeys = true,\n  onApprove,\n  onDecline,\n  onHold,\n  onRelease,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: ApprovalCardProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const heading = title ?? labels.title\n  const [live, setLive] = React.useState(\"\")\n  const expired = gateExpired(proposal)\n  const settled = proposal?.status === \"approved\" || proposal?.status === \"declined\"\n  const open = proposal?.status === \"open\" || proposal?.status === \"held\"\n\n  function onKeyDown(event: React.KeyboardEvent<HTMLElement>) {\n    if (!hotkeys || !proposal || event.target !== event.currentTarget) return\n    if (event.key === \"Enter\" && (proposal.status === \"open\" || proposal.status === \"held\")) {\n      event.preventDefault()\n      onApprove?.(proposal.id)\n      setLive(labels.approvedLive(proposal.title))\n    }\n    if (event.key === \"Escape\" && (proposal.status === \"open\" || proposal.status === \"held\")) {\n      event.preventDefault()\n      onDecline?.(proposal.id)\n      setLive(labels.declinedLive(proposal.title))\n    }\n    if ((event.key === \"h\" || event.key === \"H\") && proposal.status === \"open\" && !expired) {\n      event.preventDefault()\n      onHold?.(proposal.id)\n      setLive(labels.heldLive)\n    }\n    if ((event.key === \"h\" || event.key === \"H\") && proposal.status === \"held\") {\n      event.preventDefault()\n      onRelease?.(proposal.id)\n      setLive(labels.releasedLive)\n    }\n  }\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      tabIndex={hotkeys && open ? 0 : undefined}\n      onKeyDown={onKeyDown}\n      className={cn(\n        \"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\",\n        className,\n        classNames?.root,\n      )}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        {proposal && !settled ? (\n          <Badge variant={proposal.risk === \"high\" ? \"destructive\" : \"outline\"}>{labels.risk[proposal.risk]}</Badge>\n        ) : null}\n        {proposal?.status === \"held\" ? <Badge variant=\"secondary\">{labels.held}</Badge> : null}\n        {expired ? <Badge variant=\"destructive\">{labels.expired}</Badge> : null}\n        {proposal?.status === \"approved\" ? <Badge variant=\"secondary\">{labels.approved}</Badge> : null}\n        {proposal?.status === \"declined\" ? <Badge variant=\"outline\">{labels.declined}</Badge> : null}\n      </header>\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-24 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && !proposal ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : !proposal ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <div className=\"flex flex-col gap-3\">\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          <div className={cn(\"rounded-lg border border-border px-3 py-2\", classNames?.preview)}>\n            <h3 className=\"font-medium\">{proposal.title}</h3>\n            <p className=\"mt-1\">{proposal.preview}</p>\n            {proposal.detail ? <p className=\"mt-1 text-xs text-muted-foreground\">{proposal.detail}</p> : null}\n            {expired ? <p className=\"mt-2 text-xs\">{labels.expiredDetail}</p> : null}\n            {open && !expired ? (\n              <p className=\"mt-2 font-mono text-xs\">\n                <span aria-hidden=\"true\">{gateClock(proposal.secondsLeft)}</span>\n                <span className=\"sr-only\">{labels.clock(gateClock(proposal.secondsLeft))}</span>\n              </p>\n            ) : null}\n          </div>\n          {proposal.status === \"approved\" || proposal.status === \"declined\" ? (\n            <p>\n              <Check aria-hidden=\"true\" className={cn(\"me-1 inline size-4\", proposal.status === \"declined\" && \"hidden\")} />\n              <X aria-hidden=\"true\" className={cn(\"me-1 inline size-4\", proposal.status === \"approved\" && \"hidden\")} />\n              {proposal.status === \"approved\" ? labels.approved : labels.declined}\n            </p>\n          ) : (\n            <div className={cn(\"flex flex-wrap gap-2\", classNames?.actions)}>\n              <Button\n                type=\"button\"\n                size=\"sm\"\n                onClick={() => {\n                  onApprove?.(proposal.id)\n                  setLive(labels.approvedLive(proposal.title))\n                }}\n              >\n                <Check aria-hidden=\"true\" />\n                {expired ? labels.approveAnyway : labels.approve}\n              </Button>\n              <Button\n                type=\"button\"\n                size=\"sm\"\n                variant=\"outline\"\n                onClick={() => {\n                  onDecline?.(proposal.id)\n                  setLive(labels.declinedLive(proposal.title))\n                }}\n              >\n                <X aria-hidden=\"true\" />\n                {expired ? labels.leave : labels.decline}\n              </Button>\n              {proposal.status === \"held\" ? (\n                <Button\n                  type=\"button\"\n                  size=\"sm\"\n                  variant=\"ghost\"\n                  onClick={() => {\n                    onRelease?.(proposal.id)\n                    setLive(labels.releasedLive)\n                  }}\n                >\n                  <Play aria-hidden=\"true\" />\n                  {labels.release}\n                </Button>\n              ) : expired ? null : (\n                <Button\n                  type=\"button\"\n                  size=\"sm\"\n                  variant=\"ghost\"\n                  onClick={() => {\n                    onHold?.(proposal.id)\n                    setLive(labels.heldLive)\n                  }}\n                >\n                  <Pause aria-hidden=\"true\" />\n                  {labels.hold}\n                </Button>\n              )}\n            </div>\n          )}\n        </div>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/approval-card.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Compuerta de aprobación",
+    "descriptionEs": "Una compuerta antes de que salga algo difícil de deshacer. El reloj se puede pausar y, si se acaba, no manda nada.",
+    "preview": "app/examples/approval-card/preview.tsx",
+    "previewHref": "/examples/approval-card",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "held",
+        "label": "En pausa",
+        "labelEn": "Paused"
+      },
+      {
+        "id": "elapsed",
+        "label": "Venció",
+        "labelEn": "Elapsed"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Anticipo del pedido",
+        "href": "/examples/approval-card",
+        "description": "La SPEI de $18,400.00 MXN espera un visto. El reloj no la manda solo."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/approval-card/stress",
+        "description": "Vacío, textos largos, RTL y una compuerta ya resuelta."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/approval-card?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/approval-card?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/approval-card?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/approval-card?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "En pausa",
+        "href": "/examples/approval-card?scene=held",
+        "description": "Paused"
+      },
+      {
+        "title": "Venció",
+        "href": "/examples/approval-card?scene=elapsed",
+        "description": "Elapsed"
+      }
+    ],
+    "usage": "<ApprovalCard proposal={proposal} onApprove={approve} onDecline={decline} onHold={hold} onRelease={release} />",
+    "api": [
+      {
+        "name": "proposal",
+        "type": "ApprovalProposal<TMeta> | null",
+        "description": "id, title, preview, detail, risk (low, guarded, high), secondsLeft, status (open, held, approved, declined). meta is opaque. The host owns the tick."
+      },
+      {
+        "name": "onApprove / onDecline / onHold / onRelease",
+        "type": "(id: string) => void",
+        "description": "Approve, decline, pause the clock, or let it run. Enter, Escape, and H do the same when the card itself is focused."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when the gate cannot be saved."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<ApprovalCardLabels>",
+        "description": "Chrome copy. English is the default."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de una compuerta con cuenta atrás; reimplementación clean-room; no código, datos, iconos ni assets de Affect. No es un recibo de herramienta: eso sigue en tool-approval. Si el reloj llega a cero, la acción no sale sola. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (badge, button, skeleton), responde no. La pieza no trae tema, cssVars ni colores fijos.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}
