@@ -46,22 +46,22 @@ export type ChartTone = 1 | 2 | 3 | 4 | 5
 export type FieldOption = {
   value: string
   label: string
-  tone?: ChartTone
+  tone?: ChartTone | undefined
 }
 
 export type FieldDef = {
   id: string
   label: string
   type: FieldType
-  icon?: FieldIconName
-  options?: readonly FieldOption[]
+  icon?: FieldIconName | undefined
+  options?: readonly FieldOption[] | undefined
   /** ISO currency code. Default USD. */
-  currency?: string
+  currency?: string | undefined
   /** `compact` (default for currency) or `standard`. */
-  format?: "compact" | "standard"
+  format?: "compact" | "standard" | undefined
   /** Property-panel section. Default Details. */
-  section?: string
-  readOnly?: boolean
+  section?: string | undefined
+  readOnly?: boolean | undefined
 }
 
 export const VIEW_KINDS = [
@@ -79,24 +79,24 @@ export type ViewConfig = {
   id: string
   kind: ViewKind
   label: string
-  titleField?: string
-  subtitleField?: string
-  groupField?: string
-  sumField?: string
-  dateField?: string
-  startField?: string
-  endField?: string
-  coverField?: string
-  chipField?: string
+  titleField?: string | undefined
+  subtitleField?: string | undefined
+  groupField?: string | undefined
+  sumField?: string | undefined
+  dateField?: string | undefined
+  startField?: string | undefined
+  endField?: string | undefined
+  coverField?: string | undefined
+  chipField?: string | undefined
   /** Gallery headline. Falls back to the first currency or number field. */
-  headlineField?: string
-  cardFields?: readonly string[]
-  columns?: readonly string[]
+  headlineField?: string | undefined
+  cardFields?: readonly string[] | undefined
+  columns?: readonly string[] | undefined
 }
 
 export type MultiRecord = { id: string } & Record<string, unknown>
 
-export type PersonValue = { name: string; avatarUrl?: string | null }
+export type PersonValue = { name: string; avatarUrl?: string | null | undefined }
 
 export type DateRangeValue = { start: string; end: string }
 
@@ -118,7 +118,7 @@ export type FilterClause = {
   id: string
   field: string
   op: FilterOp
-  value?: string
+  value?: string | undefined
 }
 
 export type SortDirection = "asc" | "desc"
@@ -565,7 +565,7 @@ export function groupRecords<T extends MultiRecord>(
   records: readonly T[],
   fields: readonly FieldDef[],
   fieldId: string | null | undefined,
-  options?: { includeEmpty?: boolean; emptyLabel?: string; locale?: string },
+  options?: { includeEmpty?: boolean | undefined; emptyLabel?: string | undefined; locale?: string | undefined },
 ): RecordGroup<T>[] {
   const field = fieldById(fields, fieldId ?? undefined)
   if (!field) {
@@ -625,7 +625,7 @@ export function groupRecordsWithSum<T extends MultiRecord>(
   fields: readonly FieldDef[],
   fieldId: string | null | undefined,
   sumFieldId: string | undefined,
-  options?: { includeEmpty?: boolean; emptyLabel?: string; locale?: string },
+  options?: { includeEmpty?: boolean | undefined; emptyLabel?: string | undefined; locale?: string | undefined },
 ): RecordGroup<T>[] {
   const groups = groupRecords(records, fields, fieldId, options)
   const metric = fieldById(fields, sumFieldId)

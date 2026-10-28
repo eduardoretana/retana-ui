@@ -37,19 +37,19 @@ export type ViewCalendarProps = {
   records: readonly MultiRecord[]
   fields: readonly FieldDef[]
   config: ViewConfig
-  locale?: string
-  weekStartsOn?: number
-  today?: string
-  onOpen?: (id: string) => void
-  onMove?: (id: string, patch: Record<string, unknown>) => Promise<void> | void
+  locale?: string | undefined
+  weekStartsOn?: number | undefined
+  today?: string | undefined
+  onOpen?: ((id: string) => void) | undefined
+  onMove?: ((id: string, patch: Record<string, unknown>) => Promise<void> | void) | undefined
   /** Events stay on their day. Omitted, the calendar still drags. */
-  readOnly?: boolean
-  todayLabel?: string
-  moreLabel?: (count: number) => string
-  className?: string
-  gridClassName?: string
-  cardClassName?: string
-  agendaClassName?: string
+  readOnly?: boolean | undefined
+  todayLabel?: string | undefined
+  moreLabel?: ((count: number) => string) | undefined
+  className?: string | undefined
+  gridClassName?: string | undefined
+  cardClassName?: string | undefined
+  agendaClassName?: string | undefined
 }
 
 export function ViewCalendar({
@@ -270,15 +270,15 @@ function DayCell({
   focused: boolean
   records: readonly MultiRecord[]
   fields: readonly FieldDef[]
-  titleField?: string
-  locale?: string
+  titleField?: string | undefined
+  locale?: string | undefined
   moreLabel: (count: number) => string
-  cardClassName?: string
+  cardClassName?: string | undefined
   onFocus: () => void
   onKeyDown: (event: React.KeyboardEvent) => void
-  onOpen?: (id: string) => void
+  onOpen?: ((id: string) => void) | undefined
   onReschedule: (id: string, iso: string) => void
-  readOnly?: boolean
+  readOnly?: boolean | undefined
   dateField: string
 }) {
   const { setNodeRef, isOver } = useDroppable({ id: `day:${iso}` })
@@ -357,11 +357,11 @@ function RecordChip({
 }: {
   record: MultiRecord
   fields: readonly FieldDef[]
-  titleField?: string
-  className?: string
-  onOpen?: (id: string) => void
+  titleField?: string | undefined
+  className?: string | undefined
+  onOpen?: ((id: string) => void) | undefined
   onReschedule: (delta: number) => void
-  readOnly?: boolean
+  readOnly?: boolean | undefined
   dateField: string
 }) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: record.id, disabled: readOnly })
@@ -412,15 +412,15 @@ function Agenda({
   days: { iso: string; inMonth: boolean }[]
   byDay: Map<string, MultiRecord[]>
   fields: readonly FieldDef[]
-  titleField?: string
+  titleField?: string | undefined
   today: string
-  locale?: string
+  locale?: string | undefined
   dateField: string
-  onOpen?: (id: string) => void
+  onOpen?: ((id: string) => void) | undefined
   onReschedule: (id: string, iso: string) => void
-  readOnly?: boolean
-  className?: string
-  cardClassName?: string
+  readOnly?: boolean | undefined
+  className?: string | undefined
+  cardClassName?: string | undefined
 }) {
   const listed = days.filter((day) => day.iso === today || (byDay.get(day.iso)?.length ?? 0) > 0)
   return (

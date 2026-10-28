@@ -10,17 +10,17 @@ import { cn } from "@/lib/utils"
 export type NextStep = {
   id: string
   title: string
-  detail?: string
-  icon?: React.ReactNode
+  detail?: string | undefined
+  icon?: React.ReactNode | undefined
 }
 
 export type NextStepsProps = {
   title: string
-  body?: string
-  steps?: readonly NextStep[]
-  actionLabel?: string
-  onAction?: () => void
-  className?: string
+  body?: string | undefined
+  steps?: readonly NextStep[] | undefined
+  actionLabel?: string | undefined
+  onAction?: (() => void) | undefined
+  className?: string | undefined
 }
 
 export function NextSteps({ title, body, steps = [], actionLabel, onAction, className }: NextStepsProps) {

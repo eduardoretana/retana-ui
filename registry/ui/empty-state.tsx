@@ -22,22 +22,22 @@ import { cn } from "@/lib/utils"
 import { motionPresets } from "@/registry/retana/lib/motion"
 
 export type EmptyStateClassNames = {
-  root?: string
-  icon?: string
-  title?: string
-  description?: string
-  action?: string
+  root?: string | undefined
+  icon?: string | undefined
+  title?: string | undefined
+  description?: string | undefined
+  action?: string | undefined
 }
 
 export type EmptyStateProps = {
   title: string
   description: string
-  action?: React.ReactNode
-  icon?: React.ReactNode
-  className?: string
-  classNames?: EmptyStateClassNames
+  action?: React.ReactNode | undefined
+  icon?: React.ReactNode | undefined
+  className?: string | undefined
+  classNames?: EmptyStateClassNames | undefined
   /** Optional accessible label for the state region. */
-  label?: string
+  label?: string | undefined
 }
 
 const exitFast: Transition = { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.standard] }
@@ -59,7 +59,7 @@ function Swap(props: HTMLMotionProps<"span">) {
 
 function iconKey(icon: React.ReactNode) {
   if (!React.isValidElement(icon)) return "icon"
-  const type = icon.type as string | { displayName?: string; name?: string }
+  const type = icon.type as string | { displayName?: string | undefined; name?: string | undefined }
   return typeof type === "string" ? type : type.displayName ?? type.name ?? "icon"
 }
 
@@ -81,7 +81,7 @@ function HeightFrame({ reduce, morphKey, children }: { reduce: boolean | null; m
       if (frame.current) Object.assign(frame.current.style, { overflow: "", height: "auto" })
     }
     const observer = new ResizeObserver(([entry]) => {
-      const next = entry.borderBoxSize?.[0]?.blockSize ?? node.offsetHeight
+      const next = entry?.borderBoxSize?.[0]?.blockSize ?? node.offsetHeight
       const current = height.get()
       const from = typeof current === "number" ? current : last
       last = next

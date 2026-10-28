@@ -52,7 +52,7 @@ function useControllable<T>({
 }: {
   value: T | undefined
   defaultValue: T
-  onChange?: (value: T) => void
+  onChange?: ((value: T) => void) | undefined
 }) {
   const [uncontrolled, setUncontrolled] = React.useState(defaultValue)
   const controlled = value !== undefined
@@ -76,41 +76,41 @@ function cssLength(value: string | undefined, fallback: string) {
 }
 
 type LayeredPanelProps = {
-  children?: React.ReactNode
-  open?: boolean
-  defaultOpen?: boolean
-  onOpenChange?: (open: boolean) => void
-  mode?: LayeredPanelMode
-  defaultMode?: LayeredPanelMode
-  onModeChange?: (mode: LayeredPanelMode) => void
+  children?: React.ReactNode | undefined
+  open?: boolean | undefined
+  defaultOpen?: boolean | undefined
+  onOpenChange?: ((open: boolean) => void) | undefined
+  mode?: LayeredPanelMode | undefined
+  defaultMode?: LayeredPanelMode | undefined
+  onModeChange?: ((mode: LayeredPanelMode) => void) | undefined
   /** Accessible name announced for the dialog. */
-  title?: string
+  title?: string | undefined
   /** Accessible description. Kept visually hidden. */
-  description?: string
+  description?: string | undefined
   /** Close button label. Default: "Close". */
-  closeLabel?: string
+  closeLabel?: string | undefined
   /** Mobile tab for the peek column. Default: "Overview". */
-  mobilePeekLabel?: string
+  mobilePeekLabel?: string | undefined
   /** Mobile tab for the full column. Default: "Profile". */
-  mobileFullLabel?: string
+  mobileFullLabel?: string | undefined
   /** Peek width on desktop. Any single CSS length. Default: 26.25rem (420px). */
-  peekWidth?: string
+  peekWidth?: string | undefined
   /** Expanded width on desktop. Any single CSS length. Default: 70vw. */
-  fullWidth?: string
+  fullWidth?: string | undefined
   /** Hide the built-in close button when you render your own. */
-  showClose?: boolean
+  showClose?: boolean | undefined
   /** Panel surface. Merged onto the dialog content. */
-  className?: string
+  className?: string | undefined
   /** Backdrop. Default uses `bg-foreground` / `bg-background`, not a custom color. */
-  overlayClassName?: string
+  overlayClassName?: string | undefined
   /** Built-in close button. */
-  closeClassName?: string
+  closeClassName?: string | undefined
   /** Mobile tab track, below 1024px. */
-  tabsClassName?: string
+  tabsClassName?: string | undefined
   /** Each mobile tab button. */
-  tabClassName?: string
+  tabClassName?: string | undefined
   /** Grid that holds Header, ExpandToggle, Peek, and Full. */
-  gridClassName?: string
+  gridClassName?: string | undefined
 }
 
 function LayeredPanelRoot({
@@ -298,7 +298,7 @@ function ModeButton({
 }: {
   pressed: boolean
   onClick: () => void
-  className?: string
+  className?: string | undefined
   children: React.ReactNode
 }) {
   return (
@@ -320,9 +320,9 @@ function ModeButton({
 }
 
 type ColumnProps = {
-  children?: React.ReactNode
-  className?: string
-  contentClassName?: string
+  children?: React.ReactNode | undefined
+  className?: string | undefined
+  contentClassName?: string | undefined
 }
 
 function Peek({ children, className, contentClassName }: ColumnProps) {
@@ -386,8 +386,8 @@ function Header({
   children,
   className,
 }: {
-  children?: React.ReactNode
-  className?: string
+  children?: React.ReactNode | undefined
+  className?: string | undefined
 }) {
   return (
     <div
@@ -406,13 +406,13 @@ Header.displayName = "LayeredPanel.Header"
 
 type ExpandToggleProps = {
   /** Label while the panel is peeked. Default: "View full profile". */
-  expandLabel?: string
+  expandLabel?: string | undefined
   /** Label while the panel is expanded. Default: "Close profile". */
-  collapseLabel?: string
+  collapseLabel?: string | undefined
   /** Wrapper that places the control on the grid. */
-  className?: string
+  className?: string | undefined
   /** Passed to the host `Button`. Does not replace its variant. */
-  buttonClassName?: string
+  buttonClassName?: string | undefined
 }
 
 function ExpandToggle({
@@ -446,11 +446,11 @@ ExpandToggle.displayName = "LayeredPanel.ExpandToggle"
 
 type DetailSectionProps = {
   title: string
-  icon?: React.ReactNode
-  children?: React.ReactNode
-  className?: string
-  contentClassName?: string
-  titleClassName?: string
+  icon?: React.ReactNode | undefined
+  children?: React.ReactNode | undefined
+  className?: string | undefined
+  contentClassName?: string | undefined
+  titleClassName?: string | undefined
 }
 
 function DetailSection({
@@ -485,13 +485,13 @@ DetailSection.displayName = "LayeredPanel.Section"
 
 type DetailFieldProps = {
   label: string
-  icon?: React.ReactNode
-  value?: React.ReactNode
-  children?: React.ReactNode
-  href?: string
-  className?: string
-  labelClassName?: string
-  valueClassName?: string
+  icon?: React.ReactNode | undefined
+  value?: React.ReactNode | undefined
+  children?: React.ReactNode | undefined
+  href?: string | undefined
+  className?: string | undefined
+  labelClassName?: string | undefined
+  valueClassName?: string | undefined
 }
 
 function DetailField({

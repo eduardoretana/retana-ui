@@ -25,40 +25,40 @@ import { cn } from "@/lib/utils"
 import { joinMeta } from "@/registry/retana/lib/dashboard-format"
 import { PriorityBadge, type PriorityLevel } from "@/registry/retana/ui/priority-badge"
 
-export type RecordCrumb = { label: string; href?: string; onSelect?: () => void }
+export type RecordCrumb = { label: string; href?: string | undefined; onSelect?: (() => void) | undefined }
 
-export type RecordPerson = { name: string; src?: string }
+export type RecordPerson = { name: string; src?: string | undefined }
 
 export type RecordAction = { id: string; label: string; onSelect: () => void }
 
 export type RecordHeaderClassNames = {
-  root?: string
-  title?: string
-  meta?: string
-  actions?: string
+  root?: string | undefined
+  title?: string | undefined
+  meta?: string | undefined
+  actions?: string | undefined
 }
 
 export type RecordHeaderProps = {
-  crumbs?: readonly RecordCrumb[]
+  crumbs?: readonly RecordCrumb[] | undefined
   title: string
-  headingLevel?: 1 | 2 | 3
-  status?: string
-  meta?: readonly string[]
-  people?: readonly RecordPerson[]
-  priority?: PriorityLevel
-  priorityLabel?: string
-  statusDot?: string
-  statusTone?: "neutral" | "accent" | "info" | "warning"
-  onBack?: () => void
-  backLabel?: string
-  leading?: React.ReactNode
-  primary?: React.ReactNode
-  secondary?: readonly RecordAction[]
-  menu?: readonly RecordAction[]
-  collapseActions?: boolean
-  aside?: React.ReactNode
-  className?: string
-  classNames?: RecordHeaderClassNames
+  headingLevel?: 1 | 2 | 3 | undefined
+  status?: string | undefined
+  meta?: readonly string[] | undefined
+  people?: readonly RecordPerson[] | undefined
+  priority?: PriorityLevel | undefined
+  priorityLabel?: string | undefined
+  statusDot?: string | undefined
+  statusTone?: "neutral" | "accent" | "info" | "warning" | undefined
+  onBack?: (() => void) | undefined
+  backLabel?: string | undefined
+  leading?: React.ReactNode | undefined
+  primary?: React.ReactNode | undefined
+  secondary?: readonly RecordAction[] | undefined
+  menu?: readonly RecordAction[] | undefined
+  collapseActions?: boolean | undefined
+  aside?: React.ReactNode | undefined
+  className?: string | undefined
+  classNames?: RecordHeaderClassNames | undefined
 }
 
 function initials(name: string) {

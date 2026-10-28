@@ -11,19 +11,19 @@ export const PRIORITY_LEVELS = ["low", "medium", "high", "critical"] as const
 export type PriorityLevel = (typeof PRIORITY_LEVELS)[number]
 
 export type PriorityBadgeClassNames = {
-  root?: string
-  glyph?: string
-  label?: string
+  root?: string | undefined
+  glyph?: string | undefined
+  label?: string | undefined
 }
 
 export type PriorityBadgeProps = {
   level: PriorityLevel
-  label?: string
-  variant?: "chip" | "glyph" | "pill"
+  label?: string | undefined
+  variant?: "chip" | "glyph" | "pill" | undefined
   /** Pill only. Soft keeps a wash. Solid fills high and critical. */
-  appearance?: "soft" | "solid"
-  className?: string
-  classNames?: PriorityBadgeClassNames
+  appearance?: "soft" | "solid" | undefined
+  className?: string | undefined
+  classNames?: PriorityBadgeClassNames | undefined
 }
 
 const DEFAULT_LABEL: Record<PriorityLevel, string> = {
@@ -41,7 +41,7 @@ export function comparePriority(a: PriorityLevel, b: PriorityLevel): number {
   return priorityRank(a) - priorityRank(b)
 }
 
-function SignalGlyph({ filled, className }: { filled: number; className?: string }) {
+function SignalGlyph({ filled, className }: { filled: number; className?: string | undefined }) {
   const heights = [4, 7, 10, 13]
   return (
     <svg viewBox="0 0 16 14" className={cn("h-3.5 w-4", className)} aria-hidden>

@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [CPL]
+
+jobs:
+  registry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Strict host type-check
+        run: pnpm typecheck:strict-host
+      - run: pnpm test
+      - name: Registry build is in sync
+        run: |
+          pnpm registry:build
+          git diff --exit-code -- public/r lib/generated
+          untracked=$(git status --porcelain --untracked-files=all -- public/r lib/generated)
+          if [ -n "$untracked" ]; then echo "$untracked"; exit 1; fi

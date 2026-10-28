@@ -17,9 +17,9 @@ import { cn } from "@/lib/utils"
 import { PriorityBadge, type PriorityLevel } from "@/registry/retana/ui/priority-badge"
 
 export type AttentionChip =
-  | { type: "priority"; level: PriorityLevel; label?: string }
+  | { type: "priority"; level: PriorityLevel; label?: string | undefined }
   | { type: "date"; label: string }
-  | { type: "status"; label: string; tone?: "neutral" | "good" | "bad" }
+  | { type: "status"; label: string; tone?: "neutral" | "good" | "bad" | undefined }
   | { type: "progress"; done: number; total: number }
   | { type: "text"; label: string }
 
@@ -32,39 +32,39 @@ export type AttentionAction = {
 export type AttentionItem = {
   id: string
   title: string
-  description?: string
-  tone?: "critical" | "neutral" | "positive"
-  chips?: readonly AttentionChip[]
-  href?: string
-  onSelect?: (item: AttentionItem) => void
-  actions?: readonly AttentionAction[]
+  description?: string | undefined
+  tone?: "critical" | "neutral" | "positive" | undefined
+  chips?: readonly AttentionChip[] | undefined
+  href?: string | undefined
+  onSelect?: ((item: AttentionItem) => void) | undefined
+  actions?: readonly AttentionAction[] | undefined
   /** Cells for layout="table", keyed by column id. */
-  cells?: Record<string, React.ReactNode>
+  cells?: Record<string, React.ReactNode> | undefined
 }
 
 export type AttentionListClassNames = {
-  root?: string
-  item?: string
-  title?: string
-  description?: string
-  empty?: string
+  root?: string | undefined
+  item?: string | undefined
+  title?: string | undefined
+  description?: string | undefined
+  empty?: string | undefined
 }
 
-export type AttentionColumn = { id: string; label: string; mono?: boolean }
+export type AttentionColumn = { id: string; label: string; mono?: boolean | undefined }
 
 export type AttentionListProps = {
   items: readonly AttentionItem[]
-  label?: string
-  layout?: "stack" | "table" | "compact"
-  columns?: readonly AttentionColumn[]
-  max?: number
-  moreLabel?: (hidden: number) => string
-  emptyLabel?: string
-  emptyHint?: string
-  loading?: boolean
-  loadingRows?: number
-  className?: string
-  classNames?: AttentionListClassNames
+  label?: string | undefined
+  layout?: "stack" | "table" | "compact" | undefined
+  columns?: readonly AttentionColumn[] | undefined
+  max?: number | undefined
+  moreLabel?: ((hidden: number) => string) | undefined
+  emptyLabel?: string | undefined
+  emptyHint?: string | undefined
+  loading?: boolean | undefined
+  loadingRows?: number | undefined
+  className?: string | undefined
+  classNames?: AttentionListClassNames | undefined
 }
 
 const tileClass = {

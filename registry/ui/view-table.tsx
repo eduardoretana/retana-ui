@@ -49,22 +49,22 @@ const helper = createColumnHelper<typeof features, Row>()
 export type ViewTableProps = {
   records: readonly MultiRecord[]
   fields: readonly FieldDef[]
-  config?: ViewConfig
-  locale?: string
-  sort?: SortClause | null
-  onSortChange?: (sort: SortClause | null) => void
-  selectedIds?: readonly string[]
-  onSelectedIdsChange?: (ids: string[]) => void
-  onOpen?: (id: string) => void
-  onDelete?: (ids: readonly string[]) => Promise<void> | void
-  emptyLabel?: string
-  openLabel?: string
-  columnsLabel?: string
-  className?: string
-  toolbarClassName?: string
-  tableClassName?: string
-  rowClassName?: string
-  headerClassName?: string
+  config?: ViewConfig | undefined
+  locale?: string | undefined
+  sort?: SortClause | null | undefined
+  onSortChange?: ((sort: SortClause | null) => void) | undefined
+  selectedIds?: readonly string[] | undefined
+  onSelectedIdsChange?: ((ids: string[]) => void) | undefined
+  onOpen?: ((id: string) => void) | undefined
+  onDelete?: ((ids: readonly string[]) => Promise<void> | void) | undefined
+  emptyLabel?: string | undefined
+  openLabel?: string | undefined
+  columnsLabel?: string | undefined
+  className?: string | undefined
+  toolbarClassName?: string | undefined
+  tableClassName?: string | undefined
+  rowClassName?: string | undefined
+  headerClassName?: string | undefined
 }
 
 export function ViewTable({
@@ -315,10 +315,10 @@ function FieldCell({
 }: {
   field: FieldDef
   record: MultiRecord
-  locale?: string
+  locale?: string | undefined
   title: boolean
   openLabel: string
-  onOpen?: (id: string) => void
+  onOpen?: ((id: string) => void) | undefined
 }) {
   if (!title) return <FieldDisplay field={field} value={record[field.id]} locale={locale} />
   const label = recordTitle(record, [field], field.id)

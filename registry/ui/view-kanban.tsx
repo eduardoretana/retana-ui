@@ -56,29 +56,29 @@ export type ViewKanbanProps = {
   records: readonly MultiRecord[]
   fields: readonly FieldDef[]
   config: ViewConfig
-  locale?: string
-  selectedIds?: readonly string[]
-  onSelectedIdsChange?: (ids: string[]) => void
-  onOpen?: (id: string) => void
-  onDelete?: (ids: readonly string[]) => Promise<void> | void
-  onMove?: (id: string, patch: Record<string, unknown>) => Promise<void> | void
+  locale?: string | undefined
+  selectedIds?: readonly string[] | undefined
+  onSelectedIdsChange?: ((ids: string[]) => void) | undefined
+  onOpen?: ((id: string) => void) | undefined
+  onDelete?: ((ids: readonly string[]) => Promise<void> | void) | undefined
+  onMove?: ((id: string, patch: Record<string, unknown>) => Promise<void> | void) | undefined
   /** Cards stay put. Omitted, the board still drags. */
-  readOnly?: boolean
-  onCreateRequest?: (seed: Record<string, unknown>) => void
-  emptyLabel?: string
-  emptyHint?: string
-  addLabel?: string
-  moveLabel?: string
+  readOnly?: boolean | undefined
+  onCreateRequest?: ((seed: Record<string, unknown>) => void) | undefined
+  emptyLabel?: string | undefined
+  emptyHint?: string | undefined
+  addLabel?: string | undefined
+  moveLabel?: string | undefined
   /** Collapse a column after this many cards and offer the rest behind a button. */
-  maxVisible?: number
-  moreLabel?: (hidden: number) => string
+  maxVisible?: number | undefined
+  moreLabel?: ((hidden: number) => string) | undefined
   /** Cards that should wear a highlight ring for a short time. */
-  highlightedIds?: readonly string[]
+  highlightedIds?: readonly string[] | undefined
   /** Summary cards read priority, due, amount, and progress when those keys exist. */
-  cardLayout?: "fields" | "summary"
-  className?: string
-  columnClassName?: string
-  cardClassName?: string
+  cardLayout?: "fields" | "summary" | undefined
+  className?: string | undefined
+  columnClassName?: string | undefined
+  cardClassName?: string | undefined
 }
 
 export function ViewKanban({
@@ -302,7 +302,7 @@ function SummaryChips({ record }: { record: MultiRecord }) {
   const subtitle = typeof record.subtitle === "string" ? record.subtitle : null
   const progress =
     record.progress && typeof record.progress === "object"
-      ? (record.progress as { done?: number; total?: number })
+      ? (record.progress as { done?: number | undefined; total?: number | undefined })
       : null
   return (
     <div className="mt-2 flex flex-col gap-2">
@@ -336,7 +336,7 @@ function Column({
   children,
 }: {
   id: string
-  className?: string
+  className?: string | undefined
   children: React.ReactNode
 }) {
   const { setNodeRef, isOver } = useDroppable({ id })
@@ -376,22 +376,22 @@ function Card({
 }: {
   record: MultiRecord
   fields: readonly FieldDef[]
-  titleField?: string
+  titleField?: string | undefined
   cardFields: readonly FieldDef[]
-  locale?: string
+  locale?: string | undefined
   groupKey: string
   selected: boolean
   onSelectedChange: (checked: boolean) => void
-  onOpen?: (id: string) => void
-  onDelete?: (ids: readonly string[]) => Promise<void> | void
+  onOpen?: ((id: string) => void) | undefined
+  onDelete?: ((ids: readonly string[]) => Promise<void> | void) | undefined
   reduced: boolean
-  className?: string
+  className?: string | undefined
   moveLabel: string
   groups: readonly { key: string; label: string }[]
   onMoveTo: (key: string) => void
-  readOnly?: boolean
-  highlighted?: boolean
-  layout?: "fields" | "summary"
+  readOnly?: boolean | undefined
+  highlighted?: boolean | undefined
+  layout?: "fields" | "summary" | undefined
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: record.id,
