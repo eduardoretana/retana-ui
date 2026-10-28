@@ -171,6 +171,7 @@ export function reviewLabels(locale: SceneLocale): Partial<ReviewCenterLabels> {
     reject: "Rechazar",
     skip: "Saltar",
     undo: "Deshacer",
+    undoOffer: (title) => `Último paso, “${title}”`,
     reasons: "Por qué no",
     skipped: "Saltado",
     empty: "No hay nada esperando revisión.",

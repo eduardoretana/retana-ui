@@ -68,6 +68,7 @@ export type ReviewCenterLabels = {
   reject: string
   skip: string
   undo: string
+  undoOffer: (title: string) => string
   reasons: string
   skipped: string
   empty: string
@@ -103,6 +104,7 @@ const reviewLabels: ReviewCenterLabels = {
   reject: "Reject",
   skip: "Skip",
   undo: "Undo",
+  undoOffer: (title) => `Last step, “${title}”`,
   reasons: "Why not",
   skipped: "Skipped",
   empty: "Nothing is waiting for review.",
@@ -510,7 +512,7 @@ export function ReviewCenter<TMeta = unknown>({
           )}
           {undo ? (
             <div className="flex flex-wrap items-center gap-2 rounded-lg border border-border px-3 py-2">
-              <p className="text-xs">{labels.undone(undo.title)}</p>
+              <p className="text-xs">{labels.undoOffer(undo.title)}</p>
               <Button type="button" size="sm" variant="outline" className="ms-auto" aria-keyshortcuts="Control+Z" onClick={() => onUndo?.()}>
                 {labels.undo}
               </Button>

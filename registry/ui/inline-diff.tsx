@@ -253,6 +253,7 @@ export function InlineDiff({
                   }}
                 >
                   {segment.remove ? <del className="rounded-sm bg-destructive/10 text-destructive no-underline line-through">{segment.remove}</del> : null}
+                  {segment.remove && segment.insert ? " " : null}
                   {segment.insert ? <ins className="rounded-sm bg-primary/10 text-foreground no-underline">{segment.insert}</ins> : null}
                 </button>
               )

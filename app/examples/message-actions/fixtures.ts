@@ -23,7 +23,12 @@ const short = {
   en: "PED-1048 stays at $18,400.00 MXN and León waits until Monday 2 November.",
 }
 
-export const filled: MessageFixture = { versions: [long, short], retry: short, version: 0, quiet: false }
+const retry = {
+  es: "En corto: el horno 2 no enciende, así que León espera al lunes 2 de noviembre. El anticipo sigue en $18,400.00 MXN.",
+  en: "In short: kiln 2 will not light, so León waits until Monday 2 November. The deposit stays at $18,400.00 MXN.",
+}
+
+export const filled: MessageFixture = { versions: [long, short], retry, version: 0, quiet: false }
 
 export const empty: MessageFixture = { versions: [], retry: { es: "", en: "" } }
 
