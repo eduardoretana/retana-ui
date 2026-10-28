@@ -6368,6 +6368,14 @@
         "descriptionEs": "Muestra qué ocupa un cupo y qué tan cerca está del límite.",
         "preview": "app/examples/usage-meter/preview.tsx",
         "previewHref": "/examples/usage-meter",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "near", "label": "Casi lleno", "labelEn": "Almost full" },
+          { "id": "over", "label": "Sobre el límite", "labelEn": "Over limit" }
+        ],
         "examples": [
           {
             "title": "Medidor de uso",
@@ -6401,6 +6409,11 @@
             "name": "decimals",
             "type": "number",
             "description": "decimals"
+          },
+          {
+            "name": "labels",
+            "type": "Partial<UsageMeterLabels>",
+            "description": "Captions, badge, and announcements. English is the default."
           },
           {
             "name": "className / classNames",
@@ -10879,6 +10892,14 @@
         "descriptionEs": "Una puerta humana antes de ejecutar una herramienta, y luego un recibo breve.",
         "preview": "app/examples/tool-approval/preview.tsx",
         "previewHref": "/examples/tool-approval",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "approved", "label": "Aprobado", "labelEn": "Approved" },
+          { "id": "denied", "label": "Rechazado", "labelEn": "Denied" }
+        ],
         "examples": [
           {
             "title": "Aprobación de herramienta",
@@ -10912,6 +10933,11 @@
             "name": "changes / choices",
             "type": "props",
             "description": "A change list, a version chip, required choices that disable Approve, a hint, and a summary slot."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<ToolApprovalLabels>",
+            "description": "Receipt, risk, and always-allow copy. English is the default."
           }
         ]
       },
@@ -27270,6 +27296,14 @@
         "descriptionEs": "Avatar, fecha de aplicación, puntaje, avance por etapa y agregar evaluación.",
         "preview": "app/examples/candidate-card/preview.tsx",
         "previewHref": "/examples/candidate-card",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "readonly", "label": "Solo lectura", "labelEn": "Read only" },
+          { "id": "offer", "label": "Oferta", "labelEn": "Offer" }
+        ],
         "examples": [
           {
             "title": "Tarjeta",

@@ -15,6 +15,7 @@ function item(partial: Partial<CatalogItem> & Pick<CatalogItem, "name" | "kind">
     docs: "",
     files: [],
     examples: [],
+    scenes: [],
     previewHref: "",
     api: [],
     usage: "",

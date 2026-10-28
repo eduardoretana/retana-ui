@@ -73,7 +73,7 @@ export default async function ItemPage({ params }: PageProps) {
           </ul>
         </header>
 
-        <PreviewStage src={item.previewHref} title={`${item.titleEs} preview`} />
+        <PreviewStage src={item.previewHref} title={`${item.titleEs} preview`} scenes={item.scenes} />
 
         {item.examples.length > 0 ? (
           <section className="flex flex-col gap-3">

@@ -1,3 +1,4 @@
+import { mergePlpExamples, normalizePlpScenes, plpSceneExamples, type PlpScene } from "@/lib/plp"
 import registry from "@/registry.json"
 
 export type CatalogKind = "component" | "block" | "hook" | "lib"
@@ -34,6 +35,7 @@ export type CatalogItem = {
   docs: string
   files: CatalogFile[]
   examples: CatalogExample[]
+  scenes: PlpScene[]
   previewHref: string
   api: CatalogApiRow[]
   usage: string
@@ -51,6 +53,7 @@ type RegistryMeta = {
   preview?: string
   previewHref?: string
   examples?: CatalogExample[]
+  scenes?: unknown
   api?: CatalogApiRow[]
   usage?: string
 }
@@ -124,7 +127,8 @@ function asItem(raw: RegistryItem): CatalogItem {
     registryDependencies: raw.registryDependencies ?? [],
     docs: raw.docs ?? "",
     files: raw.files ?? [],
-    examples: meta.examples ?? [],
+    examples: mergePlpExamples(meta.examples ?? [], plpSceneExamples(raw.name, normalizePlpScenes(meta.scenes))),
+    scenes: normalizePlpScenes(meta.scenes),
     previewHref: meta.previewHref ?? "",
     api: meta.api ?? [],
     usage: meta.usage ?? "",

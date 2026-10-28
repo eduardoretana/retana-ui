@@ -45,11 +45,43 @@ export type ToolApprovalProps = {
   summary?: React.ReactNode
   className?: string
   classNames?: ToolApprovalClassNames
+  /** Chrome copy. English is the default; pass Spanish (or another language) from the host. */
+  labels?: Partial<ToolApprovalLabels>
+}
+
+export type ToolApprovalLabels = {
+  risk: (risk: ApprovalRisk) => string
+  changes: string
+  alwaysAllow: string
+  approved: string
+  denied: string
+  showMore: string
+  showLess: string
+  waiting: (toolName: string) => string
+  approvedFor: (toolName: string) => string
+  deniedFor: (toolName: string) => string
+}
+
+const toolApprovalLabels: ToolApprovalLabels = {
+  risk: (risk) => `Risk ${risk}`,
+  changes: "Changes",
+  alwaysAllow: "Always allow this tool",
+  approved: "Approved",
+  denied: "Denied",
+  showMore: "Show more",
+  showLess: "Show less",
+  waiting: (toolName) => `Waiting for a decision on ${toolName}`,
+  approvedFor: (toolName) => `${toolName} approved`,
+  deniedFor: (toolName) => `${toolName} denied`,
+}
+
+function resolveToolLabels(partial?: Partial<ToolApprovalLabels>): ToolApprovalLabels {
+  return { ...toolApprovalLabels, ...partial }
 }
 
 const CLAMP = 80
 
-function ArgValue({ value }: { value: unknown }) {
+function ArgValue({ value, showMore, showLess }: { value: unknown; showMore: string; showLess: string }) {
   const text = typeof value === "string" ? value : JSON.stringify(value)
   const [open, setOpen] = React.useState(false)
   const long = text.length > CLAMP
@@ -62,7 +94,7 @@ function ArgValue({ value }: { value: unknown }) {
           className="ml-1 text-xs text-muted-foreground underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           onClick={() => setOpen((current) => !current)}
         >
-          {open ? "Show less" : "Show more"}
+          {open ? showLess : showMore}
         </button>
       ) : null}
     </span>
@@ -93,7 +125,9 @@ export function ToolApproval({
   summary,
   className,
   classNames,
+  labels: labelOverrides,
 }: ToolApprovalProps) {
+  const labels = resolveToolLabels(labelOverrides)
   const titleId = React.useId()
   const liveId = React.useId()
   const receiptRef = React.useRef<HTMLParagraphElement>(null)
@@ -143,7 +177,7 @@ export function ToolApproval({
         className={cn("rounded-lg border border-border bg-card p-3 text-sm", className, classNames?.root)}
       >
         <p id={liveId} className="sr-only" aria-live="polite">
-          {approved ? `${toolName} approved` : `${toolName} denied`}
+          {approved ? labels.approvedFor(toolName) : labels.deniedFor(toolName)}
         </p>
         <p
           id={titleId}
@@ -152,7 +186,7 @@ export function ToolApproval({
           className={cn("flex items-center gap-2 text-muted-foreground outline-none", classNames?.receipt)}
         >
           {approved ? <Check aria-hidden="true" className="size-4" /> : <X aria-hidden="true" className="size-4" />}
-          <span>{approved ? "Approved" : "Denied"}</span>
+          <span>{approved ? labels.approved : labels.denied}</span>
           <span className="font-mono text-foreground">{toolName}</span>
         </p>
       </div>
@@ -174,7 +208,7 @@ export function ToolApproval({
         {risk ? (
           <p className={cn("flex items-center gap-1 text-xs", risk === "high" ? "text-destructive" : "text-muted-foreground")}>
             {risk === "high" ? <ShieldAlert aria-hidden="true" className="size-3.5" /> : <AlertTriangle aria-hidden="true" className="size-3.5" />}
-            Risk {risk}
+            {labels.risk(risk)}
           </p>
         ) : null}
       </div>
@@ -182,7 +216,7 @@ export function ToolApproval({
       {changes.length > 0 ? (
         <div className="rounded-xl bg-muted p-2">
           <div className="mb-2 flex items-center justify-between gap-2">
-            <p className="text-xs font-medium text-muted-foreground">Changes</p>
+            <p className="text-xs font-medium text-muted-foreground">{labels.changes}</p>
             {versionLabel ? <span className="rounded-full bg-card px-2 py-0.5 font-mono text-[10px]">{versionLabel}</span> : null}
           </div>
           <ul className="flex flex-col gap-2">
@@ -212,7 +246,7 @@ export function ToolApproval({
             <div key={key} className="flex min-w-0 flex-wrap items-baseline gap-2">
               <dt className="text-xs text-muted-foreground">{key}</dt>
               <dd className="min-w-0">
-                <ArgValue value={value} />
+                <ArgValue value={value} showMore={labels.showMore} showLess={labels.showLess} />
               </dd>
             </div>
           ))}
@@ -227,7 +261,7 @@ export function ToolApproval({
       {onAlwaysAllowChange ? (
         <label className="flex items-center gap-2 text-sm text-foreground">
           <Checkbox checked={alwaysAllow} onCheckedChange={(value) => onAlwaysAllowChange(value === true)} />
-          Always allow this tool
+          {labels.alwaysAllow}
         </label>
       ) : null}
       <div className={cn("flex flex-wrap items-center gap-2", classNames?.actions)}>
@@ -245,7 +279,7 @@ export function ToolApproval({
         </Button>
       </div>
       <p id={liveId} className="sr-only" aria-live="polite">
-        Waiting for a decision on {toolName}
+        {labels.waiting(toolName)}
       </p>
     </div>
   )

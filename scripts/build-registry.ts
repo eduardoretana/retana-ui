@@ -2,6 +2,7 @@ import { spawnSync } from "node:child_process"
 import fs from "node:fs"
 import path from "node:path"
 
+import { mergePlpExamples, normalizePlpScenes, plpSceneExamples } from "../lib/plp.ts"
 import { rewriteRegistryImports, scanPayloadDocument } from "./installed-imports.ts"
 import { validateRegistryTree, type RegistryInput } from "./validate-registry.ts"
 
@@ -22,6 +23,27 @@ const build = spawnSync("pnpm", ["exec", "shadcn", "build"], {
 })
 if (build.status !== 0) process.exit(build.status ?? 1)
 
+const registry = JSON.parse(
+  fs.readFileSync(path.join(root, "registry.json"), "utf8"),
+) as RegistryInput
+
+const scenesByName = new Map(
+  (registry.items ?? []).flatMap((item) => (item.name && item.meta?.scenes ? [[item.name, item.meta.scenes] as const] : [])),
+)
+
+function applySceneExamples(json: unknown, itemName: string, scenes: unknown) {
+  if (!json || typeof json !== "object") return false
+  const meta = (json as { meta?: { examples?: { href?: string }[] } }).meta
+  if (!meta) return false
+  const normalized = normalizePlpScenes(scenes)
+  if (!normalized.length) return false
+  const current = Array.isArray(meta.examples) ? meta.examples : []
+  const merged = mergePlpExamples(current, plpSceneExamples(itemName, normalized))
+  if (merged.length === current.length) return false
+  meta.examples = merged
+  return true
+}
+
 const builtDir = path.join(root, "public", "r")
 const builtErrors: string[] = []
 let rewritten = 0
@@ -29,12 +51,19 @@ for (const name of fs.readdirSync(builtDir)) {
   if (!name.endsWith(".json")) continue
   const filePath = path.join(builtDir, name)
   const original = fs.readFileSync(filePath, "utf8")
-  const text = rewriteRegistryImports(original)
+  let text = rewriteRegistryImports(original)
+  const json = JSON.parse(text) as unknown
+  let scenesApplied = false
+  if (name !== "registry.json") {
+    const itemName = name.replace(/\.json$/, "")
+    const scenes = scenesByName.get(itemName)
+    if (scenes && applySceneExamples(json, itemName, scenes)) scenesApplied = true
+  }
+  if (scenesApplied) text = `${JSON.stringify(json, null, 2)}\n`
   if (text !== original) {
     fs.writeFileSync(filePath, text)
     rewritten += 1
   }
-  const json = JSON.parse(text) as unknown
   if (json && typeof json === "object" && "cssVars" in json) {
     builtErrors.push(`public/r/${name} contains cssVars.`)
   }
@@ -55,10 +84,6 @@ for (const name of fs.readdirSync(builtDir)) {
 }
 if (rewritten) console.log(`Rewrote install imports in ${rewritten} registry payloads.`)
 if (builtErrors.length) fail(builtErrors)
-
-const registry = JSON.parse(
-  fs.readFileSync(path.join(root, "registry.json"), "utf8"),
-) as RegistryInput
 
 const imports: string[] = []
 const entries: string[] = []
