@@ -1,0 +1,141 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "fan-out-grid",
+  "title": "Fan-out grid",
+  "author": "Eduardo Retana",
+  "description": "One job split into cells. A failed cell can be tried again. The grid does not shine.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "badge",
+    "button",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/fan-out-grid.tsx",
+      "content": "\"use client\"\n\n/**\n * One job handed to many workers. Clean-room reading of a public behavior\n * description: every piece of the job is a cell, and a failed cell can be\n * tried again. No Affect source, sample data, icons, or assets were copied.\n * Cells do not shine or animate.\n */\n\nimport * as React from \"react\"\nimport { RotateCcw } from \"lucide-react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport const FAN_STATUSES = [\"waiting\", \"running\", \"retrying\", \"done\", \"failed\"] as const\n\nexport type FanStatus = (typeof FAN_STATUSES)[number]\n\nexport type FanCell<TMeta = unknown> = {\n  id: string\n  title: string\n  worker?: string\n  status: FanStatus\n  detail?: string\n  meta?: TMeta\n}\n\nexport type FanTally = Record<FanStatus, number> & { total: number }\n\nexport type FanOutGridLabels = {\n  title: string\n  done: (done: number, total: number) => string\n  status: Record<FanStatus, string>\n  worker: (name: string) => string\n  open: (title: string) => string\n  retry: string\n  retryNamed: (title: string) => string\n  empty: string\n  loading: string\n  retried: (title: string) => string\n}\n\nexport type FanOutGridClassNames = {\n  root?: string\n  cell?: string\n}\n\nexport type FanOutGridProps<TMeta = unknown> = {\n  cells?: readonly FanCell<TMeta>[]\n  job?: string\n  loading?: boolean\n  error?: string\n  title?: string\n  onOpen?: (id: string) => void\n  onRetry?: (id: string) => void\n  className?: string\n  classNames?: FanOutGridClassNames\n  labels?: Partial<FanOutGridLabels>\n}\n\nconst fanLabels: FanOutGridLabels = {\n  title: \"Fan-out\",\n  done: (done, total) => `${done} of ${total} done`,\n  status: {\n    waiting: \"Waiting\",\n    running: \"In progress\",\n    retrying: \"Trying again\",\n    done: \"Done\",\n    failed: \"Failed\",\n  },\n  worker: (name) => `With ${name}`,\n  open: (title) => `Open “${title}”`,\n  retry: \"Try again\",\n  retryNamed: (title) => `Try “${title}” again`,\n  empty: \"This job has no pieces yet.\",\n  loading: \"Loading the grid\",\n  retried: (title) => `Trying “${title}” again`,\n}\n\nfunction resolveLabels(partial?: Partial<FanOutGridLabels>): FanOutGridLabels {\n  return { ...fanLabels, ...partial, status: { ...fanLabels.status, ...partial?.status } }\n}\n\nexport function fanTally(cells: readonly Pick<FanCell, \"id\" | \"status\">[]): FanTally {\n  const tally: FanTally = { waiting: 0, running: 0, retrying: 0, done: 0, failed: 0, total: cells.length }\n  for (const cell of cells) tally[cell.status] += 1\n  return tally\n}\n\nconst CELL: Record<FanStatus, string> = {\n  waiting: \"border-border bg-muted/50\",\n  running: \"border-chart-2 bg-chart-2/15\",\n  retrying: \"border-chart-4 bg-chart-4/20\",\n  done: \"border-primary/40 bg-primary/10\",\n  failed: \"border-destructive bg-destructive/10\",\n}\n\nexport function FanOutGrid<TMeta = unknown>({\n  cells = [],\n  job,\n  loading = false,\n  error,\n  title,\n  onOpen,\n  onRetry,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: FanOutGridProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const heading = title ?? labels.title\n  const tally = fanTally(cells)\n  const [openId, setOpenId] = React.useState<string | null>(null)\n  const [live, setLive] = React.useState(\"\")\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        <Badge variant=\"secondary\">{labels.done(tally.done, tally.total)}</Badge>\n        {tally.failed > 0 ? <Badge variant=\"destructive\">{labels.status.failed} {tally.failed}</Badge> : null}\n        {tally.retrying > 0 ? <Badge variant=\"outline\">{labels.status.retrying} {tally.retrying}</Badge> : null}\n      </header>\n      {job ? <p className=\"text-xs text-muted-foreground\">{job}</p> : null}\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\" className=\"grid grid-cols-2 gap-2 sm:grid-cols-4\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-16 motion-reduce:animate-none\" />\n          <Skeleton className=\"h-16 motion-reduce:animate-none\" />\n          <Skeleton className=\"h-16 motion-reduce:animate-none\" />\n          <Skeleton className=\"h-16 motion-reduce:animate-none\" />\n        </div>\n      ) : error && cells.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : cells.length === 0 ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <div className=\"flex flex-col gap-2\">\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          <ul className=\"grid grid-cols-2 gap-2 sm:grid-cols-4\">\n            {cells.map((cell) => {\n              const open = openId === cell.id\n              return (\n                <li key={cell.id} className={cn(\"rounded-lg border px-2 py-2\", CELL[cell.status], classNames?.cell)}>\n                  <button\n                    type=\"button\"\n                    className=\"w-full rounded-md text-start focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n                    aria-expanded={open}\n                    aria-label={labels.open(cell.title)}\n                    onClick={() => {\n                      setOpenId(open ? null : cell.id)\n                      onOpen?.(cell.id)\n                    }}\n                  >\n                    <span className=\"block font-medium\">{cell.title}</span>\n                    <span className=\"mt-1 block text-xs text-muted-foreground\">{labels.status[cell.status]}</span>\n                    {cell.worker ? <span className=\"block text-xs text-muted-foreground\">{labels.worker(cell.worker)}</span> : null}\n                  </button>\n                  {open && cell.detail ? <p className=\"mt-1 text-xs\">{cell.detail}</p> : null}\n                  {cell.status === \"failed\" || cell.status === \"retrying\" ? (\n                    <Button\n                      type=\"button\"\n                      size=\"sm\"\n                      variant=\"outline\"\n                      className=\"mt-2\"\n                      aria-label={labels.retryNamed(cell.title)}\n                      onClick={() => {\n                        onRetry?.(cell.id)\n                        setLive(labels.retried(cell.title))\n                      }}\n                    >\n                      <RotateCcw aria-hidden=\"true\" />\n                      {labels.retry}\n                    </Button>\n                  ) : null}\n                </li>\n              )\n            })}\n          </ul>\n        </div>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/fan-out-grid.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Abanico de trabajo",
+    "descriptionEs": "Un trabajo partido en celdas. La que falló se puede reintentar. La rejilla no brilla.",
+    "preview": "app/examples/fan-out-grid/preview.tsx",
+    "previewHref": "/examples/fan-out-grid",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "retrying",
+        "label": "Reintento",
+        "labelEn": "Retry"
+      },
+      {
+        "id": "clear",
+        "label": "Listo",
+        "labelEn": "Clear"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Ocho muestras para León",
+        "href": "/examples/fan-out-grid",
+        "description": "El pedido PED-1051 repartido entre Horno y Caja. La tapa no cerró."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/fan-out-grid/stress",
+        "description": "Vacío, textos largos, RTL y diez piezas."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/fan-out-grid?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/fan-out-grid?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/fan-out-grid?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/fan-out-grid?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Reintento",
+        "href": "/examples/fan-out-grid?scene=retrying",
+        "description": "Retry"
+      },
+      {
+        "title": "Listo",
+        "href": "/examples/fan-out-grid?scene=clear",
+        "description": "Clear"
+      }
+    ],
+    "usage": "<FanOutGrid job={job} cells={cells} onOpen={open} onRetry={retry} />",
+    "api": [
+      {
+        "name": "cells",
+        "type": "FanCell<TMeta>[]",
+        "description": "id, title, worker, status (waiting, running, retrying, done, failed), detail. meta is opaque."
+      },
+      {
+        "name": "job",
+        "type": "string",
+        "description": "What the cells belong to."
+      },
+      {
+        "name": "onOpen / onRetry",
+        "type": "(id: string) => void",
+        "description": "Open a cell, or try a failed or retrying one again."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when the grid cannot be read."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<FanOutGridLabels>",
+        "description": "Chrome copy. English is the default."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,152 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "parallel-attempts",
+  "title": "Parallel attempts",
+  "author": "Eduardo Retana",
+  "description": "The same task tried a few ways at once. The best finished score is marked. A tie does not pick a winner.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "badge",
+    "button",
+    "progress",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/parallel-attempts.tsx",
+      "content": "\"use client\"\n\n/**\n * The same task tried a few ways at once. Clean-room reading of a public\n * behavior description: each attempt shows its approach and how far it got,\n * the best finished score is marked, and a person can keep a different one.\n * No Affect source, sample data, icons, or assets were copied. Bars do not race.\n */\n\nimport * as React from \"react\"\nimport { Check } from \"lucide-react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Progress } from \"@/components/ui/progress\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport const ATTEMPT_STATUSES = [\"running\", \"done\", \"failed\"] as const\n\nexport type AttemptStatus = (typeof ATTEMPT_STATUSES)[number]\n\nexport type Attempt<TMeta = unknown> = {\n  id: string\n  agent: string\n  approach: string\n  status: AttemptStatus\n  /** 0 to 1. */\n  progress: number\n  /** 0 to 100 once it has a score. */\n  score?: number\n  note?: string\n  meta?: TMeta\n}\n\nexport type ParallelAttemptsLabels = {\n  title: string\n  done: (done: number, total: number) => string\n  status: Record<AttemptStatus, string>\n  ahead: string\n  tied: string\n  chosen: string\n  score: (score: number) => string\n  pick: string\n  pickNamed: (approach: string) => string\n  progress: (approach: string, percent: number) => string\n  empty: string\n  loading: string\n  picked: (approach: string) => string\n}\n\nexport type ParallelAttemptsClassNames = {\n  root?: string\n  attempt?: string\n}\n\nexport type ParallelAttemptsProps<TMeta = unknown> = {\n  attempts?: readonly Attempt<TMeta>[]\n  task?: string\n  pickedId?: string | null\n  loading?: boolean\n  error?: string\n  title?: string\n  onPick?: (id: string) => void\n  className?: string\n  classNames?: ParallelAttemptsClassNames\n  labels?: Partial<ParallelAttemptsLabels>\n}\n\nconst attemptLabels: ParallelAttemptsLabels = {\n  title: \"Same task, several ways\",\n  done: (done, total) => `${done} of ${total} finished`,\n  status: { running: \"In progress\", done: \"Finished\", failed: \"Failed\" },\n  ahead: \"Ahead\",\n  tied: \"Tied\",\n  chosen: \"Kept\",\n  score: (score) => `Score ${score}`,\n  pick: \"Keep this one\",\n  pickNamed: (approach) => `Keep “${approach}”`,\n  progress: (approach, percent) => `${approach}, ${percent}%`,\n  empty: \"Nothing is being tried yet.\",\n  loading: \"Loading the attempts\",\n  picked: (approach) => `Kept “${approach}”`,\n}\n\nfunction resolveLabels(partial?: Partial<ParallelAttemptsLabels>): ParallelAttemptsLabels {\n  return { ...attemptLabels, ...partial, status: { ...attemptLabels.status, ...partial?.status } }\n}\n\nexport function leadingAttempt(attempts: readonly Pick<Attempt, \"id\" | \"status\" | \"score\">[]) {\n  const finished = attempts.filter((attempt) => attempt.status === \"done\" && typeof attempt.score === \"number\")\n  if (finished.length === 0) return null\n  const best = Math.max(...finished.map((attempt) => attempt.score ?? 0))\n  const winners = finished.filter((attempt) => attempt.score === best)\n  return winners.length === 1 ? winners[0]!.id : null\n}\n\nexport function ParallelAttempts<TMeta = unknown>({\n  attempts = [],\n  task,\n  pickedId,\n  loading = false,\n  error,\n  title,\n  onPick,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: ParallelAttemptsProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const heading = title ?? labels.title\n  const leader = leadingAttempt(attempts)\n  const finished = attempts.filter((attempt) => attempt.status === \"done\").length\n  const tied = leader == null && attempts.some((attempt) => attempt.status === \"done\" && typeof attempt.score === \"number\")\n  const [live, setLive] = React.useState(\"\")\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        <Badge variant=\"secondary\">{labels.done(finished, attempts.length)}</Badge>\n        {tied && !pickedId ? <Badge variant=\"outline\">{labels.tied}</Badge> : null}\n      </header>\n      {task ? <p className=\"text-xs text-muted-foreground\">{task}</p> : null}\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\" className=\"flex flex-col gap-2\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-16 w-full motion-reduce:animate-none\" />\n          <Skeleton className=\"h-16 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && attempts.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : attempts.length === 0 ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <ol className=\"flex flex-col gap-2\">\n          {error ? (\n            <li role=\"alert\" className=\"text-destructive\">\n              {error}\n            </li>\n          ) : null}\n          {attempts.map((attempt) => {\n            const percent = Math.max(0, Math.min(100, Math.round(attempt.progress * 100)))\n            const chosen = pickedId === attempt.id\n            return (\n              <li key={attempt.id} className={cn(\"rounded-lg border border-border px-3 py-2\", chosen && \"border-primary\", classNames?.attempt)}>\n                <div className=\"flex flex-wrap items-center gap-2\">\n                  <h3 className=\"font-medium\">{attempt.approach}</h3>\n                  <Badge variant={attempt.status === \"failed\" ? \"destructive\" : \"outline\"}>{labels.status[attempt.status]}</Badge>\n                  {attempt.id === leader && !pickedId ? <Badge variant=\"secondary\">{labels.ahead}</Badge> : null}\n                  {chosen ? <Badge variant=\"secondary\">{labels.chosen}</Badge> : null}\n                  <span className=\"ms-auto text-xs text-muted-foreground\">{attempt.agent}</span>\n                </div>\n                {attempt.note ? <p className=\"mt-1 text-xs text-muted-foreground\">{attempt.note}</p> : null}\n                <Progress\n                  value={percent}\n                  aria-label={labels.progress(attempt.approach, percent)}\n                  aria-valuenow={percent}\n                  aria-valuemin={0}\n                  aria-valuemax={100}\n                  className=\"mt-2\"\n                />\n                <div className=\"mt-2 flex flex-wrap items-center gap-2\">\n                  {typeof attempt.score === \"number\" ? <span className=\"text-xs\">{labels.score(attempt.score)}</span> : null}\n                  {attempt.status === \"done\" && !chosen ? (\n                    <Button\n                      type=\"button\"\n                      size=\"sm\"\n                      className=\"ms-auto\"\n                      aria-label={labels.pickNamed(attempt.approach)}\n                      onClick={() => {\n                        onPick?.(attempt.id)\n                        setLive(labels.picked(attempt.approach))\n                      }}\n                    >\n                      <Check aria-hidden=\"true\" />\n                      {labels.pick}\n                    </Button>\n                  ) : null}\n                </div>\n              </li>\n            )\n          })}\n        </ol>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/parallel-attempts.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Intentos en paralelo",
+    "descriptionEs": "La misma tarea, de varias maneras a la vez. El mejor puntaje terminado queda marcado. Un empate no elige solo.",
+    "preview": "app/examples/parallel-attempts/preview.tsx",
+    "previewHref": "/examples/parallel-attempts",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "picked",
+        "label": "Elegido",
+        "labelEn": "Kept"
+      },
+      {
+        "id": "tied",
+        "label": "Empate",
+        "labelEn": "Tied"
+      },
+      {
+        "id": "failed",
+        "label": "Falló",
+        "labelEn": "Failed"
+      }
+    ],
+    "examples": [
+      {
+        "title": "La nota para Celaya",
+        "href": "/examples/parallel-attempts",
+        "description": "Tres maneras de escribir el pedido PED-990. Bruma va adelante."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/parallel-attempts/stress",
+        "description": "Vacío, textos largos, RTL y diez intentos."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/parallel-attempts?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/parallel-attempts?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/parallel-attempts?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/parallel-attempts?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Elegido",
+        "href": "/examples/parallel-attempts?scene=picked",
+        "description": "Kept"
+      },
+      {
+        "title": "Empate",
+        "href": "/examples/parallel-attempts?scene=tied",
+        "description": "Tied"
+      },
+      {
+        "title": "Falló",
+        "href": "/examples/parallel-attempts?scene=failed",
+        "description": "Failed"
+      }
+    ],
+    "usage": "<ParallelAttempts task={task} attempts={attempts} pickedId={pickedId} onPick={pick} />",
+    "api": [
+      {
+        "name": "attempts",
+        "type": "Attempt<TMeta>[]",
+        "description": "id, agent, approach, status (running, done, failed), progress from 0 to 1, score from 0 to 100, note. meta is opaque."
+      },
+      {
+        "name": "pickedId",
+        "type": "string | null",
+        "description": "The attempt a person kept. The piece does not store it."
+      },
+      {
+        "name": "onPick",
+        "type": "(id: string) => void",
+        "description": "Keep a finished attempt. A tie leaves the choice open."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when the attempts cannot be read."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<ParallelAttemptsLabels>",
+        "description": "Chrome copy. English is the default."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

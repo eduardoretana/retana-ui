@@ -1,0 +1,141 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-cursors",
+  "title": "Agent cursors",
+  "author": "Eduardo Retana",
+  "description": "Named pointers on a shared note. A suggestion stays until someone accepts it. Someone can be away.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "badge",
+    "button",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/agent-cursors.tsx",
+      "content": "\"use client\"\n\n/**\n * Agents on one note, the way teammates share a page. Clean-room reading of a\n * public behavior description: each agent has a pointer and a name, and a\n * suggestion stays put until someone accepts it. Positions are owned by the\n * host. Nothing types itself out. No Affect source, sample data, icons, or\n * assets were copied.\n */\n\nimport * as React from \"react\"\nimport { Check, MousePointer2 } from \"lucide-react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport type CursorParagraph = {\n  id: string\n  text: string\n}\n\nexport type CursorMark<TMeta = unknown> = {\n  id: string\n  name: string\n  /** 0 to 100 across the note. */\n  x: number\n  /** 0 to 100 down the note. */\n  y: number\n  note?: string\n  away?: boolean\n  meta?: TMeta\n}\n\nexport type CursorSuggestion<TMeta = unknown> = {\n  id: string\n  cursorId: string\n  text: string\n  accepted?: boolean\n  meta?: TMeta\n}\n\nexport type AgentCursorsLabels = {\n  title: string\n  present: (count: number) => string\n  away: string\n  here: string\n  pointer: (name: string, note?: string) => string\n  suggestions: string\n  accept: string\n  acceptNamed: (name: string) => string\n  accepted: string\n  acceptedLive: (text: string) => string\n  emptyPointers: string\n  emptyNote: string\n  loading: string\n}\n\nexport type AgentCursorsClassNames = {\n  root?: string\n  note?: string\n  pointer?: string\n}\n\nexport type AgentCursorsProps<TMeta = unknown> = {\n  paragraphs?: readonly CursorParagraph[]\n  cursors?: readonly CursorMark<TMeta>[]\n  suggestions?: readonly CursorSuggestion<TMeta>[]\n  loading?: boolean\n  error?: string\n  title?: string\n  onFocus?: (id: string) => void\n  onAccept?: (id: string) => void\n  className?: string\n  classNames?: AgentCursorsClassNames\n  labels?: Partial<AgentCursorsLabels>\n}\n\nconst cursorLabels: AgentCursorsLabels = {\n  title: \"On the note\",\n  present: (count) => (count === 1 ? \"1 here\" : `${count} here`),\n  away: \"Away\",\n  here: \"Here\",\n  pointer: (name, note) => (note ? `${name}, ${note}` : name),\n  suggestions: \"Suggestions\",\n  accept: \"Accept\",\n  acceptNamed: (name) => `Accept ${name}'s suggestion`,\n  accepted: \"Accepted\",\n  acceptedLive: (text) => `Accepted “${text}”`,\n  emptyPointers: \"Nobody else is on this note.\",\n  emptyNote: \"The note is blank.\",\n  loading: \"Loading the note\",\n}\n\nfunction resolveLabels(partial?: Partial<AgentCursorsLabels>): AgentCursorsLabels {\n  return { ...cursorLabels, ...partial }\n}\n\nexport function cursorsPresent(cursors: readonly Pick<CursorMark, \"id\" | \"away\">[]) {\n  return cursors.filter((cursor) => !cursor.away).length\n}\n\nconst RINGS = [\"text-primary\", \"text-chart-2\", \"text-chart-4\"] as const\n\nexport function AgentCursors<TMeta = unknown>({\n  paragraphs = [],\n  cursors = [],\n  suggestions = [],\n  loading = false,\n  error,\n  title,\n  onFocus,\n  onAccept,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: AgentCursorsProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const heading = title ?? labels.title\n  const [live, setLive] = React.useState(\"\")\n  const names = new Map(cursors.map((cursor) => [cursor.id, cursor.name]))\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        <Badge variant=\"secondary\">{labels.present(cursorsPresent(cursors))}</Badge>\n      </header>\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-40 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && paragraphs.length === 0 && cursors.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : (\n        <div className=\"flex flex-col gap-3\">\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          <div className={cn(\"relative min-h-48 rounded-lg border border-border p-3\", classNames?.note)}>\n            {paragraphs.length === 0 ? (\n              <p className=\"text-muted-foreground\">{labels.emptyNote}</p>\n            ) : (\n              paragraphs.map((paragraph) => (\n                <p key={paragraph.id} id={paragraph.id} className=\"mb-2 last:mb-0\">\n                  {paragraph.text}\n                </p>\n              ))\n            )}\n            {cursors.map((cursor, index) => (\n              <button\n                key={cursor.id}\n                type=\"button\"\n                className={cn(\n                  \"absolute z-10 flex max-w-40 items-start gap-1 rounded-md bg-card/90 px-1 py-0.5 text-start focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\",\n                  cursor.away && \"opacity-60\",\n                  RINGS[index % RINGS.length],\n                  classNames?.pointer,\n                )}\n                style={{ left: `${Math.min(88, Math.max(4, cursor.x))}%`, top: `${Math.min(82, Math.max(4, cursor.y))}%` }}\n                aria-label={labels.pointer(cursor.name, cursor.note)}\n                onClick={() => onFocus?.(cursor.id)}\n              >\n                <MousePointer2 aria-hidden=\"true\" className=\"mt-0.5 size-3.5 shrink-0\" />\n                <span className=\"min-w-0 text-xs text-card-foreground\">\n                  <span className=\"block truncate font-medium\">{cursor.name}</span>\n                  <span className=\"block truncate text-muted-foreground\">{cursor.away ? labels.away : (cursor.note ?? labels.here)}</span>\n                </span>\n              </button>\n            ))}\n          </div>\n          {cursors.length === 0 ? <p className=\"text-xs text-muted-foreground\">{labels.emptyPointers}</p> : null}\n          {suggestions.length > 0 ? (\n            <div>\n              <h3 className=\"text-xs font-medium text-muted-foreground\">{labels.suggestions}</h3>\n              <ul className=\"mt-2 flex flex-col gap-2\">\n                {suggestions.map((suggestion) => {\n                  const name = names.get(suggestion.cursorId) ?? suggestion.cursorId\n                  return (\n                    <li key={suggestion.id} className=\"flex flex-wrap items-center gap-2 rounded-lg border border-border px-3 py-2\">\n                      <p className=\"min-w-0 flex-1\">\n                        <span className=\"text-xs text-muted-foreground\">{name}</span>\n                        <span className=\"mt-0.5 block\">{suggestion.text}</span>\n                      </p>\n                      {suggestion.accepted ? (\n                        <Badge variant=\"secondary\">\n                          <Check aria-hidden=\"true\" />\n                          {labels.accepted}\n                        </Badge>\n                      ) : (\n                        <Button\n                          type=\"button\"\n                          size=\"sm\"\n                          aria-label={labels.acceptNamed(name)}\n                          onClick={() => {\n                            onAccept?.(suggestion.id)\n                            setLive(labels.acceptedLive(suggestion.text))\n                          }}\n                        >\n                          {labels.accept}\n                        </Button>\n                      )}\n                    </li>\n                  )\n                })}\n              </ul>\n            </div>\n          ) : null}\n        </div>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/agent-cursors.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Cursores de agentes",
+    "descriptionEs": "Punteros con nombre sobre una nota compartida. La sugerencia se queda hasta que alguien la acepta. Alguien puede estar ausente.",
+    "preview": "app/examples/agent-cursors/preview.tsx",
+    "previewHref": "/examples/agent-cursors",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "accepted",
+        "label": "Aceptada",
+        "labelEn": "Accepted"
+      },
+      {
+        "id": "away",
+        "label": "Ausentes",
+        "labelEn": "Away"
+      }
+    ],
+    "examples": [
+      {
+        "title": "La nota del pedido",
+        "href": "/examples/agent-cursors",
+        "description": "Bruma propone dejar el anticipo en $18,400.00 MXN. Caja salió a cobrar."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/agent-cursors/stress",
+        "description": "Vacío, textos largos, RTL y diez marcas."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/agent-cursors?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/agent-cursors?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/agent-cursors?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/agent-cursors?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Aceptada",
+        "href": "/examples/agent-cursors?scene=accepted",
+        "description": "Accepted"
+      },
+      {
+        "title": "Ausentes",
+        "href": "/examples/agent-cursors?scene=away",
+        "description": "Away"
+      }
+    ],
+    "usage": "<AgentCursors paragraphs={paragraphs} cursors={cursors} suggestions={suggestions} onAccept={accept} />",
+    "api": [
+      {
+        "name": "paragraphs",
+        "type": "CursorParagraph[]",
+        "description": "id and text. The host owns the note."
+      },
+      {
+        "name": "cursors",
+        "type": "CursorMark<TMeta>[]",
+        "description": "id, name, x and y from 0 to 100, note, away. meta is opaque. The host owns the position."
+      },
+      {
+        "name": "suggestions",
+        "type": "CursorSuggestion<TMeta>[]",
+        "description": "id, cursorId, text, accepted. Accepting does not rewrite the note by itself."
+      },
+      {
+        "name": "onFocus / onAccept",
+        "type": "(id: string) => void",
+        "description": "Focus a pointer, or accept a suggestion."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when the note cannot be opened."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<AgentCursorsLabels>",
+        "description": "Chrome copy. English is the default."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

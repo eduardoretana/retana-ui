@@ -1,0 +1,138 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "conflict-radar",
+  "title": "Conflict radar",
+  "author": "Eduardo Retana",
+  "description": "Where two agents rewrote the same thing. A person keeps one wording. The order files only when every clash is settled.",
+  "registryDependencies": [
+    "badge",
+    "button",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/conflict-radar.tsx",
+      "content": "\"use client\"\n\n/**\n * Where two agents rewrote the same thing. Clean-room reading of a public\n * behavior description: each clash shows both wordings, a person keeps one,\n * and the file can close only when every clash is settled. No Affect source,\n * sample data, icons, or assets were copied.\n */\n\nimport * as React from \"react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport type RadarAgent<TMeta = unknown> = {\n  id: string\n  name: string\n  detail?: string\n  working?: boolean\n  meta?: TMeta\n}\n\nexport type RadarClaim = {\n  agentId: string\n  text: string\n}\n\nexport type RadarClash<TMeta = unknown> = {\n  id: string\n  topic: string\n  left: RadarClaim\n  right: RadarClaim\n  /** Which wording was kept. */\n  kept?: \"left\" | \"right\" | null\n  meta?: TMeta\n}\n\nexport type ConflictRadarLabels = {\n  title: string\n  open: (count: number) => string\n  settled: string\n  working: string\n  quiet: string\n  keep: (name: string) => string\n  kept: (name: string) => string\n  file: string\n  fileNamed: string\n  empty: string\n  loading: string\n  keptLive: (topic: string, name: string) => string\n  filedLive: string\n}\n\nexport type ConflictRadarClassNames = {\n  root?: string\n  clash?: string\n}\n\nexport type ConflictRadarProps<TMeta = unknown> = {\n  agents?: readonly RadarAgent<TMeta>[]\n  clashes?: readonly RadarClash<TMeta>[]\n  loading?: boolean\n  error?: string\n  title?: string\n  onKeep?: (id: string, side: \"left\" | \"right\") => void\n  onFile?: () => void\n  className?: string\n  classNames?: ConflictRadarClassNames\n  labels?: Partial<ConflictRadarLabels>\n}\n\nconst radarLabels: ConflictRadarLabels = {\n  title: \"Where they overlap\",\n  open: (count) => (count === 1 ? \"1 clash open\" : `${count} clashes open`),\n  settled: \"Settled\",\n  working: \"Still writing\",\n  quiet: \"Done writing\",\n  keep: (name) => `Keep ${name}`,\n  kept: (name) => `Kept ${name}`,\n  file: \"File the order\",\n  fileNamed: \"File the order once every clash is settled\",\n  empty: \"No overlap on this order.\",\n  loading: \"Loading the overlaps\",\n  keptLive: (topic, name) => `Kept ${name} on “${topic}”`,\n  filedLive: \"Order filed\",\n}\n\nfunction resolveLabels(partial?: Partial<ConflictRadarLabels>): ConflictRadarLabels {\n  return { ...radarLabels, ...partial }\n}\n\nexport function openClashes(clashes: readonly Pick<RadarClash, \"id\" | \"kept\">[]) {\n  return clashes.filter((clash) => clash.kept !== \"left\" && clash.kept !== \"right\").length\n}\n\nexport function ConflictRadar<TMeta = unknown>({\n  agents = [],\n  clashes = [],\n  loading = false,\n  error,\n  title,\n  onKeep,\n  onFile,\n  className,\n  classNames,\n  labels: labelOverrides,\n}: ConflictRadarProps<TMeta>) {\n  const labels = resolveLabels(labelOverrides)\n  const titleId = React.useId()\n  const heading = title ?? labels.title\n  const names = new Map(agents.map((agent) => [agent.id, agent.name]))\n  const open = openClashes(clashes)\n  const [live, setLive] = React.useState(\"\")\n  const nameOf = (id: string) => names.get(id) ?? id\n\n  return (\n    <section\n      aria-labelledby={titleId}\n      aria-busy={loading || undefined}\n      className={cn(\"flex flex-col gap-3 rounded-xl border border-border bg-card p-3 text-sm text-card-foreground\", className, classNames?.root)}\n    >\n      <header className=\"flex flex-wrap items-center gap-2\">\n        <h2 id={titleId} className=\"font-medium\">\n          {heading}\n        </h2>\n        <Badge variant={open > 0 ? \"destructive\" : \"secondary\"}>\n          {clashes.length === 0 ? labels.open(0) : open > 0 ? labels.open(open) : labels.settled}\n        </Badge>\n      </header>\n      {agents.length > 0 ? (\n        <ul className=\"flex flex-wrap gap-2\">\n          {agents.map((agent) => (\n            <li key={agent.id}>\n              <Badge variant=\"outline\">\n                {agent.name}\n                {agent.detail ? ` · ${agent.detail}` : \"\"}\n                {` · ${agent.working ? labels.working : labels.quiet}`}\n              </Badge>\n            </li>\n          ))}\n        </ul>\n      ) : null}\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {live}\n      </p>\n      {loading ? (\n        <div role=\"status\" className=\"flex flex-col gap-2\">\n          <span className=\"sr-only\">{labels.loading}</span>\n          <Skeleton className=\"h-20 w-full motion-reduce:animate-none\" />\n          <Skeleton className=\"h-20 w-full motion-reduce:animate-none\" />\n        </div>\n      ) : error && clashes.length === 0 ? (\n        <p role=\"alert\" className=\"text-destructive\">\n          {error}\n        </p>\n      ) : clashes.length === 0 ? (\n        <p className=\"text-muted-foreground\">{labels.empty}</p>\n      ) : (\n        <div className=\"flex flex-col gap-2\">\n          {error ? (\n            <p role=\"alert\" className=\"text-destructive\">\n              {error}\n            </p>\n          ) : null}\n          <ul className=\"flex flex-col gap-2\">\n            {clashes.map((clash) => {\n              const leftName = nameOf(clash.left.agentId)\n              const rightName = nameOf(clash.right.agentId)\n              const keptSide = clash.kept === \"left\" || clash.kept === \"right\" ? clash.kept : null\n              return (\n                <li key={clash.id} className={cn(\"rounded-lg border border-border px-3 py-2\", classNames?.clash)}>\n                  <h3 className=\"font-medium\">{clash.topic}</h3>\n                  <div className=\"mt-2 grid gap-2 sm:grid-cols-2\">\n                    {([\"left\", \"right\"] as const).map((side) => {\n                      const claim = clash[side]\n                      const name = side === \"left\" ? leftName : rightName\n                      const kept = keptSide === side\n                      const hidden = keptSide != null && !kept\n                      if (hidden) return null\n                      return (\n                        <div key={side} className={cn(\"rounded-md border border-border px-2 py-2\", kept && \"border-primary bg-primary/5\")}>\n                          <p className=\"text-xs text-muted-foreground\">{name}</p>\n                          <p className=\"mt-1\">{claim.text}</p>\n                          {kept ? (\n                            <Badge variant=\"secondary\" className=\"mt-2\">\n                              {labels.kept(name)}\n                            </Badge>\n                          ) : (\n                            <Button\n                              type=\"button\"\n                              size=\"sm\"\n                              variant=\"outline\"\n                              className=\"mt-2\"\n                              onClick={() => {\n                                onKeep?.(clash.id, side)\n                                setLive(labels.keptLive(clash.topic, name))\n                              }}\n                            >\n                              {labels.keep(name)}\n                            </Button>\n                          )}\n                        </div>\n                      )\n                    })}\n                  </div>\n                </li>\n              )\n            })}\n          </ul>\n          <Button\n            type=\"button\"\n            size=\"sm\"\n            className=\"self-start\"\n            disabled={open > 0}\n            aria-label={labels.fileNamed}\n            onClick={() => {\n              onFile?.()\n              setLive(labels.filedLive)\n            }}\n          >\n            {labels.file}\n          </Button>\n        </div>\n      )}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/conflict-radar.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Donde se cruzan",
+    "descriptionEs": "Donde dos agentes reescribieron lo mismo. Alguien se queda con una redacción. El pedido se archiva cuando cada cruce está resuelto.",
+    "preview": "app/examples/conflict-radar/preview.tsx",
+    "previewHref": "/examples/conflict-radar",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "settled",
+        "label": "Resuelto",
+        "labelEn": "Settled"
+      },
+      {
+        "id": "kiln",
+        "label": "Horno",
+        "labelEn": "Kiln"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Anticipo y entrega",
+        "href": "/examples/conflict-radar",
+        "description": "Bruma y Caja no coinciden en el pedido PED-1048."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/conflict-radar/stress",
+        "description": "Vacío, textos largos, RTL y diez cruces."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/conflict-radar?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/conflict-radar?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/conflict-radar?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/conflict-radar?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Resuelto",
+        "href": "/examples/conflict-radar?scene=settled",
+        "description": "Settled"
+      },
+      {
+        "title": "Horno",
+        "href": "/examples/conflict-radar?scene=kiln",
+        "description": "Kiln"
+      }
+    ],
+    "usage": "<ConflictRadar agents={agents} clashes={clashes} onKeep={keep} onFile={file} />",
+    "api": [
+      {
+        "name": "agents",
+        "type": "RadarAgent<TMeta>[]",
+        "description": "id, name, detail, working. meta is opaque."
+      },
+      {
+        "name": "clashes",
+        "type": "RadarClash<TMeta>[]",
+        "description": "id, topic, left and right claims (agentId, text), kept (left, right, or empty)."
+      },
+      {
+        "name": "onKeep",
+        "type": "(id: string, side: \"left\" | \"right\") => void",
+        "description": "Keep one wording. The other claim stays in the data."
+      },
+      {
+        "name": "onFile",
+        "type": "() => void",
+        "description": "File the order. Disabled while any clash is open."
+      },
+      {
+        "name": "loading / error",
+        "type": "boolean / string",
+        "description": "Loading skeleton, or an alert when a wording cannot be saved."
+      },
+      {
+        "name": "labels",
+        "type": "Partial<ConflictRadarLabels>",
+        "description": "Chrome copy. English is the default."
+      }
+    ]
+  },
+  "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

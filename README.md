@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`400` items are in `registry.json` on this branch: `313` components, `72` blocks, `6` hooks, and `9` libraries. A name links to its source file.
+`406` items are in `registry.json` on this branch: `319` components, `72` blocks, `6` hooks, and `9` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -437,6 +437,12 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`trace-waterfall`](registry/ui/trace-waterfall.tsx) · ui — Spans of one run on a shared clock, with tokens, cost in centavos, the slowest leaf marked, and branches that fold. Install: `npx shadcn@latest add @retana/trace-waterfall`.
 - [`agent-lanes`](registry/ui/agent-lanes.tsx) · ui — One lane per agent on a shared morning clock, with a hand-off and an approval sitting on the block that needs it. Install: `npx shadcn@latest add @retana/agent-lanes`.
 - [`approval-card`](registry/ui/approval-card.tsx) · ui — A gate before something hard to undo leaves the workshop. The warning clock can pause. When it runs out, nothing is sent. Install: `npx shadcn@latest add @retana/approval-card`.
+- [`agent-graph`](registry/ui/agent-graph.tsx) · ui — Who is calling whom on one order. Busy links are thicker. An agent waiting on you is marked. This is not the launch tree. Install: `npx shadcn@latest add @retana/agent-graph`.
+- [`agent-cursors`](registry/ui/agent-cursors.tsx) · ui — Named pointers on a shared note. A suggestion stays until someone accepts it. Someone can be away. Install: `npx shadcn@latest add @retana/agent-cursors`.
+- [`fan-out-grid`](registry/ui/fan-out-grid.tsx) · ui — One job split into cells. A failed cell can be tried again. The grid does not shine. Install: `npx shadcn@latest add @retana/fan-out-grid`.
+- [`parallel-attempts`](registry/ui/parallel-attempts.tsx) · ui — The same task tried a few ways at once. The best finished score is marked. A tie does not pick a winner. Install: `npx shadcn@latest add @retana/parallel-attempts`.
+- [`conflict-radar`](registry/ui/conflict-radar.tsx) · ui — Where two agents rewrote the same thing. A person keeps one wording. The order files only when every clash is settled. Install: `npx shadcn@latest add @retana/conflict-radar`.
+- [`decision-tree`](registry/ui/decision-tree.tsx) · ui — A fork the agent will not take alone. A risky option is marked, the agent's preference is marked, and a person can write another way. Install: `npx shadcn@latest add @retana/decision-tree`.
 
 ### Forms
 
