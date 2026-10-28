@@ -23,3 +23,5 @@ jobs:
         run: |
           pnpm registry:build
           git diff --exit-code -- public/r lib/generated
+          untracked=$(git status --porcelain --untracked-files=all -- public/r lib/generated)
+          if [ -n "$untracked" ]; then echo "$untracked"; exit 1; fi
