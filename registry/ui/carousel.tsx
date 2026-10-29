@@ -64,7 +64,7 @@ const unrubber = (distance: number, dimension: number) => (distance * dimension)
 const defaultSlideLabel = (index: number, count: number) => `${index + 1} of ${count}`
 const subscribeNothing = () => () => {}
 
-const iconIn: TargetAndTransition = { opacity: 0, scale: 0.6, filter: `blur(${motionPresets.blur.subtle}px)` }
+const iconIn: TargetAndTransition = { opacity: 0, scale: 0.25, filter: `blur(${motionPresets.blur.subtle}px)` }
 const iconRest: TargetAndTransition = { opacity: 1, scale: 1, filter: "blur(0px)" }
 const iconOut: TargetAndTransition = { ...iconIn, transition: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.standard] } }
 const iconEnter = { ...motionPresets.spring.snappy, opacity: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.enter] }, filter: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.enter] } } as const

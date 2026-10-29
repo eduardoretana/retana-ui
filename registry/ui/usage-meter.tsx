@@ -143,7 +143,7 @@ const rise: Variants = {
 }
 
 const pop: Variants = {
-  hidden: { opacity: 0, y: 0, scale: 0.6, filter: `blur(${blur.subtle + 1}px)` },
+  hidden: { opacity: 0, y: 0, scale: 0.25, filter: `blur(${blur.subtle + 1}px)` },
   shown: {
     opacity: 1,
     y: 0,
@@ -155,7 +155,7 @@ const pop: Variants = {
       filter: { duration: duration.fast, ease: [...ease.enter] },
     },
   },
-  gone: { opacity: 0, y: 0, scale: 0.6, filter: `blur(${blur.subtle + 1}px)`, transition: { duration: duration.instant, ease: [...ease.standard] } },
+  gone: { opacity: 0, y: 0, scale: 0.25, filter: `blur(${blur.subtle + 1}px)`, transition: { duration: duration.instant, ease: [...ease.standard] } },
 }
 
 const fade: Variants = {

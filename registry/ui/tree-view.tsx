@@ -43,7 +43,6 @@ type VisibleNode = {
   setSize: number
 }
 
-const rowHeight = 38
 const still = { duration: 0 } as const
 const fadeIn = { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.enter] } as const
 const fadeOut = { duration: motionPresets.duration.instant, ease: [...motionPresets.ease.standard] } as const
@@ -71,12 +70,12 @@ function FolderIcon({ open, reduced }: { open: boolean; reduced: boolean }) {
       <motion.span
         key={open ? "open" : "closed"}
         className="absolute inset-0 grid place-items-center"
-        initial={reduced ? false : { opacity: 0, scale: 0.6, filter: blur(motionPresets.blur.subtle) }}
+        initial={reduced ? false : { opacity: 0, scale: 0.25, filter: blur(motionPresets.blur.subtle) }}
         animate={{ opacity: 1, scale: 1, filter: blur(0) }}
         exit={
           reduced
             ? { opacity: 0, transition: still }
-            : { opacity: 0, scale: 0.6, filter: blur(motionPresets.blur.subtle), transition: fadeOut }
+            : { opacity: 0, scale: 0.25, filter: blur(motionPresets.blur.subtle), transition: fadeOut }
         }
         transition={reduced ? still : { ...motionPresets.spring.snappy, opacity: fadeIn, filter: fadeIn }}
       >
@@ -195,22 +194,22 @@ export function TreeView({
             <motion.div
               key={item.node.id}
               data-slot="tree-view-row"
-              className={cn("relative h-[38px] min-w-0", classNames?.row)}
+              className={cn("relative grid min-w-0", classNames?.row)}
               layout={reduced ? false : "position"}
-              initial={reduced ? false : { height: 0, opacity: 0, x: -6, overflow: "hidden" }}
+              initial={reduced ? false : { gridTemplateRows: "0fr", opacity: 0, x: -6, overflow: "hidden" }}
               animate={{
-                height: rowHeight,
+                gridTemplateRows: "1fr",
                 opacity: 1,
                 x: 0,
                 transitionEnd: { overflow: "visible" },
                 transition: reduced
                   ? still
-                  : { height: motionPresets.spring.smooth, opacity: { ...fadeIn, delay }, x: { ...motionPresets.spring.smooth, delay } },
+                  : { gridTemplateRows: motionPresets.spring.smooth, opacity: { ...fadeIn, delay }, x: { ...motionPresets.spring.smooth, delay } },
               }}
               exit={
                 reduced
                   ? { opacity: 0, transition: still }
-                  : { height: 0, opacity: 0, x: -4, overflow: "hidden", pointerEvents: "none", transition: { height: motionPresets.spring.smooth, opacity: fadeOut, x: fadeOut } }
+                  : { gridTemplateRows: "0fr", opacity: 0, x: -4, overflow: "hidden", pointerEvents: "none", transition: { gridTemplateRows: motionPresets.spring.smooth, opacity: fadeOut, x: fadeOut } }
               }
               transition={reduced ? still : { layout: motionPresets.spring.smooth }}
             >

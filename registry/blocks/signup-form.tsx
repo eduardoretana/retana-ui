@@ -442,11 +442,11 @@ export function SignupForm({ onSubmit, serverError, onProvider, defaultValues, c
                     {shownError ? (
                       <motion.div
                         key="error"
-                        className="overflow-hidden"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={reduce ? { duration: 0 } : { height: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.fast } }}
+                        className="grid [&>*]:min-h-0 [&>*]:overflow-hidden overflow-hidden"
+                        initial={{ gridTemplateRows: "0fr", opacity: 0 }}
+                        animate={{ gridTemplateRows: "1fr", opacity: 1 }}
+                        exit={{ gridTemplateRows: "0fr", opacity: 0 }}
+                        transition={reduce ? { duration: 0 } : { gridTemplateRows: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.fast } }}
                       >
                         <p className="text-xs text-destructive" role="alert">
                           {shownError}

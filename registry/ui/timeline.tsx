@@ -143,13 +143,13 @@ function DaySection({ id, fresh, reduced, children }: { id: string; fresh: boole
   const [entering, setEntering] = useState(fresh)
   return (
     <motion.section
-      className="relative data-[entering]:overflow-clip"
+      className="grid [&>*]:min-h-0 [&>*]:overflow-hidden relative data-[entering]:overflow-clip"
       aria-labelledby={id}
       data-entering={entering || undefined}
-      initial={fresh ? { height: 0, opacity: 0 } : false}
-      animate={{ height: "auto", opacity: 1 }}
-      exit={{ height: 0, opacity: 0, transition: { duration: reduced ? 0.1 : 0.2, ease: standard } }}
-      transition={reduced ? { duration: 0.15 } : { height: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.standard, ease: enter } }}
+      initial={fresh ? { gridTemplateRows: "0fr", opacity: 0 } : false}
+      animate={{ gridTemplateRows: "1fr", opacity: 1 }}
+      exit={{ gridTemplateRows: "0fr", opacity: 0, transition: { duration: reduced ? 0.1 : 0.2, ease: standard } }}
+      transition={reduced ? { duration: 0.15 } : { gridTemplateRows: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.standard, ease: enter } }}
       onAnimationComplete={() => setEntering(false)}
     >
       {children}
@@ -180,11 +180,11 @@ function TimelineRow({ row, last, expanded, onToggle, timeLabel, timeFull, class
   return (
     <motion.li
       data-slot="timeline-item"
-      className={cn("relative pl-10 data-[entering]:overflow-clip", classNames?.item)}
+      className={cn("grid [&>*]:min-h-0 [&>*]:overflow-hidden relative pl-10 data-[entering]:overflow-clip", classNames?.item)}
       data-entering={entering || undefined}
-      initial={fresh ? { height: 0 } : false}
-      animate={{ height: "auto" }}
-      exit={{ height: 0, opacity: 0, transition: reduced ? { duration: 0.1 } : { height: { ...motionPresets.spring.smooth, visualDuration: 0.3 }, opacity: { duration: 0.12 } } }}
+      initial={fresh ? { gridTemplateRows: "0fr" } : false}
+      animate={{ gridTemplateRows: "1fr" }}
+      exit={{ gridTemplateRows: "0fr", opacity: 0, transition: reduced ? { duration: 0.1 } : { gridTemplateRows: { ...motionPresets.spring.smooth, visualDuration: 0.3 }, opacity: { duration: 0.12 } } }}
       transition={reduced ? { duration: 0 } : motionPresets.spring.smooth}
       onAnimationComplete={() => setEntering(false)}
       onViewportEnter={() => setRevealDelay((current) => current ?? clock.schedule())}
@@ -240,10 +240,10 @@ function TimelineRow({ row, last, expanded, onToggle, timeLabel, timeFull, class
               key="detail"
               id={detailId}
               data-slot="timeline-detail"
-              className={cn("overflow-clip", classNames?.detail)}
-              initial={{ height: 0 }}
-              animate={{ height: "auto" }}
-              exit={{ height: 0, transition: reduced ? { duration: 0 } : { ...motionPresets.spring.smooth, visualDuration: 0.28 } }}
+              className={cn("grid [&>*]:min-h-0 [&>*]:overflow-hidden overflow-clip", classNames?.detail)}
+              initial={{ gridTemplateRows: "0fr" }}
+              animate={{ gridTemplateRows: "1fr" }}
+              exit={{ gridTemplateRows: "0fr", transition: reduced ? { duration: 0 } : { ...motionPresets.spring.smooth, visualDuration: 0.28 } }}
               transition={reduced ? { duration: 0 } : motionPresets.spring.smooth}
             >
               <motion.div

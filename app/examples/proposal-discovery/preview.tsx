@@ -1,7 +1,9 @@
 "use client"
 
-import { ProposalDiscoveryDemo } from "@/app/examples/proposal/screens"
+import { ScenePreview } from "@/app/catalog/scene-preview"
+
+import { scenes } from "./scenes"
 
 export default function Preview() {
-  return <ProposalDiscoveryDemo />
+  return <ScenePreview scenes={scenes} hero="filled" />
 }

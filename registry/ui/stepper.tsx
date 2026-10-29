@@ -54,7 +54,7 @@ const settle = { duration: motionPresets.duration.standard, ease: [...motionPres
 const textFrom = { opacity: 0, y: "0.3em", filter: blur(motionPresets.blur.soft) }
 const textRest = { opacity: 1, y: 0, filter: blur(0) }
 const textGone = { opacity: 0, y: "-0.3em", filter: blur(motionPresets.blur.subtle) }
-const glyphFrom = { opacity: 0, scale: 0.5, filter: blur(motionPresets.blur.subtle) }
+const glyphFrom = { opacity: 0, scale: 0.25, filter: blur(motionPresets.blur.subtle) }
 const glyphRest = { opacity: 1, scale: 1, filter: blur(0) }
 
 const statusText: Record<StepperStatus, string> = {

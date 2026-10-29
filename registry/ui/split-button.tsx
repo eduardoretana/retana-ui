@@ -54,7 +54,7 @@ const glyphOut: TargetAndTransition = {
   filter: `blur(${motionPresets.blur.subtle}px)`,
   transition: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.standard] },
 }
-const iconIn: TargetAndTransition = { opacity: 0, scale: 0.6, filter: `blur(${motionPresets.blur.subtle}px)` }
+const iconIn: TargetAndTransition = { opacity: 0, scale: 0.25, filter: `blur(${motionPresets.blur.subtle}px)` }
 const iconOut: TargetAndTransition = { ...iconIn, transition: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.standard] } }
 const iconEnter: Transition = {
   ...motionPresets.spring.snappy,

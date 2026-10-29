@@ -9,6 +9,7 @@ import { ArrowRight, BookOpen, Boxes, ChevronDown, History, LayoutTemplate, Menu
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { CollectionPhaseNotice, type CollectionPhase } from "@/registry/retana/lib/collection-phase"
 import { motionPresets } from "@/registry/retana/lib/motion"
 
 export type SiteHeaderVariant = "simple" | "centered" | "mega"
@@ -72,6 +73,9 @@ export type SiteHeaderProps = {
   label?: string
   className?: string
   classNames?: SiteHeaderClassNames
+  phase?: CollectionPhase
+  disabled?: boolean
+  phaseLabel?: string
 }
 
 const ICON = { size: 18, strokeWidth: 1.75, "aria-hidden": true } as const
@@ -162,6 +166,9 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
   label = "Main",
   className,
   classNames,
+  phase = "ready",
+  disabled = false,
+  phaseLabel,
 }, ref) {
   const id = useId()
   const reduced = useReducedMotion() ?? false
@@ -336,11 +343,20 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
     return <Button type="button" variant={kind === "primary" ? "default" : "ghost"} size="sm" className={classes} onClick={onClick}>{action.label}</Button>
   }
 
+  if (phase !== "ready") {
+    return (
+      <header ref={ref} data-slot="site-header" data-phase={phase} aria-disabled={disabled || undefined} className={cn("border-b border-border bg-background px-4 py-3", className)}>
+        <CollectionPhaseNotice phase={phase} label={phaseLabel} />
+      </header>
+    )
+  }
+
   return (
     <header
       ref={setRefs}
       data-slot="site-header"
       data-variant={variant}
+      aria-disabled={disabled || undefined}
       data-scrolled={solid ? "" : undefined}
       className={cn("@container/header relative z-20 border-b border-transparent text-foreground motion-reduce:transition-none", sticky && "sticky top-0", solid && "border-border bg-background shadow-sm", className, classNames?.root)}
     >

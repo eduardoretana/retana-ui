@@ -14,6 +14,7 @@ import {
   CommandShortcut,
 } from "@/components/ui/command"
 import { cn } from "@/lib/utils"
+import { CollectionPhaseNotice, type CollectionPhase } from "@/registry/retana/lib/collection-phase"
 
 export type CommandPaletteItem = {
   id: string
@@ -33,6 +34,9 @@ export type CommandPaletteProps = {
   label?: string
   className?: string
   classNames?: { input?: string; list?: string; item?: string }
+  phase?: CollectionPhase
+  disabled?: boolean
+  phaseLabel?: string
 }
 
 export function CommandPalette({
@@ -43,6 +47,9 @@ export function CommandPalette({
   label = "Command palette",
   className,
   classNames,
+  phase = "ready",
+  disabled = false,
+  phaseLabel,
 }: CommandPaletteProps) {
   const groups = React.useMemo(() => {
     const order: string[] = []
@@ -61,13 +68,16 @@ export function CommandPalette({
   return (
     <Command
       data-slot="command-palette"
+      data-phase={phase}
       label={label}
-      className={cn("rounded-xl border border-border bg-popover", className)}
+      aria-disabled={disabled || undefined}
+      className={cn("rounded-xl border border-border bg-popover", disabled && "pointer-events-none opacity-60", className)}
     >
       <CommandInput placeholder={placeholder} aria-label={label} className={classNames?.input} />
       <CommandList className={classNames?.list}>
         <CommandEmpty>{emptyLabel}</CommandEmpty>
-        {groups.map(({ group, items: groupItems }) => (
+        {phase !== "ready" ? <CollectionPhaseNotice phase={phase} label={phaseLabel} /> : null}
+        {phase === "ready" ? groups.map(({ group, items: groupItems }) => (
           <CommandGroup key={group || "default"} heading={group || undefined}>
             {groupItems.map((item) => (
               <CommandItem
@@ -85,7 +95,7 @@ export function CommandPalette({
               </CommandItem>
             ))}
           </CommandGroup>
-        ))}
+        )) : null}
       </CommandList>
     </Command>
   )

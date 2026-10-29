@@ -585,7 +585,7 @@ export function SignaturePad({
     visible.push({ stroke, d: strokePath(stroke, local) })
   }
   const showHint = empty && !drawing && !wiping
-  const hintHidden = reduced ? { opacity: 0 } : { opacity: 0, y: 6, scale: 0.97, filter: `blur(${blur.soft}px)` }
+  const hintHidden = reduced ? { opacity: 0 } : { opacity: 0, y: 6, filter: `blur(${blur.soft}px)` }
   const swapTransition: Transition = reduced ? { duration: 0.12 } : spring.snappy
 
   return (
@@ -719,9 +719,9 @@ export function SignaturePad({
               <motion.span
                 key={replaying ? "stop" : "play"}
                 className="grid place-items-center"
-                initial={{ opacity: 0, scale: 0.6 }}
+                initial={{ opacity: 0, scale: 0.25 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.6 }}
+                exit={{ opacity: 0, scale: 0.25 }}
                 transition={swapTransition}
               >
                 {replaying ? <Square className="size-3.5" strokeWidth={1.75} aria-hidden="true" /> : <Play className="size-4" strokeWidth={1.75} aria-hidden="true" />}

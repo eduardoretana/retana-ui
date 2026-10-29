@@ -266,11 +266,11 @@ function MessageRow({ id, text, tone, className }: { id: string; text: string; t
   const reduced = useReducedFlag()
   return (
     <motion.span
-      className="block overflow-hidden"
-      initial={reduced ? false : { height: 0, opacity: 0 }}
-      animate={{ height: "auto", opacity: 1 }}
-      exit={{ height: 0, opacity: 0, transition: reduced ? { duration: 0 } : { height: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.instant } } }}
-      transition={reduced ? { duration: 0 } : { height: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.fast } }}
+      className="grid [&>*]:min-h-0 [&>*]:overflow-hidden block overflow-hidden"
+      initial={reduced ? false : { gridTemplateRows: "0fr", opacity: 0 }}
+      animate={{ gridTemplateRows: "1fr", opacity: 1 }}
+      exit={{ gridTemplateRows: "0fr", opacity: 0, transition: reduced ? { duration: 0 } : { gridTemplateRows: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.instant } } }}
+      transition={reduced ? { duration: 0 } : { gridTemplateRows: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.fast } }}
     >
       <AnimatePresence initial={false} mode="popLayout">
         <motion.span
@@ -827,7 +827,7 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(fu
                 />
                 <AnimatePresence initial={false}>
                   {query ? (
-                    <motion.span key="clear" initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.6, transition: { duration: 0.1 } }} transition={reduced ? { duration: 0 } : GLIDE}>
+                    <motion.span key="clear" initial={{ opacity: 0, scale: 0.25 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.25, transition: { duration: 0.1 } }} transition={reduced ? { duration: 0 } : GLIDE}>
                       <Button
                         type="button"
                         variant="ghost"
@@ -955,7 +955,7 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(fu
                 key="ok"
                 className="pointer-events-none absolute top-1/2 right-3 grid size-4 -translate-y-1/2 place-items-center text-primary"
                 aria-hidden="true"
-                initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.6, filter: `blur(${blur.subtle}px)` }}
+                initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.25, filter: `blur(${blur.subtle}px)` }}
                 animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                 exit={{ opacity: 0, scale: reduced ? 1 : 0.8, transition: { duration: 0.1 } }}
                 transition={reduced ? { duration: 0.12 } : motionPresets.spring.snappy}

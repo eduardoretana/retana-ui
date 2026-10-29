@@ -409,7 +409,7 @@ export function ExpandingSearch({
     }
   }
 
-  const clearHidden = reduced ? { opacity: 0 } : { opacity: 0, scale: 0.6, filter: `blur(${motionPresets.blur.subtle}px)` }
+  const clearHidden = reduced ? { opacity: 0 } : { opacity: 0, scale: 0.25, filter: `blur(${motionPresets.blur.subtle}px)` }
 
   return (
     <div

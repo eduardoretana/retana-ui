@@ -6,6 +6,7 @@ import * as React from "react"
 import { ArrowRight } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { CollectionPhaseNotice, type CollectionPhase } from "@/registry/retana/lib/collection-phase"
 
 export type ComparePanelProps = {
   title: string
@@ -16,6 +17,9 @@ export type ComparePanelProps = {
   after: readonly string[]
   highlightIndex?: number
   className?: string
+  phase?: CollectionPhase
+  disabled?: boolean
+  phaseLabel?: string
 }
 
 export function ComparePanel({
@@ -27,9 +31,19 @@ export function ComparePanel({
   after,
   highlightIndex,
   className,
+  phase = "ready",
+  disabled = false,
+  phaseLabel,
 }: ComparePanelProps) {
+  if (phase !== "ready") {
+    return (
+      <section data-slot="compare-panel" data-phase={phase} inert={disabled || undefined} className={cn("rounded-2xl border border-border bg-card p-4", className)}>
+        <CollectionPhaseNotice phase={phase} label={phaseLabel} />
+      </section>
+    )
+  }
   return (
-    <section data-slot="compare-panel" className={cn("rounded-2xl bg-foreground p-4 text-background", className)}>
+    <section data-slot="compare-panel" inert={disabled || undefined} className={cn("rounded-2xl bg-foreground p-4 text-background", disabled && "opacity-60", className)}>
       <header className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <h3 className="text-sm font-medium">{title}</h3>
         {location ? <p className="font-mono text-xs text-primary">{location}</p> : null}

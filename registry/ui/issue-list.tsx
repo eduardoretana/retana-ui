@@ -6,6 +6,7 @@ import * as React from "react"
 import { Check, TriangleAlert, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { CollectionPhaseNotice, type CollectionPhase } from "@/registry/retana/lib/collection-phase"
 
 export type IssueSeverity = "pass" | "minor" | "critical" | "fixed"
 
@@ -24,6 +25,9 @@ export type IssueListProps = {
   onValueChange?: (id: string) => void
   emptyLabel?: string
   className?: string
+  phase?: CollectionPhase
+  disabled?: boolean
+  phaseLabel?: string
 }
 
 const iconWrap: Record<IssueSeverity, string> = {
@@ -42,26 +46,34 @@ function Mark({ severity }: { severity: IssueSeverity }) {
   )
 }
 
-export function IssueList({ label = "Findings", items, value, onValueChange, emptyLabel = "None", className }: IssueListProps) {
+export function IssueList({ label = "Findings", items, value, onValueChange, emptyLabel = "None", className, phase = "ready", disabled = false, phaseLabel }: IssueListProps) {
+  if (phase === "loading" || phase === "error") {
+    return (
+      <section data-slot="issue-list" data-phase={phase} inert={disabled || undefined} className={cn("rounded-xl border border-border bg-card p-3", className)}>
+        <CollectionPhaseNotice phase={phase} label={phaseLabel} />
+      </section>
+    )
+  }
+  const shown = phase === "empty" ? [] : items
   function onKey(event: React.KeyboardEvent<HTMLButtonElement>, index: number) {
     if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return
     event.preventDefault()
-    const next = event.key === "ArrowDown" ? Math.min(items.length - 1, index + 1) : Math.max(0, index - 1)
-    onValueChange?.(items[next]?.id ?? "")
+    const next = event.key === "ArrowDown" ? Math.min(shown.length - 1, index + 1) : Math.max(0, index - 1)
+    onValueChange?.(shown[next]?.id ?? "")
     const rows = event.currentTarget.closest("ul")?.querySelectorAll<HTMLButtonElement>("[data-issue]")
     rows?.[next]?.focus()
   }
   return (
-    <section data-slot="issue-list" className={cn("flex min-w-0 flex-col gap-2", className)}>
+    <section data-slot="issue-list" data-phase={phase} inert={disabled || undefined} className={cn("flex min-w-0 flex-col gap-2", disabled && "opacity-60", className)}>
       <div className="flex items-center justify-between gap-2">
         <h3 className="text-sm font-medium">{label}</h3>
-        <span className="font-mono text-xs text-muted-foreground">{items.length}</span>
+        <span className="font-mono text-xs text-muted-foreground">{shown.length}</span>
       </div>
-      {items.length === 0 ? (
-        <p className="text-sm text-muted-foreground">{emptyLabel}</p>
+      {shown.length === 0 ? (
+        <p className="text-sm text-muted-foreground">{phaseLabel ?? emptyLabel}</p>
       ) : (
         <ul role="listbox" aria-label={label} className="flex flex-col gap-1">
-          {items.map((item, index) => {
+          {shown.map((item, index) => {
             const selected = item.id === value
             return (
               <li key={item.id}>

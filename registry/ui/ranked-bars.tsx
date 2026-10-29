@@ -5,6 +5,7 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
+import { CollectionPhaseNotice, type CollectionPhase } from "@/registry/retana/lib/collection-phase"
 import { formatDashboardValue, orderRanked, type DashboardFormat } from "@/registry/retana/lib/dashboard-format"
 
 export type RankedBarItem = {
@@ -40,6 +41,9 @@ export type RankedBarsProps = {
   onSelect?: (item: RankedBarItem) => void
   className?: string
   classNames?: RankedBarsClassNames
+  phase?: CollectionPhase
+  disabled?: boolean
+  phaseLabel?: string
 }
 
 export function RankedBars({
@@ -59,6 +63,9 @@ export function RankedBars({
   className,
   classNames,
   layout = "stacked",
+  phase = "ready",
+  disabled = false,
+  phaseLabel,
 }: RankedBarsProps & { layout?: "stacked" | "inline" }) {
   const [expanded, setExpanded] = React.useState(false)
   const ordered = orderRanked(items, sort)
@@ -66,8 +73,16 @@ export function RankedBars({
   const peak = max ?? Math.max(...ordered.map((item) => item.value), 0)
   const percentOn = showPercent ?? ordered.some((item) => item.share != null)
 
+  if (phase !== "ready") {
+    return (
+      <div data-slot="ranked-bars" data-phase={phase} aria-disabled={disabled || undefined} className={cn("rounded-xl border border-border bg-card p-3", className, classNames?.root)}>
+        <CollectionPhaseNotice phase={phase} label={phaseLabel} />
+      </div>
+    )
+  }
+
   return (
-    <div data-slot="ranked-bars" className={cn("min-w-0", className, classNames?.root)}>
+    <div data-slot="ranked-bars" aria-disabled={disabled || undefined} className={cn("min-w-0", disabled && "pointer-events-none opacity-60", className, classNames?.root)}>
       <ol aria-label={label} className="flex flex-col gap-3">
         {visible.map((item, index) => {
           const ratio = peak > 0 ? Math.min(1, item.value / peak) : 0

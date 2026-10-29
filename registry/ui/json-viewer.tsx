@@ -236,9 +236,9 @@ function CopyGlyph({ label, icon, onCopy, reduced, className, focusable = false 
         <motion.span
           key={state}
           className="grid place-items-center"
-          initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.6, filter: `blur(${motionPresets.blur.subtle}px)` }}
+          initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.25, filter: `blur(${motionPresets.blur.subtle}px)` }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-          exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.6, filter: `blur(${motionPresets.blur.subtle}px)` }}
+          exit={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.25, filter: `blur(${motionPresets.blur.subtle}px)` }}
           transition={reduced ? { duration: 0.1 } : { ...motionPresets.spring.snappy, opacity: { duration: 0.12 }, filter: { duration: 0.12 } }}
         >
           {glyph}
@@ -540,7 +540,7 @@ export const JsonViewer = forwardRef<HTMLDivElement, JsonViewerProps>(function J
 
   const heightStyle = { "--json-max-height": typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight } as CSSProperties
   const bulk = rows.length > 400
-  const rowTransition: Transition = reduced || bulk ? { duration: 0 } : { height: motionPresets.spring.smooth, opacity: { duration: 0.2, ease: [...motionPresets.ease.standard] } }
+  const rowTransition: Transition = reduced || bulk ? { duration: 0 } : { gridTemplateRows: motionPresets.spring.smooth, opacity: { duration: 0.2, ease: [...motionPresets.ease.standard] } }
 
   const describe = (row: Row) => {
     const name = row.name === null ? rootName : String(row.name)
@@ -639,10 +639,10 @@ export const JsonViewer = forwardRef<HTMLDivElement, JsonViewerProps>(function J
                   data-kind={row.kind}
                   data-active={isActive || undefined}
                   style={{ "--level": row.level - 1 } as CSSProperties}
-                  className={cn("group/row relative rounded-lg outline-none", classNames?.row)}
-                  initial={{ height: 0, opacity: 0, overflow: "hidden" }}
-                  animate={{ height: ROW, opacity: 1, transitionEnd: { overflow: "visible" } }}
-                  exit={{ height: 0, opacity: 0, overflow: "hidden" }}
+                  className={cn("grid [&>*]:min-h-0 [&>*]:overflow-hidden group/row relative rounded-lg outline-none", classNames?.row)}
+                  initial={{ gridTemplateRows: "0fr", opacity: 0, overflow: "hidden" }}
+                  animate={{ gridTemplateRows: "1fr", opacity: 1, transitionEnd: { overflow: "visible" } }}
+                  exit={{ gridTemplateRows: "0fr", opacity: 0, overflow: "hidden" }}
                   transition={rowTransition}
                   onFocus={(event) => {
                     if (event.target === event.currentTarget && row.id !== active) setActiveRaw(row.id)

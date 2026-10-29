@@ -5,6 +5,7 @@ import { Dialog } from "radix-ui"
 import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { CollectionPhaseNotice, type CollectionPhase } from "@/registry/retana/lib/collection-phase"
 import { Button } from "@/components/ui/button"
 
 export type LightboxItem = {
@@ -27,6 +28,9 @@ export type LightboxProps = {
   zoomInLabel?: string
   zoomOutLabel?: string
   className?: string
+  phase?: CollectionPhase
+  disabled?: boolean
+  phaseLabel?: string
 }
 
 export function Lightbox({
@@ -43,6 +47,9 @@ export function Lightbox({
   zoomInLabel = "Zoom in",
   zoomOutLabel = "Zoom out",
   className,
+  phase = "ready",
+  disabled = false,
+  phaseLabel,
 }: LightboxProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen)
   const [uncontrolledIndex, setUncontrolledIndex] = React.useState(defaultIndex)
@@ -80,8 +87,16 @@ export function Lightbox({
     }
   }
 
+  if (phase !== "ready") {
+    return (
+      <div data-slot="lightbox" data-phase={phase} aria-disabled={disabled || undefined} className={cn("rounded-xl border border-border bg-card p-3", className)}>
+        <CollectionPhaseNotice phase={phase} label={phaseLabel} />
+      </div>
+    )
+  }
+
   return (
-    <Dialog.Root open={isOpen} onOpenChange={setOpen}>
+    <Dialog.Root open={disabled ? false : isOpen} onOpenChange={disabled ? undefined : setOpen}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm" />
         <Dialog.Content

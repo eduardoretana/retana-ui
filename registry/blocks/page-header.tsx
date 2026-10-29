@@ -92,10 +92,10 @@ function rowMotion(reduce: boolean) {
   return reduce
     ? { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 }, transition: { duration: motionPresets.duration.instant } }
     : {
-        initial: { opacity: 0, height: 0 },
-        animate: { opacity: 1, height: "auto" },
-        exit: { opacity: 0, height: 0 },
-        transition: { height: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.standard] } },
+        initial: { opacity: 0, gridTemplateRows: "0fr" },
+        animate: { opacity: 1, gridTemplateRows: "1fr" },
+        exit: { opacity: 0, gridTemplateRows: "0fr" },
+        transition: { gridTemplateRows: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.standard] } },
       }
 }
 
@@ -157,7 +157,8 @@ function OverflowMenu({ actions, reduce }: { actions: MenuAction[]; reduce: bool
           className="pointer-events-none absolute right-1 left-1 rounded-md bg-muted"
           aria-hidden="true"
           initial={false}
-          animate={highlight ? { y: highlight.top, height: highlight.height, opacity: 1 } : { opacity: 0 }}
+          style={highlight ? { height: highlight.height } : undefined}
+          animate={highlight ? { y: highlight.top, opacity: 1 } : { opacity: 0 }}
           transition={{ default: highlight?.glide && !reduce ? motionPresets.spring.snappy : still, opacity: { duration: reduce ? 0 : 0.08 } }}
         />
         {actions.map((action) => (
@@ -247,7 +248,7 @@ function IssuesPanel({
             const isClosing = closing.includes(issue.id)
             const owner = personById(issue.owner)
             return (
-              <motion.li key={issue.id} className="overflow-hidden border-b border-border last:border-transparent" data-fresh={issue.fresh || undefined} data-closing={isClosing || undefined} {...row}>
+              <motion.li key={issue.id} className="grid overflow-hidden border-b border-border last:border-transparent [&>*]:min-h-0 [&>*]:overflow-hidden" data-fresh={issue.fresh || undefined} data-closing={isClosing || undefined} {...row}>
                 <div className="grid min-h-13 grid-cols-[2rem_minmax(0,1fr)_auto_auto] items-center gap-3 py-1 @max-[560px]:grid-cols-[2rem_minmax(0,1fr)_auto] @max-[560px]:items-start @max-[560px]:py-2.5">
                   <button
                     ref={(node) => register(issue.id, node)}
@@ -258,7 +259,7 @@ function IssuesPanel({
                     onClick={() => onComplete(issue)}
                   >
                     <AnimatePresence initial={false} mode="popLayout">
-                      <motion.span key={isClosing ? "done" : "open"} className="grid place-items-center" initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: reduce ? 1 : 0.5, transition: quick }} transition={reduce ? still : motionPresets.spring.snappy}>
+                      <motion.span key={isClosing ? "done" : "open"} className="grid place-items-center" initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.25 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: reduce ? 1 : 0.25, transition: quick }} transition={reduce ? still : motionPresets.spring.snappy}>
                         {isClosing ? <CircleCheck className="size-4" aria-hidden="true" /> : <Circle className="size-4" aria-hidden="true" />}
                       </motion.span>
                     </AnimatePresence>
@@ -297,7 +298,7 @@ function UpdatesPanel({ updates, reduce }: { updates: PageUpdate[]; reduce: bool
         {updates.map((update) => {
           const author = personById(update.author)
           return (
-            <motion.li key={update.id} className="overflow-hidden border-b border-border last:border-transparent" data-fresh={update.fresh || undefined} {...row}>
+            <motion.li key={update.id} className="grid overflow-hidden border-b border-border last:border-transparent [&>*]:min-h-0 [&>*]:overflow-hidden" data-fresh={update.fresh || undefined} {...row}>
               <article className="grid grid-cols-[auto_minmax(0,1fr)] gap-3.5 py-4">
                 <PersonAvatar name={author.name} size="default" />
                 <div className="min-w-0">
@@ -586,11 +587,11 @@ export function PageHeader({
           </div>
           <div className="flex items-center justify-end">
             <motion.div
-              className={cn("flex shrink-0", !layout.measured && "@max-[719px]:pointer-events-none @max-[719px]:w-0 @max-[719px]:overflow-hidden @max-[719px]:opacity-0")}
+              className={cn("grid [&>*]:min-w-0 [&>*]:overflow-hidden flex shrink-0", !layout.measured && "@max-[719px]:pointer-events-none @max-[719px]:w-0 @max-[719px]:overflow-hidden @max-[719px]:opacity-0")}
               inert={layout.collapsed || undefined}
               initial={false}
-              animate={layout.measured ? (layout.collapsed ? { width: 0, opacity: 0 } : { width: "auto", opacity: 1 }) : undefined}
-              transition={layout.animate && !reduce ? { width: motionPresets.spring.smooth, opacity: { duration: layout.collapsed ? motionPresets.duration.fast : motionPresets.duration.standard, ease: [...motionPresets.ease.standard] } } : still}
+              animate={layout.measured ? (layout.collapsed ? { gridTemplateColumns: "0fr", opacity: 0 } : { gridTemplateColumns: "1fr", opacity: 1 }) : undefined}
+              transition={layout.animate && !reduce ? { gridTemplateColumns: motionPresets.spring.smooth, opacity: { duration: layout.collapsed ? motionPresets.duration.fast : motionPresets.duration.standard, ease: [...motionPresets.ease.standard] } } : still}
             >
               <div ref={secondary} className="flex shrink-0 gap-2 pr-2">
                 <Button variant="outline" size="sm" onClick={toggleFollow}>
@@ -612,9 +613,9 @@ export function PageHeader({
             </div>
           </div>
         </div>
-        <motion.div className="overflow-clip" initial={false} animate={{ height: condensed ? 0 : "auto" }} transition={reduce ? still : motionPresets.spring.smooth}>
+        <motion.div className="grid overflow-clip [&>*]:min-h-0 [&>*]:overflow-hidden" initial={false} animate={{ gridTemplateRows: condensed ? "0fr" : "1fr" }} transition={reduce ? still : { gridTemplateRows: motionPresets.spring.smooth }}>
           <div className="grid justify-items-start gap-2.5 py-5">
-            <motion.div className="flex origin-top-left flex-wrap items-center gap-3" initial={false} animate={condensed ? { opacity: 0, y: -10, scale: 0.62, filter: blur(motionPresets.blur.subtle) } : shown} transition={swap(!condensed)}>
+            <motion.div className="flex origin-top-left flex-wrap items-center gap-3" initial={false} animate={condensed ? { opacity: 0, y: -10 } : shown} transition={swap(!condensed)}>
               <h2 ref={titleRef} id={`${id}-title`} tabIndex={-1} className="text-2xl font-medium outline-none @min-[560px]:text-3xl">
                 {title}
               </h2>

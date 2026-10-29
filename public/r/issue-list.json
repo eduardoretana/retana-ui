@@ -11,9 +11,15 @@
   "files": [
     {
       "path": "registry/ui/issue-list.tsx",
-      "content": "\"use client\"\n\n/** Selectable findings. The selected row is a raised card. */\n\nimport * as React from \"react\"\nimport { Check, TriangleAlert, X } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type IssueSeverity = \"pass\" | \"minor\" | \"critical\" | \"fixed\"\n\nexport type IssueListItem = {\n  id: string\n  title: string\n  description?: string\n  severity: IssueSeverity\n  badge?: React.ReactNode\n}\n\nexport type IssueListProps = {\n  label?: string\n  items: readonly IssueListItem[]\n  value?: string\n  onValueChange?: (id: string) => void\n  emptyLabel?: string\n  className?: string\n}\n\nconst iconWrap: Record<IssueSeverity, string> = {\n  pass: \"bg-primary/15 text-foreground\",\n  minor: \"bg-chart-4/20 text-foreground\",\n  critical: \"bg-destructive/10 text-destructive\",\n  fixed: \"bg-primary/15 text-foreground\",\n}\n\nfunction Mark({ severity }: { severity: IssueSeverity }) {\n  const Icon = severity === \"critical\" ? X : severity === \"minor\" ? TriangleAlert : Check\n  return (\n    <span aria-hidden className={cn(\"grid size-7 shrink-0 place-items-center rounded-full\", iconWrap[severity])}>\n      <Icon className=\"size-3.5\" />\n    </span>\n  )\n}\n\nexport function IssueList({ label = \"Findings\", items, value, onValueChange, emptyLabel = \"None\", className }: IssueListProps) {\n  function onKey(event: React.KeyboardEvent<HTMLButtonElement>, index: number) {\n    if (event.key !== \"ArrowDown\" && event.key !== \"ArrowUp\") return\n    event.preventDefault()\n    const next = event.key === \"ArrowDown\" ? Math.min(items.length - 1, index + 1) : Math.max(0, index - 1)\n    onValueChange?.(items[next]?.id ?? \"\")\n    const rows = event.currentTarget.closest(\"ul\")?.querySelectorAll<HTMLButtonElement>(\"[data-issue]\")\n    rows?.[next]?.focus()\n  }\n  return (\n    <section data-slot=\"issue-list\" className={cn(\"flex min-w-0 flex-col gap-2\", className)}>\n      <div className=\"flex items-center justify-between gap-2\">\n        <h3 className=\"text-sm font-medium\">{label}</h3>\n        <span className=\"font-mono text-xs text-muted-foreground\">{items.length}</span>\n      </div>\n      {items.length === 0 ? (\n        <p className=\"text-sm text-muted-foreground\">{emptyLabel}</p>\n      ) : (\n        <ul role=\"listbox\" aria-label={label} className=\"flex flex-col gap-1\">\n          {items.map((item, index) => {\n            const selected = item.id === value\n            return (\n              <li key={item.id}>\n                <button\n                  type=\"button\"\n                  role=\"option\"\n                  data-issue=\"\"\n                  aria-selected={selected}\n                  onClick={() => onValueChange?.(item.id)}\n                  onKeyDown={(event) => onKey(event, index)}\n                  className={cn(\n                    \"flex w-full items-start gap-2 rounded-xl px-2 py-2 text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\",\n                    selected ? \"border border-border bg-card shadow-sm\" : \"hover:bg-muted\",\n                  )}\n                >\n                  <Mark severity={item.severity} />\n                  <span className=\"min-w-0 flex-1\">\n                    <span className=\"block text-sm font-medium wrap-break-word\">{item.title}</span>\n                    {item.description ? <span className=\"mt-0.5 line-clamp-2 block text-xs text-muted-foreground\">{item.description}</span> : null}\n                  </span>\n                  {item.badge}\n                </button>\n              </li>\n            )\n          })}\n        </ul>\n      )}\n    </section>\n  )\n}\n",
+      "content": "\"use client\"\n\n/** Selectable findings. The selected row is a raised card. */\n\nimport * as React from \"react\"\nimport { Check, TriangleAlert, X } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { CollectionPhaseNotice, type CollectionPhase } from \"@/lib/collection-phase\"\n\nexport type IssueSeverity = \"pass\" | \"minor\" | \"critical\" | \"fixed\"\n\nexport type IssueListItem = {\n  id: string\n  title: string\n  description?: string\n  severity: IssueSeverity\n  badge?: React.ReactNode\n}\n\nexport type IssueListProps = {\n  label?: string\n  items: readonly IssueListItem[]\n  value?: string\n  onValueChange?: (id: string) => void\n  emptyLabel?: string\n  className?: string\n  phase?: CollectionPhase\n  disabled?: boolean\n  phaseLabel?: string\n}\n\nconst iconWrap: Record<IssueSeverity, string> = {\n  pass: \"bg-primary/15 text-foreground\",\n  minor: \"bg-chart-4/20 text-foreground\",\n  critical: \"bg-destructive/10 text-destructive\",\n  fixed: \"bg-primary/15 text-foreground\",\n}\n\nfunction Mark({ severity }: { severity: IssueSeverity }) {\n  const Icon = severity === \"critical\" ? X : severity === \"minor\" ? TriangleAlert : Check\n  return (\n    <span aria-hidden className={cn(\"grid size-7 shrink-0 place-items-center rounded-full\", iconWrap[severity])}>\n      <Icon className=\"size-3.5\" />\n    </span>\n  )\n}\n\nexport function IssueList({ label = \"Findings\", items, value, onValueChange, emptyLabel = \"None\", className, phase = \"ready\", disabled = false, phaseLabel }: IssueListProps) {\n  if (phase === \"loading\" || phase === \"error\") {\n    return (\n      <section data-slot=\"issue-list\" data-phase={phase} inert={disabled || undefined} className={cn(\"rounded-xl border border-border bg-card p-3\", className)}>\n        <CollectionPhaseNotice phase={phase} label={phaseLabel} />\n      </section>\n    )\n  }\n  const shown = phase === \"empty\" ? [] : items\n  function onKey(event: React.KeyboardEvent<HTMLButtonElement>, index: number) {\n    if (event.key !== \"ArrowDown\" && event.key !== \"ArrowUp\") return\n    event.preventDefault()\n    const next = event.key === \"ArrowDown\" ? Math.min(shown.length - 1, index + 1) : Math.max(0, index - 1)\n    onValueChange?.(shown[next]?.id ?? \"\")\n    const rows = event.currentTarget.closest(\"ul\")?.querySelectorAll<HTMLButtonElement>(\"[data-issue]\")\n    rows?.[next]?.focus()\n  }\n  return (\n    <section data-slot=\"issue-list\" data-phase={phase} inert={disabled || undefined} className={cn(\"flex min-w-0 flex-col gap-2\", disabled && \"opacity-60\", className)}>\n      <div className=\"flex items-center justify-between gap-2\">\n        <h3 className=\"text-sm font-medium\">{label}</h3>\n        <span className=\"font-mono text-xs text-muted-foreground\">{shown.length}</span>\n      </div>\n      {shown.length === 0 ? (\n        <p className=\"text-sm text-muted-foreground\">{phaseLabel ?? emptyLabel}</p>\n      ) : (\n        <ul role=\"listbox\" aria-label={label} className=\"flex flex-col gap-1\">\n          {shown.map((item, index) => {\n            const selected = item.id === value\n            return (\n              <li key={item.id}>\n                <button\n                  type=\"button\"\n                  role=\"option\"\n                  data-issue=\"\"\n                  aria-selected={selected}\n                  onClick={() => onValueChange?.(item.id)}\n                  onKeyDown={(event) => onKey(event, index)}\n                  className={cn(\n                    \"flex w-full items-start gap-2 rounded-xl px-2 py-2 text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring\",\n                    selected ? \"border border-border bg-card shadow-sm\" : \"hover:bg-muted\",\n                  )}\n                >\n                  <Mark severity={item.severity} />\n                  <span className=\"min-w-0 flex-1\">\n                    <span className=\"block text-sm font-medium wrap-break-word\">{item.title}</span>\n                    {item.description ? <span className=\"mt-0.5 line-clamp-2 block text-xs text-muted-foreground\">{item.description}</span> : null}\n                  </span>\n                  {item.badge}\n                </button>\n              </li>\n            )\n          })}\n        </ul>\n      )}\n    </section>\n  )\n}\n",
       "type": "registry:component",
       "target": "@ui/issue-list.tsx"
+    },
+    {
+      "path": "registry/lib/collection-phase.tsx",
+      "content": "\"use client\"\n\nimport { cn } from \"@/lib/utils\"\n\n/** How a piece that lists records is getting its data. */\nexport type CollectionPhase = \"ready\" | \"loading\" | \"empty\" | \"error\"\n\nconst fallback = {\n  loading: \"Loading\",\n  empty: \"Nothing here yet\",\n  error: \"Something went wrong\",\n} as const\n\nexport function CollectionPhaseNotice({\n  phase,\n  label,\n  className,\n}: {\n  phase: Exclude<CollectionPhase, \"ready\">\n  label?: string\n  className?: string\n}) {\n  const error = phase === \"error\"\n  return (\n    <p\n      role={error ? \"alert\" : \"status\"}\n      aria-busy={phase === \"loading\" || undefined}\n      data-phase={phase}\n      className={cn(\"text-sm text-pretty\", error ? \"text-destructive\" : \"text-muted-foreground\", className)}\n    >\n      {label ?? fallback[phase]}\n    </p>\n  )\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/collection-phase.tsx"
     }
   ],
   "meta": {
@@ -21,6 +27,28 @@
     "descriptionEs": "Lista seleccionable. La fila activa se eleva.",
     "preview": "app/examples/issue-list/preview.tsx",
     "previewHref": "/examples/issue-list",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      }
+    ],
     "examples": [
       {
         "title": "Lista de hallazgos",
@@ -31,6 +59,26 @@
         "title": "Estrés",
         "href": "/examples/issue-list/stress",
         "description": "320px, vacío y RTL."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/issue-list?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/issue-list?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/issue-list?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/issue-list?scene=error",
+        "description": "Error"
       }
     ],
     "usage": "<IssueList label=\"Findings\" items={items} value={id} onValueChange={setId} />",

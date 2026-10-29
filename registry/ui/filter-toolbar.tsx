@@ -617,9 +617,9 @@ export function FilterMenu({ fields, onSelect, active = [], label = "Add filter"
                     className="mr-0.5 -ml-1.5 grid size-7 shrink-0 place-items-center rounded-full border-0 bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     aria-label="Back to fields"
                     onClick={(event) => goBack(event.detail === 0)}
-                    initial={reduced ? { opacity: 0, width: 28, marginRight: 2 } : { opacity: 0, width: 0, marginRight: 0, scale: 0.6 }}
-                    animate={{ opacity: 1, width: 28, marginRight: 2, scale: 1 }}
-                    exit={reduced ? { opacity: 0, transition: still } : { opacity: 0, width: 0, marginRight: 0, scale: 0.6, transition: { ...motionPresets.spring.snappy, opacity: leave } }}
+                    initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.25 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={reduced ? { opacity: 0, transition: still } : { opacity: 0, scale: 0.25, transition: { ...motionPresets.spring.snappy, opacity: leave } }}
                     transition={reduced ? fade : { ...motionPresets.spring.snappy, opacity: enter }}
                   >
                     <ChevronLeft size={16} strokeWidth={1.8} aria-hidden="true" />
@@ -679,15 +679,15 @@ export function FilterToolbar({ filters, onRemove, onClearAll, children, leading
     target?.focus({ preventScroll: true })
   }, [filters])
   const slot = (gap: number): HTMLMotionProps<"span"> => ({
-    initial: reduced ? false : { width: 0, marginRight: -gap, overflow: "clip", "--slot-moving": 1 },
-    animate: { width: "auto", marginRight: 0, transitionEnd: { overflow: "visible", "--slot-moving": 0 } },
-    exit: reduced ? { opacity: 0, transition: still } : { width: 0, marginRight: -gap, overflow: "clip", "--slot-moving": 1, pointerEvents: "none", transition: { ...motionPresets.spring.smooth, "--slot-moving": still } },
+    initial: reduced ? false : { gridTemplateColumns: "0fr", marginRight: -gap, overflow: "clip", "--slot-moving": 1 },
+    animate: { gridTemplateColumns: "1fr", marginRight: 0, transitionEnd: { overflow: "visible", "--slot-moving": 0 } },
+    exit: reduced ? { opacity: 0, transition: still } : { gridTemplateColumns: "0fr", marginRight: -gap, overflow: "clip", "--slot-moving": 1, pointerEvents: "none", transition: { ...motionPresets.spring.smooth, "--slot-moving": still } },
     transition: reduced ? still : motionPresets.spring.smooth,
   })
   const chip = {
-    initial: reduced ? false as const : { opacity: 0, scale: 0.9, filter: blur(motionPresets.blur.soft) },
-    animate: { opacity: 1, scale: 1, filter: blur(0) },
-    exit: reduced ? { opacity: 0, transition: still } : { opacity: 0, scale: 0.9, filter: blur(motionPresets.blur.subtle), transition: leave },
+    initial: reduced ? false as const : { opacity: 0, scale: 0.9 },
+    animate: { opacity: 1, scale: 1 },
+    exit: reduced ? { opacity: 0, transition: still } : { opacity: 0, scale: 0.9, transition: leave },
     transition: reduced ? still : { ...enter, scale: motionPresets.spring.snappy },
   }
   const text = reduced ? { ...textMotion(true), initial: false as const } : textMotion(false)
@@ -699,7 +699,7 @@ export function FilterToolbar({ filters, onRemove, onClearAll, children, leading
           {leading}
           <AnimatePresence initial={false}>
             {filters.map((filter, index) => (
-              <motion.span key={filter.id} className="inline-flex max-w-full min-w-0 shrink-0 rounded-full" {...slot(8)}>
+              <motion.span key={filter.id} className="inline-grid max-w-full min-w-0 shrink-0 rounded-full [&>*]:min-w-0 [&>*]:overflow-hidden" {...slot(8)}>
                 <motion.span data-slot="filter-toolbar-chip" className={cn("inline-flex max-w-[calc(100%+var(--slot-moving,0)*100vw)] min-h-8 shrink-0 items-center gap-2 rounded-full border border-border bg-muted py-0 pr-1 pl-3 text-xs text-muted-foreground", classNames?.chip)} {...chip}>
                   <span className="truncate">
                     {filter.label}
@@ -742,7 +742,7 @@ export function FilterToolbar({ filters, onRemove, onClearAll, children, leading
         {children}
         <AnimatePresence initial={false}>
           {filters.length > 0 ? (
-            <motion.span key="clear" className="inline-flex shrink-0" {...slot(12)}>
+            <motion.span key="clear" className="inline-grid shrink-0 [&>*]:min-w-0 [&>*]:overflow-hidden" {...slot(12)}>
               <Button
                 type="button"
                 variant="ghost"

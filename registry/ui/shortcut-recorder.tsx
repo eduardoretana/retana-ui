@@ -328,7 +328,7 @@ const RESERVED: ShortcutBinding[] = [
 type Pending = { shortcut: string; conflict: ShortcutBinding; reserved: boolean }
 
 const chip: Variants = {
-  enter: { opacity: 0, scale: 0.72, y: 4, filter: `blur(${motionPresets.blur.subtle}px)` },
+  enter: { opacity: 0, y: 4, filter: `blur(${motionPresets.blur.subtle}px)` },
   rest: (index: number) => ({
     opacity: 1,
     scale: 1,
@@ -341,7 +341,7 @@ const chip: Variants = {
       filter: { duration: 0.16, delay: index * motionPresets.stagger.item },
     },
   }),
-  exit: { opacity: 0, scale: 0.8, filter: `blur(${motionPresets.blur.subtle}px)`, transition: { duration: 0.1 } },
+  exit: { opacity: 0, y: 2, filter: `blur(${motionPresets.blur.subtle}px)`, transition: { duration: 0.1 } },
 }
 const chipFade: Variants = {
   enter: { opacity: 0 },
@@ -599,7 +599,7 @@ export function ShortcutRecorder({
         <span className="flex shrink-0 items-center gap-0.5 pr-1">
           <AnimatePresence initial={false}>
             {canReset ? (
-              <motion.span key="reset" initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.6, transition: { duration: 0.1 } }} transition={reduced ? { duration: 0 } : motionPresets.spring.snappy}>
+              <motion.span key="reset" initial={{ opacity: 0, scale: 0.25 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.25, transition: { duration: 0.1 } }} transition={reduced ? { duration: 0 } : motionPresets.spring.snappy}>
                 <Button
                   type="button"
                   variant="ghost"
@@ -615,7 +615,7 @@ export function ShortcutRecorder({
               </motion.span>
             ) : null}
             {canClear ? (
-              <motion.span key="clear" initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.6, transition: { duration: 0.1 } }} transition={reduced ? { duration: 0 } : motionPresets.spring.snappy}>
+              <motion.span key="clear" initial={{ opacity: 0, scale: 0.25 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.25, transition: { duration: 0.1 } }} transition={reduced ? { duration: 0 } : motionPresets.spring.snappy}>
                 <Button
                   type="button"
                   variant="ghost"
@@ -638,11 +638,11 @@ export function ShortcutRecorder({
         {message ? (
           <motion.div
             key="slot"
-            className="overflow-hidden"
-            initial={reduced ? false : { height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0, transition: reduced ? { duration: 0 } : { height: motionPresets.spring.smooth, opacity: { duration: 0.1 } } }}
-            transition={reduced ? { duration: 0 } : { height: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.fast } }}
+            className="grid [&>*]:min-h-0 [&>*]:overflow-hidden overflow-hidden"
+            initial={reduced ? false : { gridTemplateRows: "0fr", opacity: 0 }}
+            animate={{ gridTemplateRows: "1fr", opacity: 1 }}
+            exit={{ gridTemplateRows: "0fr", opacity: 0, transition: reduced ? { duration: 0 } : { gridTemplateRows: motionPresets.spring.smooth, opacity: { duration: 0.1 } } }}
+            transition={reduced ? { duration: 0 } : { gridTemplateRows: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.fast } }}
           >
             <AnimatePresence initial={false} mode="popLayout">
               <motion.div
@@ -811,7 +811,7 @@ export function ShortcutList({
           </span>
           <AnimatePresence initial={false}>
             {query ? (
-              <motion.span key="clear" initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.6, transition: { duration: 0.1 } }} transition={reduced ? { duration: 0 } : motionPresets.spring.snappy}>
+              <motion.span key="clear" initial={{ opacity: 0, scale: 0.25 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.25, transition: { duration: 0.1 } }} transition={reduced ? { duration: 0 } : motionPresets.spring.snappy}>
                 <Button
                   type="button"
                   variant="ghost"
@@ -835,11 +835,11 @@ export function ShortcutList({
           {filtered.map((group) => (
             <motion.section
               key={group.label}
-              className="overflow-hidden"
+              className="grid [&>*]:min-h-0 [&>*]:overflow-hidden overflow-hidden"
               aria-label={group.label}
-              initial={reduced ? { opacity: 0 } : { opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={reduced ? { opacity: 0 } : { opacity: 0, height: 0 }}
+              initial={reduced ? { opacity: 0 } : { opacity: 0, gridTemplateRows: "0fr" }}
+              animate={{ opacity: 1, gridTemplateRows: "1fr" }}
+              exit={reduced ? { opacity: 0 } : { opacity: 0, gridTemplateRows: "0fr" }}
               transition={rowTransition}
             >
               <h4 className="m-0 py-2 text-xs font-normal text-muted-foreground">{group.label}</h4>
@@ -855,10 +855,10 @@ export function ShortcutList({
                         key={item.label}
                         data-match={match || undefined}
                         data-dim={dim || undefined}
-                        className={cn("group/row overflow-hidden data-[dim]:opacity-40", classNames?.row)}
-                        initial={reduced ? { opacity: 0 } : { opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={reduced ? { opacity: 0 } : { opacity: 0, height: 0 }}
+                        className={cn("grid [&>*]:min-h-0 [&>*]:overflow-hidden group/row overflow-hidden data-[dim]:opacity-40", classNames?.row)}
+                        initial={reduced ? { opacity: 0 } : { opacity: 0, gridTemplateRows: "0fr" }}
+                        animate={{ opacity: 1, gridTemplateRows: "1fr" }}
+                        exit={reduced ? { opacity: 0 } : { opacity: 0, gridTemplateRows: "0fr" }}
                         transition={rowTransition}
                       >
                         <span className="flex min-h-9 items-center justify-between gap-3 rounded-lg px-2 group-data-[match]/row:bg-accent">

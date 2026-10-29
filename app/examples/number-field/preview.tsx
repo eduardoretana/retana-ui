@@ -1,11 +1,9 @@
 "use client"
 
-import { NumberField } from "@/registry/ui/number-field"
+import { ScenePreview } from "@/app/catalog/scene-preview"
 
-export default function NumberFieldPreview() {
-  return (
-    <div className="flex h-full items-center bg-background p-3">
-      <NumberField label="Asientos" defaultValue={4} min={1} max={24} suffix=" asientos" className="w-full" />
-    </div>
-  )
+import { scenes } from "./scenes"
+
+export default function Preview() {
+  return <ScenePreview scenes={scenes} hero="filled" />
 }

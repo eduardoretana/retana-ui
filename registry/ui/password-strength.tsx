@@ -138,14 +138,14 @@ function RollingNumber({ value, reduced }: { value: number; reduced: boolean }) 
         {digits.map((digit, index) => (
           <motion.span
             key={digits.length - 1 - index}
-            className="relative inline-block overflow-x-clip"
-            initial={{ width: 0, opacity: 0 }}
-            animate={{ width: "auto", opacity: 1 }}
-            exit={{ width: 0, opacity: 0 }}
+            className="relative inline-grid overflow-x-clip [&>*]:min-w-0 [&>*]:overflow-hidden"
+            initial={{ gridTemplateColumns: "0fr", opacity: 0 }}
+            animate={{ gridTemplateColumns: "1fr", opacity: 1 }}
+            exit={{ gridTemplateColumns: "0fr", opacity: 0 }}
             transition={
               reduced
                 ? { duration: 0 }
-                : { width: motionPresets.spring.morph, opacity: { duration: motionPresets.duration.fast } }
+                : { gridTemplateColumns: motionPresets.spring.morph, opacity: { duration: motionPresets.duration.fast } }
             }
           >
             <AnimatePresence mode="popLayout" initial={false} custom={track.direction}>
@@ -233,36 +233,25 @@ function RuleMark({ met, delay, reduced }: { met: boolean; delay: number; reduce
 }
 
 function ErrorRow({ id, text, reduced, className }: { id: string; text: string; reduced: boolean; className?: string }) {
-  const copy = React.useRef<HTMLSpanElement>(null)
-  const [height, setHeight] = React.useState<number | "auto">("auto")
-  React.useEffect(() => {
-    const node = copy.current
-    if (!node || typeof ResizeObserver === "undefined") return
-    const observer = new ResizeObserver(([entry]) => {
-      setHeight(entry.borderBoxSize?.[0]?.blockSize ?? node.offsetHeight)
-    })
-    observer.observe(node)
-    return () => observer.disconnect()
-  }, [])
   return (
     <motion.span
-      className="block overflow-hidden"
-      initial={{ height: 0, opacity: 0 }}
-      animate={{ height, opacity: 1 }}
+      className="grid overflow-hidden [&>*]:min-h-0 [&>*]:overflow-hidden"
+      initial={{ gridTemplateRows: "0fr", opacity: 0 }}
+      animate={{ gridTemplateRows: "1fr", opacity: 1 }}
       exit={{
-        height: 0,
+        gridTemplateRows: "0fr",
         opacity: 0,
         transition: reduced
           ? { duration: 0 }
-          : { height: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.instant } },
+          : { gridTemplateRows: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.instant } },
       }}
       transition={
         reduced
           ? { duration: 0 }
-          : { height: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.fast } }
+          : { gridTemplateRows: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.fast } }
       }
     >
-      <span ref={copy} id={id} className={cn("relative block pt-2 text-xs text-destructive break-all", className)}>
+      <span id={id} className={cn("relative block pt-2 text-xs text-destructive break-all", className)}>
         <AnimatePresence mode="popLayout" initial={false} custom={1}>
           <motion.span key={text} className="block" custom={1} variants={reduced ? fade : rise} initial="enter" animate="center" exit="exit">
             {text}

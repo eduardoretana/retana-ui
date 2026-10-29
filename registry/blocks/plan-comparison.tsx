@@ -184,17 +184,17 @@ export function PlanComparison({
                 key={feature.label}
                 role="row"
                 className="grid grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)_minmax(0,1fr)] overflow-hidden border-b border-border last:border-b-0 @max-[540px]:grid-cols-2"
-                initial={reduce ? false : { height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
+                initial={reduce ? false : { gridTemplateRows: "0fr", opacity: 0 }}
+                animate={{ gridTemplateRows: "1fr", opacity: 1 }}
                 exit={
                   reduce
                     ? undefined
-                    : { height: 0, opacity: 0, transition: { height: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.fast } } }
+                    : { gridTemplateRows: "0fr", opacity: 0, transition: { gridTemplateRows: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.fast } } }
                 }
                 transition={
                   reduce
                     ? { duration: 0 }
-                    : { height: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.enter], delay: 0.04 } }
+                    : { gridTemplateRows: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.enter], delay: 0.04 } }
                 }
               >
                 <div className="flex min-h-11 min-w-0 items-center px-8 py-2.5 @max-[720px]:px-5 @max-[540px]:col-span-2 @max-[540px]:min-h-0 @max-[540px]:px-5 @max-[540px]:pt-2.5 @max-[540px]:pb-0 @max-[540px]:text-xs @max-[540px]:text-muted-foreground" role="rowheader">

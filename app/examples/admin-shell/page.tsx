@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-import { AdminShellDemo } from "./demo"
+import { Demo } from "./demo"
 
 export const metadata: Metadata = {
   title: "Admin shell",
@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 }
 
 export default function AdminShellPage() {
-  return <AdminShellDemo />
+  return <Demo />
 }

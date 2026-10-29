@@ -165,10 +165,10 @@ export function ExpandableCard({
         <motion.div
           id={panelId}
           data-slot="expandable-card-panel"
-          className={cn("overflow-hidden", classNames?.panel)}
+          className={cn("grid overflow-hidden [&>*]:min-h-0 [&>*]:overflow-hidden", classNames?.panel)}
           inert={!expanded}
           initial={false}
-          animate={{ height: expanded ? "auto" : 0 }}
+          animate={{ gridTemplateRows: expanded ? "1fr" : "0fr" }}
           transition={reduceMotion ? still : boxTransition(expanded, hold)}
         >
           <motion.div

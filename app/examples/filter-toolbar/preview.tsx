@@ -1,16 +1,9 @@
 "use client"
 
-import { FilterToolbar } from "@/registry/ui/filter-toolbar"
+import { ScenePreview } from "@/app/catalog/scene-preview"
 
-export default function FilterToolbarPreview() {
-  return (
-    <div className="flex h-full items-center bg-background p-3">
-      <FilterToolbar
-        className="w-full"
-        filters={[{ id: "channel", label: "Canal", value: "kiln" }]}
-        onRemove={() => {}}
-        addFilter={{ fields: [{ id: "channel", label: "Canal", options: ["kiln", "gallery"] }], onAdd: () => {}, label: "Añadir" }}
-      />
-    </div>
-  )
+import { scenes } from "./scenes"
+
+export default function Preview() {
+  return <ScenePreview scenes={scenes} hero="filled" />
 }

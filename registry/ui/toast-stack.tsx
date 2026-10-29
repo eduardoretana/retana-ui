@@ -110,7 +110,7 @@ const reducedFade: Transition = { duration: 0.15, ease: standard }
 const exitFast: Transition = { duration: motionPresets.duration.fast, ease: standard }
 const textIn: TargetAndTransition = { opacity: 0, y: "0.3em", filter: `blur(${motionPresets.blur.soft}px)` }
 const textOut: TargetAndTransition = { opacity: 0, y: "-0.3em", filter: `blur(${motionPresets.blur.subtle}px)`, transition: exitFast }
-const iconIn: TargetAndTransition = { opacity: 0, scale: 0.6, filter: `blur(${motionPresets.blur.subtle}px)` }
+const iconIn: TargetAndTransition = { opacity: 0, scale: 0.25, filter: `blur(${motionPresets.blur.subtle}px)` }
 const shown: TargetAndTransition = { opacity: 1, y: "0em", scale: 1, filter: "blur(0px)" }
 const fadeOnly: MotionProps = { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0, transition: reducedFade }, transition: reducedFade }
 const textSwap: MotionProps = { initial: textIn, animate: shown, exit: textOut, transition: { duration: 0.22, ease: enterEase } }
@@ -477,11 +477,11 @@ function ToastItem({ toast, target, expanded, front, hidden, paused, reduce, sto
               <motion.div
                 key="action"
                 ref={actionRef}
-                className="-mt-1 flex shrink-0 justify-end data-[moving=true]:overflow-hidden @max-[21rem]:order-1 @max-[21rem]:mt-0 @max-[21rem]:basis-full @max-[21rem]:justify-start @max-[21rem]:pl-[calc(18px+0.75rem)]"
-                initial={reduce ? { opacity: 0 } : { width: 0, opacity: 0 }}
-                animate={{ width: "auto", opacity: 1 }}
-                exit={reduce ? { opacity: 0 } : { width: 0, opacity: 0 }}
-                transition={reduce ? reducedFade : { width: motionPresets.spring.smooth, opacity: fade }}
+                className="grid [&>*]:min-w-0 [&>*]:overflow-hidden -mt-1 flex shrink-0 justify-end data-[moving=true]:overflow-hidden @max-[21rem]:order-1 @max-[21rem]:mt-0 @max-[21rem]:basis-full @max-[21rem]:justify-start @max-[21rem]:pl-[calc(18px+0.75rem)]"
+                initial={reduce ? { opacity: 0 } : { gridTemplateColumns: "0fr", opacity: 0 }}
+                animate={{ gridTemplateColumns: "1fr", opacity: 1 }}
+                exit={reduce ? { opacity: 0 } : { gridTemplateColumns: "0fr", opacity: 0 }}
+                transition={reduce ? reducedFade : { gridTemplateColumns: motionPresets.spring.smooth, opacity: fade }}
                 onAnimationStart={() => markMoving(true)}
                 onAnimationComplete={() => markMoving(false)}
               >

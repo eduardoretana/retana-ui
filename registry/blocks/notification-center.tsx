@@ -61,7 +61,7 @@ const exitFast: Transition = { duration: motionPresets.duration.fast, ease: [...
 const instant: Transition = { duration: 0 }
 const textIn: TargetAndTransition = { opacity: 0, y: "0.3em", filter: `blur(${motionPresets.blur.soft}px)` }
 const textOut: TargetAndTransition = { opacity: 0, y: "-0.3em", filter: `blur(${motionPresets.blur.subtle}px)`, transition: exitFast }
-const iconIn: TargetAndTransition = { opacity: 0, scale: 0.6, filter: `blur(${motionPresets.blur.subtle}px)` }
+const iconIn: TargetAndTransition = { opacity: 0, scale: 0.25, filter: `blur(${motionPresets.blur.subtle}px)` }
 const shown: TargetAndTransition = { opacity: 1, y: "0em", scale: 1, filter: "blur(0px)" }
 const fadeOut: TargetAndTransition = { opacity: 0, transition: { duration: motionPresets.duration.instant } }
 
@@ -284,7 +284,7 @@ export function NotificationCenter({
     tab.current?.focus()
   }
 
-  const height: Transition = reduce ? instant : { height: motionPresets.spring.smooth, opacity: enter }
+  const height: Transition = reduce ? instant : { gridTemplateRows: motionPresets.spring.smooth, opacity: enter }
 
   return (
     <div data-slot="notification-center" className={cn("inline-flex", className, classNames?.root)}>
@@ -306,9 +306,9 @@ export function NotificationCenter({
                   key="badge"
                   className="absolute -top-1.5 -right-1.5 grid h-5 min-w-5 place-items-center overflow-hidden rounded-full border-2 border-background bg-foreground px-1 text-[10px] font-medium text-background tabular-nums"
                   aria-hidden="true"
-                  initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.6 }}
+                  initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.25 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  exit={reduce ? fadeOut : { opacity: 0, scale: 0.6, transition: exitFast }}
+                  exit={reduce ? fadeOut : { opacity: 0, scale: 0.25, transition: exitFast }}
                   transition={reduce ? instant : motionPresets.spring.snappy}
                 >
                   <RollingCount value={unreadCount} display={unreadCount > 9 ? "9+" : String(unreadCount)} reduce={reduce} />
@@ -400,23 +400,23 @@ export function NotificationCenter({
                 <motion.div
                   key={item.id}
                   role="listitem"
-                  className="overflow-hidden"
+                  className="grid [&>*]:min-h-0 [&>*]:overflow-hidden overflow-hidden"
                   custom={bulk}
                   variants={{
                     exit: (isBulk: boolean) =>
                       reduce
                         ? fadeOut
                         : {
-                            height: 0,
+                            gridTemplateRows: "0fr",
                             opacity: 0,
                             transition: {
-                              height: { ...motionPresets.spring.smooth, delay: isBulk ? cascade(index) : 0 },
+                              gridTemplateRows: { ...motionPresets.spring.smooth, delay: isBulk ? cascade(index) : 0 },
                               opacity: { ...exitFast, delay: isBulk ? cascade(index) : 0 },
                             },
                           },
                   }}
-                  initial={reduce ? { opacity: 0 } : { height: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
+                  initial={reduce ? { opacity: 0 } : { gridTemplateRows: "0fr" }}
+                  animate={{ gridTemplateRows: "1fr", opacity: 1 }}
                   exit="exit"
                   transition={height}
                 >
@@ -467,10 +467,10 @@ export function NotificationCenter({
                     <AnimatePresence initial={false}>
                       {expandedId === item.id ? (
                         <motion.div
-                          className="overflow-hidden pl-8"
-                          initial={reduce ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={reduce ? fadeOut : { height: 0, opacity: 0, transition: { height: motionPresets.spring.smooth, opacity: exitFast } }}
+                          className="grid [&>*]:min-h-0 [&>*]:overflow-hidden overflow-hidden pl-8"
+                          initial={reduce ? { opacity: 0 } : { gridTemplateRows: "0fr", opacity: 0 }}
+                          animate={{ gridTemplateRows: "1fr", opacity: 1 }}
+                          exit={reduce ? fadeOut : { gridTemplateRows: "0fr", opacity: 0, transition: { gridTemplateRows: motionPresets.spring.smooth, opacity: exitFast } }}
                           transition={height}
                         >
                           <p className="my-3 text-xs leading-relaxed text-muted-foreground">
@@ -510,11 +510,11 @@ export function NotificationCenter({
               {visible.length === 0 ? (
                 <motion.div
                   key="empty"
-                  className="overflow-hidden"
-                  initial={reduce ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={reduce ? fadeOut : { height: 0, opacity: 0, transition: { height: motionPresets.spring.smooth, opacity: exitFast } }}
-                  transition={reduce ? instant : { height: motionPresets.spring.smooth, opacity: { ...enter, delay: motionPresets.duration.fast } }}
+                  className="grid [&>*]:min-h-0 [&>*]:overflow-hidden overflow-hidden"
+                  initial={reduce ? { opacity: 0 } : { gridTemplateRows: "0fr", opacity: 0 }}
+                  animate={{ gridTemplateRows: "1fr", opacity: 1 }}
+                  exit={reduce ? fadeOut : { gridTemplateRows: "0fr", opacity: 0, transition: { gridTemplateRows: motionPresets.spring.smooth, opacity: exitFast } }}
+                  transition={reduce ? instant : { gridTemplateRows: motionPresets.spring.smooth, opacity: { ...enter, delay: motionPresets.duration.fast } }}
                 >
                   <div className="grid min-h-44 justify-items-center content-center px-3 py-6 text-center">
                     <CircleCheck className="mb-3 size-6 text-muted-foreground" aria-hidden="true" />
@@ -546,10 +546,10 @@ export function NotificationCenter({
             {readCount > 0 ? (
               <motion.div
                 key="footer"
-                className="overflow-hidden"
-                initial={reduce ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={reduce ? fadeOut : { height: 0, opacity: 0, transition: { height: motionPresets.spring.smooth, opacity: exitFast } }}
+                className="grid [&>*]:min-h-0 [&>*]:overflow-hidden overflow-hidden"
+                initial={reduce ? { opacity: 0 } : { gridTemplateRows: "0fr", opacity: 0 }}
+                animate={{ gridTemplateRows: "1fr", opacity: 1 }}
+                exit={reduce ? fadeOut : { gridTemplateRows: "0fr", opacity: 0, transition: { gridTemplateRows: motionPresets.spring.smooth, opacity: exitFast } }}
                 transition={height}
               >
                 <div className="flex min-h-11 items-center justify-between gap-3 border-t border-border px-5 text-[11px] text-muted-foreground">

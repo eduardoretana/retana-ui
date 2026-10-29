@@ -104,21 +104,11 @@ function SubscribeControl({ reduce }: { reduce: boolean }) {
   const [state, setState] = useState<SubscribeState>("idle")
   const [email, setEmail] = useState("")
   const [error, setError] = useState(false)
-  const [width, setWidth] = useState<number | null>(null)
-  const innerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const idleRef = useRef<HTMLButtonElement>(null)
   const undoRef = useRef<HTMLButtonElement>(null)
   const focusNext = useRef(false)
   const [shakeScope, animateShake] = useAnimate<HTMLDivElement>()
-
-  useEffect(() => {
-    const element = innerRef.current
-    if (!element) return
-    const observer = new ResizeObserver(() => setWidth(element.offsetWidth))
-    observer.observe(element)
-    return () => observer.disconnect()
-  }, [])
 
   useEffect(() => {
     if (!focusNext.current) return
@@ -176,10 +166,8 @@ function SubscribeControl({ reduce }: { reduce: boolean }) {
           )}
           data-state={state}
           initial={false}
-          animate={{ width: width ?? "auto" }}
-          transition={reduce ? instant : motionPresets.spring.morph}
         >
-          <div ref={innerRef} className="relative flex h-full w-max">
+          <div className="relative flex h-full w-max">
             <AnimatePresence mode="popLayout" initial={false}>
               {state === "idle" ? (
                 <motion.button
@@ -353,10 +341,10 @@ function EntryRow({ entry, open, onToggle, reduce }: { entry: ChangelogEntry; op
           <motion.div
             key="panel"
             id={panelId}
-            className="overflow-hidden"
-            initial={{ height: 0 }}
-            animate={{ height: "auto" }}
-            exit={{ height: 0, transition: reduce ? instant : exitSpring }}
+            className="grid [&>*]:min-h-0 [&>*]:overflow-hidden overflow-hidden"
+            initial={{ gridTemplateRows: "0fr" }}
+            animate={{ gridTemplateRows: "1fr" }}
+            exit={{ gridTemplateRows: "0fr", transition: reduce ? instant : exitSpring }}
             transition={reduce ? instant : motionPresets.spring.smooth}
           >
             <motion.div
@@ -497,10 +485,10 @@ export function ChangelogFeed({
                 onClick={() => toggleFilter(kind.id)}
               >
                 <motion.span
-                  className={cn("grid shrink-0 place-items-center overflow-hidden rounded-full bg-muted-foreground", on && "bg-background", kind.id === "new" && !on && "bg-primary", kind.id === "fixed" && !on && "bg-primary")}
+                  className={cn("grid size-4 origin-center shrink-0 place-items-center overflow-hidden rounded-full bg-muted-foreground", on && "bg-background", kind.id === "new" && !on && "bg-primary", kind.id === "fixed" && !on && "bg-primary")}
                   aria-hidden="true"
                   initial={false}
-                  animate={{ width: on ? 16 : 7, height: on ? 16 : 7 }}
+                  animate={{ scale: on ? 1 : 7 / 16 }}
                   transition={reduce ? instant : motionPresets.spring.morph}
                 >
                   <motion.span className={cn("grid place-items-center text-foreground", on && "text-foreground")} initial={false} animate={{ opacity: on ? 1 : 0, scale: on ? 1 : 0.4 }} transition={reduce ? instant : { ...motionPresets.spring.snappy, delay: on ? 0.05 : 0 }}>

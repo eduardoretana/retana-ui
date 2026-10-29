@@ -348,13 +348,13 @@ export const AnnouncementBar = forwardRef<HTMLElement, AnnouncementBarProps>(fun
           key="bar"
           ref={ref}
           data-slot="announcement-bar"
-          className={cn("@container overflow-hidden", className, classNames?.root)}
+          className={cn("grid [&>*]:min-h-0 [&>*]:overflow-hidden @container overflow-hidden", className, classNames?.root)}
           aria-label={label}
           aria-roledescription={total > 1 ? "carousel" : undefined}
-          initial={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
-          animate={{ height: "auto", opacity: 1 }}
-          exit={reduced ? { opacity: 0, transition: { duration: 0.16 } } : { height: 0, opacity: 0, transition: { height: COLLAPSE, opacity: { duration: 0.2, ease: standard } } }}
-          transition={reduced ? { duration: 0.16 } : { height: COLLAPSE, opacity: { duration: 0.24, ease: enter } }}
+          initial={reduced ? { opacity: 0 } : { gridTemplateRows: "0fr", opacity: 0 }}
+          animate={{ gridTemplateRows: "1fr", opacity: 1 }}
+          exit={reduced ? { opacity: 0, transition: { duration: 0.16 } } : { gridTemplateRows: "0fr", opacity: 0, transition: { gridTemplateRows: COLLAPSE, opacity: { duration: 0.2, ease: standard } } }}
+          transition={reduced ? { duration: 0.16 } : { gridTemplateRows: COLLAPSE, opacity: { duration: 0.24, ease: enter } }}
           onPointerEnter={(event) => {
             if (event.pointerType === "mouse") setHovered(true)
           }}
@@ -364,6 +364,7 @@ export const AnnouncementBar = forwardRef<HTMLElement, AnnouncementBarProps>(fun
             if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(false)
           }}
         >
+          <div className="min-h-0 overflow-hidden">
           <div
             data-slot="announcement-bar-bar"
             data-tone={tone}
@@ -402,6 +403,7 @@ export const AnnouncementBar = forwardRef<HTMLElement, AnnouncementBarProps>(fun
                 </Button>
               ) : null}
             </div>
+          </div>
           </div>
         </motion.section>
       ) : null}

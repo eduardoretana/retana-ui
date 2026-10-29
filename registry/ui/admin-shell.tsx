@@ -13,6 +13,7 @@ import type { LucideIcon } from "lucide-react"
 import { toast, Toaster } from "sonner"
 
 import { cn } from "@/lib/utils"
+import { CollectionPhaseNotice, type CollectionPhase } from "@/registry/retana/lib/collection-phase"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -107,6 +108,9 @@ export type AdminShellProps = {
   /** pill draws an inverted active item and flips the count chip. */
   navStyle?: "row" | "pill"
   children?: React.ReactNode
+  phase?: CollectionPhase
+  disabled?: boolean
+  phaseLabel?: string
 }
 
 export function breadcrumbsFor(
@@ -174,6 +178,9 @@ export function AdminShell({
   showToaster = true,
   navStyle = "row",
   children,
+  phase = "ready",
+  disabled = false,
+  phaseLabel,
 }: AdminShellProps) {
   const controller = themeController ?? (
     onThemeChange
@@ -215,8 +222,16 @@ export function AdminShell({
     link.remove()
   }
 
+  if (phase !== "ready") {
+    return (
+      <div data-slot="admin-shell" data-phase={phase} aria-disabled={disabled || undefined} className={cn("rounded-xl border border-border bg-card p-4", className)}>
+        <CollectionPhaseNotice phase={phase} label={phaseLabel} />
+      </div>
+    )
+  }
+
   return (
-    <SidebarProvider className={cn("min-h-svh bg-background", className)}>
+    <SidebarProvider className={cn("min-h-svh bg-background", disabled && "pointer-events-none opacity-60", className)}>
       <Sidebar collapsible="icon" className="border-sidebar-border">
         <SidebarHeader className="border-b border-sidebar-border">
           {brand ?? (
