@@ -3,6 +3,7 @@
 /** Clean-room similar-work picker. Cards select; the detail compares phases. */
 
 import { cn } from "@/lib/utils"
+import { CollectionPhaseNotice, type CollectionPhase } from "@/registry/retana/lib/collection-phase"
 import { formatHours, formatMoney, shareRatio } from "@/registry/retana/lib/proposal"
 
 export type SimilarPhase = {
@@ -44,6 +45,9 @@ export type ProposalSimilarProps = {
   quotedLabel?: string
   actualLabel?: string
   className?: string
+  phase?: CollectionPhase
+  disabled?: boolean
+  phaseLabel?: string
 }
 
 export function ProposalSimilar({
@@ -60,8 +64,18 @@ export function ProposalSimilar({
   quotedLabel = "Quoted",
   actualLabel = "Actual",
   className,
+  phase = "ready",
+  disabled = false,
+  phaseLabel,
 }: ProposalSimilarProps) {
   const selected = projects.find((project) => project.id === value) ?? projects[0]
+  if (phase !== "ready") {
+    return (
+      <div data-slot="proposal-similar" data-phase={phase} aria-disabled={disabled || undefined} className={cn("rounded-xl border border-border bg-card p-3", className)}>
+        <CollectionPhaseNotice phase={phase} label={phaseLabel} />
+      </div>
+    )
+  }
   return (
     <div data-slot="proposal-similar" className={cn("grid min-w-0 gap-4", className)}>
       <div role="radiogroup" aria-label={matchLabel} className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">

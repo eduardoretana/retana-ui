@@ -125,7 +125,8 @@ export function ProposalWorkspace({
                   data-slot="proposal-tab-indicator"
                   className="pointer-events-none absolute bottom-0 h-0.5 bg-foreground"
                   initial={false}
-                  animate={{ left: indicator.left, width: indicator.width }}
+                  style={{ width: indicator.width }}
+                  animate={{ x: indicator.left }}
                   transition={reduced ? { duration: 0 } : { duration: 0.2 }}
                 />
               ) : null}

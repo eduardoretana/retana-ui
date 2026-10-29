@@ -1,7 +1,9 @@
 "use client"
 
-import { ProposalWorkspaceDemo } from "@/app/examples/proposal/screens"
+import { ScenePreview } from "@/app/catalog/scene-preview"
+
+import { scenes } from "./scenes"
 
 export default function Preview() {
-  return <ProposalWorkspaceDemo />
+  return <ScenePreview scenes={scenes} hero="filled" />
 }

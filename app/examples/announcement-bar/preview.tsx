@@ -1,18 +1,9 @@
 "use client"
 
-import { AnnouncementBar } from "@/registry/ui/announcement-bar"
+import { ScenePreview } from "@/app/catalog/scene-preview"
 
-export default function AnnouncementBarPreview() {
-  return (
-    <div className="bg-background">
-      <AnnouncementBar
-        controls
-        autoPlay={false}
-        messages={[
-          { id: "kiln", message: "El horno ya está en temperatura." },
-          { id: "gallery", message: "La galería abre el viernes." },
-        ]}
-      />
-    </div>
-  )
+import { scenes } from "./scenes"
+
+export default function Preview() {
+  return <ScenePreview scenes={scenes} hero="filled" />
 }

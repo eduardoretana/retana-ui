@@ -117,16 +117,16 @@ function partsOf(value: number, format: Intl.NumberFormat): Part[] {
 }
 
 const slot: Variants = {
-  enter: (direction: number) => ({ width: 0, scale: 0.6, opacity: 0, y: `${direction * 0.3}em`, filter: `blur(${blur.soft}px)` }),
+  enter: (direction: number) => ({ gridTemplateColumns: "0fr", scale: 0.6, opacity: 0, y: `${direction * 0.3}em`, filter: `blur(${blur.soft}px)` }),
   center: {
-    width: "auto",
+    gridTemplateColumns: "1fr",
     scale: 1,
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
     transitionEnd: { filter: "none" },
     transition: {
-      width: spring.morph,
+      gridTemplateColumns: spring.morph,
       scale: spring.morph,
       opacity: spring.morph,
       y: spring.snappy,
@@ -134,13 +134,13 @@ const slot: Variants = {
     },
   },
   exit: (direction: number) => ({
-    width: 0,
+    gridTemplateColumns: "0fr",
     scale: 0.6,
     opacity: 0,
     y: `${direction * -0.3}em`,
     filter: `blur(${blur.subtle}px)`,
     transition: {
-      width: spring.smooth,
+      gridTemplateColumns: spring.smooth,
       scale: spring.smooth,
       y: { duration: duration.fast, ease: exitEase },
       opacity: { duration: duration.instant },
@@ -149,16 +149,16 @@ const slot: Variants = {
   }),
 }
 
-const rest = (opacity: number) => ({ width: "auto" as const, scale: 1, opacity, y: 0, filter: "none" })
+const rest = (opacity: number) => ({ gridTemplateColumns: "1fr" as const, scale: 1, opacity, y: 0, filter: "none" })
 const still: Variants = {
   enter: rest(0),
   center: { ...rest(1), transition: { duration: duration.instant } },
-  exit: { width: 0, opacity: 0, transition: { duration: 0 } },
+  exit: { gridTemplateColumns: "0fr", opacity: 0, transition: { duration: 0 } },
 }
 const cut: Variants = {
   enter: rest(1),
   center: { ...rest(1), transition: { duration: 0 } },
-  exit: { width: 0, opacity: 0, transition: { duration: 0 } },
+  exit: { gridTemplateColumns: "0fr", opacity: 0, transition: { duration: 0 } },
 }
 
 function Glyph({ position, digit }: { position: MotionValue<number>; digit: number }) {
@@ -192,12 +192,12 @@ function Wheel({ digit, direction, instant }: { digit: number; direction: number
     else animate(position, state.target, spring.snappy)
   }, [digit, direction, instant, position, reduced])
   return (
-    <>
+    <span className="relative min-w-0">
       <span className="invisible">0</span>
       {DIGITS.map((item) => (
         <Glyph key={item} position={position} digit={item} />
       ))}
-    </>
+    </span>
   )
 }
 
@@ -210,8 +210,8 @@ function Digits({ value, format, direction, instant }: { value: number; format: 
         <motion.span
           key={part.key}
           className={"digit" in part
-            ? "relative inline-block overflow-x-visible overflow-y-clip py-[0.2em] [margin-block:-0.2em]"
-            : "inline-block overflow-x-clip whitespace-pre"}
+            ? "relative inline-grid overflow-x-visible overflow-y-clip py-[0.2em] [margin-block:-0.2em] [&>*]:min-w-0"
+            : "inline-grid overflow-x-clip whitespace-pre [&>*]:min-w-0 [&>*]:overflow-hidden"}
           style={"digit" in part ? { maskImage: WHEEL_MASK, WebkitMaskImage: WHEEL_MASK } : undefined}
           custom={direction}
           variants={variants}
@@ -234,14 +234,14 @@ function AffixText({ text, direction, className }: { text: string; direction: nu
         {[...text].map((char, index) => (
           <motion.span
             key={`${index}:${char}`}
-            className="inline-block overflow-x-clip whitespace-pre"
+            className="inline-grid overflow-x-clip whitespace-pre [&>*]:min-w-0 [&>*]:overflow-hidden"
             custom={direction}
             variants={reduced ? still : slot}
             initial="enter"
             animate="center"
             exit="exit"
           >
-            {char}
+            <span className="min-w-0 overflow-hidden">{char}</span>
           </motion.span>
         ))}
       </AnimatePresence>
@@ -352,25 +352,15 @@ function FieldMessage({ id, text, className }: { id?: string; text?: string; cla
 
 function MessageRow({ id, text, className }: { id?: string; text: string; className: string }) {
   const reduced = useReducedMotion()
-  const copyRef = React.useRef<HTMLSpanElement>(null)
-  const [height, setHeight] = React.useState<number | "auto">("auto")
-  React.useLayoutEffect(() => {
-    const node = copyRef.current
-    if (!node || typeof ResizeObserver === "undefined") return
-    const observer = new ResizeObserver(([entry]) => setHeight(entry.borderBoxSize?.[0]?.blockSize ?? node.offsetHeight))
-    observer.observe(node)
-    return () => observer.disconnect()
-  }, [])
   return (
     <motion.span
-      className="block overflow-hidden"
-      initial={{ height: 0, opacity: 0 }}
-      animate={{ height, opacity: 1 }}
-      exit={{ height: 0, opacity: 0, transition: reduced ? { duration: 0 } : { height: spring.smooth, opacity: { duration: duration.instant } } }}
-      transition={reduced ? { duration: 0 } : { height: spring.smooth, opacity: { duration: duration.fast } }}
+      className="grid overflow-hidden [&>*]:min-h-0 [&>*]:overflow-hidden"
+      initial={{ gridTemplateRows: "0fr", opacity: 0 }}
+      animate={{ gridTemplateRows: "1fr", opacity: 1 }}
+      exit={{ gridTemplateRows: "0fr", opacity: 0, transition: reduced ? { duration: 0 } : { gridTemplateRows: spring.smooth, opacity: { duration: duration.instant } } }}
+      transition={reduced ? { duration: 0 } : { gridTemplateRows: spring.smooth, opacity: { duration: duration.fast } }}
     >
       <motion.span
-        ref={copyRef}
         id={id}
         className={className}
         initial={reduced ? false : { y: "0.35em", filter: `blur(${blur.soft}px)` }}

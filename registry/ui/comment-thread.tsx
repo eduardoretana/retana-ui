@@ -359,16 +359,19 @@ function Composer({ people, initial = "", placeholder, submitLabel, autoFocus, f
         />
         <AnimatePresence>
           {open ? (
-            <motion.ul
+            <motion.div
               key="people"
+              className="mt-1.5 grid [&>*]:min-h-0 [&>*]:overflow-hidden"
+              initial={{ opacity: 0, gridTemplateRows: "0fr" }}
+              animate={{ opacity: 1, gridTemplateRows: "1fr" }}
+              exit={{ opacity: 0, gridTemplateRows: "0fr", transition: { duration: 0.12, ease: standard } }}
+              transition={{ gridTemplateRows: HEIGHT, opacity: { duration: 0.16, ease: enter } }}
+            >
+            <ul
               id={`${uid}-people`}
               role="listbox"
               aria-label="People"
-              className="mt-1.5 grid list-none overflow-clip rounded-xl border border-border bg-popover p-1"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0, transition: { duration: 0.12, ease: standard } }}
-              transition={{ height: HEIGHT, opacity: { duration: 0.16, ease: enter } }}
+              className="list-none overflow-clip rounded-xl border border-border bg-popover p-1"
             >
               {suggestions.map((person, index) => (
                 <li
@@ -385,7 +388,8 @@ function Composer({ people, initial = "", placeholder, submitLabel, autoFocus, f
                   {person.name}
                 </li>
               ))}
-            </motion.ul>
+            </ul>
+            </motion.div>
           ) : null}
         </AnimatePresence>
       </div>
@@ -482,7 +486,7 @@ export const CommentThread = forwardRef<HTMLElement, CommentThreadProps>(functio
 
   const grow = reduced
     ? { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 }, transition: { duration: 0.12 } }
-    : { initial: { height: 0, opacity: 0 }, animate: { height: "auto", opacity: 1 }, exit: { height: 0, opacity: 0 }, transition: { height: HEIGHT, opacity: { duration: 0.2, ease: enter } } }
+    : { initial: { gridTemplateRows: "0fr", opacity: 0 }, animate: { gridTemplateRows: "1fr", opacity: 1 }, exit: { gridTemplateRows: "0fr", opacity: 0 }, transition: { gridTemplateRows: HEIGHT, opacity: { duration: 0.2, ease: enter } } }
 
   const renderComment = (comment: ThreadComment, depth: number): ReactNode => {
     const mine = comment.author.id === currentUser.id
@@ -493,7 +497,7 @@ export const CommentThread = forwardRef<HTMLElement, CommentThreadProps>(functio
     const picking = ui.picker === comment.id
     const replyCount = countTree(replies)
     return (
-      <motion.li key={comment.id} className="overflow-clip" {...grow}>
+      <motion.li key={comment.id} className="grid overflow-clip [&>*]:min-h-0 [&>*]:overflow-hidden" {...grow}>
         <article data-slot="comment-thread-comment" aria-label={comment.deleted ? "Deleted comment" : `${comment.author.name}, ${comment.createdAt}`} className={cn("group/comment flex gap-2.5 rounded-2xl p-2.5", classNames?.comment)}>
           {comment.deleted ? <span className="size-7 shrink-0 rounded-full border border-dashed border-border" aria-hidden="true" /> : <PersonAvatar author={comment.author} />}
           <div className="grid min-w-0 flex-1 gap-0.5">
@@ -654,7 +658,7 @@ export const CommentThread = forwardRef<HTMLElement, CommentThreadProps>(functio
         </article>
         <AnimatePresence initial={false}>
           {replies.length > 0 && !collapsed ? (
-            <motion.div key="replies" className="overflow-clip" {...grow}>
+            <motion.div key="replies" className="grid overflow-clip [&>*]:min-h-0 [&>*]:overflow-hidden" {...grow}>
               <ul className="relative ml-6 list-none border-l border-border py-0 pr-0 pl-3 max-[420px]:ml-3" data-depth={depth + 1}>
                 <AnimatePresence initial={false}>{replies.map((reply) => renderComment(reply, depth + 1))}</AnimatePresence>
               </ul>
@@ -722,7 +726,7 @@ export const CommentThread = forwardRef<HTMLElement, CommentThreadProps>(functio
               <div className="mt-1 grid border-t border-border px-3 pt-2.5 pb-3">
                 <AnimatePresence initial={false}>
                   {replyTo ? (
-                    <motion.div key="replying" className="overflow-clip" {...grow}>
+                    <motion.div key="replying" className="grid overflow-clip [&>*]:min-h-0 [&>*]:overflow-hidden" {...grow}>
                       <span className="flex items-center gap-1.5 px-0.5 pb-2 pl-9 text-xs text-muted-foreground max-[420px]:pl-0.5">
                         <CornerDownRight className="size-3.5" aria-hidden="true" />
                         <span>Replying to <span className="font-medium text-foreground">{replyTo.name}</span></span>

@@ -74,39 +74,26 @@ function MotionText({ text }: { text: string }) {
 
 function MessageRow({ id, text, className }: { id?: string; text: string; className?: string }) {
   const reduced = useReducedMotion()
-  const copyRef = React.useRef<HTMLSpanElement>(null)
-  const [height, setHeight] = React.useState<number | "auto">("auto")
-
-  React.useEffect(() => {
-    const node = copyRef.current
-    if (!node || typeof ResizeObserver === "undefined") return
-    const observer = new ResizeObserver(([entry]) => {
-      setHeight(entry.borderBoxSize?.[0]?.blockSize ?? node.offsetHeight)
-    })
-    observer.observe(node)
-    return () => observer.disconnect()
-  }, [])
 
   return (
     <motion.span
-      className="block overflow-hidden"
-      initial={reduced ? false : { height: 0, opacity: 0 }}
-      animate={{ height, opacity: 1 }}
+      className="grid overflow-hidden [&>*]:min-h-0 [&>*]:overflow-hidden"
+      initial={reduced ? false : { gridTemplateRows: "0fr", opacity: 0 }}
+      animate={{ gridTemplateRows: "1fr", opacity: 1 }}
       exit={{
-        height: 0,
+        gridTemplateRows: "0fr",
         opacity: 0,
         transition: reduced
           ? { duration: 0 }
-          : { height: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.instant } },
+          : { gridTemplateRows: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.instant } },
       }}
       transition={
         reduced
           ? { duration: 0 }
-          : { height: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.fast } }
+          : { gridTemplateRows: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.fast } }
       }
     >
       <motion.span
-        ref={copyRef}
         id={id}
         className={cn("block pt-2 text-xs text-muted-foreground break-all", className)}
         initial={reduced ? false : { y: "0.35em", filter: `blur(${motionPresets.blur.soft}px)` }}
@@ -151,17 +138,8 @@ export function TagInput({
   const inputRef = React.useRef<HTMLInputElement>(null)
   const ringRef = React.useRef<HTMLSpanElement>(null)
   const ringAt = React.useRef("")
-  const [height, setHeight] = React.useState<number | "auto">("auto")
   const tags = value ?? internal
   const active = picked !== null && tags.includes(picked) ? picked : null
-
-  React.useEffect(() => {
-    const node = contentRef.current
-    if (!node || typeof ResizeObserver === "undefined") return
-    const observer = new ResizeObserver(() => setHeight(node.offsetHeight))
-    observer.observe(node)
-    return () => observer.disconnect()
-  }, [])
 
   React.useLayoutEffect(() => {
     const ring = ringRef.current
@@ -273,9 +251,6 @@ export function TagInput({
           "overflow-hidden rounded-lg border border-input bg-background shadow-sm transition-colors focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50 motion-reduce:transition-none",
           classNames?.control,
         )}
-        initial={false}
-        animate={{ height }}
-        transition={reduced ? { duration: 0 } : motionPresets.spring.smooth}
       >
         <div
           ref={contentRef}
@@ -320,7 +295,7 @@ export function TagInput({
                 data-picked={tag === active || undefined}
                 onMouseDown={(event) => onTagPointer(event)}
                 onClick={(event) => onTagPointer(event, tag)}
-                initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.9, filter: `blur(${motionPresets.blur.soft}px)` }}
+                initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1, filter: "blur(0px)", transitionEnd: { filter: "none" } }}
                 exit={
                   reduced
@@ -328,7 +303,6 @@ export function TagInput({
                     : {
                         opacity: 0,
                         scale: 0.9,
-                        filter: `blur(${motionPresets.blur.subtle}px)`,
                         transition: { duration: motionPresets.duration.instant, ease: [...motionPresets.ease.standard] },
                       }
                 }

@@ -9,9 +9,15 @@
   "files": [
     {
       "path": "registry/blocks/demo-collage.tsx",
-      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/src/components/live-collage.tsx\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type DemoCollageItem = {\n  name: string\n  href: string\n  render: () => React.ReactNode\n}\n\nexport type DemoCollageProps = {\n  items: DemoCollageItem[]\n  ctaHref?: string\n  ctaLabel?: string\n  linkComponent?: React.ElementType<{ href: string; className?: string; children?: React.ReactNode }>\n  className?: string\n}\n\nfunction Cell({ item, linkComponent: Link = \"a\" }: { item: DemoCollageItem; linkComponent?: DemoCollageProps[\"linkComponent\"] }) {\n  const ref = React.useRef<HTMLElement>(null)\n  const [shown, setShown] = React.useState(false)\n  React.useEffect(() => {\n    const node = ref.current\n    if (!node) return\n    const observer = new IntersectionObserver((entries) => {\n      if (entries.some((entry) => entry.isIntersecting)) setShown(true)\n    })\n    observer.observe(node)\n    return () => observer.disconnect()\n  }, [])\n  return (\n    <article ref={ref} className=\"mb-3 break-inside-avoid overflow-hidden rounded-xl border border-border bg-card\">\n      <Link href={item.href} className=\"flex items-center justify-between bg-muted/40 px-3 py-2 font-mono text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\">\n        {item.name}\n        <span aria-hidden=\"true\">↗</span>\n      </Link>\n      <div className=\"pointer-events-none p-3\">{shown ? item.render() : <div className=\"h-16\" />}</div>\n    </article>\n  )\n}\n\nexport function DemoCollage({ items, ctaHref = \"/\", ctaLabel = \"Explore all components\", linkComponent: Link = \"a\", className }: DemoCollageProps) {\n  return (\n    <div className={cn(\"columns-1 gap-3 sm:columns-2\", className)}>\n      {items.map((item) => (\n        <Cell key={item.name} item={item} linkComponent={Link} />\n      ))}\n      <Link href={ctaHref} className=\"mb-3 flex break-inside-avoid items-center justify-center rounded-xl border border-dashed border-border p-6 text-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\">\n        {ctaLabel}\n      </Link>\n    </div>\n  )\n}\n",
+      "content": "\"use client\"\n\n// Adapted from LocalMode UI (MIT) — apps/ui/src/components/live-collage.tsx\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { CollectionPhaseNotice, type CollectionPhase } from \"@/lib/collection-phase\"\n\nexport type DemoCollageItem = {\n  name: string\n  href: string\n  render: () => React.ReactNode\n}\n\nexport type DemoCollageProps = {\n  items: DemoCollageItem[]\n  ctaHref?: string\n  ctaLabel?: string\n  linkComponent?: React.ElementType<{ href: string; className?: string; children?: React.ReactNode }>\n  className?: string\n  phase?: CollectionPhase\n  disabled?: boolean\n  phaseLabel?: string\n}\n\nfunction Cell({ item, linkComponent: Link = \"a\" }: { item: DemoCollageItem; linkComponent?: DemoCollageProps[\"linkComponent\"] }) {\n  const ref = React.useRef<HTMLElement>(null)\n  const [shown, setShown] = React.useState(false)\n  React.useEffect(() => {\n    const node = ref.current\n    if (!node) return\n    const observer = new IntersectionObserver((entries) => {\n      if (entries.some((entry) => entry.isIntersecting)) setShown(true)\n    })\n    observer.observe(node)\n    return () => observer.disconnect()\n  }, [])\n  return (\n    <article ref={ref} className=\"mb-3 break-inside-avoid overflow-hidden rounded-xl border border-border bg-card\">\n      <Link href={item.href} className=\"flex items-center justify-between bg-muted/40 px-3 py-2 font-mono text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\">\n        {item.name}\n        <span aria-hidden=\"true\">↗</span>\n      </Link>\n      <div className=\"pointer-events-none p-3\">{shown ? item.render() : <div className=\"h-16\" />}</div>\n    </article>\n  )\n}\n\nexport function DemoCollage({ items, ctaHref = \"/\", ctaLabel = \"Explore all components\", linkComponent: Link = \"a\", className, phase = \"ready\", disabled = false, phaseLabel }: DemoCollageProps) {\n  if (phase !== \"ready\") {\n    return (\n      <div data-slot=\"demo-collage\" data-phase={phase} aria-disabled={disabled || undefined} className={cn(\"rounded-xl border border-border bg-card p-4\", className)}>\n        <CollectionPhaseNotice phase={phase} label={phaseLabel} />\n      </div>\n    )\n  }\n  const shown = items\n  return (\n    <div aria-disabled={disabled || undefined} className={cn(\"columns-1 gap-3 sm:columns-2\", disabled && \"pointer-events-none opacity-60\", className)}>\n      {shown.map((item) => (\n        <Cell key={item.name} item={item} linkComponent={Link} />\n      ))}\n      <Link href={ctaHref} className=\"mb-3 flex break-inside-avoid items-center justify-center rounded-xl border border-dashed border-border p-6 text-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\">\n        {ctaLabel}\n      </Link>\n    </div>\n  )\n}\n",
       "type": "registry:component",
       "target": "@ui/demo-collage.tsx"
+    },
+    {
+      "path": "registry/lib/collection-phase.tsx",
+      "content": "\"use client\"\n\nimport { cn } from \"@/lib/utils\"\n\n/** How a piece that lists records is getting its data. */\nexport type CollectionPhase = \"ready\" | \"loading\" | \"empty\" | \"error\"\n\nconst fallback = {\n  loading: \"Loading\",\n  empty: \"Nothing here yet\",\n  error: \"Something went wrong\",\n} as const\n\nexport function CollectionPhaseNotice({\n  phase,\n  label,\n  className,\n}: {\n  phase: Exclude<CollectionPhase, \"ready\">\n  label?: string\n  className?: string\n}) {\n  const error = phase === \"error\"\n  return (\n    <p\n      role={error ? \"alert\" : \"status\"}\n      aria-busy={phase === \"loading\" || undefined}\n      data-phase={phase}\n      className={cn(\"text-sm text-pretty\", error ? \"text-destructive\" : \"text-muted-foreground\", className)}\n    >\n      {label ?? fallback[phase]}\n    </p>\n  )\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/collection-phase.tsx"
     }
   ],
   "meta": {
@@ -19,11 +25,53 @@
     "descriptionEs": "Una rejilla de minidemos que se dibujan al entrar en pantalla.",
     "preview": "app/examples/demo-collage/preview.tsx",
     "previewHref": "/examples/demo-collage",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      }
+    ],
     "examples": [
       {
         "title": "Collage de demos",
         "href": "/examples/demo-collage",
         "description": "Una rejilla de minidemos que se dibujan al entrar en pantalla."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/demo-collage?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/demo-collage?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/demo-collage?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/demo-collage?scene=error",
+        "description": "Error"
       }
     ],
     "usage": "<DemoCollage items={items} />",

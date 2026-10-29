@@ -119,14 +119,14 @@ function Question({ item, open, onToggle, query = "", reduced, baseId, layout, c
       </h3>
       <AnimatePresence initial={false}>
         {hint ? (
-          <motion.p key="hint" className="overflow-hidden pb-2 text-xs text-muted-foreground" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
+          <motion.p key="hint" className="grid [&>*]:min-h-0 [&>*]:overflow-hidden overflow-hidden pb-2 text-xs text-muted-foreground" initial={{ opacity: 0, gridTemplateRows: "0fr" }} animate={{ opacity: 1, gridTemplateRows: "1fr" }} exit={{ opacity: 0, gridTemplateRows: "0fr" }}>
             <Highlight text={hint} query={query} />
           </motion.p>
         ) : null}
       </AnimatePresence>
       <AnimatePresence initial={false}>
         {open ? (
-          <motion.div key="answer" id={`${safe}-a`} role="region" aria-labelledby={`${safe}-q`} className="overflow-hidden" initial={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }} animate={reduced ? { opacity: 1 } : { height: "auto", opacity: 1 }} exit={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }} transition={reduced ? { duration: 0 } : motionPresets.spring.smooth}>
+          <motion.div key="answer" id={`${safe}-a`} role="region" aria-labelledby={`${safe}-q`} className="grid [&>*]:min-h-0 [&>*]:overflow-hidden overflow-hidden" initial={reduced ? { opacity: 0 } : { gridTemplateRows: "0fr", opacity: 0 }} animate={reduced ? { opacity: 1 } : { gridTemplateRows: "1fr", opacity: 1 }} exit={reduced ? { opacity: 0 } : { gridTemplateRows: "0fr", opacity: 0 }} transition={reduced ? { duration: 0 } : motionPresets.spring.smooth}>
             <p className="pb-4 text-sm text-pretty break-words text-muted-foreground"><Highlight text={item.answer} query={query} /></p>
           </motion.div>
         ) : null}

@@ -11,9 +11,15 @@
   "files": [
     {
       "path": "registry/ui/check-tiles.tsx",
-      "content": "\"use client\"\n\n/** Completion tiles. The first featured tile uses the accent surface. */\n\nimport * as React from \"react\"\nimport { Check } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type CheckTile = {\n  id: string\n  value: string\n  label: string\n  detail?: string\n  featured?: boolean\n}\n\nexport type CheckTilesProps = {\n  items: readonly CheckTile[]\n  label?: string\n  className?: string\n}\n\nexport function CheckTiles({ items, label = \"Checks\", className }: CheckTilesProps) {\n  return (\n    <ul data-slot=\"check-tiles\" aria-label={label} className={cn(\"grid gap-2 sm:grid-cols-3\", className)}>\n      {items.map((item) => (\n        <li\n          key={item.id}\n          className={cn(\n            \"flex min-w-0 flex-col gap-1 rounded-xl p-3\",\n            item.featured ? \"bg-primary text-primary-foreground\" : \"bg-muted text-foreground\",\n          )}\n        >\n          <span className={cn(\"grid size-6 place-items-center rounded-full\", item.featured ? \"bg-card text-foreground\" : \"bg-card text-foreground\")}>\n            <Check className=\"size-3.5\" aria-hidden />\n          </span>\n          <p className=\"text-lg font-medium tabular-nums wrap-break-word\">{item.value}</p>\n          <p className=\"text-sm wrap-break-word\">{item.label}</p>\n          {item.detail ? <p className={cn(\"text-xs wrap-break-word\", item.featured ? \"opacity-80\" : \"text-muted-foreground\")}>{item.detail}</p> : null}\n        </li>\n      ))}\n    </ul>\n  )\n}\n",
+      "content": "\"use client\"\n\n/** Completion tiles. The first featured tile uses the accent surface. */\n\nimport * as React from \"react\"\nimport { Check } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { CollectionPhaseNotice, type CollectionPhase } from \"@/lib/collection-phase\"\n\nexport type CheckTile = {\n  id: string\n  value: string\n  label: string\n  detail?: string\n  featured?: boolean\n}\n\nexport type CheckTilesProps = {\n  items: readonly CheckTile[]\n  label?: string\n  className?: string\n  phase?: CollectionPhase\n  disabled?: boolean\n  phaseLabel?: string\n}\n\nexport function CheckTiles({ items, label = \"Checks\", className, phase = \"ready\", disabled = false, phaseLabel }: CheckTilesProps) {\n  if (phase !== \"ready\") {\n    return (\n      <div data-slot=\"check-tiles\" data-phase={phase} aria-disabled={disabled || undefined} className={cn(\"rounded-xl border border-border bg-card p-3\", className)}>\n        <CollectionPhaseNotice phase={phase} label={phaseLabel} />\n      </div>\n    )\n  }\n  return (\n    <ul data-slot=\"check-tiles\" aria-label={label} inert={disabled || undefined} className={cn(\"grid gap-2 sm:grid-cols-3\", disabled && \"opacity-60\", className)}>\n      {items.map((item) => (\n        <li\n          key={item.id}\n          className={cn(\n            \"flex min-w-0 flex-col gap-1 rounded-xl p-3\",\n            item.featured ? \"bg-primary text-primary-foreground\" : \"bg-muted text-foreground\",\n          )}\n        >\n          <span className={cn(\"grid size-6 place-items-center rounded-full\", item.featured ? \"bg-card text-foreground\" : \"bg-card text-foreground\")}>\n            <Check className=\"size-3.5\" aria-hidden />\n          </span>\n          <p className=\"text-lg font-medium tabular-nums wrap-break-word\">{item.value}</p>\n          <p className=\"text-sm wrap-break-word\">{item.label}</p>\n          {item.detail ? <p className={cn(\"text-xs wrap-break-word\", item.featured ? \"opacity-80\" : \"text-muted-foreground\")}>{item.detail}</p> : null}\n        </li>\n      ))}\n    </ul>\n  )\n}\n",
       "type": "registry:component",
       "target": "@ui/check-tiles.tsx"
+    },
+    {
+      "path": "registry/lib/collection-phase.tsx",
+      "content": "\"use client\"\n\nimport { cn } from \"@/lib/utils\"\n\n/** How a piece that lists records is getting its data. */\nexport type CollectionPhase = \"ready\" | \"loading\" | \"empty\" | \"error\"\n\nconst fallback = {\n  loading: \"Loading\",\n  empty: \"Nothing here yet\",\n  error: \"Something went wrong\",\n} as const\n\nexport function CollectionPhaseNotice({\n  phase,\n  label,\n  className,\n}: {\n  phase: Exclude<CollectionPhase, \"ready\">\n  label?: string\n  className?: string\n}) {\n  const error = phase === \"error\"\n  return (\n    <p\n      role={error ? \"alert\" : \"status\"}\n      aria-busy={phase === \"loading\" || undefined}\n      data-phase={phase}\n      className={cn(\"text-sm text-pretty\", error ? \"text-destructive\" : \"text-muted-foreground\", className)}\n    >\n      {label ?? fallback[phase]}\n    </p>\n  )\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/collection-phase.tsx"
     }
   ],
   "meta": {
@@ -21,6 +27,28 @@
     "descriptionEs": "La ficha destacada usa el acento del anfitrión.",
     "preview": "app/examples/check-tiles/preview.tsx",
     "previewHref": "/examples/check-tiles",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      }
+    ],
     "examples": [
       {
         "title": "Mosaico de controles",
@@ -31,6 +59,26 @@
         "title": "Estrés",
         "href": "/examples/check-tiles/stress",
         "description": "320px, vacío y RTL."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/check-tiles?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/check-tiles?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/check-tiles?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/check-tiles?scene=error",
+        "description": "Error"
       }
     ],
     "usage": "<CheckTiles items={tiles} label=\"Checks\" />",

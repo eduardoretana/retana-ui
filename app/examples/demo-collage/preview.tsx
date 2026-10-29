@@ -1,12 +1,9 @@
 "use client"
 
-import { DemoCollage } from "@/registry/blocks/demo-collage"
-import { ConfidenceBadge } from "@/registry/ui/confidence-badge"
+import { ScenePreview } from "@/app/catalog/scene-preview"
+
+import { scenes } from "./scenes"
 
 export default function Preview() {
-  return (
-    <div className="bg-background p-3">
-      <DemoCollage items={[{ name: "confidence-badge", href: "/examples/confidence-badge", render: () => <ConfidenceBadge score={0.8} /> }]} />
-    </div>
-  )
+  return <ScenePreview scenes={scenes} hero="filled" />
 }

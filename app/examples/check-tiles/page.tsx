@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 import { ExampleFrame } from "@/app/examples/example-frame"
-import { CheckTilesDemo as Demo } from "@/app/examples/review/screens"
+import { Demo } from "./demo"
 
 export const metadata: Metadata = {
   title: "Mosaico de controles",

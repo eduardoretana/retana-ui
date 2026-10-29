@@ -127,16 +127,18 @@ function Column({ digit, direction, delay, reduceMotion }: { digit: number; dire
   }, [delay, digit, direction, position, reduceMotion])
   return (
     <motion.span
-      className="relative inline-block overflow-hidden"
-      initial={{ width: 0, opacity: 0 }}
-      animate={{ width: "auto", opacity: 1 }}
-      exit={{ width: 0, opacity: 0 }}
-      transition={reduceMotion ? { duration: 0 } : motionPresets.spring.morph}
+      className="relative inline-grid overflow-hidden"
+      initial={{ gridTemplateColumns: "0fr", opacity: 0 }}
+      animate={{ gridTemplateColumns: "1fr", opacity: 1 }}
+      exit={{ gridTemplateColumns: "0fr", opacity: 0 }}
+      transition={reduceMotion ? { duration: 0 } : { gridTemplateColumns: motionPresets.spring.morph, opacity: { duration: motionPresets.duration.fast } }}
     >
-      <span className="invisible">0</span>
-      {DIGITS.map((item) => (
-        <Glyph key={item} position={position} digit={item} />
-      ))}
+      <span className="relative min-w-0 overflow-hidden">
+        <span className="invisible">0</span>
+        {DIGITS.map((item) => (
+          <Glyph key={item} position={position} digit={item} />
+        ))}
+      </span>
     </motion.span>
   )
 }
@@ -168,13 +170,13 @@ function PriceCounter({ value, decimals }: { value: number; decimals: number }) 
             ) : (
               <motion.span
                 key={part.key}
-                className="inline-block overflow-x-clip"
-                initial={{ width: 0, opacity: 0 }}
-                animate={{ width: "auto", opacity: 1 }}
-                exit={{ width: 0, opacity: 0 }}
-                transition={reduceMotion ? { duration: 0 } : motionPresets.spring.morph}
+                className="inline-grid overflow-x-clip"
+                initial={{ gridTemplateColumns: "0fr", opacity: 0 }}
+                animate={{ gridTemplateColumns: "1fr", opacity: 1 }}
+                exit={{ gridTemplateColumns: "0fr", opacity: 0 }}
+                transition={reduceMotion ? { duration: 0 } : { gridTemplateColumns: motionPresets.spring.morph, opacity: { duration: motionPresets.duration.fast } }}
               >
-                {part.text}
+                <span className="min-w-0 overflow-hidden">{part.text}</span>
               </motion.span>
             ),
           )}
@@ -278,7 +280,8 @@ export function BillingToggle({
           )}
           aria-hidden="true"
           initial={false}
-          animate={{ x: thumb.x, width: thumb.width }}
+          style={{ width: thumb.width, originX: 0 }}
+          animate={{ x: thumb.x }}
           transition={reduced ? { duration: 0 } : glide}
         />
       ) : null}
@@ -355,13 +358,13 @@ export function BillingPrice({ amount, currency = "$", period, was, decimals = 0
           {showWas ? (
             <motion.span
               key="was"
-              className="inline-block overflow-x-clip"
-              initial={reduced ? { opacity: 0 } : { opacity: 0, width: 0 }}
-              animate={{ opacity: 1, width: "auto" }}
+              className="inline-grid overflow-x-clip [&>*]:min-w-0 [&>*]:overflow-hidden"
+              initial={reduced ? { opacity: 0 } : { opacity: 0, gridTemplateColumns: "0fr" }}
+              animate={{ opacity: 1, gridTemplateColumns: "1fr" }}
               exit={
                 reduced
                   ? { opacity: 0, transition: { duration: 0 } }
-                  : { opacity: 0, width: 0, transition: { ...clip, opacity: { duration: motionPresets.duration.fast } } }
+                  : { opacity: 0, gridTemplateColumns: "0fr", transition: { ...clip, opacity: { duration: motionPresets.duration.fast } } }
               }
               transition={
                 reduced
@@ -377,11 +380,9 @@ export function BillingPrice({ amount, currency = "$", period, was, decimals = 0
           ) : null}
         </AnimatePresence>
         {period ? (
-          <motion.span
+          <span
             className={cn("relative inline-block overflow-x-clip", classNames?.period)}
-            initial={false}
-            animate={periodWidth === null ? undefined : { width: periodWidth }}
-            transition={reduced ? { duration: 0 } : clip}
+            style={periodWidth === null ? undefined : { width: periodWidth }}
           >
             <span ref={periodRef} className="invisible inline-block" aria-hidden="true">
               {period}
@@ -398,7 +399,7 @@ export function BillingPrice({ amount, currency = "$", period, was, decimals = 0
                 {period}
               </motion.span>
             </AnimatePresence>
-          </motion.span>
+          </span>
         ) : null}
       </span>
     </span>

@@ -1,25 +1,9 @@
 "use client"
 
-import * as React from "react"
+import { ScenePreview } from "@/app/catalog/scene-preview"
 
-import { BillingPrice, BillingToggle } from "@/registry/ui/billing-toggle"
+import { scenes } from "./scenes"
 
-export default function BillingTogglePreview() {
-  const [value, setValue] = React.useState("yearly")
-  const yearly = value === "yearly"
-  return (
-    <div className="flex h-full items-center bg-background p-3">
-      <div className="flex w-full min-w-0 flex-col gap-2">
-        <BillingToggle
-          value={value}
-          onValueChange={setValue}
-          options={[
-            { value: "monthly", label: "Mes" },
-            { value: "yearly", label: "Año", badge: "−20%", activeBadge: "−$48" },
-          ]}
-        />
-        <BillingPrice amount={yearly ? 614 : 64} was={yearly ? 768 : undefined} period={yearly ? "/ año" : "/ mes"} />
-      </div>
-    </div>
-  )
+export default function Preview() {
+  return <ScenePreview scenes={scenes} hero="filled" />
 }

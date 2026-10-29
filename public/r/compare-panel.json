@@ -11,9 +11,15 @@
   "files": [
     {
       "path": "registry/ui/compare-panel.tsx",
-      "content": "\"use client\"\n\n/** Side-by-side callouts. One row can be marked as added. */\n\nimport * as React from \"react\"\nimport { ArrowRight } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type ComparePanelProps = {\n  title: string\n  location?: string\n  beforeLabel: string\n  afterLabel: string\n  before: readonly string[]\n  after: readonly string[]\n  highlightIndex?: number\n  className?: string\n}\n\nexport function ComparePanel({\n  title,\n  location,\n  beforeLabel,\n  afterLabel,\n  before,\n  after,\n  highlightIndex,\n  className,\n}: ComparePanelProps) {\n  return (\n    <section data-slot=\"compare-panel\" className={cn(\"rounded-2xl bg-foreground p-4 text-background\", className)}>\n      <header className=\"mb-3 flex flex-wrap items-center justify-between gap-2\">\n        <h3 className=\"text-sm font-medium\">{title}</h3>\n        {location ? <p className=\"font-mono text-xs text-primary\">{location}</p> : null}\n      </header>\n      <div className=\"grid items-start gap-2 md:grid-cols-[1fr_auto_1fr]\">\n        <Column label={beforeLabel} rows={before} />\n        <ArrowRight className=\"mx-auto size-4 text-primary md:mt-8\" aria-hidden />\n        <Column label={afterLabel} rows={after} highlightIndex={highlightIndex} />\n      </div>\n    </section>\n  )\n}\n\nfunction Column({ label, rows, highlightIndex }: { label: string; rows: readonly string[]; highlightIndex?: number }) {\n  return (\n    <div className=\"min-w-0 rounded-xl border border-background/20 p-2\">\n      <p className=\"mb-2 text-xs text-background/60\">{label}</p>\n      <ul className=\"flex flex-col gap-1\">\n        {rows.map((row, index) => (\n          <li\n            key={`${row}-${index}`}\n            className={cn(\n              \"rounded-md px-2 py-1 font-mono text-xs uppercase wrap-break-word\",\n              index === highlightIndex && \"bg-primary text-primary-foreground\",\n            )}\n          >\n            {row}\n          </li>\n        ))}\n      </ul>\n    </div>\n  )\n}\n",
+      "content": "\"use client\"\n\n/** Side-by-side callouts. One row can be marked as added. */\n\nimport * as React from \"react\"\nimport { ArrowRight } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { CollectionPhaseNotice, type CollectionPhase } from \"@/lib/collection-phase\"\n\nexport type ComparePanelProps = {\n  title: string\n  location?: string\n  beforeLabel: string\n  afterLabel: string\n  before: readonly string[]\n  after: readonly string[]\n  highlightIndex?: number\n  className?: string\n  phase?: CollectionPhase\n  disabled?: boolean\n  phaseLabel?: string\n}\n\nexport function ComparePanel({\n  title,\n  location,\n  beforeLabel,\n  afterLabel,\n  before,\n  after,\n  highlightIndex,\n  className,\n  phase = \"ready\",\n  disabled = false,\n  phaseLabel,\n}: ComparePanelProps) {\n  if (phase !== \"ready\") {\n    return (\n      <section data-slot=\"compare-panel\" data-phase={phase} inert={disabled || undefined} className={cn(\"rounded-2xl border border-border bg-card p-4\", className)}>\n        <CollectionPhaseNotice phase={phase} label={phaseLabel} />\n      </section>\n    )\n  }\n  return (\n    <section data-slot=\"compare-panel\" inert={disabled || undefined} className={cn(\"rounded-2xl bg-foreground p-4 text-background\", disabled && \"opacity-60\", className)}>\n      <header className=\"mb-3 flex flex-wrap items-center justify-between gap-2\">\n        <h3 className=\"text-sm font-medium\">{title}</h3>\n        {location ? <p className=\"font-mono text-xs text-primary\">{location}</p> : null}\n      </header>\n      <div className=\"grid items-start gap-2 md:grid-cols-[1fr_auto_1fr]\">\n        <Column label={beforeLabel} rows={before} />\n        <ArrowRight className=\"mx-auto size-4 text-primary md:mt-8\" aria-hidden />\n        <Column label={afterLabel} rows={after} highlightIndex={highlightIndex} />\n      </div>\n    </section>\n  )\n}\n\nfunction Column({ label, rows, highlightIndex }: { label: string; rows: readonly string[]; highlightIndex?: number }) {\n  return (\n    <div className=\"min-w-0 rounded-xl border border-background/20 p-2\">\n      <p className=\"mb-2 text-xs text-background/60\">{label}</p>\n      <ul className=\"flex flex-col gap-1\">\n        {rows.map((row, index) => (\n          <li\n            key={`${row}-${index}`}\n            className={cn(\n              \"rounded-md px-2 py-1 font-mono text-xs uppercase wrap-break-word\",\n              index === highlightIndex && \"bg-primary text-primary-foreground\",\n            )}\n          >\n            {row}\n          </li>\n        ))}\n      </ul>\n    </div>\n  )\n}\n",
       "type": "registry:component",
       "target": "@ui/compare-panel.tsx"
+    },
+    {
+      "path": "registry/lib/collection-phase.tsx",
+      "content": "\"use client\"\n\nimport { cn } from \"@/lib/utils\"\n\n/** How a piece that lists records is getting its data. */\nexport type CollectionPhase = \"ready\" | \"loading\" | \"empty\" | \"error\"\n\nconst fallback = {\n  loading: \"Loading\",\n  empty: \"Nothing here yet\",\n  error: \"Something went wrong\",\n} as const\n\nexport function CollectionPhaseNotice({\n  phase,\n  label,\n  className,\n}: {\n  phase: Exclude<CollectionPhase, \"ready\">\n  label?: string\n  className?: string\n}) {\n  const error = phase === \"error\"\n  return (\n    <p\n      role={error ? \"alert\" : \"status\"}\n      aria-busy={phase === \"loading\" || undefined}\n      data-phase={phase}\n      className={cn(\"text-sm text-pretty\", error ? \"text-destructive\" : \"text-muted-foreground\", className)}\n    >\n      {label ?? fallback[phase]}\n    </p>\n  )\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/collection-phase.tsx"
     }
   ],
   "meta": {
@@ -21,6 +27,28 @@
     "descriptionEs": "Dos columnas. Una fila puede marcarse como nueva.",
     "preview": "app/examples/compare-panel/preview.tsx",
     "previewHref": "/examples/compare-panel",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      }
+    ],
     "examples": [
       {
         "title": "Panel de comparación",
@@ -31,6 +59,26 @@
         "title": "Estrés",
         "href": "/examples/compare-panel/stress",
         "description": "320px, vacío y RTL."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/compare-panel?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/compare-panel?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/compare-panel?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/compare-panel?scene=error",
+        "description": "Error"
       }
     ],
     "usage": "<ComparePanel title=\"Change\" beforeLabel=\"Before\" afterLabel=\"After\" before={before} after={after} highlightIndex={0} />",

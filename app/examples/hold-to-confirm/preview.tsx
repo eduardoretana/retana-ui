@@ -1,12 +1,9 @@
 "use client"
 
-import { atelier } from "@/app/examples/arc/demo-data"
-import { HoldToConfirm } from "@/registry/ui/hold-to-confirm"
+import { ScenePreview } from "@/app/catalog/scene-preview"
 
-export default function HoldToConfirmPreview() {
-  return (
-    <div className="flex h-full items-center bg-background p-3">
-      <HoldToConfirm label={atelier.kiln} onConfirm={() => {}} />
-    </div>
-  )
+import { scenes } from "./scenes"
+
+export default function Preview() {
+  return <ScenePreview scenes={scenes} hero="filled" />
 }

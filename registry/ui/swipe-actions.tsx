@@ -403,10 +403,10 @@ export function SwipeActionsRow({
   const collapse = reduced
     ? { opacity: 0, transition: { duration: 0.15 } }
     : {
-        height: 0,
+        gridTemplateRows: "0fr",
         opacity: 0,
         transition: {
-          height: { ...motionPresets.spring.smooth, delay: 0.12 },
+          gridTemplateRows: { ...motionPresets.spring.smooth, delay: 0.12 },
           opacity: { duration: motionPresets.duration.instant, delay: 0.34 },
         },
       }
@@ -415,17 +415,18 @@ export function SwipeActionsRow({
     <motion.li
       ref={rowRef}
       data-slot="swipe-actions-row"
-      className={cn("group/row relative isolate overflow-hidden", className, classNames?.row)}
+      className={cn("grid [&>*]:min-h-0 [&>*]:overflow-hidden group/row relative isolate overflow-hidden", className, classNames?.row)}
       style={{ "--swipe-action-width": `${ACTION}px` } as React.CSSProperties}
-      initial={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
-      animate={{ height: "auto", opacity: 1 }}
+      initial={reduced ? { opacity: 0 } : { gridTemplateRows: "0fr", opacity: 0 }}
+      animate={{ gridTemplateRows: "1fr", opacity: 1 }}
       exit={collapse}
       transition={
         reduced
           ? { duration: 0.15 }
-          : { height: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.enter] } }
+          : { gridTemplateRows: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.enter] } }
       }
     >
+      <div className="relative min-h-0 overflow-hidden">
       {(["leading", "trailing"] as const).map((side) =>
         actionsOf(side).map((action, index) => {
           const count = actionsOf(side).length
@@ -516,6 +517,7 @@ export function SwipeActionsRow({
           </DropdownMenu>
         ) : null}
       </motion.div>
+      </div>
     </motion.li>
   )
 }

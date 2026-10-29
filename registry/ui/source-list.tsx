@@ -8,6 +8,7 @@ import { ArrowUpRight, ChevronDown } from "lucide-react"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
+import { CollectionPhaseNotice, type CollectionPhase } from "@/registry/retana/lib/collection-phase"
 import { ConfidenceBadge } from "@/registry/retana/ui/confidence-badge"
 
 export type SourceItem = {
@@ -32,12 +33,22 @@ export type SourceListProps = {
   variant?: "citations" | "links"
   className?: string
   classNames?: { root?: string; row?: string }
+  phase?: CollectionPhase
+  disabled?: boolean
+  phaseLabel?: string
 }
 
-export function SourceList({ sources, highlightId, target = "_blank", defaultOpen = false, variant = "citations", className, classNames }: SourceListProps) {
+export function SourceList({ sources, highlightId, target = "_blank", defaultOpen = false, variant = "citations", className, classNames, phase = "ready", disabled = false, phaseLabel }: SourceListProps) {
   const [open, setOpen] = React.useState(defaultOpen)
-  const types = [...new Set(sources.map((source) => source.type).filter(Boolean))] as SourceItem["type"][]
   const contentId = React.useId()
+  if (phase !== "ready") {
+    return (
+      <div data-slot="source-list" data-phase={phase} aria-disabled={disabled || undefined} className={cn("rounded-xl border border-border bg-card p-3", className)}>
+        <CollectionPhaseNotice phase={phase} label={phaseLabel} />
+      </div>
+    )
+  }
+  const types = [...new Set(sources.map((source) => source.type).filter(Boolean))] as SourceItem["type"][]
 
   const list = (items: SourceItem[]) => (
     <ol className="flex flex-col gap-2">

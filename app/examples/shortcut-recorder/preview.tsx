@@ -1,11 +1,9 @@
 "use client"
 
-import { ShortcutRecorder } from "@/registry/ui/shortcut-recorder"
+import { ScenePreview } from "@/app/catalog/scene-preview"
 
-export default function ShortcutRecorderPreview() {
-  return (
-    <div className="flex h-full items-center bg-background p-3">
-      <ShortcutRecorder label="Guardar" defaultValue="mod+s" platform="mac" className="w-full" />
-    </div>
-  )
+import { scenes } from "./scenes"
+
+export default function Preview() {
+  return <ScenePreview scenes={scenes} hero="filled" />
 }

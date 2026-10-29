@@ -6,6 +6,7 @@ import * as React from "react"
 import { ArrowDownRight, ArrowUpRight } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { CollectionPhaseNotice, type CollectionPhase } from "@/registry/retana/lib/collection-phase"
 import { formatDashboardValue, type DashboardFormat } from "@/registry/retana/lib/dashboard-format"
 
 export type StatDelta = {
@@ -45,6 +46,9 @@ export type StatStripProps = {
   locale?: string
   className?: string
   classNames?: StatStripClassNames
+  phase?: CollectionPhase
+  disabled?: boolean
+  phaseLabel?: string
 }
 
 function deltaDirection(delta: StatDelta): "up" | "down" {
@@ -70,12 +74,21 @@ export function statAccessibleName(item: StatStripItem, locale: string): string 
   return [item.label, value, direction, deltaText(item.delta, locale), item.caption, quality].filter(Boolean).join(", ")
 }
 
-export function StatStrip({ items, variant = "inline", locale = "en-US", className, classNames }: StatStripProps) {
+export function StatStrip({ items, variant = "inline", locale = "en-US", className, classNames, phase = "ready", disabled = false, phaseLabel }: StatStripProps) {
+  if (phase !== "ready") {
+    return (
+      <div data-slot="stat-strip" data-phase={phase} aria-disabled={disabled || undefined} className={cn("rounded-xl border border-border bg-card px-4 py-3", className)}>
+        <CollectionPhaseNotice phase={phase} label={phaseLabel} />
+      </div>
+    )
+  }
   return (
     <div
       data-slot="stat-strip"
       data-variant={variant}
+      aria-disabled={disabled || undefined}
       className={cn(
+        disabled && "pointer-events-none opacity-60",
         "@container min-w-0",
         variant === "panel"
           ? "grid grid-cols-1 overflow-hidden rounded-xl bg-card text-card-foreground @min-[16rem]:grid-cols-2 @min-[36rem]:grid-cols-4"

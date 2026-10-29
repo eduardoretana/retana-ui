@@ -1,11 +1,9 @@
 "use client"
 
-import { TagInput } from "@/registry/ui/tag-input"
+import { ScenePreview } from "@/app/catalog/scene-preview"
 
-export default function TagInputPreview() {
-  return (
-    <div className="flex h-full items-center bg-background p-3">
-      <TagInput label="Facetas" defaultValue={["clay", "glaze"]} className="w-full" />
-    </div>
-  )
+import { scenes } from "./scenes"
+
+export default function Preview() {
+  return <ScenePreview scenes={scenes} hero="filled" />
 }

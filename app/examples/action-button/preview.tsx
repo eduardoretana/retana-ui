@@ -1,12 +1,9 @@
 "use client"
 
-import { atelier } from "@/app/examples/arc/demo-data"
-import { ActionButton } from "@/registry/ui/action-button"
+import { ScenePreview } from "@/app/catalog/scene-preview"
 
-export default function ActionButtonPreview() {
-  return (
-    <div className="flex h-full items-center bg-background p-3">
-      <ActionButton label={atelier.kiln} onAction={() => {}} />
-    </div>
-  )
+import { scenes } from "./scenes"
+
+export default function Preview() {
+  return <ScenePreview scenes={scenes} hero="filled" />
 }

@@ -97,11 +97,11 @@ export function ProposalRisks({
                   {chosen ? (
                     <motion.span
                       key="check"
-                      initial={reduced ? false : { width: 0, opacity: 0 }}
-                      animate={{ width: "auto", opacity: 1 }}
-                      exit={{ width: 0, opacity: 0 }}
+                      initial={reduced ? false : { gridTemplateColumns: "0fr", opacity: 0 }}
+                      animate={{ gridTemplateColumns: "1fr", opacity: 1 }}
+                      exit={{ gridTemplateColumns: "0fr", opacity: 0 }}
                       transition={{ duration: reduced ? 0 : 0.2 }}
-                      className="inline-flex overflow-hidden"
+                      className="inline-grid overflow-hidden [&>*]:min-w-0 [&>*]:overflow-hidden"
                     >
                       <Check className="size-4" />
                     </motion.span>

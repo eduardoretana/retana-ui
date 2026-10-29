@@ -7,6 +7,7 @@ import { AlertTriangle, Play } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { CollectionPhaseNotice, type CollectionPhase } from "@/registry/retana/lib/collection-phase"
 import { AudioPlayer, type AudioPlayerHandle } from "@/registry/retana/ui/audio-player"
 
 export type DiscoveryNote = {
@@ -52,6 +53,9 @@ export type ProposalDiscoveryProps = {
   duration?: number
   onSeek?: (seconds: number) => void
   className?: string
+  phase?: CollectionPhase
+  disabled?: boolean
+  phaseLabel?: string
 }
 
 function clock(seconds: number) {
@@ -77,8 +81,18 @@ export function ProposalDiscovery({
   duration,
   onSeek,
   className,
+  phase = "ready",
+  disabled = false,
+  phaseLabel,
 }: ProposalDiscoveryProps) {
   const player = React.useRef<AudioPlayerHandle>(null)
+  if (phase !== "ready") {
+    return (
+      <section data-slot="proposal-discovery" data-phase={phase} inert={disabled || undefined} className={cn("rounded-xl border border-border bg-card p-3", className)}>
+        <CollectionPhaseNotice phase={phase} label={phaseLabel} />
+      </section>
+    )
+  }
 
   const seek = (seconds: number) => {
     player.current?.seek(seconds)

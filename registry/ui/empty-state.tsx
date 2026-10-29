@@ -48,7 +48,7 @@ const textOut: TargetAndTransition = {
   filter: `blur(${motionPresets.blur.subtle}px)`,
   transition: exitFast,
 }
-const iconIn: TargetAndTransition = { opacity: 0, scale: 0.6, filter: `blur(${motionPresets.blur.subtle}px)` }
+const iconIn: TargetAndTransition = { opacity: 0, scale: 0.25, filter: `blur(${motionPresets.blur.subtle}px)` }
 const shown: TargetAndTransition = { opacity: 1, y: "0em", scale: 1, filter: "blur(0px)" }
 const fadeOut: TargetAndTransition = { opacity: 0, transition: { duration: motionPresets.duration.instant } }
 
@@ -134,7 +134,7 @@ export function EmptyState({ title, description, action, icon, className, classN
           "relative grid size-12 place-items-center rounded-xl border border-border bg-muted text-muted-foreground",
           classNames?.icon,
         )}
-        initial={reduce ? false : { opacity: 0, scale: 0.92 }}
+        initial={reduce ? false : { opacity: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={reduce ? { duration: 0 } : { duration: motionPresets.duration.considered, ease: [...motionPresets.ease.enter] }}
       >

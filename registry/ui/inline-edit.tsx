@@ -78,7 +78,7 @@ const textFade: Variants = {
   exit: { opacity: 0, transition: { duration: 0.1 } },
 }
 const restMotion: TargetAndTransition = { opacity: 1, scale: 1, filter: blur(0) }
-const iconIn: TargetAndTransition = { opacity: 0, scale: 0.6, filter: blur(motionPresets.blur.subtle) }
+const iconIn: TargetAndTransition = { opacity: 0, scale: 0.25, filter: blur(motionPresets.blur.subtle) }
 const iconOut: TargetAndTransition = { ...iconIn, transition: { duration: 0.15, ease: standard } }
 const fadeIn: TargetAndTransition = { opacity: 0 }
 const fadeOut: TargetAndTransition = { opacity: 0, transition: { duration: 0.1 } }

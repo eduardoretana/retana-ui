@@ -281,9 +281,9 @@ export function ComparisonTable({
                         role="row"
                         className="grid overflow-hidden"
                         style={gridStyle}
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
+                        initial={{ gridTemplateRows: "0fr", opacity: 0 }}
+                        animate={{ gridTemplateRows: "1fr", opacity: 1 }}
+                        exit={{ gridTemplateRows: "0fr", opacity: 0 }}
                         transition={reduced ? { duration: 0 } : motionPresets.spring.smooth}
                       >
                         <div role="rowheader" className="px-0 pt-8 pb-2 text-xs font-medium text-muted-foreground">
@@ -302,9 +302,9 @@ export function ComparisonTable({
                           role="row"
                           className="grid overflow-hidden"
                           style={gridStyle}
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
+                          initial={{ gridTemplateRows: "0fr", opacity: 0 }}
+                          animate={{ gridTemplateRows: "1fr", opacity: 1 }}
+                          exit={{ gridTemplateRows: "0fr", opacity: 0 }}
                           transition={reduced ? { duration: 0 } : motionPresets.spring.smooth}
                         >
                           <div role="rowheader" data-slot="comparison-table-feature" className={cn("grid min-w-0 content-center gap-0.5 border-b border-border py-3 pr-3 text-sm font-medium break-words", classNames?.feature)}>

@@ -1,11 +1,9 @@
 "use client"
 
-import { PlanComparison } from "@/registry/blocks/plan-comparison"
+import { ScenePreview } from "@/app/catalog/scene-preview"
 
-export default function PlanComparisonPreview() {
-  return (
-    <div className="h-full overflow-auto bg-background p-3">
-      <PlanComparison />
-    </div>
-  )
+import { scenes } from "./scenes"
+
+export default function Preview() {
+  return <ScenePreview scenes={scenes} hero="filled" />
 }

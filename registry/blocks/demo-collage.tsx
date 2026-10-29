@@ -5,6 +5,7 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
+import { CollectionPhaseNotice, type CollectionPhase } from "@/registry/retana/lib/collection-phase"
 
 export type DemoCollageItem = {
   name: string
@@ -18,6 +19,9 @@ export type DemoCollageProps = {
   ctaLabel?: string
   linkComponent?: React.ElementType<{ href: string; className?: string; children?: React.ReactNode }>
   className?: string
+  phase?: CollectionPhase
+  disabled?: boolean
+  phaseLabel?: string
 }
 
 function Cell({ item, linkComponent: Link = "a" }: { item: DemoCollageItem; linkComponent?: DemoCollageProps["linkComponent"] }) {
@@ -43,10 +47,18 @@ function Cell({ item, linkComponent: Link = "a" }: { item: DemoCollageItem; link
   )
 }
 
-export function DemoCollage({ items, ctaHref = "/", ctaLabel = "Explore all components", linkComponent: Link = "a", className }: DemoCollageProps) {
+export function DemoCollage({ items, ctaHref = "/", ctaLabel = "Explore all components", linkComponent: Link = "a", className, phase = "ready", disabled = false, phaseLabel }: DemoCollageProps) {
+  if (phase !== "ready") {
+    return (
+      <div data-slot="demo-collage" data-phase={phase} aria-disabled={disabled || undefined} className={cn("rounded-xl border border-border bg-card p-4", className)}>
+        <CollectionPhaseNotice phase={phase} label={phaseLabel} />
+      </div>
+    )
+  }
+  const shown = items
   return (
-    <div className={cn("columns-1 gap-3 sm:columns-2", className)}>
-      {items.map((item) => (
+    <div aria-disabled={disabled || undefined} className={cn("columns-1 gap-3 sm:columns-2", disabled && "pointer-events-none opacity-60", className)}>
+      {shown.map((item) => (
         <Cell key={item.name} item={item} linkComponent={Link} />
       ))}
       <Link href={ctaHref} className="mb-3 flex break-inside-avoid items-center justify-center rounded-xl border border-dashed border-border p-6 text-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none">

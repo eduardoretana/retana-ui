@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
+import { CollectionPhaseNotice, type CollectionPhase } from "@/registry/retana/lib/collection-phase"
 import { ConfidenceBadge } from "@/registry/retana/ui/confidence-badge"
 
 export type DocumentRowAction = { id: string; label: string }
@@ -55,20 +56,31 @@ export type DocumentListProps = {
   header?: React.ReactNode
   emptyLabel?: string
   className?: string
+  phase?: CollectionPhase
+  disabled?: boolean
+  phaseLabel?: string
 }
 
-export function DocumentList({ title, mode = "review", groups, header, emptyLabel = "No documents", className }: DocumentListProps) {
-  const total = groups.reduce((sum, group) => sum + group.items.length, 0)
+export function DocumentList({ title, mode = "review", groups, header, emptyLabel = "No documents", className, phase = "ready", disabled = false, phaseLabel }: DocumentListProps) {
+  if (phase === "loading" || phase === "error") {
+    return (
+      <section data-slot="document-list" data-phase={phase} inert={disabled || undefined} className={cn("rounded-xl border border-border bg-card p-3", className)}>
+        <CollectionPhaseNotice phase={phase} label={phaseLabel} />
+      </section>
+    )
+  }
+  const visible = phase === "empty" ? [] : groups
+  const total = visible.reduce((sum, group) => sum + group.items.length, 0)
   return (
-    <section data-slot="document-list" data-mode={mode} className={cn("flex min-w-0 flex-col gap-3", className)}>
+    <section data-slot="document-list" data-mode={mode} data-phase={phase} inert={disabled || undefined} className={cn("flex min-w-0 flex-col gap-3", disabled && "opacity-60", className)}>
       {title || header ? (
         <header className="flex flex-wrap items-center justify-between gap-2">
           {title ? <h3 className="text-sm font-medium">{title}</h3> : <span />}
           {header}
         </header>
       ) : null}
-      {total === 0 ? <p className="text-sm text-muted-foreground">{emptyLabel}</p> : null}
-      {groups.map((group) => (
+      {total === 0 ? <p className="text-sm text-muted-foreground">{phaseLabel ?? emptyLabel}</p> : null}
+      {visible.map((group) => (
         <Collapsible key={group.id} defaultOpen={group.defaultOpen ?? true} className="rounded-xl bg-muted">
           <CollapsibleTrigger className="flex w-full items-center gap-2 px-3 py-2 text-start text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <span aria-hidden className="text-muted-foreground [&_svg]:size-4">

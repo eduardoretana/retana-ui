@@ -4,6 +4,7 @@ import * as React from "react"
 import { ChevronDown } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { CollectionPhaseNotice, type CollectionPhase } from "@/registry/retana/lib/collection-phase"
 
 export type DiffLineKind = "add" | "delete" | "context" | "meta"
 
@@ -26,6 +27,9 @@ export type FileDiffProps = {
   additionsLabel?: string
   deletionsLabel?: string
   className?: string
+  phase?: CollectionPhase
+  disabled?: boolean
+  phaseLabel?: string
 }
 
 export function parseUnifiedDiff(patch: string): DiffLine[] {
@@ -101,6 +105,9 @@ export function FileDiff({
   additionsLabel = "additions",
   deletionsLabel = "deletions",
   className,
+  phase = "ready",
+  disabled = false,
+  phaseLabel,
 }: FileDiffProps) {
   const parsed = React.useMemo(() => lines ?? parseUnifiedDiff(patch), [lines, patch])
   const blocks = React.useMemo(() => groupLines(parsed, collapseAfter), [parsed, collapseAfter])
@@ -108,8 +115,16 @@ export function FileDiff({
   const additions = parsed.filter((line) => line.kind === "add").length
   const deletions = parsed.filter((line) => line.kind === "delete").length
 
+  if (phase !== "ready") {
+    return (
+      <figure data-slot="file-diff" data-phase={phase} aria-disabled={disabled || undefined} className={cn("rounded-xl border border-border bg-card p-3", className)}>
+        <CollectionPhaseNotice phase={phase} label={phaseLabel} />
+      </figure>
+    )
+  }
+
   return (
-    <figure data-slot="file-diff" className={cn("overflow-hidden rounded-xl border border-border bg-card", className)}>
+    <figure data-slot="file-diff" aria-disabled={disabled || undefined} className={cn("overflow-hidden rounded-xl border border-border bg-card", disabled && "pointer-events-none opacity-60", className)}>
       <figcaption className="flex items-center gap-3 border-b border-border px-3 py-2 text-xs">
         <span className="min-w-0 flex-1 truncate font-mono">{filename ?? "diff"}</span>
         <span className="text-primary tabular-nums">+{additions} {additionsLabel}</span>

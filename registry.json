@@ -290,6 +290,11 @@
           "path": "registry/hooks/use-admin-theme.ts",
           "type": "registry:hook",
           "target": "@hooks/use-admin-theme.ts"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ],
       "meta": {
@@ -297,6 +302,13 @@
         "descriptionEs": "Barra lateral que se pliega a iconos, migas de pan, paleta de comandos y tema. Los enlaces los pone el anfitrión.",
         "preview": "app/examples/admin-shell/preview.tsx",
         "previewHref": "/examples/admin-shell",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Estudio Acme",
@@ -1174,6 +1186,11 @@
           "path": "registry/lib/supabase/admin-kit.md",
           "type": "registry:file",
           "target": "lib/supabase/admin-kit.md"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ],
       "meta": {
@@ -1905,6 +1922,13 @@
         "descriptionEs": "Diff unificado con líneas agregadas y eliminadas, y bloques sin cambios que se pueden colapsar.",
         "preview": "app/examples/file-diff/preview.tsx",
         "previewHref": "/examples/file-diff",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Vista de diff",
@@ -1942,6 +1966,11 @@
           "path": "registry/ui/file-diff.tsx",
           "type": "registry:component",
           "target": "@ui/file-diff.tsx"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ]
     },
@@ -2557,6 +2586,13 @@
         "descriptionEs": "Visor de imágenes a pantalla completa con navegación, zoom y teclado.",
         "preview": "app/examples/lightbox/preview.tsx",
         "previewHref": "/examples/lightbox",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Visor de imágenes",
@@ -2594,6 +2630,11 @@
           "path": "registry/ui/lightbox.tsx",
           "type": "registry:component",
           "target": "@ui/lightbox.tsx"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ]
     },
@@ -3238,6 +3279,13 @@
         "descriptionEs": "Copia un valor y lo confirma en el mismo botón, con un check dibujado y un anuncio para el lector de pantalla.",
         "preview": "app/examples/copy-button/preview.tsx",
         "previewHref": "/examples/copy-button",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Botón copiar",
@@ -3683,6 +3731,13 @@
         "descriptionEs": "Una tarjeta densa que crece en ancho y alto para mostrar el detalle. Escape la cierra.",
         "preview": "app/examples/expandable-card/preview.tsx",
         "previewHref": "/examples/expandable-card",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Tarjeta expandible",
@@ -3747,6 +3802,13 @@
         "descriptionEs": "Un botón compacto que pasa por pendiente y éxito después de una acción.",
         "preview": "app/examples/action-button/preview.tsx",
         "previewHref": "/examples/action-button",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Botón de acción",
@@ -3818,6 +3880,13 @@
         "descriptionEs": "Una acción principal con un menú de alternativas cercanas.",
         "preview": "app/examples/split-button/preview.tsx",
         "previewHref": "/examples/split-button",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Botón dividido",
@@ -3892,6 +3961,13 @@
         "descriptionEs": "Confirma una acción destructiva al mantener pulsado, no con un toque.",
         "preview": "app/examples/hold-to-confirm/preview.tsx",
         "previewHref": "/examples/hold-to-confirm",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Mantener para confirmar",
@@ -3964,6 +4040,13 @@
         "descriptionEs": "Muestra acciones de la fila al deslizar, y las mismas desde un menú.",
         "preview": "app/examples/swipe-actions/preview.tsx",
         "previewHref": "/examples/swipe-actions",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Acciones al deslizar",
@@ -4180,6 +4263,13 @@
         "descriptionEs": "Un número acotado con botones de paso, teclado y un arrastre opcional.",
         "preview": "app/examples/number-field/preview.tsx",
         "previewHref": "/examples/number-field",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Campo numérico",
@@ -4259,6 +4349,13 @@
         "descriptionEs": "Convierte textos cortos en etiquetas que se pueden quitar.",
         "preview": "app/examples/tag-input/preview.tsx",
         "previewHref": "/examples/tag-input",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Campo de etiquetas",
@@ -4415,6 +4512,13 @@
         "descriptionEs": "Renombra en el sitio: el texto se vuelve un campo sin moverse.",
         "preview": "app/examples/inline-edit/preview.tsx",
         "previewHref": "/examples/inline-edit",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Edición en línea",
@@ -4493,6 +4597,13 @@
         "descriptionEs": "Un icono que se abre en un campo de búsqueda con resultados debajo.",
         "preview": "app/examples/expanding-search/preview.tsx",
         "previewHref": "/examples/expanding-search",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Búsqueda que se abre",
@@ -4650,6 +4761,13 @@
         "descriptionEs": "Muestra qué tan fuerte es una contraseña nueva mientras se escribe.",
         "preview": "app/examples/password-strength/preview.tsx",
         "previewHref": "/examples/password-strength",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Fortaleza de contraseña",
@@ -4722,6 +4840,13 @@
         "descriptionEs": "Tinta que se afina con la velocidad, con deshacer, repetición y exportación PNG o SVG.",
         "preview": "app/examples/signature-pad/preview.tsx",
         "previewHref": "/examples/signature-pad",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Panel de firma",
@@ -4877,6 +5002,13 @@
         "descriptionEs": "Un teléfono con país, formato al escribir y salida E.164.",
         "preview": "app/examples/phone-input/preview.tsx",
         "previewHref": "/examples/phone-input",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Teléfono",
@@ -4955,6 +5087,13 @@
         "descriptionEs": "Graba combinaciones de teclas, avisa de conflictos y las lista.",
         "preview": "app/examples/shortcut-recorder/preview.tsx",
         "previewHref": "/examples/shortcut-recorder",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Grabador de atajos",
@@ -5175,6 +5314,13 @@
         "descriptionEs": "Un cambio mensual y anual con el ahorro y precios que giran.",
         "preview": "app/examples/billing-toggle/preview.tsx",
         "previewHref": "/examples/billing-toggle",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Cambio de facturación",
@@ -5474,6 +5620,13 @@
         "descriptionEs": "Un siguiente paso útil cuando todavía no hay nada que mostrar.",
         "preview": "app/examples/empty-state/preview.tsx",
         "previewHref": "/examples/empty-state",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Estado vacío",
@@ -5548,6 +5701,13 @@
         "descriptionEs": "Navega carpetas y contenido anidado con el teclado.",
         "preview": "app/examples/tree-view/preview.tsx",
         "previewHref": "/examples/tree-view",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Árbol",
@@ -5624,6 +5784,13 @@
         "descriptionEs": "Deja los filtros de una colección a mano y fáciles de quitar.",
         "preview": "app/examples/filter-toolbar/preview.tsx",
         "previewHref": "/examples/filter-toolbar",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Barra de filtros",
@@ -6000,6 +6167,13 @@
         "descriptionEs": "Recorre una fila de diapositivas con controles, pestañas y flechas.",
         "preview": "app/examples/carousel/preview.tsx",
         "previewHref": "/examples/carousel",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Carrusel",
@@ -6226,6 +6400,13 @@
         "descriptionEs": "Sigue lo que pasó, lo más nuevo primero, agrupado por día.",
         "preview": "app/examples/timeline/preview.tsx",
         "previewHref": "/examples/timeline",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Línea de tiempo",
@@ -6302,6 +6483,13 @@
         "descriptionEs": "Apila resultados cortos en el borde hasta que se descartan.",
         "preview": "app/examples/toast-stack/preview.tsx",
         "previewHref": "/examples/toast-stack",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Pila de avisos",
@@ -6454,6 +6642,13 @@
         "descriptionEs": "Muestra en qué paso está una persona y qué ya quedó hecho.",
         "preview": "app/examples/stepper/preview.tsx",
         "previewHref": "/examples/stepper",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Pasos",
@@ -6535,6 +6730,13 @@
         "descriptionEs": "Una barra superior que rota mensajes y se pliega al descartarla.",
         "preview": "app/examples/announcement-bar/preview.tsx",
         "previewHref": "/examples/announcement-bar",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Barra de anuncios",
@@ -6611,6 +6813,13 @@
         "descriptionEs": "Lista de comandos que se filtra al escribir, sobre la primitiva command del anfitrión.",
         "preview": "app/examples/command-palette/preview.tsx",
         "previewHref": "/examples/command-palette",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Paleta de comandos",
@@ -6643,6 +6852,11 @@
           "path": "registry/ui/command-palette.tsx",
           "type": "registry:component",
           "target": "@ui/command-palette.tsx"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ]
     },
@@ -7366,6 +7580,13 @@
         "descriptionEs": "Un árbol JSON que se pliega, se busca y copia un valor o su ruta.",
         "preview": "app/examples/json-viewer/preview.tsx",
         "previewHref": "/examples/json-viewer",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Visor JSON",
@@ -7439,6 +7660,13 @@
         "descriptionEs": "Comentarios con respuestas, reacciones y resolución.",
         "preview": "app/examples/comment-thread/preview.tsx",
         "previewHref": "/examples/comment-thread",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Hilo de comentarios",
@@ -7514,6 +7742,13 @@
         "descriptionEs": "Alta de cuenta con validación y fortaleza de la contraseña.",
         "preview": "app/examples/signup-form/preview.tsx",
         "previewHref": "/examples/signup-form",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Formulario de registro",
@@ -7593,6 +7828,13 @@
         "descriptionEs": "Compara las diferencias entre planes y periodos de pago.",
         "preview": "app/examples/plan-comparison/preview.tsx",
         "previewHref": "/examples/plan-comparison",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Comparación de planes",
@@ -7671,6 +7913,13 @@
         "descriptionEs": "Un lugar para avisos, con leído y grupos que se abren.",
         "preview": "app/examples/notification-center/preview.tsx",
         "previewHref": "/examples/notification-center",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Centro de avisos",
@@ -7743,6 +7992,13 @@
         "descriptionEs": "Notas de versión que se filtran y se abren en el sitio.",
         "preview": "app/examples/changelog-feed/preview.tsx",
         "previewHref": "/examples/changelog-feed",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Novedades",
@@ -7835,6 +8091,13 @@
         "descriptionEs": "Una tarjeta de acceso que pasa del correo a un código.",
         "preview": "app/examples/sign-in/preview.tsx",
         "previewHref": "/examples/sign-in",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Entrar",
@@ -7916,6 +8179,13 @@
         "descriptionEs": "Un encabezado de proyecto que se pliega al hacer scroll.",
         "preview": "app/examples/page-header/preview.tsx",
         "previewHref": "/examples/page-header",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Encabezado de página",
@@ -8151,6 +8421,13 @@
         "descriptionEs": "Un encabezado fijo que se vuelve sólido al bajar, con una hoja en el teléfono.",
         "preview": "app/examples/site-header/preview.tsx",
         "previewHref": "/examples/site-header",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Encabezado del sitio",
@@ -8198,6 +8475,11 @@
           "path": "registry/lib/motion.ts",
           "type": "registry:lib",
           "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ]
     },
@@ -8393,6 +8675,13 @@
         "descriptionEs": "Preguntas como acordeón, riel de temas o lista con búsqueda.",
         "preview": "app/examples/faq-section/preview.tsx",
         "previewHref": "/examples/faq-section",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Preguntas frecuentes",
@@ -8615,6 +8904,13 @@
         "descriptionEs": "Una tabla de nosotros y ellos que se apila en el teléfono.",
         "preview": "app/examples/comparison-table/preview.tsx",
         "previewHref": "/examples/comparison-table",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Tabla comparativa",
@@ -11152,6 +11448,13 @@
         "descriptionEs": "Una lista plegable de fuentes numeradas, con extracto.",
         "preview": "app/examples/source-list/preview.tsx",
         "previewHref": "/examples/source-list",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Lista de fuentes",
@@ -11199,6 +11502,11 @@
           "path": "registry/ui/confidence-badge.tsx",
           "type": "registry:component",
           "target": "@ui/confidence-badge.tsx"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ]
     },
@@ -13143,6 +13451,13 @@
         "descriptionEs": "Una rejilla de minidemos que se dibujan al entrar en pantalla.",
         "preview": "app/examples/demo-collage/preview.tsx",
         "previewHref": "/examples/demo-collage",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Collage de demos",
@@ -13175,6 +13490,11 @@
           "path": "registry/blocks/demo-collage.tsx",
           "type": "registry:component",
           "target": "@ui/demo-collage.tsx"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ]
     },
@@ -13268,6 +13588,11 @@
           "path": "registry/lib/dashboard-format.ts",
           "type": "registry:lib",
           "target": "@lib/dashboard-format.ts"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ],
       "meta": {
@@ -13275,6 +13600,13 @@
         "descriptionEs": "Una fila densa o un panel dividido de números, cada uno con su cambio en texto.",
         "preview": "app/examples/stat-strip/preview.tsx",
         "previewHref": "/examples/stat-strip",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Franja de cifras",
@@ -13542,6 +13874,11 @@
           "path": "registry/lib/dashboard-format.ts",
           "type": "registry:lib",
           "target": "@lib/dashboard-format.ts"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ],
       "meta": {
@@ -13549,6 +13886,13 @@
         "descriptionEs": "Barras horizontales ordenadas por valor, con etiqueta, meta y porcentaje.",
         "preview": "app/examples/ranked-bars/preview.tsx",
         "previewHref": "/examples/ranked-bars",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Barras ordenadas",
@@ -14138,6 +14482,11 @@
           "path": "registry/lib/dashboard-format.ts",
           "type": "registry:lib",
           "target": "@lib/dashboard-format.ts"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ],
       "meta": {
@@ -15773,6 +16122,11 @@
           "path": "registry/lib/motion.ts",
           "type": "registry:lib",
           "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ],
       "meta": {
@@ -16113,6 +16467,13 @@
         "descriptionEs": "Migas, pestañas con subrayado móvil y cambio de panel.",
         "preview": "app/examples/proposal-workspace/preview.tsx",
         "previewHref": "/examples/proposal-workspace",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Espacio del trato",
@@ -16172,6 +16533,11 @@
           "path": "registry/ui/audio-player.tsx",
           "type": "registry:component",
           "target": "@ui/audio-player.tsx"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ],
       "meta": {
@@ -16179,6 +16545,13 @@
         "descriptionEs": "Notas con tiempo, citas y la forma de onda.",
         "preview": "app/examples/proposal-discovery/preview.tsx",
         "previewHref": "/examples/proposal-discovery",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Descubrimiento",
@@ -16395,6 +16768,11 @@
           "path": "registry/lib/reorder.ts",
           "type": "registry:lib",
           "target": "@lib/reorder.ts"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ],
       "meta": {
@@ -16402,6 +16780,13 @@
         "descriptionEs": "Coincidencia, horas reales y una comparación.",
         "preview": "app/examples/proposal-similar/preview.tsx",
         "previewHref": "/examples/proposal-similar",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Proyectos similares",
@@ -16534,6 +16919,13 @@
         "descriptionEs": "Plazo pedido contra el histórico y la aprobación.",
         "preview": "app/examples/proposal-risks/preview.tsx",
         "previewHref": "/examples/proposal-risks",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Riesgos",
@@ -17113,6 +17505,11 @@
           "path": "registry/ui/toast-stack.tsx",
           "type": "registry:component",
           "target": "@ui/toast-stack.tsx"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ],
       "meta": {
@@ -19164,6 +19561,11 @@
           "path": "registry/ui/check-tiles.tsx",
           "type": "registry:component",
           "target": "@ui/check-tiles.tsx"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ],
       "meta": {
@@ -19171,6 +19573,13 @@
         "descriptionEs": "La ficha destacada usa el acento del anfitrión.",
         "preview": "app/examples/check-tiles/preview.tsx",
         "previewHref": "/examples/check-tiles",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Mosaico de controles",
@@ -19342,6 +19751,11 @@
           "path": "registry/ui/confidence-badge.tsx",
           "type": "registry:component",
           "target": "@ui/confidence-badge.tsx"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ],
       "meta": {
@@ -19349,6 +19763,13 @@
         "descriptionEs": "Grupos en modo revisión o lista de verificación.",
         "preview": "app/examples/document-list/preview.tsx",
         "previewHref": "/examples/document-list",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Lista de documentos",
@@ -19400,6 +19821,11 @@
           "path": "registry/ui/issue-list.tsx",
           "type": "registry:component",
           "target": "@ui/issue-list.tsx"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ],
       "meta": {
@@ -19407,6 +19833,13 @@
         "descriptionEs": "Lista seleccionable. La fila activa se eleva.",
         "preview": "app/examples/issue-list/preview.tsx",
         "previewHref": "/examples/issue-list",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Lista de hallazgos",
@@ -19513,6 +19946,11 @@
           "path": "registry/ui/compare-panel.tsx",
           "type": "registry:component",
           "target": "@ui/compare-panel.tsx"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ],
       "meta": {
@@ -19520,6 +19958,13 @@
         "descriptionEs": "Dos columnas. Una fila puede marcarse como nueva.",
         "preview": "app/examples/compare-panel/preview.tsx",
         "previewHref": "/examples/compare-panel",
+
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
         "examples": [
           {
             "title": "Panel de comparación",
@@ -20022,6 +20467,11 @@
           "path": "registry/ui/radial-gauge.tsx",
           "type": "registry:component",
           "target": "@ui/radial-gauge.tsx"
+        },
+        {
+          "path": "registry/lib/collection-phase.tsx",
+          "type": "registry:lib",
+          "target": "@lib/collection-phase.tsx"
         }
       ],
       "meta": {
