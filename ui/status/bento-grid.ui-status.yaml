@@ -1,0 +1,14 @@
+schema: uis.status/v2
+ui_system:
+  version: 4.0.0
+  declaration: "UI_SYSTEM: APPLIES"
+cycle_state: BUILD
+profile: STANDARD
+spec_id: bento-grid
+retana_ui:
+  sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+direction:
+  mode: code-variants
+  chosen: media-first
+  images: none
+auditor: not-this-agent

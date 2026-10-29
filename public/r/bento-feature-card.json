@@ -1,0 +1,197 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "bento-feature-card",
+  "title": "Bento feature card",
+  "author": "Eduardo Retana",
+  "description": "Illustration slot, icon, title, description, and an optional call to action inside one bento cell.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "card",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/bento-feature-card.tsx",
+      "content": "\"use client\"\n\nimport type { ReactNode } from \"react\"\nimport { ArrowRight } from \"lucide-react\"\n\nimport { Card } from \"@/components/ui/card\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport type BentoFeatureLayout = \"media-first\" | \"copy-first\"\n\nexport type BentoFeatureStatus = \"ready\" | \"loading\" | \"empty\" | \"error\"\n\nexport type BentoFeatureClassNames = {\n  root?: string\n  media?: string\n  icon?: string\n  title?: string\n  description?: string\n  cta?: string\n}\n\nexport type BentoFeatureCardProps = {\n  title?: string\n  description?: string\n  /** Decorative icon above the title. */\n  icon?: ReactNode\n  /** Illustration slot. Omitted when empty. */\n  illustration?: ReactNode\n  /** Visible label inside the single link. Not a second control. */\n  cta?: string\n  /** Makes the whole card one link. */\n  href?: string\n  /** `media-first` is the default: drawing, then copy. */\n  layout?: BentoFeatureLayout\n  status?: BentoFeatureStatus\n  emptyLabel?: string\n  loadingLabel?: string\n  errorLabel?: string\n  className?: string\n  classNames?: BentoFeatureClassNames\n}\n\n/**\n * One feature in a bento cell.\n * The hover moves and fades. It does not animate layout.\n * A clickable card is a single link: the CTA is text inside that link.\n */\nexport function BentoFeatureCard({\n  title,\n  description,\n  icon,\n  illustration,\n  cta,\n  href,\n  layout = \"media-first\",\n  status = \"ready\",\n  emptyLabel = \"Nothing here\",\n  loadingLabel = \"Loading\",\n  errorLabel = \"Something went wrong\",\n  className,\n  classNames,\n}: BentoFeatureCardProps) {\n  const interactive = status === \"ready\" && Boolean(href)\n\n  const media = illustration ? (\n    <div\n      data-slot=\"bento-feature-media\"\n      aria-hidden=\"true\"\n      className={cn(\"min-h-40 flex-1 overflow-hidden rounded-lg bg-muted\", classNames?.media)}\n    >\n      <div className=\"h-full opacity-90 transition-[transform,opacity] duration-200 ease-out will-change-transform group-hover/feature:scale-[1.02] group-hover/feature:opacity-100 motion-reduce:transition-none motion-reduce:group-hover/feature:scale-100 motion-reduce:will-change-auto\">\n        {illustration}\n      </div>\n    </div>\n  ) : null\n\n  const copy = (\n    <div className=\"flex min-w-0 flex-col gap-2\">\n      {icon ? (\n        <div\n          data-slot=\"bento-feature-icon\"\n          aria-hidden=\"true\"\n          className={cn(\n            \"flex size-8 items-center justify-center rounded-lg bg-muted text-muted-foreground\",\n            classNames?.icon,\n          )}\n        >\n          {icon}\n        </div>\n      ) : null}\n      {title ? (\n        <h3\n          data-slot=\"bento-feature-title\"\n          className={cn(\"text-base font-semibold tracking-tight wrap-anywhere\", classNames?.title)}\n        >\n          {title}\n        </h3>\n      ) : null}\n      {description ? (\n        <p\n          data-slot=\"bento-feature-description\"\n          className={cn(\"text-sm text-pretty text-muted-foreground wrap-anywhere\", classNames?.description)}\n        >\n          {description}\n        </p>\n      ) : null}\n      {cta ? (\n        <span\n          data-slot=\"bento-feature-cta\"\n          className={cn(\"inline-flex w-fit items-center gap-1 text-sm font-medium text-primary\", classNames?.cta)}\n        >\n          {cta}\n          <ArrowRight className=\"size-4 rtl:-scale-x-100\" aria-hidden=\"true\" />\n        </span>\n      ) : null}\n    </div>\n  )\n\n  let body: ReactNode\n  if (status === \"loading\") {\n    body = (\n      <div className=\"flex flex-col gap-3\">\n        <Skeleton className=\"min-h-40 w-full motion-reduce:animate-none\" />\n        <Skeleton className=\"h-4 w-2/3 motion-reduce:animate-none\" />\n        <p className=\"text-sm text-muted-foreground\">{loadingLabel}</p>\n      </div>\n    )\n  } else if (status === \"error\") {\n    body = <p role=\"alert\" className=\"text-sm text-destructive\">{errorLabel}</p>\n  } else if (status === \"empty\") {\n    body = <p className=\"text-sm text-muted-foreground\">{emptyLabel}</p>\n  } else {\n    body = (\n      <>\n        {layout === \"media-first\" ? media : null}\n        {copy}\n        {layout === \"copy-first\" ? media : null}\n      </>\n    )\n  }\n\n  const stack = <div className=\"flex h-full min-h-0 flex-col gap-4 p-4\">{body}</div>\n\n  return (\n    <article\n      data-slot=\"bento-feature-card\"\n      data-state={status}\n      data-layout={layout}\n      aria-busy={status === \"loading\" ? true : undefined}\n      className={cn(\n        \"group/feature h-full min-w-0 rounded-xl transition-transform duration-200 ease-out will-change-transform motion-reduce:transition-none motion-reduce:will-change-auto focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background\",\n        interactive && \"hover:-translate-y-0.5 motion-reduce:hover:translate-none\",\n        className,\n        classNames?.root,\n      )}\n    >\n      <Card className=\"h-full gap-0 overflow-hidden py-0 shadow-none\">\n        {interactive ? (\n          <a href={href} className=\"flex h-full min-h-0 flex-col rounded-xl outline-none\">\n            {stack}\n          </a>\n        ) : (\n          stack\n        )}\n      </Card>\n    </article>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/bento-feature-card.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Tarjeta de función",
+    "descriptionEs": "Hueco de ilustración, icono, título, descripción y una llamada opcional, dentro de una celda bento.",
+    "preview": "app/examples/bento-feature-card/preview.tsx",
+    "previewHref": "/examples/bento-feature-card",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled",
+        "titleEs": "Ficha llena",
+        "descriptionEs": "Ilustración, icono, título, descripción y llamada.",
+        "preview": "app/examples/bento-feature-card/preview.tsx"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty",
+        "titleEs": "Ficha vacía",
+        "descriptionEs": "No hay contenido.",
+        "preview": "app/examples/bento-feature-card/preview.tsx"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading",
+        "titleEs": "Ficha cargando",
+        "descriptionEs": "Esqueleto y aviso de carga.",
+        "preview": "app/examples/bento-feature-card/preview.tsx"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error",
+        "titleEs": "Ficha con error",
+        "descriptionEs": "La alerta reemplaza el enlace.",
+        "preview": "app/examples/bento-feature-card/preview.tsx"
+      },
+      {
+        "id": "long",
+        "label": "Texto largo",
+        "labelEn": "Long text",
+        "titleEs": "Texto largo",
+        "descriptionEs": "Un token de 60 caracteres sigue en el enlace.",
+        "preview": "app/examples/bento-feature-card/preview.tsx"
+      },
+      {
+        "id": "no-cta",
+        "label": "Sin CTA",
+        "labelEn": "No CTA",
+        "titleEs": "Sin llamada",
+        "descriptionEs": "No hay texto de llamada.",
+        "preview": "app/examples/bento-feature-card/preview.tsx"
+      },
+      {
+        "id": "no-media",
+        "label": "Sin ilustración",
+        "labelEn": "No illustration",
+        "titleEs": "Sin ilustración",
+        "descriptionEs": "La zona de dibujo no se pinta.",
+        "preview": "app/examples/bento-feature-card/preview.tsx"
+      },
+      {
+        "id": "mixed",
+        "label": "Celdas mixtas",
+        "labelEn": "Mixed cells",
+        "titleEs": "En el muro",
+        "descriptionEs": "La tarjeta dentro de celdas de distinto tramo.",
+        "preview": "app/examples/bento-feature-card/preview.tsx"
+      },
+      {
+        "id": "single",
+        "label": "Una celda",
+        "labelEn": "Single cell",
+        "titleEs": "Una sola ficha",
+        "descriptionEs": "Una tarjeta en una sola celda.",
+        "preview": "app/examples/bento-feature-card/preview.tsx"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Ficha",
+        "href": "/examples/bento-feature-card",
+        "description": "El dibujo va arriba. El enlace es la tarjeta."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/bento-feature-card/stress",
+        "description": "320 px, token largo, RTL, sin CTA, carga y error."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/bento-feature-card?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/bento-feature-card?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/bento-feature-card?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/bento-feature-card?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Texto largo",
+        "href": "/examples/bento-feature-card?scene=long",
+        "description": "Long text"
+      },
+      {
+        "title": "Sin CTA",
+        "href": "/examples/bento-feature-card?scene=no-cta",
+        "description": "No CTA"
+      },
+      {
+        "title": "Sin ilustración",
+        "href": "/examples/bento-feature-card?scene=no-media",
+        "description": "No illustration"
+      },
+      {
+        "title": "Celdas mixtas",
+        "href": "/examples/bento-feature-card?scene=mixed",
+        "description": "Mixed cells"
+      },
+      {
+        "title": "Una celda",
+        "href": "/examples/bento-feature-card?scene=single",
+        "description": "Single cell"
+      }
+    ],
+    "usage": "<BentoCell span={{ col: 2, row: 2 }}>\n  <BentoFeatureCard\n    icon={<Flame />}\n    title=\"North kiln\"\n    description=\"Morning shift already booked.\"\n    href=\"#kiln\"\n    cta=\"View schedule\"\n    illustration={<KilnSketch />}\n  />\n</BentoCell>",
+    "api": [
+      {
+        "name": "illustration",
+        "type": "ReactNode",
+        "description": "Slot for the drawing. Omit it to hide the media well."
+      },
+      {
+        "name": "icon / title / description",
+        "type": "ReactNode / string",
+        "description": "Copy under or over the drawing. The icon is decorative."
+      },
+      {
+        "name": "href / cta",
+        "type": "string",
+        "description": "href makes the whole card one link. cta is text inside that link, not a second control."
+      },
+      {
+        "name": "layout",
+        "type": "\"media-first\" | \"copy-first\"",
+        "description": "media-first (default) paints the drawing first. copy-first leads with the title."
+      },
+      {
+        "name": "status",
+        "type": "\"ready\" | \"loading\" | \"empty\" | \"error\"",
+        "description": "Loading, empty, and error are not links."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and classes for media, icon, title, description, and cta."
+      }
+    ]
+  },
+  "docs": "Inspiración visual, sin código. Fuente: https://shadcnstudio.com/blocks/bento-grid/bento-cards. Licencia: bloques Pro de shadcn/studio, fuera del repositorio MIT de shadcn/ui. No se copió código, markup ni assets. The card composes the host Card and Skeleton. Hover uses transform and opacity only. If href is set, the whole card is that one link and the call to action is text inside it. layout=\"media-first\" (default) puts the illustration above the copy. layout=\"copy-first\" reverses that. Answer no if the CLI asks to overwrite card or skeleton. The item ships no theme.",
+  "categories": [
+    "content"
+  ],
+  "type": "registry:ui"
+}

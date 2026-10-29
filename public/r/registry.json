@@ -10501,6 +10501,313 @@
       ]
     },
     {
+      "name": "bento-grid",
+      "type": "registry:ui",
+      "title": "Bento grid",
+      "description": "Responsive bento layout. Each cell asks for a span and stacks to one column at 390px.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "radix-ui"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "content"
+      ],
+      "docs": "Inspiración visual, sin código. Fuente: https://shadcnstudio.com/blocks/bento-grid/bento-cards. Licencia: bloques Pro de shadcn/studio, fuera del repositorio MIT de shadcn/ui. No se copió código, markup ni assets. A container of 390px stays on one column. Two columns start at 30rem (480px). The requested column count starts at 56rem (896px). Gap uses the spacing scale. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/bento-grid.tsx",
+          "type": "registry:component",
+          "target": "@ui/bento-grid.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Rejilla bento",
+        "descriptionEs": "Acomodo bento. Cada celda pide su tramo y a 390 px queda en una columna.",
+        "preview": "app/examples/bento-grid/preview.tsx",
+        "previewHref": "/examples/bento-grid",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled",
+            "titleEs": "Muro lleno",
+            "descriptionEs": "Cuatro celdas con tramos distintos.",
+            "preview": "app/examples/bento-grid/preview.tsx"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty",
+            "titleEs": "Muro vacío",
+            "descriptionEs": "No hay celdas.",
+            "preview": "app/examples/bento-grid/preview.tsx"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading",
+            "titleEs": "Muro cargando",
+            "descriptionEs": "El muro anuncia que está cargando.",
+            "preview": "app/examples/bento-grid/preview.tsx"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error",
+            "titleEs": "Muro con error",
+            "descriptionEs": "El muro muestra la alerta.",
+            "preview": "app/examples/bento-grid/preview.tsx"
+          },
+          {
+            "id": "long",
+            "label": "Texto largo",
+            "labelEn": "Long text",
+            "titleEs": "Texto largo",
+            "descriptionEs": "Un título con un token de 60 caracteres.",
+            "preview": "app/examples/bento-grid/preview.tsx"
+          },
+          {
+            "id": "mixed",
+            "label": "Celdas mixtas",
+            "labelEn": "Mixed cells",
+            "titleEs": "Celdas mixtas",
+            "descriptionEs": "2×2, 1×1, 1×2 y 1×1 en el mismo muro.",
+            "preview": "app/examples/bento-grid/preview.tsx"
+          },
+          {
+            "id": "single",
+            "label": "Una celda",
+            "labelEn": "Single cell",
+            "titleEs": "Una sola celda",
+            "descriptionEs": "Una celda 2×2 sin vecinas.",
+            "preview": "app/examples/bento-grid/preview.tsx"
+          },
+          {
+            "id": "no-cta",
+            "label": "Sin CTA",
+            "labelEn": "No CTA",
+            "titleEs": "Sin llamada",
+            "descriptionEs": "La celda no muestra una llamada a la acción.",
+            "preview": "app/examples/bento-grid/preview.tsx"
+          },
+          {
+            "id": "no-media",
+            "label": "Sin ilustración",
+            "labelEn": "No illustration",
+            "titleEs": "Sin ilustración",
+            "descriptionEs": "La celda no trae dibujo.",
+            "preview": "app/examples/bento-grid/preview.tsx"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Muro",
+            "href": "/examples/bento-grid",
+            "description": "Cuatro celdas. A 390 px se apilan."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/bento-grid/stress",
+            "description": "390 px, token largo, RTL, cero, una, diez, carga y error."
+          }
+        ],
+        "usage": "<BentoGrid label=\"Studio wall\" columns={4}>\n  <BentoCell span={{ col: 2, row: 2 }}>\n    <BentoFeatureCard title=\"North kiln\" description=\"Morning shift.\" href=\"#kiln\" cta=\"View schedule\" />\n  </BentoCell>\n</BentoGrid>",
+        "api": [
+          {
+            "name": "columns",
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "description": "Desktop column count. Default 4. One column through 390px, two from 30rem, full count from 56rem."
+          },
+          {
+            "name": "gap",
+            "type": "\"sm\" | \"md\" | \"lg\"",
+            "description": "Spacing step. Default md, which is gap-4."
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Accessible name for the group."
+          },
+          {
+            "name": "status / emptyLabel / loadingLabel / errorLabel",
+            "type": "\"ready\" | \"loading\" | \"empty\" | \"error\"",
+            "description": "Empty, loading, and error replace the cells and are not links."
+          },
+          {
+            "name": "BentoCell span",
+            "type": "{ col?: number; row?: number }",
+            "description": "Requested span. Columns clamp to 1 until 30rem and to 2 until 56rem."
+          },
+          {
+            "name": "BentoCell asChild",
+            "type": "boolean",
+            "description": "Render the child element, such as an article, instead of a list item."
+          },
+          {
+            "name": "preset",
+            "type": "\"default\" | \"magnetic\"",
+            "description": "magnetic keeps the published MagneticBento breakpoints. Hosts should use the default."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and track class."
+          }
+        ]
+      }
+    },
+    {
+      "name": "bento-feature-card",
+      "type": "registry:ui",
+      "title": "Bento feature card",
+      "description": "Illustration slot, icon, title, description, and an optional call to action inside one bento cell.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "card",
+        "skeleton"
+      ],
+      "categories": [
+        "content"
+      ],
+      "docs": "Inspiración visual, sin código. Fuente: https://shadcnstudio.com/blocks/bento-grid/bento-cards. Licencia: bloques Pro de shadcn/studio, fuera del repositorio MIT de shadcn/ui. No se copió código, markup ni assets. The card composes the host Card and Skeleton. Hover uses transform and opacity only. If href is set, the whole card is that one link and the call to action is text inside it. layout=\"media-first\" (default) puts the illustration above the copy. layout=\"copy-first\" reverses that. Answer no if the CLI asks to overwrite card or skeleton. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/bento-feature-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/bento-feature-card.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de función",
+        "descriptionEs": "Hueco de ilustración, icono, título, descripción y una llamada opcional, dentro de una celda bento.",
+        "preview": "app/examples/bento-feature-card/preview.tsx",
+        "previewHref": "/examples/bento-feature-card",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled",
+            "titleEs": "Ficha llena",
+            "descriptionEs": "Ilustración, icono, título, descripción y llamada.",
+            "preview": "app/examples/bento-feature-card/preview.tsx"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty",
+            "titleEs": "Ficha vacía",
+            "descriptionEs": "No hay contenido.",
+            "preview": "app/examples/bento-feature-card/preview.tsx"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading",
+            "titleEs": "Ficha cargando",
+            "descriptionEs": "Esqueleto y aviso de carga.",
+            "preview": "app/examples/bento-feature-card/preview.tsx"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error",
+            "titleEs": "Ficha con error",
+            "descriptionEs": "La alerta reemplaza el enlace.",
+            "preview": "app/examples/bento-feature-card/preview.tsx"
+          },
+          {
+            "id": "long",
+            "label": "Texto largo",
+            "labelEn": "Long text",
+            "titleEs": "Texto largo",
+            "descriptionEs": "Un token de 60 caracteres sigue en el enlace.",
+            "preview": "app/examples/bento-feature-card/preview.tsx"
+          },
+          {
+            "id": "no-cta",
+            "label": "Sin CTA",
+            "labelEn": "No CTA",
+            "titleEs": "Sin llamada",
+            "descriptionEs": "No hay texto de llamada.",
+            "preview": "app/examples/bento-feature-card/preview.tsx"
+          },
+          {
+            "id": "no-media",
+            "label": "Sin ilustración",
+            "labelEn": "No illustration",
+            "titleEs": "Sin ilustración",
+            "descriptionEs": "La zona de dibujo no se pinta.",
+            "preview": "app/examples/bento-feature-card/preview.tsx"
+          },
+          {
+            "id": "mixed",
+            "label": "Celdas mixtas",
+            "labelEn": "Mixed cells",
+            "titleEs": "En el muro",
+            "descriptionEs": "La tarjeta dentro de celdas de distinto tramo.",
+            "preview": "app/examples/bento-feature-card/preview.tsx"
+          },
+          {
+            "id": "single",
+            "label": "Una celda",
+            "labelEn": "Single cell",
+            "titleEs": "Una sola ficha",
+            "descriptionEs": "Una tarjeta en una sola celda.",
+            "preview": "app/examples/bento-feature-card/preview.tsx"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Ficha",
+            "href": "/examples/bento-feature-card",
+            "description": "El dibujo va arriba. El enlace es la tarjeta."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/bento-feature-card/stress",
+            "description": "320 px, token largo, RTL, sin CTA, carga y error."
+          }
+        ],
+        "usage": "<BentoCell span={{ col: 2, row: 2 }}>\n  <BentoFeatureCard\n    icon={<Flame />}\n    title=\"North kiln\"\n    description=\"Morning shift already booked.\"\n    href=\"#kiln\"\n    cta=\"View schedule\"\n    illustration={<KilnSketch />}\n  />\n</BentoCell>",
+        "api": [
+          {
+            "name": "illustration",
+            "type": "ReactNode",
+            "description": "Slot for the drawing. Omit it to hide the media well."
+          },
+          {
+            "name": "icon / title / description",
+            "type": "ReactNode / string",
+            "description": "Copy under or over the drawing. The icon is decorative."
+          },
+          {
+            "name": "href / cta",
+            "type": "string",
+            "description": "href makes the whole card one link. cta is text inside that link, not a second control."
+          },
+          {
+            "name": "layout",
+            "type": "\"media-first\" | \"copy-first\"",
+            "description": "media-first (default) paints the drawing first. copy-first leads with the title."
+          },
+          {
+            "name": "status",
+            "type": "\"ready\" | \"loading\" | \"empty\" | \"error\"",
+            "description": "Loading, empty, and error are not links."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string",
+            "description": "Root class and classes for media, icon, title, description, and cta."
+          }
+        ]
+      }
+    },
+    {
       "name": "magnetic-bento",
       "type": "registry:ui",
       "title": "Magnetic bento",
@@ -10510,7 +10817,9 @@
         "radix-ui",
         "lucide-react"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "bento-grid"
+      ],
       "categories": [
         "content"
       ],
@@ -10580,7 +10889,7 @@
           }
         ]
       },
-      "docs": "The active card sets anchor-name. The indicator uses position-anchor and inset: anchor(inside), and transitions inset for about 450ms with a slight overshoot. That path works in Chromium since mid-2024, Safari since September 2025, and Firefox 147 (January 2026). When CSS.supports('anchor-name: --x') is false, ResizeObserver and getBoundingClientRect place the same indicator. Each grid uses its own anchor name. With reduced motion the indicator moves without the stretch, and the call to action fades in without a slide. Answer no if the CLI asks to overwrite a primitive the host already has. The anchor-positioning idea is from jh3yy: https://x.com/jh3yy/status/2105823926978814273. This is an independent implementation.",
+      "docs": "The active card sets anchor-name. The indicator uses position-anchor and inset: anchor(inside), and transitions inset for about 450ms with a slight overshoot. That path works in Chromium since mid-2024, Safari since September 2025, and Firefox 147 (January 2026). When CSS.supports('anchor-name: --x') is false, ResizeObserver and getBoundingClientRect place the same indicator. Each grid uses its own anchor name. With reduced motion the indicator moves without the stretch, and the call to action fades in without a slide. Answer no if the CLI asks to overwrite a primitive the host already has. The anchor-positioning idea is from jh3yy: https://x.com/jh3yy/status/2105823926978814273. This is an independent implementation. The track and the span classes are the magnetic preset of bento-grid. The public props and the 36rem / 56rem breakpoints stay as published.",
       "files": [
         {
           "path": "registry/ui/magnetic-bento.tsx",

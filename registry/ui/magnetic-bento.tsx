@@ -17,6 +17,7 @@ import {
 import { Slot } from "radix-ui"
 
 import { cn } from "@/lib/utils"
+import { BentoCell, BentoGrid } from "@/registry/retana/ui/bento-grid"
 import {
   MAGNETIC_BENTO_DURATION,
   MAGNETIC_BENTO_EASE,
@@ -56,25 +57,6 @@ const ACCENT_VAR: Record<MagneticBentoAccent, string> = {
   "chart-4": "var(--chart-4)",
   "chart-5": "var(--chart-5)",
   primary: "var(--primary)",
-}
-
-const COL_SPAN: Record<number, string> = {
-  1: "col-span-1",
-  2: "col-span-1 @min-[36rem]/mb:col-span-2 @min-[56rem]/mb:col-span-2",
-  3: "col-span-1 @min-[36rem]/mb:col-span-2 @min-[56rem]/mb:col-span-3",
-  4: "col-span-1 @min-[36rem]/mb:col-span-2 @min-[56rem]/mb:col-span-4",
-}
-
-const ROW_SPAN: Record<number, string> = {
-  1: "row-span-1 min-h-40",
-  2: "row-span-2 min-h-80",
-  3: "row-span-3 min-h-96",
-}
-
-function clampSpan(value: number | undefined, max: number) {
-  const next = Math.round(value ?? 1)
-  if (!Number.isFinite(next)) return 1
-  return Math.min(max, Math.max(1, next))
 }
 
 type BentoContextValue = {
@@ -252,14 +234,7 @@ export function MagneticBento({
         onKeyDown={keyDown}
       >
         <style>{indicatorCss(scope, anchorName)}</style>
-        <div
-          ref={gridRef}
-          data-slot="magnetic-bento-grid"
-          className={cn(
-            "relative isolate grid grid-cols-1 gap-4 @min-[36rem]/mb:grid-cols-2 @min-[56rem]/mb:grid-cols-4",
-            classNames?.grid,
-          )}
-        >
+        <BentoGrid preset="magnetic" trackRef={gridRef} trackSlot="magnetic-bento-grid" className={classNames?.grid}>
           <div
             ref={indicatorRef}
             data-slot="magnetic-bento-indicator"
@@ -268,7 +243,7 @@ export function MagneticBento({
             className={cn("rounded-lg", classNames?.indicator)}
           />
           {children}
-        </div>
+        </BentoGrid>
       </div>
     </BentoContext.Provider>
   )
@@ -295,8 +270,6 @@ export function MagneticBentoItem({
 }: MagneticBentoItemProps) {
   const { active, select, roving, classNames } = useBento()
   const lit = active === value
-  const col = clampSpan(span?.col, 4)
-  const row = clampSpan(span?.row, 3)
   const itemStyle = {
     "--mb-item-accent": ACCENT_VAR[accent],
     ...style,
@@ -304,7 +277,8 @@ export function MagneticBentoItem({
 
   return (
     <ItemContext.Provider value={{ active: lit, classNames }}>
-      <article
+      <BentoCell span={span} asChild>
+        <article
         data-slot="magnetic-bento-item"
         data-value={value}
         data-accent={accent}
@@ -312,8 +286,6 @@ export function MagneticBentoItem({
         tabIndex={roving ? (lit || active == null ? 0 : -1) : 0}
         className={cn(
           "relative z-10 grid min-w-0 grid-cols-[minmax(0,1fr)_auto] grid-rows-[auto_auto_minmax(0,1fr)_auto] gap-3 rounded-lg border border-border bg-transparent p-4 text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring",
-          COL_SPAN[col],
-          ROW_SPAN[row],
           className,
           classNames.item,
         )}
@@ -340,8 +312,9 @@ export function MagneticBentoItem({
           cta.click()
         }}
       >
-        {children}
-      </article>
+          {children}
+        </article>
+      </BentoCell>
     </ItemContext.Provider>
   )
 }

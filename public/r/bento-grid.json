@@ -1,0 +1,204 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "bento-grid",
+  "title": "Bento grid",
+  "author": "Eduardo Retana",
+  "description": "Responsive bento layout. Each cell asks for a span and stacks to one column at 390px.",
+  "dependencies": [
+    "radix-ui"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/bento-grid.tsx",
+      "content": "\"use client\"\n\nimport { Children, createContext, useContext, type ComponentProps, type ReactNode, type Ref } from \"react\"\nimport { Slot } from \"radix-ui\"\n\nimport { cn } from \"@/lib/utils\"\n\n/** A 390px container stays on one column. The next column starts at 30rem (480px). */\nexport const BENTO_ONE_COLUMN_UNTIL_PX = 390\n\n/** Container width where two columns begin. 30rem = 480px. */\nexport const BENTO_MID_MIN_REM = 30\n\n/** Container width where the requested column count begins. 56rem = 896px. */\nexport const BENTO_DESKTOP_MIN_REM = 56\n\nexport const BENTO_COLUMNS = [1, 2, 3, 4, 5, 6] as const\n\nexport type BentoColumns = (typeof BENTO_COLUMNS)[number]\n\nexport type BentoPreset = \"default\" | \"magnetic\"\n\nexport type BentoSpan = {\n  col?: number\n  row?: number\n}\n\nexport type BentoGap = \"sm\" | \"md\" | \"lg\"\n\nexport type BentoStatus = \"ready\" | \"loading\" | \"empty\" | \"error\"\n\nconst GAP: Record<BentoGap, string> = {\n  sm: \"gap-3\",\n  md: \"gap-4\",\n  lg: \"gap-6\",\n}\n\nconst DEFAULT_TRACK: Record<BentoColumns, string> = {\n  1: \"grid grid-cols-1\",\n  2: \"grid grid-cols-1 @min-[30rem]/bento:grid-cols-2\",\n  3: \"grid grid-cols-1 @min-[30rem]/bento:grid-cols-2 @min-[56rem]/bento:grid-cols-3\",\n  4: \"grid grid-cols-1 @min-[30rem]/bento:grid-cols-2 @min-[56rem]/bento:grid-cols-4\",\n  5: \"grid grid-cols-1 @min-[30rem]/bento:grid-cols-2 @min-[56rem]/bento:grid-cols-5\",\n  6: \"grid grid-cols-1 @min-[30rem]/bento:grid-cols-2 @min-[56rem]/bento:grid-cols-6\",\n}\n\n/** Published magnetic track. The named container `mb` stays on MagneticBento. */\nconst MAGNETIC_TRACK =\n  \"relative isolate grid grid-cols-1 gap-4 @min-[36rem]/mb:grid-cols-2 @min-[56rem]/mb:grid-cols-4\"\n\nconst DEFAULT_COL: Record<number, string> = {\n  1: \"col-span-1\",\n  2: \"col-span-1 @min-[30rem]/bento:col-span-2 @min-[56rem]/bento:col-span-2\",\n  3: \"col-span-1 @min-[30rem]/bento:col-span-2 @min-[56rem]/bento:col-span-3\",\n  4: \"col-span-1 @min-[30rem]/bento:col-span-2 @min-[56rem]/bento:col-span-4\",\n  5: \"col-span-1 @min-[30rem]/bento:col-span-2 @min-[56rem]/bento:col-span-5\",\n  6: \"col-span-1 @min-[30rem]/bento:col-span-2 @min-[56rem]/bento:col-span-6\",\n}\n\nconst DEFAULT_ROW: Record<number, string> = {\n  1: \"row-span-1 min-h-40\",\n  2: \"row-span-1 min-h-40 @min-[30rem]/bento:row-span-2 @min-[30rem]/bento:min-h-80\",\n  3: \"row-span-1 min-h-40 @min-[30rem]/bento:row-span-2 @min-[30rem]/bento:min-h-80 @min-[56rem]/bento:row-span-3 @min-[56rem]/bento:min-h-96\",\n}\n\nconst MAGNETIC_COL: Record<number, string> = {\n  1: \"col-span-1\",\n  2: \"col-span-1 @min-[36rem]/mb:col-span-2 @min-[56rem]/mb:col-span-2\",\n  3: \"col-span-1 @min-[36rem]/mb:col-span-2 @min-[56rem]/mb:col-span-3\",\n  4: \"col-span-1 @min-[36rem]/mb:col-span-2 @min-[56rem]/mb:col-span-4\",\n}\n\nconst MAGNETIC_ROW: Record<number, string> = {\n  1: \"row-span-1 min-h-40\",\n  2: \"row-span-2 min-h-80\",\n  3: \"row-span-3 min-h-96\",\n}\n\nfunction clampSpan(value: number | undefined, max: number) {\n  const next = Math.round(value ?? 1)\n  if (!Number.isFinite(next)) return 1\n  return Math.min(max, Math.max(1, next))\n}\n\nexport function bentoTrackClass(preset: BentoPreset, columns: BentoColumns, gap: BentoGap) {\n  if (preset === \"magnetic\") return MAGNETIC_TRACK\n  return cn(DEFAULT_TRACK[columns], GAP[gap])\n}\n\nexport function bentoCellClass(span: BentoSpan | undefined, preset: BentoPreset, columns: BentoColumns) {\n  const maxCol = preset === \"magnetic\" ? 4 : columns\n  const col = clampSpan(span?.col, maxCol)\n  const row = clampSpan(span?.row, 3)\n  const colClass = (preset === \"magnetic\" ? MAGNETIC_COL : DEFAULT_COL)[col] ?? \"col-span-1\"\n  const rowClass = (preset === \"magnetic\" ? MAGNETIC_ROW : DEFAULT_ROW)[row] ?? \"row-span-1\"\n  return { col, row, className: cn(\"min-w-0\", colClass, rowClass) }\n}\n\ntype BentoContextValue = {\n  preset: BentoPreset\n  columns: BentoColumns\n}\n\nconst BentoContext = createContext<BentoContextValue>({ preset: \"default\", columns: 4 })\n\nfunction useBentoGrid() {\n  return useContext(BentoContext)\n}\n\nexport type BentoGridClassNames = {\n  root?: string\n  track?: string\n}\n\nexport type BentoGridProps = Omit<ComponentProps<\"div\">, \"children\"> & {\n  /** Desktop column count. Default 4. Clamped to 1–6. */\n  columns?: BentoColumns\n  /** Accessible name for the group. */\n  label?: string\n  /** Spacing step. Default md (`gap-4`). */\n  gap?: BentoGap\n  /**\n   * `magnetic` keeps the published MagneticBento track.\n   * The host of that preset owns the `mb` container.\n   */\n  preset?: BentoPreset\n  status?: BentoStatus\n  emptyLabel?: string\n  loadingLabel?: string\n  errorLabel?: string\n  trackRef?: Ref<HTMLElement>\n  /** Overrides the track slot. MagneticBento passes its own. */\n  trackSlot?: string\n  classNames?: BentoGridClassNames\n  children?: ReactNode\n}\n\nexport function BentoGrid({\n  columns = 4,\n  label,\n  gap = \"md\",\n  preset = \"default\",\n  status,\n  emptyLabel = \"Nothing to show\",\n  loadingLabel = \"Loading\",\n  errorLabel = \"Something went wrong\",\n  trackRef,\n  trackSlot,\n  className,\n  classNames,\n  children,\n  ...rest\n}: BentoGridProps) {\n  const safeColumns = clampSpan(columns, 6) as BentoColumns\n  const count = Children.count(children)\n  const resolved: BentoStatus =\n    status === \"loading\" || status === \"error\" || status === \"empty\" ? status : count === 0 ? \"empty\" : \"ready\"\n  const context = { preset, columns: safeColumns }\n\n  if (preset === \"magnetic\") {\n    return (\n      <BentoContext.Provider value={context}>\n        <div\n          ref={trackRef as Ref<HTMLDivElement>}\n          data-slot={trackSlot ?? \"bento-grid-track\"}\n          data-bento-preset=\"magnetic\"\n          className={cn(bentoTrackClass(\"magnetic\", safeColumns, gap), className, classNames?.track)}\n          {...rest}\n        >\n          {children}\n        </div>\n      </BentoContext.Provider>\n    )\n  }\n\n  const trackClass = cn(bentoTrackClass(\"default\", safeColumns, gap), \"m-0 list-none p-0\", classNames?.track)\n\n  return (\n    <BentoContext.Provider value={context}>\n      <div\n        data-slot=\"bento-grid\"\n        data-columns={safeColumns}\n        data-state={resolved}\n        role=\"group\"\n        aria-label={label}\n        aria-busy={resolved === \"loading\" ? true : undefined}\n        className={cn(\"@container/bento w-full min-w-0 text-foreground\", className, classNames?.root)}\n        {...rest}\n      >\n        {resolved === \"empty\" ? (\n          <p data-slot=\"bento-grid-empty\" className=\"text-sm text-muted-foreground\">\n            {emptyLabel}\n          </p>\n        ) : null}\n        {resolved === \"error\" ? (\n          <p role=\"alert\" data-slot=\"bento-grid-error\" className=\"text-sm text-destructive\">\n            {errorLabel}\n          </p>\n        ) : null}\n        {resolved === \"loading\" ? (\n          <div className=\"flex flex-col gap-3\">\n            <p className=\"text-sm text-muted-foreground\">{loadingLabel}</p>\n            <ul data-slot=\"bento-grid-track\" data-bento-preset=\"default\" aria-hidden=\"true\" className={trackClass}>\n              <li className=\"min-h-40 rounded-xl bg-muted\" />\n              <li className=\"min-h-40 rounded-xl bg-muted\" />\n            </ul>\n          </div>\n        ) : null}\n        {resolved === \"ready\" ? (\n          <ul\n            ref={trackRef as Ref<HTMLUListElement>}\n            data-slot={trackSlot ?? \"bento-grid-track\"}\n            data-bento-preset=\"default\"\n            className={trackClass}\n          >\n            {children}\n          </ul>\n        ) : null}\n      </div>\n    </BentoContext.Provider>\n  )\n}\n\nexport type BentoCellProps = Omit<ComponentProps<\"li\">, \"children\"> & {\n  span?: BentoSpan\n  /** Render the child element instead of a list item. */\n  asChild?: boolean\n  children?: ReactNode\n}\n\nexport function BentoCell({ span, asChild = false, className, children, ...rest }: BentoCellProps) {\n  const { preset, columns } = useBentoGrid()\n  const laid = bentoCellClass(span, preset, columns)\n  const Comp = asChild ? Slot.Root : \"li\"\n  return (\n    <Comp\n      {...(preset === \"magnetic\" ? {} : { \"data-slot\": \"bento-cell\" })}\n      data-bento-cell=\"true\"\n      data-col={laid.col}\n      data-row={laid.row}\n      className={cn(laid.className, preset === \"default\" && \"h-full\", className)}\n      {...rest}\n    >\n      {children}\n    </Comp>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/bento-grid.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Rejilla bento",
+    "descriptionEs": "Acomodo bento. Cada celda pide su tramo y a 390 px queda en una columna.",
+    "preview": "app/examples/bento-grid/preview.tsx",
+    "previewHref": "/examples/bento-grid",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled",
+        "titleEs": "Muro lleno",
+        "descriptionEs": "Cuatro celdas con tramos distintos.",
+        "preview": "app/examples/bento-grid/preview.tsx"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty",
+        "titleEs": "Muro vacío",
+        "descriptionEs": "No hay celdas.",
+        "preview": "app/examples/bento-grid/preview.tsx"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading",
+        "titleEs": "Muro cargando",
+        "descriptionEs": "El muro anuncia que está cargando.",
+        "preview": "app/examples/bento-grid/preview.tsx"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error",
+        "titleEs": "Muro con error",
+        "descriptionEs": "El muro muestra la alerta.",
+        "preview": "app/examples/bento-grid/preview.tsx"
+      },
+      {
+        "id": "long",
+        "label": "Texto largo",
+        "labelEn": "Long text",
+        "titleEs": "Texto largo",
+        "descriptionEs": "Un título con un token de 60 caracteres.",
+        "preview": "app/examples/bento-grid/preview.tsx"
+      },
+      {
+        "id": "mixed",
+        "label": "Celdas mixtas",
+        "labelEn": "Mixed cells",
+        "titleEs": "Celdas mixtas",
+        "descriptionEs": "2×2, 1×1, 1×2 y 1×1 en el mismo muro.",
+        "preview": "app/examples/bento-grid/preview.tsx"
+      },
+      {
+        "id": "single",
+        "label": "Una celda",
+        "labelEn": "Single cell",
+        "titleEs": "Una sola celda",
+        "descriptionEs": "Una celda 2×2 sin vecinas.",
+        "preview": "app/examples/bento-grid/preview.tsx"
+      },
+      {
+        "id": "no-cta",
+        "label": "Sin CTA",
+        "labelEn": "No CTA",
+        "titleEs": "Sin llamada",
+        "descriptionEs": "La celda no muestra una llamada a la acción.",
+        "preview": "app/examples/bento-grid/preview.tsx"
+      },
+      {
+        "id": "no-media",
+        "label": "Sin ilustración",
+        "labelEn": "No illustration",
+        "titleEs": "Sin ilustración",
+        "descriptionEs": "La celda no trae dibujo.",
+        "preview": "app/examples/bento-grid/preview.tsx"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Muro",
+        "href": "/examples/bento-grid",
+        "description": "Cuatro celdas. A 390 px se apilan."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/bento-grid/stress",
+        "description": "390 px, token largo, RTL, cero, una, diez, carga y error."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/bento-grid?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/bento-grid?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/bento-grid?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/bento-grid?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Texto largo",
+        "href": "/examples/bento-grid?scene=long",
+        "description": "Long text"
+      },
+      {
+        "title": "Celdas mixtas",
+        "href": "/examples/bento-grid?scene=mixed",
+        "description": "Mixed cells"
+      },
+      {
+        "title": "Una celda",
+        "href": "/examples/bento-grid?scene=single",
+        "description": "Single cell"
+      },
+      {
+        "title": "Sin CTA",
+        "href": "/examples/bento-grid?scene=no-cta",
+        "description": "No CTA"
+      },
+      {
+        "title": "Sin ilustración",
+        "href": "/examples/bento-grid?scene=no-media",
+        "description": "No illustration"
+      }
+    ],
+    "usage": "<BentoGrid label=\"Studio wall\" columns={4}>\n  <BentoCell span={{ col: 2, row: 2 }}>\n    <BentoFeatureCard title=\"North kiln\" description=\"Morning shift.\" href=\"#kiln\" cta=\"View schedule\" />\n  </BentoCell>\n</BentoGrid>",
+    "api": [
+      {
+        "name": "columns",
+        "type": "1 | 2 | 3 | 4 | 5 | 6",
+        "description": "Desktop column count. Default 4. One column through 390px, two from 30rem, full count from 56rem."
+      },
+      {
+        "name": "gap",
+        "type": "\"sm\" | \"md\" | \"lg\"",
+        "description": "Spacing step. Default md, which is gap-4."
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Accessible name for the group."
+      },
+      {
+        "name": "status / emptyLabel / loadingLabel / errorLabel",
+        "type": "\"ready\" | \"loading\" | \"empty\" | \"error\"",
+        "description": "Empty, loading, and error replace the cells and are not links."
+      },
+      {
+        "name": "BentoCell span",
+        "type": "{ col?: number; row?: number }",
+        "description": "Requested span. Columns clamp to 1 until 30rem and to 2 until 56rem."
+      },
+      {
+        "name": "BentoCell asChild",
+        "type": "boolean",
+        "description": "Render the child element, such as an article, instead of a list item."
+      },
+      {
+        "name": "preset",
+        "type": "\"default\" | \"magnetic\"",
+        "description": "magnetic keeps the published MagneticBento breakpoints. Hosts should use the default."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and track class."
+      }
+    ]
+  },
+  "docs": "Inspiración visual, sin código. Fuente: https://shadcnstudio.com/blocks/bento-grid/bento-cards. Licencia: bloques Pro de shadcn/studio, fuera del repositorio MIT de shadcn/ui. No se copió código, markup ni assets. A container of 390px stays on one column. Two columns start at 30rem (480px). The requested column count starts at 56rem (896px). Gap uses the spacing scale. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+  "categories": [
+    "content"
+  ],
+  "type": "registry:ui"
+}

@@ -405,7 +405,24 @@ The post shows anchor-name on the active card and one indicator positioned
 with position-anchor and inset: anchor(inside). That idea is inspiration
 only. This registry does not include the post's demo code, labels, icons, or
 layout copy. The component, the measurement fallback, and the studio cards
-are an independent implementation.
+are an independent implementation. The track and the span classes are the
+magnetic preset of bento-grid.
+
+---
+
+Bento grid
+
+bento-grid and bento-feature-card take visual inspiration, without code,
+from the Bento Cards on shadcn/studio:
+
+  https://shadcnstudio.com/blocks/bento-grid/bento-cards
+
+Those blocks are Pro. They are not part of the MIT shadcn/ui repository.
+No code, markup, sample data, icons, or assets from that page were copied.
+The layout, the cell spans, and the feature card are an independent
+implementation on the host's semantic classes. card and skeleton stay host
+primitives (shadcn/ui, MIT). Slot comes from radix-ui (MIT). Icons in the
+demos and the call-to-action arrow come from lucide-react (ISC).
 
 ---
 

@@ -20,7 +20,7 @@ Perfil STANDARD. No se generaron imágenes: la dirección son dos variantes real
 
 **A, `media-first`.** Es el default de `BentoFeatureCard`. B queda en la API para celdas donde el texto tiene que leerse antes del dibujo.
 
-Capturas (se agregan al cerrar el build, desde la ruta `/examples/bento-grid/direction`):
+Capturas, tomadas de `/examples/bento-grid/direction` (código, no un generador de imágenes):
 
 - `ui/direction/bento-grid/variant-media-first.png`
 - `ui/direction/bento-grid/variant-copy-first.png`
