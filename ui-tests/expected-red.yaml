@@ -1,0 +1,15 @@
+schema: uis.expected-red/v1
+spec_id: bento-grid
+retana_ui_sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+recorded_before_build: true
+command: pnpm exec vitest run __tests__/bento-grid.test.tsx __tests__/bento-feature-card.test.tsx __tests__/bento-magnetic-contract.test.tsx
+cases:
+  - file: __tests__/bento-grid.test.tsx
+    name: suite
+    signature: 'Failed to resolve import "@/registry/ui/bento-grid" from "__tests__/bento-grid.test.tsx". Does the file exist?'
+  - file: __tests__/bento-feature-card.test.tsx
+    name: suite
+    signature: 'Failed to resolve import "@/registry/ui/bento-grid" from "__tests__/bento-feature-card.test.tsx". Does the file exist?'
+  - file: __tests__/bento-magnetic-contract.test.tsx
+    name: composes the bento base and keeps the magnetic span contract
+    signature: 'Expected the element to have attribute: data-bento-preset="magnetic". Received: null'
