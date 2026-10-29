@@ -158,3 +158,20 @@
   --primary-foreground: oklch(0.2 0.03 45);
   --chart-2: oklch(0.75 0.03 260);
 }
+
+/* Demo-only series palette for the chart family. Registry items read --chart-* and do not ship these values. */
+.chart-demo {
+  --chart-1: oklch(0.62 0.16 45);
+  --chart-2: oklch(0.5 0.16 300);
+  --chart-3: oklch(0.52 0.12 230);
+  --chart-4: oklch(0.52 0.13 155);
+  --chart-5: oklch(0.62 0.14 85);
+}
+
+.dark .chart-demo {
+  --chart-1: oklch(0.78 0.12 50);
+  --chart-2: oklch(0.74 0.12 300);
+  --chart-3: oklch(0.76 0.1 230);
+  --chart-4: oklch(0.78 0.11 155);
+  --chart-5: oklch(0.82 0.12 85);
+}

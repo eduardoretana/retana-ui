@@ -916,3 +916,34 @@ callbacks. The table sorts in place and slides rows with layout motion. The
 voice note draws a waveform from numeric peaks and does not play a file.
 Answer no if the CLI asks to overwrite a primitive the host already has.
 The items ship no theme.
+
+---
+
+Dashboard charts — clean-room
+
+hex-heatmap, flow-sankey, iso-bars, segment-gauge, range-plan,
+stacked-columns, dot-meter, combo-chart, coupled-lines, range-lanes,
+polar-area, and scrub-area are a clean-room reading of interactions seen in
+a public promo clip (https://x.com/malikyoloo/status/2115675118357909597)
+and the page it points at (https://www.mebius.design/freebies/charts).
+The original kit is proprietary and forbids reuse inside a library or design
+system, even when modified. No source, registry, Figma, markup, sample data,
+icons, or assets were copied. The implementation is original. Visual
+inspiration only.
+
+Series colors are the host tokens --chart-1 through --chart-5. The catalog
+adds a demo-only .chart-demo palette in app/globals.css so the previews can
+tell series apart. That palette is not part of any registry item.
+
+The flow layout is an original column sankey (negative links are omitted
+from the geometry). The honeycomb uses axial coordinates, not a statistical
+hexbin. No new npm dependency was added. motion (MIT, already in the repo)
+times the entrance and the period change. lucide-react (ISC) supplies the
+error icon and the menu glyph. Recharts stays a host chart primitive and is
+not imported by these items.
+
+Numbers and currency follow the locale prop (es and en map to es-MX and
+en-US). Default chrome is English. Each piece exports a Spanish label set.
+The catalog demo is Huerto Norte, a fictional community garden. Answer no if
+the CLI asks to overwrite a primitive the host already has. The items ship
+no theme. Motion is skipped when the reader prefers reduced motion.

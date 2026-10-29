@@ -423,6 +423,18 @@ import Preview418 from "@/app/examples/data-table-reorder/preview"
 import Preview419 from "@/app/examples/activity-chat/preview"
 import Preview420 from "@/app/examples/inline-approve-button/preview"
 import Preview421 from "@/app/examples/portfolio-desk/preview"
+import Preview422 from "@/app/examples/hex-heatmap/preview"
+import Preview423 from "@/app/examples/flow-sankey/preview"
+import Preview424 from "@/app/examples/iso-bars/preview"
+import Preview425 from "@/app/examples/segment-gauge/preview"
+import Preview426 from "@/app/examples/range-plan/preview"
+import Preview427 from "@/app/examples/stacked-columns/preview"
+import Preview428 from "@/app/examples/dot-meter/preview"
+import Preview429 from "@/app/examples/combo-chart/preview"
+import Preview430 from "@/app/examples/coupled-lines/preview"
+import Preview431 from "@/app/examples/range-lanes/preview"
+import Preview432 from "@/app/examples/polar-area/preview"
+import Preview433 from "@/app/examples/scrub-area/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -847,4 +859,16 @@ export const previewMap = {
   "activity-chat": Preview419,
   "inline-approve-button": Preview420,
   "portfolio-desk": Preview421,
+  "hex-heatmap": Preview422,
+  "flow-sankey": Preview423,
+  "iso-bars": Preview424,
+  "segment-gauge": Preview425,
+  "range-plan": Preview426,
+  "stacked-columns": Preview427,
+  "dot-meter": Preview428,
+  "combo-chart": Preview429,
+  "coupled-lines": Preview430,
+  "range-lanes": Preview431,
+  "polar-area": Preview432,
+  "scrub-area": Preview433,
 }

@@ -1,0 +1,199 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "combo-chart",
+  "title": "Combo chart",
+  "author": "Eduardo Retana",
+  "description": "Bars plus a line. The tooltip carries a mini chart, and the unit switch rescales the data.",
+  "dependencies": [
+    "lucide-react",
+    "motion"
+  ],
+  "registryDependencies": [
+    "button",
+    "card",
+    "select"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/combo-chart.tsx",
+      "content": "\"use client\"\n\nimport { useId, useState } from \"react\"\nimport { motion } from \"motion/react\"\n\nimport { formatChartUnit, type ChartUnit } from \"@/lib/chart-format\"\nimport { extentWithZero, linePath, scaleLinear } from \"@/lib/chart-geom\"\nimport { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from \"@/components/ui/select\"\nimport {\n  ChartCard,\n  ChartKpi,\n  ChartTip,\n  chartStatusLabels,\n  chartStatusLabelsEs,\n  chartTransition,\n  usePlotBox,\n  usePrefersReducedMotion,\n  type ChartCardClassNames,\n  type ChartStatus,\n  type ChartStatusLabels,\n} from \"@/components/ui/chart-card\"\nimport { SeriesPatterns, seriesPaint } from \"@/components/ui/chart-marks\"\n\nexport type ComboPart = { id: string; label: string; value: number }\nexport type ComboPoint = { key: string; label: string; axisLabel?: string; bar: number; line: number; parts?: ComboPart[] }\n\nexport type ComboChartLabels = ChartStatusLabels & {\n  bar: string\n  line: string\n  unit: string\n  point: (label: string, bar: string, line: string) => string\n}\n\nexport const comboChartLabels: ComboChartLabels = {\n  ...chartStatusLabels,\n  bar: \"Bars\",\n  line: \"Line\",\n  unit: \"Unit\",\n  point: (label, bar, line) => `${label}. ${bar}. ${line}.`,\n}\n\nexport const comboChartLabelsEs: ComboChartLabels = {\n  ...chartStatusLabelsEs,\n  bar: \"Barras\",\n  line: \"Línea\",\n  unit: \"Unidad\",\n  point: (label, bar, line) => `${label}. ${bar}. ${line}.`,\n}\n\nexport type ComboChartProps = {\n  title: string\n  description?: string\n  points: ComboPoint[]\n  units?: ChartUnit[]\n  unitId?: string\n  onUnitChange?: (id: string) => void\n  locale?: string\n  status?: ChartStatus\n  labels?: Partial<ComboChartLabels>\n  onActiveChange?: (key: string | null) => void\n  onMenu?: () => void\n  onRetry?: () => void\n  height?: number\n  className?: string\n  classNames?: ChartCardClassNames\n}\n\nexport function ComboChart({\n  title,\n  description,\n  points,\n  units,\n  unitId,\n  onUnitChange,\n  locale,\n  status = \"ready\",\n  labels,\n  onActiveChange,\n  onMenu,\n  onRetry,\n  height = 200,\n  className,\n  classNames,\n}: ComboChartProps) {\n  const copy = { ...comboChartLabels, ...labels }\n  const pattern = useId().replace(/:/g, \"\")\n  const reduced = usePrefersReducedMotion()\n  const { node: plotNode, width } = usePlotBox(320, height)\n  const [internalUnit, setUnit] = useState(units?.[0]?.id ?? \"\")\n  const [active, setActive] = useState<number | null>(null)\n  const currentUnit = units?.find((unit) => unit.id === (unitId ?? internalUnit)) ?? units?.[0]\n  const empty = points.length === 0\n  const view = status !== \"ready\" ? status : empty ? \"empty\" : \"ready\"\n  const values = points.flatMap((point) => [point.bar, point.line])\n  const domain = extentWithZero(values)\n  const base = scaleLinear(0, domain.min, domain.max, height - 24, 16)\n  const slot = Math.max(1, (width - 16) / Math.max(1, points.length))\n  const barWidth = Math.max(6, Math.min(18, slot * 0.45))\n  const coords = points.map((point, index) => ({\n    x: 12 + index * slot + slot / 2,\n    y: scaleLinear(point.line, domain.min, domain.max, height - 24, 16),\n  }))\n  const focus = active != null ? points[active] : null\n  const totalBar = points.reduce((sum, point) => sum + point.bar, 0)\n\n  function chooseUnit(id: string) {\n    if (unitId === undefined) setUnit(id)\n    onUnitChange?.(id)\n  }\n\n  function choose(index: number | null) {\n    setActive(index)\n    onActiveChange?.(index != null ? points[index]?.key ?? null : null)\n  }\n\n  const barText = (value: number) => `${copy.bar} ${formatChartUnit(value, currentUnit, locale)}`\n  const lineText = (value: number) => `${copy.line} ${formatChartUnit(value, currentUnit, locale)}`\n\n  return (\n    <ChartCard\n      title={title}\n      description={description}\n      status={view}\n      labels={copy}\n      onMenu={onMenu}\n      onRetry={onRetry}\n      className={className}\n      classNames={classNames}\n      summary={points.map((point) => copy.point(point.label, barText(point.bar), lineText(point.line))).join(\" \")}\n      columns={[\n        { id: \"bar\", label: copy.bar },\n        { id: \"line\", label: copy.line },\n      ]}\n      rows={points.map((point) => ({\n        id: point.key,\n        label: point.label,\n        cells: { bar: formatChartUnit(point.bar, currentUnit, locale), line: formatChartUnit(point.line, currentUnit, locale) },\n      }))}\n      live={focus ? copy.point(focus.label, barText(focus.bar), lineText(focus.line)) : undefined}\n      kpis={\n        <>\n          <ChartKpi label={copy.bar} value={formatChartUnit(focus?.bar ?? totalBar, currentUnit, locale)} hint={focus?.label ?? currentUnit?.label} />\n          <ChartKpi label={copy.line} value={formatChartUnit(focus?.line ?? points[points.length - 1]?.line ?? 0, currentUnit, locale)} />\n        </>\n      }\n      controls={\n        units && units.length > 1 ? (\n          <Select value={unitId ?? internalUnit} onValueChange={chooseUnit}>\n            <SelectTrigger size=\"sm\" aria-label={copy.unit} className=\"w-full max-w-36\">\n              <SelectValue />\n            </SelectTrigger>\n            <SelectContent>\n              {units.map((unit) => (\n                <SelectItem key={unit.id} value={unit.id}>\n                  {unit.label}\n                </SelectItem>\n              ))}\n            </SelectContent>\n          </Select>\n        ) : null\n      }\n    >\n      <div\n        ref={plotNode}\n        className=\"relative w-full outline-none focus-visible:ring-2 focus-visible:ring-ring\"\n        style={{ height }}\n        role=\"slider\"\n        tabIndex={0}\n        aria-label={title}\n        aria-valuemin={1}\n        aria-valuemax={Math.max(1, points.length)}\n        aria-valuenow={(active ?? points.length - 1) + 1}\n        aria-valuetext={focus ? copy.point(focus.label, barText(focus.bar), lineText(focus.line)) : copy.bar}\n        onMouseLeave={() => choose(null)}\n        onKeyDown={(event) => {\n          if (!points.length || ![\"ArrowRight\", \"ArrowLeft\", \"Home\", \"End\", \"Escape\"].includes(event.key)) return\n          event.preventDefault()\n          if (event.key === \"Escape\") {\n            choose(null)\n            return\n          }\n          const current = active ?? 0\n          const next = event.key === \"Home\" ? 0 : event.key === \"End\" ? points.length - 1 : event.key === \"ArrowRight\" ? Math.min(points.length - 1, current + 1) : Math.max(0, current - 1)\n          choose(next)\n        }}\n      >\n        <svg width={width} height={height} aria-hidden>\n          <SeriesPatterns id={pattern} />\n          <line x1={8} x2={width - 8} y1={base} y2={base} className=\"stroke-border\" strokeDasharray=\"3 4\" />\n          {points.map((point, index) => {\n            const y = scaleLinear(point.bar, domain.min, domain.max, height - 24, 16)\n            const bar = Math.abs(base - y)\n            const top = Math.min(base, y)\n            const x = 12 + index * slot + (slot - barWidth) / 2\n            return (\n              <motion.rect\n                key={`${currentUnit?.id ?? \"u\"}-${point.key}`}\n                data-slot=\"combo-bar\"\n                x={x}\n                width={barWidth}\n                rx={2}\n                initial={reduced ? false : { height: 0, y: base }}\n                animate={{ height: bar, y: top, opacity: active == null || active === index ? 1 : 0.35 }}\n                transition={chartTransition(reduced)}\n                fill={seriesPaint(pattern, 3)}\n                onMouseEnter={() => choose(index)}\n              />\n            )\n          })}\n          <motion.path\n            d={linePath(coords)}\n            fill=\"none\"\n            stroke=\"var(--chart-1)\"\n            strokeWidth={2}\n            initial={reduced ? false : { pathLength: 0 }}\n            animate={{ pathLength: 1 }}\n            transition={chartTransition(reduced)}\n          />\n          {coords.map((coord, index) => (\n            <circle key={points[index]?.key} cx={coord.x} cy={coord.y} r={active === index ? 4.5 : 0} fill=\"var(--chart-1)\" className=\"stroke-background\" strokeWidth={2} />\n          ))}\n          {points.map((point, index) => (\n            <text key={point.key} x={12 + index * slot + slot / 2} y={height - 6} textAnchor=\"middle\" className=\"fill-muted-foreground text-[10px]\">\n              {point.axisLabel ?? point.label}\n            </text>\n          ))}\n        </svg>\n        <ChartTip open={focus != null} x={coords[active ?? 0]?.x ?? 0} y={16}>\n          {focus ? (\n            <span className=\"block min-w-32\">\n              <span className=\"font-medium\">{focus.label}</span>\n              <span className=\"mt-1 block\">{barText(focus.bar)}</span>\n              <span className=\"block\">{lineText(focus.line)}</span>\n              {focus.parts && focus.parts.length > 0 ? (\n                <span className=\"mt-1.5 flex h-8 items-end gap-0.5\" data-slot=\"combo-mini\">\n                  {focus.parts.map((part, index) => {\n                    const max = Math.max(...focus.parts!.map((item) => Math.abs(item.value)), 1)\n                    return <span key={part.id} title={part.label} className=\"w-1.5 rounded-sm\" style={{ height: `${(Math.abs(part.value) / max) * 100}%`, background: `var(--chart-${(index % 5) + 1})` }} />\n                  })}\n                </span>\n              ) : null}\n            </span>\n          ) : null}\n        </ChartTip>\n      </div>\n    </ChartCard>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/combo-chart.tsx"
+    },
+    {
+      "path": "registry/ui/chart-card.tsx",
+      "content": "\"use client\"\n\nimport { useId, useLayoutEffect, useRef, useState, useSyncExternalStore, type KeyboardEvent, type ReactNode } from \"react\"\nimport { CircleAlert, MoreHorizontal } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Card } from \"@/components/ui/card\"\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\nimport { SeriesSwatch } from \"@/components/ui/chart-marks\"\n\nconst REDUCE_QUERY = \"(prefers-reduced-motion: reduce)\"\n\nfunction subscribeReduced(onStoreChange: () => void) {\n  const media = window.matchMedia(REDUCE_QUERY)\n  media.addEventListener(\"change\", onStoreChange)\n  return () => media.removeEventListener(\"change\", onStoreChange)\n}\n\nexport function usePrefersReducedMotion() {\n  return useSyncExternalStore(subscribeReduced, () => window.matchMedia(REDUCE_QUERY).matches, () => false)\n}\n\nexport function chartTransition(reduced: boolean) {\n  if (reduced) return { duration: 0 }\n  return { duration: motionPresets.duration.considered, ease: [...motionPresets.ease.enter] as [number, number, number, number] }\n}\n\nexport type ChartStatus = \"ready\" | \"loading\" | \"empty\" | \"error\"\n\nexport type ChartStatusLabels = {\n  loading: string\n  empty: string\n  error: string\n  retry: string\n  more: string\n}\n\nexport const chartStatusLabels: ChartStatusLabels = {\n  loading: \"Loading\",\n  empty: \"Nothing to show yet\",\n  error: \"Could not load this chart\",\n  retry: \"Try again\",\n  more: \"More\",\n}\n\nexport const chartStatusLabelsEs: ChartStatusLabels = {\n  loading: \"Cargando\",\n  empty: \"Todavía no hay datos\",\n  error: \"No se pudo cargar el gráfico\",\n  retry: \"Reintentar\",\n  more: \"Más\",\n}\n\nexport type ChartSummaryColumn = { id: string; label: string }\nexport type ChartSummaryRow = { id: string; label: string; cells: Record<string, string> }\n\nexport type ChartCardClassNames = {\n  root?: string\n  header?: string\n  title?: string\n  description?: string\n  kpis?: string\n  controls?: string\n  body?: string\n  legend?: string\n  insight?: string\n  footer?: string\n}\n\nexport type ChartCardProps = {\n  title: string\n  description?: string\n  status?: ChartStatus\n  labels?: Partial<ChartStatusLabels>\n  onRetry?: () => void\n  menuLabel?: string\n  onMenu?: () => void\n  menu?: ReactNode\n  kpis?: ReactNode\n  controls?: ReactNode\n  legend?: ReactNode\n  insight?: ReactNode\n  footer?: ReactNode\n  /** One-sentence description of the data, read with the chart. */\n  summary: string\n  tableCaption?: string\n  columns?: ChartSummaryColumn[]\n  rows?: ChartSummaryRow[]\n  live?: string\n  children?: ReactNode\n  className?: string\n  classNames?: ChartCardClassNames\n}\n\nexport function ChartCard({\n  title,\n  description,\n  status = \"ready\",\n  labels,\n  onRetry,\n  menuLabel,\n  onMenu,\n  menu,\n  kpis,\n  controls,\n  legend,\n  insight,\n  footer,\n  summary,\n  tableCaption,\n  columns,\n  rows,\n  live,\n  children,\n  className,\n  classNames,\n}: ChartCardProps) {\n  const uid = useId().replace(/:/g, \"\")\n  const titleId = `${uid}-title`\n  const summaryId = `${uid}-summary`\n  const copy = { ...chartStatusLabels, ...labels }\n  const root = `[data-chart-card=\"${uid}\"]`\n\n  return (\n    <Card\n      data-slot=\"chart-card\"\n      data-chart-card={uid}\n      data-status={status}\n      aria-labelledby={titleId}\n      aria-describedby={summaryId}\n      className={cn(\"w-full min-w-0 gap-3 rounded-2xl py-4 shadow-sm ring-foreground/10\", classNames?.root, className)}\n    >\n      <style>{`\n        @media (prefers-reduced-motion: reduce) {\n          ${root}, ${root} * {\n            animation: none !important;\n            transition: none !important;\n          }\n        }\n      `}</style>\n      <header className={cn(\"flex items-start gap-3 px-4\", classNames?.header)}>\n        <div className=\"min-w-0 flex-1\">\n          <h2 id={titleId} data-slot=\"chart-card-title\" className={cn(\"truncate text-base font-medium leading-snug\", classNames?.title)}>\n            {title}\n          </h2>\n          {description ? (\n            <p className={cn(\"mt-0.5 text-xs text-muted-foreground\", classNames?.description)}>{description}</p>\n          ) : null}\n        </div>\n        {menu ??\n          (onMenu ? (\n            <Button type=\"button\" variant=\"ghost\" size=\"icon-xs\" aria-label={menuLabel ?? copy.more} onClick={onMenu}>\n              <MoreHorizontal />\n            </Button>\n          ) : null)}\n      </header>\n      {kpis ? <div className={cn(\"grid grid-cols-2 gap-3 px-4 sm:grid-cols-3\", classNames?.kpis)}>{kpis}</div> : null}\n      {controls ? <div className={cn(\"px-4\", classNames?.controls)}>{controls}</div> : null}\n      <div className={cn(\"min-w-0 px-4\", classNames?.body)}>\n        {status === \"ready\" ? (\n          children\n        ) : (\n          <ChartState status={status} label={copy[status]} onRetry={status === \"error\" ? onRetry : undefined} retryLabel={copy.retry} />\n        )}\n      </div>\n      {status === \"ready\" && legend ? <div className={cn(\"px-4\", classNames?.legend)}>{legend}</div> : null}\n      {status === \"ready\" && insight ? <div className={cn(\"px-4\", classNames?.insight)}>{insight}</div> : null}\n      {status === \"ready\" && footer ? <div className={cn(\"flex flex-wrap items-center gap-2 px-4\", classNames?.footer)}>{footer}</div> : null}\n      <p id={summaryId} className=\"sr-only\">\n        {summary}\n      </p>\n      {live ? (\n        <p className=\"sr-only\" aria-live=\"polite\" aria-atomic=\"true\" data-slot=\"chart-live\">\n          {live}\n        </p>\n      ) : null}\n      {columns && rows && rows.length > 0 ? (\n        <table className=\"sr-only\">\n          {tableCaption ? <caption>{tableCaption}</caption> : null}\n          <thead>\n            <tr>\n              <th scope=\"col\">{tableCaption ?? title}</th>\n              {columns.map((column) => (\n                <th key={column.id} scope=\"col\">\n                  {column.label}\n                </th>\n              ))}\n            </tr>\n          </thead>\n          <tbody>\n            {rows.map((row) => (\n              <tr key={row.id}>\n                <th scope=\"row\">{row.label}</th>\n                {columns.map((column) => (\n                  <td key={column.id}>{row.cells[column.id] ?? \"\"}</td>\n                ))}\n              </tr>\n            ))}\n          </tbody>\n        </table>\n      ) : null}\n    </Card>\n  )\n}\n\nexport function ChartState({\n  status,\n  label,\n  onRetry,\n  retryLabel,\n}: {\n  status: Exclude<ChartStatus, \"ready\">\n  label: string\n  onRetry?: () => void\n  retryLabel: string\n}) {\n  return (\n    <div\n      data-slot=\"chart-state\"\n      data-status={status}\n      className=\"flex min-h-36 flex-col items-center justify-center gap-3 rounded-xl border border-dashed px-4 py-6 text-center\"\n      role={status === \"error\" ? \"alert\" : \"status\"}\n    >\n      {status === \"loading\" ? (\n        <div className=\"flex h-16 items-end gap-1.5\" aria-hidden>\n          {[40, 70, 52, 88, 60].map((height) => (\n            <span key={height} className=\"w-3 rounded-sm bg-muted motion-safe:animate-pulse\" style={{ height }} />\n          ))}\n        </div>\n      ) : null}\n      {status === \"error\" ? <CircleAlert className=\"size-5 text-destructive\" aria-hidden /> : null}\n      <p className=\"max-w-sm text-sm text-muted-foreground\">{label}</p>\n      {onRetry ? (\n        <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={onRetry}>\n          {retryLabel}\n        </Button>\n      ) : null}\n    </div>\n  )\n}\n\nexport function ChartKpi({ label, value, hint }: { label: string; value: string; hint?: string }) {\n  return (\n    <div data-slot=\"chart-kpi\" className=\"min-w-0\">\n      <p className=\"truncate text-xs text-muted-foreground\">{label}</p>\n      <p className=\"truncate text-xl font-semibold tracking-tight tabular-nums\">{value}</p>\n      {hint ? <p className=\"truncate text-xs text-muted-foreground\">{hint}</p> : null}\n    </div>\n  )\n}\n\nexport function ChartInsight({\n  title,\n  body,\n  action,\n}: {\n  title: string\n  body: string\n  action?: ReactNode\n}) {\n  return (\n    <div data-slot=\"chart-insight\" className=\"flex items-start gap-3 rounded-xl bg-muted/70 p-3\">\n      <div className=\"min-w-0 flex-1\">\n        <p className=\"text-sm font-medium\">{title}</p>\n        <p className=\"text-sm text-muted-foreground\">{body}</p>\n      </div>\n      {action}\n    </div>\n  )\n}\n\nexport type ChartLegendItem = {\n  id: string\n  label: string\n  value?: string\n  tone: number\n}\n\nexport function ChartLegend({\n  label,\n  items,\n  activeId,\n  onActiveChange,\n}: {\n  label: string\n  items: ChartLegendItem[]\n  activeId?: string | null\n  onActiveChange?: (id: string | null) => void\n}) {\n  const [focus, setFocus] = useState(0)\n  const refs = useRef<Array<HTMLButtonElement | null>>([])\n\n  function select(index: number) {\n    const item = items[index]\n    if (!item) return\n    setFocus(index)\n    refs.current[index]?.focus()\n    onActiveChange?.(activeId === item.id ? null : item.id)\n  }\n\n  function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {\n    if (!items.length) return\n    const keys = [\"ArrowRight\", \"ArrowLeft\", \"ArrowUp\", \"ArrowDown\", \"Home\", \"End\"]\n    if (!keys.includes(event.key)) return\n    event.preventDefault()\n    const next =\n      event.key === \"Home\" ? 0 : event.key === \"End\" ? items.length - 1 : event.key === \"ArrowRight\" || event.key === \"ArrowDown\" ? (focus + 1) % items.length : (focus - 1 + items.length) % items.length\n    select(next)\n  }\n\n  return (\n    <div role=\"toolbar\" aria-label={label} data-slot=\"chart-legend\" className=\"flex flex-wrap gap-2\" onKeyDown={onKeyDown}>\n      {items.map((item, index) => {\n        const pressed = activeId === item.id\n        return (\n          <button\n            key={item.id}\n            ref={(node) => {\n              refs.current[index] = node\n            }}\n            type=\"button\"\n            data-slot=\"chart-legend-item\"\n            aria-pressed={pressed}\n            tabIndex={index === focus ? 0 : -1}\n            className={cn(\n              \"inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-full px-2 py-1 text-xs outline-none focus-visible:ring-2 focus-visible:ring-ring\",\n              pressed ? \"bg-muted ring-1 ring-foreground/20\" : \"hover:bg-muted/70\",\n            )}\n            onClick={() => select(index)}\n          >\n            <SeriesSwatch index={item.tone} />\n            <span className=\"truncate\">{item.label}</span>\n            {item.value ? <span className=\"font-medium tabular-nums text-foreground\">{item.value}</span> : null}\n          </button>\n        )\n      })}\n    </div>\n  )\n}\n\nexport function ChartTip({\n  open,\n  x,\n  y,\n  children,\n}: {\n  open: boolean\n  x: number | string\n  y: number | string\n  children: ReactNode\n}) {\n  if (!open) return null\n  return (\n    <div\n      data-slot=\"chart-tip\"\n      role=\"tooltip\"\n      className=\"pointer-events-none absolute z-10 max-w-[14rem] rounded-lg bg-foreground px-2.5 py-1.5 text-xs text-background shadow-md\"\n      style={{ left: x, top: y, transform: \"translate(-50%, -110%)\" }}\n    >\n      {children}\n    </div>\n  )\n}\n\n/** Measured plot width. `node` is the element ref; read `node.current` only in effects and events. */\nexport function usePlotBox(fallbackWidth = 320, fallbackHeight = 180) {\n  const node = useRef<HTMLDivElement>(null)\n  const [width, setWidth] = useState(fallbackWidth)\n  useLayoutEffect(() => {\n    const element = node.current\n    if (!element) return\n    const read = () => {\n      const next = element.clientWidth\n      if (next > 0) setWidth(next)\n    }\n    read()\n    const observer = new ResizeObserver(read)\n    observer.observe(element)\n    return () => observer.disconnect()\n  }, [fallbackHeight])\n  return { node, width }\n}\n\nexport function dimOpacity(active: boolean) {\n  return active ? 1 : 0.18\n}\n",
+      "type": "registry:component",
+      "target": "@ui/chart-card.tsx"
+    },
+    {
+      "path": "registry/ui/chart-marks.tsx",
+      "content": "import { seriesColor, seriesMark, seriesPatternId } from \"@/lib/chart-series\"\nimport { cn } from \"@/lib/utils\"\n\nconst MARKS = [0, 1, 2, 3, 4]\n\n/** SVG patterns. Each series pairs a chart token with a distinct mark. */\nexport function SeriesPatterns({ id }: { id: string }) {\n  return (\n    <defs>\n      {MARKS.map((mark) => (\n        <pattern key={mark} id={`${id}-mark-${mark}`} width=\"6\" height=\"6\" patternUnits=\"userSpaceOnUse\">\n          <rect width=\"6\" height=\"6\" fill={`var(--chart-${mark + 1})`} />\n          {mark === 1 ? <path d=\"M0 6 L6 0\" stroke=\"var(--foreground)\" strokeOpacity=\"0.55\" /> : null}\n          {mark === 2 ? <circle cx=\"2\" cy=\"2\" r=\"1\" fill=\"var(--foreground)\" fillOpacity=\"0.55\" /> : null}\n          {mark === 3 ? <path d=\"M0 3 H6\" stroke=\"var(--foreground)\" strokeOpacity=\"0.5\" /> : null}\n          {mark === 4 ? <path d=\"M0 6 L6 0 M0 0 L6 6\" stroke=\"var(--foreground)\" strokeOpacity=\"0.45\" /> : null}\n        </pattern>\n      ))}\n    </defs>\n  )\n}\n\nexport function seriesPaint(prefix: string, index: number) {\n  return `url(#${seriesPatternId(prefix, index)})`\n}\n\nexport function SeriesSwatch({ index, className }: { index: number; className?: string }) {\n  const mark = seriesMark(index)\n  const image =\n    mark === 1\n      ? \"repeating-linear-gradient(45deg, transparent, transparent 2px, var(--foreground) 2px, var(--foreground) 3px)\"\n      : mark === 2\n        ? \"radial-gradient(circle at 30% 30%, var(--foreground) 0.8px, transparent 1px)\"\n        : mark === 3\n          ? \"repeating-linear-gradient(0deg, transparent, transparent 2px, var(--foreground) 2px, var(--foreground) 3px)\"\n          : mark === 4\n            ? \"repeating-linear-gradient(45deg, transparent, transparent 2px, var(--foreground) 2px, var(--foreground) 3px), repeating-linear-gradient(-45deg, transparent, transparent 2px, var(--foreground) 2px, var(--foreground) 3px)\"\n            : undefined\n  return (\n    <span\n      aria-hidden\n      data-slot=\"chart-swatch\"\n      data-mark={mark}\n      className={cn(\"inline-block size-2.5 shrink-0 rounded-[3px] ring-1 ring-foreground/15\", className)}\n      style={{ backgroundColor: seriesColor(index), backgroundImage: image }}\n    />\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/chart-marks.tsx"
+    },
+    {
+      "path": "registry/lib/chart-format.ts",
+      "content": "export type ChartLocale = string\n\nconst numberFormat = new Map<string, Intl.NumberFormat>()\nconst percentFormat = new Map<string, Intl.NumberFormat>()\nconst currencyFormat = new Map<string, Intl.NumberFormat>()\n\nfunction cached(map: Map<string, Intl.NumberFormat>, key: string, create: () => Intl.NumberFormat) {\n  let format = map.get(key)\n  if (!format) {\n    format = create()\n    map.set(key, format)\n  }\n  return format\n}\n\n/** `es` and `en` map to es-MX and en-US. Any other BCP 47 tag is used as-is. */\nexport function resolveChartLocale(locale: ChartLocale | undefined): string {\n  if (!locale || locale === \"en\") return \"en-US\"\n  if (locale === \"es\") return \"es-MX\"\n  return locale\n}\n\nexport function formatChartNumber(value: number, locale: ChartLocale | undefined, digits = 1): string {\n  const safe = Number.isFinite(value) ? value : 0\n  const tag = resolveChartLocale(locale)\n  const fraction = Number.isInteger(safe) ? 0 : digits\n  const format = cached(numberFormat, `${tag}:${fraction}`, () =>\n    new Intl.NumberFormat(tag, { maximumFractionDigits: fraction, minimumFractionDigits: 0 }),\n  )\n  return format.format(safe)\n}\n\n/** `share` is a ratio, 0.1 → 10%. */\nexport function formatChartPercent(share: number, locale: ChartLocale | undefined, digits = 0): string {\n  const safe = Number.isFinite(share) ? share : 0\n  const tag = resolveChartLocale(locale)\n  const format = cached(percentFormat, `${tag}:${digits}`, () =>\n    new Intl.NumberFormat(tag, { style: \"percent\", maximumFractionDigits: digits, minimumFractionDigits: 0 }),\n  )\n  return format.format(safe)\n}\n\nexport function formatChartCurrency(value: number, locale: ChartLocale | undefined, currency: string): string {\n  const safe = Number.isFinite(value) ? value : 0\n  const tag = resolveChartLocale(locale)\n  const format = cached(currencyFormat, `${tag}:${currency}`, () =>\n    new Intl.NumberFormat(tag, { style: \"currency\", currency, maximumFractionDigits: 0 }),\n  )\n  return format.format(safe)\n}\n\nexport type ChartUnit = {\n  id: string\n  label: string\n  /** Multiplies the raw measure. Defaults to 1. */\n  scale?: number\n  /** When set, values format as money in this ISO currency. */\n  currency?: string\n  /** Appended after a plain number, such as \"kg\". */\n  suffix?: string\n}\n\nexport function formatChartUnit(value: number, unit: ChartUnit | undefined, locale: ChartLocale | undefined): string {\n  const scaled = value * (unit?.scale ?? 1)\n  if (unit?.currency) return formatChartCurrency(scaled, locale, unit.currency)\n  const text = formatChartNumber(scaled, locale)\n  return unit?.suffix ? `${text} ${unit.suffix}` : text\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/chart-format.ts"
+    },
+    {
+      "path": "registry/lib/chart-series.ts",
+      "content": "import { chartVar, type ChartTone } from \"@/lib/chart-tone\"\n\n/** Host series palette. Charts cycle `--chart-1` … `--chart-5`. */\nexport const SERIES_COUNT = 5\n\nexport function seriesTone(index: number): ChartTone {\n  const tone = (Math.abs(index) % SERIES_COUNT) + 1\n  return tone as ChartTone\n}\n\nexport function seriesColor(index: number): string {\n  return chartVar(seriesTone(index))\n}\n\n/**\n * Non-color cue so a series is not identified by hue alone.\n * 0 solid, 1 diagonal, 2 dots, 3 horizontal, 4 cross.\n */\nexport function seriesMark(index: number): number {\n  return Math.abs(index) % SERIES_COUNT\n}\n\nexport function seriesPatternId(prefix: string, index: number): string {\n  return `${prefix}-mark-${seriesMark(index)}`\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/chart-series.ts"
+    },
+    {
+      "path": "registry/lib/chart-tone.ts",
+      "content": "/** shadcn chart tokens. Hosts define --chart-1 … --chart-5. */\nexport const CHART_TONES = [1, 2, 3, 4, 5] as const\n\nexport type ChartTone = (typeof CHART_TONES)[number]\n\nexport function chartVar(tone: ChartTone = 1): string {\n  return `var(--chart-${tone})`\n}\n\nexport function chartBgClass(tone: ChartTone = 1): string {\n  switch (tone) {\n    case 1:\n      return \"bg-chart-1\"\n    case 2:\n      return \"bg-chart-2\"\n    case 3:\n      return \"bg-chart-3\"\n    case 4:\n      return \"bg-chart-4\"\n    case 5:\n      return \"bg-chart-5\"\n  }\n}\n\nexport function chartFillClass(tone: ChartTone = 1): string {\n  switch (tone) {\n    case 1:\n      return \"fill-chart-1\"\n    case 2:\n      return \"fill-chart-2\"\n    case 3:\n      return \"fill-chart-3\"\n    case 4:\n      return \"fill-chart-4\"\n    case 5:\n      return \"fill-chart-5\"\n  }\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/chart-tone.ts"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    // Exit decelerates, the same curve as CSS ease-out.\n    exit: [0, 0, 0.58, 1] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    },
+    {
+      "path": "registry/lib/chart-geom.ts",
+      "content": "export type Point = { x: number; y: number }\n\nexport function clamp(value: number, low: number, high: number) {\n  return Math.min(high, Math.max(low, value))\n}\n\nexport function extentWithZero(values: number[]) {\n  if (!values.length) return { min: 0, max: 1 }\n  const low = Math.min(0, ...values)\n  const high = Math.max(0, ...values)\n  if (low === 0 && high === 0) return { min: 0, max: 1 }\n  const pad = (high - low) * 0.08\n  return { min: low < 0 ? low - pad : 0, max: high === 0 ? 1 : high + pad }\n}\n\nexport function scaleLinear(value: number, min: number, max: number, start: number, end: number) {\n  const span = max - min || 1\n  return start + ((value - min) / span) * (end - start)\n}\n\nexport function linePath(points: Point[]) {\n  return points.map((point, index) => `${index === 0 ? \"M\" : \"L\"}${point.x.toFixed(2)} ${point.y.toFixed(2)}`).join(\" \")\n}\n\nexport function areaPath(points: Point[], baseline: number) {\n  if (!points.length) return \"\"\n  const first = points[0]!\n  const last = points[points.length - 1]!\n  return `${linePath(points)} L${last.x.toFixed(2)} ${baseline.toFixed(2)} L${first.x.toFixed(2)} ${baseline.toFixed(2)} Z`\n}\n\nexport function polarPoint(cx: number, cy: number, radius: number, angle: number): Point {\n  return { x: cx + radius * Math.cos(angle), y: cy + radius * Math.sin(angle) }\n}\n\n/** Nightingale wedge. Angles are radians, 0 at the right, clockwise in SVG y-down space. */\nexport function wedgePath(cx: number, cy: number, inner: number, outer: number, start: number, end: number) {\n  const span = end - start\n  const large = span > Math.PI ? 1 : 0\n  const a = polarPoint(cx, cy, outer, start)\n  const b = polarPoint(cx, cy, outer, end)\n  const c = polarPoint(cx, cy, inner, end)\n  const d = polarPoint(cx, cy, inner, start)\n  return `M${a.x.toFixed(2)} ${a.y.toFixed(2)} A${outer.toFixed(2)} ${outer.toFixed(2)} 0 ${large} 1 ${b.x.toFixed(2)} ${b.y.toFixed(2)} L${c.x.toFixed(2)} ${c.y.toFixed(2)} A${inner.toFixed(2)} ${inner.toFixed(2)} 0 ${large} 0 ${d.x.toFixed(2)} ${d.y.toFixed(2)} Z`\n}\n\nexport type IsoFaces = { front: string; roof: string; side: string }\n\n/** Extruded bar sitting on `base`. Positive `height` grows up. */\nexport function isoFaces(x: number, base: number, width: number, height: number, depth: number): IsoFaces {\n  const top = base - height\n  const front = `M${x.toFixed(2)} ${top.toFixed(2)} H${(x + width).toFixed(2)} V${base.toFixed(2)} H${x.toFixed(2)} Z`\n  const roof = `M${x.toFixed(2)} ${top.toFixed(2)} L${(x + depth).toFixed(2)} ${(top - depth).toFixed(2)} H${(x + width + depth).toFixed(2)} L${(x + width).toFixed(2)} ${top.toFixed(2)} Z`\n  const side = `M${(x + width).toFixed(2)} ${top.toFixed(2)} L${(x + width + depth).toFixed(2)} ${(top - depth).toFixed(2)} V${(base - depth).toFixed(2)} L${(x + width).toFixed(2)} ${base.toFixed(2)} Z`\n  return { front, roof, side }\n}\n\nexport function moveIndex(index: number, count: number, key: string) {\n  if (count <= 0) return 0\n  if (key === \"Home\") return 0\n  if (key === \"End\") return count - 1\n  if (key === \"ArrowRight\" || key === \"ArrowUp\") return Math.min(count - 1, index + 1)\n  if (key === \"ArrowLeft\" || key === \"ArrowDown\") return Math.max(0, index - 1)\n  return index\n}\n\nexport function indexFromPointer(clientX: number, left: number, width: number, count: number) {\n  if (count <= 0 || width <= 0) return 0\n  const ratio = clamp((clientX - left) / width, 0, 0.9999)\n  return Math.min(count - 1, Math.floor(ratio * count))\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/chart-geom.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Barras y línea",
+    "descriptionEs": "Barras y una línea. El aviso trae un mini gráfico y la unidad vuelve a escalar los datos.",
+    "preview": "app/examples/combo-chart/preview.tsx",
+    "previewHref": "/examples/combo-chart",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "single",
+        "label": "Un punto",
+        "labelEn": "Single point"
+      },
+      {
+        "id": "dense",
+        "label": "Muchos días",
+        "labelEn": "Many days"
+      },
+      {
+        "id": "negative",
+        "label": "Valor negativo",
+        "labelEn": "Negative value"
+      },
+      {
+        "id": "highlight",
+        "label": "Cambio de unidad",
+        "labelEn": "Unit switch"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Barras y línea",
+        "href": "/examples/combo-chart",
+        "description": "Barras y una línea. El aviso trae un mini gráfico y la unidad vuelve a escalar los datos."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/combo-chart/stress",
+        "description": "320px, vacío, carga, error y un título largo."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/combo-chart?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/combo-chart?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/combo-chart?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/combo-chart?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Un punto",
+        "href": "/examples/combo-chart?scene=single",
+        "description": "Single point"
+      },
+      {
+        "title": "Muchos días",
+        "href": "/examples/combo-chart?scene=dense",
+        "description": "Many days"
+      },
+      {
+        "title": "Valor negativo",
+        "href": "/examples/combo-chart?scene=negative",
+        "description": "Negative value"
+      },
+      {
+        "title": "Cambio de unidad",
+        "href": "/examples/combo-chart?scene=highlight",
+        "description": "Unit switch"
+      }
+    ],
+    "usage": "<ComboChart title=\"Visits and harvest\" points={points} units={units} locale=\"es-MX\" />",
+    "api": [
+      {
+        "name": "points",
+        "type": "ComboPoint[]",
+        "description": "bar, line, and optional parts for the mini chart."
+      },
+      {
+        "name": "units",
+        "type": "ChartUnit[]",
+        "description": "scale, suffix, or an ISO currency. The select swaps them."
+      },
+      {
+        "name": "onUnitChange / onActiveChange",
+        "type": "callbacks",
+        "description": "Unit id and the active point key."
+      },
+      {
+        "name": "locale / labels",
+        "type": "string / partial labels",
+        "description": "comboChartLabelsEs is the Spanish chrome."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string / slots",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Visual inspiration only, with no code copied, from a public promo clip (https://x.com/malikyoloo/status/2115675118357909597) and the charts page it points at (https://www.mebius.design/freebies/charts). The original kit is proprietary and forbids reuse inside a library or design system. This item is an original implementation. Series use the host tokens --chart-1 through --chart-5. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Numbers follow the locale (es maps to es-MX, en to en-US). Motion is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "chart"
+  ],
+  "type": "registry:ui"
+}

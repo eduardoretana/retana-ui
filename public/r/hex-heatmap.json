@@ -1,0 +1,202 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hex-heatmap",
+  "title": "Hex heatmap",
+  "author": "Eduardo Retana",
+  "description": "A honeycomb of cells. The legend highlights one series and dims the rest.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button",
+    "card"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/hex-heatmap.tsx",
+      "content": "\"use client\"\n\nimport { useId, useState } from \"react\"\n\nimport { formatChartNumber, formatChartPercent } from \"@/lib/chart-format\"\nimport { axialToPixel, hexBounds, hexPolygon } from \"@/lib/hex-layout\"\nimport { cn } from \"@/lib/utils\"\nimport {\n  ChartCard,\n  ChartKpi,\n  ChartLegend,\n  ChartTip,\n  chartStatusLabels,\n  chartStatusLabelsEs,\n  dimOpacity,\n  type ChartCardClassNames,\n  type ChartStatus,\n  type ChartStatusLabels,\n} from \"@/components/ui/chart-card\"\nimport { SeriesPatterns, seriesPaint } from \"@/components/ui/chart-marks\"\n\nexport type HexSeries = { id: string; label: string; value: number }\nexport type HexCell = { id: string; q: number; r: number; seriesId: string; weight?: number }\nexport type HexRow = { id: string; label: string; value: number; seriesId?: string }\n\nexport type HexHeatmapLabels = ChartStatusLabels & {\n  legend: string\n  cell: (series: string, value: string) => string\n  share: string\n}\n\nexport const hexHeatmapLabels: HexHeatmapLabels = {\n  ...chartStatusLabels,\n  legend: \"Series\",\n  cell: (series, value) => `${series}: ${value}`,\n  share: \"Share\",\n}\n\nexport const hexHeatmapLabelsEs: HexHeatmapLabels = {\n  ...chartStatusLabelsEs,\n  legend: \"Series\",\n  cell: (series, value) => `${series}: ${value}`,\n  share: \"Parte\",\n}\n\nexport type HexHeatmapProps = {\n  title: string\n  description?: string\n  series: HexSeries[]\n  cells: HexCell[]\n  rows?: HexRow[]\n  locale?: string\n  status?: ChartStatus\n  labels?: Partial<HexHeatmapLabels>\n  activeId?: string | null\n  onActiveChange?: (id: string | null) => void\n  onMenu?: () => void\n  onRetry?: () => void\n  className?: string\n  classNames?: ChartCardClassNames\n}\n\nconst SIZE = 16\n\nexport function HexHeatmap({\n  title,\n  description,\n  series,\n  cells,\n  rows,\n  locale,\n  status = \"ready\",\n  labels,\n  activeId,\n  onActiveChange,\n  onMenu,\n  onRetry,\n  className,\n  classNames,\n}: HexHeatmapProps) {\n  const copy = { ...hexHeatmapLabels, ...labels }\n  const pattern = useId().replace(/:/g, \"\")\n  const [internal, setInternal] = useState<string | null>(null)\n  const [tip, setTip] = useState<{ id: string; x: number; y: number } | null>(null)\n  const active = activeId !== undefined ? activeId : internal\n  const total = series.reduce((sum, item) => sum + Math.max(0, item.value), 0)\n  const tone = new Map(series.map((item, index) => [item.id, index]))\n  const bounds = hexBounds(cells, SIZE, 4)\n  const empty = series.length === 0 || cells.length === 0\n  const view = status !== \"ready\" ? status : empty ? \"empty\" : \"ready\"\n\n  function setActive(id: string | null) {\n    if (activeId === undefined) setInternal(id)\n    onActiveChange?.(id)\n  }\n\n  const summary = series.map((item) => `${item.label} ${formatChartNumber(item.value, locale)} (${formatChartPercent(total ? item.value / total : 0, locale)})`).join(\", \")\n\n  return (\n    <ChartCard\n      title={title}\n      description={description}\n      status={view}\n      labels={copy}\n      onMenu={onMenu}\n      onRetry={onRetry}\n      summary={summary || copy.empty}\n      className={className}\n      classNames={classNames}\n      columns={series.map((item) => ({ id: item.id, label: item.label }))}\n      rows={[{ id: \"value\", label: copy.share, cells: Object.fromEntries(series.map((item) => [item.id, formatChartNumber(item.value, locale)])) }]}\n      live={tip ? copy.cell(series.find((item) => item.id === cells.find((cell) => cell.id === tip.id)?.seriesId)?.label ?? \"\", \"\") : undefined}\n      kpis={\n        <>\n          {series.slice(0, 3).map((item) => (\n            <ChartKpi key={item.id} label={item.label} value={formatChartPercent(total ? Math.max(0, item.value) / total : 0, locale)} hint={formatChartNumber(item.value, locale)} />\n          ))}\n        </>\n      }\n      legend={\n        <ChartLegend\n          label={copy.legend}\n          activeId={active}\n          onActiveChange={setActive}\n          items={series.map((item, index) => ({\n            id: item.id,\n            label: item.label,\n            tone: index,\n            value: formatChartPercent(total ? Math.max(0, item.value) / total : 0, locale),\n          }))}\n        />\n      }\n    >\n      <div className=\"relative mx-auto w-full max-w-sm\">\n        <svg viewBox={`${bounds.minX} ${bounds.minY} ${bounds.width} ${bounds.height}`} className=\"h-auto w-full\" role=\"group\" aria-label={title}>\n          <SeriesPatterns id={pattern} />\n          {cells.map((cell) => {\n            const point = axialToPixel(cell.q, cell.r, SIZE)\n            const index = tone.get(cell.seriesId) ?? 0\n            const seriesItem = series.find((item) => item.id === cell.seriesId)\n            const shown = !active || active === cell.seriesId\n            const weight = cell.weight ?? 1\n            return (\n              <polygon\n                key={cell.id}\n                data-slot=\"hex-cell\"\n                data-series={cell.seriesId}\n                points={hexPolygon(point.x, point.y, SIZE - 1.2)}\n                fill={seriesPaint(pattern, index)}\n                opacity={shown ? 0.4 + Math.min(1, Math.max(0, weight)) * 0.6 : dimOpacity(false)}\n                className=\"origin-center outline-none transition-transform hover:scale-110 focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none motion-reduce:hover:scale-100\"\n                tabIndex={0}\n                role=\"button\"\n                aria-label={copy.cell(seriesItem?.label ?? cell.seriesId, formatChartNumber(seriesItem?.value ?? 0, locale))}\n                aria-pressed={active === cell.seriesId}\n                onMouseEnter={(event) => {\n                  const rect = (event.currentTarget.ownerSVGElement as SVGSVGElement | null)?.getBoundingClientRect()\n                  const box = event.currentTarget.getBoundingClientRect()\n                  setTip({ id: cell.id, x: box.left + box.width / 2 - (rect?.left ?? 0), y: box.top - (rect?.top ?? 0) })\n                }}\n                onMouseLeave={() => setTip(null)}\n                onFocus={(event) => {\n                  const box = event.currentTarget.getBoundingClientRect()\n                  const rect = (event.currentTarget.ownerSVGElement as SVGSVGElement | null)?.getBoundingClientRect()\n                  setTip({ id: cell.id, x: box.left + box.width / 2 - (rect?.left ?? 0), y: box.top - (rect?.top ?? 0) })\n                }}\n                onBlur={() => setTip(null)}\n                onClick={() => setActive(active === cell.seriesId ? null : cell.seriesId)}\n              />\n            )\n          })}\n        </svg>\n        <ChartTip open={tip != null} x={tip?.x ?? 0} y={tip?.y ?? 0}>\n          {tip\n            ? copy.cell(\n                series.find((item) => item.id === cells.find((cell) => cell.id === tip.id)?.seriesId)?.label ?? \"\",\n                formatChartNumber(series.find((item) => item.id === cells.find((cell) => cell.id === tip.id)?.seriesId)?.value ?? 0, locale),\n              )\n            : null}\n        </ChartTip>\n      </div>\n      {rows && rows.length > 0 ? (\n        <ul className=\"mt-3 flex flex-col gap-1.5\">\n          {rows.map((row) => (\n            <li key={row.id} className=\"flex items-center justify-between gap-3 text-sm\">\n              <span className=\"min-w-0 truncate text-muted-foreground\">{row.label}</span>\n              <span className={cn(\"shrink-0 tabular-nums\", active && row.seriesId && active !== row.seriesId && \"opacity-40\")}>{formatChartNumber(row.value, locale)}</span>\n            </li>\n          ))}\n        </ul>\n      ) : null}\n    </ChartCard>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/hex-heatmap.tsx"
+    },
+    {
+      "path": "registry/ui/chart-card.tsx",
+      "content": "\"use client\"\n\nimport { useId, useLayoutEffect, useRef, useState, useSyncExternalStore, type KeyboardEvent, type ReactNode } from \"react\"\nimport { CircleAlert, MoreHorizontal } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Card } from \"@/components/ui/card\"\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\nimport { SeriesSwatch } from \"@/components/ui/chart-marks\"\n\nconst REDUCE_QUERY = \"(prefers-reduced-motion: reduce)\"\n\nfunction subscribeReduced(onStoreChange: () => void) {\n  const media = window.matchMedia(REDUCE_QUERY)\n  media.addEventListener(\"change\", onStoreChange)\n  return () => media.removeEventListener(\"change\", onStoreChange)\n}\n\nexport function usePrefersReducedMotion() {\n  return useSyncExternalStore(subscribeReduced, () => window.matchMedia(REDUCE_QUERY).matches, () => false)\n}\n\nexport function chartTransition(reduced: boolean) {\n  if (reduced) return { duration: 0 }\n  return { duration: motionPresets.duration.considered, ease: [...motionPresets.ease.enter] as [number, number, number, number] }\n}\n\nexport type ChartStatus = \"ready\" | \"loading\" | \"empty\" | \"error\"\n\nexport type ChartStatusLabels = {\n  loading: string\n  empty: string\n  error: string\n  retry: string\n  more: string\n}\n\nexport const chartStatusLabels: ChartStatusLabels = {\n  loading: \"Loading\",\n  empty: \"Nothing to show yet\",\n  error: \"Could not load this chart\",\n  retry: \"Try again\",\n  more: \"More\",\n}\n\nexport const chartStatusLabelsEs: ChartStatusLabels = {\n  loading: \"Cargando\",\n  empty: \"Todavía no hay datos\",\n  error: \"No se pudo cargar el gráfico\",\n  retry: \"Reintentar\",\n  more: \"Más\",\n}\n\nexport type ChartSummaryColumn = { id: string; label: string }\nexport type ChartSummaryRow = { id: string; label: string; cells: Record<string, string> }\n\nexport type ChartCardClassNames = {\n  root?: string\n  header?: string\n  title?: string\n  description?: string\n  kpis?: string\n  controls?: string\n  body?: string\n  legend?: string\n  insight?: string\n  footer?: string\n}\n\nexport type ChartCardProps = {\n  title: string\n  description?: string\n  status?: ChartStatus\n  labels?: Partial<ChartStatusLabels>\n  onRetry?: () => void\n  menuLabel?: string\n  onMenu?: () => void\n  menu?: ReactNode\n  kpis?: ReactNode\n  controls?: ReactNode\n  legend?: ReactNode\n  insight?: ReactNode\n  footer?: ReactNode\n  /** One-sentence description of the data, read with the chart. */\n  summary: string\n  tableCaption?: string\n  columns?: ChartSummaryColumn[]\n  rows?: ChartSummaryRow[]\n  live?: string\n  children?: ReactNode\n  className?: string\n  classNames?: ChartCardClassNames\n}\n\nexport function ChartCard({\n  title,\n  description,\n  status = \"ready\",\n  labels,\n  onRetry,\n  menuLabel,\n  onMenu,\n  menu,\n  kpis,\n  controls,\n  legend,\n  insight,\n  footer,\n  summary,\n  tableCaption,\n  columns,\n  rows,\n  live,\n  children,\n  className,\n  classNames,\n}: ChartCardProps) {\n  const uid = useId().replace(/:/g, \"\")\n  const titleId = `${uid}-title`\n  const summaryId = `${uid}-summary`\n  const copy = { ...chartStatusLabels, ...labels }\n  const root = `[data-chart-card=\"${uid}\"]`\n\n  return (\n    <Card\n      data-slot=\"chart-card\"\n      data-chart-card={uid}\n      data-status={status}\n      aria-labelledby={titleId}\n      aria-describedby={summaryId}\n      className={cn(\"w-full min-w-0 gap-3 rounded-2xl py-4 shadow-sm ring-foreground/10\", classNames?.root, className)}\n    >\n      <style>{`\n        @media (prefers-reduced-motion: reduce) {\n          ${root}, ${root} * {\n            animation: none !important;\n            transition: none !important;\n          }\n        }\n      `}</style>\n      <header className={cn(\"flex items-start gap-3 px-4\", classNames?.header)}>\n        <div className=\"min-w-0 flex-1\">\n          <h2 id={titleId} data-slot=\"chart-card-title\" className={cn(\"truncate text-base font-medium leading-snug\", classNames?.title)}>\n            {title}\n          </h2>\n          {description ? (\n            <p className={cn(\"mt-0.5 text-xs text-muted-foreground\", classNames?.description)}>{description}</p>\n          ) : null}\n        </div>\n        {menu ??\n          (onMenu ? (\n            <Button type=\"button\" variant=\"ghost\" size=\"icon-xs\" aria-label={menuLabel ?? copy.more} onClick={onMenu}>\n              <MoreHorizontal />\n            </Button>\n          ) : null)}\n      </header>\n      {kpis ? <div className={cn(\"grid grid-cols-2 gap-3 px-4 sm:grid-cols-3\", classNames?.kpis)}>{kpis}</div> : null}\n      {controls ? <div className={cn(\"px-4\", classNames?.controls)}>{controls}</div> : null}\n      <div className={cn(\"min-w-0 px-4\", classNames?.body)}>\n        {status === \"ready\" ? (\n          children\n        ) : (\n          <ChartState status={status} label={copy[status]} onRetry={status === \"error\" ? onRetry : undefined} retryLabel={copy.retry} />\n        )}\n      </div>\n      {status === \"ready\" && legend ? <div className={cn(\"px-4\", classNames?.legend)}>{legend}</div> : null}\n      {status === \"ready\" && insight ? <div className={cn(\"px-4\", classNames?.insight)}>{insight}</div> : null}\n      {status === \"ready\" && footer ? <div className={cn(\"flex flex-wrap items-center gap-2 px-4\", classNames?.footer)}>{footer}</div> : null}\n      <p id={summaryId} className=\"sr-only\">\n        {summary}\n      </p>\n      {live ? (\n        <p className=\"sr-only\" aria-live=\"polite\" aria-atomic=\"true\" data-slot=\"chart-live\">\n          {live}\n        </p>\n      ) : null}\n      {columns && rows && rows.length > 0 ? (\n        <table className=\"sr-only\">\n          {tableCaption ? <caption>{tableCaption}</caption> : null}\n          <thead>\n            <tr>\n              <th scope=\"col\">{tableCaption ?? title}</th>\n              {columns.map((column) => (\n                <th key={column.id} scope=\"col\">\n                  {column.label}\n                </th>\n              ))}\n            </tr>\n          </thead>\n          <tbody>\n            {rows.map((row) => (\n              <tr key={row.id}>\n                <th scope=\"row\">{row.label}</th>\n                {columns.map((column) => (\n                  <td key={column.id}>{row.cells[column.id] ?? \"\"}</td>\n                ))}\n              </tr>\n            ))}\n          </tbody>\n        </table>\n      ) : null}\n    </Card>\n  )\n}\n\nexport function ChartState({\n  status,\n  label,\n  onRetry,\n  retryLabel,\n}: {\n  status: Exclude<ChartStatus, \"ready\">\n  label: string\n  onRetry?: () => void\n  retryLabel: string\n}) {\n  return (\n    <div\n      data-slot=\"chart-state\"\n      data-status={status}\n      className=\"flex min-h-36 flex-col items-center justify-center gap-3 rounded-xl border border-dashed px-4 py-6 text-center\"\n      role={status === \"error\" ? \"alert\" : \"status\"}\n    >\n      {status === \"loading\" ? (\n        <div className=\"flex h-16 items-end gap-1.5\" aria-hidden>\n          {[40, 70, 52, 88, 60].map((height) => (\n            <span key={height} className=\"w-3 rounded-sm bg-muted motion-safe:animate-pulse\" style={{ height }} />\n          ))}\n        </div>\n      ) : null}\n      {status === \"error\" ? <CircleAlert className=\"size-5 text-destructive\" aria-hidden /> : null}\n      <p className=\"max-w-sm text-sm text-muted-foreground\">{label}</p>\n      {onRetry ? (\n        <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={onRetry}>\n          {retryLabel}\n        </Button>\n      ) : null}\n    </div>\n  )\n}\n\nexport function ChartKpi({ label, value, hint }: { label: string; value: string; hint?: string }) {\n  return (\n    <div data-slot=\"chart-kpi\" className=\"min-w-0\">\n      <p className=\"truncate text-xs text-muted-foreground\">{label}</p>\n      <p className=\"truncate text-xl font-semibold tracking-tight tabular-nums\">{value}</p>\n      {hint ? <p className=\"truncate text-xs text-muted-foreground\">{hint}</p> : null}\n    </div>\n  )\n}\n\nexport function ChartInsight({\n  title,\n  body,\n  action,\n}: {\n  title: string\n  body: string\n  action?: ReactNode\n}) {\n  return (\n    <div data-slot=\"chart-insight\" className=\"flex items-start gap-3 rounded-xl bg-muted/70 p-3\">\n      <div className=\"min-w-0 flex-1\">\n        <p className=\"text-sm font-medium\">{title}</p>\n        <p className=\"text-sm text-muted-foreground\">{body}</p>\n      </div>\n      {action}\n    </div>\n  )\n}\n\nexport type ChartLegendItem = {\n  id: string\n  label: string\n  value?: string\n  tone: number\n}\n\nexport function ChartLegend({\n  label,\n  items,\n  activeId,\n  onActiveChange,\n}: {\n  label: string\n  items: ChartLegendItem[]\n  activeId?: string | null\n  onActiveChange?: (id: string | null) => void\n}) {\n  const [focus, setFocus] = useState(0)\n  const refs = useRef<Array<HTMLButtonElement | null>>([])\n\n  function select(index: number) {\n    const item = items[index]\n    if (!item) return\n    setFocus(index)\n    refs.current[index]?.focus()\n    onActiveChange?.(activeId === item.id ? null : item.id)\n  }\n\n  function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {\n    if (!items.length) return\n    const keys = [\"ArrowRight\", \"ArrowLeft\", \"ArrowUp\", \"ArrowDown\", \"Home\", \"End\"]\n    if (!keys.includes(event.key)) return\n    event.preventDefault()\n    const next =\n      event.key === \"Home\" ? 0 : event.key === \"End\" ? items.length - 1 : event.key === \"ArrowRight\" || event.key === \"ArrowDown\" ? (focus + 1) % items.length : (focus - 1 + items.length) % items.length\n    select(next)\n  }\n\n  return (\n    <div role=\"toolbar\" aria-label={label} data-slot=\"chart-legend\" className=\"flex flex-wrap gap-2\" onKeyDown={onKeyDown}>\n      {items.map((item, index) => {\n        const pressed = activeId === item.id\n        return (\n          <button\n            key={item.id}\n            ref={(node) => {\n              refs.current[index] = node\n            }}\n            type=\"button\"\n            data-slot=\"chart-legend-item\"\n            aria-pressed={pressed}\n            tabIndex={index === focus ? 0 : -1}\n            className={cn(\n              \"inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-full px-2 py-1 text-xs outline-none focus-visible:ring-2 focus-visible:ring-ring\",\n              pressed ? \"bg-muted ring-1 ring-foreground/20\" : \"hover:bg-muted/70\",\n            )}\n            onClick={() => select(index)}\n          >\n            <SeriesSwatch index={item.tone} />\n            <span className=\"truncate\">{item.label}</span>\n            {item.value ? <span className=\"font-medium tabular-nums text-foreground\">{item.value}</span> : null}\n          </button>\n        )\n      })}\n    </div>\n  )\n}\n\nexport function ChartTip({\n  open,\n  x,\n  y,\n  children,\n}: {\n  open: boolean\n  x: number | string\n  y: number | string\n  children: ReactNode\n}) {\n  if (!open) return null\n  return (\n    <div\n      data-slot=\"chart-tip\"\n      role=\"tooltip\"\n      className=\"pointer-events-none absolute z-10 max-w-[14rem] rounded-lg bg-foreground px-2.5 py-1.5 text-xs text-background shadow-md\"\n      style={{ left: x, top: y, transform: \"translate(-50%, -110%)\" }}\n    >\n      {children}\n    </div>\n  )\n}\n\n/** Measured plot width. `node` is the element ref; read `node.current` only in effects and events. */\nexport function usePlotBox(fallbackWidth = 320, fallbackHeight = 180) {\n  const node = useRef<HTMLDivElement>(null)\n  const [width, setWidth] = useState(fallbackWidth)\n  useLayoutEffect(() => {\n    const element = node.current\n    if (!element) return\n    const read = () => {\n      const next = element.clientWidth\n      if (next > 0) setWidth(next)\n    }\n    read()\n    const observer = new ResizeObserver(read)\n    observer.observe(element)\n    return () => observer.disconnect()\n  }, [fallbackHeight])\n  return { node, width }\n}\n\nexport function dimOpacity(active: boolean) {\n  return active ? 1 : 0.18\n}\n",
+      "type": "registry:component",
+      "target": "@ui/chart-card.tsx"
+    },
+    {
+      "path": "registry/ui/chart-marks.tsx",
+      "content": "import { seriesColor, seriesMark, seriesPatternId } from \"@/lib/chart-series\"\nimport { cn } from \"@/lib/utils\"\n\nconst MARKS = [0, 1, 2, 3, 4]\n\n/** SVG patterns. Each series pairs a chart token with a distinct mark. */\nexport function SeriesPatterns({ id }: { id: string }) {\n  return (\n    <defs>\n      {MARKS.map((mark) => (\n        <pattern key={mark} id={`${id}-mark-${mark}`} width=\"6\" height=\"6\" patternUnits=\"userSpaceOnUse\">\n          <rect width=\"6\" height=\"6\" fill={`var(--chart-${mark + 1})`} />\n          {mark === 1 ? <path d=\"M0 6 L6 0\" stroke=\"var(--foreground)\" strokeOpacity=\"0.55\" /> : null}\n          {mark === 2 ? <circle cx=\"2\" cy=\"2\" r=\"1\" fill=\"var(--foreground)\" fillOpacity=\"0.55\" /> : null}\n          {mark === 3 ? <path d=\"M0 3 H6\" stroke=\"var(--foreground)\" strokeOpacity=\"0.5\" /> : null}\n          {mark === 4 ? <path d=\"M0 6 L6 0 M0 0 L6 6\" stroke=\"var(--foreground)\" strokeOpacity=\"0.45\" /> : null}\n        </pattern>\n      ))}\n    </defs>\n  )\n}\n\nexport function seriesPaint(prefix: string, index: number) {\n  return `url(#${seriesPatternId(prefix, index)})`\n}\n\nexport function SeriesSwatch({ index, className }: { index: number; className?: string }) {\n  const mark = seriesMark(index)\n  const image =\n    mark === 1\n      ? \"repeating-linear-gradient(45deg, transparent, transparent 2px, var(--foreground) 2px, var(--foreground) 3px)\"\n      : mark === 2\n        ? \"radial-gradient(circle at 30% 30%, var(--foreground) 0.8px, transparent 1px)\"\n        : mark === 3\n          ? \"repeating-linear-gradient(0deg, transparent, transparent 2px, var(--foreground) 2px, var(--foreground) 3px)\"\n          : mark === 4\n            ? \"repeating-linear-gradient(45deg, transparent, transparent 2px, var(--foreground) 2px, var(--foreground) 3px), repeating-linear-gradient(-45deg, transparent, transparent 2px, var(--foreground) 2px, var(--foreground) 3px)\"\n            : undefined\n  return (\n    <span\n      aria-hidden\n      data-slot=\"chart-swatch\"\n      data-mark={mark}\n      className={cn(\"inline-block size-2.5 shrink-0 rounded-[3px] ring-1 ring-foreground/15\", className)}\n      style={{ backgroundColor: seriesColor(index), backgroundImage: image }}\n    />\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/chart-marks.tsx"
+    },
+    {
+      "path": "registry/lib/chart-format.ts",
+      "content": "export type ChartLocale = string\n\nconst numberFormat = new Map<string, Intl.NumberFormat>()\nconst percentFormat = new Map<string, Intl.NumberFormat>()\nconst currencyFormat = new Map<string, Intl.NumberFormat>()\n\nfunction cached(map: Map<string, Intl.NumberFormat>, key: string, create: () => Intl.NumberFormat) {\n  let format = map.get(key)\n  if (!format) {\n    format = create()\n    map.set(key, format)\n  }\n  return format\n}\n\n/** `es` and `en` map to es-MX and en-US. Any other BCP 47 tag is used as-is. */\nexport function resolveChartLocale(locale: ChartLocale | undefined): string {\n  if (!locale || locale === \"en\") return \"en-US\"\n  if (locale === \"es\") return \"es-MX\"\n  return locale\n}\n\nexport function formatChartNumber(value: number, locale: ChartLocale | undefined, digits = 1): string {\n  const safe = Number.isFinite(value) ? value : 0\n  const tag = resolveChartLocale(locale)\n  const fraction = Number.isInteger(safe) ? 0 : digits\n  const format = cached(numberFormat, `${tag}:${fraction}`, () =>\n    new Intl.NumberFormat(tag, { maximumFractionDigits: fraction, minimumFractionDigits: 0 }),\n  )\n  return format.format(safe)\n}\n\n/** `share` is a ratio, 0.1 → 10%. */\nexport function formatChartPercent(share: number, locale: ChartLocale | undefined, digits = 0): string {\n  const safe = Number.isFinite(share) ? share : 0\n  const tag = resolveChartLocale(locale)\n  const format = cached(percentFormat, `${tag}:${digits}`, () =>\n    new Intl.NumberFormat(tag, { style: \"percent\", maximumFractionDigits: digits, minimumFractionDigits: 0 }),\n  )\n  return format.format(safe)\n}\n\nexport function formatChartCurrency(value: number, locale: ChartLocale | undefined, currency: string): string {\n  const safe = Number.isFinite(value) ? value : 0\n  const tag = resolveChartLocale(locale)\n  const format = cached(currencyFormat, `${tag}:${currency}`, () =>\n    new Intl.NumberFormat(tag, { style: \"currency\", currency, maximumFractionDigits: 0 }),\n  )\n  return format.format(safe)\n}\n\nexport type ChartUnit = {\n  id: string\n  label: string\n  /** Multiplies the raw measure. Defaults to 1. */\n  scale?: number\n  /** When set, values format as money in this ISO currency. */\n  currency?: string\n  /** Appended after a plain number, such as \"kg\". */\n  suffix?: string\n}\n\nexport function formatChartUnit(value: number, unit: ChartUnit | undefined, locale: ChartLocale | undefined): string {\n  const scaled = value * (unit?.scale ?? 1)\n  if (unit?.currency) return formatChartCurrency(scaled, locale, unit.currency)\n  const text = formatChartNumber(scaled, locale)\n  return unit?.suffix ? `${text} ${unit.suffix}` : text\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/chart-format.ts"
+    },
+    {
+      "path": "registry/lib/chart-series.ts",
+      "content": "import { chartVar, type ChartTone } from \"@/lib/chart-tone\"\n\n/** Host series palette. Charts cycle `--chart-1` … `--chart-5`. */\nexport const SERIES_COUNT = 5\n\nexport function seriesTone(index: number): ChartTone {\n  const tone = (Math.abs(index) % SERIES_COUNT) + 1\n  return tone as ChartTone\n}\n\nexport function seriesColor(index: number): string {\n  return chartVar(seriesTone(index))\n}\n\n/**\n * Non-color cue so a series is not identified by hue alone.\n * 0 solid, 1 diagonal, 2 dots, 3 horizontal, 4 cross.\n */\nexport function seriesMark(index: number): number {\n  return Math.abs(index) % SERIES_COUNT\n}\n\nexport function seriesPatternId(prefix: string, index: number): string {\n  return `${prefix}-mark-${seriesMark(index)}`\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/chart-series.ts"
+    },
+    {
+      "path": "registry/lib/chart-tone.ts",
+      "content": "/** shadcn chart tokens. Hosts define --chart-1 … --chart-5. */\nexport const CHART_TONES = [1, 2, 3, 4, 5] as const\n\nexport type ChartTone = (typeof CHART_TONES)[number]\n\nexport function chartVar(tone: ChartTone = 1): string {\n  return `var(--chart-${tone})`\n}\n\nexport function chartBgClass(tone: ChartTone = 1): string {\n  switch (tone) {\n    case 1:\n      return \"bg-chart-1\"\n    case 2:\n      return \"bg-chart-2\"\n    case 3:\n      return \"bg-chart-3\"\n    case 4:\n      return \"bg-chart-4\"\n    case 5:\n      return \"bg-chart-5\"\n  }\n}\n\nexport function chartFillClass(tone: ChartTone = 1): string {\n  switch (tone) {\n    case 1:\n      return \"fill-chart-1\"\n    case 2:\n      return \"fill-chart-2\"\n    case 3:\n      return \"fill-chart-3\"\n    case 4:\n      return \"fill-chart-4\"\n    case 5:\n      return \"fill-chart-5\"\n  }\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/chart-tone.ts"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    // Exit decelerates, the same curve as CSS ease-out.\n    exit: [0, 0, 0.58, 1] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    },
+    {
+      "path": "registry/lib/hex-layout.ts",
+      "content": "export type HexCellCoord = { q: number; r: number }\n\nexport function hexPolygon(cx: number, cy: number, size: number) {\n  const points: string[] = []\n  for (let corner = 0; corner < 6; corner += 1) {\n    const angle = (Math.PI / 180) * (60 * corner - 30)\n    points.push(`${(cx + size * Math.cos(angle)).toFixed(2)},${(cy + size * Math.sin(angle)).toFixed(2)}`)\n  }\n  return points.join(\" \")\n}\n\n/** Pointy-top axial layout. */\nexport function axialToPixel(q: number, r: number, size: number) {\n  return {\n    x: size * Math.sqrt(3) * (q + r / 2),\n    y: size * 1.5 * r,\n  }\n}\n\nexport function hexBounds(cells: HexCellCoord[], size: number, pad = 2) {\n  if (!cells.length) return { minX: 0, minY: 0, width: size * 2, height: size * 2 }\n  const pixels = cells.map((cell) => axialToPixel(cell.q, cell.r, size))\n  const minX = Math.min(...pixels.map((point) => point.x)) - size - pad\n  const maxX = Math.max(...pixels.map((point) => point.x)) + size + pad\n  const minY = Math.min(...pixels.map((point) => point.y)) - size - pad\n  const maxY = Math.max(...pixels.map((point) => point.y)) + size + pad\n  return { minX, minY, width: Math.max(1, maxX - minX), height: Math.max(1, maxY - minY) }\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/hex-layout.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Mapa hexagonal",
+    "descriptionEs": "Un panal. La leyenda resalta una serie y atenúa el resto.",
+    "preview": "app/examples/hex-heatmap/preview.tsx",
+    "previewHref": "/examples/hex-heatmap",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "single",
+        "label": "Serie única",
+        "labelEn": "Single series"
+      },
+      {
+        "id": "dense",
+        "label": "Muchas celdas",
+        "labelEn": "Many cells"
+      },
+      {
+        "id": "negative",
+        "label": "Valor negativo",
+        "labelEn": "Negative value"
+      },
+      {
+        "id": "highlight",
+        "label": "Serie activa",
+        "labelEn": "Active series"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Mapa hexagonal",
+        "href": "/examples/hex-heatmap",
+        "description": "Un panal. La leyenda resalta una serie y atenúa el resto."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/hex-heatmap/stress",
+        "description": "320px, vacío, carga, error y un título largo."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/hex-heatmap?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/hex-heatmap?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/hex-heatmap?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/hex-heatmap?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Serie única",
+        "href": "/examples/hex-heatmap?scene=single",
+        "description": "Single series"
+      },
+      {
+        "title": "Muchas celdas",
+        "href": "/examples/hex-heatmap?scene=dense",
+        "description": "Many cells"
+      },
+      {
+        "title": "Valor negativo",
+        "href": "/examples/hex-heatmap?scene=negative",
+        "description": "Negative value"
+      },
+      {
+        "title": "Serie activa",
+        "href": "/examples/hex-heatmap?scene=highlight",
+        "description": "Active series"
+      }
+    ],
+    "usage": "<HexHeatmap title=\"Sun on the beds\" series={series} cells={cells} locale=\"es-MX\" />",
+    "api": [
+      {
+        "name": "series",
+        "type": "HexSeries[]",
+        "description": "Series shown in the legend and the summary."
+      },
+      {
+        "name": "cells",
+        "type": "HexCell[]",
+        "description": "Axial cells. weight from 0 to 1 sets the fill strength."
+      },
+      {
+        "name": "activeId / onActiveChange",
+        "type": "string | null",
+        "description": "Highlighted series. Omit activeId to let the chart own it."
+      },
+      {
+        "name": "locale / labels",
+        "type": "string / partial labels",
+        "description": "es and en map to es-MX and en-US. hexHeatmapLabelsEs is the Spanish chrome."
+      },
+      {
+        "name": "status",
+        "type": "\"ready\" | \"loading\" | \"empty\" | \"error\"",
+        "description": "Empty data also shows the empty state."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string / slots",
+        "description": "Root class and slot classes."
+      }
+    ]
+  },
+  "docs": "Visual inspiration only, with no code copied, from a public promo clip (https://x.com/malikyoloo/status/2115675118357909597) and the charts page it points at (https://www.mebius.design/freebies/charts). The original kit is proprietary and forbids reuse inside a library or design system. This item is an original implementation. Series use the host tokens --chart-1 through --chart-5. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Numbers follow the locale (es maps to es-MX, en to en-US). Motion is skipped when the reader prefers reduced motion.",
+  "categories": [
+    "chart"
+  ],
+  "type": "registry:ui"
+}

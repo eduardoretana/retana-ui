@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`422` items are in `registry.json` on this branch: `333` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`434` items are in `registry.json` on this branch: `345` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -615,6 +615,18 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`gauge-kit`](registry/ui/gauge-kit/animated.tsx) · ui — Composable SVG gauge primitives: track, arc, stack, zones, ticks, marks, labels, needle, hub, dot, and value, with spring or tween motion, nested dials, and a keyboard slider. Install: `npx shadcn@latest add @retana/gauge-kit`.
 - [`gauge-scenes`](registry/blocks/gauge-scenes/car-dashboard.tsx) · block — Seven dashboard scenes built from the composable gauge: a car cluster, aircraft cockpit, health day, server monitor, smart home, clocks, and a coastal weather board. Install: `npx shadcn@latest add @retana/gauge-scenes`.
 - [`gauge-studio`](registry/blocks/gauge-studio/code-drawer.tsx) · block — Live studio for the composable gauge: template grid, undo and redo, copyable code, nested gauges, play modes, and the control accordion. Install: `npx shadcn@latest add @retana/gauge-studio`.
+- [`hex-heatmap`](registry/ui/hex-heatmap.tsx) · ui — A honeycomb of cells. The legend highlights one series and dims the rest. Install: `npx shadcn@latest add @retana/hex-heatmap`.
+- [`flow-sankey`](registry/ui/flow-sankey.tsx) · ui — A column flow. Pointing at a node keeps its route and dims the rest. Install: `npx shadcn@latest add @retana/flow-sankey`.
+- [`iso-bars`](registry/ui/iso-bars.tsx) · ui — Extruded bars. Changing the period animates the height. Install: `npx shadcn@latest add @retana/iso-bars`.
+- [`segment-gauge`](registry/ui/segment-gauge.tsx) · ui — A segmented bar. The tooltip follows the pointer across the track. Install: `npx shadcn@latest add @retana/segment-gauge`.
+- [`range-plan`](registry/ui/range-plan.tsx) · ui — A slider that updates the fill, the percent, and the readout as it moves. Install: `npx shadcn@latest add @retana/range-plan`.
+- [`stacked-columns`](registry/ui/stacked-columns.tsx) · ui — Tabs change the range. Hovering a column syncs the KPIs. Install: `npx shadcn@latest add @retana/stacked-columns`.
+- [`dot-meter`](registry/ui/dot-meter.tsx) · ui — Discrete cells. The tooltip shows the share and the running total. Install: `npx shadcn@latest add @retana/dot-meter`.
+- [`combo-chart`](registry/ui/combo-chart.tsx) · ui — Bars plus a line. The tooltip carries a mini chart, and the unit switch rescales the data. Install: `npx shadcn@latest add @retana/combo-chart`.
+- [`coupled-lines`](registry/ui/coupled-lines.tsx) · ui — Several lines. A dot sits on each line at the active category. Install: `npx shadcn@latest add @retana/coupled-lines`.
+- [`range-lanes`](registry/ui/range-lanes.tsx) · ui — Floating ranges on one scale. The tooltip reads the start and the end. Install: `npx shadcn@latest add @retana/range-lanes`.
+- [`polar-area`](registry/ui/polar-area.tsx) · ui — A rose chart. The legend swaps the series and the center value. Install: `npx shadcn@latest add @retana/polar-area`.
+- [`scrub-area`](registry/ui/scrub-area.tsx) · ui — A gradient area that draws in from the left, with a keyboard scrubber. Install: `npx shadcn@latest add @retana/scrub-area`.
 
 ### Collaboration
 

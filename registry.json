@@ -32050,6 +32050,1782 @@
           }
         ]
       }
+    },
+    {
+      "name": "hex-heatmap",
+      "type": "registry:ui",
+      "title": "Hex heatmap",
+      "description": "A honeycomb of cells. The legend highlights one series and dims the rest.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card"
+      ],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Mapa hexagonal",
+        "descriptionEs": "Un panal. La leyenda resalta una serie y atenúa el resto.",
+        "preview": "app/examples/hex-heatmap/preview.tsx",
+        "previewHref": "/examples/hex-heatmap",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "single",
+            "label": "Serie única",
+            "labelEn": "Single series"
+          },
+          {
+            "id": "dense",
+            "label": "Muchas celdas",
+            "labelEn": "Many cells"
+          },
+          {
+            "id": "negative",
+            "label": "Valor negativo",
+            "labelEn": "Negative value"
+          },
+          {
+            "id": "highlight",
+            "label": "Serie activa",
+            "labelEn": "Active series"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Mapa hexagonal",
+            "href": "/examples/hex-heatmap",
+            "description": "Un panal. La leyenda resalta una serie y atenúa el resto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/hex-heatmap/stress",
+            "description": "320px, vacío, carga, error y un título largo."
+          }
+        ],
+        "usage": "<HexHeatmap title=\"Sun on the beds\" series={series} cells={cells} locale=\"es-MX\" />",
+        "api": [
+          {
+            "name": "series",
+            "type": "HexSeries[]",
+            "description": "Series shown in the legend and the summary."
+          },
+          {
+            "name": "cells",
+            "type": "HexCell[]",
+            "description": "Axial cells. weight from 0 to 1 sets the fill strength."
+          },
+          {
+            "name": "activeId / onActiveChange",
+            "type": "string | null",
+            "description": "Highlighted series. Omit activeId to let the chart own it."
+          },
+          {
+            "name": "locale / labels",
+            "type": "string / partial labels",
+            "description": "es and en map to es-MX and en-US. hexHeatmapLabelsEs is the Spanish chrome."
+          },
+          {
+            "name": "status",
+            "type": "\"ready\" | \"loading\" | \"empty\" | \"error\"",
+            "description": "Empty data also shows the empty state."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string / slots",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Visual inspiration only, with no code copied, from a public promo clip (https://x.com/malikyoloo/status/2115675118357909597) and the charts page it points at (https://www.mebius.design/freebies/charts). The original kit is proprietary and forbids reuse inside a library or design system. This item is an original implementation. Series use the host tokens --chart-1 through --chart-5. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Numbers follow the locale (es maps to es-MX, en to en-US). Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/hex-heatmap.tsx",
+          "type": "registry:component",
+          "target": "@ui/hex-heatmap.tsx"
+        },
+        {
+          "path": "registry/ui/chart-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-card.tsx"
+        },
+        {
+          "path": "registry/ui/chart-marks.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-marks.tsx"
+        },
+        {
+          "path": "registry/lib/chart-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-format.ts"
+        },
+        {
+          "path": "registry/lib/chart-series.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-series.ts"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/hex-layout.ts",
+          "type": "registry:lib",
+          "target": "@lib/hex-layout.ts"
+        }
+      ]
+    },
+    {
+      "name": "flow-sankey",
+      "type": "registry:ui",
+      "title": "Flow diagram",
+      "description": "A column flow. Pointing at a node keeps its route and dims the rest.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card"
+      ],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Flujo",
+        "descriptionEs": "Un flujo por columnas. Al señalar un nodo se queda su ruta y el resto se atenúa.",
+        "preview": "app/examples/flow-sankey/preview.tsx",
+        "previewHref": "/examples/flow-sankey",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "single",
+            "label": "Un tramo",
+            "labelEn": "Single link"
+          },
+          {
+            "id": "dense",
+            "label": "Muchos nodos",
+            "labelEn": "Many nodes"
+          },
+          {
+            "id": "negative",
+            "label": "Enlace negativo",
+            "labelEn": "Negative link"
+          },
+          {
+            "id": "highlight",
+            "label": "Ruta activa",
+            "labelEn": "Active route"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Flujo",
+            "href": "/examples/flow-sankey",
+            "description": "Un flujo por columnas. Al señalar un nodo se queda su ruta y el resto se atenúa."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/flow-sankey/stress",
+            "description": "320px, vacío, carga, error y un título largo."
+          }
+        ],
+        "usage": "<FlowSankey title=\"Garden water\" nodes={nodes} links={links} />",
+        "api": [
+          {
+            "name": "nodes",
+            "type": "FlowNode[]",
+            "description": "Each node names its column."
+          },
+          {
+            "name": "links",
+            "type": "FlowLink[]",
+            "description": "Value is the thickness. Negative values are omitted from the drawing."
+          },
+          {
+            "name": "activeId / onActiveChange",
+            "type": "string | null",
+            "description": "Node whose directed route stays lit."
+          },
+          {
+            "name": "locale / labels",
+            "type": "string / partial labels",
+            "description": "flowSankeyLabelsEs is the Spanish chrome."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string / slots",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Visual inspiration only, with no code copied, from a public promo clip (https://x.com/malikyoloo/status/2115675118357909597) and the charts page it points at (https://www.mebius.design/freebies/charts). The original kit is proprietary and forbids reuse inside a library or design system. This item is an original implementation. Series use the host tokens --chart-1 through --chart-5. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Numbers follow the locale (es maps to es-MX, en to en-US). Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/flow-sankey.tsx",
+          "type": "registry:component",
+          "target": "@ui/flow-sankey.tsx"
+        },
+        {
+          "path": "registry/ui/chart-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-card.tsx"
+        },
+        {
+          "path": "registry/ui/chart-marks.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-marks.tsx"
+        },
+        {
+          "path": "registry/lib/chart-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-format.ts"
+        },
+        {
+          "path": "registry/lib/chart-series.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-series.ts"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/flow-layout.ts",
+          "type": "registry:lib",
+          "target": "@lib/flow-layout.ts"
+        }
+      ]
+    },
+    {
+      "name": "iso-bars",
+      "type": "registry:ui",
+      "title": "Isometric bars",
+      "description": "Extruded bars. Changing the period animates the height.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "select"
+      ],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Barras isométricas",
+        "descriptionEs": "Barras extruidas. Al cambiar el periodo se anima la altura.",
+        "preview": "app/examples/iso-bars/preview.tsx",
+        "previewHref": "/examples/iso-bars",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "single",
+            "label": "Una barra",
+            "labelEn": "Single bar"
+          },
+          {
+            "id": "dense",
+            "label": "Doce meses",
+            "labelEn": "Twelve months"
+          },
+          {
+            "id": "negative",
+            "label": "Valor negativo",
+            "labelEn": "Negative value"
+          },
+          {
+            "id": "highlight",
+            "label": "Mes activo",
+            "labelEn": "Active month"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Barras isométricas",
+            "href": "/examples/iso-bars",
+            "description": "Barras extruidas. Al cambiar el periodo se anima la altura."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/iso-bars/stress",
+            "description": "320px, vacío, carga, error y un título largo."
+          }
+        ],
+        "usage": "<IsoBars title=\"Harvest\" periods={periods} emphasisKey=\"apr\" unit={{ suffix: \"kg\" }} />",
+        "api": [
+          {
+            "name": "periods",
+            "type": "IsoPeriod[]",
+            "description": "Each period is a list of bars. The select swaps them."
+          },
+          {
+            "name": "emphasisKey",
+            "type": "string | null",
+            "description": "Other bars draw as a dashed outline."
+          },
+          {
+            "name": "unit",
+            "type": "{ suffix?: string; scale?: number }",
+            "description": "Scales and decorates the readout."
+          },
+          {
+            "name": "locale / labels",
+            "type": "string / partial labels",
+            "description": "isoBarsLabelsEs is the Spanish chrome."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string / slots",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Visual inspiration only, with no code copied, from a public promo clip (https://x.com/malikyoloo/status/2115675118357909597) and the charts page it points at (https://www.mebius.design/freebies/charts). The original kit is proprietary and forbids reuse inside a library or design system. This item is an original implementation. Series use the host tokens --chart-1 through --chart-5. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Numbers follow the locale (es maps to es-MX, en to en-US). Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/iso-bars.tsx",
+          "type": "registry:component",
+          "target": "@ui/iso-bars.tsx"
+        },
+        {
+          "path": "registry/ui/chart-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-card.tsx"
+        },
+        {
+          "path": "registry/ui/chart-marks.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-marks.tsx"
+        },
+        {
+          "path": "registry/lib/chart-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-format.ts"
+        },
+        {
+          "path": "registry/lib/chart-series.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-series.ts"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/chart-geom.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-geom.ts"
+        }
+      ]
+    },
+    {
+      "name": "segment-gauge",
+      "type": "registry:ui",
+      "title": "Segmented usage bar",
+      "description": "A segmented bar. The tooltip follows the pointer across the track.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card"
+      ],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Barra de uso",
+        "descriptionEs": "Una barra en tramos. El aviso sigue al puntero por la pista.",
+        "preview": "app/examples/segment-gauge/preview.tsx",
+        "previewHref": "/examples/segment-gauge",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "single",
+            "label": "Un tramo",
+            "labelEn": "Single segment"
+          },
+          {
+            "id": "dense",
+            "label": "Diez tramos",
+            "labelEn": "Ten segments"
+          },
+          {
+            "id": "negative",
+            "label": "Valor negativo",
+            "labelEn": "Negative value"
+          },
+          {
+            "id": "highlight",
+            "label": "Tramo activo",
+            "labelEn": "Active segment"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Barra de uso",
+            "href": "/examples/segment-gauge",
+            "description": "Una barra en tramos. El aviso sigue al puntero por la pista."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/segment-gauge/stress",
+            "description": "320px, vacío, carga, error y un título largo."
+          }
+        ],
+        "usage": "<SegmentGauge title=\"Occupancy\" segments={segments} limit={100} locale=\"es-MX\" />",
+        "api": [
+          {
+            "name": "segments",
+            "type": "GaugeSegment[]",
+            "description": "Parts of the filled bar. Negatives count as zero."
+          },
+          {
+            "name": "limit",
+            "type": "number",
+            "description": "The open remainder is hatched."
+          },
+          {
+            "name": "activeId / onActiveChange",
+            "type": "string | null",
+            "description": "Segment under the pointer or the legend."
+          },
+          {
+            "name": "locale / labels",
+            "type": "string / partial labels",
+            "description": "segmentGaugeLabelsEs is the Spanish chrome."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string / slots",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Visual inspiration only, with no code copied, from a public promo clip (https://x.com/malikyoloo/status/2115675118357909597) and the charts page it points at (https://www.mebius.design/freebies/charts). The original kit is proprietary and forbids reuse inside a library or design system. This item is an original implementation. Series use the host tokens --chart-1 through --chart-5. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Numbers follow the locale (es maps to es-MX, en to en-US). Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/segment-gauge.tsx",
+          "type": "registry:component",
+          "target": "@ui/segment-gauge.tsx"
+        },
+        {
+          "path": "registry/ui/chart-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-card.tsx"
+        },
+        {
+          "path": "registry/ui/chart-marks.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-marks.tsx"
+        },
+        {
+          "path": "registry/lib/chart-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-format.ts"
+        },
+        {
+          "path": "registry/lib/chart-series.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-series.ts"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/chart-geom.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-geom.ts"
+        }
+      ]
+    },
+    {
+      "name": "range-plan",
+      "type": "registry:ui",
+      "title": "Range plan",
+      "description": "A slider that updates the fill, the percent, and the readout as it moves.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card"
+      ],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Plan con control",
+        "descriptionEs": "Un control que actualiza el relleno, el porcentaje y la lectura al moverse.",
+        "preview": "app/examples/range-plan/preview.tsx",
+        "previewHref": "/examples/range-plan",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "single",
+            "label": "Un paso",
+            "labelEn": "Single step"
+          },
+          {
+            "id": "dense",
+            "label": "Rango amplio",
+            "labelEn": "Wide range"
+          },
+          {
+            "id": "negative",
+            "label": "Bajo cero",
+            "labelEn": "Below zero"
+          },
+          {
+            "id": "highlight",
+            "label": "Valor alto",
+            "labelEn": "High value"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Plan con control",
+            "href": "/examples/range-plan",
+            "description": "Un control que actualiza el relleno, el porcentaje y la lectura al moverse."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/range-plan/stress",
+            "description": "320px, vacío, carga, error y un título largo."
+          }
+        ],
+        "usage": "<RangePlan title=\"Watering hours\" min={0} max={40} defaultValue={12} suffix=\"h\" onValueChange={setHours} />",
+        "api": [
+          {
+            "name": "min / max / value",
+            "type": "number",
+            "description": "The chosen amount. Omit value to let the chart own it."
+          },
+          {
+            "name": "formatComplement",
+            "type": "(value, max, locale) => string",
+            "description": "Defaults to the share that is left."
+          },
+          {
+            "name": "actions",
+            "type": "RangePlanAction[]",
+            "description": "Buttons under the slider. Labels come from the host."
+          },
+          {
+            "name": "locale / labels",
+            "type": "string / partial labels",
+            "description": "rangePlanLabelsEs is the Spanish chrome."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string / slots",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Visual inspiration only, with no code copied, from a public promo clip (https://x.com/malikyoloo/status/2115675118357909597) and the charts page it points at (https://www.mebius.design/freebies/charts). The original kit is proprietary and forbids reuse inside a library or design system. This item is an original implementation. Series use the host tokens --chart-1 through --chart-5. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Numbers follow the locale (es maps to es-MX, en to en-US). Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/range-plan.tsx",
+          "type": "registry:component",
+          "target": "@ui/range-plan.tsx"
+        },
+        {
+          "path": "registry/ui/chart-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-card.tsx"
+        },
+        {
+          "path": "registry/ui/chart-marks.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-marks.tsx"
+        },
+        {
+          "path": "registry/lib/chart-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-format.ts"
+        },
+        {
+          "path": "registry/lib/chart-series.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-series.ts"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/chart-geom.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-geom.ts"
+        }
+      ]
+    },
+    {
+      "name": "stacked-columns",
+      "type": "registry:ui",
+      "title": "Stacked columns",
+      "description": "Tabs change the range. Hovering a column syncs the KPIs.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "tabs"
+      ],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Columnas apiladas",
+        "descriptionEs": "Las pestañas cambian el rango. Al señalar una columna se sincronizan los totales.",
+        "preview": "app/examples/stacked-columns/preview.tsx",
+        "previewHref": "/examples/stacked-columns",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "single",
+            "label": "Serie única",
+            "labelEn": "Single series"
+          },
+          {
+            "id": "dense",
+            "label": "Seis meses",
+            "labelEn": "Six months"
+          },
+          {
+            "id": "negative",
+            "label": "Valor negativo",
+            "labelEn": "Negative value"
+          },
+          {
+            "id": "highlight",
+            "label": "Con nota",
+            "labelEn": "With note"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Columnas apiladas",
+            "href": "/examples/stacked-columns",
+            "description": "Las pestañas cambian el rango. Al señalar una columna se sincronizan los totales."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/stacked-columns/stress",
+            "description": "320px, vacío, carga, error y un título largo."
+          }
+        ],
+        "usage": "<StackedColumns title=\"Harvest by type\" series={series} periods={periods} note={note} />",
+        "api": [
+          {
+            "name": "series",
+            "type": "StackedSeries[]",
+            "description": "Stacks, top to bottom in this order."
+          },
+          {
+            "name": "periods",
+            "type": "StackedPeriod[]",
+            "description": "Tabs. Each point maps a series id to a number."
+          },
+          {
+            "name": "onActiveChange",
+            "type": "(key: string | null) => void",
+            "description": "The column under the pointer. KPIs follow it."
+          },
+          {
+            "name": "note",
+            "type": "StackedNote",
+            "description": "Optional insight under the plot."
+          },
+          {
+            "name": "locale / labels",
+            "type": "string / partial labels",
+            "description": "stackedColumnsLabelsEs is the Spanish chrome."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string / slots",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Visual inspiration only, with no code copied, from a public promo clip (https://x.com/malikyoloo/status/2115675118357909597) and the charts page it points at (https://www.mebius.design/freebies/charts). The original kit is proprietary and forbids reuse inside a library or design system. This item is an original implementation. Series use the host tokens --chart-1 through --chart-5. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Numbers follow the locale (es maps to es-MX, en to en-US). Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/stacked-columns.tsx",
+          "type": "registry:component",
+          "target": "@ui/stacked-columns.tsx"
+        },
+        {
+          "path": "registry/ui/chart-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-card.tsx"
+        },
+        {
+          "path": "registry/ui/chart-marks.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-marks.tsx"
+        },
+        {
+          "path": "registry/lib/chart-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-format.ts"
+        },
+        {
+          "path": "registry/lib/chart-series.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-series.ts"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/chart-geom.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-geom.ts"
+        }
+      ]
+    },
+    {
+      "name": "dot-meter",
+      "type": "registry:ui",
+      "title": "Dot meter",
+      "description": "Discrete cells. The tooltip shows the share and the running total.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card"
+      ],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Matriz de puntos",
+        "descriptionEs": "Puntos discretos. El aviso muestra la parte y el acumulado.",
+        "preview": "app/examples/dot-meter/preview.tsx",
+        "previewHref": "/examples/dot-meter",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "single",
+            "label": "Un punto",
+            "labelEn": "Single cell"
+          },
+          {
+            "id": "dense",
+            "label": "Muchos puntos",
+            "labelEn": "Many cells"
+          },
+          {
+            "id": "negative",
+            "label": "Valor negativo",
+            "labelEn": "Negative value"
+          },
+          {
+            "id": "highlight",
+            "label": "Casi lleno",
+            "labelEn": "Nearly full"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Matriz de puntos",
+            "href": "/examples/dot-meter",
+            "description": "Puntos discretos. El aviso muestra la parte y el acumulado."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/dot-meter/stress",
+            "description": "320px, vacío, carga, error y un título largo."
+          }
+        ],
+        "usage": "<DotMeter title=\"Beds planted\" value={18} limit={40} cells={40} suffix=\"beds\" />",
+        "api": [
+          {
+            "name": "value / limit / cells",
+            "type": "number",
+            "description": "Cells are the discrete whole. Negatives fill nothing."
+          },
+          {
+            "name": "onActiveChange",
+            "type": "(index: number | null) => void",
+            "description": "The cell under the pointer."
+          },
+          {
+            "name": "locale / labels",
+            "type": "string / partial labels",
+            "description": "dotMeterLabelsEs is the Spanish chrome."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string / slots",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Visual inspiration only, with no code copied, from a public promo clip (https://x.com/malikyoloo/status/2115675118357909597) and the charts page it points at (https://www.mebius.design/freebies/charts). The original kit is proprietary and forbids reuse inside a library or design system. This item is an original implementation. Series use the host tokens --chart-1 through --chart-5. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Numbers follow the locale (es maps to es-MX, en to en-US). Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/dot-meter.tsx",
+          "type": "registry:component",
+          "target": "@ui/dot-meter.tsx"
+        },
+        {
+          "path": "registry/ui/chart-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-card.tsx"
+        },
+        {
+          "path": "registry/ui/chart-marks.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-marks.tsx"
+        },
+        {
+          "path": "registry/lib/chart-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-format.ts"
+        },
+        {
+          "path": "registry/lib/chart-series.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-series.ts"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "combo-chart",
+      "type": "registry:ui",
+      "title": "Combo chart",
+      "description": "Bars plus a line. The tooltip carries a mini chart, and the unit switch rescales the data.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "select"
+      ],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Barras y línea",
+        "descriptionEs": "Barras y una línea. El aviso trae un mini gráfico y la unidad vuelve a escalar los datos.",
+        "preview": "app/examples/combo-chart/preview.tsx",
+        "previewHref": "/examples/combo-chart",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "single",
+            "label": "Un punto",
+            "labelEn": "Single point"
+          },
+          {
+            "id": "dense",
+            "label": "Muchos días",
+            "labelEn": "Many days"
+          },
+          {
+            "id": "negative",
+            "label": "Valor negativo",
+            "labelEn": "Negative value"
+          },
+          {
+            "id": "highlight",
+            "label": "Cambio de unidad",
+            "labelEn": "Unit switch"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Barras y línea",
+            "href": "/examples/combo-chart",
+            "description": "Barras y una línea. El aviso trae un mini gráfico y la unidad vuelve a escalar los datos."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/combo-chart/stress",
+            "description": "320px, vacío, carga, error y un título largo."
+          }
+        ],
+        "usage": "<ComboChart title=\"Visits and harvest\" points={points} units={units} locale=\"es-MX\" />",
+        "api": [
+          {
+            "name": "points",
+            "type": "ComboPoint[]",
+            "description": "bar, line, and optional parts for the mini chart."
+          },
+          {
+            "name": "units",
+            "type": "ChartUnit[]",
+            "description": "scale, suffix, or an ISO currency. The select swaps them."
+          },
+          {
+            "name": "onUnitChange / onActiveChange",
+            "type": "callbacks",
+            "description": "Unit id and the active point key."
+          },
+          {
+            "name": "locale / labels",
+            "type": "string / partial labels",
+            "description": "comboChartLabelsEs is the Spanish chrome."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string / slots",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Visual inspiration only, with no code copied, from a public promo clip (https://x.com/malikyoloo/status/2115675118357909597) and the charts page it points at (https://www.mebius.design/freebies/charts). The original kit is proprietary and forbids reuse inside a library or design system. This item is an original implementation. Series use the host tokens --chart-1 through --chart-5. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Numbers follow the locale (es maps to es-MX, en to en-US). Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/combo-chart.tsx",
+          "type": "registry:component",
+          "target": "@ui/combo-chart.tsx"
+        },
+        {
+          "path": "registry/ui/chart-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-card.tsx"
+        },
+        {
+          "path": "registry/ui/chart-marks.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-marks.tsx"
+        },
+        {
+          "path": "registry/lib/chart-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-format.ts"
+        },
+        {
+          "path": "registry/lib/chart-series.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-series.ts"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/chart-geom.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-geom.ts"
+        }
+      ]
+    },
+    {
+      "name": "coupled-lines",
+      "type": "registry:ui",
+      "title": "Coupled lines",
+      "description": "Several lines. A dot sits on each line at the active category.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "button",
+        "card"
+      ],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Líneas acopladas",
+        "descriptionEs": "Varias líneas. Un punto se queda sobre cada línea en la categoría activa.",
+        "preview": "app/examples/coupled-lines/preview.tsx",
+        "previewHref": "/examples/coupled-lines",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "single",
+            "label": "Serie única",
+            "labelEn": "Single series"
+          },
+          {
+            "id": "dense",
+            "label": "Muchos puntos",
+            "labelEn": "Many points"
+          },
+          {
+            "id": "negative",
+            "label": "Valor negativo",
+            "labelEn": "Negative value"
+          },
+          {
+            "id": "highlight",
+            "label": "Serie activa",
+            "labelEn": "Active series"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Líneas acopladas",
+            "href": "/examples/coupled-lines",
+            "description": "Varias líneas. Un punto se queda sobre cada línea en la categoría activa."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/coupled-lines/stress",
+            "description": "320px, vacío, carga, error y un título largo."
+          }
+        ],
+        "usage": "<CoupledLines title=\"Bed moisture\" categories={categories} series={series} suffix=\"%\" />",
+        "api": [
+          {
+            "name": "categories",
+            "type": "{ key, label }[]",
+            "description": "Shared horizontal axis."
+          },
+          {
+            "name": "series",
+            "type": "CoupledSeries[]",
+            "description": "Each series lists a value per category key."
+          },
+          {
+            "name": "activeId / onActiveChange",
+            "type": "string | null",
+            "description": "Legend filter. Dots stay on the visible lines."
+          },
+          {
+            "name": "locale / labels",
+            "type": "string / partial labels",
+            "description": "coupledLinesLabelsEs is the Spanish chrome."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string / slots",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Visual inspiration only, with no code copied, from a public promo clip (https://x.com/malikyoloo/status/2115675118357909597) and the charts page it points at (https://www.mebius.design/freebies/charts). The original kit is proprietary and forbids reuse inside a library or design system. This item is an original implementation. Series use the host tokens --chart-1 through --chart-5. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Numbers follow the locale (es maps to es-MX, en to en-US). Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/coupled-lines.tsx",
+          "type": "registry:component",
+          "target": "@ui/coupled-lines.tsx"
+        },
+        {
+          "path": "registry/ui/chart-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-card.tsx"
+        },
+        {
+          "path": "registry/ui/chart-marks.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-marks.tsx"
+        },
+        {
+          "path": "registry/lib/chart-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-format.ts"
+        },
+        {
+          "path": "registry/lib/chart-series.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-series.ts"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/chart-geom.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-geom.ts"
+        }
+      ]
+    },
+    {
+      "name": "range-lanes",
+      "type": "registry:ui",
+      "title": "Horizontal ranges",
+      "description": "Floating ranges on one scale. The tooltip reads the start and the end.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card"
+      ],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Rangos horizontales",
+        "descriptionEs": "Rangos flotantes sobre una escala. El aviso lee el inicio y el fin.",
+        "preview": "app/examples/range-lanes/preview.tsx",
+        "previewHref": "/examples/range-lanes",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "single",
+            "label": "Un rango",
+            "labelEn": "Single range"
+          },
+          {
+            "id": "dense",
+            "label": "Diez cultivos",
+            "labelEn": "Ten crops"
+          },
+          {
+            "id": "negative",
+            "label": "Rango invertido",
+            "labelEn": "Reversed range"
+          },
+          {
+            "id": "highlight",
+            "label": "Rango activo",
+            "labelEn": "Active range"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Rangos horizontales",
+            "href": "/examples/range-lanes",
+            "description": "Rangos flotantes sobre una escala. El aviso lee el inicio y el fin."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/range-lanes/stress",
+            "description": "320px, vacío, carga, error y un título largo."
+          }
+        ],
+        "usage": "<RangeLanes title=\"Crop season\" lanes={lanes} domain={{ min: 1, max: 12 }} ticks={ticks} />",
+        "api": [
+          {
+            "name": "lanes",
+            "type": "RangeLane[]",
+            "description": "start and end on the shared domain. A reversed range is drawn swapped."
+          },
+          {
+            "name": "domain / ticks",
+            "type": "numbers",
+            "description": "Axis extent and optional tick labels."
+          },
+          {
+            "name": "activeId / onActiveChange",
+            "type": "string | null",
+            "description": "The lane that stays lit."
+          },
+          {
+            "name": "locale / labels",
+            "type": "string / partial labels",
+            "description": "rangeLanesLabelsEs is the Spanish chrome."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string / slots",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Visual inspiration only, with no code copied, from a public promo clip (https://x.com/malikyoloo/status/2115675118357909597) and the charts page it points at (https://www.mebius.design/freebies/charts). The original kit is proprietary and forbids reuse inside a library or design system. This item is an original implementation. Series use the host tokens --chart-1 through --chart-5. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Numbers follow the locale (es maps to es-MX, en to en-US). Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/range-lanes.tsx",
+          "type": "registry:component",
+          "target": "@ui/range-lanes.tsx"
+        },
+        {
+          "path": "registry/ui/chart-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-card.tsx"
+        },
+        {
+          "path": "registry/ui/chart-marks.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-marks.tsx"
+        },
+        {
+          "path": "registry/lib/chart-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-format.ts"
+        },
+        {
+          "path": "registry/lib/chart-series.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-series.ts"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/chart-geom.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-geom.ts"
+        }
+      ]
+    },
+    {
+      "name": "polar-area",
+      "type": "registry:ui",
+      "title": "Polar area",
+      "description": "A rose chart. The legend swaps the series and the center value.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "button",
+        "card"
+      ],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Área polar",
+        "descriptionEs": "Un área polar. La leyenda cambia la serie y el valor del centro.",
+        "preview": "app/examples/polar-area/preview.tsx",
+        "previewHref": "/examples/polar-area",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "single",
+            "label": "Serie única",
+            "labelEn": "Single series"
+          },
+          {
+            "id": "dense",
+            "label": "Doce gajos",
+            "labelEn": "Twelve wedges"
+          },
+          {
+            "id": "negative",
+            "label": "Valor negativo",
+            "labelEn": "Negative value"
+          },
+          {
+            "id": "highlight",
+            "label": "Serie activa",
+            "labelEn": "Active series"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Área polar",
+            "href": "/examples/polar-area",
+            "description": "Un área polar. La leyenda cambia la serie y el valor del centro."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/polar-area/stress",
+            "description": "320px, vacío, carga, error y un título largo."
+          }
+        ],
+        "usage": "<PolarArea title=\"Harvest by bed\" series={series} suffix=\"kg\" />",
+        "api": [
+          {
+            "name": "series",
+            "type": "PolarSeries[]",
+            "description": "Each series has a total and its own wedges. Radius follows the value."
+          },
+          {
+            "name": "activeId / onActiveChange",
+            "type": "string | null",
+            "description": "The series on show. The center follows the wedge under the pointer."
+          },
+          {
+            "name": "locale / labels",
+            "type": "string / partial labels",
+            "description": "polarAreaLabelsEs is the Spanish chrome."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string / slots",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Visual inspiration only, with no code copied, from a public promo clip (https://x.com/malikyoloo/status/2115675118357909597) and the charts page it points at (https://www.mebius.design/freebies/charts). The original kit is proprietary and forbids reuse inside a library or design system. This item is an original implementation. Series use the host tokens --chart-1 through --chart-5. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Numbers follow the locale (es maps to es-MX, en to en-US). Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/polar-area.tsx",
+          "type": "registry:component",
+          "target": "@ui/polar-area.tsx"
+        },
+        {
+          "path": "registry/ui/chart-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-card.tsx"
+        },
+        {
+          "path": "registry/ui/chart-marks.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-marks.tsx"
+        },
+        {
+          "path": "registry/lib/chart-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-format.ts"
+        },
+        {
+          "path": "registry/lib/chart-series.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-series.ts"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/chart-geom.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-geom.ts"
+        }
+      ]
+    },
+    {
+      "name": "scrub-area",
+      "type": "registry:ui",
+      "title": "Scrub area",
+      "description": "A gradient area that draws in from the left, with a keyboard scrubber.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "select"
+      ],
+      "categories": [
+        "chart"
+      ],
+      "meta": {
+        "titleEs": "Área con cursor",
+        "descriptionEs": "Un área con degradado que entra desde la izquierda, con un cursor por teclado.",
+        "preview": "app/examples/scrub-area/preview.tsx",
+        "previewHref": "/examples/scrub-area",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "single",
+            "label": "Un punto",
+            "labelEn": "Single point"
+          },
+          {
+            "id": "dense",
+            "label": "Muchos puntos",
+            "labelEn": "Many points"
+          },
+          {
+            "id": "negative",
+            "label": "Valor negativo",
+            "labelEn": "Negative value"
+          },
+          {
+            "id": "highlight",
+            "label": "Dos años",
+            "labelEn": "Two years"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Área con cursor",
+            "href": "/examples/scrub-area",
+            "description": "Un área con degradado que entra desde la izquierda, con un cursor por teclado."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/scrub-area/stress",
+            "description": "320px, vacío, carga, error y un título largo."
+          }
+        ],
+        "usage": "<ScrubArea title=\"Running harvest\" periods={periods} suffix=\"kg\" locale=\"es-MX\" />",
+        "api": [
+          {
+            "name": "periods",
+            "type": "ScrubPeriod[]",
+            "description": "The select swaps the series. The guide reads one point."
+          },
+          {
+            "name": "onActiveChange",
+            "type": "(key: string | null) => void",
+            "description": "The point under the scrubber."
+          },
+          {
+            "name": "locale / labels",
+            "type": "string / partial labels",
+            "description": "scrubAreaLabelsEs is the Spanish chrome."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string / slots",
+            "description": "Root class and slot classes."
+          }
+        ]
+      },
+      "docs": "Visual inspiration only, with no code copied, from a public promo clip (https://x.com/malikyoloo/status/2115675118357909597) and the charts page it points at (https://www.mebius.design/freebies/charts). The original kit is proprietary and forbids reuse inside a library or design system. This item is an original implementation. Series use the host tokens --chart-1 through --chart-5. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Numbers follow the locale (es maps to es-MX, en to en-US). Motion is skipped when the reader prefers reduced motion.",
+      "files": [
+        {
+          "path": "registry/ui/scrub-area.tsx",
+          "type": "registry:component",
+          "target": "@ui/scrub-area.tsx"
+        },
+        {
+          "path": "registry/ui/chart-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-card.tsx"
+        },
+        {
+          "path": "registry/ui/chart-marks.tsx",
+          "type": "registry:component",
+          "target": "@ui/chart-marks.tsx"
+        },
+        {
+          "path": "registry/lib/chart-format.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-format.ts"
+        },
+        {
+          "path": "registry/lib/chart-series.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-series.ts"
+        },
+        {
+          "path": "registry/lib/chart-tone.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-tone.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/chart-geom.ts",
+          "type": "registry:lib",
+          "target": "@lib/chart-geom.ts"
+        }
+      ]
     }
   ]
 }
