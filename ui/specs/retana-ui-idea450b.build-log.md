@@ -10,6 +10,10 @@ profile: STANDARD
 
 La suite y los renders no se commitean. El gate los toma por `--suite-log` y `--renders-log`, fuera del árbol, y esos archivos declaran el HEAD del PR.
 
+## merge
+
+`cursor/mobile-fixes-c51d` @ `1bfb56e19895d2f1b924399a5771a330446e38f5` entra por merge. El json-viewer anima opacidad y `y`. El anillo del slider es `before:opacity` con `transition-opacity`. No queda `gridTemplateRows` ni `transition-[color,box-shadow]` en esas piezas. El seed y las rutas no se tocaron.
+
 ## needs
 
 - Glass solo en header sticky, dock, diálogo, sheet y lightbox. El resto de los 14 archivos pierde `backdrop-blur`.

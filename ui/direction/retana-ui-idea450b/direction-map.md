@@ -17,6 +17,8 @@ Seed de captura: `ui/direction/fixtures/retana-ui-idea450b.seed.yaml`. Una URL p
 
 `circle` y `circle-above` son escenas distintas (`namePlace` below y above). El sha256 idéntico de `renders/after/circle-*` y `circle-above-*` en la VM fue porque ambas filas entraban en el mismo viewport. El seed las separa: `shot=circle` y `shot=circle-above`.
 
+Merge de `cursor/mobile-fixes-c51d` @ `1bfb56e19895d2f1b924399a5771a330446e38f5` (PR #58). El json-viewer ya no anima `grid-template-rows`; el anillo del slider es opacidad en un pseudo. Esta rama no conserva una copia propia que anime height, grid-template-rows, box-shadow o `transition-all` en esas piezas. El seed, las rutas y los comandos de arranque no cambian.
+
 | Región | reference_id | Cita | Desviación |
 | --- | --- | --- | --- |
 | Fila `layout="circle"` en `registry/ui/avatar-group.tsx` | circle-names-below | AC-4, rule: RUI-ANIM-PERF-001 | `namePlace` default `below`. `shot=circle-above` es la otra variante, en su propia URL. Las personas son Inés Ejemplo, Diego Ejemplo y Marta Muestra. |

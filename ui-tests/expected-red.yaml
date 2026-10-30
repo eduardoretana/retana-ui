@@ -3,7 +3,7 @@ spec_id: retana-ui-idea450b
 retana_ui_sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
 recorded_before_build: false
 command: pnpm exec vitest run __tests__/glass-surfaces.test.ts __tests__/badge-count.test.tsx __tests__/avatar-group-circle.test.tsx __tests__/radius-tokens.test.ts
-note: "Las pruebas entraron con el arreglo. La firma es la aserción que falla si se quita el arreglo."
+note: "Las pruebas de IDEA-450 entraron con el arreglo. Se conservan también las firmas de IDEA-448, incluido el pulgar del slider (axe 4.13.0), que llegaron con el merge de cursor/mobile-fixes-c51d @ 1bfb56e."
 cases:
   - file: __tests__/glass-surfaces.test.ts
     name: keeps backdrop-blur in the glass helper only
@@ -17,3 +17,18 @@ cases:
   - file: __tests__/radius-tokens.test.ts
     name: does not multiply --radius
     signature: "expected globals.css not to match var(--radius) *"
+  - file: __tests__/mobile-inputs.test.ts
+    name: marca los 11 controles nativos con text-base md:text-sm
+    signature: "expected <window> to contain text-base … md:text-sm"
+  - file: __tests__/mobile-inputs.test.ts
+    name: deja el tap-highlight transparente sin quitar el foco visible
+    signature: "expected app/globals.css to match -webkit-tap-highlight-color: transparent"
+  - file: __tests__/mobile-inputs.test.ts
+    name: exporta viewport-fit cover sin bloquear el zoom
+    signature: "expected app/layout.tsx to contain viewportFit: \"cover\""
+  - file: __tests__/mobile-inputs.test.ts
+    name: usa la curva sin overshoot y conserva reduced-motion
+    signature: "expected theme-toggles source to contain cubic-bezier(0.22,1,0.36,1)"
+  - file: tests/mobile/inputs.spec.ts
+    name: el pulgar del deslizador pasa axe 4.13.0 en claro y oscuro
+    signature: "axe-core 4.13.0 reports serious or critical on [data-slot=slider] in light or dark"
