@@ -98,7 +98,7 @@ function CircleLayout({
   const px = pixelSize[size]
   const transition = reduceMotion
     ? { duration: 0 }
-    : { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.standard] }
+    : { duration: motionPresets.duration.standard, ease: motionPresets.ease.standard }
 
   return (
     <ul
