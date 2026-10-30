@@ -5,6 +5,7 @@ import { Send } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { NumberRoll } from "@/registry/ui/number-roll"
+import { StaggerList } from "@/registry/ui/stagger-list"
 
 type Locale = "es" | "en"
 
@@ -34,6 +35,8 @@ const copy = {
     flow: "Continuo: opacidad y translate, sin animar el alto.",
     out: "Sale",
     in: "Entra",
+    swap: "Cambiar",
+    changeDay: "Cambiar día",
   },
   en: {
     language: "Language",
@@ -60,13 +63,15 @@ const copy = {
     flow: "Continuous: opacity and translate, without animating height.",
     out: "Leave",
     in: "Enter",
+    swap: "Swap",
+    changeDay: "Change day",
   },
 } as const
 
 const bars = [42, 68, 36, 100, 74, 48, 28]
 const activeBar = 3
 
-function text(locale: Locale, key: keyof (typeof copy)["es"]) {
+function text<K extends keyof (typeof copy)["es"]>(locale: Locale, key: K) {
   return copy[locale][key]
 }
 
@@ -138,6 +143,54 @@ function Days({ locale, loud }: { locale: Locale; loud: boolean }) {
           </div>
         )
       })}
+    </div>
+  )
+}
+
+function HardCut({ locale }: { locale: Locale }) {
+  const [on, setOn] = useState(true)
+  const t = copy[locale]
+  return (
+    <div className="flex flex-col gap-2">
+      <p className="text-xs text-muted-foreground">{t.cut}</p>
+      <button
+        type="button"
+        onClick={() => setOn((current) => !current)}
+        className="w-fit rounded-md px-2 py-1 text-xs text-muted-foreground outline-none hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        {t.swap}
+      </button>
+      <div className="rounded-lg bg-muted px-3 py-2 text-sm">{on ? t.out : t.in}</div>
+    </div>
+  )
+}
+
+function ContinuousList({ locale }: { locale: Locale }) {
+  const t = copy[locale]
+  const [day, setDay] = useState<"hoy" | "manana">("hoy")
+  const items =
+    day === "hoy"
+      ? [
+          { id: "kiln", label: locale === "en" ? "Firing · 9:00" : "Horneada · 9:00" },
+          { id: "glaze", label: locale === "en" ? "Glaze review · 11:30" : "Revisión de esmalte · 11:30" },
+        ]
+      : [
+          { id: "clay", label: locale === "en" ? "Clay wedging · 10:00" : "Amasar el barro · 10:00" },
+          { id: "shelf", label: locale === "en" ? "Shelf count · 13:00" : "Inventario · 13:00" },
+        ]
+  return (
+    <div className="flex flex-col gap-2">
+      <p className="text-xs text-muted-foreground">{t.flow}</p>
+      <button
+        type="button"
+        onClick={() => setDay((current) => (current === "hoy" ? "manana" : "hoy"))}
+        className="w-fit rounded-md px-2 py-1 text-xs text-muted-foreground outline-none hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        {t.changeDay}
+      </button>
+      <StaggerList items={items} label={locale === "en" ? "Agenda" : "Agenda"}>
+        {(item) => <div className="rounded-lg bg-muted px-3 py-2 text-sm">{item.label}</div>}
+      </StaggerList>
     </div>
   )
 }
@@ -257,19 +310,8 @@ export function LayoutRulesGallery() {
         body={t.motionBody}
         noLabel={t.no}
         yesLabel={t.yes}
-        no={
-          <div className="flex flex-col gap-2">
-            <p className="text-xs text-muted-foreground">{t.cut}</p>
-            <div className="rounded-lg bg-muted px-3 py-2 text-sm">{t.out}</div>
-          </div>
-        }
-        yes={
-          <div className="flex flex-col gap-2">
-            <p className="text-xs text-muted-foreground">{t.flow}</p>
-            <div className="rounded-lg bg-muted px-3 py-2 text-sm opacity-40">{t.out}</div>
-            <div className="translate-y-1 rounded-lg bg-muted px-3 py-2 text-sm">{t.in}</div>
-          </div>
-        }
+        no={<HardCut locale={locale} />}
+        yes={<ContinuousList locale={locale} />}
       />
     </div>
   )

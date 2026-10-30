@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`423` items are in `registry.json` on this branch: `334` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`424` items are in `registry.json` on this branch: `335` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -509,6 +509,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`tree-view`](registry/ui/tree-view.tsx) · ui — Navigates nested folders and structured content from the keyboard. Install: `npx shadcn@latest add @retana/tree-view`.
 - [`filter-toolbar`](registry/ui/filter-toolbar.tsx) · ui — Keeps collection filters close and easy to reset. Install: `npx shadcn@latest add @retana/filter-toolbar`.
 - [`animated-counter`](registry/ui/animated-counter.tsx) · ui — Gives a changing total a clear sense of movement. Install: `npx shadcn@latest add @retana/animated-counter`.
+- [`stagger-list`](registry/ui/stagger-list.tsx) · ui — Rows enter and leave in sequence, with a cap on the total delay. Install: `npx shadcn@latest add @retana/stagger-list`.
 - [`number-roll`](registry/ui/number-roll.tsx) · ui — Rolls an integer and its fraction separately, using only transform and opacity. Install: `npx shadcn@latest add @retana/number-roll`.
 - [`image-compare`](registry/ui/image-compare.tsx) · ui — Drags a divider across two images to see what changed. Install: `npx shadcn@latest add @retana/image-compare`.
 - [`carousel`](registry/ui/carousel.tsx) · ui — Browses a row of slides with controls, tabs, and arrow keys. Install: `npx shadcn@latest add @retana/carousel`.

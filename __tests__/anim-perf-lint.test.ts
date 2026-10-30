@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest"
 
 const root = path.resolve(import.meta.dirname, "..")
 const script = path.join(root, "scripts/anim-perf-lint.mjs")
-const files = ["registry/ui/number-roll.tsx", "registry/ui/animated-counter.tsx"]
+const files = ["registry/ui/number-roll.tsx", "registry/ui/animated-counter.tsx", "registry/ui/stagger-list.tsx"]
 
 describe("anim_perf_lint", () => {
   it("accepts transform and opacity on the continuity primitives", () => {

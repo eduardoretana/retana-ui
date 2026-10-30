@@ -10,8 +10,8 @@ import { motionPresets } from "@/registry/retana/lib/motion"
 
 const DIGITS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] as const
 
-const rollEase = [...motionPresets.ease.enter]
-const enterEase = [...motionPresets.ease.exit]
+const rollEase = [motionPresets.ease.enter[0], motionPresets.ease.enter[1], motionPresets.ease.enter[2], motionPresets.ease.enter[3]] as [number, number, number, number]
+const enterEase = [motionPresets.ease.exit[0], motionPresets.ease.exit[1], motionPresets.ease.exit[2], motionPresets.ease.exit[3]] as [number, number, number, number]
 
 export type NumberRollClassNames = {
   root?: string

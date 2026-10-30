@@ -5914,6 +5914,68 @@
       ]
     },
     {
+      "name": "stagger-list",
+      "type": "registry:ui",
+      "title": "Stagger list",
+      "description": "Rows enter and leave in sequence, with a cap on the total delay.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Lista escalonada",
+        "descriptionEs": "Las filas entran y salen en secuencia, con un tope al retraso total.",
+        "preview": "app/examples/stagger-list/preview.tsx",
+        "previewHref": "/examples/stagger-list",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
+        "examples": [
+          {
+            "title": "Lista escalonada",
+            "href": "/examples/stagger-list",
+            "description": "Las filas entran y salen en secuencia, con un tope al retraso total."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/stagger-list/stress",
+            "description": "320 px, vacío, una fila, cuarenta y RTL."
+          }
+        ],
+        "usage": "<StaggerList items={events} label=\"Agenda\">{(event) => <EventRow event={event} />}</StaggerList>",
+        "api": [
+          { "name": "items", "type": "Array<{ id: string }>", "description": "Stable ids drive enter and exit." },
+          { "name": "children", "type": "(item, index) => ReactNode", "description": "Renders one row. The list does not style the content." },
+          { "name": "stagger", "type": "number", "description": "Seconds between neighbors before the cap." },
+          { "name": "maxStagger", "type": "number", "description": "Longest delay any row may wait. Default 0.4s." },
+          { "name": "label", "type": "string", "description": "Accessible name of the list." },
+          { "name": "empty", "type": "ReactNode", "description": "Shown when items is empty." },
+          { "name": "pending", "type": "boolean", "description": "Sets aria-busy while a load is in flight." },
+          { "name": "className / itemClassName", "type": "string", "description": "Classes for the list and each row." }
+        ]
+      },
+      "docs": "Clean-room. Staggered enter and exit follow a public description of Jakub Antalik's Transitions UI (https://x.com/jakubantalik/status/2115844862012768541). That product is not open source; no source, sample data, icons, or assets were copied. See docs/layout-transitions.md and NOTICE. Motion is transform and opacity only. The last row never waits longer than maxStagger. Travel is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/stagger-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/stagger-list.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
       "name": "number-roll",
       "type": "registry:ui",
       "title": "Number roll",
