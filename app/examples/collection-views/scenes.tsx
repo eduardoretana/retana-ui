@@ -1,5 +1,7 @@
 "use client"
 
+import { useSearchParams } from "next/navigation"
+
 import { SceneStatus } from "@/app/catalog/scene-frame"
 import { formatSceneCall, sceneText, type Scene, type SceneFrame, type SceneRenderProps } from "@/app/catalog/scene-types"
 import { useSceneSim } from "@/app/catalog/use-scene-sim"
@@ -11,8 +13,17 @@ const frame: SceneFrame = { size: "desk", surface: "canvas", padding: "md" }
 
 type ViewsState = { view: CollectionView; query: string; broken: boolean }
 
+function viewFromSeed(value: string | null, fallback: CollectionView): CollectionView {
+  if (value === "board" || value === "list" || value === "timeline") return value
+  return fallback
+}
+
 function ViewsScene({ locale, log, fixture }: SceneRenderProps & { fixture: ViewsFixture }) {
-  const sim = useSceneSim<ViewsState>({ view: fixture.view, query: fixture.query ?? "", broken: Boolean(fixture.error) }, log)
+  const params = useSearchParams()
+  const sim = useSceneSim<ViewsState>(
+    { view: viewFromSeed(params.get("view"), fixture.view), query: fixture.query ?? "", broken: Boolean(fixture.error) },
+    log,
+  )
   const message = fixture.error?.[locale]
 
   return (

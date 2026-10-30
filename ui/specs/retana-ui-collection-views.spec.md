@@ -1,15 +1,18 @@
 ---
 artifact_id: spec-retana-ui-collection-views
 owner: lead
-spec_version: 0.1.0
+spec_version: 0.1.1
 head: 8cfdaf29c71d087391da72a6176449a82faec02f
 profile: STANDARD
 spec_id: retana-ui-collection-views
-version: 0.1.0
+version: 0.1.1
 spec_changelog:
   - version: 0.1.0
     origin: new
     note: Primera spec de la pieza. Perfil STANDARD.
+  - version: 0.1.1
+    origin: capture
+    note: Seed versionado, healthcheck y la dependencia de DESIGN.md del PR 59.
 ui_system: "4.0.0"
 brief:
   outcome: Una colección cambia entre tablero, lista y línea de tiempo con un morph continuo, gobernado por una píldora.
@@ -56,6 +59,7 @@ brand_constraints:
   - Heredar el tema del host. Sin cssVars, hex, ni paleta de Tailwind.
   - RUI-RADIUS-001. Radios por paso. El círculo 1:1 queda en el avatar del host.
   - Color fuerte solo en la píldora activa y en la barra que cubre today.
+  - La marca no se copia aquí. La trae el PR 59 en rules/brand/retana-ui.tokens.json y ui/design/retana-ui/DESIGN.md.
 retana_ui:
   sha: 8cfdaf29c71d087391da72a6176449a82faec02f
   registry_source: git-sha
@@ -125,6 +129,9 @@ acceptance:
   - id: AC-TOKEN-001
     measure: registry:build rechaza hex, rgb/oklch y clases de paleta en registry/.
     test: pnpm registry:build
+  - id: AC-SEED-001
+    measure: El seed imprime tablero, lista y cronograma con filled no vacío, más vacío, carga, error, es-MX, EN y reduced=1. /api/health responde 200 sin redirección.
+    test: node scripts/collection-views-seed.mjs --base http://127.0.0.1:40000
 ---
 
 # Vistas de colección

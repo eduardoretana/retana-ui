@@ -1,7 +1,7 @@
 ---
 artifact_id: direction-map-retana-ui-collection-views
 owner: lead
-spec_version: 0.1.0
+spec_version: 0.1.1
 head: 8cfdaf29c71d087391da72a6176449a82faec02f
 profile: STANDARD
 spec_id: retana-ui-collection-views
@@ -24,5 +24,7 @@ Una sola pantalla, tres regiones de vista. La imagen no entra al bundle.
 | Color | desdivj-collection-views | Un solo acento marca lo activo. | Primario solo en la barra que cubre `today` y en el control ya activo del host. El resto usa `muted-foreground`. Cita: `spec:brand_constraints`, `rule:RUI-COLOR-001`. |
 | Movimiento reducido | desdivj-collection-views | La vista cambia sin recorrer el layout. | Fundido de opacidad de 0.2 s, sin `layoutId`. Cita: `AC-REDUCED-001`. |
 | Encuadre | desdivj-collection-views | Nada del encuadre. | Zoom, blur y cámara quedan fuera. Cita: `spec:non_goals`. |
+| Marca | desdivj-collection-views | Este PR no agrega DESIGN.md ni tokens. | Dependencia del PR 59: `rules/brand/retana-ui.tokens.json` y `ui/design/retana-ui/DESIGN.md`. Cita: `spec:brand_constraints`, `AC-SEED-001`. |
+| Captura | desdivj-collection-views | Seed con tablero, lista y cronograma llenos. | `scripts/collection-views-seed.mjs`. Health `GET /api/health` en 200. Cita: `AC-SEED-001`. |
 
-El ejemplo es Taller Lumen, inventado. No se usan nombres, fotos ni colores de la referencia.
+El ejemplo es Taller Lumen, inventado. No se usan nombres, fotos ni colores de la referencia. La marca citada arriba no se vende con esta pieza.
