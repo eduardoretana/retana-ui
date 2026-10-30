@@ -1,0 +1,56 @@
+schema: uis.seed/v1
+version: 1.0.0
+spec_id: bento-grid
+ui_system: {version: 4.0.0}
+profile: STANDARD
+# Non-empty states only. The empty scene is not a capture target.
+# locale, theme, and motion are applied by query. Viewport is the browser, not the query.
+query:
+  scene: scene
+  locale: locale
+  theme: theme
+  motion: motion
+locale:
+  - es-MX
+  - en
+theme:
+  - light
+  - dark
+motion:
+  - full
+  - reduce
+pieces:
+  - name: bento-grid
+    route: /examples/bento-grid
+    states:
+      - id: filled
+        scene: filled
+      - id: long
+        scene: long
+      - id: error
+        scene: error
+  - name: bento-feature-card
+    route: /examples/bento-feature-card
+    states:
+      - id: filled
+        scene: filled
+      - id: long
+        scene: long
+      - id: error
+        scene: error
+  - name: magnetic-bento
+    route: /examples/magnetic-bento
+    states:
+      - id: filled
+        scene: filled
+commands:
+  install: pnpm install --frozen-lockfile
+  build: pnpm build
+  start: pnpm exec next start --hostname "$HOST" --port "$PORT"
+  health: http://$HOST:$PORT/api/health
+defaults:
+  HOST: 127.0.0.1
+  PORT: 40000
+viewports_px:
+  - 390
+  - 1280

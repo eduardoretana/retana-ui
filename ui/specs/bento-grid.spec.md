@@ -1,12 +1,15 @@
 ---
 artifact_id: bento-grid.spec
 owner: builder
-spec_version: 1.1.0
-head: 4c349f59bfebf04e093b39c69c33b226f25165d8
+spec_version: 1.2.0
+head: 328b8116d8c529612a4bf0b8535770780598da59
 spec_id: bento-grid
-version: 1.1.0
+version: 1.2.0
 ui_system: "4.0.0"
 spec_changelog:
+  - version: 1.2.0
+    origin: gate
+    note: "Seed versionado con estados no vacíos, query de locale/theme/motion, y /api/health sin redirección. DESIGN.md y los tokens siguen como dependencia del PR #59."
   - version: 1.1.0
     origin: layout-rules
     note: "Aplica las reglas de layout del PR #59 a la rejilla, la tarjeta y el preset magnético. El stagger es local, con tope 0.4 s. No se importa stagger-list."
@@ -216,7 +219,21 @@ Eje: dónde vive la ilustración. `media-first` (elegida, default) pone el dibuj
 
 ## Layout
 
-Reglas del PR #59, aplicadas aquí sin mergear esa rama. `stagger-list` no se copia ni se importa. La entrada de las celdas repite el tope de 0.4 s con `opacity` y `translateY` en `bento-grid`.
+Reglas del PR #59, aplicadas aquí sin mergear esa rama. `stagger-list` no se copia ni se importa. La entrada de las celdas repite el tope de 0.4 s con `opacity` y `translateY` en `bento-grid`. `DESIGN.md` y `rules/brand/retana-ui.tokens.json` no se duplican: son dependencia del #59. Ver `ui/specs/bento-grid.direction-map.md`.
+
+## Seed y captura
+
+`ui-tests/bento-grid.seed.yaml` versión 1.0.0. Los estados de captura son no vacíos: `filled`, `long` y `error` en la rejilla y en la tarjeta, y `filled` en magnetic-bento. `locale`, `theme` y `motion` se aplican por query (`es-MX` | `en`, `light` | `dark`, `full` | `reduce`). El viewport lo pone el navegador: 390 y 1280.
+
+```bash
+export HOST="${HOST:-127.0.0.1}"
+export PORT="${PORT:-40000}"
+pnpm install --frozen-lockfile
+pnpm build
+pnpm exec next start --hostname "$HOST" --port "$PORT"
+```
+
+`GET /api/health` responde 200 y no redirige. La sonda es `http://$HOST:$PORT/api/health`.
 
 ## Estados de la tarjeta y de la rejilla
 
