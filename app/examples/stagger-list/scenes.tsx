@@ -91,11 +91,11 @@ function ErrorScene({ locale, log }: SceneRenderProps) {
       {sim.state.phase === "ready" ? (
         <Agenda fixture={error} locale={locale} />
       ) : (
-        <SceneStatus tone={sim.state.phase === "loading" ? "loading" : "error"}>
+        <p role={sim.state.phase === "loading" ? "status" : "alert"} className="text-sm font-medium text-foreground">
           {sim.state.phase === "loading"
             ? sceneText(locale, "Reintentando la lectura…", "Reading it again…")
             : sceneText(locale, "No pudimos leer la agenda de Taller Barro.", "We could not read the agenda for Taller Barro.")}
-        </SceneStatus>
+        </p>
       )}
       {sim.state.phase !== "ready" ? (
         <Button
