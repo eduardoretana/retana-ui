@@ -5,7 +5,7 @@ cycle_state: AUDITORIA
 profile: LITE
 spec_id: retana-ui-idea448b
 spec_version: 1.0.0
-head: 1025e21b01ceea4d7111b454e775700f01ed6689
+head: dc6987f1959d79fd9fea1334a5666e5a03ff01b8
 retana_ui:
   sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
   registry_source: git-sha
@@ -15,4 +15,4 @@ direction:
 auditor: not-this-agent
 notes:
   - "ui-system 4.0.0 en una sola línea: el lector no acepta el bloque anidado. La 4.1.0 no está mergeada. ui-auditor 1.2.5 está admitido para LITE con 4.0.0."
-  - "head no puede ser el sha de este mismo commit: el objeto git incluye este archivo. El valor es el commit de código anterior (1025e21b). El gate no lee status.head. suite-log y renders-log van fuera del árbol."
+  - "head no puede ser el sha de este mismo commit: el objeto git incluye este archivo. El valor es el commit anterior (dc6987f1). El gate no lee status.head. suite-log y renders-log van fuera del árbol."

@@ -2,7 +2,7 @@
 artifact_id: retana-ui-idea448b.direction-map
 owner: builder
 spec_version: 1.0.0
-head: 1025e21b01ceea4d7111b454e775700f01ed6689
+head: dc6987f1959d79fd9fea1334a5666e5a03ff01b8
 profile: LITE
 reference_id: inherited-host-theme
 ---

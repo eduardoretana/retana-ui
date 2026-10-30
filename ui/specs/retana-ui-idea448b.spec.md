@@ -1,7 +1,7 @@
 ---
 spec_id: retana-ui-idea448b
 version: 1.0.0
-head: 1025e21b01ceea4d7111b454e775700f01ed6689
+head: dc6987f1959d79fd9fea1334a5666e5a03ff01b8
 spec_changelog:
   - version: 1.0.0
     origin: brief
