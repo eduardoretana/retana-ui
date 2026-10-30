@@ -1,11 +1,11 @@
 ---
 artifact_id: retana-ui-layout-motion.spec
 owner: builder
-spec_version: 1.1.0
+spec_version: 1.2.0
 head: fe591983055c98509435159dbfd6b63962bd340b
 profile: STANDARD
 spec_id: retana-ui-layout-motion
-version: 1.1.0
+version: 1.2.0
 spec_changelog:
   - version: 1.0.0
     origin: brief
@@ -13,11 +13,14 @@ spec_changelog:
   - version: 1.1.0
     origin: brief
     note: "Las reglas se aplican a la familia de #55. ChartKpi acepta la cifra sin aplanar. El rodillo entra cuando #59 se mergee. No se copia la primitiva."
+  - version: 1.2.0
+    origin: brief
+    note: "El seed de captura y /api/health. DESIGN.md y rules/brand/retana-ui.tokens.json se citan como dependencia de #59 y no se copian."
 ui_system: "4.0.0"
 brief:
   outcome: "La familia de gráficos de #55 cumple anchos, un solo borde, color fuerte solo en lo activo, jerarquía de la cifra y continuidad con scaleX o scaleY."
   benefit: "A 390 px la prosa no se estira, la barra crece desde su base y la cifra deja el entero al mando."
-  sources: "Guía ui-system 4.0.0 y las reglas de #59. No se mezcla esa rama ni se copia number-roll."
+  sources: "Guía ui-system 4.0.0 y las reglas de #59. No se mezcla esa rama ni se copia number-roll, DESIGN.md ni rules/brand/retana-ui.tokens.json."
   scope: "registry/ui/chart-card.tsx y las doce composiciones, sus pruebas y el PLP que ya tenían."
   checks: "Vitest de formato, de la familia y del origen de la animación. Playwright a 390 px. impeccable detect."
   stop_when: "pnpm test en verde en el sha evaluado. Logs y renders.yaml fuera del repo, con ese sha. PR #55 sigue draft. Sin merge."
@@ -84,6 +87,7 @@ direction:
   generators_used: []
 non_goals:
   - "Copiar registry/ui/number-roll.tsx o mezclar la rama de #59."
+  - "Copiar DESIGN.md o rules/brand/retana-ui.tokens.json. Esos archivos son dependencia de #59."
   - "Editar el PR #56 (bento)."
   - "Merge a CPL."
   - "Veredicto de auditoría. Quien construye no audita."
@@ -134,7 +138,7 @@ El host no recibe un segundo tema. La barra no anima el alto del SVG. Quien lee 
 
 ## Sources
 
-ui-system 4.0.0. Las reglas están en el PR #59. Este cambio no copia `number-roll` ni incorpora esa rama. `ChartKpi` deja el prop `figure` listo para que el rodillo pinte el mismo contrato cuando #59 se mergee.
+ui-system 4.0.0. Las reglas, `DESIGN.md` y `rules/brand/retana-ui.tokens.json` están en el PR #59. Este cambio no copia esos archivos ni `number-roll`, y no incorpora esa rama. `ChartKpi` deja el prop `figure` listo para que el rodillo pinte el mismo contrato cuando #59 se mergee. El seed `ui/seeds/retana-ui-layout-motion.seed.yaml` (version 1) lista los estados llenos. `/api/health` responde 200 sin redirección.
 
 ## Scope
 

@@ -3,7 +3,7 @@ ui_system: {version: 4.0.0}
 cycle_state: AUDITORIA
 profile: STANDARD
 spec_id: retana-ui-layout-motion
-spec_version: 1.1.0
+spec_version: 1.2.0
 head: fe591983055c98509435159dbfd6b63962bd340b
 stop_when: "pnpm test en verde; playwright.log y renders.yaml fuera del repo con el sha del HEAD; PR #55 draft contra CPL, sin merge."
 deliverable: "Reglas de layout aplicadas a la familia de #55. ChartKpi con figure tipado. number-roll entra cuando #59 se mergee."

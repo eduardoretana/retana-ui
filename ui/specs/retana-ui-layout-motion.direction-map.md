@@ -1,7 +1,7 @@
 ---
 artifact_id: retana-ui-layout-motion.direction-map
 owner: builder
-spec_version: 1.1.0
+spec_version: 1.2.0
 head: fe591983055c98509435159dbfd6b63962bd340b
 profile: STANDARD
 spec_id: retana-ui-layout-motion
@@ -13,6 +13,8 @@ ui_system: "4.0.0"
 No hay imagen generada. `direction.images: none`. `generators_used: []`. La referencia de comportamiento es el texto de las reglas, no un asset.
 
 `reference_id: text:layout-rules` · fuente: reglas del PR #59 · trato: se aplican a #55 sin copiar `number-roll`.
+
+Dependencia de diseño, sin copia: el PR #59 (`cursor/layout-roll-stagger-8c2f`) es la fuente de `DESIGN.md` y de `rules/brand/retana-ui.tokens.json`. Esos dos archivos no están en este árbol y no se vendan con la familia. El tema y los tokens se heredan cuando #59 se mergee.
 
 | Región | reference_id | Qué se construyó | Cita |
 | --- | --- | --- | --- |
@@ -29,3 +31,4 @@ No hay imagen generada. `direction.images: none`. `generators_used: []`. La refe
 | Carriles | text:layout-rules#motion | El tramo es `translate` + `scaleX` sobre el eje medido. Sin selección, cada carril usa su token. Al elegir uno, el resto pasa a `var(--muted-foreground)`. La etiqueta queda fuera del trazo. | AC-3 · AC-5 |
 | Polar y panal | text:layout-rules#color | La serie o el gajo no elegido pasa a muted. El centro es `text-foreground`, sin otro primario. La entrada polar sigue en opacity y scale. El panal conserva `max-w-sm`. | AC-1 · AC-3 · AC-5 |
 | #59 | text:layout-rules | No hay copia de `number-roll`. El cambio de rodillo queda anotado en el cuerpo del PR. | spec:non_goals |
+| Diseño y tokens | pr:59#DESIGN.md | `DESIGN.md` y `rules/brand/retana-ui.tokens.json` se citan como dependencia de #59. No se copian a esta rama. | spec:non_goals |
