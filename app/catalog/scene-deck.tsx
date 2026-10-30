@@ -20,8 +20,10 @@ function SceneDeckInner({ scenes }: { scenes: readonly Scene[] }) {
   const router = useRouter()
   const requested = params.get("scene")
   const selected = scenes.find((scene) => scene.id === requested) ?? scenes[0]
-  const [locale, setLocale] = useState<SceneLocale>("es")
-  const [reduced, setReduced] = useState(false)
+  const localeFromUrl: SceneLocale = params.get("locale") === "en" ? "en" : "es"
+  const reducedFromUrl = params.get("reduced") === "1" || params.get("reduced") === "true"
+  const [locale, setLocale] = useState<SceneLocale>(localeFromUrl)
+  const [reduced, setReduced] = useState(reducedFromUrl)
   const [epoch, setEpoch] = useState(0)
 
   useEffect(() => {

@@ -1,0 +1,14 @@
+schema: uis.fixture-shape/v1
+spec_id: retana-ui-layout-motion
+ui_system: "4.0.0"
+profile: STANDARD
+seed: taller-barro
+locales: [es-MX, en]
+viewport:
+  width: 390
+  height: 844
+entities:
+  - workshop
+  - balance
+  - agenda-day
+  - agenda-item

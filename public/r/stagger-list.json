@@ -1,0 +1,133 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "stagger-list",
+  "title": "Stagger list",
+  "author": "Eduardo Retana",
+  "description": "Rows enter and leave in sequence, with a cap on the total delay.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/stagger-list.tsx",
+      "content": "\"use client\"\n\n/** Clean-room list. Transform and opacity only. See NOTICE. */\n\nimport type { ReactNode } from \"react\"\nimport { AnimatePresence, motion, useReducedMotionConfig, type Variants } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\n/** Cap on the last item's delay, in seconds. */\nexport const STAGGER_LIST_MAX = 0.4\n\nconst enterEase = [motionPresets.ease.enter[0], motionPresets.ease.enter[1], motionPresets.ease.enter[2], motionPresets.ease.enter[3]] as [number, number, number, number]\nconst exitEase = [motionPresets.ease.exit[0], motionPresets.ease.exit[1], motionPresets.ease.exit[2], motionPresets.ease.exit[3]] as [number, number, number, number]\n\n/** Delay for `index` so the last item never waits longer than `maxTotal`. */\nexport function staggerDelay(index: number, count: number, step = motionPresets.stagger.item, maxTotal = STAGGER_LIST_MAX) {\n  if (count <= 1 || index <= 0) return 0\n  const last = count - 1\n  const total = Math.min(Math.max(0, maxTotal), Math.max(0, step) * last)\n  return (Math.min(index, last) / last) * total\n}\n\nexport type StaggerListProps<T extends { id: string }> = {\n  items: readonly T[]\n  children: (item: T, index: number) => ReactNode\n  /** Seconds between neighbors before the cap. */\n  stagger?: number\n  /** Longest delay any item may wait. */\n  maxStagger?: number\n  label?: string\n  empty?: ReactNode\n  pending?: boolean\n  className?: string\n  itemClassName?: string\n}\n\nfunction variants(reduced: boolean): Variants {\n  return {\n    hidden: { opacity: 0, y: reduced ? 0 : \"0.7em\" },\n    shown: (delay: number) => ({\n      opacity: 1,\n      y: 0,\n      transition: reduced\n        ? { duration: 0, delay: 0 }\n        : { duration: motionPresets.duration.standard, ease: enterEase, delay },\n    }),\n    gone: (delay: number) => ({\n      opacity: 0,\n      y: reduced ? 0 : \"-0.55em\",\n      transition: reduced\n        ? { duration: 0, delay: 0 }\n        : { duration: motionPresets.duration.exit, ease: exitEase, delay },\n    }),\n  }\n}\n\nexport function StaggerList<T extends { id: string }>({\n  items,\n  children,\n  stagger = motionPresets.stagger.item,\n  maxStagger = STAGGER_LIST_MAX,\n  label,\n  empty,\n  pending = false,\n  className,\n  itemClassName,\n}: StaggerListProps<T>) {\n  const reduced = useReducedMotionConfig() === true\n  const motionVariants = variants(reduced)\n  return (\n    <ul\n      data-slot=\"stagger-list\"\n      data-motion={reduced ? \"reduced\" : \"full\"}\n      role=\"list\"\n      aria-label={label}\n      aria-busy={pending || undefined}\n      className={cn(\"m-0 flex min-w-0 list-none flex-col gap-2 p-0\", className)}\n    >\n      <AnimatePresence initial={false}>\n        {items.map((item, index) => (\n          <motion.li\n            key={item.id}\n            className={cn(\"min-w-0\", itemClassName)}\n            custom={staggerDelay(index, items.length, stagger, maxStagger)}\n            variants={motionVariants}\n            initial={reduced ? false : \"hidden\"}\n            animate=\"shown\"\n            exit=\"gone\"\n          >\n            {children(item, index)}\n          </motion.li>\n        ))}\n      </AnimatePresence>\n      {items.length === 0 && empty != null ? (\n        <li data-slot=\"stagger-list-empty\" className=\"text-sm text-muted-foreground\">\n          {empty}\n        </li>\n      ) : null}\n    </ul>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/stagger-list.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    // Exit decelerates, the same curve as CSS ease-out.\n    exit: [0, 0, 0.58, 1] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Lista escalonada",
+    "descriptionEs": "Las filas entran y salen en secuencia, con un tope al retraso total.",
+    "preview": "app/examples/stagger-list/preview.tsx",
+    "previewHref": "/examples/stagger-list",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Lista escalonada",
+        "href": "/examples/stagger-list",
+        "description": "Las filas entran y salen en secuencia, con un tope al retraso total."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/stagger-list/stress",
+        "description": "320 px, vacío, una fila, cuarenta y RTL."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/stagger-list?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/stagger-list?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/stagger-list?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/stagger-list?scene=error",
+        "description": "Error"
+      }
+    ],
+    "usage": "<StaggerList items={events} label=\"Agenda\">{(event) => <EventRow event={event} />}</StaggerList>",
+    "api": [
+      {
+        "name": "items",
+        "type": "Array<{ id: string }>",
+        "description": "Stable ids drive enter and exit."
+      },
+      {
+        "name": "children",
+        "type": "(item, index) => ReactNode",
+        "description": "Renders one row. The list does not style the content."
+      },
+      {
+        "name": "stagger",
+        "type": "number",
+        "description": "Seconds between neighbors before the cap."
+      },
+      {
+        "name": "maxStagger",
+        "type": "number",
+        "description": "Longest delay any row may wait. Default 0.4s."
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "description": "Accessible name of the list."
+      },
+      {
+        "name": "empty",
+        "type": "ReactNode",
+        "description": "Shown when items is empty."
+      },
+      {
+        "name": "pending",
+        "type": "boolean",
+        "description": "Sets aria-busy while a load is in flight."
+      },
+      {
+        "name": "className / itemClassName",
+        "type": "string",
+        "description": "Classes for the list and each row."
+      }
+    ]
+  },
+  "docs": "Clean-room. Staggered enter and exit follow a public description of Jakub Antalik's Transitions UI (https://x.com/jakubantalik/status/2115844862012768541). That product is not open source; no source, sample data, icons, or assets were copied. See docs/layout-transitions.md and NOTICE. Motion is transform and opacity only. The last row never waits longer than maxStagger. Travel is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+  "categories": [
+    "content"
+  ],
+  "type": "registry:ui"
+}

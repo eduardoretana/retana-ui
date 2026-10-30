@@ -916,3 +916,24 @@ callbacks. The table sorts in place and slides rows with layout motion. The
 voice note draws a waveform from numeric peaks and does not play a file.
 Answer no if the CLI asks to overwrite a primitive the host already has.
 The items ship no theme.
+
+---
+
+Layout continuity (clean-room)
+
+docs/layout-transitions.md, the gallery at /examples/layout-rules, number-roll,
+and stagger-list follow a public description of Jakub Antalik's "Transitions
+UI agent":
+
+  https://x.com/jakubantalik/status/2115844862012768541
+
+That product does not publish a license that allows reuse. This is a
+clean-room reading of the behavior only. No source, sample data, icons,
+markup, or assets were copied. The five rules are bounded width, no redundant
+borders, strong color only on the active or primary thing, typographic
+hierarchy inside one value, and continuity of motion. Motion uses transform
+and opacity, skips travel when the reader prefers reduced motion, and does
+not use bounce easing or transition-all. The catalog copy is a fictional
+workshop. number-roll is the reel inside animated-counter; the counter itself
+remains an Arc UI (MIT) adaptation.
+

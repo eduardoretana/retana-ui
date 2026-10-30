@@ -5452,6 +5452,11 @@
           "path": "registry/ui/animated-counter.tsx",
           "type": "registry:component",
           "target": "@ui/animated-counter.tsx"
+        },
+        {
+          "path": "registry/ui/number-roll.tsx",
+          "type": "registry:component",
+          "target": "@ui/number-roll.tsx"
         }
       ]
     },
@@ -5889,12 +5894,140 @@
           }
         ]
       },
-      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "docs": "Adapted from Arc UI (MIT). The value reel is number-roll: transform and opacity only, with the integer and the fraction in separate nodes. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
       "files": [
         {
           "path": "registry/ui/animated-counter.tsx",
           "type": "registry:component",
           "target": "@ui/animated-counter.tsx"
+        },
+        {
+          "path": "registry/ui/number-roll.tsx",
+          "type": "registry:component",
+          "target": "@ui/number-roll.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "stagger-list",
+      "type": "registry:ui",
+      "title": "Stagger list",
+      "description": "Rows enter and leave in sequence, with a cap on the total delay.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Lista escalonada",
+        "descriptionEs": "Las filas entran y salen en secuencia, con un tope al retraso total.",
+        "preview": "app/examples/stagger-list/preview.tsx",
+        "previewHref": "/examples/stagger-list",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
+        "examples": [
+          {
+            "title": "Lista escalonada",
+            "href": "/examples/stagger-list",
+            "description": "Las filas entran y salen en secuencia, con un tope al retraso total."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/stagger-list/stress",
+            "description": "320 px, vacío, una fila, cuarenta y RTL."
+          }
+        ],
+        "usage": "<StaggerList items={events} label=\"Agenda\">{(event) => <EventRow event={event} />}</StaggerList>",
+        "api": [
+          { "name": "items", "type": "Array<{ id: string }>", "description": "Stable ids drive enter and exit." },
+          { "name": "children", "type": "(item, index) => ReactNode", "description": "Renders one row. The list does not style the content." },
+          { "name": "stagger", "type": "number", "description": "Seconds between neighbors before the cap." },
+          { "name": "maxStagger", "type": "number", "description": "Longest delay any row may wait. Default 0.4s." },
+          { "name": "label", "type": "string", "description": "Accessible name of the list." },
+          { "name": "empty", "type": "ReactNode", "description": "Shown when items is empty." },
+          { "name": "pending", "type": "boolean", "description": "Sets aria-busy while a load is in flight." },
+          { "name": "className / itemClassName", "type": "string", "description": "Classes for the list and each row." }
+        ]
+      },
+      "docs": "Clean-room. Staggered enter and exit follow a public description of Jakub Antalik's Transitions UI (https://x.com/jakubantalik/status/2115844862012768541). That product is not open source; no source, sample data, icons, or assets were copied. See docs/layout-transitions.md and NOTICE. Motion is transform and opacity only. The last row never waits longer than maxStagger. Travel is skipped when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/stagger-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/stagger-list.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
+    },
+    {
+      "name": "number-roll",
+      "type": "registry:ui",
+      "title": "Number roll",
+      "description": "Rolls an integer and its fraction separately, using only transform and opacity.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Rodillo numérico",
+        "descriptionEs": "Rueda el entero y los decimales por separado, solo con transform y opacidad.",
+        "preview": "app/examples/number-roll/preview.tsx",
+        "previewHref": "/examples/number-roll",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" }
+        ],
+        "examples": [
+          {
+            "title": "Rodillo numérico",
+            "href": "/examples/number-roll",
+            "description": "Rueda el entero y los decimales por separado, solo con transform y opacidad."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/number-roll/stress",
+            "description": "320 px, vacío, negativo, RTL y 60 caracteres."
+          }
+        ],
+        "usage": "<NumberRoll value={18640.5} decimals={2} hierarchy prefix=\"$\" locale=\"es-MX\" />",
+        "api": [
+          { "name": "value", "type": "number", "description": "The figure to show. Non-finite values render as zero." },
+          { "name": "decimals", "type": "number", "description": "Fraction digits, from 0 to 8." },
+          { "name": "locale", "type": "string", "description": "BCP 47 locale. es-MX and en-US format the catalog pair." },
+          { "name": "prefix / suffix", "type": "string", "description": "Static text beside the reel. They do not roll." },
+          { "name": "hierarchy", "type": "boolean", "description": "Draw the fraction smaller and lighter than the integer." },
+          { "name": "announce", "type": "boolean", "description": "Expose the formatted value to assistive tech. Default true." },
+          { "name": "className / classNames", "type": "string", "description": "Root class and slot classes for integer, fraction, prefix, and suffix." }
+        ]
+      },
+      "docs": "Clean-room. Integer versus fraction and the continuity of the roll follow a public description of Jakub Antalik's Transitions UI (https://x.com/jakubantalik/status/2115844862012768541). That product is not open source; no source, sample data, icons, or assets were copied. See docs/layout-transitions.md and NOTICE. The reel uses only transform and opacity, and settles immediately when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "files": [
+        {
+          "path": "registry/ui/number-roll.tsx",
+          "type": "registry:component",
+          "target": "@ui/number-roll.tsx"
         },
         {
           "path": "registry/lib/motion.ts",
@@ -7978,6 +8111,11 @@
           "path": "registry/ui/animated-counter.tsx",
           "type": "registry:component",
           "target": "@ui/animated-counter.tsx"
+        },
+        {
+          "path": "registry/ui/number-roll.tsx",
+          "type": "registry:component",
+          "target": "@ui/number-roll.tsx"
         }
       ]
     },
@@ -14809,6 +14947,11 @@
           "target": "@ui/animated-counter.tsx"
         },
         {
+          "path": "registry/ui/number-roll.tsx",
+          "type": "registry:component",
+          "target": "@ui/number-roll.tsx"
+        },
+        {
           "path": "registry/lib/chart-tone.ts",
           "type": "registry:lib",
           "target": "@lib/chart-tone.ts"
@@ -15198,6 +15341,11 @@
           "path": "registry/ui/animated-counter.tsx",
           "type": "registry:component",
           "target": "@ui/animated-counter.tsx"
+        },
+        {
+          "path": "registry/ui/number-roll.tsx",
+          "type": "registry:component",
+          "target": "@ui/number-roll.tsx"
         },
         {
           "path": "registry/ui/toast-stack.tsx",
@@ -15862,6 +16010,11 @@
           "path": "registry/ui/animated-counter.tsx",
           "type": "registry:component",
           "target": "@ui/animated-counter.tsx"
+        },
+        {
+          "path": "registry/ui/number-roll.tsx",
+          "type": "registry:component",
+          "target": "@ui/number-roll.tsx"
         },
         {
           "path": "registry/ui/sparkline.tsx",
@@ -16938,6 +17091,11 @@
           "path": "registry/ui/animated-counter.tsx",
           "type": "registry:component",
           "target": "@ui/animated-counter.tsx"
+        },
+        {
+          "path": "registry/ui/number-roll.tsx",
+          "type": "registry:component",
+          "target": "@ui/number-roll.tsx"
         },
         {
           "path": "registry/ui/sparkline.tsx",
