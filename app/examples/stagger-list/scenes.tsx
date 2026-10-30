@@ -19,7 +19,7 @@ function Row({ item, locale }: { item: AgendaItem; locale: SceneLocale }) {
       <span className={cn("w-1 self-stretch rounded-sm", item.now ? "bg-primary" : "bg-border")} aria-hidden="true" />
       <div className="min-w-0">
         <p className={cn("text-sm wrap-anywhere", item.now ? "font-medium text-foreground" : "text-foreground")}>{item.title[locale]}</p>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-foreground">
           {item.time} · {item.place[locale]}
         </p>
       </div>
