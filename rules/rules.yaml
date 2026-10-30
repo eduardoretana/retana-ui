@@ -1,0 +1,33 @@
+schema: uis.rules/v1
+ui_system: 4.0.0
+spec_id: retana-ui-idea448b
+head: 0235da2ac2a16970fee70848911a51737cf7a4e8
+profile: LITE
+# Reglas de ui-system 4.0.0 que este ciclo tiene que cumplir.
+# RUI-MOBILE-* no están: viven en 4.1.0, que no está mergeada.
+rules:
+  - id: RUI-TYPE-001
+    statement: "El tamaño sale de la escala del host. En menos de md el control nativo usa text-base."
+    req_ids: [AC-1]
+  - id: RUI-COLOR-001
+    statement: "registry/ no añade color literal. transparent del tap-highlight vive en app/globals.css."
+    req_ids: [AC-2]
+  - id: RUI-ANIM-PERF-001
+    statement: "Prohibido transition: all. La curva nueva solo cambia el timing."
+    req_ids: [AC-5]
+  - id: RUI-ANIM-PERF-007
+    statement: "El movimiento de los toggles está bajo motion-safe, así que reduced-motion lo apaga."
+    req_ids: [AC-5]
+  - id: RUI-CONTRAST-001
+    statement: "El texto de los controles tocados sigue en foreground sobre background o transparent."
+    req_ids: [AC-7]
+  - id: WCAG-1.4.4
+    statement: "No se fija maximum-scale ni user-scalable=no."
+    req_ids: [AC-4]
+  - id: WCAG-2.4.7
+    statement: "El foco visible permanece después de transparentar el tap-highlight."
+    req_ids: [AC-2]
+  - id: WCAG-2.2-AA
+    statement: "axe sin serious ni critical en los controles de este ciclo."
+    req_ids: [AC-7]
+req_ids: [AC-1, AC-2, AC-3, AC-4, AC-5, AC-6, AC-7]

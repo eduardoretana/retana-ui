@@ -1,0 +1,19 @@
+schema: uis.status/v2
+ui_system:
+  version: 4.0.0
+  declaration: "UI_SYSTEM: APPLIES"
+cycle_state: BUILD
+profile: LITE
+spec_id: retana-ui-idea448b
+spec_version: 1.0.0
+head: 0235da2ac2a16970fee70848911a51737cf7a4e8
+retana_ui:
+  sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+  registry_source: git-sha
+direction:
+  mode: inherited
+  images: none
+auditor: not-this-agent
+notes:
+  - "ui-system 4.0.0. La 4.1.0 no está mergeada. ui-auditor 1.2.5 está admitido para LITE en 4.0.0."
+  - "El head de arriba es el commit de código que evalúan los logs y las capturas. Los commits que solo agregan este paquete no cambian registry/, app/ ni tests/."
