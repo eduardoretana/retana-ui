@@ -1,0 +1,173 @@
+[
+  {
+    "antipattern": "side-tab",
+    "name": "Side-tab accent border",
+    "description": "Thick colored border on one side of a card — the most recognizable tell of AI-generated UIs. Use a subtler accent or remove it entirely.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "/tmp/retana-ui-cpl/registry/ui/agenda-event.tsx",
+    "line": 160,
+    "snippet": "border-s-2"
+  },
+  {
+    "antipattern": "border-accent-on-rounded",
+    "name": "Border accent on rounded element",
+    "description": "Thick accent border on a rounded card — the border clashes with the rounded corners. Remove the border or the border-radius.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "/tmp/retana-ui-cpl/registry/ui/line-chart.tsx",
+    "line": 522,
+    "snippet": "border-t-2"
+  },
+  {
+    "antipattern": "border-accent-on-rounded",
+    "name": "Border accent on rounded element",
+    "description": "Thick accent border on a rounded card — the border clashes with the rounded corners. Remove the border or the border-radius.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "/tmp/retana-ui-cpl/registry/ui/line-chart.tsx",
+    "line": 582,
+    "snippet": "border-t-2"
+  },
+  {
+    "antipattern": "side-tab",
+    "name": "Side-tab accent border",
+    "description": "Thick colored border on one side of a card — the most recognizable tell of AI-generated UIs. Use a subtler accent or remove it entirely.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "/tmp/retana-ui-cpl/registry/ui/rich-text-editor.tsx",
+    "line": 1484,
+    "snippet": "border-l-2"
+  },
+  {
+    "antipattern": "border-accent-on-rounded",
+    "name": "Border accent on rounded element",
+    "description": "Thick accent border on a rounded card — the border clashes with the rounded corners. Remove the border or the border-radius.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "/tmp/retana-ui-cpl/registry/ui/shortcut-recorder.tsx",
+    "line": 247,
+    "snippet": "border-b-2"
+  },
+  {
+    "antipattern": "bounce-easing",
+    "name": "Bounce or elastic easing",
+    "description": "Bounce and elastic easing feel dated and tacky. Real objects decelerate smoothly — use exponential easing (ease-out-quart/quint/expo) instead.",
+    "severity": "advisory",
+    "category": "slop",
+    "file": "/tmp/retana-ui-cpl/registry/ui/theme-toggles/eclipse.tsx",
+    "line": 66,
+    "snippet": "cubic-bezier(0, 0, 0.05, 1.15)",
+    "advisory": true
+  },
+  {
+    "antipattern": "bounce-easing",
+    "name": "Bounce or elastic easing",
+    "description": "Bounce and elastic easing feel dated and tacky. Real objects decelerate smoothly — use exponential easing (ease-out-quart/quint/expo) instead.",
+    "severity": "advisory",
+    "category": "slop",
+    "file": "/tmp/retana-ui-cpl/registry/ui/theme-toggles/eclipse.tsx",
+    "line": 75,
+    "snippet": "cubic-bezier(0, 0, 0.05, 1.15)",
+    "advisory": true
+  },
+  {
+    "antipattern": "bounce-easing",
+    "name": "Bounce or elastic easing",
+    "description": "Bounce and elastic easing feel dated and tacky. Real objects decelerate smoothly — use exponential easing (ease-out-quart/quint/expo) instead.",
+    "severity": "advisory",
+    "category": "slop",
+    "file": "/tmp/retana-ui-cpl/registry/ui/theme-toggles/expand.tsx",
+    "line": 66,
+    "snippet": "cubic-bezier(0, 0, 0, 1.25)",
+    "advisory": true
+  },
+  {
+    "antipattern": "bounce-easing",
+    "name": "Bounce or elastic easing",
+    "description": "Bounce and elastic easing feel dated and tacky. Real objects decelerate smoothly — use exponential easing (ease-out-quart/quint/expo) instead.",
+    "severity": "advisory",
+    "category": "slop",
+    "file": "/tmp/retana-ui-cpl/registry/ui/theme-toggles/expand.tsx",
+    "line": 75,
+    "snippet": "cubic-bezier(0, 0, 0, 1.25)",
+    "advisory": true
+  },
+  {
+    "antipattern": "bounce-easing",
+    "name": "Bounce or elastic easing",
+    "description": "Bounce and elastic easing feel dated and tacky. Real objects decelerate smoothly — use exponential easing (ease-out-quart/quint/expo) instead.",
+    "severity": "advisory",
+    "category": "slop",
+    "file": "/tmp/retana-ui-cpl/registry/ui/theme-toggles/expand.tsx",
+    "line": 81,
+    "snippet": "cubic-bezier(0, 0, 0, 1.25)",
+    "advisory": true
+  },
+  {
+    "antipattern": "bounce-easing",
+    "name": "Bounce or elastic easing",
+    "description": "Bounce and elastic easing feel dated and tacky. Real objects decelerate smoothly — use exponential easing (ease-out-quart/quint/expo) instead.",
+    "severity": "advisory",
+    "category": "slop",
+    "file": "/tmp/retana-ui-cpl/registry/ui/theme-toggles/inner-moon.tsx",
+    "line": 62,
+    "snippet": "cubic-bezier(0, 0, 0.15, 1.25)",
+    "advisory": true
+  },
+  {
+    "antipattern": "bounce-easing",
+    "name": "Bounce or elastic easing",
+    "description": "Bounce and elastic easing feel dated and tacky. Real objects decelerate smoothly — use exponential easing (ease-out-quart/quint/expo) instead.",
+    "severity": "advisory",
+    "category": "slop",
+    "file": "/tmp/retana-ui-cpl/registry/ui/theme-toggles/light-switch.tsx",
+    "line": 67,
+    "snippet": "cubic-bezier(0, 0, 0.15, 1.25)",
+    "advisory": true
+  },
+  {
+    "antipattern": "bounce-easing",
+    "name": "Bounce or elastic easing",
+    "description": "Bounce and elastic easing feel dated and tacky. Real objects decelerate smoothly — use exponential easing (ease-out-quart/quint/expo) instead.",
+    "severity": "advisory",
+    "category": "slop",
+    "file": "/tmp/retana-ui-cpl/registry/ui/theme-toggles/simple.tsx",
+    "line": 66,
+    "snippet": "cubic-bezier(0, 0, 0.15, 1.25)",
+    "advisory": true
+  },
+  {
+    "antipattern": "bounce-easing",
+    "name": "Bounce or elastic easing",
+    "description": "Bounce and elastic easing feel dated and tacky. Real objects decelerate smoothly — use exponential easing (ease-out-quart/quint/expo) instead.",
+    "severity": "advisory",
+    "category": "slop",
+    "file": "/tmp/retana-ui-cpl/registry/ui/theme-toggles/within.tsx",
+    "line": 72,
+    "snippet": "cubic-bezier(0, 0, 0, 1.25)",
+    "advisory": true
+  },
+  {
+    "antipattern": "bounce-easing",
+    "name": "Bounce or elastic easing",
+    "description": "Bounce and elastic easing feel dated and tacky. Real objects decelerate smoothly — use exponential easing (ease-out-quart/quint/expo) instead.",
+    "severity": "advisory",
+    "category": "slop",
+    "file": "/tmp/retana-ui-cpl/registry/ui/theme-toggles/within.tsx",
+    "line": 79,
+    "snippet": "cubic-bezier(0, 0, 0, 1.25)",
+    "advisory": true
+  },
+  {
+    "antipattern": "bounce-easing",
+    "name": "Bounce or elastic easing",
+    "description": "Bounce and elastic easing feel dated and tacky. Real objects decelerate smoothly — use exponential easing (ease-out-quart/quint/expo) instead.",
+    "severity": "advisory",
+    "category": "slop",
+    "file": "/tmp/retana-ui-cpl/registry/ui/theme-toggles/within.tsx",
+    "line": 85,
+    "snippet": "cubic-bezier(0, 0, 0, 1.25)",
+    "advisory": true
+  }
+]

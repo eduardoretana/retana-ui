@@ -1,0 +1,54 @@
+evaluated_sha: 0235da2ac2a16970fee70848911a51737cf7a4e8
+base_sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+tool: playwright
+browser: webkit
+viewport: 390x844
+renders:
+  - file: evidence/IDEA-448/bottom-sheet-after-390.png
+    sha256: d826bb4e15eaf775b11613e25a12588982c42bf12bcce6424dd685977c988d11
+    viewport: 390x844
+    phase: after
+  - file: evidence/IDEA-448/bottom-sheet-before-390.png
+    sha256: 24ababace406eac9e545fcec3546fd79270896cf30e6e42912d57575284fcdbb
+    viewport: 390x844
+    phase: before
+  - file: evidence/IDEA-448/crm-input-after-390.png
+    sha256: 406912debed3c98920622c54a1731e70f217d68506634dc92de170eea548f7e2
+    viewport: 390x844
+    phase: after
+  - file: evidence/IDEA-448/crm-input-before-390.png
+    sha256: 460ba1ab16741542a30ff21321b3f26c3bf6a31acda50df76a5117b6454d5349
+    viewport: 390x844
+    phase: before
+  - file: evidence/IDEA-448/eclipse-1-after-390.png
+    sha256: 8bb1324196c00d387920bf60b6c207ba46f98ef10e71f7733c73d4888cfdca02
+    viewport: 390x844
+    phase: after
+  - file: evidence/IDEA-448/eclipse-1-before-390.png
+    sha256: 07609926b921c2570a48f64d13ddc08415529031539be18cd87fa794a2cac88f
+    viewport: 390x844
+    phase: before
+  - file: evidence/IDEA-448/eclipse-2-after-390.png
+    sha256: 15c80fac4d1ba07ac09ebf7a01f4d7e1370784027544def4c8d7365187e0397e
+    viewport: 390x844
+    phase: after
+  - file: evidence/IDEA-448/eclipse-2-before-390.png
+    sha256: 96ff71ef825a9beaf746ca369f79dfdc0b2fc7f2af7002fcaface33c476c80bd
+    viewport: 390x844
+    phase: before
+  - file: evidence/IDEA-448/eclipse-3-after-390.png
+    sha256: 88c28475027dafbc8f45a81254b704d222817882d5b48edcb97c36245a712c0b
+    viewport: 390x844
+    phase: after
+  - file: evidence/IDEA-448/eclipse-3-before-390.png
+    sha256: 3207602e70108c1b731b5c41cde86e6e8047f8b86fd51f9276dde8e753d40eec
+    viewport: 390x844
+    phase: before
+  - file: evidence/IDEA-448/pipeline-board-date-after-390.png
+    sha256: b434d4df4a668b845cd875bab9d9e23daa308655ff08add033761e806cbe8f91
+    viewport: 390x844
+    phase: after
+  - file: evidence/IDEA-448/pipeline-board-date-before-390.png
+    sha256: 2d2656d2605fbedfe425053807e8501f5ca20fcb01dcf5310ceeb51a59231b5a
+    viewport: 390x844
+    phase: before
