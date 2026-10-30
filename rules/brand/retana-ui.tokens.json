@@ -1,0 +1,202 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
+  "color": {
+    "background": {
+      "$value": "oklch(1 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.145 0 0)" } }
+    },
+    "foreground": {
+      "$value": "oklch(0.145 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.985 0 0)" } }
+    },
+    "card": {
+      "$value": "oklch(1 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.205 0 0)" } }
+    },
+    "card-foreground": {
+      "$value": "oklch(0.145 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.985 0 0)" } }
+    },
+    "popover": {
+      "$value": "oklch(1 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.205 0 0)" } }
+    },
+    "popover-foreground": {
+      "$value": "oklch(0.145 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.985 0 0)" } }
+    },
+    "primary": {
+      "$value": "oklch(0.205 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.922 0 0)" } }
+    },
+    "primary-foreground": {
+      "$value": "oklch(0.985 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.205 0 0)" } }
+    },
+    "secondary": {
+      "$value": "oklch(0.97 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.269 0 0)" } }
+    },
+    "secondary-foreground": {
+      "$value": "oklch(0.205 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.985 0 0)" } }
+    },
+    "muted": {
+      "$value": "oklch(0.97 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.269 0 0)" } }
+    },
+    "muted-foreground": {
+      "$value": "oklch(0.556 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.708 0 0)" } }
+    },
+    "accent": {
+      "$value": "oklch(0.97 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.269 0 0)" } }
+    },
+    "accent-foreground": {
+      "$value": "oklch(0.205 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.985 0 0)" } }
+    },
+    "destructive": {
+      "$value": "oklch(0.577 0.245 27.325)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.704 0.191 22.216)" } }
+    },
+    "border": {
+      "$value": "oklch(0.922 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(1 0 0 / 10%)" } }
+    },
+    "input": {
+      "$value": "oklch(0.922 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(1 0 0 / 15%)" } }
+    },
+    "ring": {
+      "$value": "oklch(0.708 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.556 0 0)" } }
+    },
+    "chart-1": {
+      "$value": "oklch(0.87 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.87 0 0)" } }
+    },
+    "chart-2": {
+      "$value": "oklch(0.556 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.556 0 0)" } }
+    },
+    "chart-3": {
+      "$value": "oklch(0.439 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.439 0 0)" } }
+    },
+    "chart-4": {
+      "$value": "oklch(0.371 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.371 0 0)" } }
+    },
+    "chart-5": {
+      "$value": "oklch(0.269 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.269 0 0)" } }
+    },
+    "sidebar": {
+      "$value": "oklch(0.985 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.205 0 0)" } }
+    },
+    "sidebar-foreground": {
+      "$value": "oklch(0.145 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.985 0 0)" } }
+    },
+    "sidebar-primary": {
+      "$value": "oklch(0.205 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.488 0.243 264.376)" } }
+    },
+    "sidebar-primary-foreground": {
+      "$value": "oklch(0.985 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.985 0 0)" } }
+    },
+    "sidebar-accent": {
+      "$value": "oklch(0.97 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.269 0 0)" } }
+    },
+    "sidebar-accent-foreground": {
+      "$value": "oklch(0.205 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.985 0 0)" } }
+    },
+    "sidebar-border": {
+      "$value": "oklch(0.922 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(1 0 0 / 10%)" } }
+    },
+    "sidebar-ring": {
+      "$value": "oklch(0.708 0 0)",
+      "$extensions": { "retana.modes": { "dark": "oklch(0.556 0 0)" } }
+    }
+  },
+  "typography": {
+    "sans": { "$value": { "fontFamily": "var(--font-geist-sans)" } },
+    "heading": { "$value": { "fontFamily": "var(--font-sans)" } },
+    "mono": { "$value": { "fontFamily": "var(--font-geist-mono)" } }
+  },
+  "radius": {
+    "base": { "$value": "0.625rem" },
+    "sm": { "$value": "calc(var(--radius) * 0.6)" },
+    "md": { "$value": "calc(var(--radius) * 0.8)" },
+    "lg": { "$value": "var(--radius)" },
+    "xl": { "$value": "calc(var(--radius) * 1.4)" },
+    "2xl": { "$value": "calc(var(--radius) * 1.8)" },
+    "3xl": { "$value": "calc(var(--radius) * 2.2)" },
+    "4xl": { "$value": "calc(var(--radius) * 2.6)" }
+  },
+  "$extensions": {
+    "retana.dark": { "derived": false },
+    "retana.design": {
+      "name": "Retana UI",
+      "description": "Tema de demostración del catálogo. Las piezas heredan estos tokens y no traen marca propia.",
+      "overview": "Los valores salen de app/globals.css (:root y .dark) y de las variables de fuente en app/layout.tsx. El color queda en oklch, tal como está escrito. El radio es el paso calc() sobre --radius 0.625rem. El oscuro está declarado token por token, no derivado.",
+      "dos": [
+        "Usar las clases semánticas del host (bg-background, text-foreground, bg-primary, bg-muted, rounded-lg).",
+        "Dejar el color en el oklch de este archivo. No convertirlo a hex ni a rgb.",
+        "Tomar el radio de un paso de este archivo (sm, md, lg, xl, 2xl, 3xl, 4xl)."
+      ],
+      "donts": [
+        {
+          "text": "No estirar la prosa al ancho de la pantalla. La columna de lectura se detiene.",
+          "rule_id": "RUI-LAYOUT-WIDTH-001",
+          "check": "manual"
+        },
+        {
+          "text": "No apilar borde sobre borde. Separar con superficie, espacio o sombra del tema.",
+          "rule_id": "RUI-LAYOUT-BORDER-001",
+          "check": "manual"
+        },
+        {
+          "text": "No usar color fuerte fuera de la acción primaria o el dato activo.",
+          "rule_id": "RUI-LAYOUT-COLOR-001",
+          "check": "manual"
+        },
+        {
+          "text": "No pintar entero y decimales con el mismo peso.",
+          "rule_id": "RUI-TYPE-HIERARCHY-001",
+          "check": "test"
+        },
+        {
+          "text": "No animar width, height ni usar transition-all. Solo transform y opacity.",
+          "rule_id": "RUI-MOTION-CONTINUITY-001",
+          "check": "test"
+        },
+        {
+          "text": "No inventar un radio fuera de los pasos. Un círculo 1:1 es la excepción percent-circle.",
+          "rule_id": "RUI-RADIUS-001",
+          "check": "lint"
+        },
+        {
+          "text": "No meter color literal en registry/.",
+          "rule_id": "RUI-COLOR-001",
+          "check": "lint"
+        }
+      ],
+      "iteration_guide": "Editar rules/brand/retana-ui.tokens.json y regenerar ui/design/retana-ui/DESIGN.md con design_render.mjs. No editar DESIGN.md a mano. Verificar con --check.",
+      "known_gaps": [
+        "No hay tamaño, peso ni interlineado propios en app/globals.css. Solo existen los roles sans, heading y mono.",
+        "No hay sombras verbatim en globals.css. shadow-sm y el resto salen del preset de Tailwind que trae shadcn, no de este archivo.",
+        "No hay escala de spacing propia. El espacio usa la escala del preset.",
+        ".review-preview y .ae-ember pisan primary y chart dentro de esas clases. No son tokens de marca y no están aquí.",
+        "Ningún hueco de contraste medido en este archivo (2026-10-30, el render solo copia los valores)."
+      ]
+    }
+  }
+}

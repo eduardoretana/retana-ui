@@ -2,11 +2,14 @@
 artifact_id: retana-ui-layout-motion.spec
 owner: builder
 spec_version: 1.0.0
-head: c4d84045b73a92112860d5d019f75c09f342fc0b
+head: 0d966603d6ef0b3adc27a50e5996a7d2235cbe3f
 profile: STANDARD
 spec_id: retana-ui-layout-motion
-version: 1.0.0
+version: 1.0.1
 spec_changelog:
+  - version: 1.0.1
+    origin: tokens
+    note: "DESIGN.md generado desde rules/brand/retana-ui.tokens.json. El seed de captura queda en scripts/layout-motion-seed.mjs."
   - version: 1.0.0
     origin: brief
     note: "Alta de las cinco reglas de layout y de las primitivas number-roll y stagger-list. #55 y #56 no se tocan."
@@ -14,7 +17,7 @@ ui_system: "4.0.0"
 brief:
   outcome: "El catálogo documenta cinco reglas de layout y publica number-roll y stagger-list, con animated-counter usando el rodillo por dentro."
   benefit: "Un host hereda el tema y anima cifras y listas solo con transform y opacidad, con menos movimiento y con un tope al stagger."
-  sources: "Guía ui-system 4.0.0 y la nota clean-room de Jakub Antalik en docs/layout-transitions.md. No hay código de esa referencia."
+  sources: "Guía ui-system 4.0.0, rules/brand/retana-ui.tokens.json, ui/design/retana-ui/DESIGN.md y la nota clean-room de Jakub Antalik en docs/layout-transitions.md. No hay código de esa referencia."
   scope: "docs/layout-transitions.md, registry/ui/number-roll.tsx, registry/ui/stagger-list.tsx, registry/ui/animated-counter.tsx, ejemplos PLP y la galería /examples/layout-rules."
   checks: "Vitest de las reglas, del rodillo, de la lista, del contador ya existente y de anim_perf_lint. Playwright a 390 px. impeccable detect."
   stop_when: "pnpm test, pnpm build y anim_perf_lint en verde en el sha evaluado; logs crudos y manifiesto de renders con sha256; PR draft contra CPL, sin merge."
@@ -55,7 +58,9 @@ data:
   - "Locales de formato: es-MX y en-US. La copia de la escena es es-MX y en."
 brand_constraints:
   - "Sin tema propio. Solo clases semánticas del host."
-  - "RUI-RADIUS-001: rounded-sm, rounded-md, rounded-lg, rounded-xl. Sin rounded-full en una pieza 1:1."
+  - "Color en el oklch de rules/brand/retana-ui.tokens.json (colors.background, colors.foreground, colors.primary, colors.muted, colors.muted-foreground). No convertir."
+  - "Radio por paso: rounded.sm, rounded.md, rounded.lg, rounded.xl, rounded.2xl, rounded.3xl, rounded.4xl. La base es rounded.base 0.625rem. Sin rounded-full en una pieza 1:1."
+  - "Tipografía por rol: typography.sans, typography.heading, typography.mono. No hay tamaño propio en el tema."
   - "Movimiento solo con transform y opacity. Sin transition-all. Sin easing con rebote."
   - "prefers-reduced-motion y MotionConfig reducedMotion=always dejan la cifra y la lista sin recorrido."
 retana_ui:
@@ -149,7 +154,7 @@ Quien instala la pieza hereda el tema del host. La cifra y la lista no animan la
 
 ## Sources
 
-ui-system 4.0.0. La referencia de comportamiento es la nota pública de Jakub Antalik, producto sin licencia de reutilización. El trato es clean-room y está en `NOTICE` y en `docs/layout-transitions.md`. No se copió fuente, datos, iconos ni assets.
+ui-system 4.0.0. Los tokens de marca están en `rules/brand/retana-ui.tokens.json` (`colors.primary` oklch(0.205 0 0), `colors.muted` oklch(0.97 0 0), `rounded.lg` = var(--radius), `typography.sans` = var(--font-geist-sans)). `ui/design/retana-ui/DESIGN.md` es la vista generada. La referencia de comportamiento es la nota pública de Jakub Antalik, producto sin licencia de reutilización. El trato es clean-room y está en `NOTICE` y en `docs/layout-transitions.md`. No se copió fuente, datos, iconos ni assets.
 
 ## Scope
 
@@ -181,8 +186,12 @@ Esos comandos están registrados en el sha evaluado, el manifiesto de renders tr
 | rollback | El pedido de 9000 no entra y el saldo vuelve | botón que llama `useSceneSim` con `fail: true` |
 | permission_denied | No aplica. No hay permiso que negar. | — |
 | overflow | Sufijo de 60 caracteres y título largo, con `wrap-anywhere` | `/examples/number-roll/stress` y `/examples/stagger-list/stress` |
-| i18n_long | La misma escena en es-MX y en en, a 390 px | interruptor ES/EN del SceneDeck |
+| i18n_long | La misma escena en es-MX y en en, a 390 px | `?locale=es` y `?locale=en` |
+
+## Seed
+
+`scripts/layout-motion-seed.mjs` lista las rutas. Los datos llenos viven en `app/examples/number-roll/fixtures.ts` (`filled`, 18640.5) y `app/examples/stagger-list/fixtures.ts` (`filled` y `friday`). `?scene=friday` abre el viernes sin click. `?reduced=1` deja el deck en menos movimiento. `?locale=en` es inglés. Sin `locale`, es es-MX.
 
 ## Dirección
 
-No hay imágenes de proveedor. El eje es el par no/sí de cada regla, en una columna de 390 px. Ver `ui/specs/retana-ui-layout-motion.direction-map.md`.
+No hay imágenes de proveedor. El eje es el par no/sí de cada regla, en una columna de 390 px. Los colores y radios citados salen de `ui/design/retana-ui/DESIGN.md`. Ver `ui/specs/retana-ui-layout-motion.direction-map.md`.

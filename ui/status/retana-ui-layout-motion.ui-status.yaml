@@ -4,8 +4,8 @@ cycle_state: AUDITORIA
 profile: STANDARD
 spec_id: retana-ui-layout-motion
 spec_version: 1.0.0
-head: c4d84045b73a92112860d5d019f75c09f342fc0b
-spec_sha256: 751d4dd35c35d0e0b6311c1fb23703f25fd5d2f2ebf9e108cc479c92d77fa705
+head: 0d966603d6ef0b3adc27a50e5996a7d2235cbe3f
+spec_sha256: 3b7660ec2f3d0e75473ab80cac1ec038735ec35b370de76ec8596c0a60579106
 stop_when: "pnpm test, pnpm build y anim_perf_lint en verde; logs de suite y Playwright y renders.yaml con el sha del HEAD; PR draft contra CPL, sin merge."
 deliverable: "Reglas con un sí y un no, number-roll, stagger-list, animated-counter sin cambio de API, y los insumos de este ciclo."
 retana_ui:

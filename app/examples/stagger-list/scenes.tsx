@@ -68,6 +68,10 @@ function EmptyScene({ locale }: SceneRenderProps) {
   return <Agenda fixture={empty} locale={locale} />
 }
 
+function FridayScene({ locale }: SceneRenderProps) {
+  return <Agenda fixture={friday} locale={locale} />
+}
+
 function LoadingScene({ locale, log }: SceneRenderProps) {
   const sim = useSceneSim(loading, log)
   const call = sim.call
@@ -118,6 +122,7 @@ function ErrorScene({ locale, log }: SceneRenderProps) {
 
 export const scenes: Scene[] = [
   { id: "filled", label: "Lleno", labelEn: "Filled", render: FilledScene, frame },
+  { id: "friday", label: "Viernes", labelEn: "Friday", render: FridayScene, frame },
   { id: "empty", label: "Vacío", labelEn: "Empty", render: EmptyScene, frame },
   { id: "loading", label: "Cargando", labelEn: "Loading", render: LoadingScene, frame },
   { id: "error", label: "Error", labelEn: "Error", render: ErrorScene, frame },

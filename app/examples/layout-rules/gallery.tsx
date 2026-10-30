@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, type ReactNode } from "react"
+import { Suspense, useState, type ReactNode } from "react"
+import { useSearchParams } from "next/navigation"
 import { Send } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -195,8 +196,10 @@ function ContinuousList({ locale }: { locale: Locale }) {
   )
 }
 
-export function LayoutRulesGallery() {
-  const [locale, setLocale] = useState<Locale>("es")
+function LayoutRulesGalleryInner() {
+  const params = useSearchParams()
+  const localeFromUrl: Locale = params.get("locale") === "en" ? "en" : "es"
+  const [locale, setLocale] = useState<Locale>(localeFromUrl)
   const t = copy[locale]
 
   return (
@@ -314,5 +317,13 @@ export function LayoutRulesGallery() {
         yes={<ContinuousList locale={locale} />}
       />
     </div>
+  )
+}
+
+export function LayoutRulesGallery() {
+  return (
+    <Suspense fallback={null}>
+      <LayoutRulesGalleryInner />
+    </Suspense>
   )
 }
