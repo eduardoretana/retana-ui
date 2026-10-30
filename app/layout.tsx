@@ -37,7 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "try{var t=new URLSearchParams(location.search).get('theme');if(t==='dark')document.documentElement.classList.add('dark');else if(t==='light')document.documentElement.classList.remove('dark');else if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}",
+              "try{var t=new URLSearchParams(location.search).get('theme');if(t==='dark'||t==='light'){localStorage.setItem('theme',t);document.documentElement.classList.toggle('dark',t==='dark')}else if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}",
           }}
         />
       </head>
