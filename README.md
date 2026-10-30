@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`422` items are in `registry.json` on this branch: `333` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`423` items are in `registry.json` on this branch: `334` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -592,6 +592,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`activity-chat`](registry/ui/activity-chat.tsx) · ui — A collaboration log with message bubbles, a calendar block, and a voice note whose waveform comes from numeric peaks. Install: `npx shadcn@latest add @retana/activity-chat`.
 - [`inline-approve-button`](registry/ui/inline-approve-button.tsx) · ui — A primary action that becomes a success check in place after confirm, without leaving the page. Install: `npx shadcn@latest add @retana/inline-approve-button`.
 - [`portfolio-desk`](registry/blocks/portfolio-desk.tsx) · block — A mini portfolio desk that places the schedule, the dense table, the thread, and the in-place approval on one surface. Install: `npx shadcn@latest add @retana/portfolio-desk`.
+- [`collection-views`](registry/ui/collection-views.tsx) · ui — A collection that morphs between board, list, and timeline. A pill switches the view. Shared titles and avatars move; the rest fades. Install: `npx shadcn@latest add @retana/collection-views`.
 
 ### Charts
 
