@@ -11,9 +11,15 @@ reference_id: circle-names-below
 
 Referencia elegida: `circle-names-below` (`ui/direction/retana-ui-idea450b/selection.md`). No hay imagen de dirección: la variante es de composición, con fixtures genéricas.
 
+`DESIGN.md` y `rules/brand/retana-ui.tokens.json` no viven en esta rama. Los trae el PR #59 (`cursor/layout-roll-stagger-8c2f`). Este mapa no los copia. Al integrar, el `tokens.json` de #59 se regenera solo si `app/globals.css` mueve un radio. Hoy no se mueven: sm 6px, md 8px, lg 10px, xl 14px, 2xl 18px, 3xl 22px, 4xl 26px.
+
+Seed de captura: `ui/direction/fixtures/retana-ui-idea450b.seed.yaml`. Una URL por estado (`shot`, `theme`, `locale`, y `transparency=reduce` solo en dialog, dock y header).
+
+`circle` y `circle-above` son escenas distintas (`namePlace` below y above). El sha256 idéntico de `renders/after/circle-*` y `circle-above-*` en la VM fue porque ambas filas entraban en el mismo viewport. El seed las separa: `shot=circle` y `shot=circle-above`.
+
 | Región | reference_id | Cita | Desviación |
 | --- | --- | --- | --- |
-| Fila `layout="circle"` en `registry/ui/avatar-group.tsx` | circle-names-below | AC-4, rule: RUI-ANIM-PERF-001 | `namePlace` default `below`. La variante `above` existe y no es la elegida. |
+| Fila `layout="circle"` en `registry/ui/avatar-group.tsx` | circle-names-below | AC-4, rule: RUI-ANIM-PERF-001 | `namePlace` default `below`. `shot=circle-above` es la otra variante, en su propia URL. |
 | Escenas filled, empty, loading, error | circle-names-below | AC-4, wcag: 2.2 AA | Placeholders SVG ya usados en el lightbox. Vacío con iniciales. Error con src ausente y fallback. |
 | Badge `count` y `dot` en `components/ui/badge.tsx` | circle-names-below | AC-3, rule: RUI-BADGE-001, wcag: 1.4.1 | Neutro `bg-foreground` / `text-background`. El destructivo no cambia. |
 | Glass en header, dock, dialog, sheet, lightbox | circle-names-below | AC-2, rule: RUI-GLASS-001 | Fallback `bg-background`. Blur `md` o `xs`. |

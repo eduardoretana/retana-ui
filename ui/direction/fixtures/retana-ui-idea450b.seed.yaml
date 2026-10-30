@@ -1,0 +1,48 @@
+schema: uis.seed/v1
+spec_id: retana-ui-idea450b
+version: 1.0.0
+viewport: { width: 390, height: 844 }
+# Every state below is non-empty. Query params are the only switch.
+# theme=light|dark sets or removes the `dark` class on <html>.
+# locale=es|en (es-MX copy when es) swaps the visible strings.
+# transparency=reduce sets html[data-transparency=reduce], which forces the
+# opaque glass fallback on [data-glass=floating]. Omit it for the default glass.
+# shot= isolates one surface so two scenes cannot share one viewport.
+apply:
+  route: /review/idea-450
+  params: [shot, theme, locale, transparency]
+  example: /review/idea-450?shot=circle&theme=light&locale=es
+states:
+  - id: badge
+    shot: badge
+    nonempty: { count: 3, dot: 3, es: "3 sin leer", en: "3 unread" }
+  - id: dialog
+    shot: dialog
+    glass: true
+    nonempty: { es: "Aviso del taller", en: "Workshop notice" }
+  - id: dock
+    shot: dock
+    glass: true
+    nonempty: { items: ["Inicio", "Buscar", "Perfil"] }
+  - id: header
+    shot: header
+    glass: true
+    nonempty: { brand: "Retana UI", underlay: primary }
+  - id: circle
+    shot: circle
+    name_place: below
+    nonempty: { people: ["Inés Calderón", "Mateo Ruiz", "Lucía Peña", "Omar Vidal"] }
+  - id: circle-above
+    shot: circle-above
+    name_place: above
+    nonempty: { people: ["Inés Calderón", "Mateo Ruiz", "Lucía Peña", "Omar Vidal"] }
+  - id: card
+    shot: card
+    nonempty: { es: "Horno 2", en: "Kiln 2" }
+themes: [light, dark]
+locales: [es, en]
+transparency:
+  applies_to: [dialog, dock, header]
+  value: reduce
+# circle and circle-above are different shots. A previous VM capture hashed
+# them the same because both rows sat in one 390×844 viewport.

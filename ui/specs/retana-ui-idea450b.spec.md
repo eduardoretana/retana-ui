@@ -6,13 +6,16 @@ spec_changelog:
   - version: 1.0.0
     origin: brief
     note: "IDEA-450 B. Perfil STANDARD. ui-system 4.0.0. Base cursor/mobile-fixes-c51d."
+  - version: 1.0.1
+    origin: seed
+    note: "Seed versionado con un shot por URL. Mismo commit que el direction-map."
 profile: STANDARD
 brief:
   outcome: "El vidrio solo flota, el conteo neutro se lee como número, el círculo de avatares se ve a 390 px y los radios del demo dejan de usar multiplicadores sin cambiar el px."
   benefit: "Quien instala la pieza ve una superficie legible aunque el navegador no desenfoque, distingue un conteo de un estado, y el catálogo muestra el círculo sin fotos."
   sources: "IDEA-450, cola 1 del 2026-10-30, y la aprobación de Eduardo del mismo día. El video https://x.com/i/status/2116193966655934968 no tiene licencia: solo la idea, clean-room."
   scope: "Los 14 archivos con backdrop-blur, components/ui/badge.tsx, la escena circle de avatar-group y los pasos de radio en app/globals.css."
-  checks: "Vitest, Playwright WebKit a 390 px, contraste, axe, impeccable detect, registry:build y build."
+  checks: "Vitest, Playwright WebKit a 390 px, contraste, axe, impeccable detect, registry:build, build y el healthcheck /api/health."
   stop_when: "Esos comandos en verde, capturas antes y después a 390 px en el Agent Store, y el PR draft contra cursor/mobile-fixes-c51d."
   deliverable: "El diff de código en este PR más los artefactos de este ciclo. ui-system 4.0.0. La evidencia de suite y renders no se commitea."
 scope_paths:
@@ -115,3 +118,24 @@ acceptance:
 # IDEA-450 B
 
 Glass, badge neutro, escena circle y radios fijos dentro de retana-ui. Perfil STANDARD. ui-system 4.0.0.
+
+## Runtime para VibeBot
+
+El render lo levanta VibeBot sobre este head, en `127.0.0.1`, puerto ≥ 40000. Los renders de la VM del builder no cuentan.
+
+```bash
+pnpm install --frozen-lockfile
+pnpm build
+pnpm exec next start --hostname "${HOST:-127.0.0.1}" --port "${PORT:-40000}"
+curl -sS -D - -o /dev/null "http://${HOST:-127.0.0.1}:${PORT:-40000}/api/health"
+```
+
+`/api/health` responde 200 JSON `{"ok":true}` y no redirige. `HOST` y `PORT` son los flags `--hostname` y `--port`.
+
+## Seed
+
+`ui/direction/fixtures/retana-ui-idea450b.seed.yaml`. Cada estado es no vacío y se aplica solo con query params en `/review/idea-450`.
+
+`shot` aísla una superficie. `theme=light|dark` pone o quita la clase `dark`. `locale=es|en` cambia el copy (es es es-MX). `transparency=reduce` pone `html[data-transparency=reduce]` y fuerza el fallback opaco del glass. Sin ese param, el glass sigue la media query.
+
+`shot=circle` (nombres abajo) y `shot=circle-above` (nombres arriba) son páginas distintas. El sha256 repetido de la VM salió porque las dos filas cabían en el mismo viewport de 390×844.
