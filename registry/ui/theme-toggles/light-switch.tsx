@@ -13,6 +13,7 @@
  *   icon follows the `toggled` prop and not the host page's `.dark` class.
  * - Children render after the icon so theme-switch can add a label.
  * - The button is marked `data-toggled` and `group/tt`.
+ * - Overshoot easing is cubic-bezier(0.22, 1, 0.36, 1) (IDEA-448). motion-safe keeps reduced-motion off.
  */
 
 import { type ButtonHTMLAttributes, type CSSProperties, useId } from "react";
@@ -64,7 +65,7 @@ export function LightSwitch({
           <clipPath id={clipPaddleId}>
             <path
               d={"M7 3h10v9H7Z"}
-              className="motion-safe:transition-[d,translate] motion-safe:duration-(--toggles-light-switch--duration) motion-safe:[transition-timing-function:cubic-bezier(0,0,0.15,1.25)] group-data-[toggled=true]/tt:[d:path('M7_12h10v9H7Z')] group-data-[toggled=true]/tt:not-supports-[d:path('M0_0')]:translate-y-[9px]"
+              className="motion-safe:transition-[d,translate] motion-safe:duration-(--toggles-light-switch--duration) motion-safe:[transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-data-[toggled=true]/tt:[d:path('M7_12h10v9H7Z')] group-data-[toggled=true]/tt:not-supports-[d:path('M0_0')]:translate-y-[9px]"
             />
           </clipPath>
         </defs>
