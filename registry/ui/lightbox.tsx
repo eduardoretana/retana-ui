@@ -5,6 +5,7 @@ import { Dialog } from "radix-ui"
 import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { floatingGlass80 } from "@/registry/retana/lib/glass"
 import { Button } from "@/components/ui/button"
 
 export type LightboxItem = {
@@ -83,7 +84,7 @@ export function Lightbox({
   return (
     <Dialog.Root open={isOpen} onOpenChange={setOpen}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm" />
+        <Dialog.Overlay data-glass="floating" className={cn("fixed inset-0 z-50", floatingGlass80)} />
         <Dialog.Content
           data-slot="lightbox"
           aria-describedby={undefined}

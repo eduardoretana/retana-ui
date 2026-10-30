@@ -13,6 +13,7 @@ import type { LucideIcon } from "lucide-react"
 import { toast, Toaster } from "sonner"
 
 import { cn } from "@/lib/utils"
+import { floatingGlass95 } from "@/registry/retana/lib/glass"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -277,7 +278,7 @@ export function AdminShell({
         <SidebarRail aria-label={sidebarLabel} title={sidebarLabel} />
       </Sidebar>
       <SidebarInset className="min-w-0 bg-background">
-        <header className="sticky top-0 z-20 flex h-14 items-center gap-2 border-b border-border bg-background/95 px-3 backdrop-blur-sm motion-reduce:backdrop-blur-none">
+        <header data-glass="floating" className={cn("sticky top-0 z-20 flex h-14 items-center gap-2 border-b border-border px-3", floatingGlass95)}>
           <SidebarToggle label={sidebarLabel} />
           <Breadcrumb>
             <BreadcrumbList>

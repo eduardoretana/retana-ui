@@ -18,6 +18,9 @@ const badgeVariants = cva(
         ghost:
           "hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50",
         link: "text-primary underline-offset-4 hover:underline",
+        count:
+          "border-transparent bg-foreground text-background tabular-nums",
+        dot: "size-2.5 min-h-2.5 min-w-2.5 rounded-full border-transparent bg-foreground p-0",
       },
     },
     defaultVariants: {
@@ -30,10 +33,15 @@ function Badge({
   className,
   variant = "default",
   asChild = false,
+  count,
+  children,
   ...props
 }: React.ComponentProps<"span"> &
-  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
+  VariantProps<typeof badgeVariants> & { asChild?: boolean; count?: number }) {
   const Comp = asChild ? Slot.Root : "span"
+  const informative = variant === "count" || variant === "dot"
+  const number = typeof count === "number" ? String(count) : null
+  const label = informative ? (props["aria-label"] ?? number ?? undefined) : props["aria-label"]
 
   return (
     <Comp
@@ -41,7 +49,10 @@ function Badge({
       data-variant={variant}
       className={cn(badgeVariants({ variant }), className)}
       {...props}
-    />
+      aria-label={label}
+    >
+      {variant === "dot" ? <span className="sr-only">{number}</span> : (children ?? number)}
+    </Comp>
   )
 }
 
