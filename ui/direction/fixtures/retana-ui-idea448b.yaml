@@ -14,7 +14,7 @@ scenes:
     record:
       id: bruma
       company: Taller Bruma
-      owner: Inés Quesada
+      owner: Inés Ejemplo
       stage: proposal
       value: 48000
       currency: MXN
