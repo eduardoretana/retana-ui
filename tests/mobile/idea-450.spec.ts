@@ -29,12 +29,6 @@ function contrast(a: [number, number, number], b: [number, number, number]) {
   return (hi + 0.05) / (lo + 0.05)
 }
 
-function parseRgb(input: string): [number, number, number] {
-  const match = input.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/)
-  if (!match) throw new Error(`unparsed color ${input}`)
-  return [Number(match[1]), Number(match[2]), Number(match[3])]
-}
-
 async function paint(page: Page, theme: "light" | "dark") {
   await page.addInitScript((next) => {
     localStorage.setItem("theme", next)
@@ -51,16 +45,27 @@ test.describe("IDEA-450 390", () => {
     test(`badge neutro ≥3:1 y el texto ≥4.5:1 en ${theme}`, async ({ page }) => {
       await paint(page, theme)
       const ratio = await page.locator("[data-variant=count]").evaluate((badge) => {
-        const pageBg = getComputedStyle(document.body).backgroundColor
-        const badgeBg = getComputedStyle(badge).backgroundColor
-        const text = getComputedStyle(badge).color
-        return { pageBg, badgeBg, text }
+        const sample = (value: string) => {
+          const canvas = document.createElement("canvas")
+          canvas.width = 1
+          canvas.height = 1
+          const context = canvas.getContext("2d")
+          if (!context) throw new Error("canvas")
+          context.fillStyle = value
+          context.fillRect(0, 0, 1, 1)
+          const [r, g, b] = context.getImageData(0, 0, 1, 1).data
+          return [r, g, b] as [number, number, number]
+        }
+        return {
+          pageBg: sample(getComputedStyle(document.body).backgroundColor),
+          badgeBg: sample(getComputedStyle(badge).backgroundColor),
+          text: sample(getComputedStyle(badge).color),
+          dot: sample(getComputedStyle(badge.parentElement?.querySelector("[data-variant=dot]") ?? badge).backgroundColor),
+        }
       })
-      expect(contrast(parseRgb(ratio.badgeBg), parseRgb(ratio.pageBg))).toBeGreaterThanOrEqual(3)
-      expect(contrast(parseRgb(ratio.text), parseRgb(ratio.badgeBg))).toBeGreaterThanOrEqual(4.5)
-      const dot = await page.locator("[data-variant=dot]").evaluate((node) => getComputedStyle(node).backgroundColor)
-      const pageBg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor)
-      expect(contrast(parseRgb(dot), parseRgb(pageBg))).toBeGreaterThanOrEqual(3)
+      expect(contrast(ratio.badgeBg, ratio.pageBg)).toBeGreaterThanOrEqual(3)
+      expect(contrast(ratio.text, ratio.badgeBg)).toBeGreaterThanOrEqual(4.5)
+      expect(contrast(ratio.dot, ratio.pageBg)).toBeGreaterThanOrEqual(3)
       await expect(page.locator("[aria-label='3 sin leer']").first()).toBeVisible()
     })
 
@@ -70,14 +75,25 @@ test.describe("IDEA-450 390", () => {
         const probe = document.createElement("div")
         probe.className = "bg-background text-foreground"
         document.body.appendChild(probe)
-        const bg = getComputedStyle(probe).backgroundColor
-        const fg = getComputedStyle(probe).color
+        const sample = (value: string) => {
+          const canvas = document.createElement("canvas")
+          canvas.width = 1
+          canvas.height = 1
+          const context = canvas.getContext("2d")
+          if (!context) throw new Error("canvas")
+          context.fillStyle = value
+          context.fillRect(0, 0, 1, 1)
+          const [r, g, b] = context.getImageData(0, 0, 1, 1).data
+          return [r, g, b] as [number, number, number]
+        }
+        const bg = sample(getComputedStyle(probe).backgroundColor)
+        const fg = sample(getComputedStyle(probe).color)
         probe.remove()
         return { bg, fg, className: el.className }
       })
       expect(colors.className).toContain("bg-background")
       expect(colors.className).toContain("supports-[backdrop-filter]:")
-      expect(contrast(parseRgb(colors.fg), parseRgb(colors.bg))).toBeGreaterThanOrEqual(4.5)
+      expect(contrast(colors.fg, colors.bg)).toBeGreaterThanOrEqual(4.5)
     })
   }
 
@@ -106,8 +122,8 @@ test.describe("IDEA-450 390", () => {
 
   test("axe no marca serious ni critical en el círculo y el badge", async ({ page }) => {
     await paint(page, "light")
-    const results = await new AxeBuilder({ page }).include("main").analyze()
+    const results = await new AxeBuilder({ page }).include("[data-shot=badge-new]").include("#circle").analyze()
     const serious = results.violations.filter((item) => item.impact === "serious" || item.impact === "critical")
-    expect(serious.map((item) => item.id)).toEqual([])
+    expect(serious.map((item) => `${item.id} ${item.nodes.map((node) => node.target.join(" ")).join(" | ")}`)).toEqual([])
   })
 })

@@ -55,8 +55,10 @@ export default function Idea450ReviewPage() {
             <Badge variant="secondary">8</Badge>
             <Badge variant="outline">+12</Badge>
             <Badge variant="destructive">Error</Badge>
-            <Badge variant="count" count={3} aria-label="3 sin leer" />
-            <Badge variant="dot" count={3} aria-label="3 sin leer" />
+            <span data-shot="badge-new" className="inline-flex items-center gap-2">
+              <Badge variant="count" count={3} aria-label="3 sin leer" />
+              <Badge variant="dot" count={3} aria-label="3 sin leer" />
+            </span>
           </div>
         </section>
         <section id="circle" data-shot="circle" className="flex flex-col gap-3">
