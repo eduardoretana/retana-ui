@@ -1,7 +1,7 @@
 schema: uis.status/v2
 ui_system: {version: 4.0.0}
 declaration: "UI_SYSTEM: APPLIES"
-cycle_state: AUDITORIA
+cycle_state: CLOSEOUT
 profile: LITE
 spec_id: retana-ui-idea448b
 spec_version: 1.0.0
@@ -16,3 +16,4 @@ auditor: not-this-agent
 notes:
   - "ui-system 4.0.0 en una sola línea: el lector no acepta el bloque anidado. La 4.1.0 no está mergeada. ui-auditor 1.2.5 está admitido para LITE con 4.0.0."
   - "head no puede ser el sha de este mismo commit: el objeto git incluye este archivo. El valor es el commit de código anterior (fe428f3d). El gate no lee status.head. suite-log y renders-log van fuera del árbol."
+  - "Auditor ui-auditor 1.2.5 PASS en 1bfb56e1 (round-1.json sha256 ce60cd0c…), T07 → CLOSEOUT."
