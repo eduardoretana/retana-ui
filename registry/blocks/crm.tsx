@@ -238,7 +238,7 @@ export function CrmSheet({
                             <input
                             aria-label={`Empresa ${row.company}`}
                             value={draft}
-                            className="h-8 w-full min-w-0 rounded-md border border-input bg-background px-2 text-sm focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+                            className="h-8 w-full min-w-0 rounded-md border border-input bg-background px-2 text-base focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none md:text-sm"
                             onChange={(event) => setDraft(event.target.value)}
                             onBlur={saveEdit}
                             onKeyDown={(event) => {
@@ -285,7 +285,7 @@ export function CrmSheet({
                             <input
                             aria-label={`Responsable de ${row.company}`}
                             value={draft}
-                            className="h-8 w-full min-w-0 rounded-md border border-input bg-background px-2 text-sm focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+                            className="h-8 w-full min-w-0 rounded-md border border-input bg-background px-2 text-base focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none md:text-sm"
                             onChange={(event) => setDraft(event.target.value)}
                             onBlur={saveEdit}
                             onKeyDown={(event) => {
@@ -313,7 +313,7 @@ export function CrmSheet({
                             aria-label={`Valor de ${row.company}`}
                             inputMode="decimal"
                             value={draft}
-                            className="h-8 w-full min-w-0 rounded-md border border-input bg-background px-2 text-right text-sm tabular-nums focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+                            className="h-8 w-full min-w-0 rounded-md border border-input bg-background px-2 text-right text-base tabular-nums focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none md:text-sm"
                             onChange={(event) => setDraft(event.target.value)}
                             onBlur={saveEdit}
                             onKeyDown={(event) => {

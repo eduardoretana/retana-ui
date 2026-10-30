@@ -199,7 +199,7 @@ export function Onboarding({
                       <textarea
                         value={invites}
                         rows={4}
-                        className="rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+                        className="rounded-lg border border-input bg-transparent px-2.5 py-2 text-base focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none md:text-sm"
                         onChange={(event) => setInvites(event.target.value)}
                       />
                     </label>

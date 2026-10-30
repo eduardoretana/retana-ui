@@ -310,7 +310,7 @@ export function PipelineBoard<TMeta extends Record<string, unknown> = Record<str
                 <input
                   type="date"
                   aria-label={labels.from}
-                  className="h-8 rounded-lg border border-input bg-transparent px-2 text-sm text-foreground"
+                  className="h-8 rounded-lg border border-input bg-transparent px-2 text-base text-foreground md:text-sm"
                   value={filters.from ?? ""}
                   onChange={(event) => patchFilters({ from: event.target.value || null })}
                 />
@@ -320,7 +320,7 @@ export function PipelineBoard<TMeta extends Record<string, unknown> = Record<str
                 <input
                   type="date"
                   aria-label={labels.to}
-                  className="h-8 rounded-lg border border-input bg-transparent px-2 text-sm text-foreground"
+                  className="h-8 rounded-lg border border-input bg-transparent px-2 text-base text-foreground md:text-sm"
                   value={filters.to ?? ""}
                   onChange={(event) => patchFilters({ to: event.target.value || null })}
                 />

@@ -378,14 +378,14 @@ export function CandidateDetail<TMeta extends Record<string, unknown> = Record<s
           >
             <label className="grid gap-1 text-xs text-muted-foreground">
               {labels.scheduleKind}
-              <input className="h-8 rounded-lg border border-input bg-transparent px-2 text-sm text-foreground" value={kind} onChange={(event) => setKind(event.target.value)} />
+              <input className="h-8 rounded-lg border border-input bg-transparent px-2 text-base text-foreground md:text-sm" value={kind} onChange={(event) => setKind(event.target.value)} />
             </label>
             <label className="grid gap-1 text-xs text-muted-foreground">
               {labels.scheduleWhen}
               <input
                 type="datetime-local"
                 aria-label={labels.scheduleWhen}
-                className="h-8 rounded-lg border border-input bg-transparent px-2 text-sm text-foreground"
+                className="h-8 rounded-lg border border-input bg-transparent px-2 text-base text-foreground md:text-sm"
                 value={when}
                 onChange={(event) => setWhen(event.target.value)}
                 required
