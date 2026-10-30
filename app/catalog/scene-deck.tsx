@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { RotateCcw } from "lucide-react"
 import { toast } from "sonner"
 
+import { captureLocale, captureReduced } from "@/app/catalog/capture-query"
 import { SceneFrameView } from "@/app/catalog/scene-frame"
 import { SceneModeProvider } from "@/app/catalog/scene-mode"
 import { sceneText, type Scene, type SceneLocale } from "@/app/catalog/scene-types"
@@ -20,8 +21,8 @@ function SceneDeckInner({ scenes }: { scenes: readonly Scene[] }) {
   const router = useRouter()
   const requested = params.get("scene")
   const selected = scenes.find((scene) => scene.id === requested) ?? scenes[0]
-  const [locale, setLocale] = useState<SceneLocale>("es")
-  const [reduced, setReduced] = useState(false)
+  const [locale, setLocale] = useState<SceneLocale>(captureLocale(params.get("locale")))
+  const [reduced, setReduced] = useState(captureReduced(params.get("motion")))
   const [epoch, setEpoch] = useState(0)
 
   useEffect(() => {

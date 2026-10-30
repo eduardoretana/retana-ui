@@ -106,7 +106,9 @@ const agents = [
 ] as const
 
 const layouts = [
-  ["magnetic-bento", "Mixed spans with one highlight that glides between cards."],
+  ["bento-grid", "Cells that ask for a span. One column at 390px, the full count on desktop."],
+  ["bento-feature-card", "Illustration, icon, title, description, and one optional link inside a cell."],
+  ["magnetic-bento", "Mixed spans with one highlight that glides between cards. Uses the bento grid preset."],
   ["blog-grid", "A page of posts."],
   ["card-stack", "A triage deck you flick left or right. For a depth stack of notices, use notification-stack."],
   ["radio-cards", "One choice among option cards."],
