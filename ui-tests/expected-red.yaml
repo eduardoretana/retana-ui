@@ -1,0 +1,21 @@
+schema: uis.expected-red/v1
+spec_id: retana-ui-layout-motion
+ui_system: {version: 4.0.0}
+profile: STANDARD
+retana_ui_sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+head: c4d84045b73a92112860d5d019f75c09f342fc0b
+recorded_before_build: true
+command: pnpm exec vitest run __tests__/number-roll.test.tsx __tests__/stagger-list.test.tsx __tests__/animated-counter.test.tsx __tests__/anim-perf-lint.test.ts
+cases:
+  - file: __tests__/number-roll.test.tsx
+    name: suite
+    signature: 'Failed to resolve import "@/registry/ui/number-roll" from "__tests__/number-roll.test.tsx". Does the file exist?'
+  - file: __tests__/stagger-list.test.tsx
+    name: suite
+    signature: 'Failed to resolve import "@/registry/ui/stagger-list" from "__tests__/stagger-list.test.tsx". Does the file exist?'
+  - file: __tests__/animated-counter.test.tsx
+    name: suite
+    signature: 'Failed to resolve import "@/registry/retana/ui/number-roll" from "registry/ui/animated-counter.tsx". Does the file exist?'
+  - file: __tests__/anim-perf-lint.test.ts
+    name: suite
+    signature: 'ENOENT: no such file or directory, access ''/workspace/registry/ui/number-roll.tsx'''

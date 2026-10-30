@@ -1,0 +1,20 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0}
+cycle_state: AUDITORIA
+profile: STANDARD
+spec_id: retana-ui-layout-motion
+spec_version: 1.0.0
+head: c4d84045b73a92112860d5d019f75c09f342fc0b
+spec_sha256: 751d4dd35c35d0e0b6311c1fb23703f25fd5d2f2ebf9e108cc479c92d77fa705
+stop_when: "pnpm test, pnpm build y anim_perf_lint en verde; logs de suite y Playwright y renders.yaml con el sha del HEAD; PR draft contra CPL, sin merge."
+deliverable: "Reglas con un sí y un no, number-roll, stagger-list, animated-counter sin cambio de API, y los insumos de este ciclo."
+retana_ui:
+  sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+  registry_source: git-sha
+direction:
+  mode: code
+  images: none
+  generators_used: []
+  chosen: yes-no-pairs
+auditor: not-this-agent
+declaration: "UI_SYSTEM: APPLIES"

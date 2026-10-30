@@ -1,0 +1,46 @@
+schema: uis.rules/v1
+ui_system: "4.0.0"
+spec_id: retana-ui-layout-motion
+head: c4d84045b73a92112860d5d019f75c09f342fc0b
+profile: STANDARD
+rules:
+  - id: RUI-LAYOUT-WIDTH-001
+    title: Anchos acotados
+    req_ids: [AC-1]
+    source: docs/layout-transitions.md
+  - id: RUI-LAYOUT-BORDER-001
+    title: Sin bordes redundantes
+    req_ids: [AC-2]
+    source: docs/layout-transitions.md
+  - id: RUI-LAYOUT-COLOR-001
+    title: Color fuerte solo en lo activo o primario
+    req_ids: [AC-3, AC-12]
+    source: docs/layout-transitions.md
+  - id: RUI-TYPE-HIERARCHY-001
+    title: Jerarquía tipográfica dentro de un mismo valor
+    req_ids: [AC-4, AC-6]
+    source: docs/layout-transitions.md
+  - id: RUI-MOTION-CONTINUITY-001
+    title: Animar con continuidad
+    req_ids: [AC-5, AC-7, AC-9, AC-10]
+    source: docs/layout-transitions.md
+  - id: RUI-ANIM-PERF-001
+    title: Nada de transition-all
+    req_ids: [AC-5]
+    source: ui-system 4.0.0
+  - id: RUI-ANIM-PERF-002
+    title: No animar layout
+    req_ids: [AC-5, AC-8]
+    source: ui-system 4.0.0
+  - id: RUI-RADIUS-001
+    title: Radios por paso del tema
+    req_ids: [AC-2]
+    source: ui-system 4.0.0
+  - id: RUI-CONTRAST-001
+    title: Contraste WCAG 2.2 AA
+    req_ids: [AC-4, AC-12]
+    source: ui-system 4.0.0
+  - id: RUI-CONTRACT-001
+    title: El contador publicado no cambia de API
+    req_ids: [AC-8]
+    source: ui-system 4.0.0
