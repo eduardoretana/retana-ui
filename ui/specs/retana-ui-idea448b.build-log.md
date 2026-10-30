@@ -17,6 +17,8 @@ La suite y los renders no se commitean. El gate los toma por `--suite-log` y `--
 - `viewportFit: "cover"` sin `maximumScale`.
 - Las curvas con overshoot pasan a `cubic-bezier(0.22, 1, 0.36, 1)` bajo `motion-safe`. No hay `transition-all`.
 - La transición de `d` en el clip de eclipse, expand y simple ya estaba. No se reescribió.
+- Las filas de `json-viewer` no animan layout: alto estático, entrada con opacidad y `translateY`, salida solo con opacidad. Sin waiver.
+- El anillo del pulgar en `components/ui/slider.tsx` está en `::before` y solo cambia de opacidad. `transition-[color]` se queda. El foco sigue visible.
 
 ## spec_defect
 
@@ -38,4 +40,4 @@ Medidos otra vez sobre el HEAD de este PR, después de este commit, sin un commi
 - `pnpm typecheck:strict-host`: exit 0.
 - `pnpm build`: exit 0.
 
-ui-system de este ciclo: **4.0.0**. `anim_perf_lint` no está en retana-ui; no se corrió.
+ui-system de este ciclo: **4.0.0**. VibeBot corrió `anim_perf_lint` (main 419ad648) sobre CPL..ce0c2857 y marcó `grid-template-rows` y `transition-[color,box-shadow]`. Esos dos quedaron fuera del diff.

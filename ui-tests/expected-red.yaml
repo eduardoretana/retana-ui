@@ -17,3 +17,6 @@ cases:
   - file: __tests__/mobile-inputs.test.ts
     name: usa la curva sin overshoot y conserva reduced-motion
     signature: "expected theme-toggles source to contain cubic-bezier(0.22,1,0.36,1)"
+  - file: tests/mobile/inputs.spec.ts
+    name: el pulgar del deslizador pasa axe 4.13.0 en claro y oscuro
+    signature: "axe-core 4.13.0 reports serious or critical on [data-slot=slider] in light or dark"

@@ -1,7 +1,7 @@
 ---
 spec_id: retana-ui-idea448b
 version: 1.0.0
-head: dc6987f1959d79fd9fea1334a5666e5a03ff01b8
+head: fe428f3d4b31a63a51196e4c1016349ebdcf7d75
 spec_changelog:
   - version: 1.0.0
     origin: brief
@@ -166,4 +166,4 @@ Código ya en la rama, más este Spec, el status, el direction-map, el fixture, 
 
 ## Dirección
 
-Heredada del tema del catálogo. Perfil LITE: no hay tablero ni variantes de imagen. El direction-map cita AC-6 igual que esta spec (`pnpm test`, `pnpm exec tsc --noEmit`, `pnpm lint` y `pnpm build` en 0, log por `--suite-log`) y AC-7 en el pulgar del deslizador. Las filas del visor JSON ya no animan `height`: usan `grid-template-rows` de `0fr` a `1fr`, y con reduced-motion la transición dura 0. Ver `ui/direction/retana-ui-idea448b/direction-map.md`.
+Heredada del tema del catálogo. Perfil LITE: no hay tablero ni variantes de imagen. El direction-map cita AC-6 igual que esta spec (`pnpm test`, `pnpm exec tsc --noEmit`, `pnpm lint` y `pnpm build` en 0, log por `--suite-log`) y AC-7 en el pulgar del deslizador. Las filas del visor JSON se montan a su alto fijo y solo animan opacidad y un `translateY` corto; al cerrarse solo baja la opacidad y luego se desmontan. Con reduced-motion todo es instantáneo. El anillo del pulgar vive en `::before` y solo anima su opacidad. Ver `ui/direction/retana-ui-idea448b/direction-map.md`.
