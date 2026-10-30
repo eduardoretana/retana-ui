@@ -1,0 +1,28 @@
+schema: uis.fixture-shape/v1
+spec_id: retana-ui-collection-views
+ui_system: "4.0.0"
+profile: STANDARD
+seed: taller-lumen
+locale: es-MX
+today: "2026-10-30"
+fields:
+  group:
+    - id
+    - label
+  item:
+    - id
+    - groupId
+    - title
+    - detail
+    - people
+    - start
+    - end
+states:
+  - filled
+  - empty
+  - loading
+  - error
+  - list
+  - timeline
+  - crowded
+  - no-matches

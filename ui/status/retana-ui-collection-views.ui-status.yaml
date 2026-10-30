@@ -1,0 +1,30 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0}
+cycle_state: AUDITORIA
+head: 0000000000000000000000000000000000000000
+artifact_id: status-retana-ui-collection-views
+owner: lead
+spec_version: 0.1.0
+profile: STANDARD
+spec_id: retana-ui-collection-views
+declaration: "UI_SYSTEM: APPLIES"
+stop_when: Las tres vistas comparten grupo, cáscara, título y avatares; el resorte no rebota; con reduced-motion no hay morph; vacío, carga y error se leen; el registry no introduce color literal.
+deliverable: Pieza collection-views, ejemplo PLP, pruebas Vitest y Playwright, y este expediente.
+retana_ui:
+  sha: 0000000000000000000000000000000000000000
+  registry_source: git-sha
+direction:
+  reference_id: desdivj-collection-views
+  map: ui/specs/retana-ui-collection-views.direction-map.md
+  generators_used: []
+inputs:
+  - ui/specs/retana-ui-collection-views.spec.md
+  - ui/specs/retana-ui-collection-views.direction-map.md
+  - ui/specs/retana-ui-collection-views.build-log.md
+  - ui/direction/fixtures/retana-ui-collection-views.shape.yaml
+  - ui/direction/fixtures/retana-ui-collection-views.yaml
+  - rules/rules.yaml
+  - ui/status/retana-ui-collection-views.ui-status.yaml
+  - ui-tests/expected-red.yaml
+evidence:
+  note: El gate lee la evidencia por --suite-log y --renders-log. No vive en este PR.

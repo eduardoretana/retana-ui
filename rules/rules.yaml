@@ -1,0 +1,39 @@
+schema: uis.rules/v1
+ui_system: "4.0.0"
+spec_id: retana-ui-collection-views
+profile: STANDARD
+head: 0000000000000000000000000000000000000000
+rules:
+  - id: RUI-ANIM-PERF-001
+    req_ids: [AC-MORPH-003]
+    statement: Nada de transition-all.
+  - id: RUI-ANIM-PERF-002
+    req_ids: [AC-MORPH-003, AC-TIMELINE-001]
+    statement: El tamaño de la barra no se anima con width. Crece con scaleX.
+  - id: RUI-ANIM-PERF-003
+    req_ids: [AC-MORPH-003]
+    statement: No se anima box-shadow.
+  - id: RUI-ANIM-PERF-004
+    req_ids: [AC-MORPH-003]
+    statement: No hay blur().
+  - id: RUI-ANIM-PERF-006
+    req_ids: [AC-MORPH-003]
+    statement: El fuente no declara will-change.
+  - id: RUI-COLOR-001
+    req_ids: [AC-TOKEN-001]
+    statement: Sin color literal en registry/.
+  - id: RUI-RADIUS-001
+    req_ids: [AC-TOKEN-001]
+    statement: Radios por paso. El círculo 1:1 es el avatar del host.
+  - id: RUI-CONTRAST-001
+    req_ids: [AC-TIMELINE-001, AC-STATE-ERROR]
+    statement: Texto y barras usan tokens del host. El error usa destructive.
+  - id: WCAG-2.2-AA
+    req_ids: [AC-KEYS-001, AC-INPUT-001, AC-STATE-ERROR, AC-STATE-LOADING, AC-REDUCED-001]
+    statement: Nombre accesible, teclado en la píldora, 16 px en el buscador, alerta y estado, y menos movimiento.
+  - id: UIS-LAYOUT-001
+    req_ids: [AC-LAYOUT-001]
+    statement: Anchos acotados. En 390 y 1280 el documento no desborda en X.
+  - id: RUI-REUSE-001
+    req_ids: [AC-VIEW-001]
+    statement: La píldora es segmented-control. Las personas son el avatar del host.

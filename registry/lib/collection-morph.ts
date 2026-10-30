@@ -155,7 +155,8 @@ export function collectionTicks(domain: CollectionDomain, locale: string): Colle
   const span = domain.end - domain.start
   if (span <= 0) return []
   const days = Math.max(1, Math.round(span / DAY_MS))
-  const step = days > 50 ? 14 : days > 20 ? 7 : days > 10 ? 2 : 1
+  const rough = Math.ceil(days / 5)
+  const step = rough > 10 ? 14 : rough > 5 ? 7 : rough > 2 ? 2 : 1
   const ticks: CollectionTick[] = []
   for (let time = domain.start; time < domain.end; time += step * DAY_MS) {
     ticks.push({
