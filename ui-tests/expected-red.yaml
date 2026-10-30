@@ -1,0 +1,51 @@
+schema: uis.expected-red/v1
+ui_system: {version: 4.0.0}
+spec_id: retana-ui-collection-views
+profile: STANDARD
+note: Firmas con las que la suite fallaba antes de la pieza. El build las pone en verde.
+cases:
+  - id: AC-MORPH-001
+    test: __tests__/collection-morph.test.ts
+    signature: "Cannot find module '@/registry/lib/collection-morph'"
+  - id: AC-VIEW-001
+    test: __tests__/collection-views.test.tsx
+    signature: "Unable to find an accessible element with the role button and name Tablero"
+  - id: AC-KEYS-001
+    test: __tests__/collection-views.test.tsx
+    signature: "expected onViewChange to be called with list"
+  - id: AC-MORPH-002
+    test: __tests__/collection-views.test.tsx
+    signature: "expected data-shared title to be present"
+  - id: AC-MORPH-003
+    test: __tests__/collection-morph.test.ts
+    signature: "expected bounce to be 0"
+  - id: AC-REDUCED-001
+    test: __tests__/collection-views-reduced.test.tsx
+    signature: "expected data-motion crossfade"
+  - id: AC-STATE-EMPTY
+    test: __tests__/collection-views.test.tsx
+    signature: "Unable to find text Esta colección no tiene elementos"
+  - id: AC-STATE-LOADING
+    test: __tests__/collection-views.test.tsx
+    signature: "Unable to find role status"
+  - id: AC-STATE-ERROR
+    test: __tests__/collection-views.test.tsx
+    signature: "Unable to find role alert"
+  - id: AC-STATE-PARTIAL
+    test: __tests__/collection-views.test.tsx
+    signature: "Unable to find text No item matches the search"
+  - id: AC-I18N-001
+    test: __tests__/collection-views.test.tsx
+    signature: "Unable to find role button name Board"
+  - id: AC-INPUT-001
+    test: __tests__/collection-views.test.tsx
+    signature: "expected class to contain text-base"
+  - id: AC-TIMELINE-001
+    test: __tests__/collection-views.test.tsx
+    signature: "expected one current bar"
+  - id: AC-LAYOUT-001
+    test: e2e/collection-views.spec.ts
+    signature: "document scrollWidth exceeds clientWidth"
+  - id: AC-TOKEN-001
+    test: pnpm registry:build
+    signature: "ships a hex color"

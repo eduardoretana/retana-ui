@@ -32050,6 +32050,107 @@
           }
         ]
       }
+    },
+    {
+      "name": "collection-views",
+      "type": "registry:ui",
+      "title": "Collection views",
+      "description": "A collection that morphs between board, list, and timeline. A pill switches the view. Shared titles and avatars move; the rest fades.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "empty",
+        "input",
+        "skeleton",
+        "@retana/segmented-control"
+      ],
+      "categories": [
+        "table"
+      ],
+      "docs": "Clean-room. The behavior reference is a public screen recording (https://x.com/desdivj/status/2115772554199867776). No license was published, so nothing was copied: no source, markup, copy, colors, icons, photos, or assets. The morph contract is registry/lib/collection-morph.ts and does not know the example domain. It does not extend multi-view. Shared layoutId slots are the group, the item shell, the title, and the avatars. The spring is critically damped (bounce 0) with visualDuration 0.7s, inside 0.6–0.8s. Only transform and opacity run. prefers-reduced-motion skips the morph and crossfades. Segmented control and the host avatar are reused. Answer no if the CLI asks to overwrite segmented-control, avatar, button, input, empty, or skeleton. The item ships no theme. Spanish labels are the default; collectionViewsLabelsEn is the English set. Dates are inclusive YYYY-MM-DD and are read in UTC.",
+      "files": [
+        {
+          "path": "registry/ui/collection-views.tsx",
+          "type": "registry:component",
+          "target": "@ui/collection-views.tsx"
+        },
+        {
+          "path": "registry/lib/collection-morph.ts",
+          "type": "registry:lib",
+          "target": "@lib/collection-morph.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Vistas de colección",
+        "descriptionEs": "Una colección que cambia entre tablero, lista y línea de tiempo con un morph continuo. La píldora elige la vista.",
+        "preview": "app/examples/collection-views/preview.tsx",
+        "previewHref": "/examples/collection-views",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "list", "label": "Lista", "labelEn": "List" },
+          { "id": "timeline", "label": "Tiempo", "labelEn": "Timeline" },
+          { "id": "crowded", "label": "Lleno de más", "labelEn": "Crowded" },
+          { "id": "no-matches", "label": "Sin coincidencias", "labelEn": "No matches" }
+        ],
+        "examples": [
+          {
+            "title": "Pedidos del taller",
+            "href": "/examples/collection-views",
+            "description": "Tablero, lista y línea de tiempo del Taller Lumen."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/collection-views/stress",
+            "description": "320px, vacío, carga, error y un título de 60 caracteres."
+          }
+        ],
+        "usage": "<CollectionViews items={items} groups={groups} view={view} onViewChange={setView} today=\"2026-10-30\" onItemOpen={open} />",
+        "api": [
+          {
+            "name": "items / groups",
+            "type": "CollectionItem[] / CollectionGroup[]",
+            "description": "Generic rows. id, groupId, title, optional people, detail, and inclusive UTC dates. The morph does not read the example domain."
+          },
+          {
+            "name": "view / defaultView / onViewChange",
+            "type": "board | list | timeline",
+            "description": "The pill switches the view. Omit view for uncontrolled state."
+          },
+          {
+            "name": "query / onQueryChange",
+            "type": "string / callback",
+            "description": "Filters by title and detail. The field is 16px on a phone."
+          },
+          {
+            "name": "labels / locale / today",
+            "type": "Partial labels, BCP 47, YYYY-MM-DD",
+            "description": "Spanish is the default. collectionViewsLabelsEn is English. today places the timeline mark."
+          },
+          {
+            "name": "loading / error / onRetry",
+            "type": "boolean, string, callback",
+            "description": "Loading replaces the body. error is an alert. onRetry is the host."
+          },
+          {
+            "name": "onItemOpen / activeId",
+            "type": "callback, string",
+            "description": "Opening an item is the host's job. activeId draws the focus ring."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string / slots",
+            "description": "root, toolbar, group, and item. Widths stay bounded."
+          }
+        ]
+      }
     }
   ]
 }

@@ -916,3 +916,20 @@ callbacks. The table sorts in place and slides rows with layout motion. The
 voice note draws a waveform from numeric peaks and does not play a file.
 Answer no if the CLI asks to overwrite a primitive the host already has.
 The items ship no theme.
+
+---
+
+Collection views — clean-room, no open license
+
+collection-views is a clean-room reading of a public screen recording by
+@desdivj (https://x.com/desdivj/status/2115772554199867776). No license was
+published. Only the idea, the interaction, the layout, and the motion were
+taken. No source, markup, sample copy, colors, icons, photos, or assets were
+copied. The piece does not extend multi-view. The morph contract
+(registry/lib/collection-morph.ts) is generic: layoutId on the group, the
+item shell, the title, and the avatars; a critically damped spring (bounce 0,
+visual duration 0.7s); transform and opacity only. The example is Taller
+Lumen, a fictional ceramics studio. People, orders, and dates are invented.
+Segmented control and the host avatar are reused, not forked. Answer no if
+the CLI asks to overwrite a primitive the host already has. The item ships
+no theme.

@@ -1,0 +1,31 @@
+schema: uis.fixture/v1
+spec_id: retana-ui-collection-views
+ui_system: "4.0.0"
+shape: ui/direction/fixtures/retana-ui-collection-views.shape.yaml
+seed: taller-lumen
+today: "2026-10-30"
+groups:
+  - { id: banco, label: En el banco }
+  - { id: horno, label: En el horno }
+  - { id: entrega, label: Por entregar }
+people:
+  - { id: nuria, name: Nuria Solís }
+  - { id: ivan, name: Iván Paredes }
+  - { id: telma, name: Telma Cruz }
+  - { id: omar, name: Omar Beltrán }
+items:
+  - { id: jarron, groupId: banco, people: [nuria, ivan], start: "2026-10-20", end: "2026-10-28", title: Jarrón cobalto, detail: Pedido de la casa León }
+  - { id: tazas, groupId: banco, people: [telma], start: "2026-10-27", end: "2026-11-02", title: Tazas del viernes, detail: Doce piezas, esmalte mate }
+  - { id: platon, groupId: horno, people: [omar, nuria], start: "2026-10-29", end: "2026-10-31", title: Platón de esmalte, detail: Sale del horno el viernes }
+  - { id: lamparas, groupId: horno, people: [ivan], start: "2026-11-03", end: "2026-11-12", title: Lámparas de pared, detail: Par para el comedor }
+  - { id: cafe, groupId: entrega, people: [telma, omar], start: "2026-10-18", end: "2026-10-24", title: Set de café, detail: Empaque listo }
+  - { id: cuencos, groupId: entrega, people: [nuria], start: "2026-11-01", end: "2026-11-06", title: Cuencos mate, detail: Seis piezas para Regina }
+states:
+  filled: { view: board, items: all }
+  empty: { view: board, items: [] }
+  loading: { view: board, items: all, loading: true }
+  error: { view: board, items: all, error: No se cargó la colección. Los pedidos siguen en el taller. }
+  list: { view: list, items: all }
+  timeline: { view: timeline, items: all }
+  crowded: { view: board, items: all, extra: 8 }
+  no-matches: { view: board, items: all, query: zzzz }
