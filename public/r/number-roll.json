@@ -1,0 +1,128 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "number-roll",
+  "title": "Number roll",
+  "author": "Eduardo Retana",
+  "description": "Rolls an integer and its fraction separately, using only transform and opacity.",
+  "dependencies": [
+    "motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/number-roll.tsx",
+      "content": "\"use client\"\n\n/** Clean-room reel. Transform and opacity only. See NOTICE. */\n\nimport * as React from \"react\"\nimport { AnimatePresence, animate, motion, useMotionValue, useReducedMotionConfig, useTransform, type MotionValue } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\nconst DIGITS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] as const\n\nconst rollEase = [...motionPresets.ease.enter]\nconst enterEase = [...motionPresets.ease.exit]\n\nexport type NumberRollClassNames = {\n  root?: string\n  integer?: string\n  fraction?: string\n  prefix?: string\n  suffix?: string\n}\n\nexport type NumberRollProps = {\n  value: number\n  decimals?: number\n  /** BCP 47. es-MX and en-US are the catalog pair. */\n  locale?: string\n  prefix?: string\n  suffix?: string\n  /** Draw the fraction smaller and lighter than the integer. */\n  hierarchy?: boolean\n  /** Expose the formatted value to assistive tech. Turn off when a parent already does. */\n  announce?: boolean\n  className?: string\n  classNames?: NumberRollClassNames\n}\n\ntype RollSide = \"integer\" | \"fraction\"\n\nexport type RollToken =\n  | { kind: \"digit\"; key: string; digit: number; side: RollSide }\n  | { kind: \"text\"; key: string; text: string; side: RollSide }\n\nfunction finite(value: number) {\n  return Number.isFinite(value) ? value : 0\n}\n\nfunction places(decimals: number) {\n  if (!Number.isFinite(decimals)) return 0\n  return Math.min(8, Math.max(0, Math.trunc(decimals)))\n}\n\nexport function formatNumberRoll(value: number, decimals = 0, locale = \"en-US\") {\n  return new Intl.NumberFormat(locale, {\n    minimumFractionDigits: places(decimals),\n    maximumFractionDigits: places(decimals),\n    numberingSystem: \"latn\",\n  }).format(finite(value))\n}\n\n/** Signed step on a 0–9 wheel. Positive rolls forward. */\nexport function digitStep(from: number, to: number, direction: 1 | -1) {\n  const forward = (((to - from) % 10) + 10) % 10\n  if (forward === 0) return 0\n  return direction < 0 ? forward - 10 : forward\n}\n\n/** Distance from a glyph to the wheel position, wrapping every ten. */\nexport function nearestDigitOffset(digit: number, position: number) {\n  const turn = Math.round((position - digit) / 10)\n  return digit + turn * 10 - position\n}\n\nexport function rollTokens(value: number, decimals = 0, locale = \"en-US\"): RollToken[] {\n  const parts = new Intl.NumberFormat(locale, {\n    minimumFractionDigits: places(decimals),\n    maximumFractionDigits: places(decimals),\n    numberingSystem: \"latn\",\n  }).formatToParts(finite(value))\n  let place = parts.reduce((count, part) => count + (part.type === \"integer\" ? part.value.length : 0), 0)\n  let fraction = 0\n  const tokens: RollToken[] = []\n  parts.forEach((part, index) => {\n    if (part.type === \"integer\") {\n      for (const char of part.value) {\n        place -= 1\n        tokens.push({ kind: \"digit\", key: `i${place}`, digit: Number(char), side: \"integer\" })\n      }\n      return\n    }\n    if (part.type === \"fraction\") {\n      for (const char of part.value) {\n        tokens.push({ kind: \"digit\", key: `f${fraction}`, digit: Number(char), side: \"fraction\" })\n        fraction += 1\n      }\n      return\n    }\n    if (part.type === \"decimal\") {\n      tokens.push({ kind: \"text\", key: \"decimal\", text: part.value, side: \"fraction\" })\n      return\n    }\n    const key = part.type === \"group\" ? `g${place}` : part.type === \"minusSign\" ? \"sign\" : `${part.type}${index}`\n    tokens.push({ kind: \"text\", key, text: part.value, side: \"integer\" })\n  })\n  return tokens\n}\n\nfunction Glyph({ position, digit }: { position: MotionValue<number>; digit: number }) {\n  const offset = useTransform(position, (current) => nearestDigitOffset(digit, current))\n  const y = useTransform(offset, (current) => `${current}em`)\n  const opacity = useTransform(offset, (current) => {\n    const distance = Math.abs(current)\n    return distance >= 1 ? 0 : 1 - distance\n  })\n  return (\n    <motion.span className=\"absolute inset-x-0 top-0 h-[1em] text-center\" style={{ y, opacity }} aria-hidden=\"true\">\n      {digit}\n    </motion.span>\n  )\n}\n\nfunction DigitColumn({ digit, direction, reduced }: { digit: number; direction: 1 | -1; reduced: boolean }) {\n  const position = useMotionValue(digit)\n  const state = React.useRef({ digit, at: digit })\n  React.useEffect(() => {\n    const step = digitStep(state.current.digit, digit, direction)\n    state.current.digit = digit\n    if (step === 0) {\n      if (reduced) position.set(state.current.at)\n      return\n    }\n    const next = state.current.at + step\n    state.current.at = next\n    if (reduced) {\n      position.set(next)\n      return\n    }\n    const controls = animate(position, next, { duration: motionPresets.duration.considered, ease: rollEase })\n    return () => controls.stop()\n  }, [digit, direction, position, reduced])\n  return (\n    <span data-slot=\"number-roll-digit\" className=\"relative inline-block h-[1em] overflow-hidden\">\n      <span className=\"invisible\" aria-hidden=\"true\">\n        0\n      </span>\n      <span className=\"pointer-events-none absolute inset-0\">\n        {DIGITS.map((item) => (\n          <Glyph key={item} position={position} digit={item} />\n        ))}\n      </span>\n    </span>\n  )\n}\n\nfunction Side({\n  tokens,\n  direction,\n  reduced,\n  className,\n  slot,\n}: {\n  tokens: RollToken[]\n  direction: 1 | -1\n  reduced: boolean\n  className?: string\n  slot: string\n}) {\n  if (!tokens.length) return null\n  return (\n    <span data-slot={slot} className={cn(\"inline-flex items-baseline\", className)}>\n      <AnimatePresence initial={false}>\n        {tokens.map((token) => (\n          <motion.span\n            key={token.key}\n            className=\"inline-block\"\n            initial={reduced ? false : { opacity: 0, y: \"0.4em\" }}\n            animate={{ opacity: 1, y: 0 }}\n            exit={reduced ? { opacity: 0, y: 0 } : { opacity: 0, y: \"-0.35em\" }}\n            transition={{ duration: reduced ? 0 : motionPresets.duration.fast, ease: enterEase }}\n          >\n            {token.kind === \"digit\" ? <DigitColumn digit={token.digit} direction={direction} reduced={reduced} /> : token.text}\n          </motion.span>\n        ))}\n      </AnimatePresence>\n    </span>\n  )\n}\n\nexport function NumberRoll({\n  value,\n  decimals = 0,\n  locale = \"en-US\",\n  prefix = \"\",\n  suffix = \"\",\n  hierarchy = false,\n  announce = true,\n  className,\n  classNames,\n}: NumberRollProps) {\n  const reduced = useReducedMotionConfig() === true\n  const safe = finite(value)\n  const [previous, setPrevious] = React.useState(safe)\n  const [direction, setDirection] = React.useState<1 | -1>(1)\n  if (safe !== previous) {\n    setPrevious(safe)\n    setDirection(safe > previous ? 1 : -1)\n  }\n  const tokens = rollTokens(safe, decimals, locale)\n  const text = `${prefix}${formatNumberRoll(safe, decimals, locale)}${suffix}`\n  const integer = tokens.filter((token) => token.side === \"integer\")\n  const fraction = tokens.filter((token) => token.side === \"fraction\")\n  return (\n    <span\n      data-slot=\"number-roll\"\n      data-motion={reduced ? \"reduced\" : \"full\"}\n      className={cn(\"inline-flex min-w-0 flex-col text-foreground tabular-nums leading-none\", className, classNames?.root)}\n    >\n      {announce ? <span className=\"sr-only\">{text}</span> : null}\n      <span aria-hidden=\"true\" className=\"inline-flex items-baseline whitespace-nowrap\">\n        {prefix ? (\n          <span data-slot=\"number-roll-prefix\" className={cn(hierarchy && \"font-medium\", classNames?.prefix)}>\n            {prefix}\n          </span>\n        ) : null}\n        <Side\n          slot=\"number-roll-integer\"\n          tokens={integer}\n          direction={direction}\n          reduced={reduced}\n          className={cn(hierarchy && \"font-medium\", classNames?.integer)}\n        />\n        <Side\n          slot=\"number-roll-fraction\"\n          tokens={fraction}\n          direction={direction}\n          reduced={reduced}\n          className={cn(hierarchy && \"text-[0.65em] font-normal text-muted-foreground\", classNames?.fraction)}\n        />\n        {suffix ? (\n          <span data-slot=\"number-roll-suffix\" className={cn(classNames?.suffix)}>\n            {suffix}\n          </span>\n        ) : null}\n      </span>\n    </span>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/number-roll.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    // Exit decelerates, the same curve as CSS ease-out.\n    exit: [0, 0, 0.58, 1] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Rodillo numérico",
+    "descriptionEs": "Rueda el entero y los decimales por separado, solo con transform y opacidad.",
+    "preview": "app/examples/number-roll/preview.tsx",
+    "previewHref": "/examples/number-roll",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Rodillo numérico",
+        "href": "/examples/number-roll",
+        "description": "Rueda el entero y los decimales por separado, solo con transform y opacidad."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/number-roll/stress",
+        "description": "320 px, vacío, negativo, RTL y 60 caracteres."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/number-roll?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/number-roll?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/number-roll?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/number-roll?scene=error",
+        "description": "Error"
+      }
+    ],
+    "usage": "<NumberRoll value={18640.5} decimals={2} hierarchy prefix=\"$\" locale=\"es-MX\" />",
+    "api": [
+      {
+        "name": "value",
+        "type": "number",
+        "description": "The figure to show. Non-finite values render as zero."
+      },
+      {
+        "name": "decimals",
+        "type": "number",
+        "description": "Fraction digits, from 0 to 8."
+      },
+      {
+        "name": "locale",
+        "type": "string",
+        "description": "BCP 47 locale. es-MX and en-US format the catalog pair."
+      },
+      {
+        "name": "prefix / suffix",
+        "type": "string",
+        "description": "Static text beside the reel. They do not roll."
+      },
+      {
+        "name": "hierarchy",
+        "type": "boolean",
+        "description": "Draw the fraction smaller and lighter than the integer."
+      },
+      {
+        "name": "announce",
+        "type": "boolean",
+        "description": "Expose the formatted value to assistive tech. Default true."
+      },
+      {
+        "name": "className / classNames",
+        "type": "string",
+        "description": "Root class and slot classes for integer, fraction, prefix, and suffix."
+      }
+    ]
+  },
+  "docs": "Clean-room. Integer versus fraction and the continuity of the roll follow a public description of Jakub Antalik's Transitions UI (https://x.com/jakubantalik/status/2115844862012768541). That product is not open source; no source, sample data, icons, or assets were copied. See docs/layout-transitions.md and NOTICE. The reel uses only transform and opacity, and settles immediately when the reader prefers reduced motion. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+  "categories": [
+    "content"
+  ],
+  "type": "registry:ui"
+}

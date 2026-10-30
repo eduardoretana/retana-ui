@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react"
 import { Send } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { NumberRoll } from "@/registry/ui/number-roll"
 
 type Locale = "es" | "en"
 
@@ -237,10 +238,14 @@ export function LayoutRulesGallery() {
         no={<p className="text-2xl font-medium tabular-nums">$18,640.50</p>}
         yes={
           <div>
-            <p className="inline-flex items-baseline tabular-nums text-foreground">
-              <span className="text-2xl font-medium">$18,640</span>
-              <span className="text-[0.65em] font-normal text-muted-foreground">.50</span>
-            </p>
+            <NumberRoll
+              value={18640.5}
+              decimals={2}
+              hierarchy
+              prefix="$"
+              locale={locale === "en" ? "en-US" : "es-MX"}
+              className="text-2xl"
+            />
             <p className="mt-1 text-xs text-muted-foreground">{t.week}</p>
           </div>
         }
