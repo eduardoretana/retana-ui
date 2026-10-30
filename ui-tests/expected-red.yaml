@@ -1,19 +1,19 @@
 schema: uis.expected-red/v1
-spec_id: retana-ui-idea448b
+spec_id: retana-ui-idea450b
 retana_ui_sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
 recorded_before_build: false
-command: pnpm exec vitest run __tests__/mobile-inputs.test.ts
-note: "Ciclo LITE. Las pruebas entraron con el arreglo, no hubo un commit rojo previo en CPL 6671cfa. La firma es la aserción que falla si se quita el arreglo."
+command: pnpm exec vitest run __tests__/glass-surfaces.test.ts __tests__/badge-count.test.tsx __tests__/avatar-group-circle.test.tsx __tests__/radius-tokens.test.ts
+note: "Las pruebas entraron con el arreglo. La firma es la aserción que falla si se quita el arreglo."
 cases:
-  - file: __tests__/mobile-inputs.test.ts
-    name: marca los 11 controles nativos con text-base md:text-sm
-    signature: "expected <window> to contain text-base … md:text-sm"
-  - file: __tests__/mobile-inputs.test.ts
-    name: deja el tap-highlight transparente sin quitar el foco visible
-    signature: "expected app/globals.css to match -webkit-tap-highlight-color: transparent"
-  - file: __tests__/mobile-inputs.test.ts
-    name: exporta viewport-fit cover sin bloquear el zoom
-    signature: "expected app/layout.tsx to contain viewportFit: \"cover\""
-  - file: __tests__/mobile-inputs.test.ts
-    name: usa la curva sin overshoot y conserva reduced-motion
-    signature: "expected theme-toggles source to contain cubic-bezier(0.22,1,0.36,1)"
+  - file: __tests__/glass-surfaces.test.ts
+    name: keeps backdrop-blur in the glass helper only
+    signature: "expected hits to equal []"
+  - file: __tests__/badge-count.test.tsx
+    name: shows the informative count as text and names it
+    signature: "expected badge to have accessible name 3 sin leer"
+  - file: __tests__/avatar-group-circle.test.tsx
+    name: renders the filled row with placeholder images and names
+    signature: "expected list Círculo del taller"
+  - file: __tests__/radius-tokens.test.ts
+    name: does not multiply --radius
+    signature: "expected globals.css not to match var(--radius) *"

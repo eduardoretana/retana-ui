@@ -1,0 +1,44 @@
+schema: uis.fixture/v1
+spec_id: retana-ui-idea450b
+spec_version: 1.0.0
+profile: STANDARD
+head: 2f8d20198685d27718828101bca31490a619bfc6
+seed: idea450b
+locale: es-MX
+viewport: 390x844
+people:
+  - Inés Calderón
+  - Mateo Ruiz
+  - Lucía Peña
+  - Omar Vidal
+scenes:
+  - id: filled
+    state: success
+    route: /examples/avatar-group?scene=filled
+    req_ids: [AC-4]
+    portraits: placeholder-svg
+  - id: empty
+    state: empty
+    route: /examples/avatar-group?scene=empty
+    req_ids: [AC-4]
+    portraits: initials
+  - id: loading
+    state: loading
+    route: /examples/avatar-group?scene=loading
+    req_ids: [AC-4]
+  - id: error
+    state: error
+    route: /examples/avatar-group?scene=error
+    req_ids: [AC-4]
+    portraits: missing-file
+  - id: circle
+    state: success
+    route: /examples/avatar-group?scene=circle
+    req_ids: [AC-4]
+    name_place: below
+  - id: circle-above
+    state: success
+    route: /examples/avatar-group?scene=circle-above
+    req_ids: [AC-1]
+    name_place: above
+    chosen: false
