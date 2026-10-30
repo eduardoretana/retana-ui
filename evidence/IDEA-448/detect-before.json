@@ -1,0 +1,69 @@
+{
+  "tool": "impeccable",
+  "version": "4.8.0",
+  "command": "npx impeccable@4.8.0 detect --json registry components app",
+  "exit": 2,
+  "total": 16,
+  "counts": {
+    "side-tab": 2,
+    "border-accent-on-rounded": 3,
+    "bounce-easing": 11
+  },
+  "bounce": [
+    {
+      "file": "registry/ui/theme-toggles/eclipse.tsx",
+      "line": 66,
+      "snippet": "cubic-bezier(0, 0, 0.05, 1.15)"
+    },
+    {
+      "file": "registry/ui/theme-toggles/eclipse.tsx",
+      "line": 75,
+      "snippet": "cubic-bezier(0, 0, 0.05, 1.15)"
+    },
+    {
+      "file": "registry/ui/theme-toggles/expand.tsx",
+      "line": 66,
+      "snippet": "cubic-bezier(0, 0, 0, 1.25)"
+    },
+    {
+      "file": "registry/ui/theme-toggles/expand.tsx",
+      "line": 75,
+      "snippet": "cubic-bezier(0, 0, 0, 1.25)"
+    },
+    {
+      "file": "registry/ui/theme-toggles/expand.tsx",
+      "line": 81,
+      "snippet": "cubic-bezier(0, 0, 0, 1.25)"
+    },
+    {
+      "file": "registry/ui/theme-toggles/inner-moon.tsx",
+      "line": 62,
+      "snippet": "cubic-bezier(0, 0, 0.15, 1.25)"
+    },
+    {
+      "file": "registry/ui/theme-toggles/light-switch.tsx",
+      "line": 67,
+      "snippet": "cubic-bezier(0, 0, 0.15, 1.25)"
+    },
+    {
+      "file": "registry/ui/theme-toggles/simple.tsx",
+      "line": 66,
+      "snippet": "cubic-bezier(0, 0, 0.15, 1.25)"
+    },
+    {
+      "file": "registry/ui/theme-toggles/within.tsx",
+      "line": 72,
+      "snippet": "cubic-bezier(0, 0, 0, 1.25)"
+    },
+    {
+      "file": "registry/ui/theme-toggles/within.tsx",
+      "line": 79,
+      "snippet": "cubic-bezier(0, 0, 0, 1.25)"
+    },
+    {
+      "file": "registry/ui/theme-toggles/within.tsx",
+      "line": 85,
+      "snippet": "cubic-bezier(0, 0, 0, 1.25)"
+    }
+  ]
+}
