@@ -138,7 +138,9 @@ export function RangeLanes({
         {lanes.map((lane, index) => {
           const start = Math.min(lane.start, lane.end)
           const end = Math.max(lane.start, lane.end)
-          const shown = !active || active === lane.id
+          const startRatio = clamp((start - min) / span, 0, 1)
+          const endRatio = clamp((end - min) / span, 0, 1)
+          const strong = active == null || active === lane.id
           return (
             <button
               key={lane.id}
@@ -160,12 +162,12 @@ export function RangeLanes({
               <span className="relative h-full">
                 <span
                   aria-hidden
-                  className="absolute top-1/2 h-2.5 -translate-y-1/2 rounded-full"
+                  data-slot="range-lane-bar"
+                  className="absolute top-1/2 h-2.5 w-full origin-left rounded-md motion-safe:transition-transform motion-safe:duration-300 motion-reduce:transition-none"
                   style={{
-                    left: place(start),
-                    width: `max(4px, calc(${place(end)} - ${place(start)}))`,
-                    background: seriesColor(lane.tone ?? index),
-                    opacity: shown ? 1 : 0.25,
+                    transform: `translate(${startRatio * 100}%, -50%) scaleX(${Math.max(0.02, endRatio - startRatio)})`,
+                    transformOrigin: "left center",
+                    background: strong ? seriesColor(lane.tone ?? index) : "var(--muted-foreground)",
                   }}
                 />
               </span>

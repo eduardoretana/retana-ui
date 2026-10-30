@@ -1,7 +1,6 @@
 "use client"
 
 import { useId, useState } from "react"
-import { motion } from "motion/react"
 
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -13,9 +12,9 @@ import {
   ChartKpi,
   ChartLegend,
   ChartTip,
+  chartScaleStyle,
   chartStatusLabels,
   chartStatusLabelsEs,
-  chartTransition,
   usePlotBox,
   usePrefersReducedMotion,
   type ChartCardClassNames,
@@ -124,6 +123,8 @@ export function StackedColumns({
   const base = scaleLinear(0, domain.min, domain.max, height - 24, 12)
   const slot = Math.max(1, (width - 16) / Math.max(1, points.length))
   const barWidth = Math.max(6, Math.min(22, slot * 0.55))
+  const upReach = Math.max(1, base - 12)
+  const downReach = Math.max(1, height - 24 - base)
   const focus = points.find((point) => point.key === active) ?? null
   const kpiPoints = focus ? [focus] : points
   const withUnit = (value: number) => formatChartNumber(value, locale) + (suffix ? ` ${suffix}` : "")
@@ -164,8 +165,14 @@ export function StackedColumns({
             <ChartKpi
               key={item.id}
               label={item.label}
-              value={withUnit(kpiPoints.reduce((sum, point) => sum + (point.values[item.id] ?? 0), 0))}
-              hint={focus?.label}
+              figure={{
+                value: kpiPoints.reduce((sum, point) => sum + (point.values[item.id] ?? 0), 0),
+                locale,
+                suffix: suffix ? ` ${suffix}` : undefined,
+                hierarchy: true,
+                announce: true,
+              }}
+              hint={focus?.label ?? period?.label}
             />
           ))}
         </>
@@ -239,26 +246,39 @@ export function StackedColumns({
             let down = base
             const hot = active === point.key
             return (
-              <g key={`${currentId}-${point.key}`} data-slot="stacked-column" onMouseEnter={() => chooseKey(point.key)} opacity={!active || hot ? 1 : 0.4}>
+              <g key={index} data-slot="stacked-column" data-key={point.key} onMouseEnter={() => chooseKey(point.key)}>
                 {series.map((item, seriesIndex) => {
                   const value = point.values[item.id] ?? 0
                   const y = scaleLinear(value, domain.min, domain.max, height - 24, 12)
-                  const bar = value >= 0 ? base - y : y - base
+                  const bar = Math.max(0, value >= 0 ? base - y : y - base)
                   const top = value >= 0 ? up - bar : down
                   if (value >= 0) up -= bar
                   else down += bar
+                  const positive = value >= 0
+                  const reach = positive ? upReach : downReach
+                  const originY = positive ? top + bar : top
+                  const columnHot = !active || hot
+                  const seriesHot = !seriesId || seriesId === item.id
+                  const strong = columnHot && seriesHot
                   return (
-                    <motion.rect
-                      key={item.id}
-                      x={x}
-                      width={barWidth}
-                      rx={2}
-                      initial={reduced ? false : { height: 0, y: base }}
-                      animate={{ height: Math.max(0, bar), y: top }}
-                      transition={chartTransition(reduced)}
-                      fill={seriesPaint(pattern, seriesIndex)}
-                      opacity={!seriesId || seriesId === item.id ? 1 : 0.2}
-                    />
+                    <g
+                      key={`${index}-${item.id}`}
+                      data-slot="stacked-segment"
+                      data-series={item.id}
+                      {...chartScaleStyle(reduced, Math.min(1, bar / reach), `${x + barWidth / 2}px ${originY}px`)}
+                    >
+                      <title>{item.label}</title>
+                      <rect
+                        x={x}
+                        y={positive ? originY - reach : originY}
+                        width={barWidth}
+                        height={reach}
+                        rx={2}
+                        fill={strong ? seriesPaint(pattern, seriesIndex) : "var(--muted)"}
+                        stroke={strong ? "transparent" : "var(--border)"}
+                        strokeWidth={1}
+                      />
+                    </g>
                   )
                 })}
                 <text x={x + barWidth / 2} y={height - 6} textAnchor="middle" className={hot ? "fill-foreground text-[10px] font-medium" : "fill-muted-foreground text-[10px]"}>

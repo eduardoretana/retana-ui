@@ -144,8 +144,16 @@ export function SegmentGauge({
       live={live}
       kpis={
         <>
-          <ChartKpi label={copy.used} value={formatChartPercent(cap ? used / cap : 0, locale)} hint={formatChartNumber(used, locale)} />
-          <ChartKpi label={copy.free} value={formatChartPercent(cap ? free / cap : 0, locale)} hint={formatChartNumber(free, locale)} />
+          <ChartKpi
+            label={copy.used}
+            figure={{ value: cap ? used / cap : 0, percent: true, locale, hierarchy: true, announce: true }}
+            hint={formatChartNumber(used, locale)}
+          />
+          <ChartKpi
+            label={copy.free}
+            figure={{ value: cap ? free / cap : 0, percent: true, locale, hierarchy: true, announce: true }}
+            hint={formatChartNumber(free, locale)}
+          />
         </>
       }
       legend={
@@ -191,20 +199,27 @@ export function SegmentGauge({
             className="absolute inset-0 rounded-full"
             style={{ backgroundImage: "repeating-linear-gradient(-45deg, transparent, transparent 3px, var(--border) 3px, var(--border) 4px)" }}
           />
-          <div className="absolute inset-y-0 left-0 flex overflow-hidden rounded-full" style={{ width: `${(used / span) * 100}%` }}>
-            {segments.map((segment, index) => (
-              <span
-                key={segment.id}
-                data-slot="gauge-segment"
-                data-active={active === segment.id}
-                className="h-full"
-                style={{
-                  width: `${(Math.max(0, segment.value) / Math.max(used, 1)) * 100}%`,
-                  background: seriesColor(index),
-                  opacity: !active || active === segment.id ? 1 : 0.35,
-                }}
-              />
-            ))}
+          <div
+            data-slot="gauge-used"
+            className="absolute inset-y-0 left-0 flex w-full origin-left overflow-hidden rounded-full motion-safe:transition-transform motion-safe:duration-300 motion-reduce:transition-none"
+            style={{ transform: `scaleX(${used / span})`, transformOrigin: "left center" }}
+          >
+            {segments.map((segment, index) => {
+              const loud = (active ?? segments[0]?.id) === segment.id
+              return (
+                <span
+                  key={segment.id}
+                  data-slot="gauge-segment"
+                  data-active={loud}
+                  className="h-full min-w-0"
+                  style={{
+                    flexGrow: Math.max(0, segment.value),
+                    flexBasis: 0,
+                    background: loud ? seriesColor(index) : "var(--muted-foreground)",
+                  }}
+                />
+              )
+            })}
           </div>
         </div>
         <div className="mt-1 flex justify-between text-[10px] text-muted-foreground tabular-nums">

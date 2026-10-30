@@ -134,7 +134,14 @@ export function CoupledLines({
         <>
           {series.slice(0, 2).map((item) => {
             const point = focus ? item.points.find((entry) => entry.key === focus.key) : item.points[item.points.length - 1]
-            return <ChartKpi key={item.id} label={item.label} value={withUnit(point?.value ?? 0)} hint={focus?.label} />
+            return (
+              <ChartKpi
+                key={item.id}
+                label={item.label}
+                figure={{ value: point?.value ?? 0, locale, suffix: suffix ? ` ${suffix}` : undefined, hierarchy: true, announce: true }}
+                hint={focus?.label}
+              />
+            )
           })}
         </>
       }

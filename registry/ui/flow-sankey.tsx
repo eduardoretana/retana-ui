@@ -113,7 +113,7 @@ export function FlowSankey({
       columns={[{ id: "value", label: copy.total }]}
       rows={layout.nodes.map((node) => ({ id: node.id, label: node.label, cells: { value: formatChartNumber(node.value, locale) } }))}
       live={hovered ? copy.node(hovered.label, formatChartNumber(hoveredValue, locale), formatChartPercent(total ? hoveredValue / total : 0, locale)) : undefined}
-      kpis={<ChartKpi label={copy.total} value={formatChartNumber(total, locale)} />}
+      kpis={<ChartKpi label={copy.total} figure={{ value: total, locale, hierarchy: true, announce: true }} />}
       legend={
         <ChartLegend
           label={copy.legend}

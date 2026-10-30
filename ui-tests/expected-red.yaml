@@ -1,0 +1,27 @@
+schema: uis.expected-red/v1
+spec_id: retana-ui-layout-motion
+ui_system: {version: 4.0.0}
+profile: STANDARD
+retana_ui_sha: fe591983055c98509435159dbfd6b63962bd340b
+head: fe591983055c98509435159dbfd6b63962bd340b
+recorded_before_build: true
+command: pnpm exec vitest run __tests__/chart-layout.test.ts __tests__/chart-family.test.tsx
+cases:
+  - file: registry/ui/chart-card.tsx
+    name: RUI-LAYOUT-BORDER-001
+    signature: "ring-foreground/10 y shadow-sm en el root, además del anillo de Card"
+  - file: registry/ui/chart-card.tsx
+    name: RUI-LAYOUT-BORDER-001
+    signature: "border border-dashed en el estado vacío"
+  - file: registry/ui/combo-chart.tsx
+    name: RUI-MOTION-CONTINUITY-001
+    signature: "initial={{ height: 0, y: base }}"
+  - file: registry/ui/stacked-columns.tsx
+    name: RUI-MOTION-CONTINUITY-001
+    signature: "key={`${currentId}-${point.key}`} y animate height"
+  - file: registry/ui/scrub-area.tsx
+    name: RUI-MOTION-CONTINUITY-001
+    signature: "clipPath: inset(0 100% 0 0)"
+  - file: registry/ui/range-plan.tsx
+    name: RUI-MOTION-CONTINUITY-001
+    signature: "style={{ width: `${ratio * 100}%` }}"

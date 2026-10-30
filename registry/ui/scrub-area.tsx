@@ -1,18 +1,17 @@
 "use client"
 
 import { useId, useState } from "react"
-import { motion } from "motion/react"
 
-import { formatChartNumber, formatChartPercent } from "@/registry/retana/lib/chart-format"
+import { formatChartNumber } from "@/registry/retana/lib/chart-format"
 import { areaPath, extentWithZero, linePath, scaleLinear } from "@/registry/retana/lib/chart-geom"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
   ChartCard,
   ChartKpi,
   ChartTip,
+  chartScaleStyle,
   chartStatusLabels,
   chartStatusLabelsEs,
-  chartTransition,
   usePlotBox,
   usePrefersReducedMotion,
   type ChartCardClassNames,
@@ -138,8 +137,16 @@ export function ScrubArea({
       live={focus ? copy.point(focus.label, withUnit(focus.value)) : undefined}
       kpis={
         <>
-          <ChartKpi label={focus?.label ?? copy.total} value={withUnit(last)} />
-          <ChartKpi label={copy.delta} value={formatChartPercent(delta, locale, 1)} hint={points[0]?.label} />
+          <ChartKpi
+            label={focus?.label ?? copy.total}
+            figure={{ value: last, locale, suffix: suffix ? ` ${suffix}` : undefined, hierarchy: true, announce: true }}
+          />
+          <ChartKpi
+            emphasis="quiet"
+            label={copy.delta}
+            figure={{ value: delta, percent: true, decimals: 1, locale, hierarchy: true, announce: true }}
+            hint={points[0]?.label}
+          />
         </>
       }
       controls={
@@ -193,15 +200,10 @@ export function ScrubArea({
               <stop offset="1" stopColor="var(--chart-2)" stopOpacity="0" />
             </linearGradient>
           </defs>
-          <motion.g
-            key={currentId}
-            initial={reduced ? false : { clipPath: "inset(0 100% 0 0)" }}
-            animate={{ clipPath: "inset(0 0% 0 0)" }}
-            transition={chartTransition(reduced)}
-          >
+          <g data-slot="scrub-area-shape" {...chartScaleStyle(reduced, 1, `${left}px ${height / 2}px`, "x")}>
             <path d={areaPath(coords, baseline)} fill={`url(#${gradient})`} />
             <path d={linePath(coords)} fill="none" stroke="var(--chart-2)" strokeWidth={2} />
-          </motion.g>
+          </g>
           {focus ? (
             <g data-slot="scrub-guide">
               <line x1={xOf(index)} x2={xOf(index)} y1={12} y2={height - 22} className="stroke-foreground/40" strokeDasharray="3 3" />

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { motionPresets } from "@/registry/retana/lib/motion"
+import { chartFigureParts, type ChartKpiFigure } from "@/registry/retana/lib/chart-format"
 import { SeriesSwatch } from "@/registry/retana/ui/chart-marks"
 
 const REDUCE_QUERY = "(prefers-reduced-motion: reduce)"
@@ -129,9 +130,11 @@ export function ChartCard({
       data-status={status}
       aria-labelledby={titleId}
       aria-describedby={summaryId}
-      className={cn("w-full min-w-0 gap-3 rounded-2xl py-4 shadow-sm ring-foreground/10", classNames?.root, className)}
+      className={cn("w-full min-w-0 gap-3 py-4", classNames?.root, className)}
     >
       <style>{`
+        @keyframes rui-scale-y { from { transform: scaleY(0); opacity: 0; } }
+        @keyframes rui-scale-x { from { transform: scaleX(0); opacity: 0; } }
         @media (prefers-reduced-motion: reduce) {
           ${root}, ${root} * {
             animation: none !important;
@@ -140,7 +143,7 @@ export function ChartCard({
         }
       `}</style>
       <header className={cn("flex items-start gap-3 px-4", classNames?.header)}>
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 max-w-[17.5rem] flex-1">
           <h2 id={titleId} data-slot="chart-card-title" className={cn("truncate text-base font-medium leading-snug", classNames?.title)}>
             {title}
           </h2>
@@ -165,7 +168,7 @@ export function ChartCard({
         )}
       </div>
       {status === "ready" && legend ? <div className={cn("px-4", classNames?.legend)}>{legend}</div> : null}
-      {status === "ready" && insight ? <div className={cn("px-4", classNames?.insight)}>{insight}</div> : null}
+      {status === "ready" && insight ? <div className={cn("max-w-[17.5rem] px-4", classNames?.insight)}>{insight}</div> : null}
       {status === "ready" && footer ? <div className={cn("flex flex-wrap items-center gap-2 px-4", classNames?.footer)}>{footer}</div> : null}
       <p id={summaryId} className="sr-only">
         {summary}
@@ -219,7 +222,7 @@ export function ChartState({
     <div
       data-slot="chart-state"
       data-status={status}
-      className="flex min-h-36 flex-col items-center justify-center gap-3 rounded-xl border border-dashed px-4 py-6 text-center"
+      className="flex min-h-36 flex-col items-center justify-center gap-3 rounded-xl bg-muted px-4 py-6 text-center"
       role={status === "error" ? "alert" : "status"}
     >
       {status === "loading" ? (
@@ -229,8 +232,8 @@ export function ChartState({
           ))}
         </div>
       ) : null}
-      {status === "error" ? <CircleAlert className="size-5 text-destructive" aria-hidden /> : null}
-      <p className="max-w-sm text-sm text-muted-foreground">{label}</p>
+      {status === "error" ? <CircleAlert className="size-5 text-foreground" aria-hidden /> : null}
+      <p className="max-w-[17.5rem] text-sm text-foreground">{label}</p>
       {onRetry ? (
         <Button type="button" size="sm" variant="outline" onClick={onRetry}>
           {retryLabel}
@@ -240,12 +243,58 @@ export function ChartState({
   )
 }
 
-export function ChartKpi({ label, value, hint }: { label: string; value: string; hint?: string }) {
+export type { ChartKpiFigure }
+
+function ChartKpiFigureView({ figure, quiet }: { figure: ChartKpiFigure; quiet?: boolean }) {
+  const hierarchy = figure.hierarchy !== false
+  const announce = figure.announce !== false
+  const parts = chartFigureParts(figure)
   return (
-    <div data-slot="chart-kpi" className="min-w-0">
-      <p className="truncate text-xs text-muted-foreground">{label}</p>
-      <p className="truncate text-xl font-semibold tracking-tight tabular-nums">{value}</p>
-      {hint ? <p className="truncate text-xs text-muted-foreground">{hint}</p> : null}
+    <span data-slot="chart-kpi-figure" data-hierarchy={hierarchy ? "on" : "off"} className="inline-flex max-w-full items-baseline">
+      {announce ? <span className="sr-only">{parts.text}</span> : null}
+      <span aria-hidden="true" className="inline-flex min-w-0 items-baseline">
+        <span data-slot="chart-kpi-integer" className={hierarchy && !quiet ? "font-semibold" : undefined}>
+          {parts.integer}
+        </span>
+        {parts.fraction ? (
+          <span data-slot="chart-kpi-fraction" className={hierarchy ? "text-[0.65em] font-normal text-muted-foreground" : undefined}>
+            {parts.fraction}
+          </span>
+        ) : null}
+        {figure.suffix ? <span data-slot="chart-kpi-suffix">{figure.suffix}</span> : null}
+      </span>
+    </span>
+  )
+}
+
+export function ChartKpi({
+  label,
+  value,
+  figure,
+  hint,
+  emphasis = "primary",
+}: {
+  label: string
+  /** Preformatted fallback. Prefer `figure` so the integer and the fraction stay apart. */
+  value?: string
+  figure?: ChartKpiFigure
+  hint?: string
+  /** `quiet` is the secondary figure: smaller and lighter than the primary KPI. */
+  emphasis?: "primary" | "quiet"
+}) {
+  const quiet = emphasis === "quiet"
+  return (
+    <div data-slot="chart-kpi" data-emphasis={emphasis} className="min-w-0">
+      <p className="truncate text-xs font-normal text-muted-foreground">{label}</p>
+      <p
+        className={cn(
+          "truncate tabular-nums",
+          quiet ? "text-sm font-normal text-muted-foreground" : "text-xl font-semibold tracking-tight",
+        )}
+      >
+        {figure ? <ChartKpiFigureView figure={figure} quiet={quiet} /> : value}
+      </p>
+      {hint ? <p className="truncate text-xs font-normal text-muted-foreground">{hint}</p> : null}
     </div>
   )
 }
@@ -324,7 +373,7 @@ export function ChartLegend({
             aria-pressed={pressed}
             tabIndex={index === focus ? 0 : -1}
             className={cn(
-              "inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-full px-2 py-1 text-xs outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              "inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-md px-2 py-1 text-xs outline-none focus-visible:ring-2 focus-visible:ring-ring",
               pressed ? "bg-muted ring-1 ring-foreground/20" : "hover:bg-muted/70",
             )}
             onClick={() => select(index)}
@@ -384,4 +433,23 @@ export function usePlotBox(fallbackWidth = 320, fallbackHeight = 180) {
 
 export function dimOpacity(active: boolean) {
   return active ? 1 : 0.18
+}
+
+/** Fixed graphic. The keyframe enters from 0. Later value changes transition the transform. */
+export function chartScaleStyle(reduced: boolean, scale: number, origin: string, axis: "x" | "y" = "y") {
+  const safe = Number.isFinite(scale) ? scale : 0
+  const ease = motionPresets.ease.enter.join(", ")
+  const duration = motionPresets.duration.considered
+  const name = axis === "x" ? "rui-scale-x" : "rui-scale-y"
+  return {
+    "data-scale": String(Math.round(safe * 1000) / 1000),
+    style: {
+      transformBox: "view-box" as const,
+      transformOrigin: origin,
+      transform: axis === "x" ? `scaleX(${safe})` : `scaleY(${safe})`,
+      opacity: 1,
+      animation: reduced ? "none" : `${name} ${duration}s cubic-bezier(${ease})`,
+      transition: reduced ? "none" : `transform ${duration}s cubic-bezier(${ease}), opacity ${duration}s cubic-bezier(${ease})`,
+    },
+  }
 }

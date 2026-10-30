@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { formatChartCurrency, formatChartNumber, formatChartPercent, formatChartUnit, resolveChartLocale } from "@/registry/lib/chart-format"
+import { chartFigureParts, formatChartCurrency, formatChartNumber, formatChartPercent, formatChartUnit, resolveChartLocale } from "@/registry/lib/chart-format"
 import { flowRoute, layoutFlow } from "@/registry/lib/flow-layout"
 import { extentWithZero, wedgePath } from "@/registry/lib/chart-geom"
 import { hexBounds, hexPolygon } from "@/registry/lib/hex-layout"
@@ -15,6 +15,20 @@ describe("chart format", () => {
     expect(formatChartPercent(0.1, "es-MX")).toBe("10%")
     expect(formatChartCurrency(2100, "en-US", "USD")).toContain("2,100")
     expect(formatChartUnit(2, { id: "lb", label: "lb", suffix: "lb", scale: 2 }, "en-US")).toBe("4 lb")
+  })
+
+  it("splits es-MX and en-US into the same integer and fraction", () => {
+    for (const locale of ["es-MX", "en-US"] as const) {
+      const parts = chartFigureParts({ value: 1234.5, locale, hierarchy: true, announce: true })
+      expect(parts.text).toBe(formatChartNumber(1234.5, locale))
+      expect(parts.integer).toBe("1,234")
+      expect(parts.fraction).toBe(".5")
+      const percent = chartFigureParts({ value: 0.1, percent: true, locale })
+      expect(percent.text).toBe("10%")
+      expect(percent.integer).toBe("10")
+      expect(percent.fraction).toBe("%")
+    }
+    expect(chartFigureParts({ value: 14, suffix: " h", locale: "en-US" }).text).toBe("14 h")
   })
 })
 

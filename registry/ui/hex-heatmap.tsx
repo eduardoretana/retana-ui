@@ -12,7 +12,6 @@ import {
   ChartTip,
   chartStatusLabels,
   chartStatusLabelsEs,
-  dimOpacity,
   type ChartCardClassNames,
   type ChartStatus,
   type ChartStatusLabels,
@@ -113,7 +112,12 @@ export function HexHeatmap({
       kpis={
         <>
           {series.slice(0, 3).map((item) => (
-            <ChartKpi key={item.id} label={item.label} value={formatChartPercent(total ? Math.max(0, item.value) / total : 0, locale)} hint={formatChartNumber(item.value, locale)} />
+            <ChartKpi
+              key={item.id}
+              label={item.label}
+              figure={{ value: total ? Math.max(0, item.value) / total : 0, percent: true, locale, hierarchy: true, announce: true }}
+              hint={formatChartNumber(item.value, locale)}
+            />
           ))}
         </>
       }
@@ -146,8 +150,10 @@ export function HexHeatmap({
                 data-slot="hex-cell"
                 data-series={cell.seriesId}
                 points={hexPolygon(point.x, point.y, SIZE - 1.2)}
-                fill={seriesPaint(pattern, index)}
-                opacity={shown ? 0.4 + Math.min(1, Math.max(0, weight)) * 0.6 : dimOpacity(false)}
+                fill={shown ? seriesPaint(pattern, index) : "var(--muted)"}
+                stroke={shown ? "transparent" : "var(--border)"}
+                strokeWidth={shown ? 0 : 1}
+                opacity={shown ? 0.4 + Math.min(1, Math.max(0, weight)) * 0.6 : 1}
                 className="origin-center outline-none transition-transform hover:scale-110 focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none motion-reduce:hover:scale-100"
                 tabIndex={0}
                 role="button"
@@ -184,7 +190,9 @@ export function HexHeatmap({
           {rows.map((row) => (
             <li key={row.id} className="flex items-center justify-between gap-3 text-sm">
               <span className="min-w-0 truncate text-muted-foreground">{row.label}</span>
-              <span className={cn("shrink-0 tabular-nums", active && row.seriesId && active !== row.seriesId && "opacity-40")}>{formatChartNumber(row.value, locale)}</span>
+              <span className={cn("shrink-0 tabular-nums", active && row.seriesId && active !== row.seriesId ? "text-muted-foreground" : "text-foreground")}>
+                {formatChartNumber(row.value, locale)}
+              </span>
             </li>
           ))}
         </ul>

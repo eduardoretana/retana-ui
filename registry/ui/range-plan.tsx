@@ -11,6 +11,7 @@ import {
   ChartTip,
   chartStatusLabels,
   chartStatusLabelsEs,
+  usePrefersReducedMotion,
   type ChartCardClassNames,
   type ChartStatus,
   type ChartStatusLabels,
@@ -89,6 +90,7 @@ export function RangePlan({
   classNames,
 }: RangePlanProps) {
   const copy = { ...rangePlanLabels, ...labels }
+  const reduced = usePrefersReducedMotion()
   const sliderId = useId()
   const [internal, setInternal] = useState(defaultValue ?? min)
   const [dragging, setDragging] = useState(false)
@@ -121,8 +123,18 @@ export function RangePlan({
       live={copy.tip(amount, formatChartPercent(ratio, locale))}
       kpis={
         <>
-          <ChartKpi label={step ?? copy.value} value={amount} />
-          <ChartKpi label={copy.complement} value={complement} />
+          <ChartKpi
+            label={step ?? copy.value}
+            figure={{ value: current, locale, suffix: suffix ? ` ${suffix}` : undefined, hierarchy: true, announce: true }}
+          />
+          <ChartKpi
+            label={copy.complement}
+            figure={
+              formatComplement
+                ? { value: max - current, locale, suffix: suffix ? ` ${suffix}` : undefined, hierarchy: true, announce: true }
+                : { value: 1 - ratio, percent: true, locale, hierarchy: true, announce: true }
+            }
+          />
         </>
       }
       footer={
@@ -135,7 +147,12 @@ export function RangePlan({
     >
       <div className="relative pt-10">
         <div className="mb-3 h-2 overflow-hidden rounded-full bg-muted" aria-hidden>
-          <div className="h-full rounded-full bg-primary" style={{ width: `${ratio * 100}%` }} data-slot="range-plan-fill" />
+          <div
+            data-slot="range-plan-fill"
+            data-motion={reduced ? "reduced" : "full"}
+            className="h-full w-full origin-left rounded-full bg-primary motion-safe:transition-transform motion-safe:duration-300 motion-reduce:transition-none"
+            style={{ transform: `scaleX(${ratio})`, transformOrigin: "left center" }}
+          />
         </div>
         <label className="sr-only" htmlFor={sliderId}>
           {copy.slider}

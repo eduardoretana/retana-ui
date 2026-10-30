@@ -1,7 +1,6 @@
 "use client"
 
 import { useId, useState } from "react"
-import { motion } from "motion/react"
 
 import { formatChartNumber } from "@/registry/retana/lib/chart-format"
 import { extentWithZero, isoFaces, scaleLinear } from "@/registry/retana/lib/chart-geom"
@@ -9,9 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import {
   ChartCard,
   ChartKpi,
+  chartScaleStyle,
   chartStatusLabels,
   chartStatusLabelsEs,
-  chartTransition,
   usePlotBox,
   usePrefersReducedMotion,
   type ChartCardClassNames,
@@ -125,7 +124,18 @@ export function IsoBars({
       columns={[{ id: "value", label: copy.total }]}
       rows={points.map((point) => ({ id: point.key, label: point.label, cells: { value: formatChartNumber(point.value, locale) } }))}
       live={readout}
-      kpis={<ChartKpi label={shown ? shown.label : copy.total} value={readout} />}
+      kpis={
+        <ChartKpi
+          label={shown ? shown.label : copy.total}
+          figure={{
+            value: (shown?.value ?? total) * (unit?.scale ?? 1),
+            locale,
+            suffix: unit?.suffix ? ` ${unit.suffix}` : undefined,
+            hierarchy: true,
+            announce: true,
+          }}
+        />
+      }
       controls={
         periods.length > 1 ? (
           <Select value={currentId} onValueChange={choose}>
@@ -176,27 +186,28 @@ export function IsoBars({
             const y = scaleLinear(value, domain.min, domain.max, height - 28, 20 + depth)
             const barHeight = base - y
             const x = pad + index * slot + (slot - barWidth) / 2
-            const faces = isoFaces(x, base, barWidth, barHeight, depth)
-            const ghost = emphasisKey != null && emphasisKey !== point.key
-            const hot = active === index
+            const reach = Math.max(1, Math.abs(base - (20 + depth)))
+            const faces = isoFaces(x, base, barWidth, reach, depth)
+            const signed = Math.max(-1, Math.min(1, barHeight / reach))
+            const strong = emphasisKey != null ? point.key === emphasisKey : active != null ? active === index : index === points.length - 1
+            const labelHot = active != null ? active === index : strong
+            const paint = strong ? seriesPaint(pattern, 0) : "var(--muted)"
             return (
-              <motion.g
-                key={`${currentId}-${point.key}`}
-                data-slot="iso-bar"
-                data-key={point.key}
-                initial={reduced ? false : { scaleY: 0.15, opacity: 0.4 }}
-                animate={{ scaleY: 1, opacity: hot || active == null ? 1 : 0.45 }}
-                transition={chartTransition(reduced)}
-                style={{ transformOrigin: `${x + barWidth / 2}px ${base}px` }}
-                onMouseEnter={() => setActive(index)}
-              >
-                <path d={faces.roof} fill={ghost ? "transparent" : seriesPaint(pattern, 0)} opacity={0.55} stroke="var(--border)" strokeDasharray={ghost ? "3 3" : undefined} />
-                <path d={faces.side} fill={ghost ? "transparent" : seriesPaint(pattern, 0)} opacity={0.8} stroke="var(--border)" strokeDasharray={ghost ? "3 3" : undefined} />
-                <path d={faces.front} fill={ghost ? "transparent" : seriesPaint(pattern, 0)} stroke="var(--border)" strokeDasharray={ghost ? "3 3" : undefined} />
-                <text x={x + barWidth / 2} y={height - 8} textAnchor="middle" className="fill-muted-foreground text-[10px]">
+              <g key={index} data-slot="iso-bar" data-key={point.key} onMouseEnter={() => setActive(index)}>
+                <g {...chartScaleStyle(reduced, signed, `${x + barWidth / 2}px ${base}px`)}>
+                  <path d={faces.roof} fill={paint} opacity={strong ? 0.55 : 1} stroke="var(--border)" strokeDasharray={strong ? undefined : "3 3"} />
+                  <path d={faces.side} fill={paint} opacity={strong ? 0.8 : 1} stroke="var(--border)" strokeDasharray={strong ? undefined : "3 3"} />
+                  <path d={faces.front} fill={paint} stroke="var(--border)" strokeDasharray={strong ? undefined : "3 3"} />
+                </g>
+                <text
+                  x={x + barWidth / 2}
+                  y={height - 8}
+                  textAnchor="middle"
+                  className={labelHot ? "fill-foreground text-[10px] font-medium" : "fill-muted-foreground text-[10px]"}
+                >
                   {point.axisLabel ?? point.label}
                 </text>
-              </motion.g>
+              </g>
             )
           })}
         </svg>

@@ -102,8 +102,12 @@ export function DotMeter({
       live={tip}
       kpis={
         <>
-          <ChartKpi label={copy.filled} value={formatChartPercent(cap ? Math.max(0, value) / cap : 0, locale)} hint={unit(Math.max(0, value))} />
-          <ChartKpi label={copy.limit} value={unit(cap)} />
+          <ChartKpi
+            label={copy.filled}
+            figure={{ value: cap ? Math.max(0, value) / cap : 0, percent: true, locale, hierarchy: true, announce: true }}
+            hint={unit(Math.max(0, value))}
+          />
+          <ChartKpi label={copy.limit} figure={{ value: cap, locale, suffix: suffix ? ` ${suffix}` : undefined, hierarchy: true, announce: true }} />
         </>
       }
     >

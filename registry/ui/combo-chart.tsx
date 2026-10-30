@@ -3,13 +3,14 @@
 import { useId, useState } from "react"
 import { motion } from "motion/react"
 
-import { formatChartUnit, type ChartUnit } from "@/registry/retana/lib/chart-format"
+import { chartFigureForUnit, formatChartUnit, type ChartUnit } from "@/registry/retana/lib/chart-format"
 import { extentWithZero, linePath, scaleLinear } from "@/registry/retana/lib/chart-geom"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
   ChartCard,
   ChartKpi,
   ChartTip,
+  chartScaleStyle,
   chartStatusLabels,
   chartStatusLabelsEs,
   chartTransition,
@@ -96,6 +97,9 @@ export function ComboChart({
   const base = scaleLinear(0, domain.min, domain.max, height - 24, 16)
   const slot = Math.max(1, (width - 16) / Math.max(1, points.length))
   const barWidth = Math.max(6, Math.min(18, slot * 0.45))
+  const upReach = Math.max(1, base - 16)
+  const downReach = Math.max(1, height - 24 - base)
+  const barReach = Math.max(upReach, downReach)
   const coords = points.map((point, index) => ({
     x: 12 + index * slot + slot / 2,
     y: scaleLinear(point.line, domain.min, domain.max, height - 24, 16),
@@ -139,8 +143,8 @@ export function ComboChart({
       live={focus ? copy.point(focus.label, barText(focus.bar), lineText(focus.line)) : undefined}
       kpis={
         <>
-          <ChartKpi label={copy.bar} value={formatChartUnit(focus?.bar ?? totalBar, currentUnit, locale)} hint={focus?.label ?? currentUnit?.label} />
-          <ChartKpi label={copy.line} value={formatChartUnit(focus?.line ?? points[points.length - 1]?.line ?? 0, currentUnit, locale)} />
+          <ChartKpi label={copy.bar} figure={chartFigureForUnit(focus?.bar ?? totalBar, currentUnit, locale)} hint={focus?.label ?? currentUnit?.label} />
+          <ChartKpi label={copy.line} figure={chartFigureForUnit(focus?.line ?? points[points.length - 1]?.line ?? 0, currentUnit, locale)} />
         </>
       }
       controls={
@@ -190,21 +194,28 @@ export function ComboChart({
           {points.map((point, index) => {
             const y = scaleLinear(point.bar, domain.min, domain.max, height - 24, 16)
             const bar = Math.abs(base - y)
-            const top = Math.min(base, y)
             const x = 12 + index * slot + (slot - barWidth) / 2
+            const hot = active == null || active === index
+            const signed = (y > base ? -1 : 1) * Math.min(1, bar / barReach)
             return (
-              <motion.rect
-                key={`${currentUnit?.id ?? "u"}-${point.key}`}
+              <g
+                key={point.key}
                 data-slot="combo-bar"
-                x={x}
-                width={barWidth}
-                rx={2}
-                initial={reduced ? false : { height: 0, y: base }}
-                animate={{ height: bar, y: top, opacity: active == null || active === index ? 1 : 0.35 }}
-                transition={chartTransition(reduced)}
-                fill={seriesPaint(pattern, 3)}
+                data-origin="baseline"
+                {...chartScaleStyle(reduced, signed, `${x + barWidth / 2}px ${base}px`)}
                 onMouseEnter={() => choose(index)}
-              />
+              >
+                <rect
+                  x={x}
+                  y={base - barReach}
+                  width={barWidth}
+                  height={barReach}
+                  rx={2}
+                  fill={hot ? seriesPaint(pattern, 3) : "var(--muted)"}
+                  stroke={hot ? "transparent" : "var(--border)"}
+                  strokeWidth={1}
+                />
+              </g>
             )
           })}
           <motion.path
@@ -235,7 +246,20 @@ export function ComboChart({
                 <span className="mt-1.5 flex h-8 items-end gap-0.5" data-slot="combo-mini">
                   {focus.parts.map((part, index) => {
                     const max = Math.max(...focus.parts!.map((item) => Math.abs(item.value)), 1)
-                    return <span key={part.id} title={part.label} className="w-1.5 rounded-sm" style={{ height: `${(Math.abs(part.value) / max) * 100}%`, background: `var(--chart-${(index % 5) + 1})` }} />
+                    const ratio = Math.abs(part.value) / max
+                    return (
+                      <span key={part.id} title={part.label} className="flex h-full w-1.5 items-end">
+                        <span
+                          className="block h-full w-full origin-bottom rounded-sm"
+                          style={{
+                            transformOrigin: "bottom",
+                            transform: `scaleY(${ratio})`,
+                            background: `var(--chart-${(index % 5) + 1})`,
+                            animation: reduced ? "none" : "rui-scale-y 0.48s cubic-bezier(0.16, 1, 0.3, 1)",
+                          }}
+                        />
+                      </span>
+                    )
                   })}
                 </span>
               ) : null}

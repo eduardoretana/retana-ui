@@ -116,7 +116,11 @@ export function PolarArea({
       kpis={
         <>
           {series.slice(0, 2).map((item) => (
-            <ChartKpi key={item.id} label={item.label} value={withUnit(item.value)} />
+            <ChartKpi
+              key={item.id}
+              label={item.label}
+              figure={{ value: item.value, locale, suffix: suffix ? ` ${suffix}` : undefined, hierarchy: true, announce: true }}
+            />
           ))}
         </>
       }
@@ -152,10 +156,10 @@ export function PolarArea({
                     key={item.id}
                     data-slot="polar-wedge"
                     d={wedgePath(cx, cy, inner, radius, start, end)}
-                    fill={seriesPaint(pattern, index)}
-                    opacity={hot ? 1 : 0.28}
+                    fill={hot ? seriesPaint(pattern, index) : "var(--muted)"}
+                    stroke={hot ? "var(--background)" : "var(--border)"}
+                    opacity={1}
                     className="outline-none focus-visible:stroke-ring"
-                    stroke="var(--background)"
                     strokeWidth={2}
                     tabIndex={0}
                     role="button"
@@ -171,7 +175,7 @@ export function PolarArea({
           </AnimatePresence>
         </svg>
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <p className="text-center text-lg font-semibold tabular-nums" data-slot="polar-center">
+          <p className="text-center text-lg font-medium tabular-nums text-foreground" data-slot="polar-center">
             {center}
           </p>
         </div>
