@@ -540,7 +540,12 @@ export const JsonViewer = forwardRef<HTMLDivElement, JsonViewerProps>(function J
 
   const heightStyle = { "--json-max-height": typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight } as CSSProperties
   const bulk = rows.length > 400
-  const rowTransition: Transition = reduced || bulk ? { duration: 0 } : { height: motionPresets.spring.smooth, opacity: { duration: 0.2, ease: [...motionPresets.ease.standard] } }
+  const rowTransition: Transition = reduced || bulk
+    ? { duration: 0 }
+    : {
+        gridTemplateRows: { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.standard] },
+        opacity: { duration: 0.2, ease: [...motionPresets.ease.standard] },
+      }
 
   const describe = (row: Row) => {
     const name = row.name === null ? rootName : String(row.name)
@@ -639,10 +644,10 @@ export const JsonViewer = forwardRef<HTMLDivElement, JsonViewerProps>(function J
                   data-kind={row.kind}
                   data-active={isActive || undefined}
                   style={{ "--level": row.level - 1 } as CSSProperties}
-                  className={cn("group/row relative rounded-lg outline-none", classNames?.row)}
-                  initial={{ height: 0, opacity: 0, overflow: "hidden" }}
-                  animate={{ height: ROW, opacity: 1, transitionEnd: { overflow: "visible" } }}
-                  exit={{ height: 0, opacity: 0, overflow: "hidden" }}
+                  className={cn("group/row relative grid rounded-lg outline-none", classNames?.row)}
+                  initial={reduced || bulk ? false : { gridTemplateRows: "0fr", opacity: 0 }}
+                  animate={{ gridTemplateRows: "1fr", opacity: 1 }}
+                  exit={{ gridTemplateRows: "0fr", opacity: 0 }}
                   transition={rowTransition}
                   onFocus={(event) => {
                     if (event.target === event.currentTarget && row.id !== active) setActiveRaw(row.id)
@@ -657,6 +662,7 @@ export const JsonViewer = forwardRef<HTMLDivElement, JsonViewerProps>(function J
                     moveTo(row.id)
                   }}
                 >
+                  <div className="relative min-h-0 overflow-hidden">
                   {isActive ? <motion.span layoutId={`${uid}-active`} className="absolute inset-y-px inset-x-0 rounded-lg bg-muted" transition={reduced ? { duration: 0 } : motionPresets.spring.snappy} aria-hidden="true" /> : null}
                   <span className="relative flex h-[30px] min-w-0 items-center gap-1.5 pr-1.5 pl-[calc(4px+var(--level,0)*var(--indent))] whitespace-nowrap" data-kind={row.kind}>
                     {row.kind === "more" ? (
@@ -705,6 +711,7 @@ export const JsonViewer = forwardRef<HTMLDivElement, JsonViewerProps>(function J
                       </>
                     )}
                   </span>
+                  </div>
                 </motion.div>
               )
             })}

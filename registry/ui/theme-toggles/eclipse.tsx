@@ -13,7 +13,7 @@
  *   icon follows the `toggled` prop and not the host page's `.dark` class.
  * - Children render after the icon so theme-switch can add a label.
  * - The button is marked `data-toggled` and `group/tt`.
- * - Overshoot easing is cubic-bezier(0.22, 1, 0.36, 1) (IDEA-448). motion-safe keeps reduced-motion off.
+ * - Easing is cubic-bezier(0.22, 1, 0.36, 1), with no overshoot (IDEA-448). motion-safe keeps reduced-motion off.
  */
 
 import { type ButtonHTMLAttributes, type CSSProperties, useId } from "react";
