@@ -8,6 +8,7 @@ import { toast } from "sonner"
 
 import { SceneFrameView } from "@/app/catalog/scene-frame"
 import { SceneModeProvider } from "@/app/catalog/scene-mode"
+import { reducedFromQuery, sceneLocaleFromQuery } from "@/app/catalog/scene-query"
 import { sceneText, type Scene, type SceneLocale } from "@/app/catalog/scene-types"
 import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
@@ -20,8 +21,12 @@ function SceneDeckInner({ scenes }: { scenes: readonly Scene[] }) {
   const router = useRouter()
   const requested = params.get("scene")
   const selected = scenes.find((scene) => scene.id === requested) ?? scenes[0]
-  const [locale, setLocale] = useState<SceneLocale>("es")
-  const [reduced, setReduced] = useState(false)
+  const localeQuery = sceneLocaleFromQuery(params.get("locale"))
+  const reducedQuery = reducedFromQuery(params.get("reduced"))
+  const [localeState, setLocaleState] = useState<SceneLocale>("es")
+  const [reducedState, setReducedState] = useState(false)
+  const locale = localeQuery ?? localeState
+  const reduced = reducedQuery ?? reducedState
   const [epoch, setEpoch] = useState(0)
 
   useEffect(() => {
@@ -37,6 +42,26 @@ function SceneDeckInner({ scenes }: { scenes: readonly Scene[] }) {
     router.replace(`${pathname}?${next.toString()}`, { scroll: false })
   }
 
+  function chooseLocale(option: SceneLocale) {
+    if (params.get("locale")) {
+      const next = new URLSearchParams(params.toString())
+      next.set("locale", option === "en" ? "en" : "es-MX")
+      router.replace(`${pathname}?${next.toString()}`, { scroll: false })
+      return
+    }
+    setLocaleState(option)
+  }
+
+  function chooseReduced(nextReduced: boolean) {
+    if (params.get("reduced") != null) {
+      const next = new URLSearchParams(params.toString())
+      next.set("reduced", nextReduced ? "1" : "0")
+      router.replace(`${pathname}?${next.toString()}`, { scroll: false })
+      return
+    }
+    setReducedState(nextReduced)
+  }
+
   function log(line: string) {
     toast(line, {
       description: sceneText(locale, "Callback de la pieza", "Component callback"),
@@ -46,7 +71,7 @@ function SceneDeckInner({ scenes }: { scenes: readonly Scene[] }) {
   const Render = selected.render
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4" data-locale={locale} data-reduced={reduced ? "1" : "0"}>
       <div className="flex flex-wrap items-center gap-2">
         <div role="group" aria-label={sceneText(locale, "Estados", "States")} className="flex flex-wrap gap-1">
           {scenes.map((scene) => {
@@ -82,7 +107,7 @@ function SceneDeckInner({ scenes }: { scenes: readonly Scene[] }) {
                 key={option}
                 type="button"
                 aria-pressed={locale === option}
-                onClick={() => setLocale(option)}
+                onClick={() => chooseLocale(option)}
                 className={cn(
                   "rounded-md px-2 py-1 text-xs uppercase",
                   locale === option ? "bg-foreground text-background" : "text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -96,7 +121,7 @@ function SceneDeckInner({ scenes }: { scenes: readonly Scene[] }) {
             <Switch
               size="sm"
               checked={reduced}
-              onCheckedChange={setReduced}
+              onCheckedChange={chooseReduced}
               aria-label={sceneText(locale, "Menos movimiento", "Reduced motion")}
             />
             {sceneText(locale, "Menos movimiento", "Reduced motion")}

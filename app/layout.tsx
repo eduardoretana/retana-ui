@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
+import { ThemeQuery } from "@/app/catalog/theme-query";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
@@ -36,12 +37,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "try{if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}",
+              "try{var t=new URLSearchParams(location.search).get('theme');if(t==='dark'||t==='light'){localStorage.setItem('theme',t);document.documentElement.classList.toggle('dark',t==='dark')}else if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}",
           }}
         />
       </head>
       <body className="min-h-full bg-background text-foreground">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <ThemeQuery />
           <TooltipProvider>
             {children}
             <Toaster />

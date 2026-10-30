@@ -1,0 +1,72 @@
+schema: retana.capture-seed/v1
+version: 1
+spec_id: retana-ui-layout-motion
+ui_system: {version: 4.0.0}
+profile: STANDARD
+note: "Estados llenos de las 12 composiciones. Ninguna fila usa vacío, carga o error. Tema, locale y menos movimiento entran por query, sin redirección."
+query:
+  scene: filled
+  theme: "{light|dark}"
+  locale: "{es-MX|en}"
+  reduced: "{0|1}"
+axes:
+  theme: [light, dark]
+  locale: [es-MX, en]
+  reduced: ["0", "1"]
+viewports: ["390x844", "1280x800"]
+patterns:
+  - id: combo-chart
+    route: /examples/combo-chart
+    scene: filled
+    nonempty: true
+  - id: stacked-columns
+    route: /examples/stacked-columns
+    scene: filled
+    nonempty: true
+  - id: iso-bars
+    route: /examples/iso-bars
+    scene: filled
+    nonempty: true
+  - id: range-plan
+    route: /examples/range-plan
+    scene: filled
+    nonempty: true
+  - id: segment-gauge
+    route: /examples/segment-gauge
+    scene: filled
+    nonempty: true
+  - id: scrub-area
+    route: /examples/scrub-area
+    scene: filled
+    nonempty: true
+  - id: range-lanes
+    route: /examples/range-lanes
+    scene: filled
+    nonempty: true
+  - id: coupled-lines
+    route: /examples/coupled-lines
+    scene: filled
+    nonempty: true
+  - id: dot-meter
+    route: /examples/dot-meter
+    scene: filled
+    nonempty: true
+  - id: flow-sankey
+    route: /examples/flow-sankey
+    scene: filled
+    nonempty: true
+  - id: hex-heatmap
+    route: /examples/hex-heatmap
+    scene: filled
+    nonempty: true
+  - id: polar-area
+    route: /examples/polar-area
+    scene: filled
+    nonempty: true
+commands:
+  install: pnpm install --frozen-lockfile
+  build: pnpm build
+  start: pnpm exec next start --hostname "$HOST" --port "$PORT"
+  health: http://$HOST:$PORT/api/health
+  host: 127.0.0.1
+  port_min: 40000
