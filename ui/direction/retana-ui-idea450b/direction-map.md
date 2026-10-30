@@ -19,7 +19,7 @@ Seed de captura: `ui/direction/fixtures/retana-ui-idea450b.seed.yaml`. Una URL p
 
 | Región | reference_id | Cita | Desviación |
 | --- | --- | --- | --- |
-| Fila `layout="circle"` en `registry/ui/avatar-group.tsx` | circle-names-below | AC-4, rule: RUI-ANIM-PERF-001 | `namePlace` default `below`. `shot=circle-above` es la otra variante, en su propia URL. |
+| Fila `layout="circle"` en `registry/ui/avatar-group.tsx` | circle-names-below | AC-4, rule: RUI-ANIM-PERF-001 | `namePlace` default `below`. `shot=circle-above` es la otra variante, en su propia URL. Las personas son Inés Ejemplo, Diego Ejemplo y Marta Muestra. |
 | Escenas filled, empty, loading, error | circle-names-below | AC-4, wcag: 2.2 AA | Placeholders SVG ya usados en el lightbox. Vacío con iniciales. Error con src ausente y fallback. |
 | Badge `count` y `dot` en `components/ui/badge.tsx` | circle-names-below | AC-3, rule: RUI-BADGE-001, wcag: 1.4.1 | Neutro `bg-foreground` / `text-background`. El destructivo no cambia. |
 | Glass en header, dock, dialog, sheet, lightbox | circle-names-below | AC-2, rule: RUI-GLASS-001 | Fallback `bg-background`. Blur `md` o `xs`. |

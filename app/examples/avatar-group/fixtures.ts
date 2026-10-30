@@ -1,7 +1,12 @@
-import { people } from "@/app/examples/arc/demo-data"
-
 /** Same neutral swatches the lightbox demo already uses. Not photographs. */
-const tones = ["#ddd6cc", "#c9c1b6", "#b3aa9e", "#8f877d"]
+const tones = ["#ddd6cc", "#c9c1b6", "#b3aa9e"]
+
+/** Names from the auditor fixture list only. */
+const crew = [
+  { name: "Inés Ejemplo" },
+  { name: "Diego Ejemplo" },
+  { name: "Marta Muestra" },
+]
 
 export type CirclePerson = {
   name: string
@@ -13,9 +18,7 @@ function swatch(name: string, tone: string) {
   return `data:image/svg+xml,${encodeURIComponent(svg)}`
 }
 
-const crew = people.slice(0, 4)
-
-/** Four generic placeholders. No real portraits. */
+/** Generic placeholders. No real portraits. */
 export const filled: CirclePerson[] = crew.map((person, index) => ({
   name: person.name,
   src: swatch(person.name, tones[index] ?? tones[0]!),

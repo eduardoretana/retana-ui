@@ -2,7 +2,6 @@
 
 import { SceneStatus } from "@/app/catalog/scene-frame"
 import { sceneText, type Scene, type SceneFrame, type SceneRenderProps } from "@/app/catalog/scene-types"
-import { people } from "@/app/examples/arc/demo-data"
 import { AvatarGroup } from "@/registry/ui/avatar-group"
 
 import { copy, empty, error, filled, type CirclePerson } from "./fixtures"
@@ -80,11 +79,11 @@ function AboveScene({ locale }: SceneRenderProps) {
 }
 
 function StackScene() {
-  const crew = people.slice(0, 6).map((person, index) => ({
+  const crew = filled.map((person, index) => ({
     name: person.name,
-    status: index === 0 ? ("online" as const) : index === 3 ? ("offline" as const) : undefined,
+    status: index === 0 ? ("online" as const) : undefined,
   }))
-  return <AvatarGroup members={crew} max={4} label="Equipo del horno" />
+  return <AvatarGroup members={crew} max={3} label="Equipo del horno" />
 }
 
 export const scenes: Scene[] = [

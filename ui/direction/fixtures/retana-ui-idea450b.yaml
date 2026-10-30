@@ -7,10 +7,9 @@ seed: idea450b
 locale: es-MX
 viewport: 390x844
 people:
-  - Inés Calderón
-  - Mateo Ruiz
-  - Lucía Peña
-  - Omar Vidal
+  - Inés Ejemplo
+  - Diego Ejemplo
+  - Marta Muestra
 scenes:
   - id: filled
     state: success

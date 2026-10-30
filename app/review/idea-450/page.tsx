@@ -5,7 +5,6 @@ import { House, Search, User } from "lucide-react"
 
 import { filled } from "@/app/examples/avatar-group/fixtures"
 import { SiteHeader } from "@/app/catalog/site-header"
-import { people } from "@/app/examples/arc/demo-data"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -18,8 +17,6 @@ import {
 } from "@/components/ui/dialog"
 import { AvatarGroup } from "@/registry/ui/avatar-group"
 import { DockNav, type DockNavItem } from "@/registry/ui/dock-nav"
-
-const crew = people.slice(0, 4).map((person) => ({ name: person.name }))
 
 const dockItems: DockNavItem[] = [
   { value: "home", label: "Inicio", icon: <House />, group: "main" },
@@ -160,7 +157,7 @@ export default function Idea450ReviewPage({
         {shot === "all" ? (
           <section id="avatars" data-shot="avatars" className="flex flex-col gap-3">
             <h2 className="text-base font-semibold">{text.stackHeading}</h2>
-            <AvatarGroup members={crew} max={4} label={text.stackLabel} />
+            <AvatarGroup members={filled.map((person) => ({ name: person.name }))} max={3} label={text.stackLabel} />
           </section>
         ) : null}
         {show("dock") ? (

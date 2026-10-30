@@ -12,7 +12,7 @@ reference_id: circle-names-below
 
 # Elección — círculo de avatar-group
 
-Dos variantes, mismo contenido (Inés, Mateo, Lucía, Omar), mismos tokens, mismo ancho 390. No hay fotos. La idea del círculo es clean-room; no se copian valores ni retratos.
+Dos variantes, mismo contenido (Inés Ejemplo, Diego Ejemplo, Marta Muestra), mismos tokens, mismo ancho 390. No hay fotos. La idea del círculo es clean-room; no se copian valores ni retratos.
 
 | | Nombres abajo (`below`) | Nombres arriba (`above`) |
 | --- | --- | --- |

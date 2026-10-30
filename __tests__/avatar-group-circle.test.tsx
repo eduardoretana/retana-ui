@@ -16,7 +16,7 @@ describe("avatar-group circle", () => {
 
   it("renders the empty row as initials without images", () => {
     render(<AvatarGroup layout="circle" members={empty} label="Círculo del taller" />)
-    expect(screen.getByText("IC")).toBeInTheDocument()
+    expect(screen.getByText("IE")).toBeInTheDocument()
     expect(document.querySelector("[data-portrait=image]")).toBeNull()
   })
 
@@ -24,7 +24,7 @@ describe("avatar-group circle", () => {
     render(<AvatarGroup layout="circle" members={error} label="Círculo del taller" />)
     const image = document.querySelector("[data-portrait=image]")
     expect(image).toHaveAttribute("data-src", "/idea-450-missing-avatar.svg")
-    expect(screen.getByText("IC")).toBeInTheDocument()
+    expect(screen.getByText("IE")).toBeInTheDocument()
   })
 
   it("can place names above", () => {

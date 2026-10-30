@@ -53,7 +53,7 @@ states:
   - overflow
   - i18n_long
 data:
-  - "Círculo: Inés Calderón, Mateo Ruiz, Lucía Peña, Omar Vidal. Placeholders SVG, no fotos."
+  - "Círculo: Inés Ejemplo, Diego Ejemplo y Marta Muestra. Placeholders SVG, no fotos."
   - "Badge: 3 sin leer. Destructivo: Error."
   - "Tarjeta: Horno 2, radio xl."
 brand_constraints:

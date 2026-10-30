@@ -31,11 +31,11 @@ states:
   - id: circle
     shot: circle
     name_place: below
-    nonempty: { people: ["Inés Calderón", "Mateo Ruiz", "Lucía Peña", "Omar Vidal"] }
+    nonempty: { people: ["Inés Ejemplo", "Diego Ejemplo", "Marta Muestra"] }
   - id: circle-above
     shot: circle-above
     name_place: above
-    nonempty: { people: ["Inés Calderón", "Mateo Ruiz", "Lucía Peña", "Omar Vidal"] }
+    nonempty: { people: ["Inés Ejemplo", "Diego Ejemplo", "Marta Muestra"] }
   - id: card
     shot: card
     nonempty: { es: "Horno 2", en: "Kiln 2" }
