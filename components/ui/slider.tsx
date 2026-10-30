@@ -10,8 +10,11 @@ function Slider({
   value,
   min = 0,
   max = 100,
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
+  "aria-valuetext": ariaValueText,
   ...props
-}: React.ComponentProps<typeof SliderPrimitive.Root>) {
+}: React.ComponentProps<typeof SliderPrimitive.Root> & { "aria-valuetext"?: string }) {
   const _values = React.useMemo(
     () =>
       Array.isArray(value)
@@ -48,7 +51,11 @@ function Slider({
         <SliderPrimitive.Thumb
           data-slot="slider-thumb"
           key={index}
-          className="relative block size-3 shrink-0 rounded-full border border-ring bg-white ring-ring/50 transition-[color,box-shadow] select-none after:absolute after:-inset-2 hover:ring-3 focus-visible:ring-3 focus-visible:outline-hidden active:ring-3 disabled:pointer-events-none disabled:opacity-50"
+          role="slider"
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledBy}
+          aria-valuetext={ariaValueText}
+          className="relative block size-3 shrink-0 rounded-full border border-ring bg-white text-foreground ring-ring/50 transition-[color] select-none before:pointer-events-none before:absolute before:inset-0 before:rounded-full before:ring-3 before:ring-ring before:opacity-0 before:transition-opacity motion-reduce:before:transition-none hover:before:opacity-100 focus-visible:before:opacity-100 focus-visible:outline-hidden active:before:opacity-100 after:absolute after:-inset-2 disabled:pointer-events-none disabled:opacity-50"
         />
       ))}
     </SliderPrimitive.Root>

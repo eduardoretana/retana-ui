@@ -1,0 +1,27 @@
+{
+  "phase": "after",
+  "viewport": "390x844",
+  "webkit": true,
+  "pages": {
+    "crm": {
+      "fontSize": "16px",
+      "tag": "INPUT"
+    },
+    "pipeline": {
+      "fontSize": "16px",
+      "type": "date"
+    },
+    "bottomSheet": {
+      "paddingBottom": "160px",
+      "safeAreaInsetBottom": "0px",
+      "viewport": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "bottom": "-160px",
+      "tap": "rgba(0, 0, 0, 0)"
+    },
+    "eclipseMid": {
+      "count": 1,
+      "total": 1
+    },
+    "eclipseEnd": "true"
+  }
+}

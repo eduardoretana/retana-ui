@@ -1,0 +1,65 @@
+schema: uis.fixture/v1
+spec_id: retana-ui-idea448b
+spec_version: 1.0.0
+profile: LITE
+head: 0235da2ac2a16970fee70848911a51737cf7a4e8
+seed: idea448b
+locale: es-MX
+viewport: 390x844
+scenes:
+  - id: crm-input
+    state: editing
+    route: /examples/crm
+    req_ids: [AC-1, AC-2]
+    record:
+      id: bruma
+      company: Taller Bruma
+      owner: Inés Ejemplo
+      stage: proposal
+      value: 48000
+      currency: MXN
+  - id: onboarding-invites
+    state: editing
+    route: /examples/onboarding
+    req_ids: [AC-1]
+    step: team
+    invites: ""
+  - id: pipeline-dates
+    state: empty
+    route: /examples/pipeline-board
+    req_ids: [AC-1]
+    filters:
+      from: null
+      to: null
+  - id: candidate-schedule
+    state: editing
+    route: /examples/candidate-detail
+    req_ids: [AC-1]
+    action: Agendar
+  - id: json-search
+    state: idle
+    route: /examples/json-viewer
+    req_ids: [AC-1]
+    label: Carga del horno
+  - id: parameter-slider
+    state: editing
+    route: /examples/parameter-slider
+    req_ids: [AC-1]
+    label: Variation
+    value: 0.4
+  - id: view-calendar
+    state: idle
+    route: /examples/view-calendar
+    req_ids: [AC-1]
+    month: 2026-04
+  - id: bottom-sheet
+    state: ready
+    route: /examples/bottom-sheet
+    req_ids: [AC-3]
+    title: Carga del horno
+  - id: eclipse
+    state: idle
+    route: /examples/theme-toggle-icons
+    req_ids: [AC-5]
+    name: eclipse
+    frames: [rest, mid, settled]

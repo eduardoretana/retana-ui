@@ -13,6 +13,7 @@
  *   icon follows the `toggled` prop and not the host page's `.dark` class.
  * - Children render after the icon so theme-switch can add a label.
  * - The button is marked `data-toggled` and `group/tt`.
+ * - Easing is cubic-bezier(0.22, 1, 0.36, 1), with no overshoot (IDEA-448). motion-safe keeps reduced-motion off.
  */
 
 import { type ButtonHTMLAttributes, type CSSProperties, useId } from "react";
@@ -63,7 +64,7 @@ export function Eclipse({
           <clipPath id={clipMainId}>
             <path
               d={"M0 0h64v32h-64zm38 16a1 1 0 0020 0 1 1 0 00-20 0"}
-              className="origin-center motion-safe:transition-[d,translate] motion-safe:[transition-duration:var(--toggles-eclipse--duration)] motion-safe:[transition-timing-function:cubic-bezier(0,0,0.05,1.15)] motion-safe:[transition-delay:0s] group-data-[toggled=true]/tt:[d:path('M-16_-16h64v64h-64zm22_32a1_1_0_0020_0_1_1_0_00-20_0')] group-data-[toggled=true]/tt:not-supports-[d:path('M0_0')]:-translate-x-[32px] motion-safe:group-data-[toggled=true]/tt:[transition-duration:calc(var(--toggles-eclipse--duration)_*_0.8)] motion-safe:group-data-[toggled=true]/tt:[transition-delay:calc(var(--toggles-eclipse--duration)_*_0.2)]"
+              className="origin-center motion-safe:transition-[d,translate] motion-safe:[transition-duration:var(--toggles-eclipse--duration)] motion-safe:[transition-timing-function:cubic-bezier(0.22,1,0.36,1)] motion-safe:[transition-delay:0s] group-data-[toggled=true]/tt:[d:path('M-16_-16h64v64h-64zm22_32a1_1_0_0020_0_1_1_0_00-20_0')] group-data-[toggled=true]/tt:not-supports-[d:path('M0_0')]:-translate-x-[32px] motion-safe:group-data-[toggled=true]/tt:[transition-duration:calc(var(--toggles-eclipse--duration)_*_0.8)] motion-safe:group-data-[toggled=true]/tt:[transition-delay:calc(var(--toggles-eclipse--duration)_*_0.2)]"
             />
           </clipPath>
         </defs>
@@ -72,7 +73,7 @@ export function Eclipse({
             cx={16}
             cy={16}
             r={16}
-            className="[transform-origin:center] motion-safe:[transition-property:transform] motion-safe:[transition-duration:var(--toggles-eclipse--duration)] motion-safe:[transition-timing-function:cubic-bezier(0,0,0.05,1.15)]"
+            className="[transform-origin:center] motion-safe:[transition-property:transform] motion-safe:[transition-duration:var(--toggles-eclipse--duration)] motion-safe:[transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
           />
         </g>
       </svg>

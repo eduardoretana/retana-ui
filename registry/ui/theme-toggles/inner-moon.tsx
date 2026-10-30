@@ -13,6 +13,7 @@
  *   icon follows the `toggled` prop and not the host page's `.dark` class.
  * - Children render after the icon so theme-switch can add a label.
  * - The button is marked `data-toggled` and `group/tt`.
+ * - Easing is cubic-bezier(0.22, 1, 0.36, 1), with no overshoot (IDEA-448). motion-safe keeps reduced-motion off.
  */
 
 import { type ButtonHTMLAttributes, type CSSProperties } from "react";
@@ -59,7 +60,7 @@ export function InnerMoon({
           d={
             "M27.5 11.5v-7h-7L16 0l-4.5 4.5h-7v7L0 16l4.5 4.5v7h7L16 32l4.5-4.5h7v-7L32 16l-4.5-4.5zM16 25.4a9.39 9.39 0 1 1 0-18.8 9.39 9.39 0 1 1 0 18.8z"
           }
-          className="origin-center motion-safe:transition-transform motion-safe:duration-(--toggles-inner-moon--duration) motion-safe:[transition-timing-function:cubic-bezier(0,0,0.15,1.25)] group-data-[toggled=true]/tt:rotate-180"
+          className="origin-center motion-safe:transition-transform motion-safe:duration-(--toggles-inner-moon--duration) motion-safe:[transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-data-[toggled=true]/tt:rotate-180"
         />
         <circle
           cx={16}

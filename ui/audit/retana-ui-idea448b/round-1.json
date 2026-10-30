@@ -1,0 +1,514 @@
+{
+  "schema_version": "uis.verdict/v1",
+  "spec_id": "retana-ui-idea448b",
+  "spec_version": "1.0.0",
+  "head": "1bfb56e19895d2f1b924399a5771a330446e38f5",
+  "round": 1,
+  "phase": "pre-pr",
+  "profile": "LITE",
+  "dispatch_id": "DSP-retana-ui-idea448b-r3",
+  "auditor": {
+    "id": "ui-auditor",
+    "version": "1.2.5",
+    "profile_sha256": "041021689ff45954d83efac955b3f7d7710f7d22d4593174d73c54567a65fbf7",
+    "model_family": "grok-bot",
+    "git_identity": "ui-auditor <ui-auditor@retana.invalid>"
+  },
+  "independence": {
+    "builder_id": "bc-f5c5a51d-91c7-571c-bab0-98657daac51d",
+    "builder_model_family": "cursor-cloud-agent",
+    "auditor_is_builder": false,
+    "clean_clone": true,
+    "clone_path": "/workspace/ui-audit/retana-ui-idea448b/r3/repo",
+    "rev_parse_head": "1bfb56e19895d2f1b924399a5771a330446e38f5",
+    "worktree_clean": true,
+    "builder_reasoning_received": false
+  },
+  "inputs": {
+    "spec_path": "ui/specs/retana-ui-idea448b.spec.md",
+    "spec_sha256": "b72c6b44af7d675453f79a877fced2fc419b3fa4d9d75bc52f75949a7f3c0c86",
+    "direction_map_path": "ui/direction/retana-ui-idea448b/direction-map.md",
+    "direction_map_sha256": "873ef0d65449cb8edb4ef95439738653bfb4f6a0e9ca7e5d173acf3bd10e4881",
+    "build_log_path": "ui/specs/retana-ui-idea448b.build-log.md",
+    "build_log_sha256": "38a5156f2403716e81d523367ed739021e4ee954dad5a3a9c682573991c592cb",
+    "build_log_sections_read": [
+      "needs",
+      "spec_defect",
+      "candidates_detected",
+      "commands"
+    ],
+    "tests_manifest_sha256": "ea6fa8878baf32de19092174b0a8cb23da847c101d71ed2189251f2a43f1d93c",
+    "expected_red_sha256": "528971443aa4ad1aaaaa2177cf63a4bc9b9c7ff041d2414d783f0a92c55ca7a6",
+    "retana_ui": {
+      "sha": "6671cfac72f736739d2d3dd2740cc5f13416acb3"
+    },
+    "rules_sha256": "2ab17e73230d12d0553b41399333e8323064a7336f07a9424adda020adf4db69",
+    "fixture_sha256": "d0e8fb80644f5887670e0f7275337568c7cf7a450bd33e4b040085791d41722d"
+  },
+  "verdict": "PASS",
+  "routing": {
+    "transition": "T07",
+    "next_state": "CLOSEOUT",
+    "consumes_round": false,
+    "reason": "Sin blockers ni majors en H 1bfb56e1: F-001 (PII) y F-003 (height) de r1 corregidos; AC-7 slider axe 0 serious/critical claro y oscuro; anim-perf-lint del diff CPL..H pass 17/0."
+  },
+  "suite": {
+    "status": "green",
+    "run_id": "local-2026-10-25-idea448b-1bfb56e1",
+    "enforcement": "honor",
+    "head": "1bfb56e19895d2f1b924399a5771a330446e38f5",
+    "tests_total": 664,
+    "tests_failed": 0
+  },
+  "enforcement": {
+    "mode": "honor",
+    "log_path": "/workspace/retana-ui-bot/evidence/pr58/1bfb56e19895d2f1b924399a5771a330446e38f5/pnpm-test.log",
+    "log_sha256": "2c738286e33dd5e2ca0a81d109df8858fc5a2f2101f5463412a892be3168d153"
+  },
+  "skills_used": [
+    {
+      "name": "better-ui",
+      "sha": "267330e",
+      "version": "run",
+      "actor": "auditor",
+      "phase": "auditoria",
+      "patches": []
+    },
+    {
+      "name": "better-accessibility",
+      "sha": "267330e",
+      "version": "not_run",
+      "actor": "auditor",
+      "phase": "auditoria",
+      "patches": []
+    },
+    {
+      "name": "interface-review",
+      "sha": "267330e",
+      "version": "run",
+      "actor": "auditor",
+      "phase": "auditoria",
+      "patches": []
+    },
+    {
+      "name": "review-animations",
+      "sha": "e8a175d",
+      "version": "not_run",
+      "actor": "auditor",
+      "phase": "auditoria",
+      "patches": []
+    }
+  ],
+  "tools_used": [
+    {
+      "name": "axe-core",
+      "version": "4.13.0"
+    },
+    {
+      "name": "@axe-core/playwright",
+      "version": "4.13.0"
+    },
+    {
+      "name": "playwright-core",
+      "version": "1.62.1"
+    },
+    {
+      "name": "@playwright/test (repo, chromium)",
+      "version": "repo"
+    },
+    {
+      "name": "fixture-lint",
+      "version": "0.1.0"
+    },
+    {
+      "name": "anim-perf-lint",
+      "version": "0.1.0"
+    },
+    {
+      "name": "component-lint",
+      "version": "0.1.0"
+    },
+    {
+      "name": "overeng-probe",
+      "version": "0.1.0"
+    },
+    {
+      "name": "check-verdict",
+      "version": "1.2.5"
+    }
+  ],
+  "findings": [],
+  "visual_references": [],
+  "candidates": [],
+  "exceptions_used": [],
+  "residuals": [],
+  "round_budget": {
+    "base": 2,
+    "extensions": [],
+    "used": 0
+  },
+  "stale_fingerprints": [],
+  "deterministic_checks": [
+    {
+      "tool": "anim-perf-lint",
+      "version": "0.1.0",
+      "status": "pass",
+      "checked": 17,
+      "failed": 0,
+      "log": "ui/audit/retana-ui-idea448b/r1-anim-perf-lint.json",
+      "log_sha256": "4c265b03a2196bfc245807744724f93808086e2a68f712e78a928a686aa96099"
+    },
+    {
+      "tool": "component-lint",
+      "version": "0.1.0",
+      "status": "pass",
+      "checked": 62,
+      "failed": 0,
+      "log": "ui/audit/retana-ui-idea448b/r1-component-lint.json",
+      "log_sha256": "6f0ed83676d8de1d64db679781a0e1bdce0b19f164b13f45346595955835dde7"
+    },
+    {
+      "tool": "overeng-probe",
+      "version": "0.1.0",
+      "status": "pass",
+      "checked": 16,
+      "failed": 0,
+      "log": "ui/audit/retana-ui-idea448b/r1-overeng-probe.json",
+      "log_sha256": "5ec8d8141d0a9145a363b5f14c8ddbeebd6fd07828d3af56c45baa0c9a54216d"
+    }
+  ],
+  "animation_review": [
+    {
+      "file": "registry/ui/json-viewer.tsx",
+      "line": 648,
+      "mechanism": "motion-library",
+      "rules_checked": [
+        "RUI-ANIM-PERF-002",
+        "RUI-ANIM-PERF-007"
+      ],
+      "status": "pass",
+      "evidence": "Filas: opacity + y (transform) en initial/animate, exit solo opacity (648-650); sin height. Indicador activo estático (665)."
+    },
+    {
+      "file": "registry/ui/theme-toggles/eclipse.tsx",
+      "line": 60,
+      "mechanism": "css-transition",
+      "rules_checked": [
+        "RUI-ANIM-PERF-001",
+        "RUI-ANIM-PERF-007"
+      ],
+      "status": "pass",
+      "evidence": "Propiedades explícitas (transform, d, translate) bajo motion-safe; curva cubic-bezier(0.22,1,0.36,1) sin overshoot; sin transition-all."
+    },
+    {
+      "file": "registry/ui/theme-toggles/expand.tsx",
+      "line": 60,
+      "mechanism": "css-transition",
+      "rules_checked": [
+        "RUI-ANIM-PERF-001",
+        "RUI-ANIM-PERF-007"
+      ],
+      "status": "pass",
+      "evidence": "Propiedades explícitas (transform, d, translate) bajo motion-safe; curva cubic-bezier(0.22,1,0.36,1) sin overshoot; sin transition-all."
+    },
+    {
+      "file": "registry/ui/theme-toggles/inner-moon.tsx",
+      "line": 60,
+      "mechanism": "css-transition",
+      "rules_checked": [
+        "RUI-ANIM-PERF-001",
+        "RUI-ANIM-PERF-007"
+      ],
+      "status": "pass",
+      "evidence": "Propiedades explícitas (transform, d, translate) bajo motion-safe; curva cubic-bezier(0.22,1,0.36,1) sin overshoot; sin transition-all."
+    },
+    {
+      "file": "registry/ui/theme-toggles/light-switch.tsx",
+      "line": 60,
+      "mechanism": "css-transition",
+      "rules_checked": [
+        "RUI-ANIM-PERF-001",
+        "RUI-ANIM-PERF-007"
+      ],
+      "status": "pass",
+      "evidence": "Propiedades explícitas (transform, d, translate) bajo motion-safe; curva cubic-bezier(0.22,1,0.36,1) sin overshoot; sin transition-all."
+    },
+    {
+      "file": "registry/ui/theme-toggles/simple.tsx",
+      "line": 60,
+      "mechanism": "css-transition",
+      "rules_checked": [
+        "RUI-ANIM-PERF-001",
+        "RUI-ANIM-PERF-007"
+      ],
+      "status": "pass",
+      "evidence": "Propiedades explícitas (transform, d, translate) bajo motion-safe; curva cubic-bezier(0.22,1,0.36,1) sin overshoot; sin transition-all."
+    },
+    {
+      "file": "registry/ui/theme-toggles/within.tsx",
+      "line": 60,
+      "mechanism": "css-transition",
+      "rules_checked": [
+        "RUI-ANIM-PERF-001",
+        "RUI-ANIM-PERF-007"
+      ],
+      "status": "pass",
+      "evidence": "Propiedades explícitas (transform, d, translate) bajo motion-safe; curva cubic-bezier(0.22,1,0.36,1) sin overshoot; sin transition-all."
+    },
+    {
+      "file": "components/ui/slider.tsx",
+      "line": 58,
+      "mechanism": "css-transition",
+      "rules_checked": [
+        "RUI-ANIM-PERF-001",
+        "RUI-ANIM-PERF-003"
+      ],
+      "status": "pass",
+      "evidence": "Thumb: transition-[color]; anillo en ::before con transition-opacity y motion-reduce:before:transition-none; sin transición de box-shadow."
+    }
+  ],
+  "contrast_measurements": [
+    {
+      "mode": "light",
+      "screen_id": "retana-ui-idea448b",
+      "selector": "/examples/crm input[aria-label=\"Empresa Taller Bruma\"]",
+      "fg": "#0a0a0a",
+      "bg": "#ffffff",
+      "ratio": 19.8,
+      "required": 4.5,
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "screen_id": "retana-ui-idea448b",
+      "selector": "/examples/crm input[aria-label=\"Empresa Taller Bruma\"]",
+      "fg": "#fafafa",
+      "bg": "#0a0a0a",
+      "ratio": 18.97,
+      "required": 4.5,
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "screen_id": "retana-ui-idea448b",
+      "selector": "/examples/onboarding textarea",
+      "fg": "#0a0a0a",
+      "bg": "#ffffff",
+      "ratio": 19.8,
+      "required": 4.5,
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "screen_id": "retana-ui-idea448b",
+      "selector": "/examples/onboarding textarea",
+      "fg": "#fafafa",
+      "bg": "#0a0a0a",
+      "ratio": 18.97,
+      "required": 4.5,
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "screen_id": "retana-ui-idea448b",
+      "selector": "/examples/pipeline-board input[type=date] «Desde»",
+      "fg": "#0a0a0a",
+      "bg": "#ffffff",
+      "ratio": 19.8,
+      "required": 4.5,
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "screen_id": "retana-ui-idea448b",
+      "selector": "/examples/pipeline-board input[type=date] «Desde»",
+      "fg": "#fafafa",
+      "bg": "#0a0a0a",
+      "ratio": 18.97,
+      "required": 4.5,
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "screen_id": "retana-ui-idea448b",
+      "selector": "/examples/candidate-detail form[aria-label^=Agendar] input",
+      "fg": "#0a0a0a",
+      "bg": "#ffffff",
+      "ratio": 19.8,
+      "required": 4.5,
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "screen_id": "retana-ui-idea448b",
+      "selector": "/examples/candidate-detail form[aria-label^=Agendar] input",
+      "fg": "#fafafa",
+      "bg": "#0a0a0a",
+      "ratio": 18.97,
+      "required": 4.5,
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "screen_id": "retana-ui-idea448b",
+      "selector": "/examples/json-viewer input[type=search]",
+      "fg": "#0a0a0a",
+      "bg": "#ffffff",
+      "ratio": 19.8,
+      "required": 4.5,
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "screen_id": "retana-ui-idea448b",
+      "selector": "/examples/json-viewer input[type=search]",
+      "fg": "#fafafa",
+      "bg": "#0a0a0a",
+      "ratio": 18.97,
+      "required": 4.5,
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "screen_id": "retana-ui-idea448b",
+      "selector": "/examples/parameter-slider input[aria-label=Variation]",
+      "fg": "#0a0a0a",
+      "bg": "#ffffff",
+      "ratio": 19.8,
+      "required": 4.5,
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "screen_id": "retana-ui-idea448b",
+      "selector": "/examples/parameter-slider input[aria-label=Variation]",
+      "fg": "#fafafa",
+      "bg": "#0a0a0a",
+      "ratio": 18.97,
+      "required": 4.5,
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "screen_id": "retana-ui-idea448b",
+      "selector": "/examples/view-calendar input[type=month]",
+      "fg": "#0a0a0a",
+      "bg": "#ffffff",
+      "ratio": 19.8,
+      "required": 4.5,
+      "pass": true
+    },
+    {
+      "mode": "dark",
+      "screen_id": "retana-ui-idea448b",
+      "selector": "/examples/view-calendar input[type=month]",
+      "fg": "#fafafa",
+      "bg": "#0a0a0a",
+      "ratio": 18.97,
+      "required": 4.5,
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "screen_id": "retana-ui-idea448b",
+      "selector": "/examples/json-viewer input[type=search]::placeholder",
+      "fg": "#737373",
+      "bg": "#ffffff",
+      "ratio": 4.74,
+      "required": 4.5,
+      "pass": true
+    },
+    {
+      "mode": "light",
+      "screen_id": "retana-ui-idea448b",
+      "selector": "/examples/pipeline-board [data-slot=avatar-fallback] (text-muted-foreground sobre bg-muted)",
+      "fg": "#737373",
+      "bg": "#f5f5f5",
+      "ratio": 4.35,
+      "required": 4.5,
+      "pass": false,
+      "in_scope": false
+    },
+    {
+      "mode": "light",
+      "screen_id": "retana-ui-idea448b",
+      "selector": "/examples/json-viewer span.text-xs.text-muted-foreground «5 keys»",
+      "fg": "#737373",
+      "bg": "#f5f5f5",
+      "ratio": 4.35,
+      "required": 4.5,
+      "pass": false,
+      "in_scope": false
+    },
+    {
+      "mode": "light",
+      "screen_id": "retana-ui-idea448b",
+      "selector": "/examples/onboarding span.text-[11px].text-muted-foreground «3. Actual»",
+      "fg": "#737373",
+      "bg": "#f3f3f3",
+      "ratio": 4.27,
+      "required": 4.5,
+      "pass": false,
+      "in_scope": false
+    }
+  ],
+  "metrics": {
+    "findings_by_severity": {
+      "blocker": 0,
+      "major": 0,
+      "minor": 0
+    },
+    "open_by_severity": {
+      "blocker": 0,
+      "major": 0,
+      "minor": 0
+    },
+    "findings_by_category": {},
+    "axe_violations": 33,
+    "screens_audited": 9,
+    "duration_min": 75
+  },
+  "observations": [
+    {
+      "text": "Verificado: sha del sobre r3 y sus 31 entradas (repo en H, evidencia, hub). Clon fresco r3 en H, limpio; manifest tests ea6fa887. CPL..H: 15 commits de Cursor Agent; builder ≠ grok-bot.",
+      "source_tool": "lint"
+    },
+    {
+      "text": "Propio en H (node 22): vitest 664/664, tsc 0 (tras next typegen), lint 0. Playwright repo chromium :40210 4/4 (incl. pulgar axe claro/oscuro). Sin webkit en el box.",
+      "source_tool": "playwright"
+    },
+    {
+      "text": "F-001 r1 corregido: fixture_lint exit 0 en inputs.spec.ts, fixture yaml y crm.tsx (Inés/Diego Ejemplo, Marta Muestra); 0 'Quesada' en ellos y en render. Spec: 2 FIX-PII-EMAIL falsos (impeccable@4.8.0).",
+      "source_tool": "fixture-lint"
+    },
+    {
+      "text": "AC-7 cerrado: axe 4.13.0 en /examples/parameter-slider claro y oscuro con 0 violaciones; thumb con role=slider, aria-label, aria-valuetext. Ya no hace falta rule_id WCAG.",
+      "source_tool": "axe"
+    },
+    {
+      "text": "Fuera de alcance: settings-billing.tsx:134-136, app-shell.tsx:148 y agent-chat.tsx:105 conservan Mara Solís/Inés Quesada/Omar Beltrán (no en diff ni pruebas). Backlog FIX-PII-NAME.",
+      "source_tool": "lint"
+    },
+    {
+      "text": "Riesgo: json-viewer quita layoutId del indicador activo (665) y la salida ya no colapsa altura. Ninguna AC/regla exige el deslizamiento; cambio no pedido, lo decide el Lead.",
+      "source_tool": "lint"
+    },
+    {
+      "text": "AC-7 de la Spec cambió su measure a solo [data-slot=slider] sin subir versión (1.0.0). Mi axe cubrió los 9 controles: solo color-contrast muted en claro, igual que r1.",
+      "source_tool": "axe"
+    },
+    {
+      "text": "impeccable@4.8.0 detect exit 2 propio: 5 hallazgos (border-accent-on-rounded 3, side-tab 2), 0 bounce-easing → AC-5 cumple; exit 2 no es criterio de AC.",
+      "source_tool": "lint"
+    },
+    {
+      "text": "Contraste muted #737373/#f5f5f5 ~4.3:1 en claro (onboarding, pipeline, candidate, json-viewer): fuera de alcance de la Spec, backlog como en r1.",
+      "source_tool": "axe"
+    },
+    {
+      "text": "Herramientas desde tools-view r9 (hub dsp-idea448 no las trae); check_verdict blob ccbf2f21; anim_perf_lint blob 9dfd9845.",
+      "source_tool": "lint"
+    }
+  ],
+  "emitted_at": "2026-10-30T16:18:40-06:00"
+}

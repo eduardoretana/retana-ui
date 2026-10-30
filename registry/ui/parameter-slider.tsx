@@ -82,7 +82,7 @@ export function ParameterSlider({
           {editing ? (
             <input
               aria-label={label}
-              className="w-16 rounded-md border border-border bg-background px-1 text-right font-mono text-sm tabular-nums focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+              className="w-16 rounded-md border border-border bg-background px-1 text-right font-mono text-base tabular-nums focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none md:text-sm"
               defaultValue={current}
               inputMode="decimal"
               onBlur={(event) => {

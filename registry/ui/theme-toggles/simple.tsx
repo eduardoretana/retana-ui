@@ -13,6 +13,7 @@
  *   icon follows the `toggled` prop and not the host page's `.dark` class.
  * - Children render after the icon so theme-switch can add a label.
  * - The button is marked `data-toggled` and `group/tt`.
+ * - Easing is cubic-bezier(0.22, 1, 0.36, 1), with no overshoot (IDEA-448). motion-safe keeps reduced-motion off.
  */
 
 import { type ButtonHTMLAttributes, type CSSProperties, useId } from "react";
@@ -63,7 +64,7 @@ export function Simple({
           <clipPath id={clipMainId}>
             <path
               d={"M0-5h55v37h-55zm32 12a1 1 0 0025 0 1 1 0 00-25 0"}
-              className="motion-safe:transition-[d,translate] motion-safe:duration-(--toggles-simple--duration) motion-safe:[transition-timing-function:cubic-bezier(0,0,0.15,1.25)] group-data-[toggled=true]/tt:[d:path('M-18-1h55v37h-55zm32_12a1_1_0_0025_0_1_1_0_00-25_0')] group-data-[toggled=true]/tt:not-supports-[d:path('M0_0')]:-translate-x-[19px] group-data-[toggled=true]/tt:not-supports-[d:path('M0_0')]:translate-y-[5px]"
+              className="motion-safe:transition-[d,translate] motion-safe:duration-(--toggles-simple--duration) motion-safe:[transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-data-[toggled=true]/tt:[d:path('M-18-1h55v37h-55zm32_12a1_1_0_0025_0_1_1_0_00-25_0')] group-data-[toggled=true]/tt:not-supports-[d:path('M0_0')]:-translate-x-[19px] group-data-[toggled=true]/tt:not-supports-[d:path('M0_0')]:translate-y-[5px]"
             />
           </clipPath>
         </defs>

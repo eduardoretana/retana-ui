@@ -540,7 +540,12 @@ export const JsonViewer = forwardRef<HTMLDivElement, JsonViewerProps>(function J
 
   const heightStyle = { "--json-max-height": typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight } as CSSProperties
   const bulk = rows.length > 400
-  const rowTransition: Transition = reduced || bulk ? { duration: 0 } : { height: motionPresets.spring.smooth, opacity: { duration: 0.2, ease: [...motionPresets.ease.standard] } }
+  const rowTransition: Transition = reduced || bulk
+    ? { duration: 0 }
+    : {
+        opacity: { duration: 0.2, ease: [...motionPresets.ease.standard] },
+        y: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.standard] },
+      }
 
   const describe = (row: Row) => {
     const name = row.name === null ? rootName : String(row.name)
@@ -564,7 +569,7 @@ export const JsonViewer = forwardRef<HTMLDivElement, JsonViewerProps>(function J
                 aria-controls={`${uid}-tree`}
                 spellCheck={false}
                 autoComplete="off"
-                className="h-[34px] min-w-0 flex-1 bg-transparent px-1 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-3 focus-visible:ring-ring [&::-webkit-search-cancel-button]:hidden"
+                className="h-[34px] min-w-0 flex-1 bg-transparent px-1 text-base text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-3 focus-visible:ring-ring md:text-sm [&::-webkit-search-cancel-button]:hidden"
                 onChange={(event) => onQuery(event.target.value)}
                 onKeyDown={onSearchKeyDown}
               />
@@ -640,9 +645,9 @@ export const JsonViewer = forwardRef<HTMLDivElement, JsonViewerProps>(function J
                   data-active={isActive || undefined}
                   style={{ "--level": row.level - 1 } as CSSProperties}
                   className={cn("group/row relative rounded-lg outline-none", classNames?.row)}
-                  initial={{ height: 0, opacity: 0, overflow: "hidden" }}
-                  animate={{ height: ROW, opacity: 1, transitionEnd: { overflow: "visible" } }}
-                  exit={{ height: 0, opacity: 0, overflow: "hidden" }}
+                  initial={reduced || bulk ? false : { opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
                   transition={rowTransition}
                   onFocus={(event) => {
                     if (event.target === event.currentTarget && row.id !== active) setActiveRaw(row.id)
@@ -657,7 +662,7 @@ export const JsonViewer = forwardRef<HTMLDivElement, JsonViewerProps>(function J
                     moveTo(row.id)
                   }}
                 >
-                  {isActive ? <motion.span layoutId={`${uid}-active`} className="absolute inset-y-px inset-x-0 rounded-lg bg-muted" transition={reduced ? { duration: 0 } : motionPresets.spring.snappy} aria-hidden="true" /> : null}
+                  {isActive ? <span className="absolute inset-y-px inset-x-0 rounded-lg bg-muted" aria-hidden="true" /> : null}
                   <span className="relative flex h-[30px] min-w-0 items-center gap-1.5 pr-1.5 pl-[calc(4px+var(--level,0)*var(--indent))] whitespace-nowrap" data-kind={row.kind}>
                     {row.kind === "more" ? (
                       <span className="inline-flex items-baseline gap-2.5 pl-5 text-sm">

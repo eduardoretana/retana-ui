@@ -1,0 +1,9 @@
+historico: true
+note: "No es suite-log ni renders-log. El gate no los lee del árbol. La corrida vigente, con el HEAD del PR, está en el Agent Store."
+base_sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+command: npx impeccable@4.8.0 detect --json registry components app
+before_file: evidence/IDEA-448/impeccable-detect-before.json
+before_exit: 2
+after_file: evidence/IDEA-448/impeccable-detect-after.json
+after_exit: 2
+after_note: "JSON capturado en 0235da2ac2a16970fee70848911a51737cf7a4e8. Conservado como histórico."

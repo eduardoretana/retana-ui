@@ -153,7 +153,7 @@ export function ViewCalendar({
         <input
           id={`${uid}-month`}
           type="month"
-          className="h-8 rounded-md border border-input bg-background px-2 text-sm"
+          className="h-8 rounded-md border border-input bg-background px-2 text-base md:text-sm"
           value={`${cursor.y}-${String(cursor.m + 1).padStart(2, "0")}`}
           onChange={(event) => {
             const [y, m] = event.target.value.split("-").map(Number)

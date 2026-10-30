@@ -1,0 +1,22 @@
+schema: uis.expected-red/v1
+spec_id: retana-ui-idea448b
+retana_ui_sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+recorded_before_build: false
+command: pnpm exec vitest run __tests__/mobile-inputs.test.ts
+note: "Ciclo LITE. Las pruebas entraron con el arreglo, no hubo un commit rojo previo en CPL 6671cfa. La firma es la aserción que falla si se quita el arreglo."
+cases:
+  - file: __tests__/mobile-inputs.test.ts
+    name: marca los 11 controles nativos con text-base md:text-sm
+    signature: "expected <window> to contain text-base … md:text-sm"
+  - file: __tests__/mobile-inputs.test.ts
+    name: deja el tap-highlight transparente sin quitar el foco visible
+    signature: "expected app/globals.css to match -webkit-tap-highlight-color: transparent"
+  - file: __tests__/mobile-inputs.test.ts
+    name: exporta viewport-fit cover sin bloquear el zoom
+    signature: "expected app/layout.tsx to contain viewportFit: \"cover\""
+  - file: __tests__/mobile-inputs.test.ts
+    name: usa la curva sin overshoot y conserva reduced-motion
+    signature: "expected theme-toggles source to contain cubic-bezier(0.22,1,0.36,1)"
+  - file: tests/mobile/inputs.spec.ts
+    name: el pulgar del deslizador pasa axe 4.13.0 en claro y oscuro
+    signature: "axe-core 4.13.0 reports serious or critical on [data-slot=slider] in light or dark"
