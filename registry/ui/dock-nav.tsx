@@ -702,7 +702,7 @@ export function DockNav({
           </div>
           <div
             aria-hidden="true"
-            className="w-full transition-[height] duration-300 ease-out motion-reduce:transition-none"
+            className="w-full"
             style={{ height: open ? PANEL_HEIGHT + PANEL_GAP : 0 }}
           />
           {present && searchItem ? (
@@ -717,7 +717,7 @@ export function DockNav({
                 emitSearch(query)
               }}
               className={cn(
-                "relative z-10 mt-4 flex h-11 w-[min(32rem,calc(100vw-2rem))] max-w-full items-center overflow-hidden rounded-full border border-border shadow-lg",
+                "relative z-10 mt-4 flex h-11 w-[min(32rem,calc(100vw-2rem))] max-w-full items-center overflow-hidden rounded-full border border-border shadow-lg motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1 motion-safe:duration-200 motion-reduce:animate-none",
                 floatingGlass80,
                 panelClassName,
               )}

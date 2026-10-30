@@ -2,7 +2,7 @@ schema: uis.expected-red/v1
 spec_id: retana-ui-idea450b
 retana_ui_sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
 recorded_before_build: false
-command: pnpm exec vitest run __tests__/glass-surfaces.test.ts __tests__/badge-count.test.tsx __tests__/avatar-group-circle.test.tsx __tests__/radius-tokens.test.ts
+command: pnpm exec vitest run __tests__/glass-surfaces.test.ts __tests__/badge-count.test.tsx __tests__/avatar-group-circle.test.tsx __tests__/radius-tokens.test.ts __tests__/anim-perf-layout.test.ts
 note: "Las pruebas de IDEA-450 entraron con el arreglo. Se conservan también las firmas de IDEA-448, incluido el pulgar del slider (axe 4.13.0), que llegaron con el merge de cursor/mobile-fixes-c51d @ 1bfb56e."
 cases:
   - file: __tests__/glass-surfaces.test.ts
@@ -17,6 +17,12 @@ cases:
   - file: __tests__/radius-tokens.test.ts
     name: does not multiply --radius
     signature: "expected globals.css not to match var(--radius) *"
+  - file: __tests__/anim-perf-layout.test.ts
+    name: comparison-table rows mount at their height and only fade
+    signature: "expected comparison-table.tsx not to match height animation"
+  - file: __tests__/anim-perf-layout.test.ts
+    name: dock-nav does not transition the search spacer height
+    signature: "expected dock-nav.tsx not to match transition-[height]"
   - file: __tests__/mobile-inputs.test.ts
     name: marca los 11 controles nativos con text-base md:text-sm
     signature: "expected <window> to contain text-base … md:text-sm"

@@ -19,6 +19,8 @@ Seed de captura: `ui/direction/fixtures/retana-ui-idea450b.seed.yaml`. Una URL p
 
 Merge de `cursor/mobile-fixes-c51d` @ `1bfb56e19895d2f1b924399a5771a330446e38f5` (PR #58). El json-viewer ya no anima `grid-template-rows`; el anillo del slider es opacidad en un pseudo. Esta rama no conserva una copia propia que anime height, grid-template-rows, box-shadow o `transition-all` en esas piezas. El seed, las rutas y los comandos de arranque no cambian.
 
+Las filas de `comparison-table` montan a su altura y entran con opacidad y `y: 4`. Al salir solo bajan la opacidad. El hueco del buscador en `dock-nav` cambia de altura sin transición; el campo entra con opacidad y un desplazamiento de 4 px (`slide-in-from-bottom-1`). Con reduced-motion la duración es 0.
+
 | Región | reference_id | Cita | Desviación |
 | --- | --- | --- | --- |
 | Fila `layout="circle"` en `registry/ui/avatar-group.tsx` | circle-names-below | AC-4, rule: RUI-ANIM-PERF-001 | `namePlace` default `below`. `shot=circle-above` es la otra variante, en su propia URL. Las personas son Inés Ejemplo, Diego Ejemplo y Marta Muestra. |

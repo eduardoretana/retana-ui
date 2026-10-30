@@ -4,7 +4,7 @@
 
 import { useId, useLayoutEffect, useRef, useState } from "react"
 import type { CSSProperties, KeyboardEvent } from "react"
-import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "motion/react"
+import { AnimatePresence, LayoutGroup, motion, useReducedMotion, type Transition } from "motion/react"
 import { Check, Minus } from "lucide-react"
 
 import { Switch } from "@/components/ui/switch"
@@ -140,6 +140,12 @@ export function ComparisonTable({
   classNames,
 }: ComparisonTableProps) {
   const reduced = !!useReducedMotion()
+  const rowTransition: Transition = reduced
+    ? { duration: 0 }
+    : {
+        opacity: { duration: 0.2, ease: [...motionPresets.ease.standard] },
+        y: { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.standard] },
+      }
   const uid = useId()
   const rootRef = useRef<HTMLElement>(null)
   const [narrow, setNarrow] = useState(false)
@@ -280,12 +286,12 @@ export function ComparisonTable({
                       <motion.div
                         key="title"
                         role="row"
-                        className="grid overflow-hidden"
+                        className="grid"
                         style={gridStyle}
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={reduced ? { duration: 0 } : motionPresets.spring.smooth}
+                        initial={reduced ? false : { opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={rowTransition}
                       >
                         <div role="rowheader" className="px-0 pt-8 pb-2 text-xs font-medium text-muted-foreground">
                           {section.title}
@@ -301,12 +307,12 @@ export function ComparisonTable({
                         <motion.div
                           key={row.id}
                           role="row"
-                          className="grid overflow-hidden"
+                          className="grid"
                           style={gridStyle}
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={reduced ? { duration: 0 } : motionPresets.spring.smooth}
+                          initial={reduced ? false : { opacity: 0, y: 4 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0 }}
+                          transition={rowTransition}
                         >
                           <div role="rowheader" data-slot="comparison-table-feature" className={cn("grid min-w-0 content-center gap-0.5 border-b border-border py-3 pr-3 text-sm font-medium break-words", classNames?.feature)}>
                             <span>{row.feature}</span>

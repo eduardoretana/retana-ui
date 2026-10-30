@@ -12,6 +12,9 @@ spec_changelog:
   - version: 1.0.2
     origin: merge
     note: "Merge de cursor/mobile-fixes-c51d @ 1bfb56e19895d2f1b924399a5771a330446e38f5. json-viewer y slider animan solo opacity y transform. Mismo commit que el direction-map."
+  - version: 1.0.3
+    origin: fix
+    note: "comparison-table y dock-nav dejan de animar height. Mismo commit que el direction-map."
 profile: STANDARD
 brief:
   outcome: "El vidrio solo flota, el conteo neutro se lee como número, el círculo de avatares se ve a 390 px y los radios del demo dejan de usar multiplicadores sin cambiar el px."
