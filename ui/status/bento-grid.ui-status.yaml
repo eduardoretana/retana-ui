@@ -1,14 +1,19 @@
 schema: uis.status/v2
-ui_system:
-  version: 4.0.0
-  declaration: "UI_SYSTEM: APPLIES"
-cycle_state: BUILD
+ui_system: {version: 4.0.0}
+cycle_state: AUDITORIA
 profile: STANDARD
 spec_id: bento-grid
+spec_version: 1.1.0
+head: 4c349f59bfebf04e093b39c69c33b226f25165d8
+stop_when: "pnpm test en verde; Playwright a 390 px; impeccable detect antes y después; renders.yaml con el sha del HEAD; PR draft contra CPL, sin merge."
+deliverable: "bento-grid, bento-feature-card y magnetic-bento alineados a las reglas de layout, sin cambio de API pública de magnetic-bento."
 retana_ui:
   sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+  registry_source: git-sha
 direction:
   mode: code-variants
-  chosen: media-first
   images: none
+  generators_used: []
+  chosen: media-first
 auditor: not-this-agent
+declaration: "UI_SYSTEM: APPLIES"

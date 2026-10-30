@@ -98,7 +98,7 @@ function indicatorCss(scope: string, anchorName: string) {
       top: 0;
       position-anchor: ${anchorName};
       inset: anchor(inside);
-      transition: inset var(--mb-dur) var(--mb-ease), background-color 200ms linear;
+      transition: inset var(--mb-dur) var(--mb-ease);
       background: color-mix(in oklch, var(--mb-accent, var(--primary)) 18%, var(--background));
     }
     .dark ${indicator} {
@@ -285,7 +285,7 @@ export function MagneticBentoItem({
         data-active={lit ? "true" : "false"}
         tabIndex={roving ? (lit || active == null ? 0 : -1) : 0}
         className={cn(
-          "relative z-10 grid min-w-0 grid-cols-[minmax(0,1fr)_auto] grid-rows-[auto_auto_minmax(0,1fr)_auto] gap-3 rounded-lg border border-border bg-transparent p-4 text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          "relative z-10 grid min-w-0 grid-cols-[minmax(0,1fr)_auto] grid-rows-[auto_auto_minmax(0,1fr)_auto] gap-3 rounded-lg bg-transparent p-4 text-foreground shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-ring",
           className,
           classNames.item,
         )}
@@ -325,7 +325,7 @@ export function MagneticBentoIcon({ className, children }: { className?: string;
     <div
       data-slot="magnetic-bento-icon"
       className={cn(
-        "col-start-1 row-start-1 text-muted-foreground transition-colors duration-200 motion-reduce:transition-none",
+        "col-start-1 row-start-1 text-muted-foreground",
         active && "text-[color:var(--mb-item-accent)]",
         className,
         classNames.icon,
@@ -353,7 +353,11 @@ export function MagneticBentoTitle({ className, children }: { className?: string
   return (
     <h3
       data-slot="magnetic-bento-title"
-      className={cn("col-span-2 row-start-2 text-base font-semibold tracking-tight wrap-anywhere", className, classNames.title)}
+      className={cn(
+        "col-span-2 row-start-2 max-w-[17.5rem] text-base font-semibold tracking-tight wrap-anywhere",
+        className,
+        classNames.title,
+      )}
     >
       {children}
     </h3>
@@ -365,7 +369,11 @@ export function MagneticBentoDescription({ className, children }: { className?: 
   return (
     <p
       data-slot="magnetic-bento-description"
-      className={cn("col-span-2 row-start-3 text-sm text-pretty text-muted-foreground wrap-anywhere", className, classNames.description)}
+      className={cn(
+        "col-span-2 row-start-3 max-w-[17.5rem] text-sm text-pretty text-muted-foreground wrap-anywhere",
+        className,
+        classNames.description,
+      )}
     >
       {children}
     </p>
@@ -385,7 +393,7 @@ export function MagneticBentoCta({ asChild = false, className, children, ...rest
       data-slot="magnetic-bento-cta"
       tabIndex={-1}
       className={cn(
-        "col-span-2 row-start-4 inline-flex w-fit translate-y-1 items-center gap-1 self-end text-sm font-medium text-[color:var(--mb-item-accent)] opacity-0 transition-[opacity,transform] duration-[250ms] ease-out motion-reduce:translate-y-0 motion-reduce:transition-opacity",
+        "col-span-2 row-start-4 inline-flex w-fit max-w-[17.5rem] translate-y-1 items-center gap-1 self-end text-sm font-medium text-foreground opacity-0 transition-[opacity,transform] duration-[250ms] ease-out motion-reduce:translate-y-0 motion-reduce:transition-opacity",
         active && "translate-y-0 opacity-100",
         !active && "pointer-events-none",
         className,

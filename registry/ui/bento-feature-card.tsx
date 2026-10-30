@@ -69,14 +69,14 @@ export function BentoFeatureCard({
       aria-hidden="true"
       className={cn("min-h-40 flex-1 overflow-hidden rounded-lg bg-muted", classNames?.media)}
     >
-      <div className="h-full opacity-90 transition-[transform,opacity] duration-200 ease-out will-change-transform group-hover/feature:scale-[1.02] group-hover/feature:opacity-100 motion-reduce:transition-none motion-reduce:group-hover/feature:scale-100 motion-reduce:will-change-auto">
+      <div className="h-full opacity-90 transition-[transform,opacity] duration-200 ease-out group-hover/feature:scale-[1.02] group-hover/feature:opacity-100 group-hover/feature:will-change-transform motion-reduce:transition-none motion-reduce:group-hover/feature:scale-100 motion-reduce:group-hover/feature:will-change-auto">
         {illustration}
       </div>
     </div>
   ) : null
 
   const copy = (
-    <div className="flex min-w-0 flex-col gap-2">
+    <div className="flex min-w-0 max-w-[17.5rem] flex-col gap-2">
       {icon ? (
         <div
           data-slot="bento-feature-icon"
@@ -123,13 +123,17 @@ export function BentoFeatureCard({
       <div className="flex flex-col gap-3">
         <Skeleton className="min-h-40 w-full motion-reduce:animate-none" />
         <Skeleton className="h-4 w-2/3 motion-reduce:animate-none" />
-        <p className="text-sm text-muted-foreground">{loadingLabel}</p>
+        <p className="max-w-[17.5rem] text-sm text-muted-foreground">{loadingLabel}</p>
       </div>
     )
   } else if (status === "error") {
-    body = <p role="alert" className="text-sm text-destructive">{errorLabel}</p>
+    body = (
+      <p role="alert" className="max-w-[17.5rem] text-sm font-medium text-destructive">
+        {errorLabel}
+      </p>
+    )
   } else if (status === "empty") {
-    body = <p className="text-sm text-muted-foreground">{emptyLabel}</p>
+    body = <p className="max-w-[17.5rem] text-sm text-muted-foreground">{emptyLabel}</p>
   } else {
     body = (
       <>
@@ -149,15 +153,16 @@ export function BentoFeatureCard({
       data-layout={layout}
       aria-busy={status === "loading" ? true : undefined}
       className={cn(
-        "group/feature h-full min-w-0 rounded-xl transition-transform duration-200 ease-out will-change-transform motion-reduce:transition-none motion-reduce:will-change-auto focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background",
-        interactive && "hover:-translate-y-0.5 motion-reduce:hover:translate-none",
+        "group/feature h-full min-w-0",
+        interactive &&
+          "transition-transform duration-200 ease-out hover:-translate-y-0.5 hover:will-change-transform motion-reduce:transition-none motion-reduce:hover:translate-none motion-reduce:hover:will-change-auto",
         className,
         classNames?.root,
       )}
     >
-      <Card className="h-full gap-0 overflow-hidden py-0 shadow-none">
+      <Card className="h-full gap-0 overflow-hidden py-0 shadow-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background">
         {interactive ? (
-          <a href={href} className="flex h-full min-h-0 flex-col rounded-xl outline-none">
+          <a href={href} className="flex h-full min-h-0 flex-col outline-none">
             {stack}
           </a>
         ) : (

@@ -10507,13 +10507,14 @@
       "description": "Responsive bento layout. Each cell asks for a span and stacks to one column at 390px.",
       "author": "Eduardo Retana",
       "dependencies": [
+        "motion",
         "radix-ui"
       ],
       "registryDependencies": [],
       "categories": [
         "content"
       ],
-      "docs": "Inspiración visual, sin código. Fuente: https://shadcnstudio.com/blocks/bento-grid/bento-cards. Licencia: bloques Pro de shadcn/studio, fuera del repositorio MIT de shadcn/ui. No se copió código, markup ni assets. A container of 390px stays on one column. Two columns start at 30rem (480px). The requested column count starts at 56rem (896px). Gap uses the spacing scale. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "docs": "Inspiración visual, sin código. Fuente: https://shadcnstudio.com/blocks/bento-grid/bento-cards. Licencia: bloques Pro de shadcn/studio, fuera del repositorio MIT de shadcn/ui. No se copió código, markup ni assets. A container of 390px stays on one column. Two columns start at 30rem (480px). The requested column count starts at 56rem (896px). Gap uses the spacing scale. Ready cells enter with opacity and translateY. The last cell waits at most 0.4s. Reduced motion sets that duration to 0. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
       "files": [
         {
           "path": "registry/ui/bento-grid.tsx",

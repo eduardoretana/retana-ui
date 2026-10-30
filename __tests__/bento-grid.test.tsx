@@ -1,12 +1,15 @@
 import { render, screen } from "@testing-library/react"
+import { MotionConfig } from "motion/react"
 import { describe, expect, it } from "vitest"
 
 import {
   BENTO_DESKTOP_MIN_REM,
   BENTO_MID_MIN_REM,
   BENTO_ONE_COLUMN_UNTIL_PX,
+  BENTO_STAGGER_MAX_S,
   BentoCell,
   BentoGrid,
+  bentoStaggerDelay,
 } from "@/registry/ui/bento-grid"
 
 describe("BentoGrid", () => {
@@ -86,7 +89,53 @@ describe("BentoGrid", () => {
     expect(screen.queryByRole("link")).toBeNull()
 
     rerender(<BentoGrid label="Muro" status="error" errorLabel="No se pudo cargar" />)
-    expect(screen.getByRole("alert")).toHaveTextContent("No se pudo cargar")
+    const alert = screen.getByRole("alert")
+    expect(alert).toHaveTextContent("No se pudo cargar")
+    expect(alert.className).toContain("font-medium")
     expect(screen.queryByRole("link")).toBeNull()
+    expect(document.querySelector("[data-slot='bento-grid-track']")).toBeNull()
+  })
+
+  it("staggers ready cells with opacity and translate, capped at 0.4s", () => {
+    expect(BENTO_STAGGER_MAX_S).toBe(0.4)
+    expect(bentoStaggerDelay(0, 20)).toBe(0)
+    expect(bentoStaggerDelay(19, 20)).toBeLessThanOrEqual(0.4)
+    expect(bentoStaggerDelay(19, 20)).toBeCloseTo(0.4)
+
+    render(
+      <BentoGrid label="Muro">
+        <BentoCell>Uno</BentoCell>
+        <BentoCell>Dos</BentoCell>
+        <BentoCell>Tres</BentoCell>
+      </BentoGrid>,
+    )
+
+    const track = document.querySelector("[data-slot='bento-grid-track']")
+    expect(track).toHaveAttribute("data-stagger-max", "0.4")
+    expect(track?.className).not.toMatch(/transition/)
+    const cells = [...document.querySelectorAll("[data-slot='bento-cell']")]
+    expect(cells).toHaveLength(3)
+    const delays = cells.map((cell) => Number(cell.getAttribute("data-enter-delay")))
+    expect(delays[0]).toBe(0)
+    expect(delays[2]).toBeLessThanOrEqual(0.4)
+    expect(delays[2]).toBeGreaterThan(delays[1])
+    for (const cell of cells) {
+      expect(cell.getAttribute("data-motion")).toBe("full")
+      expect(cell.className).not.toContain("will-change")
+    }
+  })
+
+  it("uses duration 0 when motion is reduced", () => {
+    render(
+      <MotionConfig reducedMotion="always">
+        <BentoGrid label="Muro">
+          <BentoCell>Uno</BentoCell>
+          <BentoCell>Dos</BentoCell>
+        </BentoGrid>
+      </MotionConfig>,
+    )
+    const cells = [...document.querySelectorAll("[data-slot='bento-cell']")]
+    expect(cells.length).toBeGreaterThan(0)
+    for (const cell of cells) expect(cell.getAttribute("data-motion")).toBe("reduced")
   })
 })

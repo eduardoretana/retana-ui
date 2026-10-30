@@ -1,9 +1,38 @@
 "use client"
 
 import { Children, createContext, useContext, type ComponentProps, type ReactNode, type Ref } from "react"
+import { motion, useReducedMotionConfig, type HTMLMotionProps, type Transition } from "motion/react"
 import { Slot } from "radix-ui"
 
 import { cn } from "@/lib/utils"
+
+/**
+ * Cap on the last cell's delay, in seconds.
+ * Same ceiling as stagger-list. Computed here so this branch does not import that primitive.
+ */
+export const BENTO_STAGGER_MAX_S = 0.4
+
+/** Enter curve from motionPresets.ease.enter. Inlined so this item does not ship lib/motion. */
+const enterEase = [0.16, 1, 0.3, 1] as [number, number, number, number]
+
+/** motionPresets.duration.standard, in seconds. */
+const BENTO_ENTER_S = 0.24
+
+/** motionPresets.stagger.item, in seconds. */
+const BENTO_STAGGER_STEP_S = 0.035
+
+/** Delay for `index` so the last cell never waits longer than `maxTotal`. */
+export function bentoStaggerDelay(
+  index: number,
+  count: number,
+  step = BENTO_STAGGER_STEP_S,
+  maxTotal = BENTO_STAGGER_MAX_S,
+) {
+  if (count <= 1 || index <= 0) return 0
+  const last = count - 1
+  const total = Math.min(Math.max(0, maxTotal), Math.max(0, step) * last)
+  return (Math.min(index, last) / last) * total
+}
 
 /** A 390px container stays on one column. The next column starts at 30rem (480px). */
 export const BENTO_ONE_COLUMN_UNTIL_PX = 390
@@ -103,6 +132,10 @@ type BentoContextValue = {
 
 const BentoContext = createContext<BentoContextValue>({ preset: "default", columns: 4 })
 
+type BentoEnter = { index: number; count: number }
+
+const BentoEnterContext = createContext<BentoEnter | null>(null)
+
 function useBentoGrid() {
   return useContext(BentoContext)
 }
@@ -188,18 +221,18 @@ export function BentoGrid({
         {...rest}
       >
         {resolved === "empty" ? (
-          <p data-slot="bento-grid-empty" className="text-sm text-muted-foreground">
+          <p data-slot="bento-grid-empty" className="max-w-[17.5rem] text-sm text-muted-foreground">
             {emptyLabel}
           </p>
         ) : null}
         {resolved === "error" ? (
-          <p role="alert" data-slot="bento-grid-error" className="text-sm text-destructive">
+          <p role="alert" data-slot="bento-grid-error" className="max-w-[17.5rem] text-sm font-medium text-destructive">
             {errorLabel}
           </p>
         ) : null}
         {resolved === "loading" ? (
           <div className="flex flex-col gap-3">
-            <p className="text-sm text-muted-foreground">{loadingLabel}</p>
+            <p className="max-w-[17.5rem] text-sm text-muted-foreground">{loadingLabel}</p>
             <ul data-slot="bento-grid-track" data-bento-preset="default" aria-hidden="true" className={trackClass}>
               <li className="min-h-40 rounded-xl bg-muted" />
               <li className="min-h-40 rounded-xl bg-muted" />
@@ -211,9 +244,14 @@ export function BentoGrid({
             ref={trackRef as Ref<HTMLUListElement>}
             data-slot={trackSlot ?? "bento-grid-track"}
             data-bento-preset="default"
+            data-stagger-max={BENTO_STAGGER_MAX_S}
             className={trackClass}
           >
-            {children}
+            {Children.map(children, (child, index) => (
+              <BentoEnterContext.Provider value={{ index, count }}>
+                {child}
+              </BentoEnterContext.Provider>
+            ))}
           </ul>
         ) : null}
       </div>
@@ -228,9 +266,39 @@ export type BentoCellProps = Omit<ComponentProps<"li">, "children"> & {
   children?: ReactNode
 }
 
-export function BentoCell({ span, asChild = false, className, children, ...rest }: BentoCellProps) {
+export function BentoCell({ span, asChild = false, className, style, children, ...rest }: BentoCellProps) {
   const { preset, columns } = useBentoGrid()
+  const enter = useContext(BentoEnterContext)
+  const reduced = useReducedMotionConfig() === true
   const laid = bentoCellClass(span, preset, columns)
+  const animateEnter = preset === "default" && enter != null && !asChild
+  const delay = animateEnter ? bentoStaggerDelay(enter.index, enter.count) : 0
+  const cellClass = cn(laid.className, preset === "default" && "h-full", className)
+
+  if (animateEnter) {
+    const transition: Transition = reduced
+      ? { duration: 0 }
+      : { duration: BENTO_ENTER_S, ease: enterEase, delay }
+    return (
+      <motion.li
+        data-slot="bento-cell"
+        data-bento-cell="true"
+        data-col={laid.col}
+        data-row={laid.row}
+        data-motion={reduced ? "reduced" : "full"}
+        data-enter-delay={delay}
+        className={cellClass}
+        style={style}
+        {...(rest as HTMLMotionProps<"li">)}
+        initial={reduced ? false : { opacity: 0, y: "0.7em" }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={transition}
+      >
+        {children}
+      </motion.li>
+    )
+  }
+
   const Comp = asChild ? Slot.Root : "li"
   return (
     <Comp
@@ -238,7 +306,8 @@ export function BentoCell({ span, asChild = false, className, children, ...rest 
       data-bento-cell="true"
       data-col={laid.col}
       data-row={laid.row}
-      className={cn(laid.className, preset === "default" && "h-full", className)}
+      className={cellClass}
+      style={style}
       {...rest}
     >
       {children}

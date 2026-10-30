@@ -1,7 +1,15 @@
 ---
+artifact_id: bento-grid.spec
+owner: builder
+spec_version: 1.1.0
+head: 4c349f59bfebf04e093b39c69c33b226f25165d8
 spec_id: bento-grid
-version: 1.0.0
+version: 1.1.0
+ui_system: "4.0.0"
 spec_changelog:
+  - version: 1.1.0
+    origin: layout-rules
+    note: "Aplica las reglas de layout del PR #59 a la rejilla, la tarjeta y el preset magnético. El stagger es local, con tope 0.4 s. No se importa stagger-list."
   - version: 1.0.0
     origin: brief
     note: "Alta de bento-grid y bento-feature-card. magnetic-bento queda como preset sobre la base."
@@ -107,7 +115,7 @@ acceptance:
     test: "__tests__/bento-feature-card.test.tsx › renders media, icon, title, description, and one link"
   - id: AC-9
     statement: "El hover solo anima transform y opacity, y se apaga con reduced motion."
-    measure: "El HTML no contiene transition-all ni transition-colors. Sí contiene motion-reduce:transition-none y will-change-transform en lo que anima."
+    measure: "El HTML no contiene transition-all ni transition-colors. Sí contiene motion-reduce:transition-none. will-change-transform solo aparece como hover: o group-hover/feature:, no como clase quieta."
     test: "__tests__/bento-feature-card.test.tsx › hover animates transform and opacity only"
   - id: AC-10
     statement: "El foco del enlace es visible y es un solo tab stop."
@@ -133,6 +141,26 @@ acceptance:
     statement: "Radios, gap y padding salen de tokens. No hay color literal en registry/."
     measure: "gap-4, rounded-xl, p-4. pnpm registry:build rechaza hex, rgb/oklch y paleta de Tailwind."
     test: "pnpm registry:build y las aserciones de clase en bento-grid.test.tsx y bento-feature-card.test.tsx"
+  - id: AC-16
+    statement: "El título y la descripción de la tarjeta y de la celda magnética no se estiran al ancho de la celda."
+    measure: "El bloque de copia y el título, la descripción y el CTA magnéticos llevan max-w-[17.5rem]. La ilustración no está dentro de ese tope."
+    test: "__tests__/bento-feature-card.test.tsx › hover animates transform and opacity only; __tests__/bento-magnetic-contract.test.tsx › separates cells without a border and caps the reading measure"
+  - id: AC-17
+    statement: "El radio y la separación viven en un solo nivel. La celda magnética no apila un borde."
+    measure: "El article de la tarjeta no tiene rounded-xl ni border. El radio y el anillo son los de Card. La celda magnética no tiene border; separa con gap-3, shadow-sm y el gap-4 ya publicado de la pista. El anillo de foco se queda."
+    test: "__tests__/bento-feature-card.test.tsx › hover animates transform and opacity only; __tests__/bento-magnetic-contract.test.tsx › separates cells without a border and caps the reading measure"
+  - id: AC-18
+    statement: "Al llenarse, las celdas entran con opacity y translateY. El último hijo no espera más de 0.4 s. Con menos movimiento la duración es 0."
+    measure: "BENTO_STAGGER_MAX_S es 0.4. data-stagger-max=0.4 en la pista. data-enter-delay del último hijo es menor o igual a 0.4. MotionConfig reducedMotion=always deja data-motion=reduced. La pista no anima su alto."
+    test: "__tests__/bento-grid.test.tsx › staggers ready cells with opacity and translate, capped at 0.4s; › uses duration 0 when motion is reduced"
+  - id: AC-19
+    statement: "El error se anuncia sin depender solo del color, y el texto del CTA magnético llega a 4.5:1."
+    measure: "role=alert y font-medium. text-destructive sobre blanco mide 4.91:1, así que se queda. El CTA magnético visible usa text-foreground, no --mb-item-accent, porque chart-1 sobre blanco mide 1.48:1. El acento sigue en el indicador de la celda activa."
+    test: "__tests__/bento-feature-card.test.tsx › shows empty, loading, and error without a link; __tests__/bento-magnetic-contract.test.tsx › separates cells without a border and caps the reading measure"
+  - id: AC-20
+    statement: "La API pública de magnetic-bento no cambia y sus quiebres siguen en 36rem y 56rem."
+    measure: "Mismos props exportados. La pista conserva @min-[36rem]/mb y @min-[56rem]/mb. __tests__/magnetic-bento.test.tsx no se edita."
+    test: "__tests__/bento-magnetic-contract.test.tsx › composes the bento base and keeps the magnetic span contract; __tests__/magnetic-bento.test.tsx"
 ---
 
 # Bento grid y tarjeta de función
@@ -184,7 +212,11 @@ Esos comandos están en verde, hay capturas a 390 px y en desktop de cada pieza 
 
 ## Dirección
 
-Eje: dónde vive la ilustración. `media-first` (elegida, default) pone el dibujo arriba y el texto abajo. `copy-first` invierte el orden. No se generaron imágenes. Ver `ui/direction/bento-grid/selection.md`.
+Eje: dónde vive la ilustración. `media-first` (elegida, default) pone el dibujo arriba y el texto abajo. `copy-first` invierte el orden. No se generaron imágenes. Ver `ui/direction/bento-grid/selection.md` y `ui/specs/bento-grid.direction-map.md`.
+
+## Layout
+
+Reglas del PR #59, aplicadas aquí sin mergear esa rama. `stagger-list` no se copia ni se importa. La entrada de las celdas repite el tope de 0.4 s con `opacity` y `translateY` en `bento-grid`.
 
 ## Estados de la tarjeta y de la rejilla
 

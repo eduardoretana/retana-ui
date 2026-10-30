@@ -25,6 +25,7 @@ describe("BentoFeatureCard", () => {
     expect(screen.getByTestId("art")).toBeInTheDocument()
     expect(screen.getByTestId("icon")).toBeInTheDocument()
     expect(document.querySelector("[data-slot='bento-feature-cta']")).not.toBeNull()
+    expect(document.querySelector("[data-slot='bento-feature-cta']")?.className).toContain("text-primary")
     expect(screen.queryAllByRole("link")).toHaveLength(1)
     expect(screen.queryByRole("button")).toBeNull()
     expect(link.querySelector("a, button")).toBeNull()
@@ -48,12 +49,20 @@ describe("BentoFeatureCard", () => {
     expect(html).not.toContain("transition-all")
     expect(html).not.toContain("transition-colors")
     expect(html).toContain("motion-reduce:transition-none")
-    expect(html).toContain("will-change-transform")
+    expect(html).toContain("hover:will-change-transform")
+    expect(html).toContain("group-hover/feature:will-change-transform")
     expect(html).toContain("rounded-xl")
     expect(html).not.toMatch(/rounded-\[\d+px\]/)
     expect(html).not.toMatch(/p-\[\d+px\]/)
     const card = document.querySelector("[data-slot='bento-feature-card']")
     expect(card?.className).toMatch(/transition-transform/)
+    expect(card?.className).not.toMatch(/(^|\s)will-change-transform(\s|$)/)
+    expect(card?.className).not.toContain("rounded-xl")
+    expect(card?.className).not.toContain("border")
+    const copy = document.querySelector("[data-slot='bento-feature-title']")?.parentElement
+    expect(copy?.className).toContain("max-w-[17.5rem]")
+    expect(document.querySelector("[data-slot='bento-feature-title']")?.className ?? "").not.toContain("text-primary")
+    expect(document.querySelector("[data-slot='bento-feature-description']")?.className ?? "").not.toContain("text-primary")
   })
 
   it("is one tab stop with a visible focus ring", async () => {
@@ -88,7 +97,10 @@ describe("BentoFeatureCard", () => {
     expect(screen.queryByRole("link")).toBeNull()
 
     rerender(<BentoFeatureCard status="error" errorLabel="No se pudo abrir" title="Horno" href="#h" />)
-    expect(screen.getByRole("alert")).toHaveTextContent("No se pudo abrir")
+    const alert = screen.getByRole("alert")
+    expect(alert).toHaveTextContent("No se pudo abrir")
+    expect(alert.className).toContain("font-medium")
+    expect(alert.className).toContain("text-destructive")
     expect(screen.queryByRole("link")).toBeNull()
   })
 
