@@ -9,6 +9,7 @@ import { Check, Minus } from "lucide-react"
 
 import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
+import { floatingGlass95 } from "@/registry/retana/lib/glass"
 import { motionPresets } from "@/registry/retana/lib/motion"
 
 import { comparisonColumns, comparisonSections } from "./comparison-table-data"
@@ -245,7 +246,7 @@ export function ComparisonTable({
           role={maxHeight !== undefined ? "region" : undefined}
         >
           <div role="table" aria-labelledby={`${uid}-title`} data-slot="comparison-table-grid" className={cn("grid min-w-0", classNames?.table)}>
-            <div role="rowgroup" className="sticky z-10 bg-background/95 backdrop-blur" style={{ top: stickyTop }}>
+            <div role="rowgroup" data-glass="floating" className={cn("sticky z-10", floatingGlass95)} style={{ top: stickyTop }}>
               <div role="row" className="grid border-b border-border" style={gridStyle}>
                 <div role="columnheader" className="min-h-16">
                   <span className="sr-only">Feature</span>

@@ -28,6 +28,10 @@ export type AvatarGroupProps = {
   members: AvatarGroupMember[]
   max?: number
   size?: "sm" | "md" | "lg"
+  /** Overlapping stack, or a row of named portraits. */
+  layout?: "stack" | "circle"
+  /** Where the name sits in the circle row. Default below. */
+  namePlace?: "above" | "below"
   label?: string
   className?: string
   classNames?: AvatarGroupClassNames
@@ -77,10 +81,68 @@ function initials(name: string) {
     .join("")
 }
 
+function CircleName({ name }: { name: string }) {
+  return <span className="w-full truncate text-center text-xs text-foreground">{name}</span>
+}
+
+function CircleLayout({
+  members,
+  size,
+  namePlace,
+  label,
+  className,
+  classNames,
+  reduceMotion,
+}: Required<Pick<AvatarGroupProps, "members" | "size" | "namePlace" | "label">> &
+  Pick<AvatarGroupProps, "className" | "classNames"> & { reduceMotion: boolean }) {
+  const px = pixelSize[size]
+  const transition = reduceMotion
+    ? { duration: 0 }
+    : { duration: motionPresets.duration.standard, ease: [...motionPresets.ease.standard] }
+
+  return (
+    <ul
+      data-slot="avatar-group"
+      data-layout="circle"
+      data-name-place={namePlace}
+      aria-label={label}
+      className={cn("m-0 flex w-full min-w-0 list-none flex-wrap justify-center gap-3 p-0", className, classNames?.root)}
+    >
+      {members.map((member, index) => (
+        <motion.li
+          key={`${member.name}-${index}`}
+          data-slot="avatar-group-slot"
+          data-portrait={member.src ? "image" : "initials"}
+          data-src={member.src}
+          className={cn("flex w-16 min-w-0 flex-col items-center gap-1", classNames?.slot)}
+          initial={reduceMotion ? false : { opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={transition}
+        >
+          {namePlace === "above" ? <CircleName name={member.name} /> : null}
+          <Avatar
+            data-slot="avatar-group-avatar"
+            size={avatarSize[size]}
+            style={{ width: px, height: px }}
+            aria-hidden="true"
+            className={cn("ring-2 ring-background", classNames?.avatar)}
+          >
+            {member.src ? <AvatarImage src={member.src} alt="" /> : null}
+            <AvatarFallback>{initials(member.name)}</AvatarFallback>
+          </Avatar>
+          {namePlace === "below" ? <CircleName name={member.name} /> : null}
+        </motion.li>
+      ))}
+    </ul>
+  )
+}
+
 export function AvatarGroup({
   members,
   max = 4,
   size = "md",
+  layout = "stack",
+  namePlace = "below",
   label = "Team members",
   className,
   classNames,
@@ -91,6 +153,19 @@ export function AvatarGroup({
   const transition = reduceMotion ? { duration: 0 } : motionPresets.spring.morph
   const [count, setCount] = React.useState({ overflow, direction: 1 })
   if (count.overflow !== overflow) setCount({ overflow, direction: overflow < count.overflow ? -1 : 1 })
+  if (layout === "circle") {
+    return (
+      <CircleLayout
+        members={members}
+        size={size}
+        namePlace={namePlace}
+        label={label}
+        className={className}
+        classNames={classNames}
+        reduceMotion={reduceMotion}
+      />
+    )
+  }
   const px = pixelSize[size]
   const stack = visible.length + (overflow > 0 ? 1 : 0)
 

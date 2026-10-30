@@ -5,6 +5,7 @@ import { X } from "lucide-react"
 import { Slot } from "radix-ui"
 
 import { cn } from "@/lib/utils"
+import { floatingGlass70, floatingGlass80 } from "@/registry/retana/lib/glass"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -583,10 +584,12 @@ export function DockNav({
             <div className="absolute inset-x-0 bottom-0 flex justify-center">
               <div
                 ref={barRef}
+                data-glass="floating"
                 onPointerMove={onPointerMove}
                 onPointerLeave={onPointerLeave}
                 className={cn(
-                  "inline-flex items-end rounded-full border border-border bg-background/70 px-1.5 pt-1.5 pb-2 shadow-lg backdrop-blur-xl dark:bg-background/60",
+                  "inline-flex items-end rounded-full border border-border px-1.5 pt-1.5 pb-2 shadow-lg",
+                  floatingGlass70,
                   barClassName,
                 )}
               >
@@ -707,13 +710,15 @@ export function DockNav({
               ref={panelRef}
               id={panelId}
               role="search"
+              data-glass="floating"
               data-slot="dock-nav-search"
               onSubmit={(event) => {
                 event.preventDefault()
                 emitSearch(query)
               }}
               className={cn(
-                "relative z-10 mt-4 flex h-11 w-[min(32rem,calc(100vw-2rem))] max-w-full items-center overflow-hidden rounded-full border border-border bg-background/80 shadow-lg backdrop-blur-xl dark:bg-background/60",
+                "relative z-10 mt-4 flex h-11 w-[min(32rem,calc(100vw-2rem))] max-w-full items-center overflow-hidden rounded-full border border-border shadow-lg",
+                floatingGlass80,
                 panelClassName,
               )}
             >
