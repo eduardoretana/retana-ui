@@ -1,12 +1,11 @@
 schema: uis.status/v2
-ui_system:
-  version: 4.0.0
-  declaration: "UI_SYSTEM: APPLIES"
-cycle_state: BUILD
+ui_system: {version: 4.0.0}
+declaration: "UI_SYSTEM: APPLIES"
+cycle_state: AUDITORIA
 profile: LITE
 spec_id: retana-ui-idea448b
 spec_version: 1.0.0
-head: 0235da2ac2a16970fee70848911a51737cf7a4e8
+head: 78322b34e9c2cb94d0a918445c2ad5bdd138f23c
 retana_ui:
   sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
   registry_source: git-sha
@@ -15,5 +14,5 @@ direction:
   images: none
 auditor: not-this-agent
 notes:
-  - "ui-system 4.0.0. La 4.1.0 no está mergeada. ui-auditor 1.2.5 está admitido para LITE en 4.0.0."
-  - "El head de arriba es el commit de código que evalúan los logs y las capturas. Los commits que solo agregan este paquete no cambian registry/, app/ ni tests/."
+  - "ui-system 4.0.0 en una sola línea: el lector no acepta el bloque anidado. La 4.1.0 no está mergeada. ui-auditor 1.2.5 está admitido para LITE con 4.0.0."
+  - "head no puede ser el sha de este mismo commit: el objeto git incluye este archivo. El valor es el HEAD anterior (78322b34), el último que existía al escribir el archivo. suite-log y renders-log no van en el árbol; el gate los recibe por --suite-log y --renders-log y esos sí declaran el HEAD del PR."

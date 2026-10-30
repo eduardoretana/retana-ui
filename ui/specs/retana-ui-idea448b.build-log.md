@@ -8,7 +8,7 @@ profile: LITE
 
 # Build log — retana-ui-idea448b
 
-El sha de abajo es el commit de código que se midió. Los commits que solo agregan este paquete no tocan `registry/`, `app/` ni `tests/`.
+La suite y los renders no se commitean. El gate los toma por `--suite-log` y `--renders-log`, fuera del árbol, y esos archivos declaran el HEAD del PR.
 
 ## needs
 
@@ -28,11 +28,11 @@ Ninguno. No hay pieza nueva ni extensión de API.
 
 ## commands
 
-Corridos en `0235da2ac2a16970fee70848911a51737cf7a4e8`. La salida cruda está en el commit de evidencia:
+Medidos otra vez sobre el HEAD de este PR, después de este commit, sin un commit posterior. Los logs quedan en el Agent Store, no en el repo.
 
-- `pnpm test`: exit 0. 232 archivos, 664 pruebas. Log: `evidence/IDEA-448/pnpm-test.log`.
-- `pnpm exec playwright test`: exit 0. 3 pruebas WebKit 390×844. Log: `evidence/IDEA-448/playwright.log`.
-- `npx impeccable@4.8.0 detect --json registry components app`: exit 2 en CPL `6671cfac72f736739d2d3dd2740cc5f13416acb3` (16 hallazgos, 11 bounce-easing) y exit 2 en el sha evaluado (5 hallazgos, 0 bounce-easing). JSON crudo: `evidence/IDEA-448/impeccable-detect-before.json` y `evidence/IDEA-448/impeccable-detect-after.json`.
+- `pnpm test` y `pnpm exec playwright test`: el log declara ese HEAD.
+- `renders.yaml`: cada captura con sha256 y viewport 390x844, y el mismo HEAD.
+- `npx impeccable@4.8.0 detect --json registry components app`: la salida cruda de CPL y la de ese HEAD también van al Agent Store.
 - `pnpm lint`: 0 errores. 7 warnings previos, fuera de este diff.
 - `pnpm exec tsc --noEmit`: exit 0.
 - `pnpm typecheck:strict-host`: exit 0.

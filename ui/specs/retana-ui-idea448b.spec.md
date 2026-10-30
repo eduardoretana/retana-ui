@@ -109,7 +109,7 @@ acceptance:
   - id: AC-6
     statement: "La suite, el typecheck y el build siguen en verde."
     measure: "pnpm test sale 0 con al menos las pruebas de la base. pnpm exec tsc --noEmit, pnpm lint y pnpm build salen 0."
-    test: "evidence/IDEA-448/pnpm-test.log en el sha 0235da2ac2a16970fee70848911a51737cf7a4e8"
+    test: "pnpm test. El log no vive en el árbol: el gate lo recibe por --suite-log y debe declarar el HEAD del PR."
   - id: AC-7
     statement: "axe no marca serious ni critical en los controles de este ciclo."
     measure: "Axe sobre el input de la cartera, el textarea de onboarding, las fechas, el formulario de cita, la búsqueda JSON, el slider, el mes, la hoja y eclipse: cero serious y cero critical."
