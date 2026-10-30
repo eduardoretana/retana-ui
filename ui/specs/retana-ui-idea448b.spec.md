@@ -1,7 +1,7 @@
 ---
 spec_id: retana-ui-idea448b
 version: 1.0.0
-head: 0235da2ac2a16970fee70848911a51737cf7a4e8
+head: 81d536dd62ace0c4b0bd82377be14e9a031df74a
 spec_changelog:
   - version: 1.0.0
     origin: brief
@@ -166,4 +166,4 @@ Código ya en la rama, más este Spec, el status, el direction-map, el fixture, 
 
 ## Dirección
 
-Heredada del tema del catálogo. Perfil LITE: no hay tablero ni variantes de imagen. Ver `ui/direction/retana-ui-idea448b/direction-map.md`.
+Heredada del tema del catálogo. Perfil LITE: no hay tablero ni variantes de imagen. El direction-map cita AC-6 con el mismo criterio que esta spec: `pnpm test`, `pnpm exec tsc --noEmit`, `pnpm lint` y `pnpm build` salen 0, y el log llega por `--suite-log` declarando el HEAD del PR. Ver `ui/direction/retana-ui-idea448b/direction-map.md`.
