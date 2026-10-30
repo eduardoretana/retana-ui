@@ -1,0 +1,12 @@
+{
+  "tool": "impeccable",
+  "version": "4.8.0",
+  "command": "npx impeccable@4.8.0 detect --json registry components app",
+  "exit": 2,
+  "total": 5,
+  "counts": {
+    "side-tab": 2,
+    "border-accent-on-rounded": 3
+  },
+  "bounce": []
+}
