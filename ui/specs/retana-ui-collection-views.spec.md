@@ -2,7 +2,7 @@
 artifact_id: spec-retana-ui-collection-views
 owner: lead
 spec_version: 0.1.0
-head: 0000000000000000000000000000000000000000
+head: 8cfdaf29c71d087391da72a6176449a82faec02f
 profile: STANDARD
 spec_id: retana-ui-collection-views
 version: 0.1.0
@@ -57,7 +57,7 @@ brand_constraints:
   - RUI-RADIUS-001. Radios por paso. El círculo 1:1 queda en el avatar del host.
   - Color fuerte solo en la píldora activa y en la barra que cubre today.
 retana_ui:
-  sha: 0000000000000000000000000000000000000000
+  sha: 8cfdaf29c71d087391da72a6176449a82faec02f
   registry_source: git-sha
 components:
   retana:

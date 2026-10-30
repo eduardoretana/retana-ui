@@ -1,7 +1,7 @@
 schema: uis.status/v2
 ui_system: {version: 4.0.0}
 cycle_state: AUDITORIA
-head: 0000000000000000000000000000000000000000
+head: 8cfdaf29c71d087391da72a6176449a82faec02f
 artifact_id: status-retana-ui-collection-views
 owner: lead
 spec_version: 0.1.0
@@ -11,7 +11,7 @@ declaration: "UI_SYSTEM: APPLIES"
 stop_when: Las tres vistas comparten grupo, cáscara, título y avatares; el resorte no rebota; con reduced-motion no hay morph; vacío, carga y error se leen; el registry no introduce color literal.
 deliverable: Pieza collection-views, ejemplo PLP, pruebas Vitest y Playwright, y este expediente.
 retana_ui:
-  sha: 0000000000000000000000000000000000000000
+  sha: 8cfdaf29c71d087391da72a6176449a82faec02f
   registry_source: git-sha
 direction:
   reference_id: desdivj-collection-views

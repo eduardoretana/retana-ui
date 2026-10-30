@@ -2,7 +2,7 @@
 artifact_id: build-log-retana-ui-collection-views
 owner: builder
 spec_version: 0.1.0
-head: 0000000000000000000000000000000000000000
+head: 8cfdaf29c71d087391da72a6176449a82faec02f
 profile: STANDARD
 spec_id: retana-ui-collection-views
 ui_system: "4.0.0"

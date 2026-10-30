@@ -2,7 +2,7 @@ schema: uis.rules/v1
 ui_system: "4.0.0"
 spec_id: retana-ui-collection-views
 profile: STANDARD
-head: 0000000000000000000000000000000000000000
+head: 8cfdaf29c71d087391da72a6176449a82faec02f
 rules:
   - id: RUI-ANIM-PERF-001
     req_ids: [AC-MORPH-003]
