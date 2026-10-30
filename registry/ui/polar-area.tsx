@@ -1,7 +1,6 @@
 "use client"
 
 import { useId, useState } from "react"
-import { AnimatePresence, motion } from "motion/react"
 
 import { formatChartNumber } from "@/registry/retana/lib/chart-format"
 import { wedgePath } from "@/registry/retana/lib/chart-geom"
@@ -11,7 +10,6 @@ import {
   ChartLegend,
   chartStatusLabels,
   chartStatusLabelsEs,
-  chartTransition,
   usePrefersReducedMotion,
   type ChartCardClassNames,
   type ChartStatus,
@@ -136,14 +134,15 @@ export function PolarArea({
       <div className="relative mx-auto w-full max-w-[16rem]">
         <svg viewBox={`0 0 ${size} ${size}`} className="h-auto w-full" role="group" aria-label={title}>
           <SeriesPatterns id={pattern} />
-          <AnimatePresence mode="wait">
-            <motion.g
+          <g
               key={current?.id}
-              initial={reduced ? false : { opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={reduced ? undefined : { opacity: 0 }}
-              transition={chartTransition(reduced)}
-              style={{ transformOrigin: `${cx}px ${cy}px` }}
+              style={{
+                transformBox: "view-box",
+                transformOrigin: `${cx}px ${cy}px`,
+                transform: "scale(1)",
+                opacity: 1,
+                animation: reduced ? "none" : "rui-polar-in 0.48s cubic-bezier(0.16, 1, 0.3, 1)",
+              }}
             >
               {current?.wedges.map((item, index) => {
                 const count = current.wedges.length || 1
@@ -171,8 +170,7 @@ export function PolarArea({
                   />
                 )
               })}
-            </motion.g>
-          </AnimatePresence>
+          </g>
         </svg>
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <p className="text-center text-lg font-medium tabular-nums text-foreground" data-slot="polar-center">

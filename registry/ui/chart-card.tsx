@@ -135,6 +135,7 @@ export function ChartCard({
       <style>{`
         @keyframes rui-scale-y { from { transform: scaleY(0); opacity: 0; } }
         @keyframes rui-scale-x { from { transform: scaleX(0); opacity: 0; } }
+        @keyframes rui-polar-in { from { opacity: 0; transform: scale(0.96); } }
         @media (prefers-reduced-motion: reduce) {
           ${root}, ${root} * {
             animation: none !important;
