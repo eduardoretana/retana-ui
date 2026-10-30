@@ -34,7 +34,7 @@ test.describe("IDEA-448 móvil 390", () => {
     const bruma = page.getByRole("row", { name: /Taller Bruma/ })
     await bruma.getByRole("button", { name: "Taller Bruma", exact: true }).click()
     await expectAtLeast16(page.getByRole("textbox", { name: "Empresa Taller Bruma" }))
-    await bruma.getByRole("button", { name: "Inés Quesada", exact: true }).click()
+    await bruma.getByRole("button", { name: "Inés Ejemplo", exact: true }).click()
     await expectAtLeast16(page.getByRole("textbox", { name: "Responsable de Taller Bruma" }))
     await bruma.getByRole("button", { name: "$48,000", exact: true }).click()
     await expectAtLeast16(page.getByRole("textbox", { name: "Valor de Taller Bruma" }))
@@ -141,5 +141,37 @@ test.describe("IDEA-448 móvil 390", () => {
     await check("/examples/theme-toggle-icons", 'button[aria-label="eclipse"]')
 
     expect(failures).toEqual([])
+  })
+
+  test("el pulgar del deslizador pasa axe 4.13.0 en claro y oscuro", async ({ page }) => {
+    await page.goto("/examples/parameter-slider")
+    const thumb = page.locator("[data-slot=slider-thumb]")
+    await expect(thumb).toBeVisible()
+    await expect(thumb).toHaveAttribute("role", "slider")
+    await expect(thumb).toHaveAttribute("aria-label", "Variation")
+    await expect(thumb).toHaveAttribute("aria-valuetext", "0.40")
+    const rootValueText = await page.locator("[data-slot=slider]").getAttribute("aria-valuetext")
+    expect(rootValueText).toBeNull()
+
+    await page.addScriptTag({ path: "node_modules/axe-core/axe.min.js" })
+    for (const theme of ["light", "dark"] as const) {
+      await page.evaluate((mode) => {
+        document.documentElement.classList.toggle("dark", mode === "dark")
+      }, theme)
+      const report = await page.evaluate(async () => {
+        const axe = (window as unknown as { axe: { version: string; run: (node: Element) => Promise<{ violations: { id: string; impact: string | null }[] }> } }).axe
+        const node = document.querySelector("[data-slot=slider]")
+        if (!node) throw new Error("no slider")
+        const result = await axe.run(node)
+        return {
+          version: axe.version,
+          blocking: result.violations
+            .filter((item) => item.impact === "serious" || item.impact === "critical")
+            .map((item) => item.id),
+        }
+      })
+      expect(report.version).toBe("4.13.0")
+      expect(report.blocking, theme).toEqual([])
+    }
   })
 })

@@ -1,7 +1,7 @@
 ---
 spec_id: retana-ui-idea448b
 version: 1.0.0
-head: 0235da2ac2a16970fee70848911a51737cf7a4e8
+head: dc6987f1959d79fd9fea1334a5666e5a03ff01b8
 spec_changelog:
   - version: 1.0.0
     origin: brief
@@ -51,7 +51,7 @@ states:
   - rollback
   - permission_denied
 data:
-  - "Cartera: Taller Bruma, responsable Inés Quesada, valor 48000 MXN."
+  - "Cartera: Taller Bruma, responsable Inés Ejemplo, valor 48000 MXN."
   - "Tablero: filtros Desde y Hasta vacíos, locale es-MX."
   - "Hoja inferior: Carga del horno, abierta."
   - "Eclipse: reposo, mitad del movimiento y asentado."
@@ -111,9 +111,9 @@ acceptance:
     measure: "pnpm test sale 0 con al menos las pruebas de la base. pnpm exec tsc --noEmit, pnpm lint y pnpm build salen 0."
     test: "pnpm test. El log no vive en el árbol: el gate lo recibe por --suite-log y debe declarar el HEAD del PR."
   - id: AC-7
-    statement: "axe no marca serious ni critical en los controles de este ciclo."
-    measure: "Axe sobre el input de la cartera, el textarea de onboarding, las fechas, el formulario de cita, la búsqueda JSON, el slider, el mes, la hoja y eclipse: cero serious y cero critical."
-    test: "tests/mobile/inputs.spec.ts › axe no marca serious ni critical en los controles de esta IDEA"
+    statement: "axe no marca serious ni critical en los controles de este ciclo, ni en el pulgar del deslizador en claro y en oscuro."
+    measure: "axe-core 4.13.0 sobre [data-slot=slider] en light y dark: cero serious y cero critical. El pulgar tiene role=slider, aria-label y aria-valuetext. aria-valuetext no está en la raíz."
+    test: "tests/mobile/inputs.spec.ts › el pulgar del deslizador pasa axe 4.13.0 en claro y oscuro"
 ---
 
 # IDEA-448 B — ajustes móviles
@@ -166,4 +166,4 @@ Código ya en la rama, más este Spec, el status, el direction-map, el fixture, 
 
 ## Dirección
 
-Heredada del tema del catálogo. Perfil LITE: no hay tablero ni variantes de imagen. Ver `ui/direction/retana-ui-idea448b/direction-map.md`.
+Heredada del tema del catálogo. Perfil LITE: no hay tablero ni variantes de imagen. El direction-map cita AC-6 igual que esta spec (`pnpm test`, `pnpm exec tsc --noEmit`, `pnpm lint` y `pnpm build` en 0, log por `--suite-log`) y AC-7 en el pulgar del deslizador. Las filas del visor JSON ya no animan `height`: usan `grid-template-rows` de `0fr` a `1fr`, y con reduced-motion la transición dura 0. Ver `ui/direction/retana-ui-idea448b/direction-map.md`.

@@ -56,11 +56,11 @@ export const crmStages: CrmStage[] = [
 ]
 
 export const crmRows: CrmRow[] = [
-  { id: "bruma", company: "Taller Bruma", stage: "proposal", owner: "Inés Quesada", value: 48000 },
-  { id: "norte", company: "Vidrio Norte", stage: "qualified", owner: "Omar Beltrán", value: 120000 },
-  { id: "lumen", company: "Estudio Lumen", stage: "lead", owner: "Mara Solís", value: 18000 },
-  { id: "faro", company: "Obra Faro", stage: "won", owner: "Inés Quesada", value: 76000 },
-  { id: "costa", company: "Costa Clara", stage: "lost", owner: "Omar Beltrán", value: 9000 },
+  { id: "bruma", company: "Taller Bruma", stage: "proposal", owner: "Inés Ejemplo", value: 48000 },
+  { id: "norte", company: "Vidrio Norte", stage: "qualified", owner: "Diego Ejemplo", value: 120000 },
+  { id: "lumen", company: "Estudio Lumen", stage: "lead", owner: "Marta Muestra", value: 18000 },
+  { id: "faro", company: "Obra Faro", stage: "won", owner: "Inés Ejemplo", value: 76000 },
+  { id: "costa", company: "Costa Clara", stage: "lost", owner: "Diego Ejemplo", value: 9000 },
 ]
 
 export const salesNav: ShellNavItem[] = [

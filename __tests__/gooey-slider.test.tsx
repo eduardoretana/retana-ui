@@ -6,7 +6,9 @@ import { GooeySlider } from "@/registry/ui/gooey-slider"
 describe("GooeySlider", () => {
   it("exposes a slider with the current value", () => {
     render(<GooeySlider defaultValue={25} label="Intensity" />)
-    expect(screen.getByRole("slider")).toHaveAttribute("aria-valuenow", "25")
-    expect(document.querySelector("[data-slot=slider]")).toHaveAttribute("aria-label", "Intensity")
+    const slider = screen.getByRole("slider", { name: "Intensity" })
+    expect(slider).toHaveAttribute("aria-valuenow", "25")
+    expect(slider).toHaveAttribute("data-slot", "slider-thumb")
+    expect(document.querySelector("[data-slot=slider]")).not.toHaveAttribute("aria-valuetext")
   })
 })
