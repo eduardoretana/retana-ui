@@ -36,7 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "try{if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}",
+              "try{var q=new URLSearchParams(location.search);var theme=q.get('theme');if(theme==='dark'||theme==='light'){document.documentElement.classList.toggle('dark',theme==='dark');localStorage.setItem('theme',theme)}else if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark')}var locale=q.get('locale');if(locale==='es-MX'||locale==='es')document.documentElement.lang='es-MX';if(locale==='en'||(locale&&locale.slice(0,3)==='en-'))document.documentElement.lang='en';if(q.get('motion')==='reduce'||q.get('motion')==='reduced'){var native=window.matchMedia.bind(window);window.matchMedia=function(query){if(String(query).indexOf('prefers-reduced-motion')!==-1){return{matches:true,media:String(query),onchange:null,addListener:function(){},removeListener:function(){},addEventListener:function(){},removeEventListener:function(){},dispatchEvent:function(){return false}}}return native(query)}}}catch(e){}",
           }}
         />
       </head>

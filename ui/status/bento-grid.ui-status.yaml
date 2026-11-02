@@ -1,0 +1,19 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0}
+cycle_state: BUILD
+profile: STANDARD
+spec_id: bento-grid
+spec_version: 1.3.0
+head: bff117b3c34aa35fcacd7edd719d4627e9e0350a
+stop_when: "pnpm test en verde; typecheck y build en verde; Playwright a 390 y 1280 fuera del repo; PR draft contra CPL, sin merge."
+deliverable: "Presets sm, wide, tall y lg en bento-grid y bento-feature-card. El dibujo sigue la celda con container queries. magnetic-bento sin cambio de API."
+retana_ui:
+  sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+  registry_source: git-sha
+direction:
+  mode: code-variants
+  images: none
+  generators_used: []
+  chosen: media-first
+auditor: not-this-agent
+declaration: "UI_SYSTEM: APPLIES"

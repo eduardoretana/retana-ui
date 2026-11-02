@@ -1,0 +1,34 @@
+schema: uis.expected-red/v1
+spec_id: bento-grid
+ui_system: {version: 4.0.0}
+profile: STANDARD
+retana_ui_sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+recorded_before_build: true
+command: pnpm exec vitest run __tests__/bento-grid.test.tsx __tests__/bento-feature-card.test.tsx __tests__/bento-magnetic-contract.test.tsx
+# Ciclo 1.3.0, antes de implementar los presets. AC-23, AC-25 y AC-29 ya estaban en verde
+# (sin size y sin magnetic no hay data-size). Abajo solo las firmas rojas.
+cases:
+  - id: AC-21
+    file: __tests__/bento-grid.test.tsx
+    name: maps sm, wide, tall, and lg onto the collapsed span classes
+    signature: 'Expected the element to have attribute: data-size="sm". Received: null'
+  - id: AC-22
+    file: __tests__/bento-grid.test.tsx
+    name: keeps sized cells in source order, one column at the base, without dense packing
+    signature: 'expected [ null, null, null, null ] to deeply equal [ "lg", "wide", "tall", "sm" ]'
+  - id: AC-24
+    file: __tests__/bento-feature-card.test.tsx
+    name: adapts each size preset from the cell container, not the viewport
+    signature: 'Expected the element to have attribute: data-size="sm". Received: null'
+  - id: AC-26
+    file: __tests__/bento-feature-card.test.tsx
+    name: keeps media-first and copy-first source order when a size is set
+    signature: 'Expected the element to have attribute: data-size="wide". Received: null'
+  - id: AC-27
+    file: __tests__/bento-feature-card.test.tsx
+    name: keeps the copy when the container query hides the decorative illustration
+    signature: 'expected min-h-40 flex-1 overflow-hidden rounded-lg bg-muted to contain [@container_cell_(max-width:10rem)]:hidden'
+  - id: AC-28
+    file: __tests__/bento-feature-card.test.tsx
+    name: does not animate the change between size presets
+    signature: 'Expected the element to have attribute: data-size="lg". Received: null'

@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`422` items are in `registry.json` on this branch: `333` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`424` items are in `registry.json` on this branch: `335` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -515,6 +515,8 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`timeline`](registry/ui/timeline.tsx) · ui — Follows what happened, newest first, grouped by day. Install: `npx shadcn@latest add @retana/timeline`.
 - [`json-viewer`](registry/ui/json-viewer.tsx) · ui — A collapsible JSON tree with search and copy for a value or a path. Install: `npx shadcn@latest add @retana/json-viewer`.
 - [`comment-thread`](registry/ui/comment-thread.tsx) · ui — Threaded comments with replies, reactions, and resolve. Install: `npx shadcn@latest add @retana/comment-thread`.
+- [`bento-grid`](registry/ui/bento-grid.tsx) · ui — Responsive bento layout. Each cell asks for a span and stacks to one column at 390px. Install: `npx shadcn@latest add @retana/bento-grid`.
+- [`bento-feature-card`](registry/ui/bento-feature-card.tsx) · ui — Illustration slot, icon, title, description, and an optional call to action inside one bento cell. Install: `npx shadcn@latest add @retana/bento-feature-card`.
 - [`magnetic-bento`](registry/ui/magnetic-bento.tsx) · ui — Bento grid with one shared highlight that glides and stretches between cards. Install: `npx shadcn@latest add @retana/magnetic-bento`.
 - [`ui-sounds`](registry/ui/ui-sounds.tsx) · ui — Fourteen synthesized cues with a persisted mute, volume, theme, and emphasis. Playback waits for a user gesture. Install: `npx shadcn@latest add @retana/ui-sounds`.
 - [`haptics`](registry/ui/haptics.tsx) · ui — navigator.vibrate with a persisted mute. A no-op where the Vibration API is missing. Install: `npx shadcn@latest add @retana/haptics`.
