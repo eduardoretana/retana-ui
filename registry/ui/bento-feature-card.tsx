@@ -1,5 +1,14 @@
 "use client"
 
+/**
+ * Bento feature card.
+ * The size presets take the layout idea, not the code, from shadcn/studio Bento Cards (Pro).
+ * https://shadcnstudio.com/blocks/bento-grid/bento-cards
+ * https://x.com/ShadcnStudio/status/2116508123242598435
+ * No code, markup, assets, or copy from that source was copied. See NOTICE.
+ * Internal layout follows the cell container (`@container-size/cell`), not the viewport.
+ */
+
 import type { ReactNode } from "react"
 import { ArrowRight } from "lucide-react"
 
@@ -8,6 +17,37 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
 
 export type BentoFeatureLayout = "media-first" | "copy-first"
+
+/** Matches `BentoSize` on the grid. Kept local so this item does not import the grid. */
+export type BentoFeatureSize = "sm" | "wide" | "tall" | "lg"
+
+/**
+ * Wide and short: illustration beside the copy.
+ * Tall and narrow, or wide and tall: the illustration grows.
+ * Under 10rem the decorative illustration hides. The copy stays.
+ * These are container queries on `cell`, not viewport breakpoints.
+ */
+const ADAPTIVE_BODY =
+  "[@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:flex-row [@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:items-stretch"
+
+const ADAPTIVE_MEDIA = [
+  "max-h-16 min-h-0 **:min-h-0",
+  "[@container_cell_(max-width:10rem)]:hidden",
+  "[@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:h-full",
+  "[@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:max-h-none",
+  "[@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:min-h-0",
+  "[@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:w-1/2",
+  "[@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:flex-1",
+  "[@container_cell_(max-width:23.99rem)_and_(min-height:18rem)]:h-full",
+  "[@container_cell_(max-width:23.99rem)_and_(min-height:18rem)]:max-h-none",
+  "[@container_cell_(max-width:23.99rem)_and_(min-height:18rem)]:min-h-0",
+  "[@container_cell_(max-width:23.99rem)_and_(min-height:18rem)]:w-full",
+  "[@container_cell_(max-width:23.99rem)_and_(min-height:18rem)]:flex-1",
+  "[@container_cell_(min-width:24rem)_and_(min-height:18rem)]:max-h-none",
+  "[@container_cell_(min-width:24rem)_and_(min-height:18rem)]:min-h-0",
+  "[@container_cell_(min-width:24rem)_and_(min-height:18rem)]:w-full",
+  "[@container_cell_(min-width:24rem)_and_(min-height:18rem)]:flex-1",
+].join(" ")
 
 export type BentoFeatureStatus = "ready" | "loading" | "empty" | "error"
 
@@ -33,6 +73,11 @@ export type BentoFeatureCardProps = {
   href?: string
   /** `media-first` is the default: drawing, then copy. */
   layout?: BentoFeatureLayout
+  /**
+   * Turns on the cell-sized layout. Pass the same value the cell uses.
+   * sm, wide, tall, and lg share one set of container queries; the cell's real size picks the arrangement.
+   */
+  size?: BentoFeatureSize
   status?: BentoFeatureStatus
   emptyLabel?: string
   loadingLabel?: string
@@ -54,6 +99,7 @@ export function BentoFeatureCard({
   cta,
   href,
   layout = "media-first",
+  size,
   status = "ready",
   emptyLabel = "Nothing here",
   loadingLabel = "Loading",
@@ -67,16 +113,25 @@ export function BentoFeatureCard({
     <div
       data-slot="bento-feature-media"
       aria-hidden="true"
-      className={cn("min-h-40 flex-1 overflow-hidden rounded-lg bg-muted", classNames?.media)}
+      className={cn(
+        "overflow-hidden rounded-lg bg-muted",
+        size ? ADAPTIVE_MEDIA : "min-h-40 flex-1",
+        classNames?.media,
+      )}
     >
-      <div className="h-full opacity-90 transition-[transform,opacity] duration-200 ease-out group-hover/feature:scale-[1.02] group-hover/feature:opacity-100 group-hover/feature:will-change-transform motion-reduce:transition-none motion-reduce:group-hover/feature:scale-100 motion-reduce:group-hover/feature:will-change-auto">
+      <div className="flex h-full items-center justify-center overflow-hidden opacity-90 transition-[transform,opacity] duration-200 ease-out group-hover/feature:scale-[1.02] group-hover/feature:opacity-100 group-hover/feature:will-change-transform motion-reduce:transition-none motion-reduce:group-hover/feature:scale-100 motion-reduce:group-hover/feature:will-change-auto">
         {illustration}
       </div>
     </div>
   ) : null
 
   const copy = (
-    <div className="flex min-w-0 max-w-[17.5rem] flex-col gap-2">
+    <div
+      className={cn(
+        "flex min-w-0 max-w-[17.5rem] flex-col gap-2",
+        size && "min-h-0 shrink-0 overflow-y-auto",
+      )}
+    >
       {icon ? (
         <div
           data-slot="bento-feature-icon"
@@ -144,13 +199,21 @@ export function BentoFeatureCard({
     )
   }
 
-  const stack = <div className="flex h-full min-h-0 flex-col gap-4 p-4">{body}</div>
+  const stack = (
+    <div
+      data-slot={size ? "bento-feature-body" : undefined}
+      className={cn("flex h-full min-h-0 flex-col gap-4 p-4", size && "overflow-y-auto", size && ADAPTIVE_BODY)}
+    >
+      {body}
+    </div>
+  )
 
   return (
     <article
       data-slot="bento-feature-card"
       data-state={status}
       data-layout={layout}
+      data-size={size}
       aria-busy={status === "loading" ? true : undefined}
       className={cn(
         "group/feature h-full min-w-0",

@@ -12,8 +12,9 @@ function Variant({ layout }: { layout: "media-first" | "copy-first" }) {
   const cell = copy.cells[0]!
   return (
     <BentoGrid label="Dirección" columns={2}>
-      <BentoCell span={{ col: 1, row: 2 }}>
+      <BentoCell size="tall">
         <BentoFeatureCard
+          size="tall"
           layout={layout}
           title={cell.title}
           description={cell.description}
@@ -23,8 +24,9 @@ function Variant({ layout }: { layout: "media-first" | "copy-first" }) {
           illustration={<BentoSketch id={cell.id} />}
         />
       </BentoCell>
-      <BentoCell span={{ col: 1, row: 1 }}>
+      <BentoCell size="wide">
         <BentoFeatureCard
+          size="wide"
           layout={layout}
           title={copy.cells[1]!.title}
           description={copy.cells[1]!.description}

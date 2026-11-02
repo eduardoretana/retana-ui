@@ -10514,7 +10514,7 @@
       "categories": [
         "content"
       ],
-      "docs": "Inspiración visual, sin código. Fuente: https://shadcnstudio.com/blocks/bento-grid/bento-cards. Licencia: bloques Pro de shadcn/studio, fuera del repositorio MIT de shadcn/ui. No se copió código, markup ni assets. A container of 390px stays on one column. Two columns start at 30rem (480px). The requested column count starts at 56rem (896px). Gap uses the spacing scale. Ready cells enter with opacity and translateY. The last cell waits at most 0.4s. Reduced motion sets that duration to 0. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+      "docs": "Inspiración visual, sin código. Fuente: https://shadcnstudio.com/blocks/bento-grid/bento-cards y https://x.com/ShadcnStudio/status/2116508123242598435. Licencia: bloques Pro de shadcn/studio, fuera del repositorio MIT de shadcn/ui. No se copió código, markup, assets, copy ni datos. A container of 390px stays on one column. Two columns start at 30rem (480px). The requested column count starts at 56rem (896px). Gap uses the spacing scale. Ready cells enter with opacity and translateY. The last cell waits at most 0.4s. Reduced motion sets that duration to 0. size on BentoCell is sm (1×1), wide (2×1), tall (1×2), or lg (2×2). It sets the span and makes the cell a size container. Without size, span behaves as before. The track does not use grid-auto-flow dense. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
       "files": [
         {
           "path": "registry/ui/bento-grid.tsx",
@@ -10524,7 +10524,7 @@
       ],
       "meta": {
         "titleEs": "Rejilla bento",
-        "descriptionEs": "Acomodo bento. Cada celda pide su tramo y a 390 px queda en una columna.",
+        "descriptionEs": "Acomodo bento. Cada celda pide su tramo o un preset (sm, wide, tall, lg) y a 390 px queda en una columna.",
         "preview": "app/examples/bento-grid/preview.tsx",
         "previewHref": "/examples/bento-grid",
         "scenes": [
@@ -10599,6 +10599,62 @@
             "titleEs": "Sin ilustración",
             "descriptionEs": "La celda no trae dibujo.",
             "preview": "app/examples/bento-grid/preview.tsx"
+          },
+          {
+            "id": "size-sm",
+            "label": "Compacta",
+            "labelEn": "Compact",
+            "titleEs": "Preset compacto",
+            "descriptionEs": "Una celda 1×1. El dibujo se queda chico.",
+            "preview": "app/examples/bento-grid/preview.tsx"
+          },
+          {
+            "id": "size-wide",
+            "label": "Ancha",
+            "labelEn": "Wide",
+            "titleEs": "Preset ancho",
+            "descriptionEs": "Una celda 2×1. El dibujo va al lado si la celda es ancha.",
+            "preview": "app/examples/bento-grid/preview.tsx"
+          },
+          {
+            "id": "size-tall",
+            "label": "Alta",
+            "labelEn": "Tall",
+            "titleEs": "Preset alto",
+            "descriptionEs": "Una celda 1×2. El dibujo usa el alto si la celda es alta.",
+            "preview": "app/examples/bento-grid/preview.tsx"
+          },
+          {
+            "id": "size-lg",
+            "label": "Grande",
+            "labelEn": "Large",
+            "titleEs": "Preset grande",
+            "descriptionEs": "Una celda 2×2. El dibujo llena la celda.",
+            "preview": "app/examples/bento-grid/preview.tsx"
+          },
+          {
+            "id": "presets",
+            "label": "Presets",
+            "labelEn": "Presets",
+            "titleEs": "Los cuatro presets",
+            "descriptionEs": "sm, wide, tall y lg en el mismo muro.",
+            "preview": "app/examples/bento-grid/preview.tsx"
+          },
+          {
+            "id": "media-first",
+            "label": "Dibujo primero",
+            "labelEn": "Media first",
+            "titleEs": "Dibujo primero",
+            "descriptionEs": "Los cuatro presets con el dibujo antes del texto.",
+            "preview": "app/examples/bento-grid/preview.tsx"
+          },
+          {
+            "id": "copy-first",
+            "label": "Texto primero",
+            "labelEn": "Copy first",
+            "titleEs": "Texto primero",
+            "descriptionEs": "Los cuatro presets con el texto antes del dibujo.",
+            "preview": "app/examples/bento-grid/preview.tsx"
           }
         ],
         "examples": [
@@ -10613,7 +10669,7 @@
             "description": "390 px, token largo, RTL, cero, una, diez, carga y error."
           }
         ],
-        "usage": "<BentoGrid label=\"Studio wall\" columns={4}>\n  <BentoCell span={{ col: 2, row: 2 }}>\n    <BentoFeatureCard title=\"North kiln\" description=\"Morning shift.\" href=\"#kiln\" cta=\"View schedule\" />\n  </BentoCell>\n</BentoGrid>",
+        "usage": "<BentoGrid label=\"Studio wall\" columns={4}>\n  <BentoCell size=\"lg\">\n    <BentoFeatureCard size=\"lg\" title=\"North kiln\" description=\"Morning shift.\" href=\"#kiln\" cta=\"View schedule\" />\n  </BentoCell>\n  <BentoCell size=\"sm\">\n    <BentoFeatureCard size=\"sm\" title=\"Glaze log\" description=\"Tests that left the studio.\" href=\"#glaze\" cta=\"Open notes\" />\n  </BentoCell>\n</BentoGrid>",
         "api": [
           {
             "name": "columns",
@@ -10639,6 +10695,11 @@
             "name": "BentoCell span",
             "type": "{ col?: number; row?: number }",
             "description": "Requested span. Columns clamp to 1 until 30rem and to 2 until 56rem."
+          },
+          {
+            "name": "BentoCell size",
+            "type": "\"sm\" | \"wide\" | \"tall\" | \"lg\"",
+            "description": "Preset span: sm 1×1, wide 2×1, tall 1×2, lg 2×2. Wins over span. The cell becomes a size container so the card can follow its real box. Omitted, span is unchanged."
           },
           {
             "name": "BentoCell asChild",
@@ -10674,7 +10735,7 @@
       "categories": [
         "content"
       ],
-      "docs": "Inspiración visual, sin código. Fuente: https://shadcnstudio.com/blocks/bento-grid/bento-cards. Licencia: bloques Pro de shadcn/studio, fuera del repositorio MIT de shadcn/ui. No se copió código, markup ni assets. The card composes the host Card and Skeleton. Hover uses transform and opacity only. If href is set, the whole card is that one link and the call to action is text inside it. layout=\"media-first\" (default) puts the illustration above the copy. layout=\"copy-first\" reverses that. Answer no if the CLI asks to overwrite card or skeleton. The item ships no theme.",
+      "docs": "Inspiración visual, sin código. Fuente: https://shadcnstudio.com/blocks/bento-grid/bento-cards y https://x.com/ShadcnStudio/status/2116508123242598435. Licencia: bloques Pro de shadcn/studio, fuera del repositorio MIT de shadcn/ui. No se copió código, markup, assets, copy ni datos. The card composes the host Card and Skeleton. Hover uses transform and opacity only. If href is set, the whole card is that one link and the call to action is text inside it. layout=\"media-first\" (default) puts the illustration before the copy in the DOM. layout=\"copy-first\" reverses that. size turns on container queries against the cell (@container-size/cell): the drawing stays small under 24rem by 18rem, sits beside the copy when the cell is wide and short, and grows when the cell is at least 18rem tall. Under 10rem wide the decorative drawing hides and the text stays. Without size the stack is unchanged. The preset change is not animated. Answer no if the CLI asks to overwrite card or skeleton. The item ships no theme.",
       "files": [
         {
           "path": "registry/ui/bento-feature-card.tsx",
@@ -10684,7 +10745,7 @@
       ],
       "meta": {
         "titleEs": "Tarjeta de función",
-        "descriptionEs": "Hueco de ilustración, icono, título, descripción y una llamada opcional, dentro de una celda bento.",
+        "descriptionEs": "Hueco de ilustración, icono, título, descripción y una llamada opcional. Con size, el dibujo sigue el tamaño real de la celda.",
         "preview": "app/examples/bento-feature-card/preview.tsx",
         "previewHref": "/examples/bento-feature-card",
         "scenes": [
@@ -10759,6 +10820,62 @@
             "titleEs": "Una sola ficha",
             "descriptionEs": "Una tarjeta en una sola celda.",
             "preview": "app/examples/bento-feature-card/preview.tsx"
+          },
+          {
+            "id": "size-sm",
+            "label": "Compacta",
+            "labelEn": "Compact",
+            "titleEs": "Ficha compacta",
+            "descriptionEs": "En 1×1 el dibujo se achica y el texto se queda.",
+            "preview": "app/examples/bento-feature-card/preview.tsx"
+          },
+          {
+            "id": "size-wide",
+            "label": "Ancha",
+            "labelEn": "Wide",
+            "titleEs": "Ficha ancha",
+            "descriptionEs": "Si la celda es ancha y baja, el dibujo va al lado.",
+            "preview": "app/examples/bento-feature-card/preview.tsx"
+          },
+          {
+            "id": "size-tall",
+            "label": "Alta",
+            "labelEn": "Tall",
+            "titleEs": "Ficha alta",
+            "descriptionEs": "Si la celda es alta, el dibujo usa ese alto.",
+            "preview": "app/examples/bento-feature-card/preview.tsx"
+          },
+          {
+            "id": "size-lg",
+            "label": "Grande",
+            "labelEn": "Large",
+            "titleEs": "Ficha grande",
+            "descriptionEs": "En 2×2 el dibujo ocupa la celda.",
+            "preview": "app/examples/bento-feature-card/preview.tsx"
+          },
+          {
+            "id": "presets",
+            "label": "Presets",
+            "labelEn": "Presets",
+            "titleEs": "Los cuatro presets",
+            "descriptionEs": "sm, wide, tall y lg juntos.",
+            "preview": "app/examples/bento-feature-card/preview.tsx"
+          },
+          {
+            "id": "media-first",
+            "label": "Dibujo primero",
+            "labelEn": "Media first",
+            "titleEs": "Dibujo primero",
+            "descriptionEs": "El dibujo va antes del texto en los cuatro presets.",
+            "preview": "app/examples/bento-feature-card/preview.tsx"
+          },
+          {
+            "id": "copy-first",
+            "label": "Texto primero",
+            "labelEn": "Copy first",
+            "titleEs": "Texto primero",
+            "descriptionEs": "El texto va antes del dibujo en los cuatro presets.",
+            "preview": "app/examples/bento-feature-card/preview.tsx"
           }
         ],
         "examples": [
@@ -10773,7 +10890,7 @@
             "description": "320 px, token largo, RTL, sin CTA, carga y error."
           }
         ],
-        "usage": "<BentoCell span={{ col: 2, row: 2 }}>\n  <BentoFeatureCard\n    icon={<Flame />}\n    title=\"North kiln\"\n    description=\"Morning shift already booked.\"\n    href=\"#kiln\"\n    cta=\"View schedule\"\n    illustration={<KilnSketch />}\n  />\n</BentoCell>",
+        "usage": "<BentoCell size=\"wide\">\n  <BentoFeatureCard\n    size=\"wide\"\n    icon={<Flame />}\n    title=\"North kiln\"\n    description=\"Morning shift already booked.\"\n    href=\"#kiln\"\n    cta=\"View schedule\"\n    illustration={<KilnSketch />}\n  />\n</BentoCell>",
         "api": [
           {
             "name": "illustration",
@@ -10793,7 +10910,12 @@
           {
             "name": "layout",
             "type": "\"media-first\" | \"copy-first\"",
-            "description": "media-first (default) paints the drawing first. copy-first leads with the title."
+            "description": "media-first (default) paints the drawing first in the DOM. copy-first leads with the title. Size does not reorder them."
+          },
+          {
+            "name": "size",
+            "type": "\"sm\" | \"wide\" | \"tall\" | \"lg\"",
+            "description": "Enables container-query layout against the cell. The same classes serve every preset; the cell's real width and height pick compact, beside, full-height, or full drawing. Omitted, the stack stays as before."
           },
           {
             "name": "status",

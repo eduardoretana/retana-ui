@@ -133,4 +133,124 @@ describe("BentoFeatureCard", () => {
     const copyFirst = flipped?.textContent ?? ""
     expect(copyFirst.indexOf("Horno")).toBeLessThan(copyFirst.indexOf("dibujo"))
   })
+
+  it("adapts each size preset from the cell container, not the viewport", () => {
+    const wide = "[@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]"
+    const tall = "[@container_cell_(max-width:23.99rem)_and_(min-height:18rem)]"
+    const large = "[@container_cell_(min-width:24rem)_and_(min-height:18rem)]"
+    const hide = "[@container_cell_(max-width:10rem)]"
+    const { rerender } = render(
+      <BentoGrid label="Muro">
+        <BentoCell size="sm">
+          <BentoFeatureCard size="sm" title="Corta" description="Texto" illustration={<span>dibujo</span>} />
+        </BentoCell>
+      </BentoGrid>,
+    )
+
+    const card = () => document.querySelector("[data-slot='bento-feature-card']")
+    const body = () => document.querySelector("[data-slot='bento-feature-body']")
+    const media = () => document.querySelector("[data-slot='bento-feature-media']")
+
+    for (const size of ["sm", "wide", "tall", "lg"] as const) {
+      rerender(
+        <BentoGrid label="Muro">
+          <BentoCell size={size}>
+            <BentoFeatureCard size={size} title="Corta" description="Texto" illustration={<span>dibujo</span>} />
+          </BentoCell>
+        </BentoGrid>,
+      )
+      expect(card()).toHaveAttribute("data-size", size)
+      expect(body()?.className).toContain("flex-col")
+      expect(body()?.className).toContain(`${wide}:flex-row`)
+      expect(body()?.className).not.toMatch(/transition/)
+      expect(media()?.className).toContain("max-h-16")
+      expect(media()?.className).toContain(`${hide}:hidden`)
+      expect(media()?.className).toContain(`${wide}:max-h-none`)
+      expect(media()?.className).toContain(`${tall}:flex-1`)
+      expect(media()?.className).toContain(`${large}:flex-1`)
+      expect(`${body()?.className ?? ""} ${media()?.className ?? ""}`).not.toMatch(/(^|\s)(sm|md|lg|xl|2xl):/)
+    }
+  })
+
+  it("keeps the previous stack when size is omitted", () => {
+    render(<BentoFeatureCard title="Horno" description="Texto" illustration={<span>dibujo</span>} />)
+    const card = document.querySelector("[data-slot='bento-feature-card']")
+    expect(card).not.toHaveAttribute("data-size")
+    expect(document.querySelector("[data-slot='bento-feature-body']")).toBeNull()
+    expect(document.body.innerHTML).not.toContain("@container_cell_")
+    const media = document.querySelector("[data-slot='bento-feature-media']")
+    expect(media?.className).toContain("min-h-40")
+    expect(media?.className).toContain("flex-1")
+    expect(media?.className).not.toContain("max-h-16")
+  })
+
+  it("keeps media-first and copy-first source order when a size is set", () => {
+    const { rerender } = render(
+      <BentoFeatureCard
+        size="wide"
+        title="Horno"
+        description="Texto"
+        illustration={<span>dibujo</span>}
+      />,
+    )
+    const card = () => document.querySelector("[data-slot='bento-feature-card']")
+    expect(card()).toHaveAttribute("data-layout", "media-first")
+    expect(card()).toHaveAttribute("data-size", "wide")
+    let text = card()?.textContent ?? ""
+    expect(text.indexOf("dibujo")).toBeLessThan(text.indexOf("Horno"))
+    expect(card()?.innerHTML).not.toMatch(/order-/)
+
+    rerender(
+      <BentoFeatureCard
+        size="tall"
+        layout="copy-first"
+        title="Horno"
+        description="Texto"
+        illustration={<span>dibujo</span>}
+      />,
+    )
+    expect(card()).toHaveAttribute("data-layout", "copy-first")
+    expect(card()).toHaveAttribute("data-size", "tall")
+    text = card()?.textContent ?? ""
+    expect(text.indexOf("Horno")).toBeLessThan(text.indexOf("dibujo"))
+    expect(card()?.innerHTML).not.toMatch(/order-/)
+  })
+
+  it("keeps the copy when the container query hides the decorative illustration", () => {
+    render(
+      <BentoFeatureCard
+        size="sm"
+        title="Horno norte"
+        description="Texto que se queda."
+        cta="Ver agenda"
+        href="#h"
+        illustration={<span>dibujo</span>}
+      />,
+    )
+    const media = document.querySelector("[data-slot='bento-feature-media']")
+    expect(media).toHaveAttribute("aria-hidden", "true")
+    expect(media?.className).toContain("[@container_cell_(max-width:10rem)]:hidden")
+    const link = screen.getByRole("link", { name: /Horno norte/ })
+    expect(link).toHaveTextContent("Texto que se queda.")
+    expect(link).toHaveTextContent("Ver agenda")
+    expect(screen.queryAllByRole("link")).toHaveLength(1)
+  })
+
+  it("does not animate the change between size presets", () => {
+    const { container } = render(
+      <BentoFeatureCard size="lg" title="Horno" description="Texto" href="#h" illustration={<span>dibujo</span>} />,
+    )
+    const html = container.innerHTML
+    expect(html).not.toContain("transition-all")
+    expect(html).toContain("motion-reduce:transition-none")
+    expect(html).toContain("hover:will-change-transform")
+    const card = document.querySelector("[data-slot='bento-feature-card']")
+    expect(card).toHaveAttribute("data-size", "lg")
+    const body = document.querySelector("[data-slot='bento-feature-body']")
+    expect(body).not.toBeNull()
+    expect(body?.className ?? "").not.toMatch(/transition/)
+    expect(document.querySelector("[data-slot='bento-feature-media']")?.className).toContain(
+      "[@container_cell_(min-width:24rem)_and_(min-height:18rem)]:flex-1",
+    )
+  })
 })

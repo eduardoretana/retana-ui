@@ -1,8 +1,8 @@
 ---
 artifact_id: bento-grid.direction-map
 owner: builder
-spec_version: 1.2.0
-head: 328b8116d8c529612a4bf0b8535770780598da59
+spec_version: 1.3.0
+head: bff117b3c34aa35fcacd7edd719d4627e9e0350a
 profile: STANDARD
 spec_id: bento-grid
 ui_system: "4.0.0"
@@ -49,3 +49,18 @@ Cada fila es una desviación de lo elegido o de lo visto, con su cita. Lo que no
 | Entrada de la rejilla | pr:59#motion | Celdas con `opacity` y `translateY` (`0.7em`). Tope local `BENTO_STAGGER_MAX_S = 0.4`. `MotionConfig reducedMotion=always` deja duración 0. No se anima el alto de la pista. `stagger-list` no está en esta rama: cuando #59 se mergee, esta entrada puede pasar a esa primitiva sin cambiar el tope. | AC-18 · rule:RUI-MOTION-CONTINUITY-001 · rule:RUI-ANIM-PERF-002 |
 | Indicador magnético | pr:59#motion | Se quitó la transición de `background-color`. El recorrido publicado del indicador (`inset`, `--mb-dur`, `--mb-ease`) no se toca: es contrato de la API. Ese ease sigue con un leve overshoot (`1.06`) y no se reescribe aquí. | AC-20 · rule:RUI-MOTION-CONTINUITY-001 |
 | Placeholders | pr:59#border | Carga sigue en `rounded-xl bg-muted`, sin borde. | AC-6 · rule:RUI-LAYOUT-BORDER-001 |
+
+## Presets de tamaño — idea, no código
+
+`reference_id: shadcn-studio:bento-cards`. La ficha y el post se usaron solo como idea de layout: una celda compacta, una ancha con el dibujo al lado, una alta con el dibujo a toda la altura y una grande con el dibujo completo. Licencia Pro, no comprada. No se copió código, markup, assets, copy ni datos.
+
+- https://shadcnstudio.com/blocks/bento-grid/bento-cards
+- https://x.com/ShadcnStudio/status/2116508123242598435
+
+| Región | reference_id | Qué se construyó | Cita |
+| --- | --- | --- | --- |
+| Span | shadcn-studio:bento-cards#idea | `size` mapea sm 1×1, wide 2×1, tall 1×2, lg 2×2. El colapso a una columna de AC-3 se queda. No hay `grid-auto-flow: dense` (AC-4). | AC-21 · AC-22 |
+| Dibujo | shadcn-studio:bento-cards#idea | La celda es `@container/cell`. Desde 30rem del muro también es `container-type: size`. El cuerpo y el dibujo usan queries de esa celda, no `sm:`/`md:` del viewport. wide pone el dibujo al lado; tall y lg lo dejan crecer; bajo 10rem el dibujo decorativo se esconde y el texto sigue. Bajo 30rem la celda crece con el texto. | AC-24 · AC-27 |
+| Orden | shadcn-studio:bento-cards#idea | `layout` sigue mandando el DOM. No hay `order-*`, así el orden de lectura y el visual coinciden. En 1×1 el dibujo se achica, no se reordena, para no pelear con AC-13. | AC-13 · AC-26 |
+| Sin size | shadcn-studio:bento-cards#idea | Sin el prop, no hay `data-size` ni queries nuevas. `magnetic-bento` no recibe el preset. | AC-23 · AC-25 · AC-29 |
+| Movimiento | shadcn-studio:bento-cards#idea | El cambio de preset no anima layout. El hover sigue en transform y opacity. | AC-9 · AC-28 |

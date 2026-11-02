@@ -1,5 +1,7 @@
 export type BentoIconName = "flame" | "drops" | "box" | "frames"
 
+export type BentoSizeName = "sm" | "wide" | "tall" | "lg"
+
 export type BentoCellCopy = {
   id: string
   title: string
@@ -7,6 +9,8 @@ export type BentoCellCopy = {
   cta?: string
   href?: string
   span: { col: number; row: number }
+  /** When set, the cell and the card use this preset instead of `span`. */
+  size?: BentoSizeName
   icon: BentoIconName
   media: boolean
 }
@@ -181,4 +185,51 @@ export const noCta = {
 export const noMedia = {
   es: pack([{ ...wallEs[0]!, media: false }], "es"),
   en: pack([{ ...wallEn[0]!, media: false }], "en"),
+}
+
+const sizeSpan = {
+  sm: { col: 1, row: 1 },
+  wide: { col: 2, row: 1 },
+  tall: { col: 1, row: 2 },
+  lg: { col: 2, row: 2 },
+} as const
+
+function sized(source: BentoCellCopy, size: BentoSizeName): BentoCellCopy {
+  return { ...source, size, span: sizeSpan[size] }
+}
+
+/** One compact cell. */
+export const sizeSm = {
+  es: pack([sized(wallEs[1]!, "sm")], "es"),
+  en: pack([sized(wallEn[1]!, "sm")], "en"),
+}
+
+/** One wide cell. The drawing sits beside the copy when the cell is actually wide. */
+export const sizeWide = {
+  es: pack([sized(wallEs[2]!, "wide")], "es"),
+  en: pack([sized(wallEn[2]!, "wide")], "en"),
+}
+
+/** One tall cell. The drawing uses the height when the cell is actually tall. */
+export const sizeTall = {
+  es: pack([sized(wallEs[3]!, "tall")], "es"),
+  en: pack([sized(wallEn[3]!, "tall")], "en"),
+}
+
+/** One large cell. */
+export const sizeLg = {
+  es: pack([sized(wallEs[0]!, "lg")], "es"),
+  en: pack([sized(wallEn[0]!, "lg")], "en"),
+}
+
+/** sm, wide, tall, and lg in one wall. Source order is the reading order. */
+export const presets = {
+  es: pack(
+    [sized(wallEs[0]!, "lg"), sized(wallEs[2]!, "wide"), sized(wallEs[3]!, "tall"), sized(wallEs[1]!, "sm")],
+    "es",
+  ),
+  en: pack(
+    [sized(wallEn[0]!, "lg"), sized(wallEn[2]!, "wide"), sized(wallEn[3]!, "tall"), sized(wallEn[1]!, "sm")],
+    "en",
+  ),
 }

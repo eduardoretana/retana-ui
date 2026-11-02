@@ -1,5 +1,5 @@
 schema: uis.seed/v1
-version: 1.0.0
+version: 1.1.0
 spec_id: bento-grid
 ui_system: {version: 4.0.0}
 profile: STANDARD
@@ -29,6 +29,16 @@ pieces:
         scene: long
       - id: error
         scene: error
+      - id: presets
+        scene: presets
+      - id: size-sm
+        scene: size-sm
+      - id: size-wide
+        scene: size-wide
+      - id: size-tall
+        scene: size-tall
+      - id: size-lg
+        scene: size-lg
   - name: bento-feature-card
     route: /examples/bento-feature-card
     states:
@@ -38,6 +48,12 @@ pieces:
         scene: long
       - id: error
         scene: error
+      - id: presets
+        scene: presets
+      - id: media-first
+        scene: media-first
+      - id: copy-first
+        scene: copy-first
   - name: magnetic-bento
     route: /examples/magnetic-bento
     states:

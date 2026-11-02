@@ -33,6 +33,13 @@ export default function StressPage() {
         <BentoFeatureCard title="Sin CTA" description="No hay segundo control." icon={bentoIcons.box} illustration={<BentoSketch id="empaque" />} />
         <BentoFeatureCard title="Sin dibujo" description="El texto ocupa la tarjeta." href="#solo" cta="Ver agenda" icon={bentoIcons.frames} />
       </section>
+      <section className="flex w-80 max-w-full flex-col gap-3">
+        <h2 className="text-sm font-medium">Presets en 320 px, texto largo y sin dibujo</h2>
+        <BentoFeatureCard size="sm" title={token} description="La ficha compacta deja el texto." href="#sm" cta="Ver" icon={bentoIcons.flame} illustration={<BentoSketch id="esmalte" />} />
+        <BentoFeatureCard size="wide" title="Ancha sin dibujo" description="No hay ilustración que esconder." href="#wide" cta="Ver" icon={bentoIcons.box} />
+        <BentoFeatureCard size="tall" title="Alta" description="El alto lo pone la celda, no esta página." icon={bentoIcons.frames} illustration={<BentoSketch id="muro" />} />
+        <BentoFeatureCard size="lg" layout="copy-first" title="Grande" description={token} href="#lg" cta="Ver agenda" icon={bentoIcons.drops} illustration={<BentoSketch id="horno" />} />
+      </section>
       <section className="flex flex-col gap-3">
         <h2 className="text-sm font-medium">Carga, vacío y error</h2>
         <BentoFeatureCard status="loading" loadingLabel="Cargando horno" />

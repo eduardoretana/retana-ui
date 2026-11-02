@@ -1,12 +1,15 @@
 ---
 artifact_id: bento-grid.spec
 owner: builder
-spec_version: 1.2.0
-head: 328b8116d8c529612a4bf0b8535770780598da59
+spec_version: 1.3.0
+head: bff117b3c34aa35fcacd7edd719d4627e9e0350a
 spec_id: bento-grid
-version: 1.2.0
+version: 1.3.0
 ui_system: "4.0.0"
 spec_changelog:
+  - version: 1.3.0
+    origin: brief
+    note: "Presets sm, wide, tall y lg. El span sale del preset y el dibujo sigue el tamaño real de la celda con container queries. Sin size, el comportamiento anterior no cambia. No se usa grid-auto-flow dense."
   - version: 1.2.0
     origin: gate
     note: "Seed versionado con estados no vacíos, query de locale/theme/motion, y /api/health sin redirección. DESIGN.md y los tokens siguen como dependencia del PR #59."
@@ -18,13 +21,13 @@ spec_changelog:
     note: "Alta de bento-grid y bento-feature-card. magnetic-bento queda como preset sobre la base."
 profile: STANDARD
 brief:
-  outcome: "Una rejilla bento que reparte celdas por span y una tarjeta de función que entra en esas celdas."
-  benefit: "El host arma muros de distinto tamaño sin copiar el layout ni traer un tema."
-  sources: "Inspiración visual, sin código. Video adjunto del catálogo y la ficha pública."
+  outcome: "Una rejilla bento que reparte celdas por span o por preset, y una tarjeta cuyo dibujo sigue el tamaño real de la celda."
+  benefit: "El host pide sm, wide, tall o lg y la tarjeta no se queda con el mismo apilado en todas las celdas."
+  sources: "Inspiración visual, sin código. Ficha pública de Bento Cards y el post de shadcn/studio. Licencia Pro, no copiada."
   scope: "registry/ui/bento-grid.tsx, registry/ui/bento-feature-card.tsx, composición de magnetic-bento, ejemplos PLP y estrés."
   checks: "Vitest de la rejilla, de la tarjeta, de contrato de magnetic-bento y la suite ya existente sin editarla."
   stop_when: "Tests, typecheck, lint, registry:build y build en verde; capturas a 390 px y en desktop; PR draft contra CPL."
-  deliverable: "Dos ítems de registry instalables, magnetic-bento sin cambio de API pública, y los artefactos de este archivo."
+  deliverable: "Presets de tamaño sobre los dos ítems, magnetic-bento sin cambio de API pública, y los artefactos de este archivo."
 scope_paths:
   - registry/ui/bento-grid.tsx
   - registry/ui/bento-feature-card.tsx
@@ -164,6 +167,42 @@ acceptance:
     statement: "La API pública de magnetic-bento no cambia y sus quiebres siguen en 36rem y 56rem."
     measure: "Mismos props exportados. La pista conserva @min-[36rem]/mb y @min-[56rem]/mb. __tests__/magnetic-bento.test.tsx no se edita."
     test: "__tests__/bento-magnetic-contract.test.tsx › composes the bento base and keeps the magnetic span contract; __tests__/magnetic-bento.test.tsx"
+  - id: AC-21
+    statement: "Cada preset de tamaño fija el span y a 390 px sigue colapsando a una columna."
+    measure: "sm es data-col 1 y data-row 1, sin col-span-2. wide es data-col 2 y data-row 1, con col-span-1 y @min-[30rem]/bento:col-span-2, sin @min-[30rem]/bento:row-span-2. tall es data-col 1 y data-row 2, sin col-span-2, con @min-[30rem]/bento:row-span-2. lg es data-col 2 y data-row 2, con los dos quiebres. La celda marca data-size, @container/cell y @min-[30rem]/bento:[container-type:size]."
+    test: "__tests__/bento-grid.test.tsx › maps sm, wide, tall, and lg onto the collapsed span classes"
+  - id: AC-22
+    statement: "Con presets, el orden de lectura sigue el código. No hay empaquetado denso."
+    measure: "El texto de las celdas sale en el orden de los hijos. No hay order-* , ni grid-flow-dense, ni auto-flow. La pista base sigue en grid-cols-1."
+    test: "__tests__/bento-grid.test.tsx › keeps sized cells in source order, one column at the base, without dense packing"
+  - id: AC-23
+    statement: "Sin size, el span pedido se queda igual."
+    measure: "No hay data-size ni @container/cell ni container-type:size. data-col y data-row siguen el span. El atributo size no llega al DOM."
+    test: "__tests__/bento-grid.test.tsx › leaves the span prop untouched when size is omitted"
+  - id: AC-24
+    statement: "La tarjeta adapta el dibujo con container queries de la celda, no con quiebres del viewport."
+    measure: "Con size, data-size está en la tarjeta y el cuerpo es flex-col con [@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:flex-row. El dibujo trae max-h-16, [@container_cell_(max-width:10rem)]:hidden, max-h-none en esa query ancha, y flex-1 en las queries de 18rem de alto (angosta y ancha). No hay sm:, md:, lg:, xl: ni 2xl:."
+    test: "__tests__/bento-feature-card.test.tsx › adapts each size preset from the cell container, not the viewport"
+  - id: AC-25
+    statement: "Sin size, la pila de la tarjeta no cambia."
+    measure: "No hay data-size, ni data-slot bento-feature-body, ni @container_cell_. El dibujo sigue en min-h-40 y flex-1, sin max-h-16."
+    test: "__tests__/bento-feature-card.test.tsx › keeps the previous stack when size is omitted"
+  - id: AC-26
+    statement: "media-first y copy-first siguen mandando el orden del DOM cuando hay size."
+    measure: "data-layout se conserva. En media-first el dibujo va antes del título. En copy-first el título va antes. No hay utilidades order-*."
+    test: "__tests__/bento-feature-card.test.tsx › keeps media-first and copy-first source order when a size is set"
+  - id: AC-27
+    statement: "Si la celda es muy angosta, el dibujo decorativo se esconde y el texto sigue en el enlace."
+    measure: "El slot de media es aria-hidden y trae [@container_cell_(max-width:10rem)]:hidden. El enlace conserva título, descripción y CTA. Sigue habiendo un solo enlace."
+    test: "__tests__/bento-feature-card.test.tsx › keeps the copy when the container query hides the decorative illustration"
+  - id: AC-28
+    statement: "El cambio entre presets no se anima."
+    measure: "El cuerpo no tiene transition. El HTML no tiene transition-all. El hover sigue en transform y opacity, con motion-reduce:transition-none y hover:will-change-transform."
+    test: "__tests__/bento-feature-card.test.tsx › does not animate the change between size presets"
+  - id: AC-29
+    statement: "magnetic-bento no recibe el preset de tamaño ni empaquetado denso."
+    measure: "El article no tiene data-size ni @container/cell ni container-type:size. El HTML no tiene @container_cell_ ni grid-flow-dense. Siguen @min-[56rem]/mb:col-span-2 y row-span-2. __tests__/magnetic-bento.test.tsx no se edita."
+    test: "__tests__/bento-magnetic-contract.test.tsx › does not attach size presets or dense packing to the magnetic track"
 ---
 
 # Bento grid y tarjeta de función
@@ -223,7 +262,7 @@ Reglas del PR #59, aplicadas aquí sin mergear esa rama. `stagger-list` no se co
 
 ## Seed y captura
 
-`ui-tests/bento-grid.seed.yaml` versión 1.0.0. Los estados de captura son no vacíos: `filled`, `long` y `error` en la rejilla y en la tarjeta, y `filled` en magnetic-bento. `locale`, `theme` y `motion` se aplican por query (`es-MX` | `en`, `light` | `dark`, `full` | `reduce`). El viewport lo pone el navegador: 390 y 1280.
+`ui-tests/bento-grid.seed.yaml` versión 1.1.0. Los estados de captura son no vacíos: `filled`, `long` y `error` en la rejilla y en la tarjeta, `presets` y cada `size-*` en la rejilla, `media-first` y `copy-first` en la tarjeta, y `filled` en magnetic-bento. `locale`, `theme` y `motion` se aplican por query (`es-MX` | `en`, `light` | `dark`, `full` | `reduce`). El viewport lo pone el navegador: 390 y 1280.
 
 ```bash
 export HOST="${HOST:-127.0.0.1}"
@@ -245,3 +284,20 @@ pnpm exec next start --hostname "$HOST" --port "$PORT"
 | error | `role="alert"` y `errorLabel` | No |
 | partial | Sin CTA o sin ilustración, el resto sigue | El enlace, si hay `href` |
 | overflow | Título o descripción largos, con corte de palabra | Igual que ready |
+
+## Presets de tamaño
+
+`size` vale `sm` (1×1), `wide` (2×1), `tall` (1×2) o `lg` (2×2). En `BentoCell` fija el span con las mismas clases de colapso que AC-3: una columna hasta 30rem. En `BentoFeatureCard` enciende el acomodo interno. Sin `size`, la celda y la tarjeta se quedan como en 1.2.0.
+
+El acomodo no lee el nombre del preset. La celda con `size` es un contenedor `@container/cell`. Desde 30rem del muro pasa a `container-type: size` para que el alto también cuente. Bajo 30rem la celda crece con el texto, porque a 390 px el alto de una fila no alcanza para recortar la llamada. La tarjeta responde a ese contenedor:
+
+| Tamaño real de la celda | Acomodo |
+| --- | --- |
+| Ancho menor de 24rem y alto menor de 18rem | Compacto. El dibujo queda en `max-h-16`. Bajo 10rem de ancho se esconde. El texto sigue en el documento. |
+| Ancho de al menos 24rem y alto menor de 18rem | El dibujo va al lado del texto (`flex-row`), en el orden del DOM. |
+| Ancho menor de 24rem y alto de al menos 18rem | El dibujo ocupa el alto (`flex-1`). |
+| Ancho de al menos 24rem y alto de al menos 18rem | El dibujo ocupa el alto que deja el texto (`flex-1`). El texto no se recorta. |
+
+`layout="media-first"` y `layout="copy-first"` siguen decidiendo el orden del DOM. No se usa `order-*` ni `grid-auto-flow: dense`. El cambio de preset no anima. `magnetic-bento` no recibe `size`.
+
+La idea sale de Bento Cards en shadcn/studio (Pro, sin licencia de uso del código). No se copió código, markup, assets, copy ni datos. Ver `ui/specs/bento-grid.direction-map.md` y `NOTICE`.

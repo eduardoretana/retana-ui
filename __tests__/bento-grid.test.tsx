@@ -138,4 +138,99 @@ describe("BentoGrid", () => {
     expect(cells.length).toBeGreaterThan(0)
     for (const cell of cells) expect(cell.getAttribute("data-motion")).toBe("reduced")
   })
+
+  it("maps sm, wide, tall, and lg onto the collapsed span classes", () => {
+    const { rerender } = render(
+      <BentoGrid label="Muro">
+        <BentoCell size="sm">Corta</BentoCell>
+      </BentoGrid>,
+    )
+    const cell = () => document.querySelector("[data-slot='bento-cell']")
+
+    expect(cell()).toHaveAttribute("data-size", "sm")
+    expect(cell()).toHaveAttribute("data-col", "1")
+    expect(cell()).toHaveAttribute("data-row", "1")
+    expect(cell()?.className).toContain("col-span-1")
+    expect(cell()?.className).toContain("row-span-1")
+    expect(cell()?.className).not.toContain("col-span-2")
+    expect(cell()?.className).not.toContain("row-span-2")
+    expect(`${cell()?.className ?? ""} ${cell()?.innerHTML ?? ""}`).toContain("@container/cell")
+    expect(`${cell()?.className ?? ""} ${cell()?.innerHTML ?? ""}`).toContain("@min-[30rem]/bento:[container-type:size]")
+
+    rerender(
+      <BentoGrid label="Muro">
+        <BentoCell size="wide">Ancha</BentoCell>
+      </BentoGrid>,
+    )
+    expect(cell()).toHaveAttribute("data-size", "wide")
+    expect(cell()).toHaveAttribute("data-col", "2")
+    expect(cell()).toHaveAttribute("data-row", "1")
+    expect(cell()?.className).toContain("col-span-1")
+    expect(cell()?.className).toContain("@min-[30rem]/bento:col-span-2")
+    expect(cell()?.className).toContain("@min-[56rem]/bento:col-span-2")
+    expect(cell()?.className).not.toContain("@min-[30rem]/bento:row-span-2")
+
+    rerender(
+      <BentoGrid label="Muro">
+        <BentoCell size="tall">Alta</BentoCell>
+      </BentoGrid>,
+    )
+    expect(cell()).toHaveAttribute("data-size", "tall")
+    expect(cell()).toHaveAttribute("data-col", "1")
+    expect(cell()).toHaveAttribute("data-row", "2")
+    expect(cell()?.className).not.toContain("col-span-2")
+    expect(cell()?.className).toContain("row-span-1")
+    expect(cell()?.className).toContain("@min-[30rem]/bento:row-span-2")
+    expect(cell()?.className).toContain("@min-[30rem]/bento:min-h-80")
+
+    rerender(
+      <BentoGrid label="Muro">
+        <BentoCell size="lg">Grande</BentoCell>
+      </BentoGrid>,
+    )
+    expect(cell()).toHaveAttribute("data-size", "lg")
+    expect(cell()).toHaveAttribute("data-col", "2")
+    expect(cell()).toHaveAttribute("data-row", "2")
+    expect(cell()?.className).toContain("@min-[30rem]/bento:col-span-2")
+    expect(cell()?.className).toContain("@min-[30rem]/bento:row-span-2")
+  })
+
+  it("keeps sized cells in source order, one column at the base, without dense packing", () => {
+    render(
+      <BentoGrid label="Muro" columns={4}>
+        <BentoCell size="lg">Grande</BentoCell>
+        <BentoCell size="wide">Ancha</BentoCell>
+        <BentoCell size="tall">Alta</BentoCell>
+        <BentoCell size="sm">Corta</BentoCell>
+      </BentoGrid>,
+    )
+
+    const track = document.querySelector("[data-slot='bento-grid-track']")
+    expect(track?.className).toContain("grid-cols-1")
+    expect(track?.className).not.toContain("dense")
+    expect(track?.className).not.toMatch(/auto-flow/)
+    const cells = [...document.querySelectorAll("[data-slot='bento-cell']")]
+    expect(cells.map((item) => item.textContent)).toEqual(["Grande", "Ancha", "Alta", "Corta"])
+    expect(cells.map((item) => item.getAttribute("data-size"))).toEqual(["lg", "wide", "tall", "sm"])
+    for (const item of cells) {
+      expect(item.className).not.toMatch(/(^|\s)order-/)
+      expect(item.className).toContain("col-span-1")
+    }
+  })
+
+  it("leaves the span prop untouched when size is omitted", () => {
+    render(
+      <BentoGrid label="Muro">
+        <BentoCell span={{ col: 2, row: 2 }}>Igual</BentoCell>
+      </BentoGrid>,
+    )
+    const cell = document.querySelector("[data-slot='bento-cell']")
+    expect(cell).not.toHaveAttribute("data-size")
+    expect(cell?.className ?? "").not.toContain("@container/cell")
+    expect(cell?.innerHTML ?? "").not.toContain("@container-size/cell")
+    expect(cell?.innerHTML ?? "").not.toContain("[container-type:size]")
+    expect(cell).toHaveAttribute("data-col", "2")
+    expect(cell).toHaveAttribute("data-row", "2")
+    expect(cell?.getAttribute("size")).toBeNull()
+  })
 })

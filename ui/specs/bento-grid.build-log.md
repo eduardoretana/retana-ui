@@ -1,5 +1,35 @@
 # Build log — bento-grid
 
+## presets 1.3.0
+
+- `size` en la celda: sm 1×1, wide 2×1, tall 1×2, lg 2×2. Sin `size`, el span anterior no cambia.
+- La celda es `@container/cell`. Desde 30rem del muro también es `container-type: size`, para poder leer el alto. Bajo 30rem la celda crece con el texto: a 390 px un alto fijo de 10rem recortaba la llamada.
+- La tarjeta no usa quiebres del viewport. wide pone el dibujo al lado; tall y lg lo dejan crecer; en compacto el dibujo queda en `max-h-16`. Bajo 10rem se esconde y el texto sigue.
+- No hay `grid-auto-flow: dense` ni `order-*`. `media-first` y `copy-first` siguen mandando el DOM. El cambio de preset no anima.
+- `magnetic-bento` no recibe `size`. `__tests__/magnetic-bento.test.tsx` no se editó.
+
+## needs
+
+- El repo ya usaba container queries (`@container/bento`, `@container/mb`). Este ciclo nombra la celda `cell`. El alto usa una query arbitraria porque las variantes `@min-*` de Tailwind solo miran el ancho.
+
+## spec_defect
+
+Ninguno. AC-1 a AC-20 no se reescribieron.
+
+## commands
+
+En este ciclo, antes del PR:
+
+- `pnpm exec tsc --noEmit`: sin errores.
+- `pnpm exec eslint` sobre la rejilla, la tarjeta, las tres suites y los ejemplos: sin avisos.
+- `pnpm registry:build`: válido.
+- `pnpm test`: 235 archivos, 690 pruebas en verde.
+- `pnpm build`: Next compiló.
+
+Las capturas de Playwright quedan fuera del repo, en `/opt/cursor/artifacts/bento-size-presets/`.
+
+
+
 ## layout 1.1.0
 
 - Copia acotada a `max-w-[17.5rem]`. Ilustración sin ese tope.

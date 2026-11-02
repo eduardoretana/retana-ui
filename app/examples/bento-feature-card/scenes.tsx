@@ -4,7 +4,20 @@ import { sceneText, type Scene, type SceneFrame, type SceneRenderProps } from "@
 import { BentoCell, BentoGrid } from "@/registry/ui/bento-grid"
 import { BentoFeatureCard, type BentoFeatureLayout } from "@/registry/ui/bento-feature-card"
 
-import { filled, long, mixed, noCta, noMedia, single, type BentoLocaleCopy } from "./fixtures"
+import {
+  filled,
+  long,
+  mixed,
+  noCta,
+  noMedia,
+  presets,
+  single,
+  sizeLg,
+  sizeSm,
+  sizeTall,
+  sizeWide,
+  type BentoLocaleCopy,
+} from "./fixtures"
 import { bentoIcons, BentoSketch } from "../bento-grid/media"
 
 const frame: SceneFrame = { size: "lg", surface: "canvas", padding: "md" }
@@ -36,9 +49,10 @@ function CardWall({
       errorLabel={copy.errorLabel}
     >
       {copy.cells.map((cell) => (
-        <BentoCell key={cell.id} span={cell.span}>
+        <BentoCell key={cell.id} span={cell.span} size={cell.size}>
           <BentoFeatureCard
             layout={layout}
+            size={cell.size}
             title={cell.title}
             description={cell.description}
             cta={cell.cta}
@@ -113,6 +127,34 @@ function SingleScene({ locale }: SceneRenderProps) {
   return <CardWall pack={single} locale={locale} />
 }
 
+function SizeSmScene({ locale }: SceneRenderProps) {
+  return <CardWall pack={sizeSm} locale={locale} />
+}
+
+function SizeWideScene({ locale }: SceneRenderProps) {
+  return <CardWall pack={sizeWide} locale={locale} />
+}
+
+function SizeTallScene({ locale }: SceneRenderProps) {
+  return <CardWall pack={sizeTall} locale={locale} />
+}
+
+function SizeLgScene({ locale }: SceneRenderProps) {
+  return <CardWall pack={sizeLg} locale={locale} />
+}
+
+function PresetsScene({ locale }: SceneRenderProps) {
+  return <CardWall pack={presets} locale={locale} />
+}
+
+function MediaFirstScene({ locale }: SceneRenderProps) {
+  return <CardWall pack={presets} locale={locale} layout="media-first" />
+}
+
+function CopyFirstScene({ locale }: SceneRenderProps) {
+  return <CardWall pack={presets} locale={locale} layout="copy-first" />
+}
+
 export const scenes: Scene[] = [
   { id: "filled", label: "Lleno", labelEn: "Filled", render: FilledScene, frame },
   { id: "empty", label: "Vacío", labelEn: "Empty", render: EmptyScene, frame },
@@ -123,4 +165,11 @@ export const scenes: Scene[] = [
   { id: "no-media", label: "Sin ilustración", labelEn: "No illustration", render: NoMediaScene, frame },
   { id: "mixed", label: "Celdas mixtas", labelEn: "Mixed cells", render: MixedScene, frame: wide },
   { id: "single", label: "Una celda", labelEn: "Single cell", render: SingleScene, frame },
+  { id: "size-sm", label: "Compacta", labelEn: "Compact", render: SizeSmScene, frame },
+  { id: "size-wide", label: "Ancha", labelEn: "Wide", render: SizeWideScene, frame: wide },
+  { id: "size-tall", label: "Alta", labelEn: "Tall", render: SizeTallScene, frame },
+  { id: "size-lg", label: "Grande", labelEn: "Large", render: SizeLgScene, frame: wide },
+  { id: "presets", label: "Presets", labelEn: "Presets", render: PresetsScene, frame: wide },
+  { id: "media-first", label: "Dibujo primero", labelEn: "Media first", render: MediaFirstScene, frame: wide },
+  { id: "copy-first", label: "Texto primero", labelEn: "Copy first", render: CopyFirstScene, frame: wide },
 ]

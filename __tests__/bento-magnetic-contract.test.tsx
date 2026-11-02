@@ -66,4 +66,25 @@ describe("MagneticBento on the bento base", () => {
     expect(document.querySelector("[data-slot='magnetic-bento-grid']")?.className).toContain("@min-[36rem]/mb:grid-cols-2")
     expect(document.querySelector("[data-slot='magnetic-bento-grid']")?.className).toContain("@min-[56rem]/mb:grid-cols-4")
   })
+
+  it("does not attach size presets or dense packing to the magnetic track", () => {
+    const { container } = render(
+      <MagneticBento label="Samples">
+        <MagneticBentoItem value="a" span={{ col: 2, row: 2 }} accent="chart-1">
+          <MagneticBentoTitle>Alpha</MagneticBentoTitle>
+          <MagneticBentoDescription>Sigue el resalte.</MagneticBentoDescription>
+          <MagneticBentoCta href="#a">Abrir</MagneticBentoCta>
+        </MagneticBentoItem>
+      </MagneticBento>,
+    )
+    const item = screen.getByText("Alpha").closest("article")
+    expect(item).not.toHaveAttribute("data-size")
+    expect(item?.className ?? "").not.toContain("@container/cell")
+    expect(item?.className ?? "").not.toContain("[container-type:size]")
+    expect(container.innerHTML).not.toContain("@container_cell_")
+    expect(container.innerHTML).not.toContain("grid-flow-dense")
+    expect(container.innerHTML).not.toContain("dense")
+    expect(item?.className).toContain("@min-[56rem]/mb:col-span-2")
+    expect(item?.className).toContain("row-span-2")
+  })
 })

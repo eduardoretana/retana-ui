@@ -14,14 +14,14 @@
   "files": [
     {
       "path": "registry/ui/bento-feature-card.tsx",
-      "content": "\"use client\"\n\nimport type { ReactNode } from \"react\"\nimport { ArrowRight } from \"lucide-react\"\n\nimport { Card } from \"@/components/ui/card\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport type BentoFeatureLayout = \"media-first\" | \"copy-first\"\n\nexport type BentoFeatureStatus = \"ready\" | \"loading\" | \"empty\" | \"error\"\n\nexport type BentoFeatureClassNames = {\n  root?: string\n  media?: string\n  icon?: string\n  title?: string\n  description?: string\n  cta?: string\n}\n\nexport type BentoFeatureCardProps = {\n  title?: string\n  description?: string\n  /** Decorative icon above the title. */\n  icon?: ReactNode\n  /** Illustration slot. Omitted when empty. */\n  illustration?: ReactNode\n  /** Visible label inside the single link. Not a second control. */\n  cta?: string\n  /** Makes the whole card one link. */\n  href?: string\n  /** `media-first` is the default: drawing, then copy. */\n  layout?: BentoFeatureLayout\n  status?: BentoFeatureStatus\n  emptyLabel?: string\n  loadingLabel?: string\n  errorLabel?: string\n  className?: string\n  classNames?: BentoFeatureClassNames\n}\n\n/**\n * One feature in a bento cell.\n * The hover moves and fades. It does not animate layout.\n * A clickable card is a single link: the CTA is text inside that link.\n */\nexport function BentoFeatureCard({\n  title,\n  description,\n  icon,\n  illustration,\n  cta,\n  href,\n  layout = \"media-first\",\n  status = \"ready\",\n  emptyLabel = \"Nothing here\",\n  loadingLabel = \"Loading\",\n  errorLabel = \"Something went wrong\",\n  className,\n  classNames,\n}: BentoFeatureCardProps) {\n  const interactive = status === \"ready\" && Boolean(href)\n\n  const media = illustration ? (\n    <div\n      data-slot=\"bento-feature-media\"\n      aria-hidden=\"true\"\n      className={cn(\"min-h-40 flex-1 overflow-hidden rounded-lg bg-muted\", classNames?.media)}\n    >\n      <div className=\"h-full opacity-90 transition-[transform,opacity] duration-200 ease-out group-hover/feature:scale-[1.02] group-hover/feature:opacity-100 group-hover/feature:will-change-transform motion-reduce:transition-none motion-reduce:group-hover/feature:scale-100 motion-reduce:group-hover/feature:will-change-auto\">\n        {illustration}\n      </div>\n    </div>\n  ) : null\n\n  const copy = (\n    <div className=\"flex min-w-0 max-w-[17.5rem] flex-col gap-2\">\n      {icon ? (\n        <div\n          data-slot=\"bento-feature-icon\"\n          aria-hidden=\"true\"\n          className={cn(\n            \"flex size-8 items-center justify-center rounded-lg bg-muted text-muted-foreground\",\n            classNames?.icon,\n          )}\n        >\n          {icon}\n        </div>\n      ) : null}\n      {title ? (\n        <h3\n          data-slot=\"bento-feature-title\"\n          className={cn(\"text-base font-semibold tracking-tight wrap-anywhere\", classNames?.title)}\n        >\n          {title}\n        </h3>\n      ) : null}\n      {description ? (\n        <p\n          data-slot=\"bento-feature-description\"\n          className={cn(\"text-sm text-pretty text-muted-foreground wrap-anywhere\", classNames?.description)}\n        >\n          {description}\n        </p>\n      ) : null}\n      {cta ? (\n        <span\n          data-slot=\"bento-feature-cta\"\n          className={cn(\"inline-flex w-fit items-center gap-1 text-sm font-medium text-primary\", classNames?.cta)}\n        >\n          {cta}\n          <ArrowRight className=\"size-4 rtl:-scale-x-100\" aria-hidden=\"true\" />\n        </span>\n      ) : null}\n    </div>\n  )\n\n  let body: ReactNode\n  if (status === \"loading\") {\n    body = (\n      <div className=\"flex flex-col gap-3\">\n        <Skeleton className=\"min-h-40 w-full motion-reduce:animate-none\" />\n        <Skeleton className=\"h-4 w-2/3 motion-reduce:animate-none\" />\n        <p className=\"max-w-[17.5rem] text-sm text-muted-foreground\">{loadingLabel}</p>\n      </div>\n    )\n  } else if (status === \"error\") {\n    body = (\n      <p role=\"alert\" className=\"max-w-[17.5rem] text-sm font-medium text-destructive\">\n        {errorLabel}\n      </p>\n    )\n  } else if (status === \"empty\") {\n    body = <p className=\"max-w-[17.5rem] text-sm text-muted-foreground\">{emptyLabel}</p>\n  } else {\n    body = (\n      <>\n        {layout === \"media-first\" ? media : null}\n        {copy}\n        {layout === \"copy-first\" ? media : null}\n      </>\n    )\n  }\n\n  const stack = <div className=\"flex h-full min-h-0 flex-col gap-4 p-4\">{body}</div>\n\n  return (\n    <article\n      data-slot=\"bento-feature-card\"\n      data-state={status}\n      data-layout={layout}\n      aria-busy={status === \"loading\" ? true : undefined}\n      className={cn(\n        \"group/feature h-full min-w-0\",\n        interactive &&\n          \"transition-transform duration-200 ease-out hover:-translate-y-0.5 hover:will-change-transform motion-reduce:transition-none motion-reduce:hover:translate-none motion-reduce:hover:will-change-auto\",\n        className,\n        classNames?.root,\n      )}\n    >\n      <Card className=\"h-full gap-0 overflow-hidden py-0 shadow-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background\">\n        {interactive ? (\n          <a href={href} className=\"flex h-full min-h-0 flex-col outline-none\">\n            {stack}\n          </a>\n        ) : (\n          stack\n        )}\n      </Card>\n    </article>\n  )\n}\n",
+      "content": "\"use client\"\n\n/**\n * Bento feature card.\n * The size presets take the layout idea, not the code, from shadcn/studio Bento Cards (Pro).\n * https://shadcnstudio.com/blocks/bento-grid/bento-cards\n * https://x.com/ShadcnStudio/status/2116508123242598435\n * No code, markup, assets, or copy from that source was copied. See NOTICE.\n * Internal layout follows the cell container (`@container-size/cell`), not the viewport.\n */\n\nimport type { ReactNode } from \"react\"\nimport { ArrowRight } from \"lucide-react\"\n\nimport { Card } from \"@/components/ui/card\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\n\nexport type BentoFeatureLayout = \"media-first\" | \"copy-first\"\n\n/** Matches `BentoSize` on the grid. Kept local so this item does not import the grid. */\nexport type BentoFeatureSize = \"sm\" | \"wide\" | \"tall\" | \"lg\"\n\n/**\n * Wide and short: illustration beside the copy.\n * Tall and narrow, or wide and tall: the illustration grows.\n * Under 10rem the decorative illustration hides. The copy stays.\n * These are container queries on `cell`, not viewport breakpoints.\n */\nconst ADAPTIVE_BODY =\n  \"[@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:flex-row [@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:items-stretch\"\n\nconst ADAPTIVE_MEDIA = [\n  \"max-h-16 min-h-0 **:min-h-0\",\n  \"[@container_cell_(max-width:10rem)]:hidden\",\n  \"[@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:h-full\",\n  \"[@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:max-h-none\",\n  \"[@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:min-h-0\",\n  \"[@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:w-1/2\",\n  \"[@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:flex-1\",\n  \"[@container_cell_(max-width:23.99rem)_and_(min-height:18rem)]:h-full\",\n  \"[@container_cell_(max-width:23.99rem)_and_(min-height:18rem)]:max-h-none\",\n  \"[@container_cell_(max-width:23.99rem)_and_(min-height:18rem)]:min-h-0\",\n  \"[@container_cell_(max-width:23.99rem)_and_(min-height:18rem)]:w-full\",\n  \"[@container_cell_(max-width:23.99rem)_and_(min-height:18rem)]:flex-1\",\n  \"[@container_cell_(min-width:24rem)_and_(min-height:18rem)]:max-h-none\",\n  \"[@container_cell_(min-width:24rem)_and_(min-height:18rem)]:min-h-0\",\n  \"[@container_cell_(min-width:24rem)_and_(min-height:18rem)]:w-full\",\n  \"[@container_cell_(min-width:24rem)_and_(min-height:18rem)]:flex-1\",\n].join(\" \")\n\nexport type BentoFeatureStatus = \"ready\" | \"loading\" | \"empty\" | \"error\"\n\nexport type BentoFeatureClassNames = {\n  root?: string\n  media?: string\n  icon?: string\n  title?: string\n  description?: string\n  cta?: string\n}\n\nexport type BentoFeatureCardProps = {\n  title?: string\n  description?: string\n  /** Decorative icon above the title. */\n  icon?: ReactNode\n  /** Illustration slot. Omitted when empty. */\n  illustration?: ReactNode\n  /** Visible label inside the single link. Not a second control. */\n  cta?: string\n  /** Makes the whole card one link. */\n  href?: string\n  /** `media-first` is the default: drawing, then copy. */\n  layout?: BentoFeatureLayout\n  /**\n   * Turns on the cell-sized layout. Pass the same value the cell uses.\n   * sm, wide, tall, and lg share one set of container queries; the cell's real size picks the arrangement.\n   */\n  size?: BentoFeatureSize\n  status?: BentoFeatureStatus\n  emptyLabel?: string\n  loadingLabel?: string\n  errorLabel?: string\n  className?: string\n  classNames?: BentoFeatureClassNames\n}\n\n/**\n * One feature in a bento cell.\n * The hover moves and fades. It does not animate layout.\n * A clickable card is a single link: the CTA is text inside that link.\n */\nexport function BentoFeatureCard({\n  title,\n  description,\n  icon,\n  illustration,\n  cta,\n  href,\n  layout = \"media-first\",\n  size,\n  status = \"ready\",\n  emptyLabel = \"Nothing here\",\n  loadingLabel = \"Loading\",\n  errorLabel = \"Something went wrong\",\n  className,\n  classNames,\n}: BentoFeatureCardProps) {\n  const interactive = status === \"ready\" && Boolean(href)\n\n  const media = illustration ? (\n    <div\n      data-slot=\"bento-feature-media\"\n      aria-hidden=\"true\"\n      className={cn(\n        \"overflow-hidden rounded-lg bg-muted\",\n        size ? ADAPTIVE_MEDIA : \"min-h-40 flex-1\",\n        classNames?.media,\n      )}\n    >\n      <div className=\"flex h-full items-center justify-center overflow-hidden opacity-90 transition-[transform,opacity] duration-200 ease-out group-hover/feature:scale-[1.02] group-hover/feature:opacity-100 group-hover/feature:will-change-transform motion-reduce:transition-none motion-reduce:group-hover/feature:scale-100 motion-reduce:group-hover/feature:will-change-auto\">\n        {illustration}\n      </div>\n    </div>\n  ) : null\n\n  const copy = (\n    <div\n      className={cn(\n        \"flex min-w-0 max-w-[17.5rem] flex-col gap-2\",\n        size && \"min-h-0 shrink-0 overflow-y-auto\",\n      )}\n    >\n      {icon ? (\n        <div\n          data-slot=\"bento-feature-icon\"\n          aria-hidden=\"true\"\n          className={cn(\n            \"flex size-8 items-center justify-center rounded-lg bg-muted text-muted-foreground\",\n            classNames?.icon,\n          )}\n        >\n          {icon}\n        </div>\n      ) : null}\n      {title ? (\n        <h3\n          data-slot=\"bento-feature-title\"\n          className={cn(\"text-base font-semibold tracking-tight wrap-anywhere\", classNames?.title)}\n        >\n          {title}\n        </h3>\n      ) : null}\n      {description ? (\n        <p\n          data-slot=\"bento-feature-description\"\n          className={cn(\"text-sm text-pretty text-muted-foreground wrap-anywhere\", classNames?.description)}\n        >\n          {description}\n        </p>\n      ) : null}\n      {cta ? (\n        <span\n          data-slot=\"bento-feature-cta\"\n          className={cn(\"inline-flex w-fit items-center gap-1 text-sm font-medium text-primary\", classNames?.cta)}\n        >\n          {cta}\n          <ArrowRight className=\"size-4 rtl:-scale-x-100\" aria-hidden=\"true\" />\n        </span>\n      ) : null}\n    </div>\n  )\n\n  let body: ReactNode\n  if (status === \"loading\") {\n    body = (\n      <div className=\"flex flex-col gap-3\">\n        <Skeleton className=\"min-h-40 w-full motion-reduce:animate-none\" />\n        <Skeleton className=\"h-4 w-2/3 motion-reduce:animate-none\" />\n        <p className=\"max-w-[17.5rem] text-sm text-muted-foreground\">{loadingLabel}</p>\n      </div>\n    )\n  } else if (status === \"error\") {\n    body = (\n      <p role=\"alert\" className=\"max-w-[17.5rem] text-sm font-medium text-destructive\">\n        {errorLabel}\n      </p>\n    )\n  } else if (status === \"empty\") {\n    body = <p className=\"max-w-[17.5rem] text-sm text-muted-foreground\">{emptyLabel}</p>\n  } else {\n    body = (\n      <>\n        {layout === \"media-first\" ? media : null}\n        {copy}\n        {layout === \"copy-first\" ? media : null}\n      </>\n    )\n  }\n\n  const stack = (\n    <div\n      data-slot={size ? \"bento-feature-body\" : undefined}\n      className={cn(\"flex h-full min-h-0 flex-col gap-4 p-4\", size && \"overflow-y-auto\", size && ADAPTIVE_BODY)}\n    >\n      {body}\n    </div>\n  )\n\n  return (\n    <article\n      data-slot=\"bento-feature-card\"\n      data-state={status}\n      data-layout={layout}\n      data-size={size}\n      aria-busy={status === \"loading\" ? true : undefined}\n      className={cn(\n        \"group/feature h-full min-w-0\",\n        interactive &&\n          \"transition-transform duration-200 ease-out hover:-translate-y-0.5 hover:will-change-transform motion-reduce:transition-none motion-reduce:hover:translate-none motion-reduce:hover:will-change-auto\",\n        className,\n        classNames?.root,\n      )}\n    >\n      <Card className=\"h-full gap-0 overflow-hidden py-0 shadow-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background\">\n        {interactive ? (\n          <a href={href} className=\"flex h-full min-h-0 flex-col outline-none\">\n            {stack}\n          </a>\n        ) : (\n          stack\n        )}\n      </Card>\n    </article>\n  )\n}\n",
       "type": "registry:component",
       "target": "@ui/bento-feature-card.tsx"
     }
   ],
   "meta": {
     "titleEs": "Tarjeta de función",
-    "descriptionEs": "Hueco de ilustración, icono, título, descripción y una llamada opcional, dentro de una celda bento.",
+    "descriptionEs": "Hueco de ilustración, icono, título, descripción y una llamada opcional. Con size, el dibujo sigue el tamaño real de la celda.",
     "preview": "app/examples/bento-feature-card/preview.tsx",
     "previewHref": "/examples/bento-feature-card",
     "scenes": [
@@ -96,6 +96,62 @@
         "titleEs": "Una sola ficha",
         "descriptionEs": "Una tarjeta en una sola celda.",
         "preview": "app/examples/bento-feature-card/preview.tsx"
+      },
+      {
+        "id": "size-sm",
+        "label": "Compacta",
+        "labelEn": "Compact",
+        "titleEs": "Ficha compacta",
+        "descriptionEs": "En 1×1 el dibujo se achica y el texto se queda.",
+        "preview": "app/examples/bento-feature-card/preview.tsx"
+      },
+      {
+        "id": "size-wide",
+        "label": "Ancha",
+        "labelEn": "Wide",
+        "titleEs": "Ficha ancha",
+        "descriptionEs": "Si la celda es ancha y baja, el dibujo va al lado.",
+        "preview": "app/examples/bento-feature-card/preview.tsx"
+      },
+      {
+        "id": "size-tall",
+        "label": "Alta",
+        "labelEn": "Tall",
+        "titleEs": "Ficha alta",
+        "descriptionEs": "Si la celda es alta, el dibujo usa ese alto.",
+        "preview": "app/examples/bento-feature-card/preview.tsx"
+      },
+      {
+        "id": "size-lg",
+        "label": "Grande",
+        "labelEn": "Large",
+        "titleEs": "Ficha grande",
+        "descriptionEs": "En 2×2 el dibujo ocupa la celda.",
+        "preview": "app/examples/bento-feature-card/preview.tsx"
+      },
+      {
+        "id": "presets",
+        "label": "Presets",
+        "labelEn": "Presets",
+        "titleEs": "Los cuatro presets",
+        "descriptionEs": "sm, wide, tall y lg juntos.",
+        "preview": "app/examples/bento-feature-card/preview.tsx"
+      },
+      {
+        "id": "media-first",
+        "label": "Dibujo primero",
+        "labelEn": "Media first",
+        "titleEs": "Dibujo primero",
+        "descriptionEs": "El dibujo va antes del texto en los cuatro presets.",
+        "preview": "app/examples/bento-feature-card/preview.tsx"
+      },
+      {
+        "id": "copy-first",
+        "label": "Texto primero",
+        "labelEn": "Copy first",
+        "titleEs": "Texto primero",
+        "descriptionEs": "El texto va antes del dibujo en los cuatro presets.",
+        "preview": "app/examples/bento-feature-card/preview.tsx"
       }
     ],
     "examples": [
@@ -153,9 +209,44 @@
         "title": "Una celda",
         "href": "/examples/bento-feature-card?scene=single",
         "description": "Single cell"
+      },
+      {
+        "title": "Compacta",
+        "href": "/examples/bento-feature-card?scene=size-sm",
+        "description": "Compact"
+      },
+      {
+        "title": "Ancha",
+        "href": "/examples/bento-feature-card?scene=size-wide",
+        "description": "Wide"
+      },
+      {
+        "title": "Alta",
+        "href": "/examples/bento-feature-card?scene=size-tall",
+        "description": "Tall"
+      },
+      {
+        "title": "Grande",
+        "href": "/examples/bento-feature-card?scene=size-lg",
+        "description": "Large"
+      },
+      {
+        "title": "Presets",
+        "href": "/examples/bento-feature-card?scene=presets",
+        "description": "Presets"
+      },
+      {
+        "title": "Dibujo primero",
+        "href": "/examples/bento-feature-card?scene=media-first",
+        "description": "Media first"
+      },
+      {
+        "title": "Texto primero",
+        "href": "/examples/bento-feature-card?scene=copy-first",
+        "description": "Copy first"
       }
     ],
-    "usage": "<BentoCell span={{ col: 2, row: 2 }}>\n  <BentoFeatureCard\n    icon={<Flame />}\n    title=\"North kiln\"\n    description=\"Morning shift already booked.\"\n    href=\"#kiln\"\n    cta=\"View schedule\"\n    illustration={<KilnSketch />}\n  />\n</BentoCell>",
+    "usage": "<BentoCell size=\"wide\">\n  <BentoFeatureCard\n    size=\"wide\"\n    icon={<Flame />}\n    title=\"North kiln\"\n    description=\"Morning shift already booked.\"\n    href=\"#kiln\"\n    cta=\"View schedule\"\n    illustration={<KilnSketch />}\n  />\n</BentoCell>",
     "api": [
       {
         "name": "illustration",
@@ -175,7 +266,12 @@
       {
         "name": "layout",
         "type": "\"media-first\" | \"copy-first\"",
-        "description": "media-first (default) paints the drawing first. copy-first leads with the title."
+        "description": "media-first (default) paints the drawing first in the DOM. copy-first leads with the title. Size does not reorder them."
+      },
+      {
+        "name": "size",
+        "type": "\"sm\" | \"wide\" | \"tall\" | \"lg\"",
+        "description": "Enables container-query layout against the cell. The same classes serve every preset; the cell's real width and height pick compact, beside, full-height, or full drawing. Omitted, the stack stays as before."
       },
       {
         "name": "status",
@@ -189,7 +285,7 @@
       }
     ]
   },
-  "docs": "Inspiración visual, sin código. Fuente: https://shadcnstudio.com/blocks/bento-grid/bento-cards. Licencia: bloques Pro de shadcn/studio, fuera del repositorio MIT de shadcn/ui. No se copió código, markup ni assets. The card composes the host Card and Skeleton. Hover uses transform and opacity only. If href is set, the whole card is that one link and the call to action is text inside it. layout=\"media-first\" (default) puts the illustration above the copy. layout=\"copy-first\" reverses that. Answer no if the CLI asks to overwrite card or skeleton. The item ships no theme.",
+  "docs": "Inspiración visual, sin código. Fuente: https://shadcnstudio.com/blocks/bento-grid/bento-cards y https://x.com/ShadcnStudio/status/2116508123242598435. Licencia: bloques Pro de shadcn/studio, fuera del repositorio MIT de shadcn/ui. No se copió código, markup, assets, copy ni datos. The card composes the host Card and Skeleton. Hover uses transform and opacity only. If href is set, the whole card is that one link and the call to action is text inside it. layout=\"media-first\" (default) puts the illustration before the copy in the DOM. layout=\"copy-first\" reverses that. size turns on container queries against the cell (@container-size/cell): the drawing stays small under 24rem by 18rem, sits beside the copy when the cell is wide and short, and grows when the cell is at least 18rem tall. Under 10rem wide the decorative drawing hides and the text stays. Without size the stack is unchanged. The preset change is not animated. Answer no if the CLI asks to overwrite card or skeleton. The item ships no theme.",
   "categories": [
     "content"
   ],

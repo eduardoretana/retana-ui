@@ -1,5 +1,13 @@
 "use client"
 
+/**
+ * Bento grid.
+ * The size presets take the layout idea, not the code, from shadcn/studio Bento Cards (Pro).
+ * https://shadcnstudio.com/blocks/bento-grid/bento-cards
+ * https://x.com/ShadcnStudio/status/2116508123242598435
+ * No code, markup, assets, or copy from that source was copied. See NOTICE.
+ */
+
 import { Children, createContext, useContext, type ComponentProps, type ReactNode, type Ref } from "react"
 import { motion, useReducedMotionConfig, type HTMLMotionProps, type Transition } from "motion/react"
 import { Slot } from "radix-ui"
@@ -52,6 +60,18 @@ export type BentoPreset = "default" | "magnetic"
 export type BentoSpan = {
   col?: number
   row?: number
+}
+
+/** Cell presets. sm is 1×1, wide is 2×1, tall is 1×2, lg is 2×2. */
+export const BENTO_SIZES = ["sm", "wide", "tall", "lg"] as const
+
+export type BentoSize = (typeof BENTO_SIZES)[number]
+
+export const BENTO_SIZE_SPAN: Record<BentoSize, { col: number; row: number }> = {
+  sm: { col: 1, row: 1 },
+  wide: { col: 2, row: 1 },
+  tall: { col: 1, row: 2 },
+  lg: { col: 2, row: 2 },
 }
 
 export type BentoGap = "sm" | "md" | "lg"
@@ -261,19 +281,39 @@ export function BentoGrid({
 
 export type BentoCellProps = Omit<ComponentProps<"li">, "children"> & {
   span?: BentoSpan
+  /**
+   * Preset span. sm 1×1, wide 2×1, tall 1×2, lg 2×2.
+   * When set, this wins over `span` and the cell becomes a size container.
+   */
+  size?: BentoSize
   /** Render the child element instead of a list item. */
   asChild?: boolean
   children?: ReactNode
 }
 
-export function BentoCell({ span, asChild = false, className, style, children, ...rest }: BentoCellProps) {
+export function BentoCell({ span, size, asChild = false, className, style, children, ...rest }: BentoCellProps) {
   const { preset, columns } = useBentoGrid()
   const enter = useContext(BentoEnterContext)
   const reduced = useReducedMotionConfig() === true
-  const laid = bentoCellClass(span, preset, columns)
+  const laid = bentoCellClass(size ? BENTO_SIZE_SPAN[size] : span, preset, columns)
   const animateEnter = preset === "default" && enter != null && !asChild
   const delay = animateEnter ? bentoStaggerDelay(enter.index, enter.count) : 0
-  const cellClass = cn(laid.className, preset === "default" && "h-full", className)
+  const sized = size != null && preset === "default" && !asChild
+  const cellClass = cn(
+    laid.className,
+    preset === "default" && "h-full",
+    sized && "relative",
+    // 16rem keeps a 4rem drawing and the copy under the 18rem tall query.
+    size === "sm" && "min-h-64",
+    className,
+  )
+  const content = sized ? (
+    <div className="@container/cell flex h-full min-h-0 min-w-0 flex-col @min-[30rem]/bento:absolute @min-[30rem]/bento:inset-0 @min-[30rem]/bento:[container-type:size]">
+      {children}
+    </div>
+  ) : (
+    children
+  )
 
   if (animateEnter) {
     const transition: Transition = reduced
@@ -285,6 +325,7 @@ export function BentoCell({ span, asChild = false, className, style, children, .
         data-bento-cell="true"
         data-col={laid.col}
         data-row={laid.row}
+        data-size={size}
         data-motion={reduced ? "reduced" : "full"}
         data-enter-delay={delay}
         className={cellClass}
@@ -294,7 +335,7 @@ export function BentoCell({ span, asChild = false, className, style, children, .
         animate={{ opacity: 1, y: 0 }}
         transition={transition}
       >
-        {children}
+        {content}
       </motion.li>
     )
   }
@@ -306,11 +347,12 @@ export function BentoCell({ span, asChild = false, className, style, children, .
       data-bento-cell="true"
       data-col={laid.col}
       data-row={laid.row}
+      data-size={size}
       className={cellClass}
       style={style}
       {...rest}
     >
-      {children}
+      {content}
     </Comp>
   )
 }

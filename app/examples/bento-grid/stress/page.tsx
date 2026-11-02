@@ -148,6 +148,36 @@ export default function StressPage() {
       </section>
 
       <section className="flex flex-col gap-3">
+        <h2 className="text-sm font-medium">Presets en 320 px, a 390 px y en un muro ancho</h2>
+        <div className="w-80 max-w-full">
+          <BentoGrid label="Presets 320" columns={4}>
+            <BentoCell size="sm">
+              <BentoFeatureCard size="sm" title={token} description="Texto largo en una celda chica." href="#sm" cta="Ver" icon={bentoIcons.flame} illustration={<BentoSketch id="esmalte" />} />
+            </BentoCell>
+            <BentoCell size="wide">
+              <BentoFeatureCard size="wide" title="Ancha sin dibujo" description="El texto ocupa la celda." href="#wide" cta="Ver" icon={bentoIcons.box} />
+            </BentoCell>
+            <BentoCell size="tall">
+              <BentoFeatureCard size="tall" title="Alta" description="El dibujo sigue el alto real, no el nombre del preset." href="#tall" cta="Ver" icon={bentoIcons.frames} illustration={<BentoSketch id="muro" />} />
+            </BentoCell>
+            <BentoCell size="lg">
+              <BentoFeatureCard size="lg" title="Grande" description={token} href="#lg" cta="Ver" icon={bentoIcons.drops} illustration={<BentoSketch id="horno" />} />
+            </BentoCell>
+          </BentoGrid>
+        </div>
+        <div className="w-[390px] max-w-full">
+          <BentoGrid label="Presets 390" columns={4}>
+            <BentoCell size="lg">
+              <BentoFeatureCard size="lg" title="Horno norte" description="A 390 px la celda es de una columna." href="#a" cta="Ver agenda" icon={bentoIcons.flame} illustration={<BentoSketch id="horno" />} />
+            </BentoCell>
+            <BentoCell size="sm">
+              <BentoFeatureCard size="sm" title="Bitácora" description="Sin dibujo." href="#b" cta="Abrir" icon={bentoIcons.drops} />
+            </BentoCell>
+          </BentoGrid>
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-3">
         <h2 className="text-sm font-medium">Carga, vacío, error, sin CTA y sin ilustración</h2>
         <BentoGrid label="Cargando" status="loading" loadingLabel="Cargando el muro del taller…" />
         <BentoGrid label="Vacío" status="empty" emptyLabel="Todavía no hay piezas en el muro." />

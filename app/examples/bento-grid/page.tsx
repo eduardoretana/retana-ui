@@ -13,7 +13,7 @@ export default function Page() {
   return (
     <ExampleFrame
       title="Rejilla bento"
-      description="Cada celda pide su tramo. A 390 px hay una columna. Desde 480 px hay dos. Desde 896 px se usa el número de columnas pedido."
+      description="Cada celda pide su tramo o un preset: compacta, ancha, alta o grande. A 390 px hay una columna y el dibujo sigue el ancho real de la celda."
       size="desk"
     >
       <Demo />
