@@ -155,7 +155,13 @@ describe("BentoFeatureCard", () => {
       rerender(
         <BentoGrid label="Muro">
           <BentoCell size={size}>
-            <BentoFeatureCard size={size} title="Corta" description="Texto" illustration={<span>dibujo</span>} />
+            <BentoFeatureCard
+              size={size}
+              title="Corta"
+              description="Texto"
+              href="#c"
+              illustration={<span>dibujo</span>}
+            />
           </BentoCell>
         </BentoGrid>,
       )
@@ -163,7 +169,14 @@ describe("BentoFeatureCard", () => {
       expect(body()?.className).toContain("flex-col")
       expect(body()?.className).toContain(`${wide}:flex-row`)
       expect(body()?.className).not.toMatch(/transition/)
-      expect(media()?.className).toContain("max-h-16")
+      expect(media()?.className).toContain("max-h-28")
+      expect(media()?.className).toContain("p-3")
+      expect(card()?.className).toContain("h-full")
+      expect(card()?.className).toContain("self-stretch")
+      expect(card()?.querySelector("a")?.className ?? card()?.innerHTML).toContain("self-stretch")
+      const copy = document.querySelector("[data-slot='bento-feature-title']")?.parentElement
+      expect(copy?.className).toContain("max-w-[65ch]")
+      expect(copy?.className).not.toContain("max-w-[17.5rem]")
       expect(media()?.className).toContain(`${hide}:hidden`)
       expect(media()?.className).toContain(`${wide}:max-h-none`)
       expect(media()?.className).toContain(`${tall}:flex-1`)

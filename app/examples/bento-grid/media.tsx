@@ -1,6 +1,8 @@
 import type { ReactNode } from "react"
 import { Box, Droplets, Flame, Images } from "lucide-react"
 
+import { cn } from "@/lib/utils"
+
 import type { BentoIconName } from "./fixtures"
 
 export const bentoIcons: Record<BentoIconName, ReactNode> = {
@@ -11,12 +13,17 @@ export const bentoIcons: Record<BentoIconName, ReactNode> = {
 }
 
 function Well({ children }: { children: ReactNode }) {
-  return <div className="flex h-full min-h-40 items-center justify-center gap-3 p-3">{children}</div>
+  return <div className="flex h-full w-full min-w-0 items-center justify-center gap-3 p-3">{children}</div>
 }
 
-function Chip({ children }: { children: ReactNode }) {
+function Chip({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <span className="rounded-lg bg-background px-2.5 py-1.5 text-xs text-muted-foreground ring-1 ring-foreground/10">
+    <span
+      className={cn(
+        "rounded-lg bg-background px-2.5 py-1.5 text-xs text-muted-foreground ring-1 ring-foreground/10",
+        className,
+      )}
+    >
       {children}
     </span>
   )
@@ -38,9 +45,9 @@ export function BentoSketch({ id }: { id: string }) {
         <Mark>
           <Droplets className="size-5" aria-hidden="true" />
         </Mark>
-        <div className="flex flex-col gap-2">
+        <div className="flex min-w-0 flex-col gap-2">
           <Chip>1.180°</Chip>
-          <Chip>Sábado</Chip>
+          <Chip className="@max-[24rem]/cell:hidden">Sábado</Chip>
         </div>
       </Well>
     )

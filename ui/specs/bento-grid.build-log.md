@@ -3,6 +3,8 @@
 ## presets 1.3.0
 
 - `size` en la celda: sm 1×1, wide 2×1, tall 1×2, lg 2×2. Sin `size`, el span anterior no cambia.
+- Desde 30rem la pista usa `auto-rows-[16rem]` y la tarjeta (`h-full` / `self-stretch`) llena la celda. La alta queda en dos filas. Bajo 30rem el alto sigue al contenido.
+- Con `size`, la copia llega a `65ch`. Sin `size` se queda en `max-w-[17.5rem]`.
 - La celda es `@container/cell`. Desde 30rem del muro también es `container-type: size`, para poder leer el alto. Bajo 30rem la celda crece con el texto: a 390 px un alto fijo de 10rem recortaba la llamada.
 - La tarjeta no usa quiebres del viewport. wide pone el dibujo al lado; tall y lg lo dejan crecer; en compacto el dibujo queda en `max-h-16`. Bajo 10rem se esconde y el texto sigue.
 - No hay `grid-auto-flow: dense` ni `order-*`. `media-first` y `copy-first` siguen mandando el DOM. El cambio de preset no anima.

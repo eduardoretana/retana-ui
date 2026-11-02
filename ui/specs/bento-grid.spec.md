@@ -181,7 +181,7 @@ acceptance:
     test: "__tests__/bento-grid.test.tsx › leaves the span prop untouched when size is omitted"
   - id: AC-24
     statement: "La tarjeta adapta el dibujo con container queries de la celda, no con quiebres del viewport."
-    measure: "Con size, data-size está en la tarjeta y el cuerpo es flex-col con [@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:flex-row. El dibujo trae max-h-16, [@container_cell_(max-width:10rem)]:hidden, max-h-none en esa query ancha, y flex-1 en las queries de 18rem de alto (angosta y ancha). No hay sm:, md:, lg:, xl: ni 2xl:."
+    measure: "Con size, data-size está en la tarjeta y el cuerpo es flex-col con [@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:flex-row. El dibujo trae max-h-28 y p-3, [@container_cell_(max-width:10rem)]:hidden, max-h-none en esa query ancha, y flex-1 en las queries de 18rem de alto (angosta y ancha). La copia con size usa max-w-[65ch]. La tarjeta y el enlace llevan h-full y self-stretch. No hay sm:, md:, lg:, xl: ni 2xl:."
     test: "__tests__/bento-feature-card.test.tsx › adapts each size preset from the cell container, not the viewport"
   - id: AC-25
     statement: "Sin size, la pila de la tarjeta no cambia."
@@ -203,6 +203,10 @@ acceptance:
     statement: "magnetic-bento no recibe el preset de tamaño ni empaquetado denso."
     measure: "El article no tiene data-size ni @container/cell ni container-type:size. El HTML no tiene @container_cell_ ni grid-flow-dense. Siguen @min-[56rem]/mb:col-span-2 y row-span-2. __tests__/magnetic-bento.test.tsx no se edita."
     test: "__tests__/bento-magnetic-contract.test.tsx › does not attach size presets or dense packing to the magnetic track"
+  - id: AC-30
+    statement: "Desde 30rem cada tarjeta llena su celda y la alta mide al menos 1.9 veces la compacta."
+    measure: "La pista lleva items-stretch y @min-[30rem]/bento:auto-rows-[16rem]. La celda con size lleva self-stretch y h-auto. En Playwright a 1280, el alto de la tarjeta y el de su celda difieren a lo sumo 1 px, y el alto de tall es mayor o igual a 1.9 veces el alto de sm. A 390, grid-auto-rows computa auto y la tarjeta sigue midiendo lo mismo que su celda."
+    test: "__tests__/bento-size-geometry.test.ts › cards fill their cells at 1280 and the tall cell is at least 1.9 times the sm cell"
 ---
 
 # Bento grid y tarjeta de función
@@ -293,7 +297,7 @@ El acomodo no lee el nombre del preset. La celda con `size` es un contenedor `@c
 
 | Tamaño real de la celda | Acomodo |
 | --- | --- |
-| Ancho menor de 24rem y alto menor de 18rem | Compacto. El dibujo queda en `max-h-16`. Bajo 10rem de ancho se esconde. El texto sigue en el documento. |
+| Ancho menor de 24rem y alto menor de 18rem | Compacto. El dibujo queda en `max-h-28` con `p-3`. Bajo 10rem de ancho se esconde. El texto sigue en el documento. Con `size`, la copia llega a `65ch`. |
 | Ancho de al menos 24rem y alto menor de 18rem | El dibujo va al lado del texto (`flex-row`), en el orden del DOM. |
 | Ancho menor de 24rem y alto de al menos 18rem | El dibujo ocupa el alto (`flex-1`). |
 | Ancho de al menos 24rem y alto de al menos 18rem | El dibujo ocupa el alto que deja el texto (`flex-1`). El texto no se recorta. |

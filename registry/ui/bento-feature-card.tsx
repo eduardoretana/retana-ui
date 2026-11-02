@@ -31,7 +31,10 @@ const ADAPTIVE_BODY =
   "[@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:flex-row [@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:items-stretch"
 
 const ADAPTIVE_MEDIA = [
-  "max-h-16 min-h-0 **:min-h-0",
+  "max-h-28 min-h-0 p-3 **:min-h-0",
+  "[@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:p-0",
+  "[@container_cell_(max-width:23.99rem)_and_(min-height:18rem)]:p-0",
+  "[@container_cell_(min-width:24rem)_and_(min-height:18rem)]:p-0",
   "[@container_cell_(max-width:10rem)]:hidden",
   "[@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:h-full",
   "[@container_cell_(min-width:24rem)_and_(max-height:17.99rem)]:max-h-none",
@@ -119,7 +122,7 @@ export function BentoFeatureCard({
         classNames?.media,
       )}
     >
-      <div className="flex h-full items-center justify-center overflow-hidden opacity-90 transition-[transform,opacity] duration-200 ease-out group-hover/feature:scale-[1.02] group-hover/feature:opacity-100 group-hover/feature:will-change-transform motion-reduce:transition-none motion-reduce:group-hover/feature:scale-100 motion-reduce:group-hover/feature:will-change-auto">
+      <div className="flex h-full w-full items-center justify-center overflow-hidden opacity-90 transition-[transform,opacity] duration-200 ease-out group-hover/feature:scale-[1.02] group-hover/feature:opacity-100 group-hover/feature:will-change-transform motion-reduce:transition-none motion-reduce:group-hover/feature:scale-100 motion-reduce:group-hover/feature:will-change-auto">
         {illustration}
       </div>
     </div>
@@ -128,8 +131,9 @@ export function BentoFeatureCard({
   const copy = (
     <div
       className={cn(
-        "flex min-w-0 max-w-[17.5rem] flex-col gap-2",
-        size && "min-h-0 shrink-0 overflow-y-auto",
+        "flex min-w-0 flex-col gap-2",
+        size ? "max-w-[65ch] min-w-0" : "max-w-[17.5rem]",
+        size && "min-h-0 overflow-y-auto",
       )}
     >
       {icon ? (
@@ -202,7 +206,11 @@ export function BentoFeatureCard({
   const stack = (
     <div
       data-slot={size ? "bento-feature-body" : undefined}
-      className={cn("flex h-full min-h-0 flex-col gap-4 p-4", size && "overflow-y-auto", size && ADAPTIVE_BODY)}
+      className={cn(
+        "flex h-full min-h-0 w-full flex-1 flex-col gap-4 self-stretch p-4",
+        size && "overflow-y-auto",
+        size && ADAPTIVE_BODY,
+      )}
     >
       {body}
     </div>
@@ -216,16 +224,16 @@ export function BentoFeatureCard({
       data-size={size}
       aria-busy={status === "loading" ? true : undefined}
       className={cn(
-        "group/feature h-full min-w-0",
+        "group/feature flex h-full w-full min-w-0 flex-col self-stretch",
         interactive &&
           "transition-transform duration-200 ease-out hover:-translate-y-0.5 hover:will-change-transform motion-reduce:transition-none motion-reduce:hover:translate-none motion-reduce:hover:will-change-auto",
         className,
         classNames?.root,
       )}
     >
-      <Card className="h-full gap-0 overflow-hidden py-0 shadow-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background">
+      <Card className="flex h-full w-full flex-1 flex-col gap-0 self-stretch overflow-hidden py-0 shadow-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-within:ring-offset-background">
         {interactive ? (
-          <a href={href} className="flex h-full min-h-0 flex-col outline-none">
+          <a href={href} className="flex h-full min-h-0 w-full flex-1 flex-col self-stretch outline-none">
             {stack}
           </a>
         ) : (

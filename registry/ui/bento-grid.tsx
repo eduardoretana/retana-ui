@@ -131,9 +131,12 @@ function clampSpan(value: number | undefined, max: number) {
   return Math.min(max, Math.max(1, next))
 }
 
+/** One row from 30rem. A 2-row cell is two of these plus the gap, so tall stays about twice sm. */
+export const BENTO_ROW_TRACK = "@min-[30rem]/bento:auto-rows-[16rem]"
+
 export function bentoTrackClass(preset: BentoPreset, columns: BentoColumns, gap: BentoGap) {
   if (preset === "magnetic") return MAGNETIC_TRACK
-  return cn(DEFAULT_TRACK[columns], GAP[gap])
+  return cn(DEFAULT_TRACK[columns], GAP[gap], "items-stretch", BENTO_ROW_TRACK)
 }
 
 export function bentoCellClass(span: BentoSpan | undefined, preset: BentoPreset, columns: BentoColumns) {
@@ -301,14 +304,14 @@ export function BentoCell({ span, size, asChild = false, className, style, child
   const sized = size != null && preset === "default" && !asChild
   const cellClass = cn(
     laid.className,
-    preset === "default" && "h-full",
-    sized && "relative",
-    // 16rem keeps a 4rem drawing and the copy under the 18rem tall query.
-    size === "sm" && "min-h-64",
+    // h-full on a grid item beats stretch and leaves the card short of the row.
+    // Sized cells use the row height; the card inside is the one with h-full.
+    preset === "default" && !sized && "h-full",
+    sized && "relative h-auto w-full self-stretch",
     className,
   )
   const content = sized ? (
-    <div className="@container/cell flex h-full min-h-0 min-w-0 flex-col @min-[30rem]/bento:absolute @min-[30rem]/bento:inset-0 @min-[30rem]/bento:[container-type:size]">
+    <div className="@container/cell flex h-full min-h-0 w-full min-w-0 flex-col @min-[30rem]/bento:absolute @min-[30rem]/bento:inset-0 @min-[30rem]/bento:[container-type:size]">
       {children}
     </div>
   ) : (
