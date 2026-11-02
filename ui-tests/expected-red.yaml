@@ -1,0 +1,16 @@
+schema: uis.expected-red/v1
+spec_id: retana-ui-motion-14
+ui_system: {version: 4.0.0}
+profile: LITE
+retana_ui_sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+head: 70612d0ba76ba2d24bc85829066cfbe9d30b45ec
+recorded_before_build: false
+command: pnpm test
+note: "Ciclo LITE. La suite ya estaba verde en CPL 6671cfa con motion 13.5.0; no hubo commit rojo. La firma es la resolución del lockfile: si se revierte el bump, motion deja de ser 14.9.0."
+cases:
+  - file: package.json
+    name: motion declara ^14.9.0
+    signature: "\"motion\": \"^14.9.0\""
+  - file: pnpm-lock.yaml
+    name: motion, framer-motion y motion-dom resuelven 14.9.0
+    signature: "motion@14.9.0 y framer-motion@14.9.0 dependen de motion-dom@14.9.0"
