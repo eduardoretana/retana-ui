@@ -6,6 +6,12 @@
  * https://shadcnstudio.com/blocks/bento-grid/bento-cards
  * https://x.com/ShadcnStudio/status/2116508123242598435
  * No code, markup, assets, or copy from that source was copied. See NOTICE.
+ *
+ * The track never uses dense packing, so a later cell cannot jump back into a hole.
+ * Spans in source order have to tile the open columns. A 4-column wall that fills
+ * three rows is lg, tall, sm, sm, wide, wide. That same order also tiles the
+ * 2-column track used from 30rem until 56rem: lg and wide take the full width,
+ * and the two sm cells sit beside the tall one.
  */
 
 import { Children, createContext, useContext, type ComponentProps, type ReactNode, type Ref } from "react"
@@ -287,6 +293,9 @@ export type BentoCellProps = Omit<ComponentProps<"li">, "children"> & {
   /**
    * Preset span. sm 1×1, wide 2×1, tall 1×2, lg 2×2.
    * When set, this wins over `span` and the cell becomes a size container.
+   * There is no dense packing. Put the cells in an order whose spans tile the
+   * columns, or the last rows stay empty. One order that fills both the
+   * 4-column track and the 2-column track is lg, tall, sm, sm, wide, wide.
    */
   size?: BentoSize
   /** Render the child element instead of a list item. */

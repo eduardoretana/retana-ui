@@ -58,7 +58,7 @@ function CardWall({
             cta={cell.cta}
             href={status === "ready" ? cell.href : undefined}
             icon={bentoIcons[cell.icon]}
-            illustration={cell.media ? <BentoSketch id={cell.id} /> : undefined}
+            illustration={cell.media ? <BentoSketch id={cell.sketch ?? cell.id} /> : undefined}
             status={copy.cells.length === 1 ? status : "ready"}
             emptyLabel={copy.emptyLabel}
             loadingLabel={copy.loadingLabel}

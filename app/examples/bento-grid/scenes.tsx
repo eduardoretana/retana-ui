@@ -60,7 +60,7 @@ function Wall({
             cta={cell.cta}
             href={cell.href}
             icon={bentoIcons[cell.icon]}
-            illustration={cell.media ? <BentoSketch id={cell.id} /> : undefined}
+            illustration={cell.media ? <BentoSketch id={cell.sketch ?? cell.id} /> : undefined}
           />
         </BentoCell>
       ))}

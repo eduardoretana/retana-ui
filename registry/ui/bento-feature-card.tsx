@@ -7,6 +7,9 @@
  * https://x.com/ShadcnStudio/status/2116508123242598435
  * No code, markup, assets, or copy from that source was copied. See NOTICE.
  * Internal layout follows the cell container (`@container-size/cell`), not the viewport.
+ * The grid does not pack dense. When several cards share a track, their sizes
+ * have to tile it. lg, tall, sm, sm, wide, wide fills 4 columns and also the
+ * 2-column track. See BentoCell in bento-grid.
  */
 
 import type { ReactNode } from "react"

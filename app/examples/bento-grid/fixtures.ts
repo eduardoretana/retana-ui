@@ -11,6 +11,8 @@ export type BentoCellCopy = {
   span: { col: number; row: number }
   /** When set, the cell and the card use this preset instead of `span`. */
   size?: BentoSizeName
+  /** Sketch id when `id` is unique but the drawing is shared. */
+  sketch?: string
   icon: BentoIconName
   media: boolean
 }
@@ -194,8 +196,8 @@ const sizeSpan = {
   lg: { col: 2, row: 2 },
 } as const
 
-function sized(source: BentoCellCopy, size: BentoSizeName): BentoCellCopy {
-  return { ...source, size, span: sizeSpan[size] }
+function sized(source: BentoCellCopy, size: BentoSizeName, patch?: Partial<BentoCellCopy>): BentoCellCopy {
+  return { ...source, ...patch, sketch: source.id, size, span: sizeSpan[size] }
 }
 
 /** One compact cell. */
@@ -222,14 +224,53 @@ export const sizeLg = {
   en: pack([sized(wallEn[0]!, "lg")], "en"),
 }
 
-/** sm, wide, tall, and lg in one wall. Source order is the reading order. */
+/**
+ * All four presets, in an order that tiles the track without dense packing.
+ * At 4 columns this is 3 rows: lg, tall, sm, sm, wide, wide.
+ * At 2 columns (30rem until 56rem) the same order still fills: the large and
+ * wide cells take the full width, and the two compact cells sit beside the tall one.
+ */
 export const presets = {
   es: pack(
-    [sized(wallEs[0]!, "lg"), sized(wallEs[2]!, "wide"), sized(wallEs[3]!, "tall"), sized(wallEs[1]!, "sm")],
+    [
+      sized(wallEs[0]!, "lg"),
+      sized(wallEs[3]!, "tall"),
+      sized(wallEs[1]!, "sm"),
+      sized(wallEs[1]!, "sm", {
+        id: "esmalte-sabado",
+        title: "Esmalte del sábado",
+        description: "La prueba que sigue en el anaquel.",
+        href: "#esmalte-sabado",
+      }),
+      sized(wallEs[2]!, "wide"),
+      sized(wallEs[2]!, "wide", {
+        id: "salida",
+        title: "Salida de cajas",
+        description: "El orden en que dejan el taller.",
+        href: "#salida",
+      }),
+    ],
     "es",
   ),
   en: pack(
-    [sized(wallEn[0]!, "lg"), sized(wallEn[2]!, "wide"), sized(wallEn[3]!, "tall"), sized(wallEn[1]!, "sm")],
+    [
+      sized(wallEn[0]!, "lg"),
+      sized(wallEn[3]!, "tall"),
+      sized(wallEn[1]!, "sm"),
+      sized(wallEn[1]!, "sm", {
+        id: "esmalte-sabado",
+        title: "Saturday glaze",
+        description: "The test still on the shelf.",
+        href: "#esmalte-sabado",
+      }),
+      sized(wallEn[2]!, "wide"),
+      sized(wallEn[2]!, "wide", {
+        id: "salida",
+        title: "Box run",
+        description: "The order they leave the studio.",
+        href: "#salida",
+      }),
+    ],
     "en",
   ),
 }
