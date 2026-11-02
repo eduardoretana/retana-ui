@@ -1,0 +1,20 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0}
+declaration: "UI_SYSTEM: APPLIES"
+cycle_state: BUILD
+profile: LITE
+spec_id: retana-ui-motion-14
+spec_version: 1.0.0
+head: 70612d0ba76ba2d24bc85829066cfbe9d30b45ec
+stop_when: "pnpm typecheck:strict-host, pnpm test y pnpm build en verde; capturas fuera del repo; PR draft contra CPL, sin merge."
+deliverable: "motion ^14.9.0. framer-motion y motion-dom en 14.9.0. Sin cambio de componentes ni de tema."
+retana_ui:
+  sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+  registry_source: git-sha
+direction:
+  mode: inherited
+  images: none
+auditor: not-this-agent
+notes:
+  - "ui-system 4.0.0 en una sola línea. Perfil LITE: subida de dependencia, sin cambio visual previsto."
+  - "head es el commit del bump (70612d0). Este archivo entra en el commit siguiente. suite-log y capturas quedan fuera del árbol."
