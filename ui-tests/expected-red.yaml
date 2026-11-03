@@ -1,0 +1,41 @@
+# Firmas observadas el 2026-11-03, antes del build, con
+# `pnpm exec vitest run __tests__/agenda-resources.test.ts`.
+# 14 pruebas, 0 verdes. El archivo .ts se renombró a .tsx porque el
+# parser rechazó el JSX; esa corrección no añade producción.
+schema: uis.expected-red/v1
+spec_id: agenda-resources
+profile: STANDARD
+command: pnpm exec vitest run __tests__/agenda-resources.test.tsx
+observed_at: "2026-11-03"
+result:
+  failed: 14
+  passed: 0
+cases:
+  - name: findResourceConflicts does not treat a shared endpoint as a conflict
+    signature: "TypeError: findResourceConflicts is not a function"
+  - name: findResourceConflicts pairs overlapping events on the same resource only
+    signature: "TypeError: findResourceConflicts is not a function"
+  - name: findResourceConflicts counts an all-day event against the same resource and not the next boundary
+    signature: "TypeError: findResourceConflicts is not a function"
+  - name: findResourceConflicts uses absolute instants across a DST fold and a short spring day
+    signature: "TypeError: findResourceConflicts is not a function"
+  - name: findResourceConflicts reports each overlapping pair and stays quiet for two hundred chained touches
+    signature: "TypeError: findResourceConflicts is not a function"
+  - name: resourceLoads sums clipped hours, ignores a missing resource, and reports the overage
+    signature: "TypeError: resourceLoads is not a function"
+  - name: resourceLoads counts a spring-forward all-day as 23 hours and doubles overlapping bookings
+    signature: "TypeError: resourceLoads is not a function"
+  - name: agenda resources keeps the previous agenda when resources are omitted
+    signature: 'Expected the element to have attribute data-resource-layout="off"'
+  - name: agenda resources filters by resource, controlled or not, and lays the day out in columns
+    signature: 'Expected the element to have attribute data-resource-layout="columns"'
+  - name: agenda resources announces a conflict on the event and in the header, and keyboard reaches it
+    signature: "Expected element to have accessible name /Choque con Esmalte húmedo/"
+  - name: agenda resources shows scheduled hours against capacity, including the overage
+    signature: "expected null not to be null (data-slot=agenda-capacity)"
+  - name: agenda resources uses a list instead of columns at a narrow width
+    signature: 'Expected the element to have attribute data-resource-layout="list"'
+  - name: agenda resources switches the chrome to English
+    signature: 'Unable to find an accessible element with the role "combobox" and name "Resource"'
+  - name: agenda resources keeps thirty resources and long names in the day axis
+    signature: 'Unable to find an accessible element with the role "option"'
