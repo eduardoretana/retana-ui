@@ -122,6 +122,22 @@ function StatusIcon({ status }: { status: CheckStatus }) {
   return <Circle className={className} aria-hidden />
 }
 
+/**
+ * The track is only a groove. Icon and word carry the state, so WCAG 1.4.11
+ * applies to the fill against the track and the surface, not to the track
+ * against the card. Passed uses the host success token, then primary.
+ */
+export const checkMeterTrack = "var(--muted)"
+
+export const checkMeterFill: Record<CheckStatus, string | null> = {
+  passed: "var(--success, var(--primary))",
+  running: "var(--foreground)",
+  failed: "var(--destructive)",
+  queued: null,
+  skipped: null,
+  cancelled: null,
+}
+
 function Meter({
   name,
   value,
@@ -141,15 +157,17 @@ function Meter({
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={Math.round(scale * 100)}
-      className="h-1.5 w-full overflow-hidden rounded-full bg-foreground/50"
+      className="h-1.5 w-full overflow-hidden rounded-full"
+      style={{ backgroundColor: checkMeterTrack }}
     >
       <div
         data-bar
-        className={cn(
-          "h-full w-full origin-left bg-chart-2 transition-transform duration-200 motion-reduce:transition-none",
-          status === "failed" && "bg-destructive",
-        )}
-        style={{ transform: `scaleX(${scale})`, transitionDuration: reduced ? "0ms" : "200ms" }}
+        className="h-full w-full origin-left transition-transform duration-200 motion-reduce:transition-none"
+        style={{
+          backgroundColor: checkMeterFill[status] ?? "transparent",
+          transform: `scaleX(${scale})`,
+          transitionDuration: reduced ? "0ms" : "200ms",
+        }}
       />
     </div>
   )

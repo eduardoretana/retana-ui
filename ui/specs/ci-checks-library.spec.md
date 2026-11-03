@@ -111,6 +111,10 @@ Dos variantes, eje densidad. Ver `ci-checks-library.direction.md`. Elegida: `rai
 - measure: `ci-checks-story` recorre vacío → creando → abierto → fallo → arreglo → checks en verde → fusionado, con un botón "Siguiente paso", y termina en "Fusionado en main". El panel de checks sigue cerrado en la fase abierta.
 - test: `__tests__/ci-checks-story.test.tsx`.
 
+### AC-13
+- measure: la pista de la barra es `--muted`. No es el portador del estado: el icono y la palabra lo son (AC-2). WCAG 2.2 1.4.11 (Non-text Contrast) pide 3:1 en el componente gráfico que comunica, no en el surco decorativo contra la tarjeta. Por eso no se exige 3:1 entre la pista y el fondo. El relleno sí: pasó usa `var(--success, var(--primary))`, en curso usa `--foreground`, falló usa `--destructive`. Cada uno mide al menos 3:1 contra la pista y contra `--card` y `--background`, en `:root` y en `.dark`, con los valores resueltos de `app/globals.css`. Este tema no define `--success`, así que pasó cae en `--primary`.
+- test: `__tests__/checks-panel-contrast.test.ts`.
+
 ### AC-11
 - measure: ningún archivo de esta familia bajo `registry/` contiene `transition-all`, un hex, `rgb(`, `oklch(` ni una clase de paleta Tailwind.
 - test: `__tests__/ci-checks-family-source.test.ts`.

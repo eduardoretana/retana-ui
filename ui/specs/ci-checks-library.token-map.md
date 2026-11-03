@@ -10,9 +10,10 @@ Firmado por el rol de UI Lead de este encargo antes de construir. ui-system 4.0.
 | Pastilla en reposo | `bg-background`, `border-border`, `rounded-full` | |
 | Texto secundario, SHA, tiempos | `text-muted-foreground`, `font-mono`, `text-xs` | Sin tamaño `--text-*` propio. |
 | Texto principal | `text-foreground`, `text-sm` | |
-| Estado positivo / barra en curso o pasada | `bg-primary`, `text-primary` | El icono y la palabra acompañan el color. |
-| Estado de fallo | `bg-destructive`, `text-destructive`, `border-destructive` | Igual: icono + palabra. |
-| Pista de la barra | `bg-muted` | La barra es `scaleX` sobre `bg-primary` o `bg-destructive`. |
+| Estado positivo / barra pasada | `var(--success, var(--primary))` | Este demo no define `--success`. El relleno cae en `--primary`. El icono y la palabra siguen siendo el estado. |
+| Barra en curso | `var(--foreground)` | Distinta de la pista. |
+| Estado de fallo | `var(--destructive)`, `text-destructive` | Igual: icono + palabra. |
+| Pista de la barra | `var(--muted)` | Surco. WCAG 1.4.11 no se le pide contra la tarjeta. AC-13. |
 | Foco | `focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none` | |
 | Aviso en vivo | `sr-only` en el nodo `status`, salvo el estado de fusión que también es visible | |
 | Movimiento | `transition-[opacity,transform]`, `motion-reduce:transition-none`, `motion-reduce:animate-none` | Prohibido `transition-all`. Sin animar width, height, top o left. |
