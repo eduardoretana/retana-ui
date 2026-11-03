@@ -1,3 +1,4 @@
+import { fieldLabel } from "./catalog"
 import type { Evaluation, GuardLocale, MessageCatalog, TerminalDecision } from "./types"
 import { REASON } from "./types"
 
@@ -89,7 +90,7 @@ export function explain(evaluation: Evaluation, locale: GuardLocale, extra?: Mes
   const parts: string[] = []
   if (evaluation.failClosed) {
     const base = guardMessage(REASON.missing, locale, extra)
-    const paths = evaluation.missingPaths.join(", ")
+    const paths = evaluation.missingPaths.map((path) => fieldLabel(path, locale)).join(", ")
     parts.push(paths ? `${base} (${paths})` : base)
   }
   for (const fired of evaluation.fired) {

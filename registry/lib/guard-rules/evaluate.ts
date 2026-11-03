@@ -1,4 +1,5 @@
-import { actionData, describeCondition, evalCondition } from "./condition"
+import { decisionWord, kindLabel } from "./catalog"
+import { actionData, evalCondition } from "./condition"
 import type { DecisionKind, Evaluation, GuardAction, GuardLocale, GuardRule, RuleTrace, Ruleset, TerminalDecision } from "./types"
 import { GuardError } from "./types"
 
@@ -102,9 +103,10 @@ export function evaluateRules(ruleset: Ruleset, action: GuardAction, clock: () =
   }
 }
 
+/** Short reading. The condition tree is shown apart so a long OR does not become one sentence. */
 export function describeRule(rule: GuardRule, locale: GuardLocale): string {
-  const kinds = rule.kinds.join(", ")
-  const conditions = describeCondition(rule.conditions, locale)
-  if (locale === "es") return `Cuando ${kinds}. Si ${conditions}. Entonces ${rule.decision}.`
-  return `When ${kinds}. If ${conditions}. Then ${rule.decision}.`
+  const when = rule.kinds.map((kind) => kindLabel(kind, locale)).join(", ")
+  const then = decisionWord(rule.decision, locale)
+  if (locale === "es") return `Cuando ${when}. Entonces ${then}.`
+  return `When ${when}. Then ${then}.`
 }

@@ -32075,6 +32075,11 @@
           "target": "@lib/guard-rules/audit-log.ts"
         },
         {
+          "path": "registry/lib/guard-rules/catalog.ts",
+          "type": "registry:lib",
+          "target": "@lib/guard-rules/catalog.ts"
+        },
+        {
           "path": "registry/lib/guard-rules/condition.ts",
           "type": "registry:lib",
           "target": "@lib/guard-rules/condition.ts"
@@ -32196,6 +32201,7 @@
         "input",
         "label",
         "checkbox",
+        "switch",
         "badge",
         "separator",
         "skeleton"
@@ -32308,8 +32314,8 @@
         "button",
         "input",
         "label",
+        "switch",
         "badge",
-        "scroll-area",
         "skeleton"
       ],
       "categories": [

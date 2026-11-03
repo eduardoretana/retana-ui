@@ -74,8 +74,23 @@ export {
 } from "./preset"
 export { gitMergeApprovalRuleset, mapExampleCrmWebhook, syntheticGitMerge } from "./webhook"
 export type { ExampleCrmWebhook } from "./webhook"
-export { encodeDataValue, flattenData, parseDataValue, unflattenData } from "./data"
+export { encodeDataValue, flattenData, parseDataValue, readDataPath, unflattenData, writePath } from "./data"
 export type { DataRow } from "./data"
+export {
+  ACTION_KINDS,
+  GUARD_FIELDS,
+  OP_LABELS,
+  TRACE_STATUS_LABELS,
+  decisionWord,
+  fieldLabel,
+  fieldsForKind,
+  guardField,
+  kindLabel,
+  opLabel,
+  optionLabel,
+  traceStatusLabel,
+} from "./catalog"
+export type { FieldKind, FieldOption, GuardField } from "./catalog"
 
 export function createIdSequence(prefix: string) {
   let value = 0

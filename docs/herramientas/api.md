@@ -53,6 +53,10 @@ TTL: `expiresAt = now + ttlMs` al crear. `DEFAULT_APPROVAL_TTL_MS` es 15 minutos
 - `flattenData` / `unflattenData` — los usa el simulador
 - `createIdSequence(prefix)`
 
+## Etiquetas
+
+`GUARD_FIELDS`, `ACTION_KINDS`, `opLabel`, `fieldLabel`, `kindLabel` y `traceStatusLabel` son el catálogo de lectura. El `path`, el `op` y el `kind` que evalúa el motor no cambian. La UI muestra “Tipo de oferta” y “es igual a”; el valor guardado sigue siendo `offer.kind` y `eq`.
+
 ## Copy
 
 `GUARD_MESSAGES` y `guardMessage(key, locale, extra?)`. Una clave que el núcleo no conoce se muestra como `Regla <key>.` / `Rule <key>.`. Otra herramienta puede pasar un catálogo extra a `explain` y a `guardMessage`.

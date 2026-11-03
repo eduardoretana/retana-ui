@@ -1,4 +1,32 @@
+import { readPath } from "./condition"
+
 const BLOCKED = new Set(["__proto__", "prototype", "constructor"])
+
+export function readDataPath(data: Record<string, unknown>, path: string): unknown {
+  const found = readPath(data, path)
+  return found.ok ? found.value : undefined
+}
+
+export function writePath(data: Record<string, unknown>, path: string, value: unknown): Record<string, unknown> {
+  const parts = path.split(".")
+  if (parts.some((part) => BLOCKED.has(part) || part.trim() === "")) return data
+  const clone = structuredClone(data)
+  let cursor: Record<string, unknown> = clone
+  for (let index = 0; index < parts.length - 1; index += 1) {
+    const part = parts[index]!
+    const next = cursor[part]
+    if (next === null || typeof next !== "object" || Array.isArray(next)) {
+      const created: Record<string, unknown> = {}
+      cursor[part] = created
+      cursor = created
+    } else {
+      cursor = next as Record<string, unknown>
+    }
+  }
+  const leaf = parts[parts.length - 1]!
+  cursor[leaf] = value
+  return clone
+}
 
 export type DataRow = { path: string; value: string }
 
