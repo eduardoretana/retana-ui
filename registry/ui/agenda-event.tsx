@@ -30,7 +30,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import {
   allDayMove,
   formatInterval,
@@ -154,6 +154,47 @@ export function AgendaEventCard<TMeta extends Record<string, unknown> = Record<s
     commit("move", shiftClock(event, sign * snapMinutes, timeZone))
   }
 
+  const openButton = (
+    <button
+      type="button"
+      data-agenda-focus={event.id}
+      className="flex min-w-0 flex-1 items-start gap-1.5 rounded-sm text-start focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+      aria-pressed={selected}
+      aria-keyshortcuts="Alt+ArrowUp Alt+ArrowDown Alt+ArrowLeft Alt+ArrowRight"
+      aria-label={openLabel}
+      onClick={() => onSelect?.(event.id)}
+      onKeyDown={onTitleKeyDown}
+    >
+      <AgendaCategoryIcon name={category?.icon} className="mt-0.5 shrink-0 text-muted-foreground" />
+      <span className="min-w-0 flex-1">
+        <span data-slot="agenda-event-title" title={event.title} className="block truncate text-xs font-medium text-card-foreground" dir="auto">
+          {event.title}
+        </span>
+        {density === "regular" ? (
+          <span
+            data-slot="agenda-event-when"
+            className="mt-0.5 block truncate text-[11px] text-muted-foreground tabular-nums whitespace-nowrap @max-[11rem]:sr-only"
+          >
+            {event.allDay ? labels.allDay : when}
+            {ongoing ? <span className="font-medium text-card-foreground"> {labels.ongoing}</span> : null}
+            {continuesBefore ? <span> {labels.continuesBefore}</span> : null}
+            {continuesAfter ? <span> {labels.continuesAfter}</span> : null}
+          </span>
+        ) : null}
+        {conflictLabel ? (
+          <span
+            data-slot="agenda-conflict"
+            title={conflictLabel}
+            className="mt-0.5 inline-flex max-w-full items-center gap-1 text-[11px] font-medium text-card-foreground"
+          >
+            <TriangleAlert aria-hidden className="size-3 shrink-0" />
+            <span className="whitespace-nowrap">{labels.conflict}</span>
+          </span>
+        ) : null}
+      </span>
+    </button>
+  )
+
   return (
     <article
       data-slot="agenda-event"
@@ -163,7 +204,7 @@ export function AgendaEventCard<TMeta extends Record<string, unknown> = Record<s
       data-all-day={event.allDay ? "true" : "false"}
       data-conflict={conflictLabel ? "true" : "false"}
       className={cn(
-        "relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-md border border-border border-s-2 bg-card text-card-foreground shadow-sm",
+        "relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-md border border-border border-s-2 bg-card text-card-foreground shadow-sm @container",
         agendaToneEdge(category?.tone),
         selected && "z-20 ring-2 ring-ring",
         density === "compact" && "shadow-none",
@@ -171,37 +212,16 @@ export function AgendaEventCard<TMeta extends Record<string, unknown> = Record<s
       )}
     >
       <div className="flex min-h-0 items-start gap-1 p-1.5">
-        <button
-          type="button"
-          data-agenda-focus={event.id}
-          className="flex min-w-0 flex-1 items-start gap-1.5 rounded-sm text-start focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-          aria-pressed={selected}
-          aria-keyshortcuts="Alt+ArrowUp Alt+ArrowDown Alt+ArrowLeft Alt+ArrowRight"
-          aria-label={openLabel}
-          onClick={() => onSelect?.(event.id)}
-          onKeyDown={onTitleKeyDown}
-        >
-          <AgendaCategoryIcon name={category?.icon} className="mt-0.5 shrink-0 text-muted-foreground" />
-          <span className="min-w-0">
-            <span className={cn("block font-medium break-words", density === "compact" ? "truncate text-xs" : "line-clamp-2 text-xs")} dir="auto">
-              {event.title}
-            </span>
-            {density === "regular" ? (
-              <span className="mt-0.5 flex flex-wrap items-center gap-1 text-[11px] text-muted-foreground tabular-nums">
-                <span>{event.allDay ? labels.allDay : when}</span>
-                {ongoing ? <span className="font-medium text-primary">{labels.ongoing}</span> : null}
-                {continuesBefore ? <span>{labels.continuesBefore}</span> : null}
-                {continuesAfter ? <span>{labels.continuesAfter}</span> : null}
-              </span>
-            ) : null}
-            {conflictLabel ? (
-              <span className="mt-0.5 flex min-w-0 items-center gap-1 text-[11px] font-medium text-foreground">
-                <TriangleAlert aria-hidden className="size-3 shrink-0" />
-                <span className="truncate">{conflictLabel}</span>
-              </span>
-            ) : null}
-          </span>
-        </button>
+        {conflictLabel ? (
+          <TooltipProvider delayDuration={300}>
+            <Tooltip>
+              <TooltipTrigger asChild>{openButton}</TooltipTrigger>
+              <TooltipContent>{conflictLabel}</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ) : (
+          openButton
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -237,39 +257,16 @@ export function AgendaEventCard<TMeta extends Record<string, unknown> = Record<s
                 <DropdownMenuItem onSelect={() => commit("resize", resizeEventEnd(event, -snapMinutes, snapMinutes, timeZone))}>
                   {labels.shrink}
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => commit(event.allDay ? "all-day" : "all-day", allDayMove(event, timeZone, !event.allDay))}>
+                <DropdownMenuItem onSelect={() => commit("all-day", allDayMove(event, timeZone, !event.allDay))}>
                   {event.allDay ? labels.makeTimed : labels.makeAllDay}
                 </DropdownMenuItem>
               </>
             ) : null}
+            {onEdit ? <DropdownMenuItem onSelect={onEdit}>{labels.edit}</DropdownMenuItem> : null}
+            {onDuplicate ? <DropdownMenuItem onSelect={onDuplicate}>{labels.duplicate}</DropdownMenuItem> : null}
+            {onDelete ? <DropdownMenuItem onSelect={onDelete}>{labels.remove}</DropdownMenuItem> : null}
           </DropdownMenuContent>
         </DropdownMenu>
-        {onEdit || onDuplicate || onDelete ? (
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button type="button" size="sm" variant="outline" className="h-auto whitespace-normal px-2" aria-label={labels.eventMenu(event.title)}>
-                {labels.manage}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent align="end" className="w-44 gap-1">
-              {onEdit ? (
-                <Button type="button" size="sm" variant="ghost" className="h-auto justify-start whitespace-normal" onClick={onEdit}>
-                  {labels.edit}
-                </Button>
-              ) : null}
-              {onDuplicate ? (
-                <Button type="button" size="sm" variant="ghost" className="h-auto justify-start whitespace-normal" onClick={onDuplicate}>
-                  {labels.duplicate}
-                </Button>
-              ) : null}
-              {onDelete ? (
-                <Button type="button" size="sm" variant="ghost" className="h-auto justify-start whitespace-normal text-destructive" onClick={onDelete}>
-                  {labels.remove}
-                </Button>
-              ) : null}
-            </PopoverContent>
-          </Popover>
-        ) : null}
       </div>
       {selected && children ? (
         <div data-agenda-ignore-drag="" className="min-h-0 border-t border-border">

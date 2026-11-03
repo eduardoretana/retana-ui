@@ -5,7 +5,7 @@ Firmado por el Lead de este ciclo como mapa de la extensión. No hay tokens nuev
 | Uso | Clase del tema | Notas |
 |---|---|---|
 | Fondo del bloque y del canal fijo | `bg-background` | |
-| Texto | `text-foreground` | El aviso de choque usa este color, no un rojo suelto. |
+| Texto del choque y del cupo excedido | `text-card-foreground` sobre `bg-card` | Medido en el viewport: 19.8:1 en claro y 17.2:1 en oscuro. AA pide 4.5:1. |
 | Texto secundario del filtro | `text-muted-foreground` | |
 | Bordes del selector, del resumen y de la tarjeta | `border-border` | |
 | Día de hoy | `bg-accent`, `bg-primary`, `text-primary-foreground` | Ya estaba. No se toca. |

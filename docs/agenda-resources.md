@@ -29,7 +29,7 @@ La idea sale de shadcn/studio «User Schedule #5» (Pro, no comprado). Solo la i
 
 En la vista de día, con el filtro en «todos»:
 
-- Si el ancho del bloque es de al menos 560px, cada recurso es una columna. El eje hace scroll horizontal. El mínimo de columna es 10rem. El canal de horas queda fijo al inicio.
+- Si el ancho del bloque es de al menos 560px, cada recurso es una columna de al menos 22rem. Si no caben, el eje hace scroll horizontal antes de comprimir la tarjeta. El canal de horas queda fijo al inicio.
 - Por debajo de 560px (incluye 390px) el día es una lista agrupada por recurso, con el mismo selector. Elegir un recurso vuelve a la cuadrícula de un solo día.
 - Antes de medir el ancho, se usa el viewport (`max-width: 767px`) para no pintar columnas en un teléfono.
 
@@ -54,7 +54,9 @@ Reglas, cubiertas por `__tests__/agenda-resources.test.tsx`:
 - Una hora civil repetida son dos instantes. No chocan si esos instantes no se solapan.
 - Cada par es un choque. Tres eventos en cadena pueden dar dos pares.
 
-En la pieza, el aviso lleva icono y texto («Choque con …»). El mismo texto entra en el nombre accesible del botón del evento. El encabezado muestra el conteo («1 choque» / «2 choques») y, con Enter o clic, mueve el foco al primer evento en conflicto del documento. El aviso también se anuncia en la región `status`.
+En la pieza, el aviso lleva icono y la palabra «Choque» (no se trunca). El nombre accesible y el tooltip dicen con quién choca («Choque con …»). El menú es uno solo: el botón «…». Editar, duplicar y borrar viven ahí cuando el anfitrión pasa esos callbacks. La hora va en una línea y, si la tarjeta mide menos de 11rem, queda solo para el lector de pantalla. El encabezado muestra el conteo («1 choque» / «2 choques») y, con Enter o clic, mueve el foco al primer evento en conflicto. El aviso también se anuncia en la región `status`.
+
+El texto del choque y el chip de cupo excedido usan `text-card-foreground` sobre `bg-card` (el par del tema, claro y oscuro). No usan `muted-foreground` ni un rojo suelto.
 
 El conteo y el resumen usan los eventos visibles: categoría no oculta, filtro de recurso y fechas de la vista actual.
 
@@ -81,7 +83,7 @@ const rows = resourceLoads(events, resources, ["2026-04-08"], "America/Mexico_Ci
 - El cupo es por día civil, no por la franja de horas que está a la vista.
 - La vista de mes incluye los días de relleno de la cuadrícula (hasta 42). El cupo se multiplica por esos días.
 - Los id de recurso se usan en el DOM. Conviene que sean estables y sin espacios.
-- 30 columnas no caben en 1280px: se desplazan en horizontal. En 390px se usa la lista.
+- 30 columnas no caben en 1280px: se desplazan en horizontal. Cada columna mide al menos 22rem para que, aun partida en dos por un choque, queden el título y la palabra «Choque». Si un recurso tiene más de dos solapes a la vez, esa columna pasa a lista para no dejar el título en un icono. En 390px se usa la lista.
 - No hay animación nueva. Lo que ya existía no anima layout. `prefers-reduced-motion` sigue en `data-reduced-motion`.
 
 ## Ejemplo mínimo
@@ -105,3 +107,15 @@ const events = [
 ```
 
 Los nombres del ejemplo son del taller inventado Estudio Cálamo. No hay datos reales.
+
+## Capturas del viewport
+
+`scripts/capture-agenda.mjs` usa Playwright y guarda solo el viewport (1280×800 y 390×844, claro y oscuro). No incluye el escritorio ni las herramientas del navegador.
+
+```bash
+pnpm exec playwright install chromium
+pnpm dev --port 3000
+pnpm capture:agenda -- --base http://localhost:3000 --set after --out tmp/agenda-after
+```
+
+`--set before` fotografía `/examples/agenda` sin la escena de recursos (la semana de siempre). `--set after` fotografía Choques, Sobrecapacidad y Muchos recursos. Si el aviso o el chip de cupo excedido bajan de 4.5:1, el script termina con error y escribe `contrast.json`.

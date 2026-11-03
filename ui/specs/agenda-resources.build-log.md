@@ -24,6 +24,8 @@ Corridos el 2026-11-03 en esta rama, sobre el árbol de trabajo:
 - `pnpm exec tsc --noEmit --pretty false` — verde.
 - `pnpm typecheck:strict-host` — verde. `agenda`, `agenda-event`, `agenda-detail` y `date-range` entran en ese chequeo.
 - `pnpm readme:catalog` — el catálogo sigue en 422 piezas.
-- `pnpm build` (`registry:build` y `next build`) — verde.
+- `pnpm build` (`registry:build` y `next build`) — verde en el head anterior. Se vuelve a correr en este arreglo.
+- `node scripts/capture-agenda.mjs` — viewport limpio. Contraste del aviso y del chip excedido: 19.8:1 claro, 17.2:1 oscuro.
+- Cierre de esta ronda: `pnpm test` 674 verdes, `tsc --noEmit` verde, `pnpm typecheck:strict-host` verde, `pnpm build` verde.
 
-No hay Playwright en el repo. La revisión visual va por el navegador, con capturas a 1280 y 390, claro y oscuro.
+Playwright queda como devDependency. El script está en `scripts/capture-agenda.mjs`.

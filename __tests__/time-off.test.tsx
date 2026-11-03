@@ -60,8 +60,8 @@ describe("time off", () => {
       />,
     )
     expect(screen.getByText("Festivo: Día de la Independencia")).toBeInTheDocument()
-    await user.click(screen.getByRole("button", { name: "Editar, duplicar o borrar Revisión del horno 2" }))
-    await user.click(screen.getByRole("button", { name: "Duplicar" }))
+    await user.click(screen.getByRole("button", { name: "Acciones de Revisión del horno 2" }))
+    await user.click(screen.getByRole("menuitem", { name: "Duplicar" }))
     expect(onDuplicate).toHaveBeenCalledWith(expect.objectContaining({ id: "horno" }))
     expect(await screen.findByText("Evento duplicado")).toBeInTheDocument()
   })

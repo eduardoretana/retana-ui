@@ -74,6 +74,8 @@ import {
 } from "@/registry/retana/lib/agenda"
 
 const GUTTER = "4.5rem"
+/** Wide enough that a two-way overlap still leaves a title and the word "Choque". */
+const RESOURCE_COLUMN_MIN = "22rem"
 
 export type AgendaProps<TMeta = Record<string, unknown>> = {
   events: readonly AgendaEvent<TMeta>[]
@@ -349,7 +351,7 @@ export function Agenda<TMeta extends Record<string, unknown> = Record<string, un
       data-resource-layout={resourceLayout}
       data-readonly={readOnly ? "true" : "false"}
       data-reduced-motion={reduced ? "true" : "false"}
-      className={cn("flex h-full min-h-0 flex-col bg-background text-foreground", className)}
+      className={cn("flex h-full w-full min-h-0 min-w-0 max-w-full flex-col bg-background text-foreground", className)}
     >
       <header className={cn("flex flex-wrap items-end justify-between gap-3 border-b border-border px-3 py-3", toolbarClassName)}>
         <div className="min-w-0">
@@ -437,7 +439,8 @@ export function Agenda<TMeta extends Record<string, unknown> = Record<string, un
                 <li
                   key={load.resourceId}
                   data-over={over ? "true" : "false"}
-                  className="flex min-w-0 max-w-full items-center gap-1 rounded-md border border-border px-2 py-1 text-xs"
+                  data-slot={over ? "agenda-capacity-over" : "agenda-capacity-row"}
+                  className="flex min-w-0 max-w-full items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-xs font-medium text-card-foreground"
                 >
                   {over ? <TriangleAlert aria-hidden className="size-3 shrink-0" /> : null}
                   <span className="max-w-40 truncate" title={resource?.label}>
@@ -503,9 +506,9 @@ export function Agenda<TMeta extends Record<string, unknown> = Record<string, un
               conflictText={conflictText}
               onSelect={select}
               onReschedule={reschedule}
-              onEdit={editEvent}
-              onDuplicate={duplicateEvent}
-              onDelete={deleteEvent}
+              onEdit={onEdit ? editEvent : undefined}
+              onDuplicate={onDuplicate ? duplicateEvent : undefined}
+              onDelete={onDelete ? deleteEvent : undefined}
             />
           ) : null}
           {showGrid && listWeek && !resourceList ? (
@@ -526,9 +529,9 @@ export function Agenda<TMeta extends Record<string, unknown> = Record<string, un
               onSelect={select}
               onReschedule={reschedule}
               holidays={holidays}
-              onEdit={editEvent}
-              onDuplicate={duplicateEvent}
-              onDelete={deleteEvent}
+              onEdit={onEdit ? editEvent : undefined}
+              onDuplicate={onDuplicate ? duplicateEvent : undefined}
+              onDelete={onDelete ? deleteEvent : undefined}
             />
           ) : null}
           {showGrid && !listWeek && view !== "month" && !resourceList ? (
@@ -556,9 +559,9 @@ export function Agenda<TMeta extends Record<string, unknown> = Record<string, un
               onReschedule={reschedule}
               onCreate={requestCreate}
               holidays={holidays}
-              onEdit={editEvent}
-              onDuplicate={duplicateEvent}
-              onDelete={deleteEvent}
+              onEdit={onEdit ? editEvent : undefined}
+              onDuplicate={onDuplicate ? duplicateEvent : undefined}
+              onDelete={onDelete ? deleteEvent : undefined}
             />
           ) : null}
           {showGrid && view === "month" ? (
@@ -583,9 +586,9 @@ export function Agenda<TMeta extends Record<string, unknown> = Record<string, un
               onViewChange={setView}
               conflictText={conflictText}
               holidays={holidays}
-              onEdit={editEvent}
-              onDuplicate={duplicateEvent}
-              onDelete={deleteEvent}
+              onEdit={onEdit ? editEvent : undefined}
+              onDuplicate={onDuplicate ? duplicateEvent : undefined}
+              onDelete={onDelete ? deleteEvent : undefined}
             />
           ) : null}
         </div>
@@ -764,9 +767,9 @@ function TimeGrid<TMeta extends Record<string, unknown>>({
     ),
   )
   const boxes = layoutTimedSegments(segments, hourStart, hourEnd)
-  const track = resourceMode ? "minmax(10rem, 1fr)" : "minmax(0, 1fr)"
+  const track = resourceMode ? `minmax(${RESOURCE_COLUMN_MIN}, 1fr)` : "minmax(0, 1fr)"
   const columns = `${GUTTER} repeat(${Math.max(lanes.length, 1)}, ${track})`
-  const boardWidth = resourceMode ? `calc(${GUTTER} + ${lanes.length} * 10rem)` : undefined
+  const boardWidth = resourceMode ? `calc(${GUTTER} + ${lanes.length} * ${RESOURCE_COLUMN_MIN})` : undefined
   const nowMinute = now == null ? null : clockMinutes(now, timeZone)
   const nowTop = nowMinute == null ? null : (nowMinute - hourStart * 60) / ((hourEnd - hourStart) * 60)
   const showNow = Boolean(today && dates.includes(today) && nowTop != null && nowTop >= 0 && nowTop <= 1)
@@ -821,6 +824,7 @@ function TimeGrid<TMeta extends Record<string, unknown>>({
       aria-label={labels.gridLabel(rangeLabel)}
       aria-rowcount={hours.length + 2}
       aria-colcount={lanes.length + 1}
+      data-resource-column-min={resourceMode ? RESOURCE_COLUMN_MIN : undefined}
       className={cn("flex min-h-0 flex-1 flex-col", resourceMode && "overflow-x-auto", className)}
     >
       <div className="flex min-h-0 min-w-0 flex-1 flex-col" style={boardWidth ? { minWidth: boardWidth } : undefined}>
@@ -965,11 +969,29 @@ function TimeGrid<TMeta extends Record<string, unknown>>({
           ))}
           <div className="pointer-events-none absolute inset-0 grid" style={{ gridTemplateColumns: columns }}>
             <div />
-            {lanes.map((lane) => (
+            {lanes.map((lane) => {
+              const laneBoxes = boxes.filter((box) => box.date === lane.key)
+              const crowded = laneBoxes.some((box) => box.columns > 2)
+              if (crowded) {
+                return (
+                  <div key={lane.key} className="pointer-events-auto relative overflow-y-auto p-1">
+                    <div className="grid gap-1">
+                      {laneBoxes.map((box) => {
+                        const event = events.find((item) => item.id === box.eventId)
+                        if (!event) return null
+                        return (
+                          <div key={event.id} className="min-w-0">
+                            {eventCard(event, { continuesBefore: box.continuesBefore, continuesAfter: box.continuesAfter })}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              }
+              return (
               <div key={lane.key} className="relative">
-                {boxes
-                  .filter((box) => box.date === lane.key)
-                  .map((box) => {
+                {laneBoxes.map((box) => {
                     const event = events.find((item) => item.id === box.eventId)
                     if (!event) return null
                     const selected = event.id === selectedId
@@ -991,7 +1013,8 @@ function TimeGrid<TMeta extends Record<string, unknown>>({
                     )
                   })}
               </div>
-            ))}
+              )
+            })}
           </div>
           {showNow && now != null && nowTop != null ? (
             <div

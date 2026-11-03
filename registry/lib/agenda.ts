@@ -247,6 +247,7 @@ export type AgendaLabels = {
   deleted: (title: string) => string
   holiday: (title: string) => string
   resourceFilter: string
+  conflict: string
   allResources: string
   unassignedResource: string
   conflictWith: (titles: string) => string
@@ -352,6 +353,7 @@ export const agendaLabels: AgendaLabels = {
   deleted: () => "Evento eliminado",
   holiday: (title) => `Festivo: ${title}`,
   resourceFilter: "Recurso",
+  conflict: "Choque",
   allResources: "Todos los recursos",
   unassignedResource: "Sin recurso",
   conflictWith: (titles) => `Choque con ${titles}`,
@@ -452,6 +454,7 @@ export const agendaLabelsEn: AgendaLabels = {
   deleted: () => "Event deleted",
   holiday: (title) => `Holiday: ${title}`,
   resourceFilter: "Resource",
+  conflict: "Conflict",
   allResources: "All resources",
   unassignedResource: "Unassigned",
   conflictWith: (titles) => `Conflicts with ${titles}`,

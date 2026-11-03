@@ -10,7 +10,7 @@ No se toca el hub. Esta nota solo propone la regla para que alguien del sistema 
 
 Un choque de reserva no se señala solo con color.
 
-Si dos intervalos del mismo recurso se solapan, la interfaz muestra icono y texto en el evento y un conteo en el encabezado. El texto entra en el nombre accesible. El conteo es un control de teclado que lleva el foco a un evento en conflicto. El color puede acompañar; no puede ser la única señal.
+Si dos intervalos del mismo recurso se solapan, la interfaz muestra icono y una palabra visible que no se trunca («Choque») en el evento, más un conteo en el encabezado. Con quién choca va en el nombre accesible y en un tooltip. El conteo es un control de teclado que lleva el foco a un evento en conflicto. El color puede acompañar; no puede ser la única señal. Una tarjeta angosta no puede dejar el aviso en un icono solo.
 
 El intervalo es semiabierto: terminar cuando otro empieza no es choque.
 
