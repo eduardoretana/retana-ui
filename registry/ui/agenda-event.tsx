@@ -13,6 +13,7 @@ import {
   Flag,
   MapPin,
   MoreHorizontal,
+  TriangleAlert,
   PenLine,
   Search,
   Users,
@@ -58,7 +59,7 @@ const ICONS: Record<string, LucideIcon> = {
   video: Video,
 }
 
-export function AgendaCategoryIcon({ name, className }: { name?: string; className?: string }) {
+export function AgendaCategoryIcon({ name, className }: { name?: string | undefined; className?: string | undefined }) {
   const Icon = (name && ICONS[name]) || Calendar
   return <Icon className={cn("size-3.5", className)} aria-hidden />
 }
@@ -82,24 +83,26 @@ export function agendaToneEdge(tone?: AgendaTone) {
 
 export type AgendaEventCardProps<TMeta = Record<string, unknown>> = {
   event: AgendaEvent<TMeta>
-  category?: AgendaCategory | null
-  locale?: string
-  timeZone?: string
-  labels?: Partial<AgendaLabels>
-  ongoing?: boolean
-  selected?: boolean
-  readOnly?: boolean
-  snapMinutes?: number
-  continuesBefore?: boolean
-  continuesAfter?: boolean
-  density?: "regular" | "compact"
-  onSelect?: (id: string) => void
-  onReschedule?: (id: string, move: AgendaMove, source: AgendaChangeSource) => void
-  onEdit?: () => void
-  onDuplicate?: () => void
-  onDelete?: () => void
-  className?: string
-  children?: React.ReactNode
+  category?: AgendaCategory | null | undefined
+  locale?: string | undefined
+  timeZone?: string | undefined
+  labels?: Partial<AgendaLabels> | undefined
+  ongoing?: boolean | undefined
+  selected?: boolean | undefined
+  readOnly?: boolean | undefined
+  snapMinutes?: number | undefined
+  continuesBefore?: boolean | undefined
+  continuesAfter?: boolean | undefined
+  /** Visible sentence, icon plus text. Null hides the notice. */
+  conflictLabel?: string | null | undefined
+  density?: "regular" | "compact" | undefined
+  onSelect?: ((id: string) => void) | undefined
+  onReschedule?: ((id: string, move: AgendaMove, source: AgendaChangeSource) => void) | undefined
+  onEdit?: (() => void) | undefined
+  onDuplicate?: (() => void) | undefined
+  onDelete?: (() => void) | undefined
+  className?: string | undefined
+  children?: React.ReactNode | undefined
 }
 
 export function AgendaEventCard<TMeta extends Record<string, unknown> = Record<string, unknown>>({
@@ -114,6 +117,7 @@ export function AgendaEventCard<TMeta extends Record<string, unknown> = Record<s
   snapMinutes = 15,
   continuesBefore = false,
   continuesAfter = false,
+  conflictLabel = null,
   density = "regular",
   onSelect,
   onReschedule,
@@ -126,6 +130,7 @@ export function AgendaEventCard<TMeta extends Record<string, unknown> = Record<s
   const labels = resolveAgendaLabels(labelOverrides)
   const when = formatInterval(event.startsAt, event.endsAt, timeZone, locale, event.allDay)
   const canEdit = !readOnly && Boolean(onReschedule)
+  const openLabel = conflictLabel ? `${labels.openEvent(event.title, when)}. ${conflictLabel}` : labels.openEvent(event.title, when)
 
   function commit(source: AgendaChangeSource, move: AgendaMove) {
     onReschedule?.(event.id, move, source)
@@ -156,6 +161,7 @@ export function AgendaEventCard<TMeta extends Record<string, unknown> = Record<s
       data-ongoing={ongoing ? "true" : "false"}
       data-selected={selected ? "true" : "false"}
       data-all-day={event.allDay ? "true" : "false"}
+      data-conflict={conflictLabel ? "true" : "false"}
       className={cn(
         "relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-md border border-border border-s-2 bg-card text-card-foreground shadow-sm",
         agendaToneEdge(category?.tone),
@@ -171,7 +177,7 @@ export function AgendaEventCard<TMeta extends Record<string, unknown> = Record<s
           className="flex min-w-0 flex-1 items-start gap-1.5 rounded-sm text-start focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           aria-pressed={selected}
           aria-keyshortcuts="Alt+ArrowUp Alt+ArrowDown Alt+ArrowLeft Alt+ArrowRight"
-          aria-label={labels.openEvent(event.title, when)}
+          aria-label={openLabel}
           onClick={() => onSelect?.(event.id)}
           onKeyDown={onTitleKeyDown}
         >
@@ -186,6 +192,12 @@ export function AgendaEventCard<TMeta extends Record<string, unknown> = Record<s
                 {ongoing ? <span className="font-medium text-primary">{labels.ongoing}</span> : null}
                 {continuesBefore ? <span>{labels.continuesBefore}</span> : null}
                 {continuesAfter ? <span>{labels.continuesAfter}</span> : null}
+              </span>
+            ) : null}
+            {conflictLabel ? (
+              <span className="mt-0.5 flex min-w-0 items-center gap-1 text-[11px] font-medium text-foreground">
+                <TriangleAlert aria-hidden className="size-3 shrink-0" />
+                <span className="truncate">{conflictLabel}</span>
               </span>
             ) : null}
           </span>

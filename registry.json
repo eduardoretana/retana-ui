@@ -30630,10 +30630,10 @@
       "name": "agenda-core",
       "type": "registry:lib",
       "title": "Agenda core",
-      "description": "Types and pure helpers for a CRM agenda: time zones, Monday weeks, overlap columns, all-day and midnight-crossing slices.",
+      "description": "Types and pure helpers for a CRM agenda: time zones, Monday weeks, overlap columns, all-day slices, resource conflicts, and hours against capacity.",
       "author": "Eduardo Retana",
       "categories": ["table"],
-      "docs": "Clean-room helpers for agenda. No React and no fetching. Spanish labels are the default; agendaLabelsEn is the English set. The default time zone is America/Mexico_City and the week starts on Monday. A missing civil hour snaps forward. A repeated hour uses the earlier offset. Time zones reuse date-range (timeZoneOffsetMs, startOfZonedDay, addZonedDays). view-calendar stays the date-field month inside multi-view. Pass a stable now from the host when tests or demos must not follow the clock. No mockup source, copy, or assets were copied. If the CLI asks to overwrite date-range and the host already has it, answer no.",
+      "docs": "Clean-room helpers for agenda. No React and no fetching. Spanish labels are the default; agendaLabelsEn is the English set. The default time zone is America/Mexico_City and the week starts on Monday. A missing civil hour snaps forward. A repeated hour uses the earlier offset. Time zones reuse date-range (timeZoneOffsetMs, startOfZonedDay, addZonedDays). view-calendar stays the date-field month inside multi-view. Pass a stable now from the host when tests or demos must not follow the clock. No mockup source, copy, or assets were copied. If the CLI asks to overwrite date-range and the host already has it, answer no. findResourceConflicts and resourceLoads are pure. Overlap uses absolute instants. capacityHours is the budget of one civil day multiplied by the visible dates.",
       "files": [
         {
           "path": "registry/lib/agenda.ts",
@@ -30648,7 +30648,7 @@
       ],
       "meta": {
         "titleEs": "Núcleo de la agenda",
-        "descriptionEs": "Tipos y funciones puras: zona horaria, semana en lunes, columnas de traslape y eventos que cruzan la medianoche.",
+        "descriptionEs": "Tipos y funciones puras: zona, traslapes, choques del mismo recurso y horas contra el cupo.",
         "preview": "app/examples/agenda-core/preview.tsx",
         "previewHref": "/examples/agenda-core",
         "examples": [
@@ -30684,6 +30684,16 @@
             "name": "agendaLabels / agendaLabelsEn",
             "type": "AgendaLabels",
             "description": "Spanish is the default chrome. Spread either object and override the keys you need."
+          },
+          {
+            "name": "findResourceConflicts",
+            "type": "(events) => AgendaConflict[]",
+            "description": "Pairs that overlap on the same resource. Half-open intervals: a shared endpoint is not a conflict. Events without resourceId are ignored."
+          },
+          {
+            "name": "resourceLoads",
+            "type": "(events, resources, dates, timeZone) => ResourceLoad[]",
+            "description": "Scheduled milliseconds clipped to the visible civil dates, compared with capacityHours times the number of dates. Overlaps are summed."
           }
         ]
       }
@@ -30753,6 +30763,11 @@
             "name": "timeZone / locale / snapMinutes / labels",
             "type": "string, string, number, partial labels",
             "description": "Default America/Mexico_City, es-MX, and 15 minutes. Spanish chrome unless labels override it."
+          },
+          {
+            "name": "conflictLabel",
+            "type": "string | null",
+            "description": "Icon plus text on the card. The open button name includes the same sentence. Null hides it."
           }
         ]
       }
@@ -30830,12 +30845,12 @@
       "name": "agenda",
       "type": "registry:block",
       "title": "Agenda",
-      "description": "A CRM agenda: day, week, and month, a now line, overlap columns, drag or keyboard edits, and a sidebar with a mini month, upcoming items, and category filters.",
+      "description": "A CRM agenda: day, week, and month, a now line, overlap columns, drag or keyboard edits, and a sidebar with a mini month, upcoming items, and category filters. Optional resources add a filter, day columns, conflict notices, and hours against capacity.",
       "author": "Eduardo Retana",
       "dependencies": ["lucide-react", "sonner"],
       "registryDependencies": ["badge", "button", "dropdown-menu", "popover", "scroll-area", "separator", "sheet", "skeleton", "switch", "tabs"],
       "categories": ["block", "table"],
-      "docs": "Clean-room agenda for any CRM. Pass events and categories. onReschedule is move, resize, and all-day, from drag, Alt+arrows, and the actions menu. onCreate and onCreateRequest receive a draft when someone drags an empty slot, presses Enter on a slot, or uses New event. The agenda does not mutate events. onSync is a generic callback with no provider. onOpenTask and onOpenRecord hand back opaque ids. view-calendar stays the date-field month inside multi-view. On a wide screen the selected event opens a side panel with Detail and Participants. Month opens that detail in a sheet. Loading, error, empty, and readOnly are props. Below 768px the week becomes a list, the detail sits in the card, and the sidebar opens from a button. Reduced motion skips scroll animation. The default time zone is America/Mexico_City, the week starts on Monday, and formats use es-MX. Answer no if the CLI asks to overwrite a primitive the host already has, or date-range when the host already has it. The item ships no theme. No mockup source, copy, colors, or assets were copied.",
+      "docs": "Clean-room agenda for any CRM. Pass events and categories. onReschedule is move, resize, and all-day, from drag, Alt+arrows, and the actions menu. onCreate and onCreateRequest receive a draft when someone drags an empty slot, presses Enter on a slot, or uses New event. The agenda does not mutate events. onSync is a generic callback with no provider. onOpenTask and onOpenRecord hand back opaque ids. view-calendar stays the date-field month inside multi-view. On a wide screen the selected event opens a side panel with Detail and Participants. Month opens that detail in a sheet. Loading, error, empty, and readOnly are props. Below 768px the week becomes a list, the detail sits in the card, and the sidebar opens from a button. Reduced motion skips scroll animation. The default time zone is America/Mexico_City, the week starts on Monday, and formats use es-MX. Answer no if the CLI asks to overwrite a primitive the host already has, or date-range when the host already has it. The item ships no theme. No mockup source, copy, colors, or assets were copied. Optional resources (id, label, capacityHours per civil day) add a filter, day columns when the agenda is at least 560px wide, and a stacked list below that. findResourceConflicts reports half-open overlaps on the same resource. A shared endpoint is not a conflict. Events without resourceId are ignored. resourceLoads sums clipped hours for the visible dates and reports the overage. Overlapping bookings are counted twice. An all-day event uses its stored instants, so a DST day is 23h or 25h. Drag does not change resourceId. shadcn/studio User Schedule #5 was an idea only (Pro, not purchased); no source or assets were copied.",
       "files": [
         {
           "path": "registry/blocks/agenda.tsx",
@@ -30865,9 +30880,19 @@
       ],
       "meta": {
         "titleEs": "Agenda",
-        "descriptionEs": "Día, semana y mes, línea de ahora, traslapes, arrastre o teclado, y una barra con mini calendario y categorías.",
+        "descriptionEs": "Día, semana y mes, con eje de recursos opcional, aviso de choques y horas contra el cupo.",
         "preview": "app/examples/agenda/preview.tsx",
         "previewHref": "/examples/agenda",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "resources", "label": "Recursos", "labelEn": "Resources" },
+          { "id": "conflicts", "label": "Choques", "labelEn": "Conflicts" },
+          { "id": "over", "label": "Sobrecapacidad", "labelEn": "Over capacity" },
+          { "id": "many", "label": "Muchos recursos", "labelEn": "Many resources" }
+        ],
         "examples": [
           {
             "title": "Estudio Cálamo",
@@ -30916,6 +30941,16 @@
             "name": "timeZone / locale / weekStartsOn / hourStart / hourEnd / now",
             "type": "strings and numbers",
             "description": "Default America/Mexico_City, es-MX, Monday, and the full day. now is the clock for the now line."
+          },
+          {
+            "name": "resources",
+            "type": "AgendaResource[]",
+            "description": "Optional axis. Each item has id, label, and optional capacityHours for one civil day. Omit the prop and the agenda stays a date grid."
+          },
+          {
+            "name": "resourceId / defaultResourceId / onResourceIdChange",
+            "type": "string | null",
+            "description": "Filter. null shows every resource. Controlled when resourceId is passed."
           }
         ]
       }
