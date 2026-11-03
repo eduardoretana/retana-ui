@@ -4,5 +4,5 @@ cycle_state: AUDITORIA
 spec_id: ci-checks-library
 profile: STANDARD
 base: 6671cfac72f736739d2d3dd2740cc5f13416acb3
-head: pending
-note: "El head de 40 caracteres se escribe en el commit de entrega. El auditor es otro agente: este ciclo no se autoaprueba."
+head: d615a583440c524da63f61d779c131ada818e787
+note: "Head del commit que introduce las piezas. El auditor es otro agente: este ciclo no se autoaprueba."
