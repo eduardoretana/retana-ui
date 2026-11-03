@@ -4,5 +4,5 @@ cycle_state: AUDITORIA
 spec_id: ci-checks-live
 profile: STANDARD
 base: 8f7859c06b59ca89be6aab89aa98ffe41a147f37
-head: 461f73e9e2e68978f6aae4e00ef994ef557cb9bb
-note: "Head del commit de la herramienta. Apilado sobre las piezas. El auditor es otro agente."
+head: de96d4ed72dfdd6fd89526ca75a250f37084ab20
+note: "Head del arreglo rebasado sobre las piezas. El auditor es otro agente."
