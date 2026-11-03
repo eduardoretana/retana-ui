@@ -70,6 +70,8 @@ export type MergeButtonProps = {
   onMerge?: () => void
   onCancel?: () => void
   reason?: string
+  /** Replaces the default status sentence. One line, not a second status. */
+  statusLabel?: string
   variant?: "rail" | "compact"
   labels?: MergeButtonLabels
   className?: string
@@ -80,11 +82,13 @@ export function MergeButton({
   onMerge,
   onCancel,
   reason,
+  statusLabel,
   variant = "rail",
   labels = mergeButtonLabels,
   className,
 }: MergeButtonProps) {
   const reduced = useReducedMotion()
+  const statusId = React.useId()
   const [asking, setAsking] = React.useState(false)
   const [seenPhase, setSeenPhase] = React.useState(phase)
   const confirmRef = React.useRef<HTMLButtonElement>(null)
@@ -112,7 +116,7 @@ export function MergeButton({
           ? labels.allPassed
           : phase === "rejected"
             ? labels.rejected
-            : labels.waiting
+            : (statusLabel ?? labels.waiting)
 
   return (
     <div
@@ -128,17 +132,17 @@ export function MergeButton({
       }}
     >
       {phase === "rejected" ? (
-        <p role="alert" className="text-sm break-words text-destructive">
+        <p id={statusId} role="alert" className="text-sm break-words text-destructive">
           {labels.rejected}
           {reason ? ` ${reason}` : null}
         </p>
       ) : phase === "merged" ? (
-        <p role="status" aria-live="polite" className="inline-flex items-center gap-1.5 text-sm text-foreground">
+        <p id={statusId} role="status" aria-live="polite" className="inline-flex items-center gap-1.5 text-sm text-foreground">
           <Check className="size-3.5" aria-hidden />
           {labels.merged}
         </p>
       ) : (
-        <p role="status" aria-live="polite" className={cn("text-sm text-foreground", variant === "compact" && phase === "ready" && "sr-only")}>
+        <p id={statusId} role="status" aria-live="polite" className={cn("text-sm text-foreground", variant === "compact" && phase === "ready" && "sr-only")}>
           {statusText}
         </p>
       )}
@@ -146,7 +150,7 @@ export function MergeButton({
         <div className="flex flex-wrap items-center gap-2">
           {showConfirm ? (
             <>
-              <Button ref={confirmRef} type="button" onClick={() => onMerge?.()}>
+              <Button ref={confirmRef} type="button" aria-describedby={statusId} onClick={() => onMerge?.()}>
                 <GitMerge aria-hidden />
                 {labels.confirm}
               </Button>
@@ -158,6 +162,7 @@ export function MergeButton({
             <Button
               type="button"
               disabled={phase === "disabled" || phase === "merging" || phase === "rejected"}
+              aria-describedby={statusId}
               aria-busy={phase === "merging" || undefined}
               onClick={() => {
                 if (phase !== "ready") return

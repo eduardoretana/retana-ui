@@ -8,8 +8,11 @@ describe("MergeButton", () => {
   it("stays disabled until checks pass", () => {
     const onMerge = vi.fn()
     render(<MergeButton phase="disabled" onMerge={onMerge} labels={mergeButtonLabelsEs} />)
-    expect(screen.getByRole("button", { name: "Fusionar" })).toBeDisabled()
-    expect(screen.getByRole("status")).toHaveTextContent(/esperando las comprobaciones/i)
+    const button = screen.getByRole("button", { name: "Fusionar" })
+    expect(button).toBeDisabled()
+    const status = screen.getByRole("status")
+    expect(status).toHaveTextContent(/esperando las comprobaciones/i)
+    expect(button).toHaveAttribute("aria-describedby", status.id)
   })
 
   it("does not call onMerge before confirmation", async () => {

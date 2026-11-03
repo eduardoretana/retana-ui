@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it } from "vitest"
 
-import { PrCreateCard, prCreateCardLabelsEs, type CommitNode } from "@/registry/ui/pr-create-card"
+import { formatRelativeTime, PrCreateCard, prCreateCardLabelsEs, type CommitNode } from "@/registry/ui/pr-create-card"
 
 const commit: CommitNode = {
   sha: "b7e21aa",
@@ -80,6 +80,24 @@ describe("PrCreateCard", () => {
     render(<PrCreateCard {...base} title={title} open commits={[]} />)
     expect(screen.getByRole("heading", { name: title })).toBeInTheDocument()
     expect(screen.getByText(/sin commits/i)).toBeInTheDocument()
+  })
+
+  it("renders an ISO instant as a relative time with a full title", () => {
+    const now = Date.parse("2026-11-02T18:00:00Z")
+    render(
+      <PrCreateCard
+        {...base}
+        open
+        now={now}
+        locale="es-MX"
+        commits={[{ ...commit, committedAt: "2026-11-02T15:00:00Z" }]}
+      />,
+    )
+    const time = screen.getByTitle(/2 de noviembre de 2026/)
+    expect(time.tagName).toBe("TIME")
+    expect(time).toHaveAttribute("dateTime", "2026-11-02T15:00:00Z")
+    expect(time).toHaveTextContent("hace 3 h")
+    expect(formatRelativeTime("2026-11-02T15:00:00Z", now, "en")).toBe("3 hr. ago")
   })
 
   it("respects reduced motion", () => {

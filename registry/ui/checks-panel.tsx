@@ -141,14 +141,13 @@ function Meter({
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={Math.round(scale * 100)}
-      className="h-1.5 w-full overflow-hidden rounded-full bg-muted"
+      className="h-1.5 w-full overflow-hidden rounded-full bg-foreground/50"
     >
       <div
         data-bar
         className={cn(
-          "h-full w-full origin-left bg-primary transition-transform duration-200 motion-reduce:transition-none",
+          "h-full w-full origin-left bg-chart-2 transition-transform duration-200 motion-reduce:transition-none",
           status === "failed" && "bg-destructive",
-          (status === "queued" || status === "skipped" || status === "cancelled") && "bg-muted-foreground",
         )}
         style={{ transform: `scaleX(${scale})`, transitionDuration: reduced ? "0ms" : "200ms" }}
       />
@@ -205,7 +204,12 @@ export function ChecksPanel({
           style={{ willChange: reduced ? "auto" : "transform, opacity" }}
           className="w-full min-w-0 rounded-xl border border-border bg-card p-3 shadow-sm"
         >
-          <p className="text-sm break-words text-foreground">{labels.header(sha, message)}</p>
+          <div className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+            <p className="font-mono text-xs text-muted-foreground">{labels.listLabel(sha)}</p>
+            <p className="min-w-0 truncate text-sm text-foreground" title={message}>
+              {message}
+            </p>
+          </div>
           <ol
             aria-label={labels.listLabel(sha)}
             className={cn(

@@ -67,6 +67,14 @@ describe("ChecksPanel", () => {
     expect(screen.getByText("Cancelada")).toBeInTheDocument()
   })
 
+  it("separates the sha from the title", () => {
+    render(<ChecksPanel {...base} open />)
+    expect(screen.getByText("Comprobaciones en b7e21aa").className).toMatch(/font-mono/)
+    const title = screen.getByTitle("Guardar el folio del horno")
+    expect(title).toHaveClass("truncate")
+    expect(title).not.toHaveTextContent("b7e21aa")
+  })
+
   it("labels an estimated duration", () => {
     render(<ChecksPanel {...base} open />)
     expect(screen.getByText(/estimado/i)).toBeInTheDocument()

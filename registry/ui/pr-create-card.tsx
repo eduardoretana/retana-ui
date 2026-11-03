@@ -28,8 +28,34 @@ export type CommitNode = {
   sha: string
   message: string
   author: string
+  /** Preformatted label. Used when `committedAt` is absent. */
   timeLabel: string
+  /** ISO-8601 instant. Rendered as a localized relative time inside `<time>`. */
+  committedAt?: string
   branches?: readonly string[]
+}
+
+export type CommitTimeLocale = "es-MX" | "en"
+
+/** Short relative time. es-MX: "hace 3 h". English: "3 hr. ago". */
+export function formatRelativeTime(iso: string, now: number, locale: CommitTimeLocale) {
+  const then = Date.parse(iso)
+  if (!Number.isFinite(then)) return iso
+  const deltaSec = Math.round((then - now) / 1000)
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto", style: "short" })
+  const abs = Math.abs(deltaSec)
+  if (abs < 60) return rtf.format(deltaSec, "second")
+  if (abs < 3600) return rtf.format(Math.round(deltaSec / 60), "minute")
+  if (abs < 86400) return rtf.format(Math.round(deltaSec / 3600), "hour")
+  if (abs < 86400 * 30) return rtf.format(Math.round(deltaSec / 86400), "day")
+  return rtf.format(Math.round(deltaSec / (86400 * 30)), "month")
+}
+
+/** Full date for the tooltip and the title of `<time>`. */
+export function formatAbsoluteTime(iso: string, locale: CommitTimeLocale) {
+  const then = Date.parse(iso)
+  if (!Number.isFinite(then)) return iso
+  return new Intl.DateTimeFormat(locale, { dateStyle: "full", timeStyle: "short" }).format(new Date(then))
 }
 
 export type PrCreateCardLabels = {
@@ -108,6 +134,9 @@ export type PrCreateCardProps = {
   onOpenChange?: (open: boolean) => void
   variant?: "rail" | "compact"
   labels?: PrCreateCardLabels
+  /** Clock for relative commit times. The host passes it so render stays pure. */
+  now?: number
+  locale?: CommitTimeLocale
   className?: string
 }
 
@@ -133,10 +162,13 @@ export function PrCreateCard({
   onOpenChange,
   variant = "rail",
   labels = prCreateCardLabels,
+  now,
+  locale = "en",
   className,
 }: PrCreateCardProps) {
   const reduced = useReducedMotion()
   const [uncontrolled, setUncontrolled] = React.useState(defaultOpen)
+  const [openedOnMount] = React.useState(openProp ?? defaultOpen)
   const open = openProp ?? uncontrolled
   const panelId = React.useId()
   const setOpen = (next: boolean) => {
@@ -175,11 +207,11 @@ export function PrCreateCard({
         <motion.section
           id={panelId}
           aria-labelledby={`${panelId}-title`}
-          initial={reduced ? false : { opacity: 0, y: -6 }}
+          initial={reduced || openedOnMount ? false : { opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={reduced ? { duration: 0 } : { duration: motionPresets.duration.standard, ease: motionPresets.ease.standard }}
-          style={{ willChange: reduced ? "auto" : "transform, opacity" }}
-          className="w-full min-w-0 rounded-xl border border-border bg-card p-3 shadow-sm"
+          transition={reduced || openedOnMount ? { duration: 0 } : { duration: motionPresets.duration.standard, ease: motionPresets.ease.standard }}
+          style={{ willChange: reduced || openedOnMount ? "auto" : "transform, opacity" }}
+          className="w-full min-w-0 rounded-xl border border-foreground/25 bg-card p-3 text-card-foreground shadow-sm"
         >
           <div className="flex min-w-0 flex-wrap items-start gap-2">
             <h2 id={`${panelId}-title`} className="min-w-0 flex-1 text-sm font-medium break-words text-foreground">
@@ -203,7 +235,7 @@ export function PrCreateCard({
             <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
               {commits.map((commit) => (
                 <li key={commit.sha} className="min-w-0 rounded-md border border-border p-2">
-                  <CommitBody commit={commit} />
+                  <CommitBody commit={commit} now={now} locale={locale} />
                 </li>
               ))}
             </ul>
@@ -216,7 +248,7 @@ export function PrCreateCard({
                     {index < commits.length - 1 ? <span className="w-px flex-1 bg-border" /> : null}
                   </span>
                   <div className="min-w-0 pb-3">
-                    <CommitBody commit={commit} />
+                    <CommitBody commit={commit} now={now} locale={locale} />
                   </div>
                 </li>
               ))}
@@ -231,15 +263,24 @@ export function PrCreateCard({
   )
 }
 
-function CommitBody({ commit }: { commit: CommitNode }) {
+function CommitBody({ commit, now, locale }: { commit: CommitNode; now?: number; locale: CommitTimeLocale }) {
+  const iso = commit.committedAt && now != null ? commit.committedAt : undefined
+  const relative = iso ? formatRelativeTime(iso, now!, locale) : commit.timeLabel
+  const absolute = iso ? formatAbsoluteTime(iso, locale) : undefined
   return (
     <div className="min-w-0">
       <p className="text-sm break-words text-foreground">{commit.message}</p>
       <p className="font-mono text-xs break-all text-muted-foreground">{commit.sha}</p>
-      <p className="text-xs break-words text-muted-foreground">
-        {commit.author}
+      <p className="text-xs break-words text-foreground">
+        <span className="text-muted-foreground">{commit.author}</span>
         <span aria-hidden> · </span>
-        {commit.timeLabel}
+        {iso ? (
+          <time dateTime={iso} title={absolute}>
+            {relative}
+          </time>
+        ) : (
+          relative
+        )}
       </p>
       {commit.branches && commit.branches.length > 0 ? (
         <p className="mt-1 flex flex-wrap gap-1">

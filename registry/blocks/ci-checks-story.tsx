@@ -65,12 +65,15 @@ const title = {
   en: "Keep the kiln folio across a reload",
 }
 
+const storyNow = Date.parse("2026-11-02T18:00:00Z")
+
 const commits: CommitNode[] = [
   {
     sha: "b7e21aa",
     message: "Leer el folio desde la ficha",
     author: "Noa Ferrer",
     timeLabel: "hace 40 min",
+    committedAt: "2026-11-02T17:20:00Z",
     branches: ["feat/folio-horno"],
   },
   {
@@ -78,6 +81,7 @@ const commits: CommitNode[] = [
     message: "Subir el horno de pruebas",
     author: "Sam Ríos",
     timeLabel: "hace 3 h",
+    committedAt: "2026-11-02T15:00:00Z",
     branches: ["main"],
   },
 ]
@@ -209,10 +213,12 @@ export function CiChecksStory({
         number={phase === "empty" ? undefined : 42}
         state={prState(phase)}
         diffStat={phase === "empty" ? { add: 0, del: 0 } : { add: 86, del: 12 }}
-        commits={phase === "empty" || phase === "creating" ? [] : commits}
-        open={phase !== "empty"}
-        variant={variant}
-        labels={prLabels}
+          commits={phase === "empty" || phase === "creating" ? [] : commits}
+          open={phase !== "empty"}
+          variant={variant}
+          labels={prLabels}
+          now={storyNow}
+          locale={locale === "es" ? "es-MX" : "en"}
       />
       {phase === "empty" ? null : (
         <ChecksPanel
