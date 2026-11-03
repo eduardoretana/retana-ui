@@ -81,6 +81,13 @@ function providesModule(dependencies: Set<string>, name: string) {
 function hostCanResolve(specifier: string, dependencies: Set<string>, modules: Set<string>) {
   if (modules.has(specifier)) return true
   if (specifier === "@/lib/utils") return true
+  if (specifier.startsWith("@/lib/")) {
+    const rest = specifier.slice("@/lib/".length)
+    const root = rest.split("/")[0]
+    if (!root || root === "utils") return false
+    if (modules.has(`${specifier}/index`)) return true
+    return providesModule(dependencies, root)
+  }
   if (specifier.startsWith("@/components/ui/")) {
     const name = specifier.slice("@/components/ui/".length)
     return !name.includes("/") && providesModule(dependencies, name)

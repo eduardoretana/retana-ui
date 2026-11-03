@@ -32050,6 +32050,560 @@
           }
         ]
       }
+    },
+    {
+      "name": "guard-rules",
+      "type": "registry:lib",
+      "title": "Guard rules",
+      "description": "Pure deterministic guard engine. When an action kind matches, nested conditions resolve to allow, require_approval, block, handoff_to_human, or log. ApprovalGate is the stable port other tools use, including a git.merge approval.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "herramientas"
+      ],
+      "docs": "Clean-room. The rule-builder idea is from a public post (https://x.com/heyanantj/status/2116917836086186436): idea only, no license. No source, copy, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Demo data is fictional (marca-sintetica, +52 55 0000 0000).",
+      "files": [
+        {
+          "path": "registry/lib/guard-rules/approval-gate.ts",
+          "type": "registry:lib",
+          "target": "@lib/guard-rules/approval-gate.ts"
+        },
+        {
+          "path": "registry/lib/guard-rules/audit-log.ts",
+          "type": "registry:lib",
+          "target": "@lib/guard-rules/audit-log.ts"
+        },
+        {
+          "path": "registry/lib/guard-rules/condition.ts",
+          "type": "registry:lib",
+          "target": "@lib/guard-rules/condition.ts"
+        },
+        {
+          "path": "registry/lib/guard-rules/data.ts",
+          "type": "registry:lib",
+          "target": "@lib/guard-rules/data.ts"
+        },
+        {
+          "path": "registry/lib/guard-rules/evaluate.ts",
+          "type": "registry:lib",
+          "target": "@lib/guard-rules/evaluate.ts"
+        },
+        {
+          "path": "registry/lib/guard-rules/freeze.ts",
+          "type": "registry:lib",
+          "target": "@lib/guard-rules/freeze.ts"
+        },
+        {
+          "path": "registry/lib/guard-rules/guard-action.ts",
+          "type": "registry:lib",
+          "target": "@lib/guard-rules/guard-action.ts"
+        },
+        {
+          "path": "registry/lib/guard-rules/hash.ts",
+          "type": "registry:lib",
+          "target": "@lib/guard-rules/hash.ts"
+        },
+        {
+          "path": "registry/lib/guard-rules/index.ts",
+          "type": "registry:lib",
+          "target": "@lib/guard-rules/index.ts"
+        },
+        {
+          "path": "registry/lib/guard-rules/messages.ts",
+          "type": "registry:lib",
+          "target": "@lib/guard-rules/messages.ts"
+        },
+        {
+          "path": "registry/lib/guard-rules/preset.ts",
+          "type": "registry:lib",
+          "target": "@lib/guard-rules/preset.ts"
+        },
+        {
+          "path": "registry/lib/guard-rules/rulesets.ts",
+          "type": "registry:lib",
+          "target": "@lib/guard-rules/rulesets.ts"
+        },
+        {
+          "path": "registry/lib/guard-rules/schema.ts",
+          "type": "registry:lib",
+          "target": "@lib/guard-rules/schema.ts"
+        },
+        {
+          "path": "registry/lib/guard-rules/types.ts",
+          "type": "registry:lib",
+          "target": "@lib/guard-rules/types.ts"
+        },
+        {
+          "path": "registry/lib/guard-rules/webhook.ts",
+          "type": "registry:lib",
+          "target": "@lib/guard-rules/webhook.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Reglas de guardas",
+        "descriptionEs": "Motor puro. Evalúa una acción (WhatsApp o git.merge), abre aprobaciones que vencen y escribe una bitácora por cuenta.",
+        "preview": "app/examples/guard-rules/preview.tsx",
+        "previewHref": "/examples/guard-rules",
+        "examples": [
+          {
+            "title": "Núcleo",
+            "href": "/examples/guard-rules",
+            "description": "Un bloqueo ficticio de WhatsApp y un git.merge que pide aprobación."
+          }
+        ],
+        "usage": "evaluateRules(ruleset, action, clock)\nguardAction({ ruleset, gate, audit, clock, nextAuditId }, action)",
+        "api": [
+          {
+            "name": "GuardAction",
+            "type": "{ accountId, kind, data, text? }",
+            "description": "kind is an open string. git.merge is valid."
+          },
+          {
+            "name": "evaluateRules",
+            "type": "(ruleset, action, clock) => Evaluation",
+            "description": "Pure. Missing data never resolves to allow."
+          },
+          {
+            "name": "ApprovalGate",
+            "type": "interface",
+            "description": "create, get, list, decide, consume. MemoryApprovalGate is the in-memory adapter."
+          },
+          {
+            "name": "guardAction",
+            "type": "function",
+            "description": "Pre-action hook. Consumes one matching approval or opens a pending ticket."
+          },
+          {
+            "name": "explain / decisionLabel",
+            "type": "(evaluation, es|en)",
+            "description": "es-MX and English copy from the core."
+          }
+        ]
+      }
+    },
+    {
+      "name": "guard-rule-builder",
+      "type": "registry:component",
+      "title": "Guard rule builder",
+      "description": "When / conditions / then editor for one guard rule. Reads and writes the guard-rules types. No backend.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/guard-rules",
+        "@retana/empty-state",
+        "button",
+        "input",
+        "label",
+        "checkbox",
+        "badge",
+        "separator",
+        "skeleton"
+      ],
+      "categories": [
+        "herramientas"
+      ],
+      "docs": "Clean-room. The rule-builder idea is from a public post (https://x.com/heyanantj/status/2116917836086186436): idea only, no license. No source, copy, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Demo data is fictional (marca-sintetica, +52 55 0000 0000).",
+      "files": [
+        {
+          "path": "registry/ui/guard-rule-builder.tsx",
+          "type": "registry:component",
+          "target": "@ui/guard-rule-builder.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Constructor de reglas",
+        "descriptionEs": "Arma una regla Cuando, condiciones y entonces. No guarda sola.",
+        "preview": "app/examples/guard-rule-builder/preview.tsx",
+        "previewHref": "/examples/guard-rule-builder",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "readonly",
+            "label": "Solo lectura",
+            "labelEn": "Read only"
+          },
+          {
+            "id": "nested",
+            "label": "Anidada",
+            "labelEn": "Nested"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Constructor de reglas",
+            "href": "/examples/guard-rule-builder",
+            "description": "Arma una regla Cuando, condiciones y entonces. No guarda sola."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/guard-rule-builder/stress",
+            "description": "320px, vacío, carga, error y un texto largo."
+          }
+        ],
+        "usage": "<GuardRuleBuilder rule={rule} locale=\"es\" onChange={setRule} />",
+        "api": [
+          {
+            "name": "rule",
+            "type": "GuardRule | null",
+            "description": "Controlled rule. Null is the empty state."
+          },
+          {
+            "name": "locale",
+            "type": "\"es\" | \"en\"",
+            "description": "Chrome and the summary sentence. Default en."
+          },
+          {
+            "name": "status",
+            "type": "\"idle\" | \"loading\" | \"error\"",
+            "description": "Loading and error are explicit."
+          },
+          {
+            "name": "readOnly",
+            "type": "boolean",
+            "description": "Viewer. Controls are disabled."
+          },
+          {
+            "name": "onChange",
+            "type": "(rule) => void",
+            "description": "Called with the next rule."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      }
+    },
+    {
+      "name": "guard-rule-simulator",
+      "type": "registry:component",
+      "title": "Guard rule simulator",
+      "description": "Runs one action against a ruleset and shows the decision and trace. Action kinds are open, including git.merge.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/guard-rules",
+        "@retana/empty-state",
+        "button",
+        "input",
+        "label",
+        "badge",
+        "scroll-area",
+        "skeleton"
+      ],
+      "categories": [
+        "herramientas"
+      ],
+      "docs": "Clean-room. The rule-builder idea is from a public post (https://x.com/heyanantj/status/2116917836086186436): idea only, no license. No source, copy, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Demo data is fictional (marca-sintetica, +52 55 0000 0000).",
+      "files": [
+        {
+          "path": "registry/ui/guard-rule-simulator.tsx",
+          "type": "registry:component",
+          "target": "@ui/guard-rule-simulator.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Simulador de reglas",
+        "descriptionEs": "Prueba una acción contra el ruleset y muestra la decisión y la traza.",
+        "preview": "app/examples/guard-rule-simulator/preview.tsx",
+        "previewHref": "/examples/guard-rule-simulator",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "missing",
+            "label": "Dato faltante",
+            "labelEn": "Missing fact"
+          },
+          {
+            "id": "merge",
+            "label": "Merge",
+            "labelEn": "Merge"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Simulador de reglas",
+            "href": "/examples/guard-rule-simulator",
+            "description": "Prueba una acción contra el ruleset y muestra la decisión y la traza."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/guard-rule-simulator/stress",
+            "description": "320px, vacío, carga, error y un texto largo."
+          }
+        ],
+        "usage": "<GuardRuleSimulator ruleset={ruleset} action={action} locale=\"es\" clock={clock} />",
+        "api": [
+          {
+            "name": "ruleset",
+            "type": "Ruleset | null",
+            "description": "Active ruleset. Null is empty."
+          },
+          {
+            "name": "action",
+            "type": "GuardAction | null",
+            "description": "Includes kind and structured data."
+          },
+          {
+            "name": "clock",
+            "type": "() => number",
+            "description": "Injected clock. Default returns 0."
+          },
+          {
+            "name": "locale",
+            "type": "\"es\" | \"en\"",
+            "description": "Decision copy comes from the core."
+          },
+          {
+            "name": "status",
+            "type": "\"idle\" | \"loading\" | \"error\"",
+            "description": "Loading skips evaluation."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      }
+    },
+    {
+      "name": "guard-approval-queue",
+      "type": "registry:component",
+      "title": "Guard approval queue",
+      "description": "Pending, approved, rejected, and expired tickets. Expired tickets and viewers cannot approve.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/guard-rules",
+        "@retana/empty-state",
+        "button",
+        "badge",
+        "skeleton"
+      ],
+      "categories": [
+        "herramientas"
+      ],
+      "docs": "Clean-room. The rule-builder idea is from a public post (https://x.com/heyanantj/status/2116917836086186436): idea only, no license. No source, copy, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Demo data is fictional (marca-sintetica, +52 55 0000 0000).",
+      "files": [
+        {
+          "path": "registry/ui/guard-approval-queue.tsx",
+          "type": "registry:component",
+          "target": "@ui/guard-approval-queue.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Cola de aprobaciones",
+        "descriptionEs": "Cola pending, approved, rejected y expired. Un lector no decide y lo vencido no se aprueba.",
+        "preview": "app/examples/guard-approval-queue/preview.tsx",
+        "previewHref": "/examples/guard-approval-queue",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "expired",
+            "label": "Vencida",
+            "labelEn": "Expired"
+          },
+          {
+            "id": "viewer",
+            "label": "Lector",
+            "labelEn": "Viewer"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Cola de aprobaciones",
+            "href": "/examples/guard-approval-queue",
+            "description": "Cola pending, approved, rejected y expired. Un lector no decide y lo vencido no se aprueba."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/guard-approval-queue/stress",
+            "description": "320px, vacío, carga, error y un texto largo."
+          }
+        ],
+        "usage": "<GuardApprovalQueue items={items} now={now} role=\"approver\" locale=\"es\" onApprove={approve} onReject={reject} />",
+        "api": [
+          {
+            "name": "items",
+            "type": "ApprovalQueueItem[]",
+            "description": "Already loaded by the host. The piece does not import a store."
+          },
+          {
+            "name": "now",
+            "type": "number",
+            "description": "Injected clock. Pending past expiresAt renders as expired."
+          },
+          {
+            "name": "role",
+            "type": "viewer | editor | approver",
+            "description": "Only approver can press the buttons."
+          },
+          {
+            "name": "onApprove / onReject",
+            "type": "(id) => void",
+            "description": "Host calls ApprovalGate.decide."
+          },
+          {
+            "name": "locale",
+            "type": "\"es\" | \"en\"",
+            "description": "Reason text comes from guardMessage."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      }
+    },
+    {
+      "name": "guard-audit-log",
+      "type": "registry:component",
+      "title": "Guard audit log",
+      "description": "Append-only decision list. There is no delete control.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/guard-rules",
+        "@retana/empty-state",
+        "badge",
+        "scroll-area",
+        "skeleton"
+      ],
+      "categories": [
+        "herramientas"
+      ],
+      "docs": "Clean-room. The rule-builder idea is from a public post (https://x.com/heyanantj/status/2116917836086186436): idea only, no license. No source, copy, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Demo data is fictional (marca-sintetica, +52 55 0000 0000).",
+      "files": [
+        {
+          "path": "registry/ui/guard-audit-log.tsx",
+          "type": "registry:component",
+          "target": "@ui/guard-audit-log.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Bitácora de guardas",
+        "descriptionEs": "Lista de solo lectura. Cada decisión se agrega y no se borra.",
+        "preview": "app/examples/guard-audit-log/preview.tsx",
+        "previewHref": "/examples/guard-audit-log",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Bitácora de guardas",
+            "href": "/examples/guard-audit-log",
+            "description": "Lista de solo lectura. Cada decisión se agrega y no se borra."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/guard-audit-log/stress",
+            "description": "320px, vacío, carga, error y un texto largo."
+          }
+        ],
+        "usage": "<GuardAuditLog entries={entries} locale=\"es\" />",
+        "api": [
+          {
+            "name": "entries",
+            "type": "AuditLogItem[]",
+            "description": "Host-provided records. The piece cannot append or delete."
+          },
+          {
+            "name": "locale",
+            "type": "\"es\" | \"en\"",
+            "description": "Decision labels come from the core."
+          },
+          {
+            "name": "status",
+            "type": "\"idle\" | \"loading\" | \"error\"",
+            "description": "Empty, loading, and error are explicit."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      }
     }
   ]
 }

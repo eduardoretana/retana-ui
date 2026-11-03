@@ -229,6 +229,21 @@ export default function DocsPage() {
         </section>
 
         <section className="flex flex-col gap-3 text-sm leading-6">
+          <h2 className="text-lg font-semibold">Herramientas</h2>
+          <p className="text-muted-foreground">
+            Tools are registry libraries with a pure core plus UI pieces. The index is{" "}
+            <code>retana-ui.json</code> <code>tools[]</code>. The first tool is the guard-rules
+            engine. Its demo uses fictional data and the same <code>ApprovalGate</code> port can
+            gate a <code>git.merge</code> action.
+          </p>
+          <p>
+            <Link href="/herramientas" className="underline-offset-2 hover:underline">
+              Open the Herramientas demo
+            </Link>
+          </p>
+        </section>
+
+        <section className="flex flex-col gap-3 text-sm leading-6">
           <h2 className="text-lg font-semibold">Publishing</h2>
           <p className="text-muted-foreground">
             Import this repository in Vercel and set the production branch to <code>CPL</code>. To

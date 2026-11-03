@@ -1,0 +1,39 @@
+{
+  "schema": "retana-ui.catalog/v1",
+  "components": [
+    {
+      "slug": "guard-rule-builder",
+      "profile": "STANDARD",
+      "registryType": "registry:component"
+    },
+    {
+      "slug": "guard-rule-simulator",
+      "profile": "STANDARD",
+      "registryType": "registry:component"
+    },
+    {
+      "slug": "guard-approval-queue",
+      "profile": "STANDARD",
+      "registryType": "registry:component"
+    },
+    {
+      "slug": "guard-audit-log",
+      "profile": "STANDARD",
+      "registryType": "registry:component"
+    }
+  ],
+  "tools": [
+    {
+      "slug": "guard-rules",
+      "kind": "tool",
+      "core": "guard-rules",
+      "ui": [
+        "guard-rule-builder",
+        "guard-rule-simulator",
+        "guard-approval-queue",
+        "guard-audit-log"
+      ],
+      "docs": "docs/herramientas/README.md"
+    }
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "guard-rule-simulator",
+  "title": "Guard rule simulator",
+  "author": "Eduardo Retana",
+  "description": "Runs one action against a ruleset and shows the decision and trace. Action kinds are open, including git.merge.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/guard-rules",
+    "@retana/empty-state",
+    "button",
+    "input",
+    "label",
+    "badge",
+    "scroll-area",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/guard-rule-simulator.tsx",
+      "content": "\"use client\"\n\nimport { useState } from \"react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Input } from \"@/components/ui/input\"\nimport { Label } from \"@/components/ui/label\"\nimport { ScrollArea } from \"@/components/ui/scroll-area\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { EmptyState } from \"@/components/ui/empty-state\"\nimport {\n  decisionLabel,\n  evaluateRules,\n  explain,\n  flattenData,\n  unflattenData,\n  type GuardAction,\n  type GuardLocale,\n  type Ruleset,\n} from \"@/lib/guard-rules\"\nimport { cn } from \"@/lib/utils\"\n\nconst copy = {\n  es: {\n    emptyTitle: \"Nada que simular\",\n    emptyBody: \"Elige un ruleset y una acción. El kind puede ser whatsapp.before_send o git.merge.\",\n    kind: \"Kind de la acción\",\n    text: \"Texto (señal secundaria)\",\n    path: \"Ruta\",\n    value: \"Valor\",\n    add: \"Agregar dato\",\n    result: \"Decisión\",\n    trace: \"Traza\",\n    loading: \"Simulando\",\n    remove: \"Quitar dato\",\n  },\n  en: {\n    emptyTitle: \"Nothing to simulate\",\n    emptyBody: \"Choose a ruleset and an action. The kind can be whatsapp.before_send or git.merge.\",\n    kind: \"Action kind\",\n    text: \"Text (secondary signal)\",\n    path: \"Path\",\n    value: \"Value\",\n    add: \"Add fact\",\n    result: \"Decision\",\n    trace: \"Trace\",\n    loading: \"Simulating\",\n    remove: \"Remove fact\",\n  },\n} as const\n\nexport type GuardRuleSimulatorProps = {\n  ruleset: Ruleset | null\n  action: GuardAction | null\n  locale?: GuardLocale\n  status?: \"idle\" | \"loading\" | \"error\"\n  errorMessage?: string\n  clock?: () => number\n  onActionChange?: (action: GuardAction) => void\n  className?: string\n}\n\nexport function GuardRuleSimulator({\n  ruleset,\n  action,\n  locale = \"en\",\n  status = \"idle\",\n  errorMessage,\n  clock = () => 0,\n  onActionChange,\n  className,\n}: GuardRuleSimulatorProps) {\n  const text = copy[locale]\n  const [draft, setDraft] = useState<GuardAction | null>(action)\n  const current = draft && action && draft.kind === action.kind && draft.accountId === action.accountId ? draft : action\n  const rows = current ? flattenData(current.data) : []\n\n  function commit(next: GuardAction) {\n    setDraft(next)\n    onActionChange?.(next)\n  }\n\n  const evaluation = status === \"idle\" && ruleset && current ? evaluateRules(ruleset, current, clock) : null\n\n  return (\n    <section className={cn(\"flex min-w-0 flex-col gap-4 rounded-xl border border-border bg-card p-4 text-card-foreground\", className)} aria-busy={status === \"loading\" || undefined}>\n      {status === \"error\" && errorMessage ? (\n        <p role=\"alert\" className=\"break-words text-sm text-destructive\">\n          {errorMessage}\n        </p>\n      ) : null}\n      {status === \"loading\" ? (\n        <div role=\"status\" aria-label={text.loading} className=\"space-y-2\">\n          <Skeleton className=\"h-8 w-full\" />\n          <Skeleton className=\"h-20 w-full\" />\n        </div>\n      ) : null}\n      {status !== \"loading\" && (!ruleset || !current) ? <EmptyState title={text.emptyTitle} description={text.emptyBody} /> : null}\n      {status !== \"loading\" && ruleset && current ? (\n        <div className=\"flex min-w-0 flex-col gap-3\">\n          <div className=\"space-y-2\">\n            <Label htmlFor=\"guard-kind\">{text.kind}</Label>\n            <Input\n              id=\"guard-kind\"\n              value={current.kind}\n              onChange={(event) => commit({ ...current, kind: event.target.value })}\n            />\n          </div>\n          <div className=\"space-y-2\">\n            <Label htmlFor=\"guard-text\">{text.text}</Label>\n            <Input\n              id=\"guard-text\"\n              value={current.text ?? \"\"}\n              onChange={(event) => commit({ ...current, text: event.target.value })}\n            />\n          </div>\n          <ul className=\"flex min-w-0 flex-col gap-2\">\n            {rows.map((row, index) => (\n              <li key={`${row.path}-${index}`} className=\"flex min-w-0 flex-col gap-2 sm:flex-row\">\n                <Input\n                  aria-label={`${text.path} ${index + 1}`}\n                  value={row.path}\n                  onChange={(event) => {\n                    const next = rows.map((item, itemIndex) => (itemIndex === index ? { ...item, path: event.target.value } : item))\n                    commit({ ...current, data: unflattenData(next) })\n                  }}\n                />\n                <Input\n                  aria-label={`${text.value} ${index + 1}`}\n                  value={row.value}\n                  className=\"break-words\"\n                  onChange={(event) => {\n                    const next = rows.map((item, itemIndex) => (itemIndex === index ? { ...item, value: event.target.value } : item))\n                    commit({ ...current, data: unflattenData(next) })\n                  }}\n                />\n                <Button\n                  type=\"button\"\n                  variant=\"ghost\"\n                  size=\"sm\"\n                  onClick={() => commit({ ...current, data: unflattenData(rows.filter((_, itemIndex) => itemIndex !== index)) })}\n                >\n                  {text.remove}\n                </Button>\n              </li>\n            ))}\n          </ul>\n          <Button type=\"button\" variant=\"outline\" size=\"sm\" className=\"w-fit\" onClick={() => commit({ ...current, data: unflattenData([...rows, { path: \"extra\", value: \"\" }]) })}>\n            {text.add}\n          </Button>\n          {evaluation ? (\n            <div className=\"space-y-2\" role=\"status\" aria-live=\"polite\" aria-label={text.result}>\n              <Badge variant={evaluation.decision === \"block\" ? \"destructive\" : \"outline\"}>{decisionLabel(evaluation.decision, locale)}</Badge>\n              <p className=\"break-words text-sm\">{explain(evaluation, locale)}</p>\n              <ScrollArea className=\"h-64 rounded-lg border border-border\">\n                <ol aria-label={text.trace} className=\"space-y-2 p-3 text-sm\">\n                  {evaluation.traces.map((trace) => (\n                    <li key={trace.ruleId} className=\"min-w-0 break-words\">\n                      <span className=\"font-medium\">{trace.ruleName}</span>\n                      <span className=\"text-muted-foreground\"> · {trace.status}</span>\n                      {trace.missingPaths.length ? <span className=\"text-muted-foreground\"> · {trace.missingPaths.join(\", \")}</span> : null}\n                    </li>\n                  ))}\n                </ol>\n              </ScrollArea>\n            </div>\n          ) : null}\n        </div>\n      ) : null}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/guard-rule-simulator.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Simulador de reglas",
+    "descriptionEs": "Prueba una acción contra el ruleset y muestra la decisión y la traza.",
+    "preview": "app/examples/guard-rule-simulator/preview.tsx",
+    "previewHref": "/examples/guard-rule-simulator",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "missing",
+        "label": "Dato faltante",
+        "labelEn": "Missing fact"
+      },
+      {
+        "id": "merge",
+        "label": "Merge",
+        "labelEn": "Merge"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Simulador de reglas",
+        "href": "/examples/guard-rule-simulator",
+        "description": "Prueba una acción contra el ruleset y muestra la decisión y la traza."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/guard-rule-simulator/stress",
+        "description": "320px, vacío, carga, error y un texto largo."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/guard-rule-simulator?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/guard-rule-simulator?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/guard-rule-simulator?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/guard-rule-simulator?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Dato faltante",
+        "href": "/examples/guard-rule-simulator?scene=missing",
+        "description": "Missing fact"
+      },
+      {
+        "title": "Merge",
+        "href": "/examples/guard-rule-simulator?scene=merge",
+        "description": "Merge"
+      }
+    ],
+    "usage": "<GuardRuleSimulator ruleset={ruleset} action={action} locale=\"es\" clock={clock} />",
+    "api": [
+      {
+        "name": "ruleset",
+        "type": "Ruleset | null",
+        "description": "Active ruleset. Null is empty."
+      },
+      {
+        "name": "action",
+        "type": "GuardAction | null",
+        "description": "Includes kind and structured data."
+      },
+      {
+        "name": "clock",
+        "type": "() => number",
+        "description": "Injected clock. Default returns 0."
+      },
+      {
+        "name": "locale",
+        "type": "\"es\" | \"en\"",
+        "description": "Decision copy comes from the core."
+      },
+      {
+        "name": "status",
+        "type": "\"idle\" | \"loading\" | \"error\"",
+        "description": "Loading skips evaluation."
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "description": "Root class."
+      }
+    ]
+  },
+  "docs": "Clean-room. The rule-builder idea is from a public post (https://x.com/heyanantj/status/2116917836086186436): idea only, no license. No source, copy, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Demo data is fictional (marca-sintetica, +52 55 0000 0000).",
+  "categories": [
+    "herramientas"
+  ],
+  "type": "registry:component"
+}

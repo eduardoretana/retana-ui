@@ -1,0 +1,111 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "guard-audit-log",
+  "title": "Guard audit log",
+  "author": "Eduardo Retana",
+  "description": "Append-only decision list. There is no delete control.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/guard-rules",
+    "@retana/empty-state",
+    "badge",
+    "scroll-area",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/guard-audit-log.tsx",
+      "content": "\"use client\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { ScrollArea } from \"@/components/ui/scroll-area\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { EmptyState } from \"@/components/ui/empty-state\"\nimport { decisionLabel, formatGuardTime, type GuardLocale, type TerminalDecision } from \"@/lib/guard-rules\"\nimport { cn } from \"@/lib/utils\"\n\nconst copy = {\n  es: {\n    emptyTitle: \"La bitácora está vacía\",\n    emptyBody: \"Cada decisión se agrega aquí. No se puede borrar ni editar.\",\n    loading: \"Cargando la bitácora\",\n    version: \"Versión\",\n    account: \"Cuenta\",\n    response: \"Respuesta\",\n    approver: \"Aprobó\",\n  },\n  en: {\n    emptyTitle: \"The audit log is empty\",\n    emptyBody: \"Every decision is appended here. Nothing can be deleted or edited.\",\n    loading: \"Loading the audit log\",\n    version: \"Version\",\n    account: \"Account\",\n    response: \"Response\",\n    approver: \"Approved by\",\n  },\n} as const\n\nexport type AuditLogItem = {\n  id: string\n  createdAt: number\n  kind: string\n  decision: TerminalDecision\n  summary: string\n  ruleIds: readonly string[]\n  rulesetVersion: number\n  accountId: string\n  agentResponse?: string\n  approver?: string\n}\n\nexport type GuardAuditLogProps = {\n  entries: readonly AuditLogItem[]\n  locale?: GuardLocale\n  status?: \"idle\" | \"loading\" | \"error\"\n  errorMessage?: string\n  className?: string\n}\n\nexport function GuardAuditLog({ entries, locale = \"en\", status = \"idle\", errorMessage, className }: GuardAuditLogProps) {\n  const text = copy[locale]\n  return (\n    <section className={cn(\"flex min-w-0 flex-col gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground\", className)} aria-busy={status === \"loading\" || undefined}>\n      {status === \"error\" && errorMessage ? (\n        <p role=\"alert\" className=\"break-words text-sm text-destructive\">\n          {errorMessage}\n        </p>\n      ) : null}\n      {status === \"loading\" ? (\n        <div role=\"status\" aria-label={text.loading} className=\"space-y-2\">\n          <Skeleton className=\"h-14 w-full\" />\n          <Skeleton className=\"h-14 w-full\" />\n        </div>\n      ) : null}\n      {status !== \"loading\" && entries.length === 0 ? <EmptyState title={text.emptyTitle} description={text.emptyBody} /> : null}\n      {status !== \"loading\" && entries.length > 0 ? (\n        <ScrollArea className=\"h-80\">\n          <ol className=\"flex min-w-0 flex-col gap-3 pe-3\">\n            {entries.map((entry) => (\n              <li key={entry.id} className=\"min-w-0 space-y-1 rounded-lg border border-border p-3\">\n                <div className=\"flex min-w-0 flex-wrap items-center gap-2\">\n                  <Badge variant={entry.decision === \"block\" ? \"destructive\" : \"outline\"}>{decisionLabel(entry.decision, locale)}</Badge>\n                  <span className=\"break-all text-xs text-muted-foreground\">{formatGuardTime(entry.createdAt, locale)}</span>\n                </div>\n                <p className=\"break-words text-sm font-medium\">{entry.kind}</p>\n                <p className=\"break-words text-sm\">{entry.summary}</p>\n                <p className=\"break-words text-xs text-muted-foreground\">\n                  {entry.ruleIds.join(\", \") || \"—\"} · {text.version} {entry.rulesetVersion} · {text.account} {entry.accountId}\n                </p>\n                {entry.agentResponse ? (\n                  <p className=\"break-words text-sm\">\n                    {text.response}: {entry.agentResponse}\n                  </p>\n                ) : null}\n                {entry.approver ? (\n                  <p className=\"break-words text-xs text-muted-foreground\">\n                    {text.approver}: {entry.approver}\n                  </p>\n                ) : null}\n              </li>\n            ))}\n          </ol>\n        </ScrollArea>\n      ) : null}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/guard-audit-log.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Bitácora de guardas",
+    "descriptionEs": "Lista de solo lectura. Cada decisión se agrega y no se borra.",
+    "preview": "app/examples/guard-audit-log/preview.tsx",
+    "previewHref": "/examples/guard-audit-log",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Bitácora de guardas",
+        "href": "/examples/guard-audit-log",
+        "description": "Lista de solo lectura. Cada decisión se agrega y no se borra."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/guard-audit-log/stress",
+        "description": "320px, vacío, carga, error y un texto largo."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/guard-audit-log?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/guard-audit-log?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/guard-audit-log?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/guard-audit-log?scene=error",
+        "description": "Error"
+      }
+    ],
+    "usage": "<GuardAuditLog entries={entries} locale=\"es\" />",
+    "api": [
+      {
+        "name": "entries",
+        "type": "AuditLogItem[]",
+        "description": "Host-provided records. The piece cannot append or delete."
+      },
+      {
+        "name": "locale",
+        "type": "\"es\" | \"en\"",
+        "description": "Decision labels come from the core."
+      },
+      {
+        "name": "status",
+        "type": "\"idle\" | \"loading\" | \"error\"",
+        "description": "Empty, loading, and error are explicit."
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "description": "Root class."
+      }
+    ]
+  },
+  "docs": "Clean-room. The rule-builder idea is from a public post (https://x.com/heyanantj/status/2116917836086186436): idea only, no license. No source, copy, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Demo data is fictional (marca-sintetica, +52 55 0000 0000).",
+  "categories": [
+    "herramientas"
+  ],
+  "type": "registry:component"
+}

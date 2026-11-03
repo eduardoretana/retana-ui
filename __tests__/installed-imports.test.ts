@@ -91,6 +91,24 @@ describe("unresolvableImports", () => {
     expect(errors).toEqual([])
   })
 
+  it("resolves a tool core from @retana/<lib> without copying the lib into the UI item", () => {
+    const errors = unresolvableImports({
+      name: "guard-rule-simulator",
+      registryDependencies: ["@retana/guard-rules", "button"],
+      files: [
+        {
+          path: "registry/ui/guard-rule-simulator.tsx",
+          target: "@ui/guard-rule-simulator.tsx",
+          content: [
+            'import { evaluateRules } from "@/lib/guard-rules"',
+            'import { Button } from "@/components/ui/button"',
+          ].join("\n"),
+        },
+      ],
+    })
+    expect(errors).toEqual([])
+  })
+
   it("rejects catalog aliases and imports that miss the installed files", () => {
     const errors = unresolvableImports({
       name: "data-table",

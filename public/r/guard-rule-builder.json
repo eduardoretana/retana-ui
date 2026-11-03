@@ -1,0 +1,145 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "guard-rule-builder",
+  "title": "Guard rule builder",
+  "author": "Eduardo Retana",
+  "description": "When / conditions / then editor for one guard rule. Reads and writes the guard-rules types. No backend.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/guard-rules",
+    "@retana/empty-state",
+    "button",
+    "input",
+    "label",
+    "checkbox",
+    "badge",
+    "separator",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/guard-rule-builder.tsx",
+      "content": "\"use client\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Checkbox } from \"@/components/ui/checkbox\"\nimport { Input } from \"@/components/ui/input\"\nimport { Label } from \"@/components/ui/label\"\nimport { Separator } from \"@/components/ui/separator\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { EmptyState } from \"@/components/ui/empty-state\"\nimport {\n  addChildCondition,\n  blankCondition,\n  describeRule,\n  removeChildCondition,\n  replaceCondition,\n  type Condition,\n  type DecisionKind,\n  type GuardLocale,\n  type GuardRule,\n} from \"@/lib/guard-rules\"\nimport { cn } from \"@/lib/utils\"\n\nconst OPS: Condition[\"op\"][] = [\"and\", \"or\", \"not\", \"eq\", \"neq\", \"gt\", \"gte\", \"lt\", \"lte\", \"in\", \"exists\", \"missing\", \"includes\", \"text_includes\"]\nconst DECISIONS: DecisionKind[] = [\"allow\", \"require_approval\", \"block\", \"handoff_to_human\", \"log\"]\n\nconst control =\n  \"h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50\"\n\nconst copy = {\n  es: {\n    emptyTitle: \"No hay regla\",\n    emptyBody: \"Crea una regla con un evento, condiciones y una decisión.\",\n    name: \"Nombre\",\n    kinds: \"Cuando (kinds, separados por coma)\",\n    enabled: \"Activa\",\n    conditions: \"Condiciones\",\n    decision: \"Entonces\",\n    reason: \"Clave del motivo\",\n    ttl: \"La aprobación vence a los (ms)\",\n    add: \"Agregar condición\",\n    remove: \"Quitar\",\n    summary: \"Lectura\",\n    loading: \"Cargando la regla\",\n  },\n  en: {\n    emptyTitle: \"No rule\",\n    emptyBody: \"Create a rule with an action kind, conditions, and a decision.\",\n    name: \"Name\",\n    kinds: \"When (kinds, comma separated)\",\n    enabled: \"Enabled\",\n    conditions: \"Conditions\",\n    decision: \"Then\",\n    reason: \"Reason key\",\n    ttl: \"Approval expires after (ms)\",\n    add: \"Add condition\",\n    remove: \"Remove\",\n    summary: \"Reading\",\n    loading: \"Loading the rule\",\n  },\n} as const\n\nexport type GuardRuleBuilderProps = {\n  rule: GuardRule | null\n  locale?: GuardLocale\n  status?: \"idle\" | \"loading\" | \"error\"\n  errorMessage?: string\n  readOnly?: boolean\n  onChange?: (rule: GuardRule) => void\n  className?: string\n  classNames?: { root?: string; section?: string; summary?: string }\n}\n\nfunction changeOp(current: Condition, op: Condition[\"op\"]): Condition {\n  const next = blankCondition(op)\n  if (\"path\" in current && \"path\" in next && current.path) return { ...next, path: current.path }\n  return next\n}\n\nfunction ConditionEditor({\n  condition,\n  locale,\n  readOnly,\n  path,\n  onReplace,\n  onRemove,\n}: {\n  condition: Condition\n  locale: GuardLocale\n  readOnly: boolean\n  path: number[]\n  onReplace: (path: number[], next: Condition) => void\n  onRemove?: () => void\n}) {\n  const text = copy[locale]\n  const field = `${path.join(\"-\") || \"root\"}`\n  return (\n    <fieldset className=\"min-w-0 space-y-2 border-s border-border ps-3\" aria-label={text.conditions}>\n      <div className=\"flex min-w-0 flex-wrap items-center gap-2\">\n        <select\n          aria-label={`${text.conditions} ${field}`}\n          className={cn(control, \"w-auto min-w-28\")}\n          value={condition.op}\n          disabled={readOnly}\n          onChange={(event) => onReplace(path, changeOp(condition, event.target.value as Condition[\"op\"]))}\n        >\n          {OPS.map((op) => (\n            <option key={op} value={op}>\n              {op}\n            </option>\n          ))}\n        </select>\n        {\"path\" in condition ? (\n          <Input\n            aria-label={`path ${field}`}\n            value={condition.path}\n            disabled={readOnly}\n            className=\"min-w-0 flex-1\"\n            onChange={(event) => onReplace(path, { ...condition, path: event.target.value })}\n          />\n        ) : null}\n        {onRemove ? (\n          <Button type=\"button\" variant=\"ghost\" size=\"sm\" disabled={readOnly} onClick={onRemove}>\n            {text.remove}\n          </Button>\n        ) : null}\n      </div>\n      {condition.op === \"gt\" || condition.op === \"gte\" || condition.op === \"lt\" || condition.op === \"lte\" ? (\n        <Input\n          aria-label={`value ${field}`}\n          value={String(condition.value)}\n          disabled={readOnly}\n          onChange={(event) => onReplace(path, { ...condition, value: Number(event.target.value) })}\n        />\n      ) : null}\n      {condition.op === \"eq\" || condition.op === \"neq\" ? (\n        <Input\n          aria-label={`value ${field}`}\n          value={String(condition.value)}\n          disabled={readOnly}\n          onChange={(event) => {\n            const raw = event.target.value\n            const next = raw === \"true\" ? true : raw === \"false\" ? false : raw === \"null\" ? null : /^-?\\d+(\\.\\d+)?$/.test(raw) ? Number(raw) : raw\n            onReplace(path, { ...condition, value: next })\n          }}\n        />\n      ) : null}\n      {condition.op === \"includes\" || condition.op === \"text_includes\" ? (\n        <Input\n          aria-label={`value ${field}`}\n          value={condition.value}\n          disabled={readOnly}\n          onChange={(event) => onReplace(path, { ...condition, value: event.target.value })}\n        />\n      ) : null}\n      {condition.op === \"in\" ? (\n        <Input\n          aria-label={`values ${field}`}\n          value={condition.values.map(String).join(\", \")}\n          disabled={readOnly}\n          onChange={(event) =>\n            onReplace(path, {\n              ...condition,\n              values: event.target.value\n                .split(\",\")\n                .map((item) => item.trim())\n                .filter(Boolean),\n            })\n          }\n        />\n      ) : null}\n      {condition.op === \"and\" || condition.op === \"or\"\n        ? condition.conditions.map((child, index) => (\n            <ConditionEditor\n              key={`${field}-${index}`}\n              condition={child}\n              locale={locale}\n              readOnly={readOnly}\n              path={[...path, index]}\n              onReplace={onReplace}\n              onRemove={() => onRemoveChild(path, index)}\n            />\n          ))\n        : null}\n      {condition.op === \"not\" ? (\n        <ConditionEditor condition={condition.condition} locale={locale} readOnly={readOnly} path={[...path, 0]} onReplace={onReplace} />\n      ) : null}\n      {condition.op === \"and\" || condition.op === \"or\" ? (\n        <Button\n          type=\"button\"\n          variant=\"outline\"\n          size=\"sm\"\n          disabled={readOnly}\n          onClick={() => onReplace(path, addChildCondition(condition, [], blankCondition(\"eq\")))}\n        >\n          {text.add}\n        </Button>\n      ) : null}\n    </fieldset>\n  )\n\n  function onRemoveChild(parent: number[], index: number) {\n    onReplace(parent, removeChildCondition(condition, [index]))\n  }\n}\n\nexport function GuardRuleBuilder({\n  rule,\n  locale = \"en\",\n  status = \"idle\",\n  errorMessage,\n  readOnly = false,\n  onChange,\n  className,\n  classNames,\n}: GuardRuleBuilderProps) {\n  const text = copy[locale]\n  const locked = readOnly || !onChange\n\n  const edit = (next: GuardRule) => {\n    if (!locked) onChange?.(next)\n  }\n\n  return (\n    <section\n      data-layout=\"stacked\"\n      aria-busy={status === \"loading\" || undefined}\n      className={cn(\"flex min-w-0 flex-col gap-4 rounded-xl border border-border bg-card p-4 text-card-foreground\", className, classNames?.root)}\n    >\n      {status === \"error\" && errorMessage ? (\n        <p role=\"alert\" className=\"break-words text-sm text-destructive\">\n          {errorMessage}\n        </p>\n      ) : null}\n      {status === \"loading\" ? (\n        <div className=\"space-y-2\" role=\"status\" aria-label={text.loading}>\n          <Skeleton className=\"h-4 w-2/3\" />\n          <Skeleton className=\"h-8 w-full\" />\n          <Skeleton className=\"h-24 w-full\" />\n        </div>\n      ) : null}\n      {status !== \"loading\" && !rule ? (\n        <EmptyState title={text.emptyTitle} description={text.emptyBody} />\n      ) : null}\n      {status !== \"loading\" && rule ? (\n        <div className=\"flex min-w-0 flex-col gap-4\">\n          <p className={cn(\"break-words text-sm text-muted-foreground\", classNames?.summary)} aria-label={text.summary}>\n            {describeRule(rule, locale)}\n          </p>\n          <div className={cn(\"space-y-2\", classNames?.section)}>\n            <Label htmlFor={`${rule.id}-name`}>{text.name}</Label>\n            <Input\n              id={`${rule.id}-name`}\n              value={rule.name}\n              disabled={locked}\n              onChange={(event) => edit({ ...rule, name: event.target.value })}\n            />\n          </div>\n          <div className=\"space-y-2\">\n            <Label htmlFor={`${rule.id}-kinds`}>{text.kinds}</Label>\n            <Input\n              id={`${rule.id}-kinds`}\n              value={rule.kinds.join(\", \")}\n              disabled={locked}\n              onChange={(event) =>\n                edit({\n                  ...rule,\n                  kinds: event.target.value\n                    .split(\",\")\n                    .map((item) => item.trim())\n                    .filter(Boolean),\n                })\n              }\n            />\n          </div>\n          <label className=\"flex items-center gap-2 text-sm\">\n            <Checkbox checked={rule.enabled} disabled={locked} onCheckedChange={(value) => edit({ ...rule, enabled: value === true })} />\n            {text.enabled}\n          </label>\n          <Separator />\n          <h2 className=\"text-sm font-medium\">{text.conditions}</h2>\n          <ConditionEditor\n            condition={rule.conditions}\n            locale={locale}\n            readOnly={locked}\n            path={[]}\n            onReplace={(path, next) => edit({ ...rule, conditions: path.length === 0 ? next : replaceCondition(rule.conditions, path, next) })}\n          />\n          <Separator />\n          <div className=\"space-y-2\">\n            <Label htmlFor={`${rule.id}-decision`}>{text.decision}</Label>\n            <select\n              id={`${rule.id}-decision`}\n              className={control}\n              value={rule.decision}\n              disabled={locked}\n              onChange={(event) => edit({ ...rule, decision: event.target.value as DecisionKind })}\n            >\n              {DECISIONS.map((decision) => (\n                <option key={decision} value={decision}>\n                  {decision}\n                </option>\n              ))}\n            </select>\n          </div>\n          <div className=\"space-y-2\">\n            <Label htmlFor={`${rule.id}-reason`}>{text.reason}</Label>\n            <Input\n              id={`${rule.id}-reason`}\n              value={rule.reasonKey}\n              disabled={locked}\n              onChange={(event) => edit({ ...rule, reasonKey: event.target.value })}\n            />\n          </div>\n          {rule.decision === \"require_approval\" ? (\n            <div className=\"space-y-2\">\n              <Label htmlFor={`${rule.id}-ttl`}>{text.ttl}</Label>\n              <Input\n                id={`${rule.id}-ttl`}\n                inputMode=\"numeric\"\n                value={String(rule.approvalTtlMs ?? \"\")}\n                disabled={locked}\n                onChange={(event) => {\n                  const approvalTtlMs = Number(event.target.value)\n                  if (approvalTtlMs > 0) edit({ ...rule, approvalTtlMs })\n                }}\n              />\n            </div>\n          ) : null}\n          <Badge variant=\"outline\" className=\"w-fit max-w-full break-words\">\n            {rule.decision}\n          </Badge>\n        </div>\n      ) : null}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/guard-rule-builder.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Constructor de reglas",
+    "descriptionEs": "Arma una regla Cuando, condiciones y entonces. No guarda sola.",
+    "preview": "app/examples/guard-rule-builder/preview.tsx",
+    "previewHref": "/examples/guard-rule-builder",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "readonly",
+        "label": "Solo lectura",
+        "labelEn": "Read only"
+      },
+      {
+        "id": "nested",
+        "label": "Anidada",
+        "labelEn": "Nested"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Constructor de reglas",
+        "href": "/examples/guard-rule-builder",
+        "description": "Arma una regla Cuando, condiciones y entonces. No guarda sola."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/guard-rule-builder/stress",
+        "description": "320px, vacío, carga, error y un texto largo."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/guard-rule-builder?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/guard-rule-builder?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/guard-rule-builder?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/guard-rule-builder?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Solo lectura",
+        "href": "/examples/guard-rule-builder?scene=readonly",
+        "description": "Read only"
+      },
+      {
+        "title": "Anidada",
+        "href": "/examples/guard-rule-builder?scene=nested",
+        "description": "Nested"
+      }
+    ],
+    "usage": "<GuardRuleBuilder rule={rule} locale=\"es\" onChange={setRule} />",
+    "api": [
+      {
+        "name": "rule",
+        "type": "GuardRule | null",
+        "description": "Controlled rule. Null is the empty state."
+      },
+      {
+        "name": "locale",
+        "type": "\"es\" | \"en\"",
+        "description": "Chrome and the summary sentence. Default en."
+      },
+      {
+        "name": "status",
+        "type": "\"idle\" | \"loading\" | \"error\"",
+        "description": "Loading and error are explicit."
+      },
+      {
+        "name": "readOnly",
+        "type": "boolean",
+        "description": "Viewer. Controls are disabled."
+      },
+      {
+        "name": "onChange",
+        "type": "(rule) => void",
+        "description": "Called with the next rule."
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "description": "Root class."
+      }
+    ]
+  },
+  "docs": "Clean-room. The rule-builder idea is from a public post (https://x.com/heyanantj/status/2116917836086186436): idea only, no license. No source, copy, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Demo data is fictional (marca-sintetica, +52 55 0000 0000).",
+  "categories": [
+    "herramientas"
+  ],
+  "type": "registry:component"
+}

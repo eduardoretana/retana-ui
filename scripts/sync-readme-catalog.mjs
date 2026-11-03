@@ -41,6 +41,7 @@ const GROUP_ORDER = [
   "Page blocks",
   "Actions and overlays",
   "Animaciones",
+  "Herramientas",
   "Admin",
   "Other",
 ]
@@ -67,6 +68,7 @@ function groupOf(item) {
   const cats = new Set(item.categories ?? [])
   if (cats.has("interfaces")) return "Interfaces"
   if (cats.has("animation")) return "Animaciones"
+  if (cats.has("herramientas")) return "Herramientas"
   if (item.pending || cats.has("admin")) return "Admin"
   if (cats.has("agents")) return "Agents"
   if (cats.has("panel")) return "Detail"
