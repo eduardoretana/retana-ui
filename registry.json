@@ -32623,6 +32623,11 @@
           "target": "@lib/ci-checks/poll.ts"
         },
         {
+          "path": "registry/lib/ci-checks/pages.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/pages.ts"
+        },
+        {
           "path": "registry/lib/ci-checks/webhook.ts",
           "type": "registry:lib",
           "target": "@lib/ci-checks/webhook.ts"
@@ -32739,6 +32744,11 @@
           "path": "registry/lib/ci-checks/poll.ts",
           "type": "registry:lib",
           "target": "@lib/ci-checks/poll.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/pages.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/pages.ts"
         },
         {
           "path": "registry/lib/ci-checks/webhook.ts",
@@ -32867,6 +32877,11 @@
           "path": "registry/lib/ci-checks/poll.ts",
           "type": "registry:lib",
           "target": "@lib/ci-checks/poll.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/pages.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/pages.ts"
         },
         {
           "path": "registry/lib/ci-checks/webhook.ts",

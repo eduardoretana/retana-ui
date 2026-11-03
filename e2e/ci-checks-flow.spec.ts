@@ -6,6 +6,7 @@ import { expect, test, type Page } from "@playwright/test"
 const outDir = "/opt/cursor/artifacts/ci-checks"
 
 const shots: { name: string; path: string }[] = [
+  { name: "antes-cpl-docs", path: "/docs" },
   { name: "pr-create-card", path: "/examples/pr-create-card?scene=filled" },
   { name: "checks-panel", path: "/examples/checks-panel?scene=open" },
   { name: "agent-fix-timeline", path: "/examples/agent-fix-timeline?scene=filled" },

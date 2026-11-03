@@ -24,6 +24,8 @@ export {
   normalizePull,
   normalizeStatusesPayload,
 } from "./ci-checks/normalize"
+export { collectCheckRuns, nextLink } from "./ci-checks/pages"
+export type { CheckRunPage } from "./ci-checks/pages"
 export { DEFAULT_POLL_MS, interpretPoll, isPrimaryRateLimit, isSecondaryRateLimit, pollRequestHeaders } from "./ci-checks/poll"
 export { FALLBACK_DURATION_MS, estimateProgress, median } from "./ci-checks/progress"
 export { stripSecrets } from "./ci-checks/secrets"

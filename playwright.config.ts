@@ -6,7 +6,8 @@ export default defineConfig({
   expect: { timeout: 20_000 },
   use: {
     baseURL: "http://127.0.0.1:3000",
-    channel: "chrome",
+    // CI installs Playwright's Chromium. Local runs reuse the system Chrome.
+    ...(process.env.CI ? {} : { channel: "chrome" as const }),
   },
   webServer: {
     command: "pnpm exec next start -p 3000",

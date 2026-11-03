@@ -91,7 +91,7 @@ Apagada por defecto. Hace falta `CI_CHECKS_MERGE_ENABLED=true` y, aun así:
 3. `ApprovalGate.review` tiene que devolver `granted`. `alwaysAskApproval` solo lo hace si llegan `confirmed` y `grantedBy`.
 4. Si GitHub responde 405 o 422 por la protección de la rama, la interfaz muestra el `message` (y los `errors[].message`) y no insiste.
 
-Cuando exista el motor de guardas, sustituye el gate. El puerto ya se llama con la regla `require_approval`.
+El adaptador por defecto sigue siendo `alwaysAskApproval`. El motor de guardas del PR #65 usa otro `ApprovalGate` (`create` / `decide` / `consume`) y la acción `kind: "git.merge"`. El archivo `docs/herramientas/snippets/guard-merge-gate.ts` los conecta. Se compiló contra los tipos de `cursor/herramientas-guard-rules-ea36`. No sustituye al adaptador por defecto y este PR no se apila sobre esa rama.
 
 ## El arreglo
 
@@ -105,7 +105,7 @@ Los números cambian y manda la documentación vigente: https://docs.github.com/
 - El límite secundario no se anuncia con un número fijo. Hay que honrar `retry-after`.
 - Cada sondeo de esta herramienta puede gastar dos llamadas (check runs y status) más una del pull request cuando no hay 304.
 - Un sondeo cada 15 segundos (`DEFAULT_POLL_MS`) contra muchos PR agota el cupo. Sube el intervalo o usa el webhook.
-- La API de checks lista como máximo 100 runs por página. Esta versión lee la primera página. Si un SHA tiene más, el total puede quedar corto: es una limitación conocida.
+- La API de checks entrega como máximo 100 runs por página. El adaptador sigue el encabezado `Link` con `rel="next"` hasta 20 páginas. `collectCheckRuns` es la función pura del núcleo; el fetch se inyecta.
 
 ## Limitaciones
 

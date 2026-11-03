@@ -47,9 +47,17 @@ describe("CiChecksLive", () => {
 
   it("stays off by default", async () => {
     const merge = vi.fn(async () => ({ ok: true, message: "Merged into main" }))
-    render(<CiChecksLive transport={transport(merge)} labels={ciChecksLiveLabelsEs} />)
-    expect(await screen.findByText("La fusión está apagada.")).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Fusionar" })).toBeDisabled()
+    render(<CiChecksLive transport={transport(merge)} labels={ciChecksLiveLabelsEs} now={Date.parse("2026-11-02T18:00:00Z")} />)
+    expect(await screen.findByText(/La fusión está apagada/)).toBeInTheDocument()
+    expect(screen.queryByText("Esperando las comprobaciones")).not.toBeInTheDocument()
+    const button = screen.getByRole("button", { name: "Fusionar" })
+    const status = screen.getByText("La fusión está apagada. Las comprobaciones ya pasaron.")
+    expect(button).toBeDisabled()
+    expect(status.tagName).toBe("P")
+    expect(button).toHaveAttribute("aria-describedby", status.id)
+    expect(status).toHaveTextContent(/comprobaciones/)
+    const time = screen.getByTitle(/2 de noviembre de 2026/)
+    expect(time).toHaveTextContent("hace 3 h")
     expect(merge).not.toHaveBeenCalled()
   })
 

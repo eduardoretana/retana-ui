@@ -25,3 +25,22 @@ jobs:
           git diff --exit-code -- public/r lib/generated
           untracked=$(git status --porcelain --untracked-files=all -- public/r lib/generated)
           if [ -n "$untracked" ]; then echo "$untracked"; exit 1; fi
+
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm build
+      - name: Preview flow
+        run: pnpm test:e2e
+        env:
+          CI: true

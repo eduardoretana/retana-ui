@@ -21,7 +21,8 @@ export type CiChecksLiveLabels = {
   locale: "es" | "en"
   loading: string
   missing: string
-  mergeOff: string
+  mergeOffPending: string
+  mergeOffReady: string
   estimatedNote: string
   region: string
 }
@@ -30,7 +31,8 @@ export const ciChecksLiveLabels: CiChecksLiveLabels = {
   locale: "en",
   loading: "Loading checks.",
   missing: "No pull request yet.",
-  mergeOff: "Merge is off.",
+  mergeOffPending: "Merge is off until the checks finish.",
+  mergeOffReady: "Merge is off. The checks have passed.",
   estimatedNote: "Bar times are estimated from history or elapsed time.",
   region: "CI checks",
 }
@@ -39,7 +41,8 @@ export const ciChecksLiveLabelsEs: CiChecksLiveLabels = {
   locale: "es",
   loading: "Cargando comprobaciones.",
   missing: "Todavía no hay pull request.",
-  mergeOff: "La fusión está apagada.",
+  mergeOffPending: "La fusión está apagada. Falta que terminen las comprobaciones.",
+  mergeOffReady: "La fusión está apagada. Las comprobaciones ya pasaron.",
   estimatedNote: "Los tiempos de las barras son estimados, a partir del historial o del tiempo transcurrido.",
   region: "Comprobaciones de CI",
 }
@@ -139,6 +142,8 @@ export function CiChecksLive({
           diffStat={{ add: pull.additions, del: pull.deletions }}
           commits={pull.commits.map(toCommit)}
           variant={variant}
+          now={clock}
+          locale={locale === "es" ? "es-MX" : "en"}
           labels={locale === "en" ? prCreateCardLabels : prCreateCardLabelsEs}
         />
       ) : null}
@@ -160,19 +165,21 @@ export function CiChecksLive({
         <AgentFixTimeline steps={events.map(toStep)} variant={variant} labels={locale === "en" ? agentFixTimelineLabels : agentFixTimelineLabelsEs} />
       ) : null}
       {pull ? (
-        <div className="flex flex-col gap-2">
-          {mergeEnabled ? null : <p className="text-sm text-muted-foreground">{labels.mergeOff}</p>}
-          <MergeButton
-            phase={mergeEnabled ? mergePhase : "disabled"}
-            reason={mergeReason}
-            variant={variant}
-            labels={locale === "en" ? mergeButtonLabels : mergeButtonLabelsEs}
-            onMerge={() => void confirmMerge()}
-          />
-        </div>
+        <MergeButton
+          phase={mergeEnabled ? mergePhase : "disabled"}
+          reason={mergeReason}
+          {...(mergeEnabled ? {} : { statusLabel: mergeOffLabel(labels, ready(state.snapshot, true)) })}
+          variant={variant}
+          labels={locale === "en" ? mergeButtonLabels : mergeButtonLabelsEs}
+          onMerge={() => void confirmMerge()}
+        />
       ) : null}
     </section>
   )
+}
+
+function mergeOffLabel(labels: CiChecksLiveLabels, checksReady: boolean) {
+  return checksReady ? labels.mergeOffReady : labels.mergeOffPending
 }
 
 function ready(snapshot: { checks: NormalizedCheck[]; total: number } | null, mergeEnabled: boolean) {
@@ -206,7 +213,8 @@ function toCommit(commit: { sha: string; message: string; author: string; commit
     sha: commit.sha.slice(0, 7),
     message: commit.message,
     author: commit.author,
-    timeLabel: commit.committedAt ?? "",
+    timeLabel: "",
+    ...(commit.committedAt ? { committedAt: commit.committedAt } : {}),
   }
 }
 

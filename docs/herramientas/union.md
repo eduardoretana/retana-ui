@@ -1,6 +1,6 @@
 # Punto de unión — sección Herramientas
 
-Otro agente está creando la sección Herramientas y el motor de reglas de guardas. En `CPL` todavía no estaban. Esta rama deja el mínimo para que el merge sea unir listas, no reescribir.
+El motor de guardas ya está en el PR borrador #65 (`cursor/herramientas-guard-rules-ea36`, paquete `@retana/guard-rules`). Este PR no se apila sobre esa rama. El merge de los dos es unir `tools[]` y conservar un solo índice.
 
 ## Contrato que ya decidió el UI Lead
 
@@ -19,7 +19,7 @@ No existe el tipo de registry `tool`. El núcleo es `registry:lib`. La interfaz 
 | Manifiesto | `retana-ui.json` → `tools[]` | Conservar el arreglo y añadir la entrada. No renombrar `kind`. |
 | Regla | `__tests__/tool-core-purity.test.ts` | Lee `tools[].core` y falla si ese ítem importa React, react-dom, next, CSS o `components/`. |
 | Índice | `app/herramientas/page.tsx` | Lee el manifiesto. Un solo enlace en `app/catalog/site-header.tsx` hacia `/herramientas`. |
-| Aprobación | `ApprovalGate` en `registry/lib/ci-checks/approval.ts` | El motor real implementa `review()`. Mientras no esté, `alwaysAskApproval()` no concede la fusión sin `confirmed` y `grantedBy`. La regla prevista es `require_approval`. |
+| Aprobación | `alwaysAskApproval` en `registry/lib/ci-checks/approval.ts` | Sigue siendo el adaptador por defecto. El puerto del #65 se llama `ApprovalGate` y no es el mismo tipo: tiene `create`, `get`, `list`, `decide` y `consume`. El adaptador que los une está en `docs/herramientas/snippets/guard-merge-gate.ts`. La acción usa `kind: "git.merge"`. |
 | Agente que arregla | `AgentFixPort` | Solo publica y escucha pasos. No hay agente en este repo. |
 
 ## Qué no tocar al mezclar

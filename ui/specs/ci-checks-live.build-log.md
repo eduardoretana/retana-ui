@@ -18,8 +18,11 @@ Ninguno.
 
 ## commands
 
-- `pnpm test`: 242 archivos, 714 pruebas, en verde.
+- `pnpm test`: 717 pruebas, en verde.
 - `pnpm typecheck:strict-host`: `registry/` compila. El aviso de `dropdown-menu.tsx` es del primitivo del host.
 - `pnpm exec next build`: compiló y pasó el TypeScript del proyecto, 1248 páginas.
-- `pnpm exec playwright test`: 29 pruebas en verde, con Chrome del sistema. No forma parte de `pnpm test` para no exigir navegador en CI.
+- `pnpm exec tsc --noEmit`: salida 0 después de `next build`.
+- `pnpm exec next build`: TypeScript en verde, 1248 páginas.
+- `pnpm exec playwright test`: 33 pruebas en verde, incluidas las capturas y `/docs` como antes.
+- El job `e2e` de `.github/workflows/ci.yml` instala Chromium y corre `pnpm test:e2e` tras el build.
 - No se commitea la salida cruda ni las capturas.

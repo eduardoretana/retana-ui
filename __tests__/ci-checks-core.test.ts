@@ -18,6 +18,7 @@ import {
 import { interpretPoll } from "@/registry/lib/ci-checks/poll"
 import { estimateProgress, median } from "@/registry/lib/ci-checks/progress"
 import { stripSecrets } from "@/registry/lib/ci-checks/secrets"
+import { collectCheckRuns, nextLink } from "@/registry/lib/ci-checks/pages"
 import { readWebhook } from "@/registry/lib/ci-checks/webhook"
 
 /** Anonymized from https://docs.github.com/en/rest/checks/runs#list-check-runs-for-a-git-reference */
@@ -244,7 +245,8 @@ describe("server handler", () => {
   })
 
   it("sends the token only to GitHub and strips it from the client body", async () => {
-    const fetchImpl = vi.fn(async (url: string, _init?: { headers?: Record<string, string> }) => {
+    const fetchImpl = vi.fn(async (url: string, init?: { headers?: Record<string, string> }) => {
+      void init
       if (String(url).endsWith("/pulls/42")) {
         return { status: 200, headers: { get: () => null }, text: async () => JSON.stringify({ number: 42, title: "Folio", state: "open", additions: 86, deletions: 12, head: { sha: "b7e21aa", ref: "feat/folio" }, base: { ref: "main" }, token }) }
       }
@@ -297,6 +299,35 @@ describe("server handler", () => {
   })
 })
 
+describe("check run pages", () => {
+  it("reads a Link header and keeps runs past the first hundred", async () => {
+    expect(nextLink('<https://example.invalid/runs?page=2>; rel="next", <https://example.invalid/runs?page=2>; rel="last"')).toBe(
+      "https://example.invalid/runs?page=2",
+    )
+    const page = (count: number, start: number, link: string | null) => ({
+      status: 200,
+      link,
+      error: null,
+      body: JSON.stringify({
+        check_runs: Array.from({ length: count }, (_, index) => ({
+          id: start + index,
+          name: `job-${start + index}`,
+          status: "completed",
+          conclusion: "success",
+        })),
+      }),
+    })
+    const result = await collectCheckRuns({
+      firstUrl: "https://example.invalid/runs?page=1",
+      fetchPage: async (url) => (url.endsWith("page=1") ? page(100, 0, '<https://example.invalid/runs?page=2>; rel="next"') : page(1, 100, null)),
+    })
+    expect(result.error).toBeNull()
+    expect(result.pages).toBe(2)
+    expect(result.checks).toHaveLength(101)
+    expect(result.checks.at(-1)?.name).toBe("job-100")
+  })
+})
+
 describe("stripSecrets", () => {
   it("removes credential fields", () => {
     expect(stripSecrets({ title: "Folio", token: "ghp_secret", nested: { authorization: "Bearer x" } })).toEqual({ title: "Folio", nested: {} })
@@ -305,7 +336,11 @@ describe("stripSecrets", () => {
 
 describe("adapter request", () => {
   it("sends If-None-Match", async () => {
-    const fetchImpl = vi.fn(async (_url: string, _init?: { headers?: Record<string, string> }) => ({ status: 304, headers: { get: (name: string) => (name === "etag" ? '"abc"' : null) }, text: async () => "" }))
+    const fetchImpl = vi.fn(async (url: string, init?: { headers?: Record<string, string> }) => {
+      void url
+      void init
+      return { status: 304, headers: { get: (name: string) => (name === "etag" ? '"abc"' : null) }, text: async () => "" }
+    })
     const adapter = createGithubAdapter({ token: "test-token-not-real", fetchImpl: fetchImpl as unknown as FetchLike })
     const read = await adapter.getPull("taller", "ladrillo", 42, '"abc"')
     expect(read.notModified).toBe(true)

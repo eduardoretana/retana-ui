@@ -3,6 +3,7 @@
  * The token is an argument. This file does not read the environment.
  */
 
+import { nextLink } from "./pages"
 import { normalizeCheckRunsPayload, normalizePull, normalizeStatusesPayload } from "./normalize"
 import { interpretPoll, pollRequestHeaders, type HeaderMap } from "./poll"
 import type { CiError, NormalizedCheck, NormalizedPull } from "./types"
@@ -27,10 +28,11 @@ export type GithubRead = {
   error: CiError | null
   notModified: boolean
   body: string
+  link: string | null
 }
 
 function headersOf(response: { headers: { get(name: string): string | null } }): HeaderMap {
-  const names = ["etag", "retry-after", "x-ratelimit-remaining", "x-ratelimit-reset"]
+  const names = ["etag", "link", "retry-after", "x-ratelimit-remaining", "x-ratelimit-reset"]
   const headers: HeaderMap = {}
   for (const name of names) headers[name] = response.headers.get(name)
   return headers
@@ -46,7 +48,8 @@ export function createGithubAdapter(options: GithubAdapterOptions) {
       ...pollRequestHeaders(init.etag ?? null),
       authorization: `Bearer ${options.token}`,
     }
-    const response = await fetchImpl(`${baseUrl}${path}`, { method: init.method ?? "GET", headers, body: init.body })
+    const target = path.startsWith("http") ? path : `${baseUrl}${path}`
+    const response = await fetchImpl(target, { method: init.method ?? "GET", headers, body: init.body })
     const body = await response.text()
     const decision = interpretPoll({
       status: response.status,
@@ -62,6 +65,7 @@ export function createGithubAdapter(options: GithubAdapterOptions) {
       error: decision.error,
       notModified: decision.kind === "not_modified",
       body,
+      link: headersOf(response).link ?? null,
     }
   }
 
@@ -72,21 +76,42 @@ export function createGithubAdapter(options: GithubAdapterOptions) {
       return { ...read, pull: pullBody }
     },
     async listChecks(owner: string, repo: string, sha: string, etags: { checkRuns: string | null; statuses: string | null }) {
-      const [runs, statuses] = await Promise.all([
-        request(`/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/commits/${encodeURIComponent(sha)}/check-runs`, { etag: etags.checkRuns }),
-        request(`/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/commits/${encodeURIComponent(sha)}/status`, { etag: etags.statuses }),
-      ])
-      const error = runs.error ?? statuses.error
+      const root = `/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/commits/${encodeURIComponent(sha)}`
+      const runs: NormalizedCheck[] = []
+      let checkRunsEtag: string | null = null
+      let checkRunsNotModified = false
+      let runsError: CiError | null = null
+      let runsWait = 0
+      let url: string | null = `${root}/check-runs?per_page=100`
+      let first = true
+      while (url) {
+        const page = await request(url, { etag: first ? etags.checkRuns : null })
+        first = false
+        checkRunsEtag = page.etag
+        runsWait = Math.max(runsWait, page.waitMs)
+        if (page.error) {
+          runsError = page.error
+          break
+        }
+        if (page.notModified) {
+          checkRunsNotModified = true
+          break
+        }
+        runs.push(...normalizeCheckRunsPayload(parseJson(page.body)))
+        url = nextLink(page.link)
+      }
+      const statuses = await request(`${root}/status`, { etag: etags.statuses })
+      const error = runsError ?? statuses.error
       const checks: NormalizedCheck[] = [
-        ...(runs.notModified || runs.error ? [] : normalizeCheckRunsPayload(parseJson(runs.body))),
+        ...runs,
         ...(statuses.notModified || statuses.error ? [] : normalizeStatusesPayload(parseJson(statuses.body))),
       ]
       return {
         error,
-        waitMs: Math.max(runs.waitMs, statuses.waitMs),
-        checkRunsEtag: runs.etag,
+        waitMs: Math.max(runsWait, statuses.waitMs),
+        checkRunsEtag,
         statusEtag: statuses.etag,
-        checkRunsNotModified: runs.notModified,
+        checkRunsNotModified,
         statusesNotModified: statuses.notModified,
         checks,
       }
