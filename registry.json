@@ -32050,6 +32050,537 @@
           }
         ]
       }
+    },
+    {
+      "name": "pr-create-card",
+      "type": "registry:ui",
+      "title": "Pull request card",
+      "description": "A diff chip that opens into a pull request and a commit rail. The host passes the data.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge"
+      ],
+      "categories": [
+        "agents",
+        "ci"
+      ],
+      "docs": "Clean-room. Idea only, no license: the interaction comes from Phil Pitus, Generative UI #6 (https://x.com/pitus_/status/2117270206464631028). No source, copy, layout, or assets were copied. Answer no if the CLI asks to overwrite badge. The item ships no theme. Motion is opacity and transform only, and it stops when the reader prefers reduced motion. English labels are the default; prCreateCardLabelsEs is es-MX.",
+      "files": [
+        {
+          "path": "registry/ui/pr-create-card.tsx",
+          "type": "registry:component",
+          "target": "@ui/pr-create-card.tsx"
+        },
+        {
+          "path": "registry/ui/use-reduced-motion.ts",
+          "type": "registry:component",
+          "target": "@ui/use-reduced-motion.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de pull request",
+        "descriptionEs": "Un chip con el diff que se abre en la tarjeta del pull request y su riel de commits.",
+        "preview": "app/examples/pr-create-card/preview.tsx",
+        "previewHref": "/examples/pr-create-card",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "collapsed",
+            "label": "Chip",
+            "labelEn": "Chip"
+          },
+          {
+            "id": "compact",
+            "label": "Compacta",
+            "labelEn": "Compact"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Tarjeta de pull request",
+            "href": "/examples/pr-create-card",
+            "description": "Chip, riel y variante compacta. Taller Ladrillo."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/pr-create-card/stress",
+            "description": "390 px, 320 px, texto de 60 caracteres y vacío."
+          }
+        ],
+        "usage": "<PrCreateCard title=\"Keep the folio\" number={42} state=\"open\" diffStat={{ add: 86, del: 12 }} commits={commits} />",
+        "api": [
+          {
+            "name": "title / number / state",
+            "type": "string, number, PrState",
+            "description": "creating, open, merged, closed, or error."
+          },
+          {
+            "name": "diffStat / commits",
+            "type": "{ add, del }, CommitNode[]",
+            "description": "The chip and the rail. Both come from the host."
+          },
+          {
+            "name": "open / defaultOpen / onOpenChange",
+            "type": "boolean, (open) => void",
+            "description": "Controlled or uncontrolled. Closed unless opened."
+          },
+          {
+            "name": "variant",
+            "type": "\"rail\" | \"compact\"",
+            "description": "rail is the chosen default. compact is the two-column alternative."
+          },
+          {
+            "name": "labels",
+            "type": "PrCreateCardLabels",
+            "description": "English by default. prCreateCardLabelsEs is es-MX."
+          },
+          {
+            "name": "errorMessage / className",
+            "type": "string",
+            "description": "Visible error text. The state word is not color alone."
+          }
+        ]
+      }
+    },
+    {
+      "name": "checks-panel",
+      "type": "registry:ui",
+      "title": "Checks panel",
+      "description": "A checks count pill that opens lint, typecheck, unit, preview, and e2e rows. Closed by default.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "agents",
+        "ci"
+      ],
+      "docs": "Clean-room. Idea only, no license (Phil Pitus, Generative UI #6). The panel stays closed until opened. Each row has an icon, a status word, a bar, and a time. If estimated is set, the row says the time is estimated. The bar uses scaleX, not the host Progress primitive, because that primitive animates with transition-all. Answer no if the CLI asks to overwrite a primitive. No theme. Motion is opacity and transform, and it stops when reduced motion is preferred.",
+      "files": [
+        {
+          "path": "registry/ui/checks-panel.tsx",
+          "type": "registry:component",
+          "target": "@ui/checks-panel.tsx"
+        },
+        {
+          "path": "registry/ui/use-reduced-motion.ts",
+          "type": "registry:component",
+          "target": "@ui/use-reduced-motion.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Panel de comprobaciones",
+        "descriptionEs": "Una pastilla con el conteo que abre cada check con estado, barra y tiempo. Nace cerrada.",
+        "preview": "app/examples/checks-panel/preview.tsx",
+        "previewHref": "/examples/checks-panel",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "open",
+            "label": "Abierta",
+            "labelEn": "Open"
+          },
+          {
+            "id": "compact",
+            "label": "Compacta",
+            "labelEn": "Compact"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Panel de comprobaciones",
+            "href": "/examples/checks-panel",
+            "description": "Pastilla cerrada, filas y variante compacta."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/checks-panel/stress",
+            "description": "50 checks en 390 px."
+          }
+        ],
+        "usage": "<ChecksPanel passed={2} total={5} sha=\"b7e21aa\" message=\"Keep the folio\" checks={checks} />",
+        "api": [
+          {
+            "name": "passed / total / sha / message",
+            "type": "numbers and strings",
+            "description": "The pill and the panel header."
+          },
+          {
+            "name": "checks",
+            "type": "CheckItem[]",
+            "description": "queued, running, passed, failed, skipped, or cancelled. progress is 0 to 1."
+          },
+          {
+            "name": "open / defaultOpen",
+            "type": "boolean",
+            "description": "Closed by default."
+          },
+          {
+            "name": "variant",
+            "type": "\"rail\" | \"compact\"",
+            "description": "rail is the default."
+          },
+          {
+            "name": "labels",
+            "type": "ChecksPanelLabels",
+            "description": "English by default. checksPanelLabelsEs is es-MX."
+          }
+        ]
+      }
+    },
+    {
+      "name": "agent-fix-timeline",
+      "type": "registry:ui",
+      "title": "Fix timeline",
+      "description": "A host-fed timeline of diagnosis, files, edit, tests, and push. It does not run an agent.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "agents",
+        "ci"
+      ],
+      "docs": "Clean-room. Idea only, no license (Phil Pitus, Generative UI #6). Steps arrive as props. There is no agent in this file. Answer no if the CLI asks to overwrite a primitive. No theme. English labels are the default; agentFixTimelineLabelsEs is es-MX.",
+      "files": [
+        {
+          "path": "registry/ui/agent-fix-timeline.tsx",
+          "type": "registry:component",
+          "target": "@ui/agent-fix-timeline.tsx"
+        },
+        {
+          "path": "registry/ui/use-reduced-motion.ts",
+          "type": "registry:component",
+          "target": "@ui/use-reduced-motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Línea de tiempo del arreglo",
+        "descriptionEs": "Diagnóstico, archivos, edición, pruebas y empuje. Los pasos los manda el anfitrión.",
+        "preview": "app/examples/agent-fix-timeline/preview.tsx",
+        "previewHref": "/examples/agent-fix-timeline",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "compact",
+            "label": "Compacta",
+            "labelEn": "Compact"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Línea de tiempo del arreglo",
+            "href": "/examples/agent-fix-timeline",
+            "description": "Cinco pasos del Taller Ladrillo."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/agent-fix-timeline/stress",
+            "description": "390 px y un camino de archivo de 60 caracteres."
+          }
+        ],
+        "usage": "<AgentFixTimeline steps={[{ id: \"1\", kind: \"thought\", label: \"The folio dropped\", status: \"done\" }]} />",
+        "api": [
+          {
+            "name": "steps",
+            "type": "FixStep[]",
+            "description": "kind is thought, edit, test, push, or done. files are optional."
+          },
+          {
+            "name": "variant",
+            "type": "\"rail\" | \"compact\"",
+            "description": "rail is the default vertical spine."
+          },
+          {
+            "name": "labels",
+            "type": "AgentFixTimelineLabels",
+            "description": "English by default. agentFixTimelineLabelsEs is es-MX."
+          }
+        ]
+      }
+    },
+    {
+      "name": "merge-button",
+      "type": "registry:ui",
+      "title": "Merge button",
+      "description": "Stays disabled until checks pass, asks before merging, and ends on Merged into main.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "agents",
+        "ci"
+      ],
+      "docs": "Clean-room. Idea only, no license (Phil Pitus, Generative UI #6). onMerge runs only from the confirm button. A rejected phase shows the branch protection reason as text. Answer no if the CLI asks to overwrite button. No theme. English labels are the default; mergeButtonLabelsEs is es-MX.",
+      "files": [
+        {
+          "path": "registry/ui/merge-button.tsx",
+          "type": "registry:component",
+          "target": "@ui/merge-button.tsx"
+        },
+        {
+          "path": "registry/ui/use-reduced-motion.ts",
+          "type": "registry:component",
+          "target": "@ui/use-reduced-motion.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Botón de fusión",
+        "descriptionEs": "Se habilita con todas las comprobaciones en verde, pide confirmación y termina en Fusionado en main.",
+        "preview": "app/examples/merge-button/preview.tsx",
+        "previewHref": "/examples/merge-button",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "merged",
+            "label": "Fusionado",
+            "labelEn": "Merged"
+          },
+          {
+            "id": "compact",
+            "label": "Compacta",
+            "labelEn": "Compact"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Botón de fusión",
+            "href": "/examples/merge-button",
+            "description": "Listo, en espera, fusionando, rechazado y fusionado."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/merge-button/stress",
+            "description": "390 px y un motivo de 60 caracteres."
+          }
+        ],
+        "usage": "<MergeButton phase=\"ready\" onMerge={merge} labels={mergeButtonLabelsEs} />",
+        "api": [
+          {
+            "name": "phase",
+            "type": "MergePhase",
+            "description": "disabled, ready, confirming, merging, merged, or rejected."
+          },
+          {
+            "name": "onMerge",
+            "type": "() => void",
+            "description": "Runs only after the reader confirms."
+          },
+          {
+            "name": "reason",
+            "type": "string",
+            "description": "Shown when the branch protection rejects the merge."
+          },
+          {
+            "name": "variant / labels",
+            "type": "rail | compact, MergeButtonLabels",
+            "description": "English by default. mergeButtonLabelsEs is es-MX."
+          }
+        ]
+      }
+    },
+    {
+      "name": "ci-checks-story",
+      "type": "registry:block",
+      "title": "CI checks story",
+      "description": "A fictional walk from creating a pull request, through a failed check and a fix, to merge.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "pr-create-card",
+        "checks-panel",
+        "agent-fix-timeline",
+        "merge-button"
+      ],
+      "categories": [
+        "agents",
+        "ci",
+        "block"
+      ],
+      "docs": "Clean-room composition. Idea only, no license (Phil Pitus, Generative UI #6). The story does not fetch or merge. The flow scene steps through create, fail, fix, and merge with invented Taller Ladrillo data. The checks pill stays closed on the open step. Answer no if the CLI asks to overwrite button or any of the four pieces already installed. No theme.",
+      "files": [
+        {
+          "path": "registry/blocks/ci-checks-story.tsx",
+          "type": "registry:component",
+          "target": "@ui/ci-checks-story.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Escenario de comprobaciones",
+        "descriptionEs": "Crea, falla, arregla y fusiona un pull request ficticio. La pastilla nace cerrada.",
+        "preview": "app/examples/ci-checks-story/preview.tsx",
+        "previewHref": "/examples/ci-checks-story",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "merged",
+            "label": "Fusionado",
+            "labelEn": "Merged"
+          },
+          {
+            "id": "flow",
+            "label": "Escenario",
+            "labelEn": "Flow"
+          },
+          {
+            "id": "compact",
+            "label": "Compacta",
+            "labelEn": "Compact"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Escenario completo",
+            "href": "/examples/ci-checks-story",
+            "description": "Crear, fallar, arreglar y fusionar."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/ci-checks-story/stress",
+            "description": "390 px en fallo y en la variante compacta."
+          }
+        ],
+        "usage": "<CiChecksStory defaultPhase=\"empty\" showTransport labels={ciChecksStoryLabelsEs} />",
+        "api": [
+          {
+            "name": "phase / defaultPhase",
+            "type": "StoryPhase",
+            "description": "empty, creating, open, failing, fixing, passing, or merged."
+          },
+          {
+            "name": "showTransport",
+            "type": "boolean",
+            "description": "Shows the next-step button used by the flow scene."
+          },
+          {
+            "name": "variant",
+            "type": "\"rail\" | \"compact\"",
+            "description": "Passed through to the four pieces. rail is the default."
+          },
+          {
+            "name": "labels",
+            "type": "CiChecksStoryLabels",
+            "description": "es-MX is the story default. ciChecksStoryLabels is English."
+          }
+        ]
+      }
     }
   ]
 }

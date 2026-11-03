@@ -1,0 +1,8 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0, declaration: "UI_SYSTEM: APPLIES"}
+cycle_state: AUDITORIA
+spec_id: ci-checks-library
+profile: STANDARD
+base: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+head: 461081eb2fb6ccdef1f37d273a6648dcde203df6
+note: "Head del contraste del relleno contra la pista. El auditor es otro agente."

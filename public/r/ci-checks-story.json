@@ -1,0 +1,143 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "ci-checks-story",
+  "title": "CI checks story",
+  "author": "Eduardo Retana",
+  "description": "A fictional walk from creating a pull request, through a failed check and a fix, to merge.",
+  "dependencies": [],
+  "registryDependencies": [
+    "button",
+    "pr-create-card",
+    "checks-panel",
+    "agent-fix-timeline",
+    "merge-button"
+  ],
+  "files": [
+    {
+      "path": "registry/blocks/ci-checks-story.tsx",
+      "content": "\"use client\"\n\n/**\n * Clean-room walkthrough of a fictional pull request.\n * Idea only, no license. The story is props and local demo state.\n * It does not fetch, merge, or run an agent.\n * Taller Ladrillo is invented. People, SHAs, and times are invented.\n */\n\nimport * as React from \"react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\nimport {\n  AgentFixTimeline,\n  agentFixTimelineLabels,\n  agentFixTimelineLabelsEs,\n  type FixStep,\n} from \"@/components/ui/agent-fix-timeline\"\nimport {\n  ChecksPanel,\n  checksPanelLabels,\n  checksPanelLabelsEs,\n  type CheckItem,\n} from \"@/components/ui/checks-panel\"\nimport { MergeButton, mergeButtonLabels, mergeButtonLabelsEs, type MergePhase } from \"@/components/ui/merge-button\"\nimport {\n  PrCreateCard,\n  prCreateCardLabels,\n  prCreateCardLabelsEs,\n  type CommitNode,\n  type PrState,\n} from \"@/components/ui/pr-create-card\"\n\nexport const storyPhases = [\"empty\", \"creating\", \"open\", \"failing\", \"fixing\", \"passing\", \"merged\"] as const\n\nexport type StoryPhase = (typeof storyPhases)[number]\n\nexport type CiChecksStoryLabels = {\n  locale: \"es\" | \"en\"\n  next: string\n  done: string\n  region: string\n  live: (phase: StoryPhase) => string\n}\n\nexport const ciChecksStoryLabels: CiChecksStoryLabels = {\n  locale: \"en\",\n  next: \"Next step\",\n  done: \"Done\",\n  region: \"Pull request story\",\n  live: (phase) => `Story step: ${phase}.`,\n}\n\nexport const ciChecksStoryLabelsEs: CiChecksStoryLabels = {\n  locale: \"es\",\n  next: \"Siguiente paso\",\n  done: \"Listo\",\n  region: \"Historia del pull request\",\n  live: (phase) => `Paso de la historia: ${phase}.`,\n}\n\nconst title = {\n  es: \"Guardar el folio del horno al recargar\",\n  en: \"Keep the kiln folio across a reload\",\n}\n\nconst storyNow = Date.parse(\"2026-11-02T18:00:00Z\")\n\nconst commits: CommitNode[] = [\n  {\n    sha: \"b7e21aa\",\n    message: \"Leer el folio desde la ficha\",\n    author: \"Noa Ferrer\",\n    timeLabel: \"hace 40 min\",\n    committedAt: \"2026-11-02T17:20:00Z\",\n    branches: [\"feat/folio-horno\"],\n  },\n  {\n    sha: \"c4d90f1\",\n    message: \"Subir el horno de pruebas\",\n    author: \"Sam Ríos\",\n    timeLabel: \"hace 3 h\",\n    committedAt: \"2026-11-02T15:00:00Z\",\n    branches: [\"main\"],\n  },\n]\n\nconst thought = {\n  es: \"El recibo pierde el folio cuando el horno recarga\",\n  en: \"The receipt drops the folio when the kiln reloads\",\n}\n\nfunction checksFor(phase: StoryPhase): { passed: number; checks: CheckItem[] } {\n  const lint: CheckItem = { id: \"lint\", name: \"lint\", status: \"passed\", durationMs: 11_000, progress: 1 }\n  const types: CheckItem = { id: \"typecheck\", name: \"typecheck\", status: \"passed\", durationMs: 19_000, progress: 1 }\n  if (phase === \"empty\" || phase === \"creating\" || phase === \"open\") {\n    return {\n      passed: phase === \"empty\" ? 0 : 2,\n      checks:\n        phase === \"empty\"\n          ? []\n          : [\n              lint,\n              types,\n              { id: \"unit\", name: \"unit\", status: \"running\", durationMs: 8_000, progress: 0.4, estimated: true },\n              { id: \"preview\", name: \"preview\", status: \"queued\", progress: 0 },\n              { id: \"e2e\", name: \"e2e\", status: \"queued\", progress: 0, durationMs: undefined },\n            ],\n    }\n  }\n  if (phase === \"failing\" || phase === \"fixing\") {\n    return {\n      passed: 4,\n      checks: [\n        lint,\n        types,\n        { id: \"unit\", name: \"unit\", status: \"passed\", durationMs: 33_000, progress: 1 },\n        { id: \"preview\", name: \"preview\", status: \"passed\", durationMs: 38_000, progress: 1 },\n        { id: \"e2e\", name: \"e2e\", status: \"failed\", durationMs: 29_000, progress: 1 },\n      ],\n    }\n  }\n  return {\n    passed: 5,\n    checks: [\n      lint,\n      types,\n      { id: \"unit\", name: \"unit\", status: \"passed\", durationMs: 33_000, progress: 1 },\n      { id: \"preview\", name: \"preview\", status: \"passed\", durationMs: 38_000, progress: 1 },\n      { id: \"e2e\", name: \"e2e\", status: \"passed\", durationMs: 41_000, progress: 1, estimated: true },\n    ],\n  }\n}\n\nfunction stepsFor(phase: StoryPhase, locale: \"es\" | \"en\"): FixStep[] {\n  if (phase !== \"fixing\" && phase !== \"passing\" && phase !== \"merged\") return []\n  const copy = locale === \"es\"\n  return [\n    { id: \"thought\", kind: \"thought\", label: copy ? thought.es : thought.en, status: \"done\" },\n    {\n      id: \"edit\",\n      kind: \"edit\",\n      label: copy ? \"Edité horno.ts\" : \"Edited horno.ts\",\n      status: \"done\",\n      files: [{ path: \"horno.ts\" }, { path: \"folio.spec.ts\" }],\n    },\n    { id: \"test\", kind: \"test\", label: copy ? \"12 pruebas de punta a punta pasaron\" : \"12 end-to-end tests passed\", status: \"done\" },\n    { id: \"push\", kind: \"push\", label: copy ? \"Empujé b7e21aa al pull request 42\" : \"Pushed b7e21aa to pull request 42\", status: \"done\" },\n    { id: \"done\", kind: \"done\", label: copy ? \"El folio se conserva\" : \"The folio stays\", status: phase === \"fixing\" ? \"active\" : \"done\" },\n  ]\n}\n\nfunction prState(phase: StoryPhase): PrState {\n  if (phase === \"creating\") return \"creating\"\n  if (phase === \"merged\") return \"merged\"\n  if (phase === \"empty\") return \"closed\"\n  return \"open\"\n}\n\nfunction mergePhase(phase: StoryPhase): MergePhase {\n  if (phase === \"passing\") return \"ready\"\n  if (phase === \"merged\") return \"merged\"\n  return \"disabled\"\n}\n\nexport type CiChecksStoryProps = {\n  phase?: StoryPhase\n  defaultPhase?: StoryPhase\n  onPhaseChange?: (phase: StoryPhase) => void\n  showTransport?: boolean\n  variant?: \"rail\" | \"compact\"\n  labels?: CiChecksStoryLabels\n  className?: string\n}\n\nexport function CiChecksStory({\n  phase: phaseProp,\n  defaultPhase = \"empty\",\n  onPhaseChange,\n  showTransport = false,\n  variant = \"rail\",\n  labels = ciChecksStoryLabelsEs,\n  className,\n}: CiChecksStoryProps) {\n  const [index, setIndex] = React.useState(() => Math.max(0, storyPhases.indexOf(defaultPhase)))\n  const phase = phaseProp ?? storyPhases[index] ?? \"empty\"\n  const [panel, setPanel] = React.useState(false)\n  const locale = labels.locale\n  const prLabels = locale === \"es\" ? prCreateCardLabelsEs : prCreateCardLabels\n  const checkLabels = locale === \"es\" ? checksPanelLabelsEs : checksPanelLabels\n  const fixLabels = locale === \"es\" ? agentFixTimelineLabelsEs : agentFixTimelineLabels\n  const mergeLabels = locale === \"es\" ? mergeButtonLabelsEs : mergeButtonLabels\n  const snapshot = checksFor(phase)\n  const steps = stepsFor(phase, locale)\n  const panelOpen = panel || phase === \"failing\" || phase === \"fixing\" || phase === \"passing\" || phase === \"merged\"\n  const atEnd = phase === \"merged\"\n\n  function advance() {\n    const current = storyPhases.indexOf(phase)\n    const next = storyPhases[Math.min(storyPhases.length - 1, current + 1)] ?? phase\n    onPhaseChange?.(next)\n    if (phaseProp === undefined) setIndex(storyPhases.indexOf(next))\n  }\n\n  return (\n    <section aria-label={labels.region} className={cn(\"flex w-full min-w-0 flex-col gap-4\", className)}>\n      <p role=\"status\" aria-live=\"polite\" className=\"sr-only\">\n        {labels.live(phase)}\n      </p>\n      <PrCreateCard\n        title={title[locale]}\n        number={phase === \"empty\" ? undefined : 42}\n        state={prState(phase)}\n        diffStat={phase === \"empty\" ? { add: 0, del: 0 } : { add: 86, del: 12 }}\n          commits={phase === \"empty\" || phase === \"creating\" ? [] : commits}\n          open={phase !== \"empty\"}\n          variant={variant}\n          labels={prLabels}\n          now={storyNow}\n          locale={locale === \"es\" ? \"es-MX\" : \"en\"}\n      />\n      {phase === \"empty\" ? null : (\n        <ChecksPanel\n          passed={snapshot.passed}\n          total={5}\n          sha=\"b7e21aa\"\n          message={title[locale]}\n          checks={snapshot.checks}\n          open={panelOpen}\n          onOpenChange={setPanel}\n          variant={variant}\n          labels={checkLabels}\n        />\n      )}\n      {steps.length > 0 ? <AgentFixTimeline steps={steps} variant={variant} labels={fixLabels} /> : null}\n      {phase === \"empty\" || phase === \"creating\" ? null : (\n        <MergeButton phase={mergePhase(phase)} variant={variant} labels={mergeLabels} onMerge={() => advance()} />\n      )}\n      {showTransport ? (\n        <Button type=\"button\" variant=\"outline\" onClick={advance} disabled={atEnd}>\n          {atEnd ? labels.done : labels.next}\n        </Button>\n      ) : null}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/ci-checks-story.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Escenario de comprobaciones",
+    "descriptionEs": "Crea, falla, arregla y fusiona un pull request ficticio. La pastilla nace cerrada.",
+    "preview": "app/examples/ci-checks-story/preview.tsx",
+    "previewHref": "/examples/ci-checks-story",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "merged",
+        "label": "Fusionado",
+        "labelEn": "Merged"
+      },
+      {
+        "id": "flow",
+        "label": "Escenario",
+        "labelEn": "Flow"
+      },
+      {
+        "id": "compact",
+        "label": "Compacta",
+        "labelEn": "Compact"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Escenario completo",
+        "href": "/examples/ci-checks-story",
+        "description": "Crear, fallar, arreglar y fusionar."
+      },
+      {
+        "title": "Marco de estrés",
+        "href": "/examples/ci-checks-story/stress",
+        "description": "390 px en fallo y en la variante compacta."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/ci-checks-story?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/ci-checks-story?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/ci-checks-story?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/ci-checks-story?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Fusionado",
+        "href": "/examples/ci-checks-story?scene=merged",
+        "description": "Merged"
+      },
+      {
+        "title": "Escenario",
+        "href": "/examples/ci-checks-story?scene=flow",
+        "description": "Flow"
+      },
+      {
+        "title": "Compacta",
+        "href": "/examples/ci-checks-story?scene=compact",
+        "description": "Compact"
+      }
+    ],
+    "usage": "<CiChecksStory defaultPhase=\"empty\" showTransport labels={ciChecksStoryLabelsEs} />",
+    "api": [
+      {
+        "name": "phase / defaultPhase",
+        "type": "StoryPhase",
+        "description": "empty, creating, open, failing, fixing, passing, or merged."
+      },
+      {
+        "name": "showTransport",
+        "type": "boolean",
+        "description": "Shows the next-step button used by the flow scene."
+      },
+      {
+        "name": "variant",
+        "type": "\"rail\" | \"compact\"",
+        "description": "Passed through to the four pieces. rail is the default."
+      },
+      {
+        "name": "labels",
+        "type": "CiChecksStoryLabels",
+        "description": "es-MX is the story default. ciChecksStoryLabels is English."
+      }
+    ]
+  },
+  "docs": "Clean-room composition. Idea only, no license (Phil Pitus, Generative UI #6). The story does not fetch or merge. The flow scene steps through create, fail, fix, and merge with invented Taller Ladrillo data. The checks pill stays closed on the open step. Answer no if the CLI asks to overwrite button or any of the four pieces already installed. No theme.",
+  "categories": [
+    "agents",
+    "ci",
+    "block"
+  ],
+  "type": "registry:block"
+}

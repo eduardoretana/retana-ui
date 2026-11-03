@@ -1,0 +1,33 @@
+schema: uis.expected-red/v1
+spec_id: ci-checks-library
+recorded_against: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+command: pnpm exec vitest run __tests__/pr-create-card.test.tsx __tests__/checks-panel.test.tsx __tests__/agent-fix-timeline.test.tsx __tests__/merge-button.test.tsx __tests__/ci-checks-story.test.tsx __tests__/ci-checks-labels.test.ts __tests__/ci-checks-family-source.test.ts
+result: red
+files_failed: 7
+tests_failed: 1
+note: >
+  Seis archivos no llegaron a las aserciones: Vitest no resolvió el módulo.
+  El séptimo sí corrió y falló porque el archivo de registry todavía no existe.
+  Firma tomada de la corrida, no inventada.
+cases:
+  - id: T-A1
+    file: __tests__/pr-create-card.test.tsx
+    signature: 'Failed to resolve import "@/registry/ui/pr-create-card" from "__tests__/pr-create-card.test.tsx". Does the file exist?'
+  - id: T-A2
+    file: __tests__/checks-panel.test.tsx
+    signature: 'Failed to resolve import "@/registry/ui/checks-panel" from "__tests__/checks-panel.test.tsx". Does the file exist?'
+  - id: T-A3
+    file: __tests__/agent-fix-timeline.test.tsx
+    signature: 'Failed to resolve import "@/registry/ui/agent-fix-timeline" from "__tests__/agent-fix-timeline.test.tsx". Does the file exist?'
+  - id: T-A4
+    file: __tests__/merge-button.test.tsx
+    signature: 'Failed to resolve import "@/registry/ui/merge-button" from "__tests__/merge-button.test.tsx". Does the file exist?'
+  - id: T-A5
+    file: __tests__/ci-checks-story.test.tsx
+    signature: 'Failed to resolve import "@/registry/blocks/ci-checks-story" from "__tests__/ci-checks-story.test.tsx". Does the file exist?'
+  - id: T-A6
+    file: __tests__/ci-checks-labels.test.ts
+    signature: 'Failed to resolve import "@/registry/ui/agent-fix-timeline" from "__tests__/ci-checks-labels.test.ts". Does the file exist?'
+  - id: T-A7
+    file: __tests__/ci-checks-family-source.test.ts
+    signature: 'expected false to be true (registry file missing before the build)'

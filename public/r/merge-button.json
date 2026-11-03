@@ -1,0 +1,136 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "merge-button",
+  "title": "Merge button",
+  "author": "Eduardo Retana",
+  "description": "Stays disabled until checks pass, asks before merging, and ends on Merged into main.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/merge-button.tsx",
+      "content": "\"use client\"\n\n/**\n * Clean-room merge control.\n * Idea only, no license.\n * Disabled until the host says checks passed. The first click asks.\n * `onMerge` runs only from the confirm control.\n */\n\nimport * as React from \"react\"\nimport { Check, GitMerge, Loader2 } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\n\nimport { useReducedMotion } from \"./use-reduced-motion\"\n\nexport type MergePhase = \"disabled\" | \"ready\" | \"confirming\" | \"merging\" | \"merged\" | \"rejected\"\n\nexport type MergeButtonLabels = {\n  merge: string\n  confirm: string\n  cancel: string\n  merging: string\n  merged: string\n  allPassed: string\n  waiting: string\n  rejected: string\n  live: (phase: MergePhase) => string\n}\n\nexport const mergeButtonLabels: MergeButtonLabels = {\n  merge: \"Merge\",\n  confirm: \"Confirm merge into main\",\n  cancel: \"Cancel\",\n  merging: \"Merging\",\n  merged: \"Merged into main\",\n  allPassed: \"All checks passed\",\n  waiting: \"Waiting for checks\",\n  rejected: \"Branch protection rejected the merge\",\n  live: (phase) => {\n    if (phase === \"merged\") return \"Merged into main\"\n    if (phase === \"merging\") return \"Merging\"\n    if (phase === \"ready\" || phase === \"confirming\") return \"All checks passed\"\n    if (phase === \"rejected\") return \"Branch protection rejected the merge\"\n    return \"Waiting for checks\"\n  },\n}\n\nexport const mergeButtonLabelsEs: MergeButtonLabels = {\n  merge: \"Fusionar\",\n  confirm: \"Confirmar fusión en main\",\n  cancel: \"Cancelar\",\n  merging: \"Fusionando\",\n  merged: \"Fusionado en main\",\n  allPassed: \"Todas las comprobaciones pasaron\",\n  waiting: \"Esperando las comprobaciones\",\n  rejected: \"La protección de la rama rechazó la fusión\",\n  live: (phase) => {\n    if (phase === \"merged\") return \"Fusionado en main\"\n    if (phase === \"merging\") return \"Fusionando\"\n    if (phase === \"ready\" || phase === \"confirming\") return \"Todas las comprobaciones pasaron\"\n    if (phase === \"rejected\") return \"La protección de la rama rechazó la fusión\"\n    return \"Esperando las comprobaciones\"\n  },\n}\n\nexport type MergeButtonProps = {\n  phase: MergePhase\n  onMerge?: () => void\n  onCancel?: () => void\n  reason?: string\n  /** Replaces the default status sentence. One line, not a second status. */\n  statusLabel?: string\n  variant?: \"rail\" | \"compact\"\n  labels?: MergeButtonLabels\n  className?: string\n}\n\nexport function MergeButton({\n  phase,\n  onMerge,\n  onCancel,\n  reason,\n  statusLabel,\n  variant = \"rail\",\n  labels = mergeButtonLabels,\n  className,\n}: MergeButtonProps) {\n  const reduced = useReducedMotion()\n  const statusId = React.useId()\n  const [asking, setAsking] = React.useState(false)\n  const [seenPhase, setSeenPhase] = React.useState(phase)\n  const confirmRef = React.useRef<HTMLButtonElement>(null)\n  if (seenPhase !== phase) {\n    setSeenPhase(phase)\n    if (phase !== \"ready\") setAsking(false)\n  }\n  const showConfirm = phase === \"ready\" && asking\n\n  React.useEffect(() => {\n    if (showConfirm) confirmRef.current?.focus()\n  }, [showConfirm])\n\n  function cancel() {\n    setAsking(false)\n    onCancel?.()\n  }\n\n  const statusText =\n    phase === \"merged\"\n      ? labels.merged\n      : phase === \"merging\"\n        ? labels.merging\n        : phase === \"ready\"\n          ? labels.allPassed\n          : phase === \"rejected\"\n            ? labels.rejected\n            : (statusLabel ?? labels.waiting)\n\n  return (\n    <div\n      data-testid=\"merge-button\"\n      data-variant={variant}\n      data-motion={reduced ? \"reduced\" : \"full\"}\n      className={cn(\"flex min-w-0 flex-col items-start gap-2\", className)}\n      onKeyDown={(event) => {\n        if (event.key === \"Escape\" && showConfirm) {\n          event.preventDefault()\n          cancel()\n        }\n      }}\n    >\n      {phase === \"rejected\" ? (\n        <p id={statusId} role=\"alert\" className=\"text-sm break-words text-destructive\">\n          {labels.rejected}\n          {reason ? ` ${reason}` : null}\n        </p>\n      ) : phase === \"merged\" ? (\n        <p id={statusId} role=\"status\" aria-live=\"polite\" className=\"inline-flex items-center gap-1.5 text-sm text-foreground\">\n          <Check className=\"size-3.5\" aria-hidden />\n          {labels.merged}\n        </p>\n      ) : (\n        <p id={statusId} role=\"status\" aria-live=\"polite\" className={cn(\"text-sm text-foreground\", variant === \"compact\" && phase === \"ready\" && \"sr-only\")}>\n          {statusText}\n        </p>\n      )}\n      {phase === \"merged\" ? null : (\n        <div className=\"flex flex-wrap items-center gap-2\">\n          {showConfirm ? (\n            <>\n              <Button ref={confirmRef} type=\"button\" aria-describedby={statusId} onClick={() => onMerge?.()}>\n                <GitMerge aria-hidden />\n                {labels.confirm}\n              </Button>\n              <Button type=\"button\" variant=\"outline\" onClick={cancel}>\n                {labels.cancel}\n              </Button>\n            </>\n          ) : (\n            <Button\n              type=\"button\"\n              disabled={phase === \"disabled\" || phase === \"merging\" || phase === \"rejected\"}\n              aria-describedby={statusId}\n              aria-busy={phase === \"merging\" || undefined}\n              onClick={() => {\n                if (phase !== \"ready\") return\n                setAsking(true)\n              }}\n            >\n              {phase === \"merging\" ? <Loader2 className=\"animate-spin motion-reduce:animate-none\" aria-hidden /> : <GitMerge aria-hidden />}\n              {variant === \"compact\" && phase === \"ready\" ? `${labels.allPassed}. ${labels.merge}` : phase === \"merging\" ? labels.merging : labels.merge}\n            </Button>\n          )}\n        </div>\n      )}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/merge-button.tsx"
+    },
+    {
+      "path": "registry/ui/use-reduced-motion.ts",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nfunction subscribe(onStoreChange: () => void) {\n  const query = window.matchMedia(\"(prefers-reduced-motion: reduce)\")\n  query.addEventListener(\"change\", onStoreChange)\n  return () => query.removeEventListener(\"change\", onStoreChange)\n}\n\nfunction snapshot() {\n  return window.matchMedia(\"(prefers-reduced-motion: reduce)\").matches\n}\n\n/** True when the reader asked for reduced motion. False during SSR. */\nexport function useReducedMotion() {\n  return React.useSyncExternalStore(subscribe, snapshot, () => false)\n}\n",
+      "type": "registry:component",
+      "target": "@ui/use-reduced-motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Botón de fusión",
+    "descriptionEs": "Se habilita con todas las comprobaciones en verde, pide confirmación y termina en Fusionado en main.",
+    "preview": "app/examples/merge-button/preview.tsx",
+    "previewHref": "/examples/merge-button",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "merged",
+        "label": "Fusionado",
+        "labelEn": "Merged"
+      },
+      {
+        "id": "compact",
+        "label": "Compacta",
+        "labelEn": "Compact"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Botón de fusión",
+        "href": "/examples/merge-button",
+        "description": "Listo, en espera, fusionando, rechazado y fusionado."
+      },
+      {
+        "title": "Marco de estrés",
+        "href": "/examples/merge-button/stress",
+        "description": "390 px y un motivo de 60 caracteres."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/merge-button?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/merge-button?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/merge-button?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/merge-button?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Fusionado",
+        "href": "/examples/merge-button?scene=merged",
+        "description": "Merged"
+      },
+      {
+        "title": "Compacta",
+        "href": "/examples/merge-button?scene=compact",
+        "description": "Compact"
+      }
+    ],
+    "usage": "<MergeButton phase=\"ready\" onMerge={merge} labels={mergeButtonLabelsEs} />",
+    "api": [
+      {
+        "name": "phase",
+        "type": "MergePhase",
+        "description": "disabled, ready, confirming, merging, merged, or rejected."
+      },
+      {
+        "name": "onMerge",
+        "type": "() => void",
+        "description": "Runs only after the reader confirms."
+      },
+      {
+        "name": "reason",
+        "type": "string",
+        "description": "Shown when the branch protection rejects the merge."
+      },
+      {
+        "name": "variant / labels",
+        "type": "rail | compact, MergeButtonLabels",
+        "description": "English by default. mergeButtonLabelsEs is es-MX."
+      }
+    ]
+  },
+  "docs": "Clean-room. Idea only, no license (Phil Pitus, Generative UI #6). onMerge runs only from the confirm button. A rejected phase shows the branch protection reason as text. Answer no if the CLI asks to overwrite button. No theme. English labels are the default; mergeButtonLabelsEs is es-MX.",
+  "categories": [
+    "agents",
+    "ci"
+  ],
+  "type": "registry:ui"
+}
