@@ -1,0 +1,12 @@
+schema: uis.expected-red/v1
+spec_id: ci-checks-live
+note: >
+  El núcleo y las pruebas de esta herramienta se escribieron en el mismo turno,
+  después de que las piezas de biblioteca ya tenían su corrida en rojo
+  (ui-tests/expected-red.yaml). No hay una firma de "módulo ausente" separada
+  para este spec. La mordida está en tool-core-purity: un texto que importa
+  React hace fallar el detector, y el núcleo real tiene que seguir limpio.
+bite:
+  - id: RUI-TOOLS-001
+    file: __tests__/tool-core-purity.test.ts
+    signature: 'forbiddenCoreImport("import React from \\"react\\"") === true'

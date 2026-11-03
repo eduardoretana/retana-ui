@@ -428,6 +428,9 @@ import Preview423 from "@/app/examples/checks-panel/preview"
 import Preview424 from "@/app/examples/agent-fix-timeline/preview"
 import Preview425 from "@/app/examples/merge-button/preview"
 import Preview426 from "@/app/examples/ci-checks-story/preview"
+import Preview427 from "@/app/examples/ci-checks-core/preview"
+import Preview428 from "@/app/examples/ci-checks-github/preview"
+import Preview429 from "@/app/examples/ci-checks-live/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -857,4 +860,7 @@ export const previewMap = {
   "agent-fix-timeline": Preview424,
   "merge-button": Preview425,
   "ci-checks-story": Preview426,
+  "ci-checks-core": Preview427,
+  "ci-checks-github": Preview428,
+  "ci-checks-live": Preview429,
 }

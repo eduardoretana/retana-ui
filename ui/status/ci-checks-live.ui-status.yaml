@@ -1,0 +1,8 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0, declaration: "UI_SYSTEM: APPLIES"}
+cycle_state: AUDITORIA
+spec_id: ci-checks-live
+profile: STANDARD
+base: 8f7859c06b59ca89be6aab89aa98ffe41a147f37
+head: pending
+note: "Apilado sobre las piezas. El auditor es otro agente."
