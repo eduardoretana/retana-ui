@@ -3,6 +3,6 @@ ui_system: {version: 4.0.0, declaration: "UI_SYSTEM: APPLIES"}
 cycle_state: AUDITORIA
 spec_id: ci-checks-live
 profile: STANDARD
-base: 8f7859c06b59ca89be6aab89aa98ffe41a147f37
-head: de96d4ed72dfdd6fd89526ca75a250f37084ab20
-note: "Head del arreglo rebasado sobre las piezas. El auditor es otro agente."
+base: 0b0ef05fdfbf1fa5ad3e0015b49a7662d488321e
+head: 1eede1531e546e245233d3600176153006790fef
+note: "Rebasado sobre el contraste de las barras. El auditor es otro agente."
