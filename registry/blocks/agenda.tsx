@@ -209,6 +209,7 @@ export function Agenda<TMeta extends Record<string, unknown> = Record<string, un
   const [hidden, setHidden] = useControllable(hiddenProp, defaultHiddenCategoryIds, onHiddenCategoryIdsChange)
   const [resourceId, setResourceId] = useControllable(resourceProp, defaultResourceId, onResourceIdChange)
   const [sidebarOpen, setSidebarOpen] = React.useState(false)
+  const [capacityOpen, setCapacityOpen] = React.useState(false)
   const [announcement, setAnnouncement] = React.useState("")
 
   const visible = events.filter((event) => isCategoryVisible(event.categoryId, hidden))
@@ -292,6 +293,7 @@ export function Agenda<TMeta extends Record<string, unknown> = Record<string, un
   }
 
   const resourceLabelId = React.useId()
+  const capacityListId = React.useId()
   const showCapacity = resources.some((resource) => resource.capacityHours != null && resource.capacityHours >= 0)
 
   const detail = selected ? (
@@ -427,39 +429,21 @@ export function Agenda<TMeta extends Record<string, unknown> = Record<string, un
         </div>
       </header>
       {showGrid && showCapacity ? (
-        <section aria-label={labels.capacitySummary} data-slot="agenda-capacity" className="border-b border-border px-3 py-2">
-          <h3 className="sr-only">{labels.capacitySummary}</h3>
-          <ul className="flex flex-wrap gap-2">
-            {loads.map((load) => {
-              const resource = resources.find((item) => item.id === load.resourceId)
-              const over = load.overMs > 0
-              const scheduled = labels.hours(formatHoursFromMs(load.scheduledMs, locale))
-              const capacity = load.capacityMs == null ? null : labels.hours(formatHoursFromMs(load.capacityMs, locale))
-              return (
-                <li
-                  key={load.resourceId}
-                  data-over={over ? "true" : "false"}
-                  data-slot={over ? "agenda-capacity-over" : "agenda-capacity-row"}
-                  className="flex min-w-0 max-w-full items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-xs font-medium text-card-foreground"
-                >
-                  {over ? <TriangleAlert aria-hidden className="size-3 shrink-0" /> : null}
-                  <span className="max-w-40 truncate" title={resource?.label}>
-                    {resource?.label ?? load.resourceId}
-                  </span>
-                  <span className="tabular-nums">
-                    {capacity == null ? scheduled : labels.scheduledOf(scheduled, capacity)}
-                  </span>
-                  {over ? <span>{labels.overCapacity(labels.hours(formatHoursFromMs(load.overMs, locale)))}</span> : null}
-                </li>
-              )
-            })}
-          </ul>
-        </section>
+        <CapacitySummary
+          id={capacityListId}
+          labels={labels}
+          locale={locale}
+          resources={resources}
+          loads={loads}
+          preview={narrow ? 4 : 12}
+          open={capacityOpen}
+          onOpenChange={setCapacityOpen}
+        />
       ) : null}
       <p className="sr-only">{labels.shortcuts}</p>
       {readOnly ? <p className="px-3 pt-2 text-xs text-muted-foreground">{labels.readOnlyNote}</p> : null}
-      <div className="flex min-h-0 flex-1">
-        <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden">
+        <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           {loading ? (
             <div className="grid gap-2 p-3" aria-busy="true">
               <Skeleton className="h-8 w-full" />
@@ -825,7 +809,7 @@ function TimeGrid<TMeta extends Record<string, unknown>>({
       aria-rowcount={hours.length + 2}
       aria-colcount={lanes.length + 1}
       data-resource-column-min={resourceMode ? RESOURCE_COLUMN_MIN : undefined}
-      className={cn("flex min-h-0 flex-1 flex-col", resourceMode && "overflow-x-auto", className)}
+      className={cn("flex min-h-0 min-w-0 w-full flex-1 flex-col", resourceMode ? "overflow-x-auto" : "overflow-x-hidden", className)}
     >
       <div className="flex min-h-0 min-w-0 flex-1 flex-col" style={boardWidth ? { minWidth: boardWidth } : undefined}>
       <div role="row" className="grid border-b border-border" style={{ gridTemplateColumns: columns }}>
@@ -967,7 +951,7 @@ function TimeGrid<TMeta extends Record<string, unknown>>({
               })}
             </div>
           ))}
-          <div className="pointer-events-none absolute inset-0 grid" style={{ gridTemplateColumns: columns }}>
+          <div className="pointer-events-none absolute inset-0 z-10 grid" style={{ gridTemplateColumns: columns }}>
             <div />
             {lanes.map((lane) => {
               const laneBoxes = boxes.filter((box) => box.date === lane.key)
@@ -1019,7 +1003,7 @@ function TimeGrid<TMeta extends Record<string, unknown>>({
           {showNow && now != null && nowTop != null ? (
             <div
               data-slot="agenda-now"
-              className="pointer-events-none absolute z-30"
+              className="pointer-events-none absolute z-0"
               style={{ top: `${nowTop * 100}%`, insetInlineStart: 0, insetInlineEnd: 0 }}
             >
               <span className="absolute start-1 z-10 -translate-y-1/2 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-medium text-primary-foreground shadow-sm tabular-nums">
@@ -1551,6 +1535,71 @@ function useControllable<T>(value: T | undefined, defaultValue: T, onChange?: (v
     [onChange, value],
   )
   return [current, setValue] as const
+}
+
+function CapacitySummary({
+  id,
+  labels,
+  locale,
+  resources,
+  loads,
+  preview,
+  open,
+  onOpenChange,
+}: {
+  id: string
+  labels: AgendaLabels
+  locale: string
+  resources: readonly AgendaResource[]
+  loads: readonly { resourceId: string; scheduledMs: number; capacityMs: number | null; overMs: number }[]
+  preview: number
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}) {
+  const ordered = [...loads].sort((a, b) => b.overMs - a.overMs || a.resourceId.localeCompare(b.resourceId))
+  const visible = open ? ordered : ordered.slice(0, preview)
+  return (
+    <section aria-label={labels.capacitySummary} data-slot="agenda-capacity" className="border-b border-border px-3 py-2">
+      <h3 className="sr-only">{labels.capacitySummary}</h3>
+      <ul id={id} className="flex max-h-none flex-wrap gap-2">
+        {visible.map((load) => {
+          const resource = resources.find((item) => item.id === load.resourceId)
+          const over = load.overMs > 0
+          const scheduled = labels.hours(formatHoursFromMs(load.scheduledMs, locale))
+          const capacity = load.capacityMs == null ? null : labels.hours(formatHoursFromMs(load.capacityMs, locale))
+          const name = resource?.label ?? load.resourceId
+          return (
+            <li
+              key={load.resourceId}
+              data-over={over ? "true" : "false"}
+              data-slot={over ? "agenda-capacity-over" : "agenda-capacity-row"}
+              className="flex min-w-0 max-w-full items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-xs font-medium text-card-foreground"
+            >
+              {over ? <TriangleAlert aria-hidden className="size-3 shrink-0" /> : null}
+              <span className="max-w-40 truncate" title={name}>
+                {name}
+              </span>
+              <span className="tabular-nums">{capacity == null ? scheduled : labels.scheduledOf(scheduled, capacity)}</span>
+              {over ? <span>{labels.overCapacity(labels.hours(formatHoursFromMs(load.overMs, locale)))}</span> : null}
+            </li>
+          )
+        })}
+      </ul>
+      {ordered.length > preview ? (
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="mt-2"
+          aria-expanded={open}
+          aria-controls={id}
+          onClick={() => onOpenChange(!open)}
+        >
+          {open ? labels.showFewerResources : labels.showAllResources(ordered.length)}
+        </Button>
+      ) : null}
+    </section>
+  )
 }
 
 function ResourceDayList<TMeta extends Record<string, unknown>>({

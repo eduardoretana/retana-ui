@@ -176,9 +176,24 @@ export function AgendaEventCard<TMeta extends Record<string, unknown> = Record<s
             className="mt-0.5 block truncate text-[11px] text-muted-foreground tabular-nums whitespace-nowrap @max-[11rem]:sr-only"
           >
             {event.allDay ? labels.allDay : when}
-            {ongoing ? <span className="font-medium text-card-foreground"> {labels.ongoing}</span> : null}
-            {continuesBefore ? <span> {labels.continuesBefore}</span> : null}
-            {continuesAfter ? <span> {labels.continuesAfter}</span> : null}
+            {ongoing ? (
+              <>
+                <span aria-hidden="true">{"\u00A0·\u00A0"}</span>
+                <span className="font-medium text-card-foreground">{labels.ongoing}</span>
+              </>
+            ) : null}
+            {continuesBefore ? (
+              <>
+                <span aria-hidden="true">{"\u00A0·\u00A0"}</span>
+                <span>{labels.continuesBefore}</span>
+              </>
+            ) : null}
+            {continuesAfter ? (
+              <>
+                <span aria-hidden="true">{"\u00A0·\u00A0"}</span>
+                <span>{labels.continuesAfter}</span>
+              </>
+            ) : null}
           </span>
         ) : null}
         {conflictLabel ? (

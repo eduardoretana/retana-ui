@@ -130,6 +130,39 @@ try {
         await page.evaluate((mode) => {
           document.documentElement.classList.toggle("dark", mode === "dark")
         }, theme)
+        if (set === "after" && view.width >= 1000) {
+          const overlap = await page.evaluate(() => {
+            const sidebar = document.querySelector("[data-slot=agenda-sidebar]")
+            const grid = document.querySelector("[role=grid]")
+            if (!sidebar || !grid) return { ok: true, skipped: true }
+            const side = sidebar.getBoundingClientRect()
+            const port = grid.getBoundingClientRect()
+            const crosses = (a, b) => a.right > b.left + 1 && a.left < b.right - 1 && a.bottom > b.top + 1 && a.top < b.bottom - 1
+            const clip = (rect) => {
+              const left = Math.max(rect.left, port.left)
+              const right = Math.min(rect.right, port.right)
+              const top = Math.max(rect.top, port.top)
+              const bottom = Math.min(rect.bottom, port.bottom)
+              if (right - left <= 1 || bottom - top <= 1) return null
+              return { left, right, top, bottom }
+            }
+            const headers = [...grid.querySelectorAll("[role=columnheader]")]
+            const hit = headers.find((node) => {
+              const visible = clip(node.getBoundingClientRect())
+              return visible ? crosses(visible, side) : false
+            })
+            return {
+              ok: port.right <= side.left + 1 && !hit,
+              portRight: port.right,
+              sideLeft: side.left,
+              hit: hit ? hit.getAttribute("aria-label") ?? hit.textContent : null,
+            }
+          })
+          if (!overlap.ok) {
+            throw new Error(`resource column overlaps the sidebar: ${JSON.stringify(overlap)}`)
+          }
+          console.log(`layout: grid ends at ${overlap.portRight}, sidebar starts at ${overlap.sideLeft}`)
+        }
         const file = path.join(out, `agenda-${target.id}-${theme}-${view.name}.png`)
         await page.screenshot({ path: file })
         const row = { file, theme, viewport: view.name, scene: target.id, contrast: {} }

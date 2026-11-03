@@ -316,6 +316,7 @@ describe("agenda resources", () => {
     const badge = within(open).getByText("Choque")
     expect(badge).toBeVisible()
     expect(badge.closest("[data-slot=agenda-conflict]")).toHaveAttribute("title", expect.stringContaining("Esmalte húmedo"))
+    expect(document.querySelector("[data-ongoing=true] [data-slot=agenda-event-when]")?.textContent).toMatch(/\u00A0·\u00A0En curso/)
     expect(screen.queryByRole("button", { name: (name) => name === "Acciones" })).not.toBeInTheDocument()
     const jump = screen.getByRole("button", { name: /1 choque/ })
     jump.focus()
@@ -349,10 +350,12 @@ describe("agenda resources", () => {
     expect(screen.getByRole("button", { name: /1 conflict/ })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: /Conflicts with Esmalte húmedo/ })).toBeInTheDocument()
     expect(screen.getAllByText("Conflict").length).toBeGreaterThan(0)
+    expect(document.querySelector("[data-ongoing=true] [data-slot=agenda-event-when]")?.textContent).toMatch(/\u00A0·\u00A0In progress/)
     expect(document.querySelector("[data-slot=agenda-capacity]")).toHaveTextContent("1 h over")
   })
 
-  it("keeps thirty resources and long names in the day axis", () => {
+  it("keeps thirty resources and long names in the day axis", async () => {
+    const user = userEvent.setup()
     const manyResources: AgendaResource[] = Array.from({ length: 30 }, (_, index) => ({
       id: `r${index}`,
       label: index === 0 ? `Horno${"Norte".repeat(12)}` : `Recurso ${index}`,
@@ -381,5 +384,12 @@ describe("agenda resources", () => {
     expect(title).toHaveClass("truncate")
     expect(document.querySelector("[data-resource-column-min]")).toHaveAttribute("data-resource-column-min", "22rem")
     expect(screen.getByRole("button", { name: new RegExp(`Abrir ${manyEvents[0]!.title}`) })).toBeInTheDocument()
+    const more = screen.getByRole("button", { name: "Ver los 30" })
+    expect(more).toHaveAttribute("aria-expanded", "false")
+    expect(document.querySelectorAll("[data-slot=agenda-capacity-row], [data-slot=agenda-capacity-over]")).toHaveLength(12)
+    await user.click(more)
+    expect(more).toHaveAttribute("aria-expanded", "true")
+    expect(document.querySelectorAll("[data-slot=agenda-capacity-row], [data-slot=agenda-capacity-over]")).toHaveLength(30)
+    expect(screen.getAllByTitle(manyResources[0]!.label).length).toBeGreaterThan(0)
   })
 })

@@ -258,6 +258,8 @@ export type AgendaLabels = {
   overCapacity: (amount: string) => string
   hours: (amount: string) => string
   noResourceMatchesHint: string
+  showAllResources: (count: number) => string
+  showFewerResources: string
 }
 
 export type AgendaHoliday = {
@@ -364,6 +366,8 @@ export const agendaLabels: AgendaLabels = {
   overCapacity: (amount) => `${amount} de más`,
   hours: (amount) => `${amount} h`,
   noResourceMatchesHint: "Prueba con otro recurso.",
+  showAllResources: (count) => `Ver los ${count}`,
+  showFewerResources: "Ver menos",
 }
 
 export const agendaLabelsEn: AgendaLabels = {
@@ -465,6 +469,8 @@ export const agendaLabelsEn: AgendaLabels = {
   overCapacity: (amount) => `${amount} over`,
   hours: (amount) => `${amount} h`,
   noResourceMatchesHint: "Try another resource.",
+  showAllResources: (count) => `Show all ${count}`,
+  showFewerResources: "Show fewer",
 }
 
 export function resolveAgendaLabels(partial?: Partial<AgendaLabels>): AgendaLabels {

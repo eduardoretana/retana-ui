@@ -29,7 +29,7 @@ La idea sale de shadcn/studio «User Schedule #5» (Pro, no comprado). Solo la i
 
 En la vista de día, con el filtro en «todos»:
 
-- Si el ancho del bloque es de al menos 560px, cada recurso es una columna de al menos 22rem. Si no caben, el eje hace scroll horizontal antes de comprimir la tarjeta. El canal de horas queda fijo al inicio.
+- Si el ancho del bloque es de al menos 560px, cada recurso es una columna de al menos 22rem. El scroll horizontal vive en la cuadrícula (`min-w-0` y `overflow-x-auto`). La barra lateral es una columna hermana y no tapa los recursos.
 - Por debajo de 560px (incluye 390px) el día es una lista agrupada por recurso, con el mismo selector. Elegir un recurso vuelve a la cuadrícula de un solo día.
 - Antes de medir el ancho, se usa el viewport (`max-width: 767px`) para no pintar columnas en un teléfono.
 
@@ -83,7 +83,7 @@ const rows = resourceLoads(events, resources, ["2026-04-08"], "America/Mexico_Ci
 - El cupo es por día civil, no por la franja de horas que está a la vista.
 - La vista de mes incluye los días de relleno de la cuadrícula (hasta 42). El cupo se multiplica por esos días.
 - Los id de recurso se usan en el DOM. Conviene que sean estables y sin espacios.
-- 30 columnas no caben en 1280px: se desplazan en horizontal. Cada columna mide al menos 22rem para que, aun partida en dos por un choque, queden el título y la palabra «Choque». Si un recurso tiene más de dos solapes a la vez, esa columna pasa a lista para no dejar el título en un icono. En 390px se usa la lista.
+- 30 columnas no caben en 1280px: se desplazan dentro de la cuadrícula. Si un recurso tiene más de dos solapes a la vez, esa columna pasa a lista. En 390px se usa la lista. El cupo cerrado muestra primero el exceso y como mucho 12 fichas (4 si la pantalla es estrecha). «Ver los N» lo abre (`aria-expanded`).
 - No hay animación nueva. Lo que ya existía no anima layout. `prefers-reduced-motion` sigue en `data-reduced-motion`.
 
 ## Ejemplo mínimo
