@@ -290,6 +290,11 @@
           "path": "registry/hooks/use-admin-theme.ts",
           "type": "registry:hook",
           "target": "@hooks/use-admin-theme.ts"
+        },
+        {
+          "path": "registry/lib/glass.ts",
+          "type": "registry:lib",
+          "target": "@lib/glass.ts"
         }
       ],
       "meta": {
@@ -1174,6 +1179,11 @@
           "path": "registry/lib/supabase/admin-kit.md",
           "type": "registry:file",
           "target": "lib/supabase/admin-kit.md"
+        },
+        {
+          "path": "registry/lib/glass.ts",
+          "type": "registry:lib",
+          "target": "@lib/glass.ts"
         }
       ],
       "meta": {
@@ -2594,6 +2604,11 @@
           "path": "registry/ui/lightbox.tsx",
           "type": "registry:component",
           "target": "@ui/lightbox.tsx"
+        },
+        {
+          "path": "registry/lib/glass.ts",
+          "type": "registry:lib",
+          "target": "@lib/glass.ts"
         }
       ]
     },
@@ -3018,6 +3033,11 @@
           "path": "registry/ui/dock-nav.tsx",
           "type": "registry:component",
           "target": "@ui/dock-nav.tsx"
+        },
+        {
+          "path": "registry/lib/glass.ts",
+          "type": "registry:lib",
+          "target": "@lib/glass.ts"
         }
       ]
     },
@@ -5303,7 +5323,7 @@
       "name": "avatar-group",
       "type": "registry:ui",
       "title": "Avatar group",
-      "description": "Shows a team in a small stack, with an overflow count.",
+      "description": "Shows a team as a stack, or as a named circle row.",
       "author": "Eduardo Retana",
       "dependencies": [
         "motion"
@@ -5316,14 +5336,23 @@
       ],
       "meta": {
         "titleEs": "Grupo de avatares",
-        "descriptionEs": "Muestra un equipo en una pila pequeña, con un recuento del resto.",
+        "descriptionEs": "Muestra un equipo en pila, o en una fila con nombre: el círculo.",
         "preview": "app/examples/avatar-group/preview.tsx",
         "previewHref": "/examples/avatar-group",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "circle", "label": "Círculo", "labelEn": "Circle" },
+          { "id": "circle-above", "label": "Nombres arriba", "labelEn": "Names above" },
+          { "id": "stack", "label": "Pila", "labelEn": "Stack" }
+        ],
         "examples": [
           {
             "title": "Grupo de avatares",
             "href": "/examples/avatar-group",
-            "description": "Muestra un equipo en una pila pequeña, con un recuento del resto."
+            "description": "Muestra un equipo en pila, o en una fila con nombre: el círculo."
           }
         ],
         "usage": "<AvatarGroup members={members} max={4} />",
@@ -5352,10 +5381,20 @@
             "name": "className / classNames",
             "type": "string",
             "description": "Root class and slot classes."
+          },
+          {
+            "name": "layout",
+            "type": "\"stack\" | \"circle\"",
+            "description": "Overlapping stack, or a row of named portraits. Default stack."
+          },
+          {
+            "name": "namePlace",
+            "type": "\"above\" | \"below\"",
+            "description": "Where the name sits in the circle row. Default below."
           }
         ]
       },
-      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "docs": "Adapted from Arc UI (MIT). The circle row is a clean-room idea from an unlicensed video (https://x.com/i/status/2116193966655934968): no values, photos, or source were copied. Portraits are host content; the demo uses generic placeholders already used in this repo. Answer no if the CLI asks to overwrite avatar. The item ships no theme, cssVars, or fixed colors. Motion is opacity and transform only, and it is skipped when the reader prefers reduced motion.",
       "files": [
         {
           "path": "registry/ui/avatar-group.tsx",
@@ -8667,6 +8706,11 @@
           "path": "registry/lib/motion.ts",
           "type": "registry:lib",
           "target": "@lib/motion.ts"
+        },
+        {
+          "path": "registry/lib/glass.ts",
+          "type": "registry:lib",
+          "target": "@lib/glass.ts"
         }
       ]
     },

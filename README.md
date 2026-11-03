@@ -96,7 +96,7 @@ Names that sit near each other do different jobs. Install the row that matches t
 
 | Piece | Use it for |
 | --- | --- |
-| [`avatar-group`](registry/ui/avatar-group.tsx) | A static stack of people, with an overflow count. |
+| [`avatar-group`](registry/ui/avatar-group.tsx) | A named circle row, or a stack with an overflow count. |
 | [`presence-avatars`](registry/ui/presence-avatars.tsx) | People currently in a presence room, with a live dot, tooltips, and an optional single avatar for every agent. It reads `PresenceProvider`. |
 
 ### Layouts
@@ -504,7 +504,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`text-shimmer`](registry/ui/text-shimmer.tsx) · ui — A calm light across a short status line while work is ongoing. Sets aria-busy. Install: `npx shadcn@latest add @retana/text-shimmer`.
 - [`in-view-title`](registry/ui/in-view-title.tsx) · ui — A section title that reveals as it scrolls into view: blur, word, line, tracking, or wipe. Install: `npx shadcn@latest add @retana/in-view-title`.
 - [`slot-text`](registry/ui/slot-text.tsx) · ui — Text and numbers that spin into their next value on staggered reels, like a slot machine. Install: `npx shadcn@latest add @retana/slot-text`.
-- [`avatar-group`](registry/ui/avatar-group.tsx) · ui — Shows a team in a small stack, with an overflow count. Install: `npx shadcn@latest add @retana/avatar-group`.
+- [`avatar-group`](registry/ui/avatar-group.tsx) · ui — Shows a team as a stack, or as a named circle row. Install: `npx shadcn@latest add @retana/avatar-group`.
 - [`empty-state`](registry/ui/empty-state.tsx) · ui — A useful next step when there is nothing to show yet. Install: `npx shadcn@latest add @retana/empty-state`.
 - [`tree-view`](registry/ui/tree-view.tsx) · ui — Navigates nested folders and structured content from the keyboard. Install: `npx shadcn@latest add @retana/tree-view`.
 - [`filter-toolbar`](registry/ui/filter-toolbar.tsx) · ui — Keeps collection filters close and easy to reset. Install: `npx shadcn@latest add @retana/filter-toolbar`.

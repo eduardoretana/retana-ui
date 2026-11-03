@@ -1,0 +1,19 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0}
+declaration: "UI_SYSTEM: APPLIES"
+cycle_state: AUDITORIA
+profile: STANDARD
+spec_id: retana-ui-idea450b
+spec_version: 1.0.0
+head: 2f8d20198685d27718828101bca31490a619bfc6
+retana_ui:
+  sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+  registry_source: git-sha
+direction:
+  mode: chosen
+  images: none
+  reference_id: circle-names-below
+auditor: not-this-agent
+notes:
+  - "ui-system 4.0.0 en una sola línea. La 4.1.0 no está mergeada. ui-auditor 1.2.5 está admitido para STANDARD con 4.0.0."
+  - "head no puede ser el sha de este mismo commit: el objeto git incluye este archivo. El valor es el commit de código 2f8d201. suite-log, el log de Playwright y renders.yaml no van en el árbol; el gate los recibe por --suite-log y --renders-log y esos declaran el HEAD del PR."

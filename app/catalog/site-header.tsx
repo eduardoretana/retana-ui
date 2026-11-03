@@ -4,6 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 import { ThemeToggle } from "@/components/demo/theme-toggle"
+import { floatingGlass90 } from "@/lib/glass"
 import { cn } from "@/lib/utils"
 
 const links = [
@@ -15,7 +16,7 @@ export function SiteHeader() {
   const pathname = usePathname()
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
+    <header data-glass="floating" className={cn("sticky top-0 z-40 border-b border-border", floatingGlass90)}>
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-6 px-4">
         <Link href="/" className="text-sm font-semibold tracking-tight">
           Retana UI

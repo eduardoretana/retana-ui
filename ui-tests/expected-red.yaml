@@ -1,10 +1,28 @@
 schema: uis.expected-red/v1
-spec_id: retana-ui-idea448b
+spec_id: retana-ui-idea450b
 retana_ui_sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
 recorded_before_build: false
-command: pnpm exec vitest run __tests__/mobile-inputs.test.ts
-note: "Ciclo LITE. Las pruebas entraron con el arreglo, no hubo un commit rojo previo en CPL 6671cfa. La firma es la aserción que falla si se quita el arreglo."
+command: pnpm exec vitest run __tests__/glass-surfaces.test.ts __tests__/badge-count.test.tsx __tests__/avatar-group-circle.test.tsx __tests__/radius-tokens.test.ts __tests__/anim-perf-layout.test.ts
+note: "Las pruebas de IDEA-450 entraron con el arreglo. Se conservan también las firmas de IDEA-448, incluido el pulgar del slider (axe 4.13.0), que llegaron con el merge de cursor/mobile-fixes-c51d @ 1bfb56e."
 cases:
+  - file: __tests__/glass-surfaces.test.ts
+    name: keeps backdrop-blur in the glass helper only
+    signature: "expected hits to equal []"
+  - file: __tests__/badge-count.test.tsx
+    name: shows the informative count as text and names it
+    signature: "expected badge to have accessible name 3 sin leer"
+  - file: __tests__/avatar-group-circle.test.tsx
+    name: renders the filled row with placeholder images and names
+    signature: "expected list Círculo del taller"
+  - file: __tests__/radius-tokens.test.ts
+    name: does not multiply --radius
+    signature: "expected globals.css not to match var(--radius) *"
+  - file: __tests__/anim-perf-layout.test.ts
+    name: comparison-table rows mount at their height and only fade
+    signature: "expected comparison-table.tsx not to match height animation"
+  - file: __tests__/anim-perf-layout.test.ts
+    name: dock-nav does not transition the search spacer height
+    signature: "expected dock-nav.tsx not to match transition-[height]"
   - file: __tests__/mobile-inputs.test.ts
     name: marca los 11 controles nativos con text-base md:text-sm
     signature: "expected <window> to contain text-base … md:text-sm"

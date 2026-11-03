@@ -776,7 +776,7 @@ export function OrganViewer({
           <div
             role="toolbar"
             aria-label="View controls"
-            className="absolute top-2 right-2 flex items-center gap-0.5 rounded-lg border bg-background/90 p-1 shadow-sm backdrop-blur"
+            className="absolute top-2 right-2 flex items-center gap-0.5 rounded-lg border bg-background p-1 shadow-sm"
           >
             <Select
               value={view ?? ""}

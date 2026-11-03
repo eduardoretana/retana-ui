@@ -1736,7 +1736,7 @@ export function MoleculeViewer({
               aria-label="View controls"
               className="absolute top-2 right-2 left-2 flex flex-wrap items-center justify-end gap-0.5"
             >
-              <div className="flex flex-wrap items-center justify-end gap-0.5 rounded-lg border bg-background/90 p-1 shadow-sm backdrop-blur">
+              <div className="flex flex-wrap items-center justify-end gap-0.5 rounded-lg border bg-background p-1 shadow-sm">
                 <Select
                   value={representation}
                   onValueChange={(next) => {

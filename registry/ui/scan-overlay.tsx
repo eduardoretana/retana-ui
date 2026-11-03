@@ -30,7 +30,7 @@ export function ScanOverlay({
     <div aria-busy={active} className={cn("relative overflow-hidden", className)}>
       {children}
       {active ? (
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/60 p-4 text-center backdrop-blur-sm">
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background p-4 text-center">
           {variant === "scan" ? (
             <span
               aria-hidden="true"

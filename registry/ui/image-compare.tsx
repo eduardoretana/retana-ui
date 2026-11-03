@@ -307,7 +307,7 @@ export function ImageCompare({ before, after, position, defaultPosition = 50, on
   }
 
   const capsule = dragging ? (vertical ? { width: 36, height: 56 } : { width: 56, height: 36 }) : { width: 40, height: 40 }
-  const chip = "pointer-events-none border-border bg-background/75 text-foreground backdrop-blur-md"
+  const chip = "pointer-events-none border-border bg-background text-foreground"
   return (
     <div
       ref={rootRef}

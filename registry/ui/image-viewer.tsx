@@ -734,7 +734,7 @@ export function ImageViewer({
             <div
               role="toolbar"
               aria-label="Image controls"
-              className="absolute top-2 right-2 flex max-w-[calc(100%-1rem)] flex-wrap items-center justify-end gap-0.5 rounded-lg border bg-background/90 p-1 shadow-sm backdrop-blur"
+              className="absolute top-2 right-2 flex max-w-[calc(100%-1rem)] flex-wrap items-center justify-end gap-0.5 rounded-lg border bg-background p-1 shadow-sm"
             >
               {presets.length > 0 && (
                 <Select
