@@ -1,0 +1,24 @@
+schema: uis.expected-red/v1
+spec_id: guard-rules
+captured_at: "2026-11-03T07:48:00Z"
+note: >
+  Firma real, capturada moviendo registry/lib/guard-rules fuera del árbol y
+  corriendo vitest sobre __tests__/guard-rules.test.ts antes de restaurarlo.
+  El núcleo todavía no resolvía. Después de restaurar, la misma suite pasa.
+cases:
+  - file: __tests__/guard-rules.test.ts
+    signature: 'Failed to resolve import "@/registry/retana/lib/guard-rules" from "__tests__/guard-rules.test.ts". Does the file exist?'
+    result: failed
+  - file: __tests__/guard-rules-ui.test.tsx
+    signature: mismo import no resuelto; no se capturó en esa corrida
+    captured: false
+  - file: __tests__/guard-rules-snippets.test.ts
+    signature: mismo import no resuelto; no se capturó en esa corrida
+    captured: false
+purity_fixture:
+  file: __tests__/guard-rules.test.ts
+  name: tool core purity fails when a core imports react, css, next, or a component
+  signature: 'expects lintToolCoreSource(react import) to match /react/'
+  note: >
+    Esa prueba está verde solo porque el lint falla con el fixture. Si el lint
+    dejara pasar un import de react, esta prueba se pone roja.

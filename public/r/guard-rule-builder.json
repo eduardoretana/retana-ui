@@ -1,0 +1,146 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "guard-rule-builder",
+  "title": "Guard rule builder",
+  "author": "Eduardo Retana",
+  "description": "When / conditions / then editor for one guard rule. Reads and writes the guard-rules types. No backend.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/guard-rules",
+    "@retana/empty-state",
+    "button",
+    "input",
+    "label",
+    "checkbox",
+    "switch",
+    "badge",
+    "separator",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/guard-rule-builder.tsx",
+      "content": "\"use client\"\n\nimport { useState } from \"react\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Checkbox } from \"@/components/ui/checkbox\"\nimport { Input } from \"@/components/ui/input\"\nimport { Label } from \"@/components/ui/label\"\nimport { Separator } from \"@/components/ui/separator\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { Switch } from \"@/components/ui/switch\"\nimport { EmptyState } from \"@/components/ui/empty-state\"\nimport {\n  ACTION_KINDS,\n  GUARD_FIELDS,\n  addChildCondition,\n  blankCondition,\n  decisionWord,\n  describeRule,\n  fieldLabel,\n  guardMessage,\n  guardField,\n  kindLabel,\n  opLabel,\n  optionLabel,\n  removeChildCondition,\n  replaceCondition,\n  type Condition,\n  type DecisionKind,\n  type GuardLocale,\n  type GuardRule,\n} from \"@/lib/guard-rules\"\nimport { cn } from \"@/lib/utils\"\n\nconst OPS: Condition[\"op\"][] = [\"and\", \"or\", \"not\", \"eq\", \"neq\", \"gt\", \"gte\", \"lt\", \"lte\", \"in\", \"exists\", \"missing\", \"includes\", \"text_includes\"]\nconst DECISIONS: DecisionKind[] = [\"allow\", \"require_approval\", \"block\", \"handoff_to_human\", \"log\"]\n\nconst control =\n  \"h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50\"\n\nconst copy = {\n  es: {\n    emptyTitle: \"No hay regla\",\n    emptyBody: \"Crea una regla con un evento, condiciones y una decisión.\",\n    name: \"Nombre\",\n    when: \"Cuando\",\n    enabled: \"Activa\",\n    conditions: \"Condiciones\",\n    field: \"Campo\",\n    operator: \"Operador\",\n    value: \"Valor\",\n    custom: \"Otro campo\",\n    customPath: \"Ruta del campo\",\n    decision: \"Entonces\",\n    reason: \"Motivo\",\n    ttl: \"La aprobación vence a los (ms)\",\n    add: \"Agregar condición\",\n    remove: \"Quitar\",\n    summary: \"Lectura de la regla\",\n    loading: \"Cargando la regla\",\n    yes: \"Sí\",\n    no: \"No\",\n  },\n  en: {\n    emptyTitle: \"No rule\",\n    emptyBody: \"Create a rule with an event, conditions, and a decision.\",\n    name: \"Name\",\n    when: \"When\",\n    enabled: \"Enabled\",\n    conditions: \"Conditions\",\n    field: \"Field\",\n    operator: \"Operator\",\n    value: \"Value\",\n    custom: \"Other field\",\n    customPath: \"Field path\",\n    decision: \"Then\",\n    reason: \"Reason\",\n    ttl: \"Approval expires after (ms)\",\n    add: \"Add condition\",\n    remove: \"Remove\",\n    summary: \"Rule reading\",\n    loading: \"Loading the rule\",\n    yes: \"Yes\",\n    no: \"No\",\n  },\n} as const\n\nexport type GuardRuleBuilderProps = {\n  rule: GuardRule | null\n  locale?: GuardLocale\n  status?: \"idle\" | \"loading\" | \"error\"\n  errorMessage?: string\n  readOnly?: boolean\n  onChange?: (rule: GuardRule) => void\n  className?: string\n  classNames?: { root?: string; section?: string; summary?: string }\n}\n\nfunction retarget(condition: Condition, path: string): Condition {\n  const field = guardField(path)\n  if (condition.op === \"eq\" || condition.op === \"neq\") {\n    if (field?.kind === \"boolean\") return { ...condition, path, value: false }\n    if (field?.kind === \"number\") return { ...condition, path, value: 0 }\n    if (field?.kind === \"enum\") return { ...condition, path, value: field.options?.[0]?.value ?? \"\" }\n    return { ...condition, path, value: \"\" }\n  }\n  if (\"path\" in condition) return { ...condition, path }\n  return condition\n}\n\nfunction valueText(condition: Condition, locale: GuardLocale, yes: string, no: string) {\n  if (!(\"value\" in condition)) return \"\"\n  if (typeof condition.value === \"boolean\") return condition.value ? yes : no\n  if (typeof condition.value === \"string\" && \"path\" in condition) return optionLabel(condition.path, condition.value, locale)\n  return String(condition.value)\n}\n\nfunction ConditionSummary({ condition, locale, yes, no }: { condition: Condition; locale: GuardLocale; yes: string; no: string }) {\n  if (condition.op === \"and\" || condition.op === \"or\") {\n    return (\n      <div className=\"min-w-0\">\n        <p className=\"text-sm font-medium\">{opLabel(condition.op, locale)}</p>\n        {condition.conditions.length === 0 ? null : (\n          <ul className=\"ms-4 mt-1 flex list-disc flex-col gap-1\">\n            {condition.conditions.map((child, index) => (\n              <li key={index} className=\"min-w-0 break-words\">\n                <ConditionSummary condition={child} locale={locale} yes={yes} no={no} />\n              </li>\n            ))}\n          </ul>\n        )}\n      </div>\n    )\n  }\n  if (condition.op === \"not\") {\n    return (\n      <div className=\"min-w-0\">\n        <p className=\"text-sm font-medium\">{opLabel(\"not\", locale)}</p>\n        <div className=\"ms-4 mt-1\">\n          <ConditionSummary condition={condition.condition} locale={locale} yes={yes} no={no} />\n        </div>\n      </div>\n    )\n  }\n  const path = \"path\" in condition ? fieldLabel(condition.path, locale) : \"\"\n  const extra = condition.op === \"in\" ? condition.values.map((item) => optionLabel(condition.path, String(item), locale)).join(\", \") : valueText(condition, locale, yes, no)\n  return (\n    <span className=\"break-words\">\n      {path} {opLabel(condition.op, locale)}\n      {extra ? ` ${extra}` : \"\"}\n    </span>\n  )\n}\n\nfunction ConditionEditor({\n  condition,\n  locale,\n  readOnly,\n  path,\n  onReplace,\n  onRemove,\n}: {\n  condition: Condition\n  locale: GuardLocale\n  readOnly: boolean\n  path: number[]\n  onReplace: (path: number[], next: Condition) => void\n  onRemove?: () => void\n}) {\n  const text = copy[locale]\n  const fieldId = path.join(\"-\") || \"root\"\n  const currentPath = \"path\" in condition ? condition.path : \"\"\n  const known = Boolean(guardField(currentPath))\n  const [custom, setCustom] = useState(!known && currentPath.length > 0)\n  const fieldChoices = currentPath && !known ? [{ path: currentPath, es: currentPath, en: currentPath }, ...GUARD_FIELDS] : GUARD_FIELDS\n\n  return (\n    <fieldset className=\"flex min-w-0 flex-col gap-2 border-s border-border ps-3\" aria-label={text.conditions}>\n      {\"path\" in condition ? (\n        <label className=\"flex min-w-0 flex-col gap-1 text-sm\">\n          <span>{text.field}</span>\n          <select\n            aria-label={`${text.field} ${fieldId}`}\n            className={control}\n            value={custom ? \"__custom__\" : currentPath}\n            disabled={readOnly}\n            onChange={(event) => {\n              if (event.target.value === \"__custom__\") {\n                setCustom(true)\n                return\n              }\n              setCustom(false)\n              onReplace(path, retarget(condition, event.target.value))\n            }}\n          >\n            {fieldChoices.map((field) => (\n              <option key={field.path} value={field.path}>\n                {locale === \"es\" ? field.es : field.en}\n              </option>\n            ))}\n            <option value=\"__custom__\">{text.custom}</option>\n          </select>\n        </label>\n      ) : null}\n      {custom && \"path\" in condition ? (\n        <label className=\"flex min-w-0 flex-col gap-1 text-sm\">\n          <span>{text.customPath}</span>\n          <Input\n            aria-label={`${text.customPath} ${fieldId}`}\n            value={currentPath}\n            disabled={readOnly}\n            onChange={(event) => onReplace(path, { ...condition, path: event.target.value })}\n          />\n        </label>\n      ) : null}\n      <label className=\"flex min-w-0 flex-col gap-1 text-sm\">\n        <span>{text.operator}</span>\n        <select\n          aria-label={`${text.operator} ${fieldId}`}\n          className={control}\n          value={condition.op}\n          disabled={readOnly}\n          onChange={(event) => {\n            const next = blankCondition(event.target.value as Condition[\"op\"])\n            onReplace(path, \"path\" in condition && \"path\" in next ? { ...next, path: condition.path } : next)\n          }}\n        >\n          {OPS.map((op) => (\n            <option key={op} value={op}>\n              {opLabel(op, locale)}\n            </option>\n          ))}\n        </select>\n      </label>\n      <ValueControl condition={condition} locale={locale} readOnly={readOnly} fieldId={fieldId} onReplace={(next) => onReplace(path, next)} />\n      {onRemove ? (\n        <Button type=\"button\" variant=\"ghost\" size=\"sm\" className=\"w-fit\" disabled={readOnly} onClick={onRemove}>\n          {text.remove}\n        </Button>\n      ) : null}\n      {condition.op === \"and\" || condition.op === \"or\"\n        ? condition.conditions.map((child, index) => (\n            <ConditionEditor\n              key={`${fieldId}-${index}`}\n              condition={child}\n              locale={locale}\n              readOnly={readOnly}\n              path={[...path, index]}\n              onReplace={onReplace}\n              onRemove={() => onReplace(path, removeChildCondition(condition, [index]))}\n            />\n          ))\n        : null}\n      {condition.op === \"not\" ? (\n        <ConditionEditor condition={condition.condition} locale={locale} readOnly={readOnly} path={[...path, 0]} onReplace={onReplace} />\n      ) : null}\n      {condition.op === \"and\" || condition.op === \"or\" ? (\n        <Button type=\"button\" variant=\"outline\" size=\"sm\" className=\"w-fit\" disabled={readOnly} onClick={() => onReplace(path, addChildCondition(condition, [], blankCondition(\"eq\")))}>\n          {text.add}\n        </Button>\n      ) : null}\n    </fieldset>\n  )\n}\n\nfunction ValueControl({\n  condition,\n  locale,\n  readOnly,\n  fieldId,\n  onReplace,\n}: {\n  condition: Condition\n  locale: GuardLocale\n  readOnly: boolean\n  fieldId: string\n  onReplace: (next: Condition) => void\n}) {\n  const text = copy[locale]\n  if (!(\"value\" in condition) && condition.op !== \"in\") return null\n  const path = \"path\" in condition ? condition.path : \"\"\n  const field = guardField(path)\n  if (condition.op === \"eq\" || condition.op === \"neq\") {\n    if (field?.kind === \"boolean\" || typeof condition.value === \"boolean\") {\n      const checked = condition.value === true\n      return (\n        <label className=\"flex items-center gap-2 text-sm\">\n          <Switch checked={checked} disabled={readOnly} onCheckedChange={(value) => onReplace({ ...condition, value: value === true })} aria-label={`${text.value} ${fieldId}`} />\n          {checked ? text.yes : text.no}\n        </label>\n      )\n    }\n    if (field?.kind === \"enum\" && field.options) {\n      return (\n        <label className=\"flex min-w-0 flex-col gap-1 text-sm\">\n          <span>{text.value}</span>\n          <select\n            aria-label={`${text.value} ${fieldId}`}\n            className={control}\n            value={String(condition.value)}\n            disabled={readOnly}\n            onChange={(event) => onReplace({ ...condition, value: event.target.value })}\n          >\n            {field.options.map((option) => (\n              <option key={option.value} value={option.value}>\n                {locale === \"es\" ? option.es : option.en}\n              </option>\n            ))}\n          </select>\n        </label>\n      )\n    }\n    if (field?.kind === \"number\" || typeof condition.value === \"number\") {\n      return (\n        <label className=\"flex min-w-0 flex-col gap-1 text-sm\">\n          <span>{text.value}</span>\n          <Input\n            aria-label={`${text.value} ${fieldId}`}\n            inputMode=\"decimal\"\n            value={String(condition.value)}\n            disabled={readOnly}\n            onChange={(event) => onReplace({ ...condition, value: Number(event.target.value) })}\n          />\n        </label>\n      )\n    }\n  }\n  if (condition.op === \"gt\" || condition.op === \"gte\" || condition.op === \"lt\" || condition.op === \"lte\") {\n    return (\n      <label className=\"flex min-w-0 flex-col gap-1 text-sm\">\n        <span>{text.value}</span>\n        <Input\n          aria-label={`${text.value} ${fieldId}`}\n          inputMode=\"decimal\"\n          value={String(condition.value)}\n          disabled={readOnly}\n          onChange={(event) => onReplace({ ...condition, value: Number(event.target.value) })}\n        />\n      </label>\n    )\n  }\n  if (condition.op === \"in\") {\n    return (\n      <label className=\"flex min-w-0 flex-col gap-1 text-sm\">\n        <span>{text.value}</span>\n        <Input\n          aria-label={`${text.value} ${fieldId}`}\n          value={condition.values.map(String).join(\", \")}\n          disabled={readOnly}\n          onChange={(event) =>\n            onReplace({\n              ...condition,\n              values: event.target.value\n                .split(\",\")\n                .map((item) => item.trim())\n                .filter(Boolean),\n            })\n          }\n        />\n      </label>\n    )\n  }\n  if (condition.op === \"includes\" || condition.op === \"text_includes\" || condition.op === \"eq\" || condition.op === \"neq\") {\n    return (\n      <label className=\"flex min-w-0 flex-col gap-1 text-sm\">\n        <span>{text.value}</span>\n        <Input\n          aria-label={`${text.value} ${fieldId}`}\n          value={String(\"value\" in condition ? condition.value : \"\")}\n          disabled={readOnly}\n          onChange={(event) => onReplace({ ...condition, value: event.target.value })}\n        />\n      </label>\n    )\n  }\n  return null\n}\n\nfunction toggleKind(kinds: string[], kind: string, on: boolean) {\n  if (on) return kinds.includes(kind) ? kinds : [...kinds, kind]\n  return kinds.filter((item) => item !== kind)\n}\n\nexport function GuardRuleBuilder({\n  rule,\n  locale = \"en\",\n  status = \"idle\",\n  errorMessage,\n  readOnly = false,\n  onChange,\n  className,\n  classNames,\n}: GuardRuleBuilderProps) {\n  const text = copy[locale]\n  const locked = readOnly || !onChange\n  const edit = (next: GuardRule) => {\n    if (!locked) onChange?.(next)\n  }\n  const knownKinds = new Set(ACTION_KINDS.map((item) => item.kind))\n\n  return (\n    <section\n      data-layout=\"stacked\"\n      aria-busy={status === \"loading\" || undefined}\n      className={cn(\"flex min-w-0 flex-col gap-4 rounded-xl border border-border bg-card p-4 text-card-foreground\", className, classNames?.root)}\n    >\n      {status === \"error\" && errorMessage ? (\n        <p role=\"alert\" className=\"break-words text-sm text-destructive\">\n          {errorMessage}\n        </p>\n      ) : null}\n      {status === \"loading\" ? (\n        <div className=\"space-y-2\" role=\"status\" aria-label={text.loading}>\n          <Skeleton className=\"h-4 w-2/3\" />\n          <Skeleton className=\"h-8 w-full\" />\n          <Skeleton className=\"h-24 w-full\" />\n        </div>\n      ) : null}\n      {status !== \"loading\" && !rule ? <EmptyState title={text.emptyTitle} description={text.emptyBody} /> : null}\n      {status !== \"loading\" && rule ? (\n        <div className=\"flex min-w-0 flex-col gap-4\">\n          <div className={cn(\"min-w-0 rounded-lg bg-muted/40 p-3\", classNames?.summary)} aria-label={text.summary}>\n            <p className=\"break-words text-sm\">{describeRule(rule, locale)}</p>\n            <div className=\"mt-2\">\n              <ConditionSummary condition={rule.conditions} locale={locale} yes={text.yes} no={text.no} />\n            </div>\n          </div>\n          <div className={cn(\"space-y-2\", classNames?.section)}>\n            <Label htmlFor={`${rule.id}-name`}>{text.name}</Label>\n            <Input id={`${rule.id}-name`} value={rule.name} disabled={locked} onChange={(event) => edit({ ...rule, name: event.target.value })} />\n          </div>\n          <fieldset className=\"flex min-w-0 flex-col gap-2\" disabled={locked}>\n            <legend className=\"text-sm font-medium\">{text.when}</legend>\n            {ACTION_KINDS.map((item) => (\n              <label key={item.kind} className=\"flex min-w-0 items-start gap-2 text-sm\">\n                <Checkbox\n                  className=\"mt-0.5\"\n                  checked={rule.kinds.includes(item.kind)}\n                  disabled={locked}\n                  onCheckedChange={(value) => edit({ ...rule, kinds: toggleKind(rule.kinds, item.kind, value === true) })}\n                />\n                <span className=\"break-words\">{kindLabel(item.kind, locale)}</span>\n              </label>\n            ))}\n            {rule.kinds.filter((kind) => !knownKinds.has(kind)).map((kind) => (\n              <label key={kind} className=\"flex min-w-0 items-start gap-2 text-sm\">\n                <Checkbox checked disabled={locked} onCheckedChange={() => edit({ ...rule, kinds: toggleKind(rule.kinds, kind, false) })} />\n                <span className=\"break-all\">{kind}</span>\n              </label>\n            ))}\n          </fieldset>\n          <label className=\"flex items-center gap-2 text-sm\">\n            <Checkbox checked={rule.enabled} disabled={locked} onCheckedChange={(value) => edit({ ...rule, enabled: value === true })} />\n            {text.enabled}\n          </label>\n          <Separator />\n          <h2 className=\"text-sm font-medium\">{text.conditions}</h2>\n          <ConditionEditor\n            condition={rule.conditions}\n            locale={locale}\n            readOnly={locked}\n            path={[]}\n            onReplace={(nextPath, next) => edit({ ...rule, conditions: nextPath.length === 0 ? next : replaceCondition(rule.conditions, nextPath, next) })}\n          />\n          <Separator />\n          <div className=\"space-y-2\">\n            <Label htmlFor={`${rule.id}-decision`}>{text.decision}</Label>\n            <select\n              id={`${rule.id}-decision`}\n              className={control}\n              value={rule.decision}\n              disabled={locked}\n              onChange={(event) => edit({ ...rule, decision: event.target.value as DecisionKind })}\n            >\n              {DECISIONS.map((decision) => (\n                <option key={decision} value={decision}>\n                  {decisionWord(decision, locale)}\n                </option>\n              ))}\n            </select>\n          </div>\n          <div className=\"space-y-2\">\n            <Label htmlFor={`${rule.id}-reason`}>{text.reason}</Label>\n            <Input id={`${rule.id}-reason`} value={rule.reasonKey} disabled={locked} onChange={(event) => edit({ ...rule, reasonKey: event.target.value })} />\n            <p className=\"break-words text-sm text-muted-foreground\">{guardMessage(rule.reasonKey, locale)}</p>\n          </div>\n          {rule.decision === \"require_approval\" ? (\n            <div className=\"space-y-2\">\n              <Label htmlFor={`${rule.id}-ttl`}>{text.ttl}</Label>\n              <Input\n                id={`${rule.id}-ttl`}\n                inputMode=\"numeric\"\n                value={String(rule.approvalTtlMs ?? \"\")}\n                disabled={locked}\n                onChange={(event) => {\n                  const approvalTtlMs = Number(event.target.value)\n                  if (approvalTtlMs > 0) edit({ ...rule, approvalTtlMs })\n                }}\n              />\n            </div>\n          ) : null}\n          <Badge variant=\"outline\" className=\"w-fit max-w-full break-words\">\n            {decisionWord(rule.decision, locale)}\n          </Badge>\n        </div>\n      ) : null}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/guard-rule-builder.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Constructor de reglas",
+    "descriptionEs": "Arma una regla Cuando, condiciones y entonces. No guarda sola.",
+    "preview": "app/examples/guard-rule-builder/preview.tsx",
+    "previewHref": "/examples/guard-rule-builder",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "readonly",
+        "label": "Solo lectura",
+        "labelEn": "Read only"
+      },
+      {
+        "id": "nested",
+        "label": "Anidada",
+        "labelEn": "Nested"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Constructor de reglas",
+        "href": "/examples/guard-rule-builder",
+        "description": "Arma una regla Cuando, condiciones y entonces. No guarda sola."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/guard-rule-builder/stress",
+        "description": "320px, vacío, carga, error y un texto largo."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/guard-rule-builder?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/guard-rule-builder?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/guard-rule-builder?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/guard-rule-builder?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Solo lectura",
+        "href": "/examples/guard-rule-builder?scene=readonly",
+        "description": "Read only"
+      },
+      {
+        "title": "Anidada",
+        "href": "/examples/guard-rule-builder?scene=nested",
+        "description": "Nested"
+      }
+    ],
+    "usage": "<GuardRuleBuilder rule={rule} locale=\"es\" onChange={setRule} />",
+    "api": [
+      {
+        "name": "rule",
+        "type": "GuardRule | null",
+        "description": "Controlled rule. Null is the empty state."
+      },
+      {
+        "name": "locale",
+        "type": "\"es\" | \"en\"",
+        "description": "Chrome and the summary sentence. Default en."
+      },
+      {
+        "name": "status",
+        "type": "\"idle\" | \"loading\" | \"error\"",
+        "description": "Loading and error are explicit."
+      },
+      {
+        "name": "readOnly",
+        "type": "boolean",
+        "description": "Viewer. Controls are disabled."
+      },
+      {
+        "name": "onChange",
+        "type": "(rule) => void",
+        "description": "Called with the next rule."
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "description": "Root class."
+      }
+    ]
+  },
+  "docs": "Clean-room. The rule-builder idea is from a public post (https://x.com/heyanantj/status/2116917836086186436): idea only, no license. No source, copy, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Demo data is fictional (marca-sintetica, +52 55 0000 0000).",
+  "categories": [
+    "herramientas"
+  ],
+  "type": "registry:component"
+}

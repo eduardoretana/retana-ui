@@ -2,6 +2,7 @@ import fs from "node:fs"
 import path from "node:path"
 
 import { exportedBindings, PLP_REQUIRED_SCENES, plpSceneId, type PlpSceneInput } from "../lib/plp.ts"
+import { lintDeclaredToolCores } from "./tool-core-purity.ts"
 
 const SOURCE_ROOTS = ["registry/ui", "registry/blocks", "registry/hooks", "registry/lib"]
 
@@ -346,14 +347,17 @@ export function validateRegistryTree(root: string) {
   const appFiles: string[] = []
   walk(path.join(root, "app"), root, appFiles)
   existing.push(...appFiles)
-  return validateRegistry({
-    registry,
-    files,
-    existingPaths: existing,
-    readFile: (repoPath) => {
-      const abs = path.join(root, repoPath)
-      if (!fs.existsSync(abs) || !fs.statSync(abs).isFile()) return null
-      return fs.readFileSync(abs, "utf8")
-    },
-  })
+  return [
+    ...validateRegistry({
+      registry,
+      files,
+      existingPaths: existing,
+      readFile: (repoPath) => {
+        const abs = path.join(root, repoPath)
+        if (!fs.existsSync(abs) || !fs.statSync(abs).isFile()) return null
+        return fs.readFileSync(abs, "utf8")
+      },
+    }),
+    ...lintDeclaredToolCores(root),
+  ]
 }

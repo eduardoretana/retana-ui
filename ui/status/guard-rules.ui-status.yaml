@@ -1,0 +1,13 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0, declaration: "UI_SYSTEM: APPLIES"}
+cycle_state: AUDITORIA
+spec_id: guard-rules
+profile: STANDARD
+ui_surface_impact: FOUR_SCREENS
+core_ui_surface_impact: NONE
+core_reason:
+  - purity_lint: scripts/tool-core-purity.ts
+  - fictional_fixtures: marca-sintetica
+rule_pending_in_hub: RUI-TOOLS-001
+direction: text-degraded
+note: El núcleo no entra a la superficie UI. Las cuatro piezas quedan en AUDITORIA. Quien construyó no audita. No hay head de evidencia en este archivo.

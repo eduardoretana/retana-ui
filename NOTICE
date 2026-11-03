@@ -916,3 +916,19 @@ callbacks. The table sorts in place and slides rows with layout motion. The
 voice note draws a waveform from numeric peaks and does not play a file.
 Answer no if the CLI asks to overwrite a primitive the host already has.
 The items ship no theme.
+
+---
+
+Guard rules (Herramientas)
+
+guard-rules, guard-rule-builder, guard-rule-simulator, guard-approval-queue,
+and guard-audit-log are a clean-room reading of a rule-builder idea from a
+public post:
+
+  https://x.com/heyanantj/status/2116917836086186436
+
+Idea only, no license. No source, sample data, icons, or assets were copied.
+The preset "Mejoravit WhatsApp" and the git.merge example use invented
+names, the number +52 55 0000 0000, and the account marca-sintetica.
+Answer no if the CLI asks to overwrite a primitive the host already has.
+The items ship no theme.

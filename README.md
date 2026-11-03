@@ -330,11 +330,19 @@ npx shadcn@latest add @retana/layered-panel
 
 Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry/ui/layered-panel.tsx). For a table beside that panel, use the guide above.
 
+## Herramientas
+
+Tools are pieces with logic, not only chrome. The core is a `registry:lib`. Each screen is its own `registry:component` and depends on that lib. `retana-ui.json` lists them under `tools[]`. The guide is [`docs/herramientas/README.md`](docs/herramientas/README.md).
+
+The first tool is a guard-rules engine for an agent loop. A rule is when (an action kind such as `whatsapp.before_send` or `git.merge`) → nested AND/OR conditions → then (`allow`, `require_approval`, `block`, `handoff_to_human`, `log`). Approvals expire. The audit log is append-only. Accounts do not leak. The live demo is [`/herramientas`](/herramientas) and uses fictional people and the number +52 55 0000 0000.
+
+The layout idea of a rule builder was seen in a public post, [x.com/heyanantj/status/2116917836086186436](https://x.com/heyanantj/status/2116917836086186436). Idea only, no license. No source, copy, or assets were taken. See [NOTICE](NOTICE).
+
 ## Catalog
 
 <!-- CATALOG:START -->
 
-`422` items are in `registry.json` on this branch: `333` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`427` items are in `registry.json` on this branch: `337` components, `73` blocks, `6` hooks, and `11` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -718,6 +726,14 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`use-min-width`](registry/hooks/use-min-width.ts) · hook — True when the viewport is at least a given number of CSS pixels wide. The first paint uses the narrow layout. Install: `npx shadcn@latest add @retana/use-min-width`.
 - [`pinned-steps`](registry/ui/pinned-steps.tsx) · ui — A sticky visual column that cross-fades as each step crosses the center of the viewport. Narrow viewports and reduced motion stack the step with its visual. Install: `npx shadcn@latest add @retana/pinned-steps`.
 - [`scroll-linked`](registry/ui/scroll-linked.tsx) · ui — Maps scroll progress to a fade, rise, scale, or rotate. CSS scroll-driven animations run first. Reduced motion shows the finished state. Install: `npx shadcn@latest add @retana/scroll-linked`.
+
+### Herramientas
+
+- [`guard-rules`](registry/lib/guard-rules/approval-gate.ts) · lib — Pure deterministic guard engine. When an action kind matches, nested conditions resolve to allow, require_approval, block, handoff_to_human, or log. ApprovalGate is the stable port other tools use, including a git.merge approval. Install: `npx shadcn@latest add @retana/guard-rules`.
+- [`guard-rule-builder`](registry/ui/guard-rule-builder.tsx) · ui — When / conditions / then editor for one guard rule. Reads and writes the guard-rules types. No backend. Install: `npx shadcn@latest add @retana/guard-rule-builder`.
+- [`guard-rule-simulator`](registry/ui/guard-rule-simulator.tsx) · ui — Runs one action against a ruleset and shows the decision and trace. Action kinds are open, including git.merge. Install: `npx shadcn@latest add @retana/guard-rule-simulator`.
+- [`guard-approval-queue`](registry/ui/guard-approval-queue.tsx) · ui — Pending, approved, rejected, and expired tickets. Expired tickets and viewers cannot approve. Install: `npx shadcn@latest add @retana/guard-approval-queue`.
+- [`guard-audit-log`](registry/ui/guard-audit-log.tsx) · ui — Append-only decision list. There is no delete control. Install: `npx shadcn@latest add @retana/guard-audit-log`.
 
 ### Admin
 

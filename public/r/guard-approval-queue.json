@@ -1,0 +1,141 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "guard-approval-queue",
+  "title": "Guard approval queue",
+  "author": "Eduardo Retana",
+  "description": "Pending, approved, rejected, and expired tickets. Expired tickets and viewers cannot approve.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/guard-rules",
+    "@retana/empty-state",
+    "button",
+    "badge",
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/guard-approval-queue.tsx",
+      "content": "\"use client\"\n\nimport { Badge } from \"@/components/ui/badge\"\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { EmptyState } from \"@/components/ui/empty-state\"\nimport { formatGuardTime, guardMessage, type ApprovalStatus, type GuardLocale, type GuardRole } from \"@/lib/guard-rules\"\nimport { cn } from \"@/lib/utils\"\n\nconst copy = {\n  es: {\n    emptyTitle: \"No hay aprobaciones\",\n    emptyBody: \"Cuando una acción quede en require_approval, aparece aquí.\",\n    loading: \"Cargando aprobaciones\",\n    approve: \"Aprobar\",\n    reject: \"Rechazar\",\n    expires: \"Vence\",\n    decided: \"Decidió\",\n    locked: \"Solo un approver puede decidir, y una aprobación vencida no se puede aprobar.\",\n    kind: \"Kind\",\n  },\n  en: {\n    emptyTitle: \"No approvals\",\n    emptyBody: \"When an action stays on require_approval, it shows up here.\",\n    loading: \"Loading approvals\",\n    approve: \"Approve\",\n    reject: \"Reject\",\n    expires: \"Expires\",\n    decided: \"Decided by\",\n    locked: \"Only an approver can decide, and an expired approval cannot be approved.\",\n    kind: \"Kind\",\n  },\n} as const\n\nexport type ApprovalQueueItem = {\n  id: string\n  kind: string\n  reasonKey: string\n  status: ApprovalStatus\n  expiresAt: number\n  createdAt: number\n  summary: string\n  decidedBy?: string\n  decidedAt?: number\n}\n\nexport type GuardApprovalQueueProps = {\n  items: readonly ApprovalQueueItem[]\n  now: number\n  locale?: GuardLocale\n  status?: \"idle\" | \"loading\" | \"error\"\n  errorMessage?: string\n  role?: GuardRole\n  onApprove?: (id: string) => void\n  onReject?: (id: string) => void\n  className?: string\n}\n\nfunction shownStatus(item: ApprovalQueueItem, now: number): ApprovalStatus {\n  if ((item.status === \"pending\" || item.status === \"approved\") && now >= item.expiresAt) return \"expired\"\n  return item.status\n}\n\nexport function GuardApprovalQueue({\n  items,\n  now,\n  locale = \"en\",\n  status = \"idle\",\n  errorMessage,\n  role = \"viewer\",\n  onApprove,\n  onReject,\n  className,\n}: GuardApprovalQueueProps) {\n  const text = copy[locale]\n  return (\n    <section className={cn(\"flex min-w-0 flex-col gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground\", className)} aria-busy={status === \"loading\" || undefined}>\n      {status === \"error\" && errorMessage ? (\n        <p role=\"alert\" className=\"break-words text-sm text-destructive\">\n          {errorMessage}\n        </p>\n      ) : null}\n      {status === \"loading\" ? (\n        <div role=\"status\" aria-label={text.loading} className=\"space-y-2\">\n          <Skeleton className=\"h-16 w-full\" />\n          <Skeleton className=\"h-16 w-full\" />\n        </div>\n      ) : null}\n      {status !== \"loading\" && items.length === 0 ? <EmptyState title={text.emptyTitle} description={text.emptyBody} /> : null}\n      {status !== \"loading\" && items.length > 0 ? (\n        <ul className=\"flex min-w-0 flex-col gap-3\">\n          {items.map((item) => {\n            const state = shownStatus(item, now)\n            const open = state === \"pending\" && role === \"approver\"\n            const hint = `${item.id}-hint`\n            return (\n              <li key={item.id} className=\"min-w-0 space-y-2 rounded-lg border border-border p-3\">\n                <div className=\"flex min-w-0 flex-wrap items-center gap-2\">\n                  <Badge variant={state === \"expired\" || state === \"rejected\" ? \"outline\" : \"secondary\"}>{state}</Badge>\n                  <span className=\"break-words text-sm font-medium\">\n                    {text.kind}: {item.kind}\n                  </span>\n                </div>\n                <p className=\"break-words text-sm\">{item.summary}</p>\n                <p className=\"break-words text-sm text-muted-foreground\">{guardMessage(item.reasonKey, locale)}</p>\n                <p className=\"text-xs text-muted-foreground\">\n                  {text.expires}: {formatGuardTime(item.expiresAt, locale)}\n                </p>\n                {item.decidedBy ? (\n                  <p className=\"break-words text-xs text-muted-foreground\">\n                    {text.decided}: {item.decidedBy}\n                    {item.decidedAt !== undefined ? ` · ${formatGuardTime(item.decidedAt, locale)}` : \"\"}\n                  </p>\n                ) : null}\n                <div className=\"flex flex-wrap gap-2\">\n                  <Button type=\"button\" size=\"sm\" disabled={!open || !onApprove} aria-describedby={hint} onClick={() => onApprove?.(item.id)}>\n                    {text.approve}\n                  </Button>\n                  <Button type=\"button\" size=\"sm\" variant=\"outline\" disabled={!open || !onReject} aria-describedby={hint} onClick={() => onReject?.(item.id)}>\n                    {text.reject}\n                  </Button>\n                </div>\n                <p id={hint} className=\"text-xs text-muted-foreground\">\n                  {text.locked}\n                </p>\n              </li>\n            )\n          })}\n        </ul>\n      ) : null}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/guard-approval-queue.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Cola de aprobaciones",
+    "descriptionEs": "Cola pending, approved, rejected y expired. Un lector no decide y lo vencido no se aprueba.",
+    "preview": "app/examples/guard-approval-queue/preview.tsx",
+    "previewHref": "/examples/guard-approval-queue",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "expired",
+        "label": "Vencida",
+        "labelEn": "Expired"
+      },
+      {
+        "id": "viewer",
+        "label": "Lector",
+        "labelEn": "Viewer"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Cola de aprobaciones",
+        "href": "/examples/guard-approval-queue",
+        "description": "Cola pending, approved, rejected y expired. Un lector no decide y lo vencido no se aprueba."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/guard-approval-queue/stress",
+        "description": "320px, vacío, carga, error y un texto largo."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/guard-approval-queue?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/guard-approval-queue?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/guard-approval-queue?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/guard-approval-queue?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Vencida",
+        "href": "/examples/guard-approval-queue?scene=expired",
+        "description": "Expired"
+      },
+      {
+        "title": "Lector",
+        "href": "/examples/guard-approval-queue?scene=viewer",
+        "description": "Viewer"
+      }
+    ],
+    "usage": "<GuardApprovalQueue items={items} now={now} role=\"approver\" locale=\"es\" onApprove={approve} onReject={reject} />",
+    "api": [
+      {
+        "name": "items",
+        "type": "ApprovalQueueItem[]",
+        "description": "Already loaded by the host. The piece does not import a store."
+      },
+      {
+        "name": "now",
+        "type": "number",
+        "description": "Injected clock. Pending past expiresAt renders as expired."
+      },
+      {
+        "name": "role",
+        "type": "viewer | editor | approver",
+        "description": "Only approver can press the buttons."
+      },
+      {
+        "name": "onApprove / onReject",
+        "type": "(id) => void",
+        "description": "Host calls ApprovalGate.decide."
+      },
+      {
+        "name": "locale",
+        "type": "\"es\" | \"en\"",
+        "description": "Reason text comes from guardMessage."
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "description": "Root class."
+      }
+    ]
+  },
+  "docs": "Clean-room. The rule-builder idea is from a public post (https://x.com/heyanantj/status/2116917836086186436): idea only, no license. No source, copy, or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme. Demo data is fictional (marca-sintetica, +52 55 0000 0000).",
+  "categories": [
+    "herramientas"
+  ],
+  "type": "registry:component"
+}
