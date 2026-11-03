@@ -1,0 +1,11 @@
+{
+  "tools": [
+    {
+      "slug": "ci-checks-live",
+      "kind": "tool",
+      "core": "ci-checks-core",
+      "ui": ["ci-checks-live"],
+      "docs": "docs/herramientas/ci-checks-live.md"
+    }
+  ]
+}

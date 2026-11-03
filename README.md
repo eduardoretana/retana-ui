@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`427` items are in `registry.json` on this branch: `337` components, `74` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`430` items are in `registry.json` on this branch: `337` components, `75` blocks, `6` hooks, and `12` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -458,6 +458,9 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`agent-fix-timeline`](registry/ui/agent-fix-timeline.tsx) · ui — A host-fed timeline of diagnosis, files, edit, tests, and push. It does not run an agent. Install: `npx shadcn@latest add @retana/agent-fix-timeline`.
 - [`merge-button`](registry/ui/merge-button.tsx) · ui — Stays disabled until checks pass, asks before merging, and ends on Merged into main. Install: `npx shadcn@latest add @retana/merge-button`.
 - [`ci-checks-story`](registry/blocks/ci-checks-story.tsx) · block — A fictional walk from creating a pull request, through a failed check and a fix, to merge. Install: `npx shadcn@latest add @retana/ci-checks-story`.
+- [`ci-checks-core`](registry/lib/ci-checks.ts) · lib — Deterministic TypeScript for normalizing GitHub checks, estimating bars, polling decisions, webhook signatures, and merge approval. No React and no network. Install: `npx shadcn@latest add @retana/ci-checks-core`.
+- [`ci-checks-github`](registry/lib/ci-checks.ts) · lib — Fetches check runs, commit statuses, and the merge endpoint. The token is an argument, never an environment read. Install: `npx shadcn@latest add @retana/ci-checks-github`.
+- [`ci-checks-live`](registry/blocks/ci-checks-live.tsx) · block — Shows a pull request, a closed-by-default checks panel, a fix port, and a merge button. Merge is off unless the host enables it. Install: `npx shadcn@latest add @retana/ci-checks-live`.
 
 ### Forms
 

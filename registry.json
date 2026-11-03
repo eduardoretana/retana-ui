@@ -32581,6 +32581,402 @@
           }
         ]
       }
+    },
+    {
+      "name": "ci-checks-core",
+      "type": "registry:lib",
+      "title": "CI checks core",
+      "description": "Deterministic TypeScript for normalizing GitHub checks, estimating bars, polling decisions, webhook signatures, and merge approval. No React and no network.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "agents",
+        "ci",
+        "utility"
+      ],
+      "docs": "Clean-room. Idea only, no license (Phil Pitus, Generative UI #6) for the interaction. The HTTP shapes follow GitHub's public REST docs. This item does not fetch and does not read a token. Answer no if the CLI asks to overwrite a file the host already has. No theme.",
+      "files": [
+        {
+          "path": "registry/lib/ci-checks.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/types.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/types.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/normalize.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/normalize.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/progress.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/progress.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/poll.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/poll.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/pages.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/pages.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/webhook.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/webhook.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/merge.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/merge.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/approval.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/approval.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/agent-port.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/agent-port.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/secrets.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/secrets.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Núcleo de comprobaciones",
+        "descriptionEs": "TypeScript puro para normalizar checks, estimar barras, decidir el sondeo y pedir aprobación antes de fusionar.",
+        "preview": "app/examples/ci-checks-core/preview.tsx",
+        "previewHref": "/examples/ci-checks-core",
+        "examples": [
+          {
+            "title": "Núcleo",
+            "href": "/examples/ci-checks-core",
+            "description": "Un check de ejemplo, sin red."
+          }
+        ],
+        "usage": "import { normalizeCheckRunsPayload, decideMerge } from \"@/lib/ci-checks\"",
+        "api": [
+          {
+            "name": "normalizeCheckRunsPayload",
+            "type": "(payload) => NormalizedCheck[]",
+            "description": "Public check-run list shape."
+          },
+          {
+            "name": "normalizeStatusesPayload",
+            "type": "(payload) => NormalizedCheck[]",
+            "description": "Commit statuses, including Vercel."
+          },
+          {
+            "name": "estimateProgress",
+            "type": "function",
+            "description": "Running bars are estimates. The UI must say so."
+          },
+          {
+            "name": "interpretPoll",
+            "type": "function",
+            "description": "ETag, 401, 403, 404, 422, primary and secondary rate limit."
+          },
+          {
+            "name": "readWebhook",
+            "type": "function",
+            "description": "HMAC is injected. Events: check_run, check_suite, status."
+          },
+          {
+            "name": "performMerge",
+            "type": "function",
+            "description": "Does not call send without confirmation and an ApprovalGate grant."
+          },
+          {
+            "name": "alwaysAskApproval",
+            "type": "ApprovalGate",
+            "description": "Stand-in for require_approval until the guard engine exists."
+          }
+        ]
+      }
+    },
+    {
+      "name": "ci-checks-github",
+      "type": "registry:lib",
+      "title": "CI checks GitHub adapter",
+      "description": "Fetches check runs, commit statuses, and the merge endpoint. The token is an argument, never an environment read.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "agents",
+        "ci",
+        "utility"
+      ],
+      "docs": "Network lives here. Pass the token from the server. Minimum permissions: checks:read, statuses:read, pull_requests:read. contents:write only when merge is enabled. The example routes are app/api/ci-checks. Answer no if the CLI asks to overwrite a file the host already has.",
+      "files": [
+        {
+          "path": "registry/lib/ci-checks.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/types.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/types.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/normalize.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/normalize.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/progress.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/progress.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/poll.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/poll.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/pages.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/pages.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/webhook.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/webhook.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/merge.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/merge.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/approval.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/approval.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/agent-port.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/agent-port.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/secrets.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/secrets.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/github-adapter.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/github-adapter.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/http.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/http.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Adaptador de GitHub",
+        "descriptionEs": "Lee check runs, statuses y, si se enciende, el endpoint de fusión. El token entra como argumento.",
+        "preview": "app/examples/ci-checks-github/preview.tsx",
+        "previewHref": "/examples/ci-checks-github",
+        "examples": [
+          {
+            "title": "Adaptador",
+            "href": "/examples/ci-checks-github",
+            "description": "Permisos mínimos y ruta de ejemplo."
+          }
+        ],
+        "usage": "createGithubAdapter({ token, fetchImpl })",
+        "api": [
+          {
+            "name": "createGithubAdapter",
+            "type": "function",
+            "description": "token and fetch are arguments."
+          },
+          {
+            "name": "readPullChecks",
+            "type": "function",
+            "description": "Returns a client-safe body. Strips secret fields."
+          },
+          {
+            "name": "mergePullRequest",
+            "type": "function",
+            "description": "Refuses when merge is off or confirmation is missing."
+          }
+        ]
+      }
+    },
+    {
+      "name": "ci-checks-live",
+      "type": "registry:block",
+      "title": "CI checks live",
+      "description": "Shows a pull request, a closed-by-default checks panel, a fix port, and a merge button. Merge is off unless the host enables it.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "pr-create-card",
+        "checks-panel",
+        "agent-fix-timeline",
+        "merge-button"
+      ],
+      "categories": [
+        "agents",
+        "ci",
+        "block"
+      ],
+      "docs": "Clean-room. Idea only, no license. The block takes a transport and does not see the GitHub token. The catalog demo is fictional. Answer no if the CLI asks to overwrite a primitive or any of the four pieces the host already has. No theme. See docs/herramientas/ci-checks-live.md.",
+      "files": [
+        {
+          "path": "registry/blocks/ci-checks-live.tsx",
+          "type": "registry:component",
+          "target": "@ui/ci-checks-live.tsx"
+        },
+        {
+          "path": "registry/hooks/use-ci-checks.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-ci-checks.ts"
+        },
+        {
+          "path": "registry/ui/use-reduced-motion.ts",
+          "type": "registry:component",
+          "target": "@ui/use-reduced-motion.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/types.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/types.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/normalize.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/normalize.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/progress.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/progress.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/poll.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/poll.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/pages.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/pages.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/webhook.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/webhook.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/merge.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/merge.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/approval.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/approval.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/agent-port.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/agent-port.ts"
+        },
+        {
+          "path": "registry/lib/ci-checks/secrets.ts",
+          "type": "registry:lib",
+          "target": "@lib/ci-checks/secrets.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "CI Checks Live",
+        "descriptionEs": "Pull request, pastilla cerrada, puerto de arreglo y fusión apagada por defecto. El token no entra al navegador.",
+        "preview": "app/examples/ci-checks-live/preview.tsx",
+        "previewHref": "/examples/ci-checks-live",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "merge",
+            "label": "Fusión",
+            "labelEn": "Merge"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Demo ficticia",
+            "href": "/examples/ci-checks-live",
+            "description": "Transporte en memoria. Sin token."
+          },
+          {
+            "title": "Marco de estrés",
+            "href": "/examples/ci-checks-live/stress",
+            "description": "50 checks en 390 px."
+          }
+        ],
+        "usage": "<CiChecksLive transport={transport} />",
+        "api": [
+          {
+            "name": "transport",
+            "type": "CiTransport",
+            "description": "load and merge. The HTTP transport sets no Authorization header."
+          },
+          {
+            "name": "mergeEnabled",
+            "type": "boolean",
+            "description": "Default false."
+          },
+          {
+            "name": "agent / onCheckFailed",
+            "type": "AgentFixPort, function",
+            "description": "Connection point. This block does not run an agent."
+          },
+          {
+            "name": "labels",
+            "type": "CiChecksLiveLabels",
+            "description": "es-MX by default in the demo. ciChecksLiveLabels is English."
+          }
+        ]
+      }
     }
   ]
 }

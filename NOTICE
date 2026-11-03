@@ -931,3 +931,9 @@ No source, markup, copy, colors, icons, or assets were copied. The catalog
 demo is Taller Ladrillo, a fictional kiln. People, SHAs, and times are
 invented. The pieces do not fetch. Answer no if the CLI asks to overwrite a
 primitive the host already has. The items ship no theme.
+
+ci-checks-core, ci-checks-github, and ci-checks-live are the functional
+tool. The core does not fetch. The adapter takes the token as an argument.
+The example routes under app/api/ci-checks are the only files that read
+CI_CHECKS_GITHUB_TOKEN. Tests use a fake token and mocked fetch. Merge is
+off unless CI_CHECKS_MERGE_ENABLED=true, and even then it asks first.

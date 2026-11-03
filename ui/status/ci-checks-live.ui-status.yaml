@@ -1,0 +1,8 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0, declaration: "UI_SYSTEM: APPLIES"}
+cycle_state: AUDITORIA
+spec_id: ci-checks-live
+profile: STANDARD
+base: 0b0ef05fdfbf1fa5ad3e0015b49a7662d488321e
+head: 1eede1531e546e245233d3600176153006790fef
+note: "Rebasado sobre el contraste de las barras. El auditor es otro agente."
