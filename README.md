@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`422` items are in `registry.json` on this branch: `333` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`427` items are in `registry.json` on this branch: `337` components, `74` blocks, `6` hooks, and `10` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -453,6 +453,11 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`inline-diff`](registry/ui/inline-diff.tsx) · ui — A finished prose rewrite, word by word. Accept or reject each change. Until it is accepted, the original words stay. Install: `npx shadcn@latest add @retana/inline-diff`.
 - [`email-draft`](registry/ui/email-draft.tsx) · ui — An agent-written letter waiting for a person. Switch the recipient and the tone, edit the words, remove the file, then send or discard. Install: `npx shadcn@latest add @retana/email-draft`.
 - [`message-actions`](registry/ui/message-actions.tsx) · ui — The bar under a finished answer. Copy, try again, keep the versions, say why a thumb went down, or read it aloud. The host speaks and stores the note. Install: `npx shadcn@latest add @retana/message-actions`.
+- [`pr-create-card`](registry/ui/pr-create-card.tsx) · ui — A diff chip that opens into a pull request and a commit rail. The host passes the data. Install: `npx shadcn@latest add @retana/pr-create-card`.
+- [`checks-panel`](registry/ui/checks-panel.tsx) · ui — A checks count pill that opens lint, typecheck, unit, preview, and e2e rows. Closed by default. Install: `npx shadcn@latest add @retana/checks-panel`.
+- [`agent-fix-timeline`](registry/ui/agent-fix-timeline.tsx) · ui — A host-fed timeline of diagnosis, files, edit, tests, and push. It does not run an agent. Install: `npx shadcn@latest add @retana/agent-fix-timeline`.
+- [`merge-button`](registry/ui/merge-button.tsx) · ui — Stays disabled until checks pass, asks before merging, and ends on Merged into main. Install: `npx shadcn@latest add @retana/merge-button`.
+- [`ci-checks-story`](registry/blocks/ci-checks-story.tsx) · block — A fictional walk from creating a pull request, through a failed check and a fix, to merge. Install: `npx shadcn@latest add @retana/ci-checks-story`.
 
 ### Forms
 

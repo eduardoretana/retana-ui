@@ -1,0 +1,119 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-fix-timeline",
+  "title": "Fix timeline",
+  "author": "Eduardo Retana",
+  "description": "A host-fed timeline of diagnosis, files, edit, tests, and push. It does not run an agent.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/agent-fix-timeline.tsx",
+      "content": "\"use client\"\n\n/**\n * Clean-room timeline for a fix narrated by the host.\n * Idea only, no license. This file does not run an agent.\n * The host pushes steps in. Kinds are diagnosis, edit, test, push, and done.\n */\n\nimport { Check, FileCode, FlaskConical, MessageSquare, Upload, X } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nimport { useReducedMotion } from \"./use-reduced-motion\"\n\nexport type FixStepKind = \"thought\" | \"edit\" | \"test\" | \"push\" | \"done\"\n\nexport type FixStepStatus = \"pending\" | \"active\" | \"done\" | \"failed\"\n\nexport type FixFile = {\n  path: string\n}\n\nexport type FixStep = {\n  id: string\n  kind: FixStepKind\n  label: string\n  detail?: string\n  files?: readonly FixFile[]\n  status?: FixStepStatus\n}\n\nexport type AgentFixTimelineLabels = {\n  kind: (kind: FixStepKind) => string\n  empty: string\n  failed: string\n  pending: string\n  active: string\n  done: string\n  files: string\n  live: (step: FixStep | undefined) => string\n}\n\nconst kindEn: Record<FixStepKind, string> = {\n  thought: \"Diagnosis\",\n  edit: \"Edit\",\n  test: \"Tests\",\n  push: \"Push\",\n  done: \"Done\",\n}\n\nconst kindEs: Record<FixStepKind, string> = {\n  thought: \"Diagnóstico\",\n  edit: \"Edición\",\n  test: \"Pruebas\",\n  push: \"Empuje\",\n  done: \"Listo\",\n}\n\nfunction liveEn(step: FixStep | undefined) {\n  if (!step) return \"No steps yet.\"\n  return `${kindEn[step.kind]}. ${step.label}`\n}\n\nfunction liveEs(step: FixStep | undefined) {\n  if (!step) return \"Sin pasos todavía.\"\n  return `${kindEs[step.kind]}. ${step.label}`\n}\n\nexport const agentFixTimelineLabels: AgentFixTimelineLabels = {\n  kind: (kind) => kindEn[kind],\n  empty: \"No steps yet.\",\n  failed: \"Failed\",\n  pending: \"Pending\",\n  active: \"In progress\",\n  done: \"Done\",\n  files: \"Files\",\n  live: liveEn,\n}\n\nexport const agentFixTimelineLabelsEs: AgentFixTimelineLabels = {\n  kind: (kind) => kindEs[kind],\n  empty: \"Sin pasos todavía.\",\n  failed: \"Falló\",\n  pending: \"En espera\",\n  active: \"En curso\",\n  done: \"Hecho\",\n  files: \"Archivos\",\n  live: liveEs,\n}\n\nexport type AgentFixTimelineProps = {\n  steps: readonly FixStep[]\n  variant?: \"rail\" | \"compact\"\n  labels?: AgentFixTimelineLabels\n  className?: string\n}\n\nfunction KindIcon({ kind }: { kind: FixStepKind }) {\n  const className = \"size-3.5\"\n  if (kind === \"edit\") return <FileCode className={className} aria-hidden />\n  if (kind === \"test\") return <FlaskConical className={className} aria-hidden />\n  if (kind === \"push\") return <Upload className={className} aria-hidden />\n  if (kind === \"done\") return <Check className={className} aria-hidden />\n  return <MessageSquare className={className} aria-hidden />\n}\n\nfunction statusWord(labels: AgentFixTimelineLabels, status: FixStepStatus) {\n  if (status === \"failed\") return labels.failed\n  if (status === \"active\") return labels.active\n  if (status === \"pending\") return labels.pending\n  return labels.done\n}\n\nexport function AgentFixTimeline({\n  steps,\n  variant = \"rail\",\n  labels = agentFixTimelineLabels,\n  className,\n}: AgentFixTimelineProps) {\n  const reduced = useReducedMotion()\n  const current = steps.find((step) => step.status === \"active\") ?? steps.find((step) => step.status === \"failed\") ?? steps.at(-1)\n\n  if (steps.length === 0) {\n    return (\n      <div data-testid=\"agent-fix-timeline\" data-variant={variant} data-motion={reduced ? \"reduced\" : \"full\"} className={cn(\"min-w-0\", className)}>\n        <p role=\"status\" aria-live=\"polite\" className=\"text-sm text-muted-foreground\">\n          {labels.empty}\n        </p>\n      </div>\n    )\n  }\n\n  return (\n    <div\n      data-testid=\"agent-fix-timeline\"\n      data-variant={variant}\n      data-motion={reduced ? \"reduced\" : \"full\"}\n      className={cn(\"min-w-0\", className)}\n    >\n      <p role=\"status\" aria-live=\"polite\" className=\"sr-only\">\n        {labels.live(current)}\n      </p>\n      <ol className={cn(\"flex flex-col\", variant === \"compact\" && \"flex-row flex-wrap gap-2\")}>\n        {steps.map((step, index) => {\n          const status = step.status ?? \"done\"\n          return (\n            <li\n              key={step.id}\n              className={cn(\n                \"min-w-0\",\n                variant === \"rail\" && \"grid grid-cols-[1rem_minmax(0,1fr)] gap-2\",\n                variant === \"compact\" && \"max-w-full rounded-md border border-border p-2\",\n              )}\n            >\n              {variant === \"rail\" ? (\n                <span className=\"flex flex-col items-center\" aria-hidden>\n                  <span\n                    className={cn(\n                      \"mt-1 size-2 shrink-0 rounded-full border border-foreground bg-background transition-[opacity,transform] duration-200 motion-reduce:transition-none\",\n                      status === \"active\" && \"scale-110 bg-primary\",\n                      status === \"failed\" && \"bg-destructive\",\n                      reduced && \"scale-100\",\n                    )}\n                  />\n                  {index < steps.length - 1 ? <span className=\"w-px flex-1 bg-border\" /> : null}\n                </span>\n              ) : null}\n              <div className={cn(\"min-w-0\", variant === \"rail\" && \"pb-3\")}>\n                <p className=\"flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground\">\n                  <KindIcon kind={step.kind} />\n                  <span>{labels.kind(step.kind)}</span>\n                  <span className={cn(status === \"failed\" && \"text-destructive\")}>{statusWord(labels, status)}</span>\n                  {status === \"failed\" ? <X className=\"size-3 text-destructive\" aria-hidden /> : null}\n                </p>\n                <p className=\"text-sm break-words text-foreground\">{step.label}</p>\n                {step.detail ? <p className=\"text-xs break-words text-muted-foreground\">{step.detail}</p> : null}\n                {step.files && step.files.length > 0 ? (\n                  <ul aria-label={labels.files} className=\"mt-1 flex flex-wrap gap-1\">\n                    {step.files.map((file) => (\n                      <li key={file.path} className=\"max-w-full rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-xs break-all text-foreground\">\n                        {file.path}\n                      </li>\n                    ))}\n                  </ul>\n                ) : null}\n              </div>\n            </li>\n          )\n        })}\n      </ol>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/agent-fix-timeline.tsx"
+    },
+    {
+      "path": "registry/ui/use-reduced-motion.ts",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nfunction subscribe(onStoreChange: () => void) {\n  const query = window.matchMedia(\"(prefers-reduced-motion: reduce)\")\n  query.addEventListener(\"change\", onStoreChange)\n  return () => query.removeEventListener(\"change\", onStoreChange)\n}\n\nfunction snapshot() {\n  return window.matchMedia(\"(prefers-reduced-motion: reduce)\").matches\n}\n\n/** True when the reader asked for reduced motion. False during SSR. */\nexport function useReducedMotion() {\n  return React.useSyncExternalStore(subscribe, snapshot, () => false)\n}\n",
+      "type": "registry:component",
+      "target": "@ui/use-reduced-motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Línea de tiempo del arreglo",
+    "descriptionEs": "Diagnóstico, archivos, edición, pruebas y empuje. Los pasos los manda el anfitrión.",
+    "preview": "app/examples/agent-fix-timeline/preview.tsx",
+    "previewHref": "/examples/agent-fix-timeline",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "compact",
+        "label": "Compacta",
+        "labelEn": "Compact"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Línea de tiempo del arreglo",
+        "href": "/examples/agent-fix-timeline",
+        "description": "Cinco pasos del Taller Ladrillo."
+      },
+      {
+        "title": "Marco de estrés",
+        "href": "/examples/agent-fix-timeline/stress",
+        "description": "390 px y un camino de archivo de 60 caracteres."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/agent-fix-timeline?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/agent-fix-timeline?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/agent-fix-timeline?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/agent-fix-timeline?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Compacta",
+        "href": "/examples/agent-fix-timeline?scene=compact",
+        "description": "Compact"
+      }
+    ],
+    "usage": "<AgentFixTimeline steps={[{ id: \"1\", kind: \"thought\", label: \"The folio dropped\", status: \"done\" }]} />",
+    "api": [
+      {
+        "name": "steps",
+        "type": "FixStep[]",
+        "description": "kind is thought, edit, test, push, or done. files are optional."
+      },
+      {
+        "name": "variant",
+        "type": "\"rail\" | \"compact\"",
+        "description": "rail is the default vertical spine."
+      },
+      {
+        "name": "labels",
+        "type": "AgentFixTimelineLabels",
+        "description": "English by default. agentFixTimelineLabelsEs is es-MX."
+      }
+    ]
+  },
+  "docs": "Clean-room. Idea only, no license (Phil Pitus, Generative UI #6). Steps arrive as props. There is no agent in this file. Answer no if the CLI asks to overwrite a primitive. No theme. English labels are the default; agentFixTimelineLabelsEs is es-MX.",
+  "categories": [
+    "agents",
+    "ci"
+  ],
+  "type": "registry:ui"
+}
