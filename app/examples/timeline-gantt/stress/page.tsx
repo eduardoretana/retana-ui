@@ -76,6 +76,25 @@ export default function StressPage() {
       </section>
 
       <section className="flex flex-col gap-2">
+        <h2 className="text-sm font-medium">Avance 0, 100, por encima, NaN y un día</h2>
+        <div className="h-96">
+          <TimelineGantt
+            now={demoNow}
+            scale="day"
+            workstreams={demoWorkstreams}
+            items={[
+              one({ id: "cero", label: "Cero", progress: 0 }),
+              one({ id: "lleno", label: "Lleno", progress: 100, start: "2026-10-21", end: "2026-10-26", status: "done" }),
+              one({ id: "mas", label: "Más de cien", progress: 140, start: "2026-10-22", end: "2026-10-23", status: "active" }),
+              one({ id: "nan", label: "NaN", progress: Number.NaN, start: "2026-10-18", end: "2026-10-19", status: "blocked" }),
+              one({ id: "dia", label: "Un día", progress: 0.4, start: "2026-10-25", end: "2026-10-25" }),
+              one({ id: "hito", label: "Hito", progress: 1, start: "2026-10-25", end: "2026-10-20", milestone: true, status: "planned" }),
+            ]}
+          />
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-2">
         <h2 className="text-sm font-medium">Contenedor ancho, apretado por un hermano</h2>
         <div className="flex min-w-0 gap-3">
           <div className="h-80 w-40 shrink-0 rounded-lg border border-border" />

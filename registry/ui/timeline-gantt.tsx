@@ -12,6 +12,9 @@ import { motion, useReducedMotion } from "motion/react"
 
 import { Button } from "@/components/ui/button"
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty"
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
 import { motionPresets } from "@/registry/retana/lib/motion"
@@ -21,20 +24,26 @@ import {
   GANTT_LABEL_WIDTH,
   GANTT_ROW_HEIGHT,
   GANTT_SCALES,
+  GANTT_STATUSES,
   dependencyCurve,
   formatGanttDate,
   ganttBar,
   ganttDependencies,
   ganttDomain,
+  ganttGroupSpan,
   ganttTicks,
   isUtcWeekend,
   layoutGroups,
+  parseGanttProgress,
   timelineWidth,
   todayOffset,
+  utcDay,
   withGanttLabels,
+  workstreamProgress,
   type GanttItem,
   type GanttScale,
   type GanttStatus,
+  type GanttTaskPatch,
   type GanttWorkstream,
   type TimelineGanttLabels,
 } from "@/registry/retana/lib/timeline-gantt"
@@ -86,6 +95,14 @@ export type TimelineGanttProps<TMeta = Record<string, unknown>> = {
   className?: string
   classNames?: TimelineGanttClassNames
   renderDetail?: (item: GanttItem<TMeta>) => React.ReactNode
+  /** Controlled id of the task in the edit sheet. Omit it to let the gantt remember the open row. */
+  editingId?: string | null
+  onEditingIdChange?: (id: string | null) => void
+  /**
+   * The host stores the patch. The gantt does not write `items`.
+   * Pass it, or `onEditingIdChange`, to show Editar.
+   */
+  onTaskChangeRequest?: (taskId: string, patch: GanttTaskPatch) => void
 }
 
 export function TimelineGantt<TMeta = Record<string, unknown>>({
@@ -110,6 +127,9 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
   className,
   classNames,
   renderDetail,
+  editingId,
+  onEditingIdChange,
+  onTaskChangeRequest,
 }: TimelineGanttProps<TMeta>) {
   const copy = withGanttLabels(labels)
   const reduced = useReducedFlag()
@@ -123,6 +143,11 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
   const [cursor, setCursor] = React.useState<string | null>(null)
   const [announcement, setAnnouncement] = React.useState("")
   const headingId = React.useId()
+  const editingControlled = editingId !== undefined
+  const [internalEditingId, setInternalEditingId] = React.useState<string | null>(null)
+  const activeEditingId = editingControlled ? (editingId ?? null) : internalEditingId
+  const returnFocusId = React.useRef<string | null>(null)
+  const canEdit = Boolean(onTaskChangeRequest || onEditingIdChange)
 
   const dayWidth = GANTT_DAY_WIDTH[scale]
   const nowMs = Date.parse(nowIso)
@@ -142,6 +167,8 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
   const links = React.useMemo(() => ganttDependencies(items), [items])
   const byId = React.useMemo(() => new Map(items.map((item) => [item.id, item])), [items])
   const today = todayOffset(nowIso, domain, dayWidth)
+  const chartHasProgress = items.some((item) => parseGanttProgress(item.progress) != null)
+  const editingItem = activeEditingId ? (byId.get(activeEditingId) ?? null) : null
   const taskOrder = layout.groups.flatMap((group) => group.tasks.map((task) => task.id))
   const activeId = selectedId ?? cursor ?? taskOrder[0] ?? null
   const columns = `${labelWidth}px ${width}px`
@@ -157,6 +184,23 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
     openRef.current = resolved
     setOpenId(resolved)
     onHover?.(resolved ? (byId.get(resolved) ?? null) : null)
+  }
+
+  function requestEdit(id: string) {
+    returnFocusId.current = barDomId(headingId, id)
+    if (!editingControlled) setInternalEditingId(id)
+    onEditingIdChange?.(id)
+  }
+
+  if (activeEditingId) returnFocusId.current = barDomId(headingId, activeEditingId)
+
+  function closeEdit() {
+    const id = returnFocusId.current
+    if (!editingControlled) setInternalEditingId(null)
+    onEditingIdChange?.(null)
+    queueMicrotask(() => {
+      if (id) document.getElementById(id)?.focus()
+    })
   }
 
   function moveFocus(fromId: string, key: string) {
@@ -300,21 +344,52 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                   )
                 })}
               </svg>
-              {layout.groups.map((group) => (
+              {layout.groups.map((group) => {
+                const members = group.tasks.flatMap((task) => {
+                  const item = items[task.index]
+                  return item ? [item] : []
+                })
+                const rollup = chartHasProgress ? workstreamProgress(members) : null
+                const span = rollup?.ratio != null ? ganttGroupSpan(members) : null
+                const spanBar = span ? ganttBar({ id: group.id, start: span.start, end: span.end }, domain, dayWidth) : null
+                return (
                 <div key={group.id}>
                   <div className="grid" style={{ gridTemplateColumns: columns }}>
                     <div
-                      className="sticky start-0 z-10 flex items-center border-r border-border bg-muted px-2 text-xs font-medium"
+                      className={cn(
+                        "sticky start-0 z-10 flex items-center border-r border-border bg-muted px-2 text-xs font-medium",
+                        chartHasProgress && "min-w-0 gap-2",
+                      )}
                       style={{ width: labelWidth, height: GANTT_GROUP_HEIGHT }}
                     >
-                      <span className="truncate">{copy.workstream(group.label, group.tasks.length)}</span>
+                      <span className={cn("truncate", chartHasProgress && "min-w-0 flex-1")}>{copy.workstream(group.label, group.tasks.length)}</span>
+                      {rollup?.percent != null ? <span className="shrink-0 tabular-nums">{rollup.percent}%</span> : null}
+                      {chartHasProgress && rollup?.percent == null && group.tasks.length > 0 ? (
+                        <span className="shrink-0 font-normal text-muted-foreground">{copy.noProgress}</span>
+                      ) : null}
                     </div>
-                    <div className="bg-muted/40" style={{ height: GANTT_GROUP_HEIGHT }} />
+                    {rollup?.ratio != null && spanBar ? (
+                      <div className="relative bg-muted/40" style={{ height: GANTT_GROUP_HEIGHT }}>
+                        <div className="absolute top-1/2 h-3 -translate-y-1/2" style={{ left: spanBar.x, width: Math.max(spanBar.width, 12) }}>
+                          <GanttProgressTrack
+                            slot="timeline-gantt-group-progress"
+                            ratio={rollup.ratio}
+                            label={copy.groupProgress(group.label, rollup.percent ?? 0)}
+                            showLabel={false}
+                            reduced={reduced}
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="bg-muted/40" style={{ height: GANTT_GROUP_HEIGHT }} />
+                    )}
                   </div>
                   {group.tasks.map((task) => {
                     const item = items[task.index]
                     if (!item) return null
                     const bar = ganttBar(item, domain, dayWidth)
+                    const ratio = parseGanttProgress(item.progress)
+                    const percent = ratio == null ? null : Math.round(ratio * 100)
                     const statusLabel = copy.status[item.status] ?? item.status
                     const startLabel = formatGanttDate(item.start, locale)
                     const endLabel = formatGanttDate(item.end, locale)
@@ -322,6 +397,11 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                     const description = [item.description, depNames.length ? `${copy.dependencies}: ${depNames.join(", ")}` : copy.noDependencies]
                       .filter(Boolean)
                       .join("\n")
+                    const detail = renderDetail?.(item)
+                    const editActions = [
+                      ...(onSelect ? [{ id: "open", label: copy.open, onSelect: () => onSelect(item) }] : []),
+                      ...(canEdit ? [{ id: "edit", label: copy.edit, onSelect: () => requestEdit(item.id) }] : []),
+                    ]
                     const button = (
                       <button
                         id={barDomId(headingId, item.id)}
@@ -333,9 +413,11 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                         data-slot="timeline-gantt-bar"
                         data-status={item.status}
                         data-id={item.id}
+                        {...(percent != null ? { "data-progress": String(percent) } : {})}
                         className={cn(
-                          "absolute top-1.5 flex h-7 items-center rounded-md px-2 text-xs font-medium outline-none focus-visible:ring-3 focus-visible:ring-ring",
-                          barTone[item.status] ?? barTone.planned,
+                          "absolute top-1.5 flex h-7 items-center rounded-md text-xs font-medium outline-none focus-visible:ring-3 focus-visible:ring-ring",
+                          ratio == null ? "px-2" : "overflow-hidden p-0",
+                          ratio == null ? (barTone[item.status] ?? barTone.planned) : "bg-transparent",
                           selectedId === item.id && "ring-2 ring-ring",
                           classNames?.bar,
                         )}
@@ -355,7 +437,17 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                           }
                         }}
                       >
-                        <span className={cn("truncate", bar && bar.width < 72 && "sr-only")}>{item.label}</span>
+                        {ratio != null ? (
+                          <span className="pointer-events-none absolute inset-0">
+                            <GanttProgressTrack
+                              ratio={ratio}
+                              label={`${item.label}, ${copy.progressValue(percent ?? 0)}`}
+                              showLabel={!!bar && bar.width >= 48}
+                              reduced={reduced}
+                            />
+                          </span>
+                        ) : null}
+                        <span className={cn("truncate", (ratio != null || (bar && bar.width < 72)) && "sr-only")}>{item.label}</span>
                       </button>
                     )
                     return (
@@ -363,11 +455,15 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                         <div
                           className={cn(
                             "sticky start-0 z-10 flex items-center border-r border-b border-border bg-background px-2 text-sm",
+                            percent != null && "min-w-0 gap-2",
                             classNames?.label,
                           )}
                           style={{ width: labelWidth, height: GANTT_ROW_HEIGHT }}
                         >
-                          <span className="truncate">{item.label}</span>
+                          <span className={cn("truncate", percent != null && "min-w-0 flex-1")}>{item.label}</span>
+                          {percent != null ? (
+                            <span className={cn("shrink-0 tabular-nums text-xs text-muted-foreground", labelWidth < 88 && "sr-only")}>{percent}%</span>
+                          ) : null}
                         </div>
                         <div className="relative border-b border-border" style={{ height: GANTT_ROW_HEIGHT }}>
                           {bar ? (
@@ -395,15 +491,16 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                                   title={item.label}
                                   eyebrow={group.label}
                                   description={description}
-                                  people={item.assignees}
+                                  {...(item.assignees ? { people: item.assignees } : {})}
                                   metrics={[
                                     { id: "status", label: copy.statusLabel, value: statusLabel },
                                     { id: "start", label: copy.start, value: startLabel },
                                     { id: "end", label: copy.end, value: endLabel },
+                                    ...(percent != null ? [{ id: "progress", label: copy.progress, value: `${percent}%` }] : []),
                                     ...(item.metrics ?? []),
                                   ]}
-                                  actions={onSelect ? [{ id: "open", label: copy.open, onSelect: () => onSelect(item) }] : undefined}
-                                  extra={renderDetail?.(item)}
+                                  {...(editActions.length > 0 ? { actions: editActions } : {})}
+                                  {...(detail != null ? { extra: detail } : {})}
                                 >
                                   {button}
                                 </TooltipCard>
@@ -417,7 +514,8 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                     )
                   })}
                 </div>
-              ))}
+                )
+              })}
             </div>
           </div>
           <ul className="sr-only">
@@ -431,10 +529,241 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
         {announcement}
       </p>
       <span className="sr-only">{copy.announcements}</span>
+      <GanttEditSheet
+        item={editingItem}
+        copy={copy}
+        onOpenChange={(open) => {
+          if (!open) closeEdit()
+        }}
+        onSubmit={(patch) => {
+          if (!editingItem || !onTaskChangeRequest) return
+          onTaskChangeRequest(editingItem.id, patch)
+          if (!editingControlled) setInternalEditingId(null)
+        }}
+        onCloseAutoFocus={(event) => {
+          event.preventDefault()
+          const id = returnFocusId.current ?? (activeEditingId ? barDomId(headingId, activeEditingId) : null)
+          if (id) document.getElementById(id)?.focus()
+        }}
+      />
     </section>
   )
 }
 
 function barDomId(scope: string, id: string) {
   return `${scope}-bar-${id}`
+}
+
+function GanttProgressTrack({
+  ratio,
+  label,
+  showLabel,
+  reduced,
+  slot = "timeline-gantt-progress",
+}: {
+  ratio: number
+  label: string
+  showLabel: boolean
+  reduced: boolean
+  slot?: string
+}) {
+  const percent = Math.round(ratio * 100)
+  const text = `${percent}%`
+  return (
+    <span
+      data-slot={slot}
+      role="progressbar"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={percent}
+      aria-valuetext={label}
+      aria-label={label}
+      className="relative block h-full overflow-hidden rounded-md border border-foreground bg-muted"
+    >
+      {showLabel ? (
+        <span className="relative z-0 flex h-full items-center justify-center px-1 text-[10px] font-medium text-foreground tabular-nums">{text}</span>
+      ) : null}
+      {ratio > 0 ? (
+        <motion.span
+          aria-hidden
+          data-slot="timeline-gantt-progress-fill"
+          data-ratio={ratio}
+          className="absolute inset-0 z-10 origin-left overflow-hidden bg-foreground"
+          initial={reduced ? false : { scaleX: 0 }}
+          animate={{ scaleX: ratio }}
+          transition={{ duration: reduced ? 0 : motionPresets.duration.fast, ease: motionPresets.ease.enter }}
+        >
+          {showLabel ? (
+            <span
+              className="absolute inset-y-0 left-0 flex items-center justify-center px-1 text-[10px] font-medium text-background tabular-nums"
+              style={{ width: "100%", transform: `scaleX(${1 / ratio})`, transformOrigin: "left center" }}
+            >
+              {text}
+            </span>
+          ) : null}
+        </motion.span>
+      ) : null}
+    </span>
+  )
+}
+
+function GanttEditSheet<TMeta>({
+  item,
+  copy,
+  onOpenChange,
+  onSubmit,
+  onCloseAutoFocus,
+}: {
+  item: GanttItem<TMeta> | null
+  copy: TimelineGanttLabels
+  onOpenChange: (open: boolean) => void
+  onSubmit: (patch: GanttTaskPatch) => void
+  onCloseAutoFocus: (event: Event) => void
+}) {
+  return (
+    <Sheet open={item != null} onOpenChange={onOpenChange}>
+      <SheetContent
+        side="right"
+        className="w-[390px] max-w-full gap-0 overflow-y-auto sm:max-w-[390px]"
+        onOpenAutoFocus={(event) => {
+          event.preventDefault()
+          const content = event.currentTarget
+          if (content instanceof HTMLElement) content.querySelector<HTMLElement>("[data-slot=gantt-edit-name]")?.focus()
+        }}
+        onCloseAutoFocus={onCloseAutoFocus}
+      >
+        {item ? <GanttEditForm key={item.id} item={item} copy={copy} onSubmit={onSubmit} onCancel={() => onOpenChange(false)} /> : null}
+      </SheetContent>
+    </Sheet>
+  )
+}
+
+function GanttEditForm<TMeta>({
+  item,
+  copy,
+  onSubmit,
+  onCancel,
+}: {
+  item: GanttItem<TMeta>
+  copy: TimelineGanttLabels
+  onSubmit: (patch: GanttTaskPatch) => void
+  onCancel: () => void
+}) {
+  const nameId = React.useId()
+  const startId = React.useId()
+  const endId = React.useId()
+  const personId = React.useId()
+  const statusId = React.useId()
+  const progressId = React.useId()
+  const known = parseGanttProgress(item.progress)
+  const [label, setLabel] = React.useState(item.label)
+  const [start, setStart] = React.useState(item.start.slice(0, 10))
+  const [end, setEnd] = React.useState(item.end.slice(0, 10))
+  const [status, setStatus] = React.useState<GanttStatus>(item.status)
+  const [assignee, setAssignee] = React.useState(item.assignees?.[0]?.name ?? "")
+  const [progress, setProgress] = React.useState(known == null ? "" : String(Math.round(known * 100)))
+  const [error, setError] = React.useState<string | null>(null)
+  const rangeError = error === copy.invalidRange || error === copy.invalidDate
+
+  function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const name = label.trim()
+    if (!name) {
+      setError(copy.invalidName)
+      return
+    }
+    const startMs = utcDay(start)
+    const endMs = utcDay(end)
+    if (startMs == null || endMs == null) {
+      setError(copy.invalidDate)
+      return
+    }
+    if (endMs < startMs) {
+      setError(copy.invalidRange)
+      return
+    }
+    let nextProgress: number | null
+    if (progress.trim() === "") nextProgress = null
+    else {
+      const value = Number(progress)
+      if (!Number.isFinite(value) || value < 0 || value > 100) {
+        setError(copy.invalidProgress)
+        return
+      }
+      nextProgress = value / 100
+    }
+    const person = assignee.trim()
+    const previous = item.assignees?.[0]
+    const nextId = previous && previous.name === person ? previous.id : person.toLocaleLowerCase("es-MX").replace(/\s+/g, "-")
+    onSubmit({
+      label: name,
+      start,
+      end,
+      status,
+      progress: nextProgress,
+      assignees: person ? [{ id: nextId, name: person }] : [],
+    })
+  }
+
+  return (
+    <form onSubmit={submit} className="flex min-h-full flex-col">
+      <SheetHeader>
+        <SheetTitle>{copy.editTitle}</SheetTitle>
+        <SheetDescription>{copy.editDescription}</SheetDescription>
+      </SheetHeader>
+      <FieldGroup className="px-4">
+        <Field>
+          <FieldLabel htmlFor={nameId}>{copy.taskName}</FieldLabel>
+          <Input id={nameId} data-slot="gantt-edit-name" value={label} autoFocus onChange={(event) => setLabel(event.target.value)} />
+        </Field>
+        <Field data-invalid={rangeError || undefined}>
+          <FieldLabel htmlFor={startId}>{copy.start}</FieldLabel>
+          <Input id={startId} type="date" value={start} aria-invalid={rangeError || undefined} onChange={(event) => setStart(event.target.value)} />
+        </Field>
+        <Field data-invalid={rangeError || undefined}>
+          <FieldLabel htmlFor={endId}>{copy.end}</FieldLabel>
+          <Input id={endId} type="date" value={end} aria-invalid={rangeError || undefined} onChange={(event) => setEnd(event.target.value)} />
+        </Field>
+        <Field>
+          <FieldLabel htmlFor={personId}>{copy.assignee}</FieldLabel>
+          <Input id={personId} value={assignee} onChange={(event) => setAssignee(event.target.value)} />
+        </Field>
+        <Field>
+          <FieldLabel htmlFor={statusId}>{copy.statusLabel}</FieldLabel>
+          <select
+            id={statusId}
+            value={status}
+            className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            onChange={(event) => {
+              const next = GANTT_STATUSES.find((option) => option === event.target.value)
+              if (next) setStatus(next)
+            }}
+          >
+            {GANTT_STATUSES.map((option) => (
+              <option key={option} value={option}>
+                {copy.status[option]}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <Field data-invalid={error === copy.invalidProgress || undefined}>
+          <FieldLabel htmlFor={progressId}>{copy.progress}</FieldLabel>
+          <Input
+            id={progressId}
+            inputMode="decimal"
+            value={progress}
+            aria-invalid={error === copy.invalidProgress || undefined}
+            onChange={(event) => setProgress(event.target.value)}
+          />
+        </Field>
+      </FieldGroup>
+      {error ? <FieldError className="px-4">{error}</FieldError> : null}
+      <SheetFooter>
+        <Button type="submit">{copy.save}</Button>
+        <Button type="button" variant="outline" onClick={onCancel}>
+          {copy.cancel}
+        </Button>
+      </SheetFooter>
+    </form>
+  )
 }

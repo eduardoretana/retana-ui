@@ -52,6 +52,17 @@ export type GanttItem<TMeta = Record<string, unknown>> = {
   description?: string
   assignees?: readonly GanttAssignee[]
   metrics?: readonly GanttMetric[]
+  /**
+   * Fraction 0–1, or a percent above 1 and up to 100.
+   * `1` is 100%. Pass `0.01` for 1%. See `parseGanttProgress`.
+   * Omitted, NaN, and non-finite values draw the solid status bar.
+   */
+  progress?: number
+  /**
+   * Zero-duration marker. It keeps its dates on the scale and does not
+   * weight `workstreamProgress`.
+   */
+  milestone?: boolean
   /** Host payload. The gantt never reads it. */
   meta?: TMeta
 }
@@ -126,6 +137,21 @@ export type TimelineGanttLabels = {
   dependency: (from: string, to: string) => string
   workstream: (label: string, count: number) => string
   selected: (label: string) => string
+  progress: string
+  noProgress: string
+  edit: string
+  editTitle: string
+  editDescription: string
+  taskName: string
+  assignee: string
+  save: string
+  cancel: string
+  invalidName: string
+  invalidRange: string
+  invalidDate: string
+  invalidProgress: string
+  progressValue: (percent: number) => string
+  groupProgress: (label: string, percent: number) => string
 }
 
 export const timelineGanttLabels: TimelineGanttLabels = {
@@ -162,6 +188,21 @@ export const timelineGanttLabels: TimelineGanttLabels = {
   dependency: (from, to) => `${to} depende de ${from}`,
   workstream: (label, count) => `${label}, ${count}`,
   selected: (label) => `${label} seleccionado`,
+  progress: "Avance",
+  noProgress: "Sin avance",
+  edit: "Editar",
+  editTitle: "Editar tarea",
+  editDescription: "Los cambios se los queda el anfitrión. Aquí no se guardan solos.",
+  taskName: "Nombre",
+  assignee: "Responsable",
+  save: "Guardar",
+  cancel: "Cancelar",
+  invalidName: "Escribe un nombre.",
+  invalidRange: "La fecha de fin no puede ser anterior al inicio.",
+  invalidDate: "Usa una fecha real.",
+  invalidProgress: "El avance va de 0 a 100.",
+  progressValue: (percent) => `${percent}% de avance`,
+  groupProgress: (label, percent) => `${label}, ${percent}% de avance`,
 }
 
 export const timelineGanttLabelsEn: TimelineGanttLabels = {
@@ -198,6 +239,21 @@ export const timelineGanttLabelsEn: TimelineGanttLabels = {
   dependency: (from, to) => `${to} depends on ${from}`,
   workstream: (label, count) => `${label}, ${count}`,
   selected: (label) => `${label} selected`,
+  progress: "Progress",
+  noProgress: "No progress",
+  edit: "Edit",
+  editTitle: "Edit task",
+  editDescription: "The host keeps the changes. Nothing is saved here.",
+  taskName: "Name",
+  assignee: "Owner",
+  save: "Save",
+  cancel: "Cancel",
+  invalidName: "Enter a name.",
+  invalidRange: "The end date cannot be before the start.",
+  invalidDate: "Use a real date.",
+  invalidProgress: "Progress is from 0 to 100.",
+  progressValue: (percent) => `${percent}% progress`,
+  groupProgress: (label, percent) => `${label}, ${percent}% progress`,
 }
 
 export function withGanttLabels(labels?: Partial<TimelineGanttLabels>): TimelineGanttLabels {
@@ -449,6 +505,153 @@ export function ganttDependencies(items: readonly { id: string; deps?: readonly 
     }
   }
   return links
+}
+
+/**
+ * Theme tokens for the progress fill.
+ * Fill is `foreground`, track is `muted`, the row surface is `background`.
+ * A `foreground` border marks the track, because muted against background is under 3:1.
+ * Status colors are not the fill: `chart-4` is under 3:1 on the dark background.
+ */
+export const GANTT_PROGRESS_PAINT = {
+  fill: "foreground",
+  track: "muted",
+  surface: "background",
+  edge: "foreground",
+} as const
+
+/**
+ * Reads `progress`.
+ * - Finite numbers from 0 to 1 are a fraction. `1` is 100%, not 1%.
+ * - Finite numbers above 1 and up to 100 are a percent (`40` → 0.4).
+ * - Below 0 clamps to 0. Above 100 clamps to 1.
+ * - NaN, Infinity, and anything that is not a number are missing (`null`), not 0.
+ */
+export function parseGanttProgress(value: unknown): number | null {
+  if (typeof value !== "number" || !Number.isFinite(value)) return null
+  if (value < 0) return 0
+  if (value > 100) return 1
+  if (value > 1) return value / 100
+  return value
+}
+
+/**
+ * Inclusive calendar days. A one-day task (`start === end`) weighs 1.
+ * Returns 0 when the end is before the start (a zero-duration milestone).
+ * Returns null when either day is not a real calendar day.
+ */
+export function ganttSpanDays(start: string, end: string): number | null {
+  const from = utcDay(start)
+  const to = utcDay(end)
+  if (from == null || to == null) return null
+  const days = Math.round((to - from) / DAY_MS)
+  if (days < 0) return 0
+  return days + 1
+}
+
+export type WorkstreamProgress = {
+  /** Null when no positive-duration task has a known progress. Not zero. */
+  ratio: number | null
+  percent: number | null
+  /** Inclusive days that had a known progress and a positive duration. */
+  weightDays: number
+  /** Tasks left out because progress was missing or the dates were not real. */
+  omitted: number
+  /** `milestone` tasks and ranges whose end is before the start. Weight 0. */
+  milestones: number
+}
+
+/**
+ * Duration-weighted progress for one workstream.
+ * Tasks without a finite progress are left out of both sides of the ratio.
+ * They are not treated as 0%.
+ * Zero-duration milestones (`milestone: true`, or end before start) do not move the ratio.
+ * A one-day task weighs 1. An empty list is `{ ratio: null }`, not 0%.
+ * If every remaining weight is 0, the ratio is null.
+ */
+export function workstreamProgress(
+  items: readonly { start: string; end: string; progress?: number; milestone?: boolean }[],
+): WorkstreamProgress {
+  if (items.length === 0) {
+    return { ratio: null, percent: null, weightDays: 0, omitted: 0, milestones: 0 }
+  }
+  let weight = 0
+  let weighted = 0
+  let omitted = 0
+  let milestones = 0
+  for (const item of items) {
+    const span = ganttSpanDays(item.start, item.end)
+    if (span == null) {
+      omitted += 1
+      continue
+    }
+    if (item.milestone === true || span === 0) {
+      milestones += 1
+      continue
+    }
+    const ratio = parseGanttProgress(item.progress)
+    if (ratio == null) {
+      omitted += 1
+      continue
+    }
+    weight += span
+    weighted += ratio * span
+  }
+  if (weight <= 0) {
+    return { ratio: null, percent: null, weightDays: 0, omitted, milestones }
+  }
+  const ratio = weighted / weight
+  return { ratio, percent: Math.round(ratio * 100), weightDays: weight, omitted, milestones }
+}
+
+/** Inclusive union of real dates. Inverted ranges still contribute their days. */
+export function ganttGroupSpan(items: readonly { start: string; end: string }[]): { start: string; end: string } | null {
+  let start: number | null = null
+  let end: number | null = null
+  for (const item of items) {
+    const from = utcDay(item.start)
+    const to = utcDay(item.end)
+    if (from == null || to == null) continue
+    const first = Math.min(from, to)
+    const last = Math.max(from, to)
+    start = start == null ? first : Math.min(start, first)
+    end = end == null ? last : Math.max(end, last)
+  }
+  if (start == null || end == null) return null
+  return { start: isoDay(start), end: isoDay(end) }
+}
+
+export type GanttTaskPatch = {
+  label?: string
+  start?: string
+  end?: string
+  status?: GanttStatus
+  /** Fraction 0–1. `null` clears the progress. */
+  progress?: number | null
+  assignees?: readonly GanttAssignee[]
+}
+
+/** Pure merge. The gantt does not call this. The host does, after `onTaskChangeRequest`. */
+export function applyGanttTaskPatch<TMeta>(
+  items: readonly GanttItem<TMeta>[],
+  taskId: string,
+  patch: GanttTaskPatch,
+): GanttItem<TMeta>[] {
+  return items.map((item) => {
+    if (item.id !== taskId) return item
+    const next: GanttItem<TMeta> = { ...item }
+    if (patch.label != null) next.label = patch.label
+    if (patch.start != null) next.start = patch.start
+    if (patch.end != null) next.end = patch.end
+    if (patch.status != null) next.status = patch.status
+    if (patch.assignees != null) next.assignees = patch.assignees
+    if (patch.progress === null) delete next.progress
+    else if (patch.progress != null) {
+      const ratio = parseGanttProgress(patch.progress)
+      if (ratio != null) next.progress = ratio
+    }
+    return next
+  })
 }
 
 export function dependencyCurve(
