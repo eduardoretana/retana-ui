@@ -31665,7 +31665,7 @@
       "name": "timeline-gantt",
       "type": "registry:ui",
       "title": "Timeline gantt",
-      "description": "Workstream Gantt with task bars, dependency curves, a today marker, and a sticky scale. Hover opens a detail card.",
+      "description": "Workstream Gantt with task bars, optional progress, a duration-weighted group summary, dependency curves, a today marker, and a sticky scale. Hover opens a detail card. An edit sheet reports a patch and does not write the items.",
       "author": "Eduardo Retana",
       "dependencies": [
         "motion"
@@ -31673,13 +31673,17 @@
       "registryDependencies": [
         "button",
         "empty",
+        "field",
+        "input",
+        "label",
+        "sheet",
         "skeleton",
         "@retana/tooltip-card"
       ],
       "categories": [
         "table"
       ],
-      "docs": "Clean-room schedule. Pass items with id, workstream, label, start, end, status, and optional deps. Dates are inclusive YYYY-MM-DD and the day is read in UTC. onSelect and onHover do not write the items. Arrow keys move between bars. The scale header stays pinned while the timeline scrolls sideways. The today line uses now, which should be a stable timestamp in tests. Reduced motion skips the bar fade. Answer no if the CLI asks to overwrite button, empty, skeleton, or tooltip-card. The item ships no theme. No mockup source, copy, colors, or assets were copied.",
+      "docs": "Clean-room schedule. Pass items with id, workstream, label, start, end, status, and optional deps. Dates are inclusive YYYY-MM-DD and the day is read in UTC. progress is an optional fraction from 0 to 1 (0.5 is 50%, 1 is 100%). Values below 0 or above 1 clamp. In development, a value above 1 also warns; it is not read as a percent. NaN is ignored and the bar stays the solid status color. The fill uses scaleX, foreground on a muted track, and a foreground border so the amount is not color alone. A status mark and a short status word stay visible with the progress; the full status stays in the accessible name. Dependencies are orthogonal, sit behind the bars, and brighten for the hovered or selected task. On mount the scale scrolls toward today, with a background fade when more days sit off to the side. The sheet progress field is 0–100 with a % suffix and stores a fraction. Date inputs use lang, but the written format is the browser's. Group rows show a duration-weighted summary only when that group has a known ratio. Tasks with no progress are left out of that ratio. A group with no known ratio shows its name and count only, not 0% and not a stand-in label. milestone tasks and ranges whose end is before the start weigh 0. An empty group has no percent. onSelect, onHover, and onTaskChangeRequest do not write the items. editingId opens the sheet; the host applies the patch. The sheet's progress field is a percent from 0 to 100 and the patch stores the fraction. End must be on or after start. Arrow keys move between bars. The scale header stays pinned while the timeline scrolls sideways. The today line uses now, which should be a stable timestamp in tests. Reduced motion skips the bar fade and the fill scale. Answer no if the CLI asks to overwrite button, empty, field, input, label, sheet, skeleton, or tooltip-card. The item ships no theme. Shadcn Studio Gantt Chart 04 is a Pro reference: layout and interaction only. No mockup source, copy, colors, or assets were copied.",
       "files": [
         {
           "path": "registry/ui/timeline-gantt.tsx",
@@ -31699,14 +31703,28 @@
       ],
       "meta": {
         "titleEs": "Cronograma",
-        "descriptionEs": "Barras por frente, dependencias, línea de hoy y una tarjeta al pasar el puntero. La escala se queda fija.",
+        "descriptionEs": "Barras por frente con avance, resumen de la fase, dependencias y un panel que pide cambios sin guardarlos.",
+        "scenes": [
+          "filled",
+          "empty",
+          "loading",
+          "error",
+          { "id": "progress", "label": "Con avance", "labelEn": "With progress" },
+          { "id": "complete", "label": "Grupo al 100%", "labelEn": "Group at 100%" },
+          { "id": "plain", "label": "Sin avance", "labelEn": "No progress" },
+          { "id": "extremes", "label": "Valores extremos", "labelEn": "Extreme values" },
+          { "id": "long", "label": "Nombres largos", "labelEn": "Long names" },
+          { "id": "oneday", "label": "Un día", "labelEn": "One day" },
+          { "id": "many", "label": "Muchas tareas", "labelEn": "Many tasks" },
+          { "id": "editor", "label": "Edición", "labelEn": "Editing" }
+        ],
         "preview": "app/examples/timeline-gantt/preview.tsx",
         "previewHref": "/examples/timeline-gantt",
         "examples": [
           {
             "title": "Taller Bruma",
             "href": "/examples/timeline-gantt",
-            "description": "Semana, mes o día. Datos inventados. Nada se guarda."
+            "description": "Semana, mes o día. El avance y el panel son del anfitrión. Datos inventados."
           },
           {
             "title": "Marco de estrés",
@@ -31714,7 +31732,7 @@
             "description": "320px, vacío, carga, error, token largo y cuarenta tareas."
           }
         ],
-        "usage": "<TimelineGantt\n  items={items}\n  workstreams={workstreams}\n  scale=\"week\"\n  now=\"2026-10-25T18:00:00.000Z\"\n  onSelect={(item) => open(item.id)}\n  onHover={(item) => preview(item)}\n/>",
+        "usage": "<TimelineGantt\n  items={items}\n  workstreams={workstreams}\n  scale=\"week\"\n  now=\"2026-10-25T18:00:00.000Z\"\n  editingId={editingId}\n  onEditingIdChange={setEditingId}\n  onTaskChangeRequest={(id, patch) => setItems(applyGanttTaskPatch(items, id, patch))}\n/>",
         "api": [
           {
             "name": "items / workstreams",
@@ -31745,6 +31763,21 @@
             "name": "labels / className",
             "type": "Partial<TimelineGanttLabels>, string",
             "description": "Spanish chrome. timelineGanttLabelsEn is the English set."
+          },
+          {
+            "name": "progress",
+            "type": "number",
+            "description": "Optional fraction 0–1 (0.5 is 50%). Below 0 and above 1 clamp. In development, above 1 warns and is not read as a percent. NaN draws the solid status bar."
+          },
+          {
+            "name": "workstreamProgress",
+            "type": "function",
+            "description": "Pure rollup weighted by inclusive days. Missing progress is left out, not counted as 0. Milestones and inverted ranges weigh 0. An empty group returns null."
+          },
+          {
+            "name": "editingId / onEditingIdChange / onTaskChangeRequest",
+            "type": "string | null, callbacks",
+            "description": "The sheet is controlled. Save emits a patch. The host writes items, usually with applyGanttTaskPatch. End must be on or after start."
           }
         ]
       }

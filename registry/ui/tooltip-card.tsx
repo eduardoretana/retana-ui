@@ -253,10 +253,10 @@ export function TooltipCard({
           </div>
           {people.length ? (
             <div className={cn("flex min-w-0 items-center gap-2", classNames?.people)}>
-              <AvatarGroup role="group" aria-label={copy.people}>
+              <AvatarGroup role="group" aria-label={copy.people} className="-space-x-0 gap-1">
                 {visiblePeople.map((person) => (
                   <Avatar key={person.id} size="sm">
-                    <AvatarFallback>{personInitials(person.name)}</AvatarFallback>
+                    <AvatarFallback className="text-[10px] leading-none">{personInitials(person.name)}</AvatarFallback>
                   </Avatar>
                 ))}
                 {extraPeople > 0 ? <AvatarGroupCount>{copy.morePeople(extraPeople)}</AvatarGroupCount> : null}

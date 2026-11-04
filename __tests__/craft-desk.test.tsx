@@ -143,8 +143,9 @@ describe("tooltip card", () => {
         title="Catálogo"
         description="Treinta y dos páginas."
         people={[
+          { id: "mina", name: "Mina Soler" },
           { id: "ana", name: "Ana Rueda" },
-          { id: "leo", name: "Leo Marín" },
+          { id: "noa", name: "Noa Vidal" },
         ]}
         metrics={[{ id: "sheets", label: "Pliegos", value: "120" }]}
         actions={[{ id: "open", label: "Abrir ficha", onSelect }]}
@@ -155,7 +156,10 @@ describe("tooltip card", () => {
     const trigger = screen.getByRole("button", { name: "Ver" })
     trigger.focus()
     expect(await screen.findByRole("dialog", { name: "Catálogo" })).toBeInTheDocument()
+    expect(screen.getByText("MS")).toBeInTheDocument()
     expect(screen.getByText("AR")).toBeInTheDocument()
+    expect(screen.getByText("NV")).toBeInTheDocument()
+    expect(screen.getByRole("group", { name: "Personas" }).className).not.toContain("-space-x-2")
     await user.tab()
     await user.keyboard("{Enter}")
     expect(onSelect).toHaveBeenCalled()

@@ -20,6 +20,25 @@ export const GANTT_GROUP_HEIGHT = 32
 
 export const GANTT_LABEL_WIDTH = 176
 
+/** Label column. An explicit width wins. Otherwise it grows with the container and stays narrow on a phone. */
+export function ganttLabelWidth(containerWidth: number, explicit?: number) {
+  if (explicit != null) return explicit
+  if (!(containerWidth > 0)) return GANTT_LABEL_WIDTH
+  return Math.round(Math.min(320, Math.max(144, containerWidth * 0.24)))
+}
+
+/**
+ * Timeline width. When the container is wider than the natural scale, the days stretch
+ * so the board fills the card. A narrower container keeps the natural width and scrolls.
+ */
+export function ganttBoard(naturalWidth: number, containerWidth: number, labelWidth: number) {
+  const content = labelWidth + Math.max(0, naturalWidth)
+  const board = containerWidth > content ? containerWidth : content
+  const drawn = Math.max(0, board - labelWidth)
+  const scale = naturalWidth > 0 ? drawn / naturalWidth : 1
+  return { board, drawn, scale }
+}
+
 export const DAY_MS = 86_400_000
 
 export const GANTT_DAY_WIDTH: Record<GanttScale, number> = {
@@ -52,6 +71,18 @@ export type GanttItem<TMeta = Record<string, unknown>> = {
   description?: string
   assignees?: readonly GanttAssignee[]
   metrics?: readonly GanttMetric[]
+  /**
+   * Fraction from 0 to 1. `0.5` is 50% and `1` is 100%.
+   * Values below 0 or above 1 are clamped. In development, a value above 1
+   * also logs a warning: it is not read as a percent.
+   * Omitted, NaN, and non-finite values draw the solid status bar.
+   */
+  progress?: number
+  /**
+   * Zero-duration marker. It keeps its dates on the scale and does not
+   * weight `workstreamProgress`.
+   */
+  milestone?: boolean
   /** Host payload. The gantt never reads it. */
   meta?: TMeta
 }
@@ -121,11 +152,31 @@ export type TimelineGanttLabels = {
   announcements: string
   people: string
   status: Record<GanttStatus, string>
+  /** Short visible status. The full word stays in the accessible name. */
+  statusShort: Record<GanttStatus, string>
+  /** The date control's written format is the browser's, not this locale. */
+  dateHint: string
+  progressHint: string
   openItem: (label: string) => string
   barLabel: (label: string, start: string, end: string, status: string) => string
   dependency: (from: string, to: string) => string
   workstream: (label: string, count: number) => string
   selected: (label: string) => string
+  progress: string
+  noProgress: string
+  edit: string
+  editTitle: string
+  editDescription: string
+  taskName: string
+  assignee: string
+  save: string
+  cancel: string
+  invalidName: string
+  invalidRange: string
+  invalidDate: string
+  invalidProgress: string
+  progressValue: (percent: number) => string
+  groupProgress: (label: string, percent: number) => string
 }
 
 export const timelineGanttLabels: TimelineGanttLabels = {
@@ -157,11 +208,35 @@ export const timelineGanttLabels: TimelineGanttLabels = {
     done: "Hecho",
     "at-risk": "En riesgo",
   },
+  statusShort: {
+    planned: "Plan",
+    active: "Curso",
+    blocked: "Bloq.",
+    done: "Hecho",
+    "at-risk": "Riesgo",
+  },
+  dateHint: "El formato de la fecha lo pone el navegador.",
+  progressHint: "De 0 a 100.",
   openItem: (label) => `Abrir ${label}`,
   barLabel: (label, start, end, status) => `${label}, ${status}, del ${start} al ${end}`,
   dependency: (from, to) => `${to} depende de ${from}`,
   workstream: (label, count) => `${label}, ${count}`,
   selected: (label) => `${label} seleccionado`,
+  progress: "Avance",
+  noProgress: "Sin avance",
+  edit: "Editar",
+  editTitle: "Editar tarea",
+  editDescription: "Los cambios se los queda el anfitrión. Aquí no se guardan solos.",
+  taskName: "Nombre",
+  assignee: "Responsable",
+  save: "Guardar",
+  cancel: "Cancelar",
+  invalidName: "Escribe un nombre.",
+  invalidRange: "La fecha de fin no puede ser anterior al inicio.",
+  invalidDate: "Usa una fecha real.",
+  invalidProgress: "El avance va de 0 a 100.",
+  progressValue: (percent) => `${percent}% de avance`,
+  groupProgress: (label, percent) => `${label}, ${percent}% de avance`,
 }
 
 export const timelineGanttLabelsEn: TimelineGanttLabels = {
@@ -193,15 +268,44 @@ export const timelineGanttLabelsEn: TimelineGanttLabels = {
     done: "Done",
     "at-risk": "At risk",
   },
+  statusShort: {
+    planned: "Plan",
+    active: "Active",
+    blocked: "Hold",
+    done: "Done",
+    "at-risk": "Risk",
+  },
+  dateHint: "The date format comes from the browser.",
+  progressHint: "From 0 to 100.",
   openItem: (label) => `Open ${label}`,
   barLabel: (label, start, end, status) => `${label}, ${status}, ${start} to ${end}`,
   dependency: (from, to) => `${to} depends on ${from}`,
   workstream: (label, count) => `${label}, ${count}`,
   selected: (label) => `${label} selected`,
+  progress: "Progress",
+  noProgress: "No progress",
+  edit: "Edit",
+  editTitle: "Edit task",
+  editDescription: "The host keeps the changes. Nothing is saved here.",
+  taskName: "Name",
+  assignee: "Owner",
+  save: "Save",
+  cancel: "Cancel",
+  invalidName: "Enter a name.",
+  invalidRange: "The end date cannot be before the start.",
+  invalidDate: "Use a real date.",
+  invalidProgress: "Progress is from 0 to 100.",
+  progressValue: (percent) => `${percent}% progress`,
+  groupProgress: (label, percent) => `${label}, ${percent}% progress`,
 }
 
 export function withGanttLabels(labels?: Partial<TimelineGanttLabels>): TimelineGanttLabels {
-  return { ...timelineGanttLabels, ...labels, status: { ...timelineGanttLabels.status, ...labels?.status } }
+  return {
+    ...timelineGanttLabels,
+    ...labels,
+    status: { ...timelineGanttLabels.status, ...labels?.status },
+    statusShort: { ...timelineGanttLabels.statusShort, ...labels?.statusShort },
+  }
 }
 
 /** UTC midnight for a YYYY-MM-DD prefix, or null when the day is not real. */
@@ -449,6 +553,186 @@ export function ganttDependencies(items: readonly { id: string; deps?: readonly 
     }
   }
   return links
+}
+
+/**
+ * Theme tokens for the progress fill.
+ * Fill is `foreground`, track is `muted`, the row surface is `background`.
+ * A `foreground` border marks the track, because muted against background is under 3:1.
+ * Status colors are not the fill: `chart-4` is under 3:1 on the dark background.
+ */
+export const GANTT_PROGRESS_PAINT = {
+  fill: "foreground",
+  track: "muted",
+  surface: "background",
+  edge: "foreground",
+} as const
+
+/**
+ * Reads `progress` as a fraction from 0 to 1.
+ * `0.5` is 50%. `1` is 100%.
+ * Below 0 clamps to 0. Above 1 clamps to 1.
+ * In development, a finite value above 1 also warns once per call.
+ * It is not treated as a percent: `50` becomes 1, not 50%.
+ * NaN, Infinity, and anything that is not a number are missing (`null`), not 0.
+ */
+export function parseGanttProgress(value: unknown): number | null {
+  if (typeof value !== "number" || !Number.isFinite(value)) return null
+  if (process.env.NODE_ENV !== "production" && value > 1) {
+    console.warn(
+      `[timeline-gantt] progress ${value} is outside 0–1 and was clamped to 1. Pass a fraction (0.5 is 50%).`,
+    )
+  }
+  if (value < 0) return 0
+  if (value > 1) return 1
+  return value
+}
+
+/**
+ * Inclusive calendar days. A one-day task (`start === end`) weighs 1.
+ * Returns 0 when the end is before the start (a zero-duration milestone).
+ * Returns null when either day is not a real calendar day.
+ */
+export function ganttSpanDays(start: string, end: string): number | null {
+  const from = utcDay(start)
+  const to = utcDay(end)
+  if (from == null || to == null) return null
+  const days = Math.round((to - from) / DAY_MS)
+  if (days < 0) return 0
+  return days + 1
+}
+
+export type WorkstreamProgress = {
+  /** Null when no positive-duration task has a known progress. Not zero. */
+  ratio: number | null
+  percent: number | null
+  /** Inclusive days that had a known progress and a positive duration. */
+  weightDays: number
+  /** Tasks left out because progress was missing or the dates were not real. */
+  omitted: number
+  /** `milestone` tasks and ranges whose end is before the start. Weight 0. */
+  milestones: number
+}
+
+/**
+ * Duration-weighted progress for one workstream.
+ * Tasks without a finite progress are left out of both sides of the ratio.
+ * They are not treated as 0%.
+ * Zero-duration milestones (`milestone: true`, or end before start) do not move the ratio.
+ * A one-day task weighs 1. An empty list is `{ ratio: null }`, not 0%.
+ * If every remaining weight is 0, the ratio is null.
+ */
+export function workstreamProgress(
+  items: readonly { start: string; end: string; progress?: number; milestone?: boolean }[],
+): WorkstreamProgress {
+  if (items.length === 0) {
+    return { ratio: null, percent: null, weightDays: 0, omitted: 0, milestones: 0 }
+  }
+  let weight = 0
+  let weighted = 0
+  let omitted = 0
+  let milestones = 0
+  for (const item of items) {
+    const span = ganttSpanDays(item.start, item.end)
+    if (span == null) {
+      omitted += 1
+      continue
+    }
+    if (item.milestone === true || span === 0) {
+      milestones += 1
+      continue
+    }
+    const ratio = parseGanttProgress(item.progress)
+    if (ratio == null) {
+      omitted += 1
+      continue
+    }
+    weight += span
+    weighted += ratio * span
+  }
+  if (weight <= 0) {
+    return { ratio: null, percent: null, weightDays: 0, omitted, milestones }
+  }
+  const ratio = weighted / weight
+  return { ratio, percent: Math.round(ratio * 100), weightDays: weight, omitted, milestones }
+}
+
+/** Inclusive union of real dates. Inverted ranges still contribute their days. */
+export function ganttGroupSpan(items: readonly { start: string; end: string }[]): { start: string; end: string } | null {
+  let start: number | null = null
+  let end: number | null = null
+  for (const item of items) {
+    const from = utcDay(item.start)
+    const to = utcDay(item.end)
+    if (from == null || to == null) continue
+    const first = Math.min(from, to)
+    const last = Math.max(from, to)
+    start = start == null ? first : Math.min(start, first)
+    end = end == null ? last : Math.max(end, last)
+  }
+  if (start == null || end == null) return null
+  return { start: isoDay(start), end: isoDay(end) }
+}
+
+export type GanttTaskPatch = {
+  label?: string
+  start?: string
+  end?: string
+  status?: GanttStatus
+  /** Fraction 0–1. `null` clears the progress. */
+  progress?: number | null
+  assignees?: readonly GanttAssignee[]
+}
+
+/** Pure merge. The gantt does not call this. The host does, after `onTaskChangeRequest`. */
+export function applyGanttTaskPatch<TMeta>(
+  items: readonly GanttItem<TMeta>[],
+  taskId: string,
+  patch: GanttTaskPatch,
+): GanttItem<TMeta>[] {
+  return items.map((item) => {
+    if (item.id !== taskId) return item
+    const next: GanttItem<TMeta> = { ...item }
+    if (patch.label != null) next.label = patch.label
+    if (patch.start != null) next.start = patch.start
+    if (patch.end != null) next.end = patch.end
+    if (patch.status != null) next.status = patch.status
+    if (patch.assignees != null) next.assignees = patch.assignees
+    if (patch.progress === null) delete next.progress
+    else if (patch.progress != null) {
+      const ratio = parseGanttProgress(patch.progress)
+      if (ratio != null) next.progress = ratio
+    }
+    return next
+  })
+}
+
+/**
+ * Orthogonal dependency. Leaves the predecessor's end, runs through the
+ * boundary between rows, and enters the successor's start. No curve.
+ */
+export function dependencyElbow(
+  from: { x: number; width: number; y: number },
+  to: { x: number; y: number },
+  rowHeight: number,
+) {
+  const x1 = from.x + from.width
+  const y1 = from.y + rowHeight / 2
+  const x2 = to.x
+  const y2 = to.y + rowHeight / 2
+  const round = (value: number) => Math.round(value * 10) / 10
+  if (Math.abs(y1 - y2) < 1) {
+    return { d: `M ${round(x1)} ${round(y1)} H ${round(x2)}`, x: round(x2), y: round(y2) }
+  }
+  const stub = 8
+  const outX = x1 + stub
+  const inX = x2 - stub
+  const channelY = y1 < y2 ? from.y + rowHeight - 1 : from.y + 1
+  return {
+    d: `M ${round(x1)} ${round(y1)} H ${round(outX)} V ${round(channelY)} H ${round(inX)} V ${round(y2)} H ${round(x2)}`,
+    x: round(x2),
+    y: round(y2),
+  }
 }
 
 export function dependencyCurve(
