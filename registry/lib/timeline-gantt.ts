@@ -53,8 +53,9 @@ export type GanttItem<TMeta = Record<string, unknown>> = {
   assignees?: readonly GanttAssignee[]
   metrics?: readonly GanttMetric[]
   /**
-   * Fraction 0–1, or a percent above 1 and up to 100.
-   * `1` is 100%. Pass `0.01` for 1%. See `parseGanttProgress`.
+   * Fraction from 0 to 1. `0.5` is 50% and `1` is 100%.
+   * Values below 0 or above 1 are clamped. In development, a value above 1
+   * also logs a warning: it is not read as a percent.
    * Omitted, NaN, and non-finite values draw the solid status bar.
    */
   progress?: number
@@ -521,17 +522,22 @@ export const GANTT_PROGRESS_PAINT = {
 } as const
 
 /**
- * Reads `progress`.
- * - Finite numbers from 0 to 1 are a fraction. `1` is 100%, not 1%.
- * - Finite numbers above 1 and up to 100 are a percent (`40` → 0.4).
- * - Below 0 clamps to 0. Above 100 clamps to 1.
- * - NaN, Infinity, and anything that is not a number are missing (`null`), not 0.
+ * Reads `progress` as a fraction from 0 to 1.
+ * `0.5` is 50%. `1` is 100%.
+ * Below 0 clamps to 0. Above 1 clamps to 1.
+ * In development, a finite value above 1 also warns once per call.
+ * It is not treated as a percent: `50` becomes 1, not 50%.
+ * NaN, Infinity, and anything that is not a number are missing (`null`), not 0.
  */
 export function parseGanttProgress(value: unknown): number | null {
   if (typeof value !== "number" || !Number.isFinite(value)) return null
+  if (process.env.NODE_ENV !== "production" && value > 1) {
+    console.warn(
+      `[timeline-gantt] progress ${value} is outside 0–1 and was clamped to 1. Pass a fraction (0.5 is 50%).`,
+    )
+  }
   if (value < 0) return 0
-  if (value > 100) return 1
-  if (value > 1) return value / 100
+  if (value > 1) return 1
   return value
 }
 

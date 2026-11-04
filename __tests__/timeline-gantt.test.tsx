@@ -64,28 +64,90 @@ describe("TimelineGantt progress", () => {
   ]
 
   it("exposes a progressbar, clamps extremes, and ignores NaN", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
     render(
       <TimelineGantt
         items={[
-          { ...items[1]!, progress: 150 },
+          { ...items[1]!, progress: 50 },
           { ...items[0]!, id: "nada", label: "Sin número", progress: Number.NaN },
-          { ...items[2]!, id: "cero", label: "En cero", progress: -8 },
-          { ...items[1]!, id: "uno", label: "Un día", start: "2026-10-22", end: "2026-10-22", progress: 40 },
+          { ...items[2]!, id: "cero", label: "En cero", progress: 0 },
+          { ...items[1]!, id: "lleno", label: "Lleno", start: "2026-10-18", end: "2026-10-24", progress: 1 },
+          { ...items[1]!, id: "uno", label: "Un día", start: "2026-10-22", end: "2026-10-22", progress: 0.5 },
         ]}
         now={now}
         scale="day"
       />,
     )
     expect(screen.getByRole("progressbar", { name: /Catálogo de feria/ })).toHaveAttribute("aria-valuenow", "100")
+    expect(warn).toHaveBeenCalled()
     expect(screen.getByRole("button", { name: /Sin número/ })).not.toHaveAttribute("data-progress")
-    expect(screen.getByRole("progressbar", { name: /En cero/ })).toHaveAttribute("aria-valuenow", "0")
+    const empty = screen.getByRole("progressbar", { name: /En cero/ })
+    expect(empty).toHaveAttribute("aria-valuenow", "0")
+    expect(empty.className).toContain("border-foreground")
+    expect(empty.querySelector("[data-slot=timeline-gantt-progress-fill]")).toBeNull()
+    const full = screen.getByRole("progressbar", { name: /Lleno/ })
+    expect(full).toHaveAttribute("aria-valuenow", "100")
+    expect(full.className).toContain("border-foreground")
+    expect(full.querySelector("[data-slot=timeline-gantt-progress-fill]")).not.toBeNull()
     const day = screen.getByRole("progressbar", { name: /Un día/ })
     expect(day).toHaveAttribute("aria-valuemin", "0")
     expect(day).toHaveAttribute("aria-valuemax", "100")
-    expect(day).toHaveAttribute("aria-valuenow", "40")
+    expect(day).toHaveAttribute("aria-valuenow", "50")
     const fill = document.querySelector("[data-slot=timeline-gantt-progress-fill]")
     expect(fill?.className).toContain("origin-left")
     expect(fill?.getAttribute("style") ?? "").not.toMatch(/width/)
+    warn.mockRestore()
+  })
+
+  it("leaves a group with no known ratio unlabeled", () => {
+    render(
+      <TimelineGantt
+        now={now}
+        workstreams={[
+          { id: "impresion", label: "Impresión" },
+          { id: "archivo", label: "Archivo" },
+        ]}
+        items={[
+          { ...base[1]!, progress: 0.5 },
+          { ...base[2]!, id: "caja", workstream: "archivo", label: "Caja sin dato" },
+        ]}
+      />,
+    )
+    expect(screen.queryByText("Sin avance")).not.toBeInTheDocument()
+    expect(screen.queryByRole("progressbar", { name: /Archivo/ })).not.toBeInTheDocument()
+    expect(screen.getByText("Archivo, 1").textContent).toBe("Archivo, 1")
+    expect(screen.getByRole("progressbar", { name: /Impresión, 50% de avance/ })).toHaveAttribute("aria-valuenow", "50")
+  })
+
+  it("truncates a long name beside the percent", () => {
+    const token = "Y".repeat(60)
+    render(<TimelineGantt now={now} labelWidth={140} items={[{ ...base[1]!, label: token, progress: 0.5 }]} />)
+    const name = screen.getAllByText(token).find((node) => node.className.includes("truncate"))
+    expect(name?.className).toContain("truncate")
+    expect(name?.parentElement?.className).toContain("overflow-hidden")
+  })
+
+  it("skips the fill scale when motion is reduced", async () => {
+    const previous = window.matchMedia
+    window.matchMedia = (query: string) =>
+      ({
+        matches: query.includes("prefers-reduced-motion"),
+        media: query,
+        onchange: null,
+        addListener: () => {},
+        removeListener: () => {},
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        dispatchEvent: () => false,
+      }) as MediaQueryList
+    try {
+      render(<TimelineGantt now={now} items={[{ ...base[1]!, progress: 0.5 }]} />)
+      await waitFor(() => expect(screen.getByRole("region", { name: "Cronograma" })).toHaveAttribute("data-reduced-motion", "true"))
+      const fill = document.querySelector("[data-slot=timeline-gantt-progress-fill]")
+      expect(fill?.getAttribute("style") ?? "").not.toMatch(/scaleX\(0\)/)
+    } finally {
+      window.matchMedia = previous
+    }
   })
 
   it("rolls a group up by duration and leaves an empty group without a fake zero", () => {

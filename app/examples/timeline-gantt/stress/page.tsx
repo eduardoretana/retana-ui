@@ -84,8 +84,8 @@ export default function StressPage() {
             workstreams={demoWorkstreams}
             items={[
               one({ id: "cero", label: "Cero", progress: 0 }),
-              one({ id: "lleno", label: "Lleno", progress: 100, start: "2026-10-21", end: "2026-10-26", status: "done" }),
-              one({ id: "mas", label: "Más de cien", progress: 140, start: "2026-10-22", end: "2026-10-23", status: "active" }),
+              one({ id: "lleno", label: "Lleno", progress: 1, start: "2026-10-21", end: "2026-10-26", status: "done" }),
+              one({ id: "mas", label: "Fuera de rango", progress: 1.4, start: "2026-10-22", end: "2026-10-23", status: "active" }),
               one({ id: "nan", label: "NaN", progress: Number.NaN, start: "2026-10-18", end: "2026-10-19", status: "blocked" }),
               one({ id: "dia", label: "Un día", progress: 0.4, start: "2026-10-25", end: "2026-10-25" }),
               one({ id: "hito", label: "Hito", progress: 1, start: "2026-10-25", end: "2026-10-20", milestone: true, status: "planned" }),

@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs"
 import path from "node:path"
 
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 
 import {
   GANTT_PROGRESS_PAINT,
@@ -15,15 +15,25 @@ import {
 const root = path.resolve(import.meta.dirname, "..")
 
 describe("parseGanttProgress", () => {
-  it("reads a fraction, a percent, and clamps the ends", () => {
+  it("reads a fraction and clamps anything outside 0–1", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
     expect(parseGanttProgress(0)).toBe(0)
-    expect(parseGanttProgress(0.4)).toBe(0.4)
+    expect(parseGanttProgress(0.5)).toBe(0.5)
     expect(parseGanttProgress(1)).toBe(1)
     expect(parseGanttProgress(0.01)).toBeCloseTo(0.01)
-    expect(parseGanttProgress(40)).toBeCloseTo(0.4)
-    expect(parseGanttProgress(100)).toBe(1)
-    expect(parseGanttProgress(150)).toBe(1)
     expect(parseGanttProgress(-4)).toBe(0)
+    expect(parseGanttProgress(50)).toBe(1)
+    expect(parseGanttProgress(1.5)).toBe(1)
+    expect(warn).toHaveBeenCalledTimes(2)
+    expect(warn.mock.calls[0]?.[0]).toEqual(expect.stringContaining("outside 0–1"))
+    warn.mockRestore()
+  })
+
+  it("does not warn for a fraction inside the range", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    expect(parseGanttProgress(0.5)).toBe(0.5)
+    expect(warn).not.toHaveBeenCalled()
+    warn.mockRestore()
   })
 
   it("treats non-finite values as missing, not as zero", () => {
@@ -81,7 +91,7 @@ describe("workstreamProgress", () => {
   })
 
   it("counts a one-day task", () => {
-    const result = workstreamProgress([{ start: "2026-10-20", end: "2026-10-20", progress: 40 }])
+    const result = workstreamProgress([{ start: "2026-10-20", end: "2026-10-20", progress: 0.4 }])
     expect(result.ratio).toBeCloseTo(0.4)
     expect(result.weightDays).toBe(1)
   })

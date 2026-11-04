@@ -59,9 +59,20 @@ const barTone: Record<GanttStatus, string> = {
 
 const subscribe = () => () => {}
 
+function subscribeReduced(onStoreChange: () => void) {
+  const query = window.matchMedia("(prefers-reduced-motion: reduce)")
+  query.addEventListener("change", onStoreChange)
+  return () => query.removeEventListener("change", onStoreChange)
+}
+
 function useReducedFlag() {
   const hydrated = React.useSyncExternalStore(subscribe, () => true, () => false)
-  return !!useReducedMotion() && hydrated
+  const media = React.useSyncExternalStore(
+    subscribeReduced,
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    () => false,
+  )
+  return hydrated && (Boolean(useReducedMotion()) || media)
 }
 
 export type TimelineGanttClassNames = {
@@ -364,9 +375,6 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                     >
                       <span className={cn("truncate", chartHasProgress && "min-w-0 flex-1")}>{copy.workstream(group.label, group.tasks.length)}</span>
                       {rollup?.percent != null ? <span className="shrink-0 tabular-nums">{rollup.percent}%</span> : null}
-                      {chartHasProgress && rollup?.percent == null && group.tasks.length > 0 ? (
-                        <span className="shrink-0 font-normal text-muted-foreground">{copy.noProgress}</span>
-                      ) : null}
                     </div>
                     {rollup?.ratio != null && spanBar ? (
                       <div className="relative bg-muted/40" style={{ height: GANTT_GROUP_HEIGHT }}>
@@ -455,7 +463,7 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                         <div
                           className={cn(
                             "sticky start-0 z-10 flex items-center border-r border-b border-border bg-background px-2 text-sm",
-                            percent != null && "min-w-0 gap-2",
+                            percent != null && "min-w-0 gap-2 overflow-hidden",
                             classNames?.label,
                           )}
                           style={{ width: labelWidth, height: GANTT_ROW_HEIGHT }}

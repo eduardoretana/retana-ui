@@ -96,8 +96,8 @@ export const extremes: GanttFixture = {
   ],
   items: [
     { id: "cero", workstream: "impresion", label: "Sin empezar", start: "2026-10-20", end: "2026-10-24", status: "planned", progress: 0 },
-    { id: "lleno", workstream: "impresion", label: "Cerrada", start: "2026-10-13", end: "2026-10-18", status: "done", progress: 100 },
-    { id: "mas", workstream: "impresion", label: "Por encima", start: "2026-10-21", end: "2026-10-27", status: "active", progress: 150 },
+    { id: "lleno", workstream: "impresion", label: "Cerrada", start: "2026-10-13", end: "2026-10-18", status: "done", progress: 1 },
+    { id: "mas", workstream: "impresion", label: "Por encima", start: "2026-10-21", end: "2026-10-27", status: "active", progress: 1.5 },
     { id: "menos", workstream: "impresion", label: "Por debajo", start: "2026-10-22", end: "2026-10-26", status: "blocked", progress: -4 },
     { id: "nan", workstream: "impresion", label: "Sin número", start: "2026-10-19", end: "2026-10-23", status: "at-risk", progress: Number.NaN },
     { id: "hito", workstream: "impresion", label: "Entrega", start: "2026-10-25", end: "2026-10-25", status: "done", progress: 1, milestone: true },
@@ -116,7 +116,7 @@ export const oneday: GanttFixture = {
 
 export const many: GanttFixture = {
   workstreams,
-  items: manyGanttItems(24).map((item, index) => ({ ...item, progress: (index * 17) % 101 })),
+  items: manyGanttItems(24).map((item, index) => ({ ...item, progress: (index % 11) / 10 })),
 }
 
 export const editor: GanttFixture = { ...filled, editingId: "catalogo" }

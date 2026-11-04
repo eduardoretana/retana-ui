@@ -31683,7 +31683,7 @@
       "categories": [
         "table"
       ],
-      "docs": "Clean-room schedule. Pass items with id, workstream, label, start, end, status, and optional deps. Dates are inclusive YYYY-MM-DD and the day is read in UTC. progress is optional: a fraction 0–1, where 1 means 100%, or a percent from just above 1 through 100. Values below 0 or above 100 clamp. NaN is ignored and the bar stays the solid status color. The fill uses scaleX, foreground on a muted track, and a foreground border so the amount is not color alone. Group rows show a duration-weighted summary. Tasks with no progress are left out of that ratio. milestone tasks and ranges whose end is before the start weigh 0. An empty group has no percent. onSelect, onHover, and onTaskChangeRequest do not write the items. editingId opens the sheet; the host applies the patch. End must be on or after start. Arrow keys move between bars. The scale header stays pinned while the timeline scrolls sideways. The today line uses now, which should be a stable timestamp in tests. Reduced motion skips the bar fade and the fill scale. Answer no if the CLI asks to overwrite button, empty, field, input, label, sheet, skeleton, or tooltip-card. The item ships no theme. Shadcn Studio Gantt Chart 04 is a Pro reference: layout and interaction only. No mockup source, copy, colors, or assets were copied.",
+      "docs": "Clean-room schedule. Pass items with id, workstream, label, start, end, status, and optional deps. Dates are inclusive YYYY-MM-DD and the day is read in UTC. progress is an optional fraction from 0 to 1 (0.5 is 50%, 1 is 100%). Values below 0 or above 1 clamp. In development, a value above 1 also warns; it is not read as a percent. NaN is ignored and the bar stays the solid status color. The fill uses scaleX, foreground on a muted track, and a foreground border so the amount is not color alone. Group rows show a duration-weighted summary only when that group has a known ratio. Tasks with no progress are left out of that ratio. A group with no known ratio shows its name and count only, not 0% and not a stand-in label. milestone tasks and ranges whose end is before the start weigh 0. An empty group has no percent. onSelect, onHover, and onTaskChangeRequest do not write the items. editingId opens the sheet; the host applies the patch. The sheet's progress field is a percent from 0 to 100 and the patch stores the fraction. End must be on or after start. Arrow keys move between bars. The scale header stays pinned while the timeline scrolls sideways. The today line uses now, which should be a stable timestamp in tests. Reduced motion skips the bar fade and the fill scale. Answer no if the CLI asks to overwrite button, empty, field, input, label, sheet, skeleton, or tooltip-card. The item ships no theme. Shadcn Studio Gantt Chart 04 is a Pro reference: layout and interaction only. No mockup source, copy, colors, or assets were copied.",
       "files": [
         {
           "path": "registry/ui/timeline-gantt.tsx",
@@ -31767,7 +31767,7 @@
           {
             "name": "progress",
             "type": "number",
-            "description": "Optional per task. 0–1 is a fraction (1 is 100%). Above 1 through 100 is a percent. Below 0 and above 100 clamp. NaN draws the solid status bar."
+            "description": "Optional fraction 0–1 (0.5 is 50%). Below 0 and above 1 clamp. In development, above 1 warns and is not read as a percent. NaN draws the solid status bar."
           },
           {
             "name": "workstreamProgress",
