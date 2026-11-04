@@ -35,6 +35,14 @@ import { cn } from "@/lib/utils"
 
 type SlideState = "idle" | "sliding" | "success"
 
+const SLIDE_SLOP = 8
+
+/** Vertical movement yields to the page scroll. Horizontal movement owns the slider. */
+export function slideAxis(dx: number, dy: number, slop = SLIDE_SLOP): "pending" | "x" | "y" {
+  if (Math.abs(dx) < slop && Math.abs(dy) < slop) return "pending"
+  return Math.abs(dy) > Math.abs(dx) ? "y" : "x"
+}
+
 export type SlideToConfirmProps = Omit<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
   "onClick" | "onDrag" | "onDragStart" | "onDragEnd" | "onAnimationStart" | "style"
@@ -115,6 +123,7 @@ export function SlideToConfirm({
   const intendedRef = React.useRef(0)
   const armedRef = React.useRef(false)
   const draggingRef = React.useRef(false)
+  const touchGate = React.useRef<{ id: number; x: number; y: number } | null>(null)
   const [state, setState] = React.useState<SlideState>("idle")
   const [armed, setArmed] = React.useState(false)
   const [range, setRange] = React.useState(0)
@@ -203,10 +212,7 @@ export function SlideToConfirm({
     }
   }
 
-  const handlePointerDown = (event: React.PointerEvent<HTMLButtonElement>) => {
-    onPointerDown?.(event)
-    if (locked || range <= 0 || event.defaultPrevented) return
-    if (event.pointerType === "mouse" && event.button !== 0) return
+  const beginDrag = (event: React.PointerEvent<HTMLButtonElement>) => {
     event.currentTarget.setPointerCapture(event.pointerId)
     const current = clamp01(x.get() / range)
     originRef.current = event.clientX - unresist(current, resistance) * range
@@ -214,7 +220,26 @@ export function SlideToConfirm({
     setState("sliding")
   }
 
+  const handlePointerDown = (event: React.PointerEvent<HTMLButtonElement>) => {
+    onPointerDown?.(event)
+    if (locked || range <= 0 || event.defaultPrevented) return
+    if (event.pointerType === "mouse" && event.button !== 0) return
+    if (event.pointerType === "touch") {
+      touchGate.current = { id: event.pointerId, x: event.clientX, y: event.clientY }
+      return
+    }
+    beginDrag(event)
+  }
+
   const handlePointerMove = (event: React.PointerEvent<HTMLButtonElement>) => {
+    const gate = touchGate.current
+    if (gate && gate.id === event.pointerId) {
+      const axis = slideAxis(event.clientX - gate.x, event.clientY - gate.y)
+      if (axis === "pending") return
+      touchGate.current = null
+      if (axis === "y") return
+      beginDrag(event)
+    }
     if (!draggingRef.current || range <= 0) return
     const raw = event.clientX - originRef.current
     const next = raw < 0 ? -PULL_BACK * (1 - 1 / (1 + -raw / 60)) : resist(clamp01(raw / range), resistance) * range
@@ -224,6 +249,7 @@ export function SlideToConfirm({
   }
 
   const handlePointerEnd = () => {
+    touchGate.current = null
     if (!draggingRef.current) return
     draggingRef.current = false
     release()
@@ -267,7 +293,7 @@ export function SlideToConfirm({
       data-armed={armed || undefined}
       data-slot="slide-to-confirm"
       className={cn(
-        "group/slide relative inline-flex h-12 min-w-64 items-center overflow-hidden rounded-full border border-border bg-muted select-none",
+        "group/slide relative inline-flex h-12 min-w-64 touch-pan-y items-center overflow-hidden rounded-full border border-border bg-muted select-none",
         disabled && "cursor-not-allowed opacity-50",
         className,
       )}

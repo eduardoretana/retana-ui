@@ -8,7 +8,7 @@ import { MorphDialog } from "@/registry/ui/morph-dialog"
 import { MorphPopover } from "@/registry/ui/morph-popover"
 import { setPressSoundMuted } from "@/registry/ui/press-sound"
 import { ShortcutButton } from "@/registry/ui/shortcut-button"
-import { SlideToConfirm } from "@/registry/ui/slide-to-confirm"
+import { SlideToConfirm, slideAxis } from "@/registry/ui/slide-to-confirm"
 import { SpotlightButton } from "@/registry/ui/spotlight-button"
 import { Squircle, squirclePathString } from "@/registry/ui/squircle"
 import { ThemeSwitch } from "@/registry/ui/theme-switch"
@@ -129,6 +129,14 @@ describe("ported buttons", () => {
   it("renders the spotlight control", () => {
     render(<SpotlightButton>Continue</SpotlightButton>)
     expect(screen.getByRole("button", { name: "Continue" })).toBeInTheDocument()
+  })
+
+  it("lets a vertical touch scroll and keeps horizontal drag for the slider", () => {
+    expect(slideAxis(2, 3)).toBe("pending")
+    expect(slideAxis(4, 20)).toBe("y")
+    expect(slideAxis(20, 4)).toBe("x")
+    render(<SlideToConfirm label="Send" />)
+    expect(document.querySelector("[data-slot='slide-to-confirm']")?.className).toContain("touch-pan-y")
   })
 
   it("confirms from the keyboard once the threshold is crossed", async () => {

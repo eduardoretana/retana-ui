@@ -22,7 +22,7 @@ import {
   type TimelineZoom,
   type ViewConfig,
 } from "@/registry/retana/lib/multi-view"
-import { usePrefersReducedMotion } from "@/registry/retana/ui/multi-view-fields"
+import { TOUCH_HOLD_MS, TOUCH_SLOP_PX, touchIntent, usePrefersReducedMotion } from "@/registry/retana/ui/multi-view-fields"
 
 const UNIT: Record<TimelineZoom, number> = {
   day: 28,
@@ -294,14 +294,89 @@ function TimelineRow({
   const range = readRange(record, startField, endField)
   const place = range ? barPlacement(rangeStart, range.start, range.end, zoom, weekStartsOn) : null
   const drag = React.useRef<{ edge: "move" | "start" | "end"; x: number; start: string; end: string } | null>(null)
+  const barRef = React.useRef<HTMLButtonElement | null>(null)
+  const touch = React.useRef<BarTouch | null>(null)
+  const [holding, setHolding] = React.useState(false)
+  const openRef = React.useRef(onOpen)
+  const commitRef = React.useRef(onCommit)
+  React.useEffect(() => {
+    openRef.current = onOpen
+    commitRef.current = onCommit
+  }, [onOpen, onCommit])
+  React.useEffect(() => {
+    const move = (event: PointerEvent) => {
+      const session = touch.current
+      if (!session || session.pointerId !== event.pointerId || session.phase !== "pending") return
+      const intent = touchIntent({ dx: event.clientX - session.x, dy: event.clientY - session.y, elapsedMs: 0, released: false })
+      if (intent !== "scroll" && intent !== "cancel") return
+      window.clearTimeout(session.timer)
+      session.phase = intent
+      setHolding(false)
+    }
+    const end = (event: PointerEvent) => {
+      const session = touch.current
+      if (!session || session.pointerId !== event.pointerId) return
+      window.clearTimeout(session.timer)
+      touch.current = null
+      setHolding(false)
+      const dx = event.clientX - session.x
+      const dy = event.clientY - session.y
+      if (session.phase === "scroll" || session.phase === "cancel") return
+      const units = session.phase === "hold" ? Math.round(dx / unit) : 0
+      if (!units) {
+        if (session.edge === "move" && Math.hypot(dx, dy) <= TOUCH_SLOP_PX) openRef.current?.(record.id)
+        return
+      }
+      const next = session.edge === "move"
+        ? moveRange(session.start, session.end, zoom, units)
+        : resizeRange(session.start, session.end, session.edge, zoom, units)
+      if (next) commitRef.current(record.id, next.start, next.end)
+    }
+    window.addEventListener("pointermove", move)
+    window.addEventListener("pointerup", end)
+    window.addEventListener("pointercancel", end)
+    return () => {
+      window.removeEventListener("pointermove", move)
+      window.removeEventListener("pointerup", end)
+      window.removeEventListener("pointercancel", end)
+      if (touch.current) window.clearTimeout(touch.current.timer)
+    }
+  }, [record.id, unit, zoom])
 
   function onPointerDown(event: React.PointerEvent<HTMLButtonElement>, edge: "move" | "start" | "end") {
     if (readOnly || !range) return
+    if (event.pointerType === "touch") {
+      const session: BarTouch = {
+        pointerId: event.pointerId,
+        x: event.clientX,
+        y: event.clientY,
+        edge,
+        start: range.start,
+        end: range.end,
+        phase: "pending",
+        timer: 0,
+      }
+      session.timer = window.setTimeout(() => {
+        if (touch.current !== session || session.phase !== "pending") return
+        session.phase = "hold"
+        setHolding(true)
+        const node = barRef.current
+        if (!node) return
+        try {
+          node.setPointerCapture(event.pointerId)
+        } catch {
+          /* The pointer already ended. */
+        }
+      }, TOUCH_HOLD_MS)
+      touch.current = session
+      return
+    }
     event.currentTarget.setPointerCapture(event.pointerId)
     drag.current = { edge, x: event.clientX, start: range.start, end: range.end }
   }
 
   function onPointerUp(event: React.PointerEvent<HTMLButtonElement>) {
+    if (event.pointerType === "touch") return
     const session = drag.current
     drag.current = null
     if (!session) return
@@ -342,10 +417,13 @@ function TimelineRow({
       <div className="relative h-10" style={{ width }}>
         {place && range ? (
           <button
+            ref={barRef}
             type="button"
+            data-gesture={holding ? "holding" : "ready"}
             className={cn(
-              "absolute top-2 flex h-6 items-center overflow-hidden rounded-md bg-primary/15 px-2 text-xs text-foreground ring-1 ring-primary/30 focus-visible:ring-2 focus-visible:ring-ring",
+              "absolute top-2 flex h-6 touch-pan-y items-center overflow-hidden rounded-md bg-primary/15 px-2 text-xs text-foreground ring-1 ring-primary/30 focus-visible:ring-2 focus-visible:ring-ring",
               reduced && "transition-none",
+              holding && "touch-none",
               barClassName,
             )}
             style={{ left: place.offset * unit, width: Math.max(place.span * unit - 4, 16) }}
@@ -366,6 +444,17 @@ function TimelineRow({
       </div>
     </div>
   )
+}
+
+type BarTouch = {
+  pointerId: number
+  x: number
+  y: number
+  edge: "move" | "start" | "end"
+  start: string
+  end: string
+  phase: "pending" | "hold" | "scroll" | "cancel"
+  timer: number
 }
 
 function edgeFromTarget(event: React.PointerEvent<HTMLButtonElement>): "move" | "start" | "end" {
