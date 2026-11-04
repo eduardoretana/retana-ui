@@ -31,7 +31,7 @@ import {
   type MultiRecord,
   type ViewConfig,
 } from "@/registry/retana/lib/multi-view"
-import { useContainerWidth, usePrefersReducedMotion } from "@/registry/retana/ui/multi-view-fields"
+import { useCoarsePointer, useContainerWidth, usePrefersReducedMotion } from "@/registry/retana/ui/multi-view-fields"
 
 export type ViewCalendarProps = {
   records: readonly MultiRecord[]
@@ -366,20 +366,45 @@ function RecordChip({
 }) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: record.id, disabled: readOnly })
   const title = recordTitle(record, fields, titleField)
+  const coarse = useCoarsePointer()
+  const [armed, setArmed] = React.useState(false)
+  const nodeRef = React.useRef<HTMLButtonElement | null>(null)
+  React.useEffect(() => {
+    if (!armed) return
+    const down = (event: PointerEvent) => {
+      if (event.target instanceof Node && nodeRef.current?.contains(event.target)) return
+      setArmed(false)
+    }
+    document.addEventListener("pointerdown", down)
+    return () => document.removeEventListener("pointerdown", down)
+  }, [armed])
+  const capture = !coarse || armed
   return (
     <button
-      ref={setNodeRef}
+      ref={(node) => {
+        nodeRef.current = node
+        setNodeRef(node)
+      }}
       type="button"
+      data-gesture={coarse ? (armed ? "armed" : "dormant") : "direct"}
       className={cn(
         "truncate rounded-md bg-muted px-1.5 py-0.5 text-left text-xs focus-visible:ring-2 focus-visible:ring-ring",
         isDragging && "opacity-40",
+        coarse && armed && "touch-none",
         className,
       )}
       aria-label={`Reschedule ${title}`}
       dir="auto"
-      onClick={() => onOpen?.(record.id)}
-      {...(readOnly ? {} : attributes)}
-      {...(readOnly ? {} : listeners)}
+      onClick={(event) => {
+        if (coarse && !readOnly && !armed) {
+          event.preventDefault()
+          setArmed(true)
+          return
+        }
+        onOpen?.(record.id)
+      }}
+      {...(readOnly || !capture ? {} : attributes)}
+      {...(readOnly || !capture ? {} : listeners)}
       onKeyDown={(event) => {
         if (readOnly) return
         if (event.altKey && (event.key === "ArrowLeft" || event.key === "ArrowRight")) {

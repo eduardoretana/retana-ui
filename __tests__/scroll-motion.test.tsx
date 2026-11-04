@@ -102,6 +102,23 @@ describe("StaggerReveal", () => {
     expect(screen.getByText("Ceniza")).toBeInTheDocument()
     expect(screen.getByText("Sílice")).toBeInTheDocument()
     expect(document.querySelector("[data-slot='stagger-reveal']")).toHaveAttribute("data-reduced", "true")
+    const delays = [...document.querySelectorAll("[data-slot='stagger-item']")].map((node) => node.getAttribute("data-delay"))
+    expect(delays).toEqual(["0", "0"])
+  })
+
+  it("shrinks the delay and caps the tail of a long group", () => {
+    render(
+      <StaggerReveal>
+        {Array.from({ length: 8 }, (_, index) => (
+          <StaggerItem key={index}>Pieza {index}</StaggerItem>
+        ))}
+      </StaggerReveal>,
+    )
+    const delays = [...document.querySelectorAll("[data-slot='stagger-item']")].map((node) => Number(node.getAttribute("data-delay")))
+    expect(delays[0]).toBe(0)
+    expect(delays[1] - delays[0]).toBeGreaterThan(delays[2] - delays[1])
+    expect(delays[7]).toBe(delays[5])
+    expect(delays[7]).toBeLessThan(0.3)
   })
 })
 

@@ -4,7 +4,7 @@
 
 import { useEffect, useId, useLayoutEffect, useRef, useState } from "react"
 import type { ReactNode } from "react"
-import { MotionConfig, motion, useReducedMotion } from "motion/react"
+import { MotionConfig, motion, stagger, useReducedMotion } from "motion/react"
 import type { Variants } from "motion/react"
 import { ArrowRight, ArrowUpRight, BarChart3, BookOpen, Check, ChevronsUpDown, Database, Gauge, ListTodo, MessageSquare, Minus, Receipt, Search, Settings, Sparkles, Split, Users } from "lucide-react"
 
@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils"
 import { CopyButton } from "@/registry/retana/ui/copy-button"
 import { Sparkline } from "@/registry/retana/ui/sparkline"
 import { SegmentedControl } from "@/registry/retana/ui/segmented-control"
-import { motionPresets } from "@/registry/retana/lib/motion"
+import { motionPresets, staggerDelaySeconds } from "@/registry/retana/lib/motion"
 
 import { dashboardInsight, dashboardKpis, dashboardMovers, dashboardRanges, dashboardSeries, editorialBrands } from "./hero-section-data"
 import type { DashboardPoint, DashboardRange } from "./hero-section-data"
@@ -78,11 +78,40 @@ export type HeroSectionClassNames = {
   mesh?: string
 }
 
-const rise = {
-  hidden: { opacity: 0, y: 12, filter: `blur(${motionPresets.blur.subtle}px)` },
-  shown: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.64, ease: [...motionPresets.ease.enter] as [number, number, number, number] } },
-} satisfies Variants
-const group = { hidden: {}, shown: { transition: { staggerChildren: motionPresets.stagger.line, delayChildren: 0.04 } } }
+const enterEase = [...motionPresets.ease.enter] as [number, number, number, number]
+
+function heroGroup(reduced: boolean): Variants {
+  if (reduced) return { hidden: {}, shown: {} }
+  return { hidden: {}, shown: { transition: { delayChildren: stagger(motionPresets.stagger.marketing, { ease: "easeOut" }) } } }
+}
+
+function heroRise(reduced: boolean): Variants {
+  if (reduced) return { hidden: { opacity: 0 }, shown: { opacity: 1, transition: { duration: motionPresets.duration.instant } } }
+  return {
+    hidden: { opacity: 0, y: 12, filter: `blur(${motionPresets.blur.subtle}px)` },
+    shown: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.55, ease: enterEase } },
+  }
+}
+
+function heroMediaMotion(reduced: boolean, animateIn: boolean) {
+  if (!animateIn) return { initial: false as const, animate: { opacity: 1, y: 0 }, transition: { duration: 0 } }
+  if (reduced) {
+    return {
+      initial: { opacity: 0 },
+      animate: { opacity: 1, y: 0 },
+      transition: { duration: motionPresets.duration.instant },
+    }
+  }
+  return {
+    initial: { opacity: 0, y: 8 },
+    animate: { opacity: 1, y: 0 },
+    transition: {
+      duration: 0.55,
+      ease: enterEase,
+      delay: staggerDelaySeconds(3, { step: motionPresets.stagger.marketing }),
+    },
+  }
+}
 
 const DASHBOARD_MESH = [
   { x: 0.1, y: 0.92, spread: 0.7 },
@@ -388,38 +417,36 @@ function DashboardHero(props: SharedProps) {
     <MotionConfig reducedMotion="user">
       <section data-slot="hero-section" data-variant="dashboard" className={shell(props)} aria-labelledby={id}>
         <HeroMesh points={DASHBOARD_MESH} className={props.classNames?.mesh} />
-        <motion.div className="relative z-10 mx-auto grid max-w-3xl justify-items-center gap-5 px-4 pt-8 text-center" variants={group} initial={props.animateIn ? "hidden" : false} animate="shown">
+        <motion.div className="relative z-10 mx-auto grid max-w-3xl justify-items-center gap-5 px-4 pt-8 text-center" variants={heroGroup(reduced)} initial={props.animateIn ? "hidden" : false} animate="shown">
           {props.announcement ? (
-            <motion.div variants={rise}>
+            <motion.div variants={heroRise(reduced)}>
               <AnnouncementLink action={props.announcement} />
             </motion.div>
           ) : null}
-          <motion.h1 id={id} variants={rise} className={cn("m-0 max-w-[14ch] font-heading text-3xl font-medium tracking-tight text-balance wrap-anywhere @min-[640px]/hero:text-5xl", props.classNames?.title)}>
+          <motion.h1 id={id} variants={heroRise(reduced)} className={cn("m-0 max-w-[14ch] font-heading text-3xl font-medium tracking-tight text-balance wrap-anywhere @min-[640px]/hero:text-5xl", props.classNames?.title)}>
             {title}
           </motion.h1>
           {description ? (
-            <motion.p variants={rise} className={cn("m-0 max-w-xl text-pretty text-muted-foreground @min-[640px]/hero:text-lg", props.classNames?.description)}>
+            <motion.p variants={heroRise(reduced)} className={cn("m-0 max-w-xl text-pretty text-muted-foreground @min-[640px]/hero:text-lg", props.classNames?.description)}>
               {description}
             </motion.p>
           ) : null}
-          <motion.div variants={rise} className={props.classNames?.actions}>
+          <motion.div variants={heroRise(reduced)} className={props.classNames?.actions}>
             <Actions primary={primary} secondary={secondary} className="justify-center" />
           </motion.div>
           {props.install?.[0] ? (
-            <motion.div variants={rise} className="w-full">
+            <motion.div variants={heroRise(reduced)} className="w-full">
               <InstallLine command={props.install[0].command} />
             </motion.div>
           ) : null}
-          <motion.p variants={rise} className="m-0 text-sm text-muted-foreground">{copy.fine}</motion.p>
+          <motion.p variants={heroRise(reduced)} className="m-0 text-sm text-muted-foreground">{copy.fine}</motion.p>
           {props.meta && props.meta.length > 0 ? <MetaList items={props.meta} /> : null}
         </motion.div>
         <motion.div
           ref={stage}
           data-slot="hero-media"
           className={cn("relative z-10 mx-auto mt-8 w-full max-w-6xl flex-1 px-4", props.classNames?.media)}
-          initial={props.animateIn ? { opacity: 0, y: 40 } : false}
-          animate={{ opacity: 1, y: 0 }}
-          transition={reduced ? { duration: motionPresets.duration.standard } : { duration: 1, ease: [...motionPresets.ease.enter], delay: 0.28 }}
+          {...heroMediaMotion(reduced, props.animateIn)}
         >
           <div className={cn("origin-top", narrow ? "min-h-[28rem]" : "min-h-[36rem]")}>
             <DashboardWindow narrow={narrow} />
@@ -572,28 +599,28 @@ function WorkflowHero(props: SharedProps) {
     <MotionConfig reducedMotion="user">
       <section ref={root} data-slot="hero-section" data-variant="workflow" className={cn(shell(props), "bg-[radial-gradient(circle,var(--border)_1px,transparent_1.5px)] [background-size:22px_22px]")} aria-labelledby={id}>
         <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-4 py-10 @min-[960px]/hero:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)] @min-[960px]/hero:px-8 @min-[960px]/hero:py-16">
-          <motion.div className="grid justify-items-start gap-5" variants={group} initial={props.animateIn ? "hidden" : false} animate="shown">
+          <motion.div className="grid justify-items-start gap-5" variants={heroGroup(reduced)} initial={props.animateIn ? "hidden" : false} animate="shown">
             {props.announcement ? (
-              <motion.div variants={rise}>
+              <motion.div variants={heroRise(reduced)}>
                 <AnnouncementLink action={props.announcement} />
               </motion.div>
             ) : null}
-            <motion.h1 id={id} variants={rise} className={cn("m-0 max-w-[12ch] font-heading text-3xl font-medium tracking-tight text-balance wrap-anywhere @min-[640px]/hero:text-5xl", props.classNames?.title)}>
+            <motion.h1 id={id} variants={heroRise(reduced)} className={cn("m-0 max-w-[12ch] font-heading text-3xl font-medium tracking-tight text-balance wrap-anywhere @min-[640px]/hero:text-5xl", props.classNames?.title)}>
               {title}
             </motion.h1>
-            {description ? <motion.p variants={rise} className={cn("m-0 max-w-lg text-pretty text-muted-foreground @min-[640px]/hero:text-lg", props.classNames?.description)}>{description}</motion.p> : null}
-            <motion.div variants={rise} className={props.classNames?.actions}>
+            {description ? <motion.p variants={heroRise(reduced)} className={cn("m-0 max-w-lg text-pretty text-muted-foreground @min-[640px]/hero:text-lg", props.classNames?.description)}>{description}</motion.p> : null}
+            <motion.div variants={heroRise(reduced)} className={props.classNames?.actions}>
               <Actions primary={primary} secondary={secondary} />
             </motion.div>
             {props.install?.[0] ? (
-              <motion.div variants={rise} className="w-full">
+              <motion.div variants={heroRise(reduced)} className="w-full">
                 <InstallLine command={props.install[0].command} />
               </motion.div>
             ) : null}
-            <motion.p variants={rise} className="m-0 text-sm text-muted-foreground">{copy.fine}</motion.p>
+            <motion.p variants={heroRise(reduced)} className="m-0 text-sm text-muted-foreground">{copy.fine}</motion.p>
             {props.meta && props.meta.length > 0 ? <MetaList items={props.meta} /> : null}
           </motion.div>
-          <motion.div data-slot="hero-media" className={cn("grid min-w-0 justify-items-center gap-4", props.classNames?.media)} initial={props.animateIn ? { opacity: 0, y: 24 } : false} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduced ? motionPresets.duration.standard : 1, ease: [...motionPresets.ease.enter], delay: reduced ? 0 : 0.28 }}>
+          <motion.div data-slot="hero-media" className={cn("grid min-w-0 justify-items-center gap-4", props.classNames?.media)} {...heroMediaMotion(reduced, props.animateIn)}>
             {props.plain && props.media ? props.media : (
               <>
                 <div className="flex w-full max-w-xl items-center justify-between gap-3">
@@ -671,6 +698,7 @@ function FlowNode({ box, status, icon, title, sub, meta }: { box: Box; status: S
 
 function EditorialHero(props: SharedProps) {
   const id = useId()
+  const reduced = !!useReducedMotion()
   const copy = COPY.editorial
   const title = props.title ?? copy.title
   const description = props.description ?? copy.description
@@ -682,31 +710,31 @@ function EditorialHero(props: SharedProps) {
       <section data-slot="hero-section" data-variant="editorial" className={shell(props)} aria-labelledby={id}>
         <HeroMesh points={EDITORIAL_MESH} className={props.classNames?.mesh} />
         <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-transparent to-background/40" aria-hidden="true" />
-        <motion.div className="relative z-10 mx-auto grid min-h-[28rem] w-full max-w-6xl content-center gap-8 px-4 py-12 @min-[640px]/hero:px-8" variants={group} initial={props.animateIn ? "hidden" : false} animate="shown">
+        <motion.div className="relative z-10 mx-auto grid min-h-[28rem] w-full max-w-6xl content-center gap-8 px-4 py-12 @min-[640px]/hero:px-8" variants={heroGroup(reduced)} initial={props.animateIn ? "hidden" : false} animate="shown">
           {props.announcement ? (
-            <motion.div variants={rise}>
+            <motion.div variants={heroRise(reduced)}>
               <AnnouncementLink action={props.announcement} />
             </motion.div>
           ) : null}
-          <motion.h1 id={id} variants={rise} className={cn("m-0 max-w-[14ch] font-heading text-4xl font-medium tracking-tight text-balance wrap-anywhere @min-[640px]/hero:text-6xl @min-[960px]/hero:text-7xl", props.classNames?.title)}>
+          <motion.h1 id={id} variants={heroRise(reduced)} className={cn("m-0 max-w-[14ch] font-heading text-4xl font-medium tracking-tight text-balance wrap-anywhere @min-[640px]/hero:text-6xl @min-[960px]/hero:text-7xl", props.classNames?.title)}>
             {title}
           </motion.h1>
           <div className="grid items-end gap-6 @min-[800px]/hero:grid-cols-[minmax(0,1fr)_auto]">
-            {description ? <motion.p variants={rise} className={cn("m-0 max-w-lg text-pretty text-muted-foreground @min-[640px]/hero:text-lg", props.classNames?.description)}>{description}</motion.p> : <span />}
-            <motion.div variants={rise} className={cn("grid justify-items-start gap-3 @min-[800px]/hero:justify-items-end", props.classNames?.actions)}>
+            {description ? <motion.p variants={heroRise(reduced)} className={cn("m-0 max-w-lg text-pretty text-muted-foreground @min-[640px]/hero:text-lg", props.classNames?.description)}>{description}</motion.p> : <span />}
+            <motion.div variants={heroRise(reduced)} className={cn("grid justify-items-start gap-3 @min-[800px]/hero:justify-items-end", props.classNames?.actions)}>
               <Actions primary={primary} secondary={secondary} />
               <p className="m-0 text-sm text-muted-foreground">{copy.fine}</p>
             </motion.div>
           </div>
           {props.install?.[0] ? (
-            <motion.div variants={rise}>
+            <motion.div variants={heroRise(reduced)}>
               <InstallLine command={props.install[0].command} />
             </motion.div>
           ) : null}
           {props.meta && props.meta.length > 0 ? <MetaList items={props.meta} /> : null}
-          {props.media ? <motion.div variants={rise} className={props.classNames?.media}>{props.media}</motion.div> : null}
+          {props.media ? <motion.div variants={heroRise(reduced)} className={props.classNames?.media}>{props.media}</motion.div> : null}
           {brands.length > 0 ? (
-            <motion.div variants={rise} className="grid gap-4 border-t border-border pt-6">
+            <motion.div variants={heroRise(reduced)} className="grid gap-4 border-t border-border pt-6">
               <p className="m-0 text-sm text-muted-foreground">Teams planning with this</p>
               <ul className="m-0 flex list-none flex-wrap gap-x-6 gap-y-3 p-0" aria-label="Sample customers">
                 {brands.map((brand) => (
@@ -723,6 +751,7 @@ function EditorialHero(props: SharedProps) {
 
 function PlainHero(props: SharedProps) {
   const id = useId()
+  const reduced = !!useReducedMotion()
   const copy = COPY[props.variant]
   const title = props.title ?? copy.title
   const description = props.description ?? copy.description
@@ -734,17 +763,17 @@ function PlainHero(props: SharedProps) {
       <section data-slot="hero-section" data-variant={props.variant} data-plain="" className={shell(props)} aria-labelledby={id}>
         {props.variant !== "workflow" ? <HeroMesh points={props.variant === "editorial" ? EDITORIAL_MESH : DASHBOARD_MESH} className={props.classNames?.mesh} /> : null}
         <div className={cn("relative z-10 mx-auto grid w-full max-w-6xl gap-10 px-4 py-12 @min-[640px]/hero:px-8", split && "items-center @min-[860px]/hero:grid-cols-2")}>
-          <motion.div className={cn("grid gap-5", split ? "justify-items-start text-left" : "mx-auto max-w-2xl justify-items-center text-center")} variants={group} initial={props.animateIn ? "hidden" : false} animate="shown">
-            {props.announcement ? <motion.div variants={rise}><AnnouncementLink action={props.announcement} /></motion.div> : null}
-            <motion.h1 id={id} variants={rise} className={cn("m-0 font-heading text-4xl font-medium tracking-tight text-balance wrap-anywhere", props.classNames?.title)}>{title}</motion.h1>
-            {description ? <motion.p variants={rise} className={cn("m-0 max-w-xl text-pretty text-muted-foreground", props.classNames?.description)}>{description}</motion.p> : null}
-            <motion.div variants={rise} className={props.classNames?.actions}>
+          <motion.div className={cn("grid gap-5", split ? "justify-items-start text-left" : "mx-auto max-w-2xl justify-items-center text-center")} variants={heroGroup(reduced)} initial={props.animateIn ? "hidden" : false} animate="shown">
+            {props.announcement ? <motion.div variants={heroRise(reduced)}><AnnouncementLink action={props.announcement} /></motion.div> : null}
+            <motion.h1 id={id} variants={heroRise(reduced)} className={cn("m-0 font-heading text-4xl font-medium tracking-tight text-balance wrap-anywhere", props.classNames?.title)}>{title}</motion.h1>
+            {description ? <motion.p variants={heroRise(reduced)} className={cn("m-0 max-w-xl text-pretty text-muted-foreground", props.classNames?.description)}>{description}</motion.p> : null}
+            <motion.div variants={heroRise(reduced)} className={props.classNames?.actions}>
               <Actions primary={primary} secondary={secondary} className={split ? undefined : "justify-center"} />
             </motion.div>
-            {props.install?.[0] ? <motion.div variants={rise} className="w-full"><InstallLine command={props.install[0].command} /></motion.div> : null}
+            {props.install?.[0] ? <motion.div variants={heroRise(reduced)} className="w-full"><InstallLine command={props.install[0].command} /></motion.div> : null}
             {props.meta && props.meta.length > 0 ? <MetaList items={props.meta} /> : null}
           </motion.div>
-          {props.media ? <motion.div className={cn("min-w-0", props.classNames?.media)} variants={rise} initial={props.animateIn ? "hidden" : false} animate="shown">{props.media}</motion.div> : null}
+          {props.media ? <motion.div className={cn("min-w-0", props.classNames?.media)} variants={heroRise(reduced)} initial={props.animateIn ? "hidden" : false} animate="shown">{props.media}</motion.div> : null}
         </div>
       </section>
     </MotionConfig>

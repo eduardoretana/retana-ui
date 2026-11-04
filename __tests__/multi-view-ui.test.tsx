@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react"
+import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { useState } from "react"
 import { describe, expect, it, vi } from "vitest"
@@ -114,6 +114,24 @@ describe("ViewKanban", () => {
   })
 })
 
+function mockCoarsePointer() {
+  const original = window.matchMedia
+  window.matchMedia = (query: string) =>
+    ({
+      matches: query.includes("coarse"),
+      media: query,
+      onchange: null,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      dispatchEvent: () => false,
+    }) as MediaQueryList
+  return () => {
+    window.matchMedia = original
+  }
+}
+
 describe("ViewCalendar", () => {
   it("moves between days and reschedules with Alt+Arrow", async () => {
     const user = userEvent.setup()
@@ -155,9 +173,55 @@ describe("ViewCalendar", () => {
     await user.keyboard("{Alt>}{ArrowRight}{/Alt}")
     expect(onMove).not.toHaveBeenCalled()
   })
+
+  it("arms a touch drag on the first tap and opens on the next", async () => {
+    const restore = mockCoarsePointer()
+    const user = userEvent.setup()
+    const onOpen = vi.fn()
+    render(
+      <ViewCalendar
+        records={rows}
+        fields={fields}
+        config={{ id: "cal", kind: "calendar", label: "Calendar", titleField: "name", dateField: "close" }}
+        locale="en-US"
+        today="2026-03-15"
+        onOpen={onOpen}
+      />,
+    )
+    const chip = screen.getByRole("button", { name: "Reschedule Bruma" })
+    expect(chip).toHaveAttribute("data-gesture", "dormant")
+    expect(chip.className).not.toContain("touch-none")
+    await user.click(chip)
+    expect(onOpen).not.toHaveBeenCalled()
+    expect(chip).toHaveAttribute("data-gesture", "armed")
+    expect(chip.className).toContain("touch-none")
+    await user.click(chip)
+    expect(onOpen).toHaveBeenCalledWith("a")
+    restore()
+  })
 })
 
 describe("ViewTimeline", () => {
+  it("arms a touch drag before the bar captures the gesture", () => {
+    const restore = mockCoarsePointer()
+    render(
+      <ViewTimeline
+        records={rows}
+        fields={fields}
+        config={{ id: "time", kind: "timeline", label: "Timeline", titleField: "name", startField: "start", endField: "end" }}
+        locale="en-US"
+        today="2026-04-03"
+        zoom="day"
+      />,
+    )
+    const bar = screen.getByRole("button", { name: "Bruma, Apr 1, 2026 to Apr 10, 2026" })
+    expect(bar).toHaveAttribute("data-gesture", "dormant")
+    fireEvent.pointerDown(bar, { pointerType: "touch", pointerId: 1, clientX: 12 })
+    expect(bar).toHaveAttribute("data-gesture", "armed")
+    expect(bar.className).toContain("touch-none")
+    restore()
+  })
+
   it("moves and resizes a bar from the keyboard", async () => {
     const user = userEvent.setup()
     const onMove = vi.fn(async () => undefined)

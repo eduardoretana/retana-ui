@@ -22,7 +22,7 @@ import {
   type TimelineZoom,
   type ViewConfig,
 } from "@/registry/retana/lib/multi-view"
-import { usePrefersReducedMotion } from "@/registry/retana/ui/multi-view-fields"
+import { useCoarsePointer, usePrefersReducedMotion } from "@/registry/retana/ui/multi-view-fields"
 
 const UNIT: Record<TimelineZoom, number> = {
   day: 28,
@@ -294,9 +294,25 @@ function TimelineRow({
   const range = readRange(record, startField, endField)
   const place = range ? barPlacement(rangeStart, range.start, range.end, zoom, weekStartsOn) : null
   const drag = React.useRef<{ edge: "move" | "start" | "end"; x: number; start: string; end: string } | null>(null)
+  const coarse = useCoarsePointer()
+  const [armed, setArmed] = React.useState(false)
+  const barRef = React.useRef<HTMLButtonElement | null>(null)
+  React.useEffect(() => {
+    if (!armed) return
+    const down = (event: PointerEvent) => {
+      if (event.target instanceof Node && barRef.current?.contains(event.target)) return
+      setArmed(false)
+    }
+    document.addEventListener("pointerdown", down)
+    return () => document.removeEventListener("pointerdown", down)
+  }, [armed])
 
   function onPointerDown(event: React.PointerEvent<HTMLButtonElement>, edge: "move" | "start" | "end") {
     if (readOnly || !range) return
+    if (event.pointerType === "touch" && !armed) {
+      setArmed(true)
+      return
+    }
     event.currentTarget.setPointerCapture(event.pointerId)
     drag.current = { edge, x: event.clientX, start: range.start, end: range.end }
   }
@@ -342,10 +358,13 @@ function TimelineRow({
       <div className="relative h-10" style={{ width }}>
         {place && range ? (
           <button
+            ref={barRef}
             type="button"
+            data-gesture={coarse ? (armed ? "armed" : "dormant") : "direct"}
             className={cn(
               "absolute top-2 flex h-6 items-center overflow-hidden rounded-md bg-primary/15 px-2 text-xs text-foreground ring-1 ring-primary/30 focus-visible:ring-2 focus-visible:ring-ring",
               reduced && "transition-none",
+              coarse && armed && "touch-none",
               barClassName,
             )}
             style={{ left: place.offset * unit, width: Math.max(place.span * unit - 4, 16) }}

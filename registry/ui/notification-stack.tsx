@@ -114,11 +114,14 @@ const stackCss = `
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: none; }
   }
+  @keyframes retana-notice-fade {
+    from { opacity: 0; }
+  }
   @media (prefers-reduced-motion: reduce) {
     [data-slot="notification-count"],
     [data-slot="notification-leaving"],
     [data-expanded="true"] [data-slot="notification-row"] {
-      animation: none;
+      animation: retana-notice-fade 120ms ease both;
     }
   }
 `
@@ -369,7 +372,7 @@ export function NotificationStack({
       ) : expanded ? (
         <ul className="m-0 flex list-none flex-col gap-3 p-0">
           {displayed.map((item, index) => (
-            <li key={item.id} data-slot="notification-row" className="min-w-0" style={{ animationDelay: `${index * 40}ms` }}>
+            <li key={item.id} data-slot="notification-row" className="min-w-0">
               <article
                 tabIndex={0}
                 data-slot="notification-front"

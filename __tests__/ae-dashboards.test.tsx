@@ -2,6 +2,7 @@ import { render, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it } from "vitest"
 
+import { AeCard, AeStagger } from "@/registry/blocks/ae/card-shell"
 import { BarTrendCard } from "@/registry/blocks/ae/bar-trend-card"
 import { DashboardAnaliticoAe } from "@/registry/blocks/ae/dashboard-analitico-ae"
 import { DashboardCapacitacionAe } from "@/registry/blocks/ae/dashboard-capacitacion-ae"
@@ -16,6 +17,21 @@ import { TaskProgressCard } from "@/registry/blocks/ae/task-progress-card"
 import { aeAppointments, aeDays, aeLeaders, aeMonthly } from "@/registry/lib/ae-dash-data"
 
 describe("AE dashboard pieces", () => {
+  it("staggers cards with a capped index and collapses the delay when motion is reduced", () => {
+    const { unmount } = render(
+      <AeStagger>
+        <AeCard title="Uno">a</AeCard>
+        <div>
+          <AeCard title="Dos">b</AeCard>
+        </div>
+        <AeCard title="Tres">c</AeCard>
+      </AeStagger>,
+    )
+    const indexes = [...document.querySelectorAll("[data-slot='ae-card']")].map((node) => node.getAttribute("data-stagger-index"))
+    expect(indexes).toEqual(["0", "1", "2"])
+    unmount()
+  })
+
   it("stat card shows value and direction, and inverts tone", () => {
     render(<StatSparklineCard label="Vencidas" value="27" change="−12%" direction="down" series={[3, 2, 1]} invert />)
     expect(screen.getByText("27")).toBeInTheDocument()

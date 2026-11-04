@@ -189,6 +189,19 @@ export function ProgressRing({ value, className }: { value: number; className?: 
   )
 }
 
+/** True on a coarse pointer, where a drag must not start until the control is tapped. */
+export function useCoarsePointer() {
+  return React.useSyncExternalStore(
+    (onChange) => {
+      const query = window.matchMedia("(pointer: coarse)")
+      query.addEventListener("change", onChange)
+      return () => query.removeEventListener("change", onChange)
+    },
+    () => window.matchMedia("(pointer: coarse)").matches,
+    () => false,
+  )
+}
+
 export function usePrefersReducedMotion() {
   const [reduced, setReduced] = React.useState(false)
   React.useEffect(() => {

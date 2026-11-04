@@ -2,7 +2,7 @@
 
 /** Clean-room AE dashboard surface. Theme tokens only. */
 
-import type { ReactNode } from "react"
+import { createContext, useContext, type ReactNode } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import { cn } from "@/lib/utils"
@@ -18,15 +18,20 @@ export type AeCardProps = {
   as?: "section" | "article"
 }
 
+const AeOrder = createContext<(() => number) | null>(null)
+
 /** White card with a large radius, soft shadow, staggered rise and hover lift. Put it inside an `AeStagger`. */
 export function AeCard({ title, action, children, className, label, as = "section" }: AeCardProps) {
   const reduce = !!useReducedMotion()
+  const take = useContext(AeOrder)
+  const index = take ? take() : 0
   const Tag = as === "article" ? motion.article : motion.section
   return (
     <Tag
       data-slot="ae-card"
+      data-stagger-index={index}
       aria-label={typeof title === "string" ? title : label}
-      variants={riseItem(reduce)}
+      variants={riseItem(reduce, index)}
       whileHover={liftOnHover(reduce)}
       className={cn(aeCard, "flex min-w-0 flex-col gap-4 p-5 transition-shadow hover:shadow-md", className)}
     >
@@ -43,10 +48,26 @@ export function AeCard({ title, action, children, className, label, as = "sectio
 
 /** Runs the staggered entrance of every AeCard inside it. */
 export function AeStagger({ children, className }: { children: ReactNode; className?: string }) {
+  const reduce = !!useReducedMotion()
+  const order = { n: 0 }
+  // The next index is taken while each AeCard renders. A new object starts every pass,
+  // so a later parent render recounts from zero. A ref cannot do this: the lint forbids
+  // reading it during render, and the delay has to exist on the first paint.
+  const take = () => order.n++
   return (
-    <motion.div data-slot="ae-stagger" initial="hidden" animate="shown" variants={staggerParent} className={className}>
-      {children}
-    </motion.div>
+    // eslint-disable-next-line react-hooks/immutability -- render-time counter, consumed by children during this render
+    <AeOrder.Provider value={take}>
+      <motion.div
+        data-slot="ae-stagger"
+        data-reduced={reduce ? "true" : "false"}
+        initial="hidden"
+        animate="shown"
+        variants={staggerParent}
+        className={className}
+      >
+        {children}
+      </motion.div>
+    </AeOrder.Provider>
   )
 }
 

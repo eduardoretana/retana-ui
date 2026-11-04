@@ -329,19 +329,18 @@ type Pending = { shortcut: string; conflict: ShortcutBinding; reserved: boolean 
 
 const chip: Variants = {
   enter: { opacity: 0, scale: 0.72, y: 4, filter: `blur(${motionPresets.blur.subtle}px)` },
-  rest: (index: number) => ({
+  rest: {
     opacity: 1,
     scale: 1,
     y: 0,
     filter: "blur(0px)",
     transition: {
       ...motionPresets.spring.snappy,
-      delay: index * motionPresets.stagger.item,
-      opacity: { duration: 0.14, delay: index * motionPresets.stagger.item },
-      filter: { duration: 0.16, delay: index * motionPresets.stagger.item },
+      opacity: { duration: 0.14 },
+      filter: { duration: 0.16 },
     },
-  }),
-  exit: { opacity: 0, scale: 0.8, filter: `blur(${motionPresets.blur.subtle}px)`, transition: { duration: 0.1 } },
+  },
+  exit: { opacity: 0, scale: 0.72, y: 4, filter: `blur(${motionPresets.blur.subtle}px)`, transition: { duration: 0.1 } },
 }
 const chipFade: Variants = {
   enter: { opacity: 0 },
@@ -563,16 +562,15 @@ export function ShortcutRecorder({
           <span className="relative flex min-w-0 items-center gap-1" aria-hidden="true">
             {recording ? <span className={cn("mr-1 ml-0.5 size-1.5 shrink-0 rounded-full bg-primary", reduced ? "" : "animate-pulse")} /> : null}
             <AnimatePresence initial={false} mode="popLayout">
-              {tokens.map((token, index) => (
+              {tokens.map((token) => (
                 <motion.span
                   key={`${token.id}`}
                   layout={reduced ? false : "position"}
-                  custom={recording ? 0 : index}
                   variants={reduced ? chipFade : chip}
                   initial="enter"
                   animate="rest"
                   exit="exit"
-                  transition={reduced ? { duration: 0 } : { layout: motionPresets.spring.snappy }}
+                  transition={reduced ? undefined : { layout: motionPresets.spring.snappy }}
                   className="inline-flex"
                 >
                   <Kbd pressed={recording || (settled > 0 && !pending)} data-tone={pending ? "warning" : undefined}>

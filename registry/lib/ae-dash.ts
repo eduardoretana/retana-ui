@@ -4,27 +4,41 @@
  */
 import type { Transition, Variants } from "motion/react"
 
-import { motionPresets } from "@/registry/retana/lib/motion"
+import { motionPresets, staggerDelaySeconds } from "@/registry/retana/lib/motion"
 
-/** Parent of a staggered entrance. Children use `riseItem`. */
+/** Parent of a staggered entrance. Children use `riseItem` and own the delay. */
 export const staggerParent: Variants = {
   hidden: {},
-  shown: { transition: { staggerChildren: motionPresets.stagger.line, delayChildren: 0.04 } },
+  shown: {},
 }
 
-/** Fade and slide up. With reduced motion the caller passes `reduce` and gets a plain fade. */
-export function riseItem(reduce: boolean): Variants {
+/** Fade and a short rise. Reduced motion keeps a shared opacity fade and drops the rise. */
+export function riseItem(reduce: boolean, index = 0): Variants {
   return reduce
-    ? { hidden: { opacity: 0 }, shown: { opacity: 1, transition: { duration: motionPresets.duration.instant } } }
+    ? { hidden: { opacity: 0 }, shown: { opacity: 1, transition: { duration: motionPresets.duration.instant, delay: 0 } } }
     : {
-        hidden: { opacity: 0, y: 16 },
-        shown: { opacity: 1, y: 0, transition: { duration: motionPresets.duration.considered, ease: [...motionPresets.ease.enter] } },
+        hidden: { opacity: 0, y: 8 },
+        shown: {
+          opacity: 1,
+          y: 0,
+          transition: {
+            duration: motionPresets.duration.standard,
+            ease: [...motionPresets.ease.enter],
+            delay: staggerDelaySeconds(index),
+          },
+        },
       }
 }
 
 /** Grow transition for bars and stroke draws. Zero when motion is reduced. */
 export function growTransition(reduce: boolean, index = 0): Transition {
-  return reduce ? { duration: 0 } : { duration: motionPresets.duration.considered * 1.5, ease: [...motionPresets.ease.enter], delay: 0.15 + index * motionPresets.stagger.item }
+  return reduce
+    ? { duration: 0 }
+    : {
+        duration: motionPresets.duration.considered * 1.5,
+        ease: [...motionPresets.ease.enter],
+        delay: staggerDelaySeconds(index, { step: motionPresets.stagger.item }),
+      }
 }
 
 /** Hover lift for a card. Off when motion is reduced. */
