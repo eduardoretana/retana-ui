@@ -25,7 +25,7 @@ import {
   GANTT_ROW_HEIGHT,
   GANTT_SCALES,
   GANTT_STATUSES,
-  dependencyCurve,
+  dependencyElbow,
   formatGanttDate,
   ganttBar,
   ganttDependencies,
@@ -55,6 +55,15 @@ const barTone: Record<GanttStatus, string> = {
   blocked: "bg-destructive text-background",
   done: "bg-foreground text-background",
   "at-risk": "bg-chart-4 text-foreground",
+}
+
+/** Leading mark. Planned uses foreground because muted disappears on the muted track. */
+const statusMark: Record<GanttStatus, string> = {
+  planned: "bg-foreground",
+  active: "bg-primary",
+  blocked: "bg-destructive",
+  done: "bg-foreground",
+  "at-risk": "bg-chart-4",
 }
 
 const subscribe = () => () => {}
@@ -158,6 +167,8 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
   const [internalEditingId, setInternalEditingId] = React.useState<string | null>(null)
   const activeEditingId = editingControlled ? (editingId ?? null) : internalEditingId
   const returnFocusId = React.useRef<string | null>(null)
+  const scrollerRef = React.useRef<HTMLDivElement>(null)
+  const [scrollEdges, setScrollEdges] = React.useState({ start: false, end: false })
   const canEdit = Boolean(onTaskChangeRequest || onEditingIdChange)
 
   const dayWidth = GANTT_DAY_WIDTH[scale]
@@ -179,10 +190,31 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
   const byId = React.useMemo(() => new Map(items.map((item) => [item.id, item])), [items])
   const today = todayOffset(nowIso, domain, dayWidth)
   const chartHasProgress = items.some((item) => parseGanttProgress(item.progress) != null)
+  const linkFocus = openId ?? selectedId ?? cursor
   const editingItem = activeEditingId ? (byId.get(activeEditingId) ?? null) : null
   const taskOrder = layout.groups.flatMap((group) => group.tasks.map((task) => task.id))
   const activeId = selectedId ?? cursor ?? taskOrder[0] ?? null
   const columns = `${labelWidth}px ${width}px`
+
+  React.useLayoutEffect(() => {
+    const el = scrollerRef.current
+    if (!el) return
+    if (today != null) {
+      el.scrollLeft = Math.max(0, labelWidth + today - el.clientWidth * 0.3)
+    }
+    const update = () => {
+      const max = el.scrollWidth - el.clientWidth
+      setScrollEdges({ start: el.scrollLeft > 2, end: max - el.scrollLeft > 2 })
+    }
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(el)
+    el.addEventListener("scroll", update)
+    return () => {
+      observer.disconnect()
+      el.removeEventListener("scroll", update)
+    }
+  }, [today, labelWidth, scale, width, items.length])
 
   function commitScale(next: GanttScale) {
     if (scaleProp === undefined) setUncontrolledScale(next)
@@ -296,7 +328,8 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
           </EmptyHeader>
         </Empty>
       ) : (
-        <div className="min-h-48 flex-1 overflow-auto rounded-lg border border-border">
+        <div className="relative min-h-48 min-w-0 flex-1">
+        <div ref={scrollerRef} className="h-full min-h-48 overflow-auto rounded-lg border border-border" data-slot="timeline-gantt-scroll">
           <div style={{ width: labelWidth + width }} className="min-w-full">
             <div className={cn("sticky top-0 z-20 grid border-b border-border bg-background", classNames?.header)} style={{ gridTemplateColumns: columns }}>
               <div
@@ -337,7 +370,7 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                 {today != null ? <div className="absolute inset-y-0 w-px bg-primary" style={{ left: today }} data-slot="timeline-gantt-today" /> : null}
               </div>
               <svg
-                className="pointer-events-none absolute top-0"
+                className="pointer-events-none absolute top-0 z-0"
                 style={{ left: labelWidth, width, height: layout.height }}
                 viewBox={`0 0 ${width} ${Math.max(layout.height, 1)}`}
                 aria-hidden="true"
@@ -346,11 +379,16 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                   const from = placed.get(link.fromId)
                   const to = placed.get(link.toId)
                   if (!from || !to) return null
-                  const curve = dependencyCurve(from, to, GANTT_ROW_HEIGHT)
+                  const elbow = dependencyElbow(from, to, GANTT_ROW_HEIGHT)
+                  const hot = linkFocus != null && (link.fromId === linkFocus || link.toId === linkFocus)
                   return (
-                    <g key={`${link.fromId}-${link.toId}`} data-slot="timeline-gantt-dependency">
-                      <path d={curve.d} className="fill-none stroke-muted-foreground" strokeWidth="1.25" />
-                      <circle cx={curve.x} cy={curve.y} r="2.5" className="fill-muted-foreground" />
+                    <g key={`${link.fromId}-${link.toId}`} data-slot="timeline-gantt-dependency" data-hot={hot ? "true" : "false"}>
+                      <path
+                        d={elbow.d}
+                        className={cn("fill-none", hot ? "stroke-foreground opacity-100" : "stroke-muted-foreground opacity-35")}
+                        strokeWidth={hot ? 1.75 : 1.25}
+                      />
+                      <circle cx={elbow.x} cy={elbow.y} r="2.5" className={cn(hot ? "fill-foreground opacity-100" : "fill-muted-foreground opacity-35")} />
                     </g>
                   )
                 })}
@@ -364,7 +402,7 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                 const span = rollup?.ratio != null ? ganttGroupSpan(members) : null
                 const spanBar = span ? ganttBar({ id: group.id, start: span.start, end: span.end }, domain, dayWidth) : null
                 return (
-                <div key={group.id}>
+                <div key={group.id} className="relative z-10">
                   <div className="grid" style={{ gridTemplateColumns: columns }}>
                     <div
                       className={cn(
@@ -433,6 +471,7 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                         onPointerEnter={() => {
                           if (!disabled) setOpen(item.id, true)
                         }}
+                        onFocus={() => setCursor(item.id)}
                         onClick={() => {
                           setCursor(item.id)
                           setAnnouncement(copy.selected(item.label))
@@ -449,12 +488,14 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                           <span className="pointer-events-none absolute inset-0">
                             <GanttProgressTrack
                               ratio={ratio}
-                              label={`${item.label}, ${copy.progressValue(percent ?? 0)}`}
+                              label={`${item.label}, ${statusLabel}, ${copy.progressValue(percent ?? 0)}`}
                               showLabel={!!bar && bar.width >= 48}
                               reduced={reduced}
                             />
+                            <span aria-hidden data-slot="timeline-gantt-status-mark" className={cn("absolute inset-y-0 start-0 z-20 w-1.5", statusMark[item.status])} />
                           </span>
                         ) : null}
+                        <span className="sr-only">{statusLabel}</span>
                         <span className={cn("truncate", (ratio != null || (bar && bar.width < 72)) && "sr-only")}>{item.label}</span>
                       </button>
                     )
@@ -469,6 +510,11 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                           style={{ width: labelWidth, height: GANTT_ROW_HEIGHT }}
                         >
                           <span className={cn("truncate", percent != null && "min-w-0 flex-1")}>{item.label}</span>
+                          {percent != null ? (
+                            <span data-slot="timeline-gantt-status" className="shrink-0 text-[10px] font-medium">
+                              {copy.statusShort[item.status]}
+                            </span>
+                          ) : null}
                           {percent != null ? (
                             <span className={cn("shrink-0 tabular-nums text-xs text-muted-foreground", labelWidth < 88 && "sr-only")}>{percent}%</span>
                           ) : null}
@@ -532,6 +578,13 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
             ))}
           </ul>
         </div>
+        {scrollEdges.end ? (
+          <div aria-hidden data-slot="timeline-gantt-scroll-end" className="pointer-events-none absolute inset-y-0 end-0 w-8 rounded-e-lg bg-gradient-to-l from-background to-transparent" />
+        ) : null}
+        {scrollEdges.start ? (
+          <div aria-hidden data-slot="timeline-gantt-scroll-start" className="pointer-events-none absolute inset-y-0 start-0 w-8 rounded-s-lg bg-gradient-to-r from-background to-transparent" />
+        ) : null}
+        </div>
       )}
       <p className="sr-only" aria-live="polite" data-slot="timeline-gantt-announcement">
         {announcement}
@@ -540,6 +593,7 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
       <GanttEditSheet
         item={editingItem}
         copy={copy}
+        locale={locale}
         onOpenChange={(open) => {
           if (!open) closeEdit()
         }}
@@ -618,12 +672,14 @@ function GanttProgressTrack({
 function GanttEditSheet<TMeta>({
   item,
   copy,
+  locale,
   onOpenChange,
   onSubmit,
   onCloseAutoFocus,
 }: {
   item: GanttItem<TMeta> | null
   copy: TimelineGanttLabels
+  locale: string
   onOpenChange: (open: boolean) => void
   onSubmit: (patch: GanttTaskPatch) => void
   onCloseAutoFocus: (event: Event) => void
@@ -640,7 +696,7 @@ function GanttEditSheet<TMeta>({
         }}
         onCloseAutoFocus={onCloseAutoFocus}
       >
-        {item ? <GanttEditForm key={item.id} item={item} copy={copy} onSubmit={onSubmit} onCancel={() => onOpenChange(false)} /> : null}
+        {item ? <GanttEditForm key={item.id} item={item} copy={copy} locale={locale} onSubmit={onSubmit} onCancel={() => onOpenChange(false)} /> : null}
       </SheetContent>
     </Sheet>
   )
@@ -649,11 +705,13 @@ function GanttEditSheet<TMeta>({
 function GanttEditForm<TMeta>({
   item,
   copy,
+  locale,
   onSubmit,
   onCancel,
 }: {
   item: GanttItem<TMeta>
   copy: TimelineGanttLabels
+  locale: string
   onSubmit: (patch: GanttTaskPatch) => void
   onCancel: () => void
 }) {
@@ -663,6 +721,9 @@ function GanttEditForm<TMeta>({
   const personId = React.useId()
   const statusId = React.useId()
   const progressId = React.useId()
+  const errorId = React.useId()
+  const dateHintId = React.useId()
+  const progressHintId = React.useId()
   const known = parseGanttProgress(item.progress)
   const [label, setLabel] = React.useState(item.label)
   const [start, setStart] = React.useState(item.start.slice(0, 10))
@@ -713,8 +774,11 @@ function GanttEditForm<TMeta>({
     })
   }
 
+  const progressDescribedBy = error === copy.invalidProgress ? `${progressHintId} ${errorId}` : progressHintId
+  const dateDescribedBy = rangeError ? `${dateHintId} ${errorId}` : dateHintId
+
   return (
-    <form onSubmit={submit} className="flex min-h-full flex-col">
+    <form lang={locale} onSubmit={submit} className="flex min-h-full flex-col">
       <SheetHeader>
         <SheetTitle>{copy.editTitle}</SheetTitle>
         <SheetDescription>{copy.editDescription}</SheetDescription>
@@ -726,11 +790,12 @@ function GanttEditForm<TMeta>({
         </Field>
         <Field data-invalid={rangeError || undefined}>
           <FieldLabel htmlFor={startId}>{copy.start}</FieldLabel>
-          <Input id={startId} type="date" value={start} aria-invalid={rangeError || undefined} onChange={(event) => setStart(event.target.value)} />
+          <Input id={startId} type="date" value={start} aria-invalid={rangeError || undefined} aria-describedby={dateDescribedBy} onChange={(event) => setStart(event.target.value)} />
         </Field>
         <Field data-invalid={rangeError || undefined}>
           <FieldLabel htmlFor={endId}>{copy.end}</FieldLabel>
-          <Input id={endId} type="date" value={end} aria-invalid={rangeError || undefined} onChange={(event) => setEnd(event.target.value)} />
+          <Input id={endId} type="date" value={end} aria-invalid={rangeError || undefined} aria-describedby={dateDescribedBy} onChange={(event) => setEnd(event.target.value)} />
+          <FieldDescription id={dateHintId}>{copy.dateHint}</FieldDescription>
         </Field>
         <Field>
           <FieldLabel htmlFor={personId}>{copy.assignee}</FieldLabel>
@@ -756,16 +821,31 @@ function GanttEditForm<TMeta>({
         </Field>
         <Field data-invalid={error === copy.invalidProgress || undefined}>
           <FieldLabel htmlFor={progressId}>{copy.progress}</FieldLabel>
-          <Input
-            id={progressId}
-            inputMode="decimal"
-            value={progress}
-            aria-invalid={error === copy.invalidProgress || undefined}
-            onChange={(event) => setProgress(event.target.value)}
-          />
+          <div className="flex items-center gap-2">
+            <Input
+              id={progressId}
+              type="number"
+              inputMode="numeric"
+              min={0}
+              max={100}
+              step={1}
+              value={progress}
+              aria-invalid={error === copy.invalidProgress || undefined}
+              aria-describedby={progressDescribedBy}
+              onChange={(event) => setProgress(event.target.value)}
+            />
+            <span aria-hidden className="text-sm text-muted-foreground">
+              %
+            </span>
+          </div>
+          <FieldDescription id={progressHintId}>{copy.progressHint}</FieldDescription>
         </Field>
       </FieldGroup>
-      {error ? <FieldError className="px-4">{error}</FieldError> : null}
+      {error ? (
+        <FieldError id={errorId} className="px-4">
+          {error}
+        </FieldError>
+      ) : null}
       <SheetFooter>
         <Button type="submit">{copy.save}</Button>
         <Button type="button" variant="outline" onClick={onCancel}>

@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from "vitest"
 import {
   GANTT_PROGRESS_PAINT,
   applyGanttTaskPatch,
+  dependencyElbow,
   ganttSpanDays,
   parseGanttProgress,
   workstreamProgress,
@@ -94,6 +95,16 @@ describe("workstreamProgress", () => {
     const result = workstreamProgress([{ start: "2026-10-20", end: "2026-10-20", progress: 0.4 }])
     expect(result.ratio).toBeCloseTo(0.4)
     expect(result.weightDays).toBe(1)
+  })
+})
+
+describe("dependencyElbow", () => {
+  it("routes through the row boundary instead of a curve", () => {
+    const path = dependencyElbow({ x: 10, width: 40, y: 0 }, { x: 90, y: 40 }, 40)
+    expect(path.d).not.toMatch(/\bC\b/)
+    expect(path.d).toContain("H ")
+    expect(path.d).toContain("V ")
+    expect(path.y).toBe(60)
   })
 })
 

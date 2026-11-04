@@ -23,7 +23,8 @@ Nada de los tres puntos estaba cubierto ni se descarta.
 - Por debajo de 0 se recorta a 0. Por encima de 1 se recorta a 1.
 - Un valor finito mayor que 1 **no** se lee como porcentaje. `50` queda en 1 (100%), no en 50%. En desarrollo, `parseGanttProgress` avisa con `console.warn`. En producción no avisa.
 - `NaN`, infinitos y cualquier cosa que no sea número se ignoran. La barra sigue siendo el bloque de estado, sin relleno. No cuentan como 0% en el acumulado.
-- El campo de la hoja pide un porcentaje de 0 a 100 y el parche guarda la fracción (`64` en el campo → `0.64` en el ítem).
+- El campo de la hoja es un número de 0 a 100 con sufijo `%`. El parche guarda la fracción (`64` → `0.64`).
+- El control de fecha lleva `lang` del cronograma. El texto que se ve (a veces `mm/dd/yyyy`) lo decide el navegador, no el `lang`. La pista lo dice.
 
 `workstreamProgress(tareas)` es pura. Devuelve `{ ratio, percent, weightDays, omitted, milestones }`.
 

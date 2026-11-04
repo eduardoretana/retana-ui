@@ -133,6 +133,11 @@ export type TimelineGanttLabels = {
   announcements: string
   people: string
   status: Record<GanttStatus, string>
+  /** Short visible status. The full word stays in the accessible name. */
+  statusShort: Record<GanttStatus, string>
+  /** The date control's written format is the browser's, not this locale. */
+  dateHint: string
+  progressHint: string
   openItem: (label: string) => string
   barLabel: (label: string, start: string, end: string, status: string) => string
   dependency: (from: string, to: string) => string
@@ -184,6 +189,15 @@ export const timelineGanttLabels: TimelineGanttLabels = {
     done: "Hecho",
     "at-risk": "En riesgo",
   },
+  statusShort: {
+    planned: "Plan",
+    active: "Curso",
+    blocked: "Bloq.",
+    done: "Hecho",
+    "at-risk": "Riesgo",
+  },
+  dateHint: "El formato de la fecha lo pone el navegador.",
+  progressHint: "De 0 a 100.",
   openItem: (label) => `Abrir ${label}`,
   barLabel: (label, start, end, status) => `${label}, ${status}, del ${start} al ${end}`,
   dependency: (from, to) => `${to} depende de ${from}`,
@@ -235,6 +249,15 @@ export const timelineGanttLabelsEn: TimelineGanttLabels = {
     done: "Done",
     "at-risk": "At risk",
   },
+  statusShort: {
+    planned: "Plan",
+    active: "Active",
+    blocked: "Hold",
+    done: "Done",
+    "at-risk": "Risk",
+  },
+  dateHint: "The date format comes from the browser.",
+  progressHint: "From 0 to 100.",
   openItem: (label) => `Open ${label}`,
   barLabel: (label, start, end, status) => `${label}, ${status}, ${start} to ${end}`,
   dependency: (from, to) => `${to} depends on ${from}`,
@@ -258,7 +281,12 @@ export const timelineGanttLabelsEn: TimelineGanttLabels = {
 }
 
 export function withGanttLabels(labels?: Partial<TimelineGanttLabels>): TimelineGanttLabels {
-  return { ...timelineGanttLabels, ...labels, status: { ...timelineGanttLabels.status, ...labels?.status } }
+  return {
+    ...timelineGanttLabels,
+    ...labels,
+    status: { ...timelineGanttLabels.status, ...labels?.status },
+    statusShort: { ...timelineGanttLabels.statusShort, ...labels?.statusShort },
+  }
 }
 
 /** UTC midnight for a YYYY-MM-DD prefix, or null when the day is not real. */
@@ -658,6 +686,34 @@ export function applyGanttTaskPatch<TMeta>(
     }
     return next
   })
+}
+
+/**
+ * Orthogonal dependency. Leaves the predecessor's end, runs through the
+ * boundary between rows, and enters the successor's start. No curve.
+ */
+export function dependencyElbow(
+  from: { x: number; width: number; y: number },
+  to: { x: number; y: number },
+  rowHeight: number,
+) {
+  const x1 = from.x + from.width
+  const y1 = from.y + rowHeight / 2
+  const x2 = to.x
+  const y2 = to.y + rowHeight / 2
+  const round = (value: number) => Math.round(value * 10) / 10
+  if (Math.abs(y1 - y2) < 1) {
+    return { d: `M ${round(x1)} ${round(y1)} H ${round(x2)}`, x: round(x2), y: round(y2) }
+  }
+  const stub = 8
+  const outX = x1 + stub
+  const inX = x2 - stub
+  const channelY = y1 < y2 ? from.y + rowHeight - 1 : from.y + 1
+  return {
+    d: `M ${round(x1)} ${round(y1)} H ${round(outX)} V ${round(channelY)} H ${round(inX)} V ${round(y2)} H ${round(x2)}`,
+    x: round(x2),
+    y: round(y2),
+  }
 }
 
 export function dependencyCurve(

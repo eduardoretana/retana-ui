@@ -150,6 +150,40 @@ describe("TimelineGantt progress", () => {
     }
   })
 
+  it("keeps the status in the name and in the DOM when progress is set", () => {
+    render(
+      <TimelineGantt
+        now={now}
+        items={[
+          {
+            id: "etq",
+            workstream: "tienda",
+            label: "Etiquetas de envío",
+            start: "2026-10-25",
+            end: "2026-11-02",
+            status: "at-risk",
+            progress: 0.12,
+          },
+        ]}
+      />,
+    )
+    expect(screen.getByRole("button", { name: /En riesgo/ })).toHaveAttribute("data-status", "at-risk")
+    expect(screen.getByRole("progressbar", { name: /En riesgo/ })).toBeInTheDocument()
+    expect(screen.getByText("Riesgo")).toHaveAttribute("data-slot", "timeline-gantt-status")
+    expect(document.querySelector("[data-slot=timeline-gantt-status-mark]")).toBeTruthy()
+  })
+
+  it("draws dependencies as elbows behind the bars and highlights the focused task", async () => {
+    const user = userEvent.setup()
+    render(<TimelineGantt items={base} workstreams={streams} now={now} />)
+    const path = document.querySelector("[data-slot=timeline-gantt-dependency] path")
+    expect(path?.getAttribute("d") ?? "").not.toMatch(/\bC\b/)
+    expect(path?.getAttribute("d") ?? "").toMatch(/H /)
+    expect(document.querySelector("[data-slot=timeline-gantt-dependency]")?.parentElement?.getAttribute("class")).toContain("z-0")
+    await user.hover(screen.getByRole("button", { name: /Catálogo de feria/ }))
+    expect(document.querySelector('[data-slot=timeline-gantt-dependency][data-hot="true"]')).toBeTruthy()
+  })
+
   it("rolls a group up by duration and leaves an empty group without a fake zero", () => {
     render(<TimelineGantt items={[
       { ...base[0]!, start: "2026-10-01", end: "2026-10-05", progress: 1 },
@@ -190,10 +224,16 @@ describe("TimelineGantt edit sheet", () => {
     const name = screen.getByRole("textbox", { name: "Nombre" })
     await user.clear(name)
     await user.type(name, "Catálogo revisado")
+    const progress = screen.getByRole("spinbutton", { name: "Avance" })
+    expect(progress).toHaveAttribute("inputMode", "numeric")
+    expect(progress).toHaveAttribute("step", "1")
+    expect(progress.getAttribute("aria-describedby")).toBeTruthy()
+    expect(screen.getByText("%")).toBeInTheDocument()
+    fireEvent.change(progress, { target: { value: "64" } })
     await user.click(screen.getByRole("button", { name: "Guardar" }))
     expect(requests).toHaveBeenCalledWith(
       "catalogo",
-      expect.objectContaining({ label: "Catálogo revisado", start: "2026-10-13", end: "2026-10-28", status: "active" }),
+      expect.objectContaining({ label: "Catálogo revisado", start: "2026-10-13", end: "2026-10-28", status: "active", progress: 0.64 }),
     )
     expect(screen.getByRole("button", { name: /Catálogo revisado/ })).toBeInTheDocument()
     expect(screen.queryByRole("dialog", { name: "Editar tarea" })).not.toBeInTheDocument()
