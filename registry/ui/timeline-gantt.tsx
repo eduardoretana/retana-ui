@@ -21,11 +21,12 @@ import { motionPresets } from "@/registry/retana/lib/motion"
 import {
   GANTT_DAY_WIDTH,
   GANTT_GROUP_HEIGHT,
-  GANTT_LABEL_WIDTH,
   GANTT_ROW_HEIGHT,
   GANTT_SCALES,
   GANTT_STATUSES,
   dependencyElbow,
+  ganttBoard,
+  ganttLabelWidth,
   formatGanttDate,
   ganttBar,
   ganttDependencies,
@@ -57,14 +58,6 @@ const barTone: Record<GanttStatus, string> = {
   "at-risk": "bg-chart-4 text-foreground",
 }
 
-/** Leading mark. Planned uses foreground because muted disappears on the muted track. */
-const statusMark: Record<GanttStatus, string> = {
-  planned: "bg-foreground",
-  active: "bg-primary",
-  blocked: "bg-destructive",
-  done: "bg-foreground",
-  "at-risk": "bg-chart-4",
-}
 
 const subscribe = () => () => {}
 
@@ -134,7 +127,7 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
   now,
   locale = "es-MX",
   weekStartsOn = 1,
-  labelWidth = GANTT_LABEL_WIDTH,
+  labelWidth: labelWidthProp,
   selectedId,
   onSelect,
   onHover,
@@ -168,16 +161,21 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
   const activeEditingId = editingControlled ? (editingId ?? null) : internalEditingId
   const returnFocusId = React.useRef<string | null>(null)
   const scrollerRef = React.useRef<HTMLDivElement>(null)
+  const [containerWidth, setContainerWidth] = React.useState(0)
   const [scrollEdges, setScrollEdges] = React.useState({ start: false, end: false })
   const canEdit = Boolean(onTaskChangeRequest || onEditingIdChange)
 
-  const dayWidth = GANTT_DAY_WIDTH[scale]
+  const baseDay = GANTT_DAY_WIDTH[scale]
   const nowMs = Date.parse(nowIso)
   const domain = React.useMemo(
     () => ganttDomain(items, scale, Number.isFinite(nowMs) ? nowMs : Date.UTC(2026, 0, 1), weekStartsOn),
     [items, scale, nowMs, weekStartsOn],
   )
-  const width = timelineWidth(domain, dayWidth)
+  const labelWidth = ganttLabelWidth(containerWidth, labelWidthProp)
+  const naturalWidth = timelineWidth(domain, baseDay)
+  const board = ganttBoard(naturalWidth, containerWidth, labelWidth)
+  const dayWidth = baseDay * board.scale
+  const width = board.drawn
   const ticks = React.useMemo(
     () => ganttTicks(domain, scale, locale, dayWidth, weekStartsOn),
     [domain, scale, locale, dayWidth, weekStartsOn],
@@ -199,7 +197,8 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
   React.useLayoutEffect(() => {
     const el = scrollerRef.current
     if (!el) return
-    if (today != null) {
+    setContainerWidth((current) => (current === el.clientWidth ? current : el.clientWidth))
+    if (today != null && el.clientWidth > 0 && el.scrollWidth > el.clientWidth + 2) {
       el.scrollLeft = Math.max(0, labelWidth + today - el.clientWidth * 0.3)
     }
     const update = () => {
@@ -492,7 +491,6 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                               showLabel={!!bar && bar.width >= 48}
                               reduced={reduced}
                             />
-                            <span aria-hidden data-slot="timeline-gantt-status-mark" className={cn("absolute inset-y-0 start-0 z-20 w-1.5", statusMark[item.status])} />
                           </span>
                         ) : null}
                         <span className="sr-only">{statusLabel}</span>
@@ -503,18 +501,13 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                       <div key={`${item.id}-${task.index}`} className="grid" style={{ gridTemplateColumns: columns }}>
                         <div
                           className={cn(
-                            "sticky start-0 z-10 flex items-center border-r border-b border-border bg-background px-2 text-sm",
+                            "sticky start-0 z-20 flex items-center border-r border-b border-border bg-background px-2 text-sm",
                             percent != null && "min-w-0 gap-2 overflow-hidden",
                             classNames?.label,
                           )}
                           style={{ width: labelWidth, height: GANTT_ROW_HEIGHT }}
                         >
-                          <span className={cn("truncate", percent != null && "min-w-0 flex-1")}>{item.label}</span>
-                          {percent != null ? (
-                            <span data-slot="timeline-gantt-status" className="shrink-0 text-[10px] font-medium">
-                              {copy.statusShort[item.status]}
-                            </span>
-                          ) : null}
+                          <span title={item.label} className={cn("truncate", percent != null && "min-w-0 flex-1")}>{item.label}</span>
                           {percent != null ? (
                             <span className={cn("shrink-0 tabular-nums text-xs text-muted-foreground", labelWidth < 88 && "sr-only")}>{percent}%</span>
                           ) : null}
@@ -563,6 +556,9 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
                           ) : (
                             <span className="sr-only">{item.label}</span>
                           )}
+                          {ratio != null && bar && (item.status === "at-risk" || item.status === "blocked") ? (
+                            <StatusChip status={item.status} label={statusLabel} left={bar.x + bar.width + 6} />
+                          ) : null}
                         </div>
                       </div>
                     )
@@ -614,6 +610,33 @@ export function TimelineGantt<TMeta = Record<string, unknown>>({
 
 function barDomId(scope: string, id: string) {
   return `${scope}-bar-${id}`
+}
+
+function StatusChip({ status, label, left }: { status: "at-risk" | "blocked"; label: string; left: number }) {
+  const blocked = status === "blocked"
+  return (
+    <span
+      data-slot="timeline-gantt-status"
+      data-status={status}
+      className="pointer-events-none absolute top-1.5 z-20 flex h-7 items-center"
+      style={{ left }}
+    >
+      <svg viewBox="0 0 16 16" className="size-4" aria-hidden>
+        {blocked ? (
+          <>
+            <circle cx="8" cy="8" r="6.5" className="fill-destructive" />
+            <path d="M4.5 8h7" className="stroke-background" strokeWidth="1.6" strokeLinecap="round" />
+          </>
+        ) : (
+          <>
+            <path d="M8 1.6 14.4 14.2H1.6L8 1.6Z" className="fill-destructive" />
+            <path d="M8 6.2v3.4" className="stroke-background" strokeWidth="1.4" strokeLinecap="round" />
+          </>
+        )}
+      </svg>
+      <span className="sr-only">{label}</span>
+    </span>
+  )
 }
 
 function GanttProgressTrack({

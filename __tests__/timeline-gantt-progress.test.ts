@@ -5,6 +5,8 @@ import { describe, expect, it, vi } from "vitest"
 
 import {
   GANTT_PROGRESS_PAINT,
+  ganttBoard,
+  ganttLabelWidth,
   applyGanttTaskPatch,
   dependencyElbow,
   ganttSpanDays,
@@ -98,6 +100,25 @@ describe("workstreamProgress", () => {
   })
 })
 
+describe("gantt layout width", () => {
+  it("widens the label on a wide card and keeps a floor on a phone", () => {
+    expect(ganttLabelWidth(0)).toBe(176)
+    expect(ganttLabelWidth(1200)).toBeGreaterThanOrEqual(240)
+    expect(ganttLabelWidth(390)).toBe(144)
+    expect(ganttLabelWidth(1200, 140)).toBe(140)
+  })
+
+  it("stretches the scale to the container and scrolls when the container is narrower", () => {
+    const wide = ganttBoard(650, 1200, 288)
+    expect(wide.board).toBe(1200)
+    expect(wide.drawn).toBe(912)
+    expect(wide.scale).toBeGreaterThan(1)
+    const narrow = ganttBoard(650, 390, 144)
+    expect(narrow.scale).toBe(1)
+    expect(narrow.board).toBe(794)
+  })
+})
+
 describe("dependencyElbow", () => {
   it("routes through the row boundary instead of a curve", () => {
     const path = dependencyElbow({ x: 10, width: 40, y: 0 }, { x: 90, y: 40 }, 40)
@@ -131,6 +152,7 @@ describe("progress contrast", () => {
     expect(source).toContain("border-foreground")
     expect(source).toContain("origin-left")
     expect(source).toContain("scaleX")
+    expect(source).toContain("fill-destructive")
     expect(source).not.toContain("transition-all")
     expect(GANTT_PROGRESS_PAINT).toEqual({ fill: "foreground", track: "muted", surface: "background", edge: "foreground" })
   })
@@ -152,6 +174,11 @@ describe("progress contrast", () => {
       expect(fillTrack, `${mode} fill/track ${fillTrack.toFixed(2)}`).toBeGreaterThanOrEqual(3)
       expect(fillSurface, `${mode} fill/surface ${fillSurface.toFixed(2)}`).toBeGreaterThanOrEqual(3)
       expect(edgeSurface, `${mode} edge/surface ${edgeSurface.toFixed(2)}`).toBeGreaterThanOrEqual(3)
+      const marker = composite(parseOklch(required(tokens, "destructive")), surface)
+      const markerSurface = contrast(marker, surface)
+      const glyph = contrast(surface, marker)
+      expect(markerSurface, `${mode} status marker/surface ${markerSurface.toFixed(2)}`).toBeGreaterThanOrEqual(3)
+      expect(glyph, `${mode} status glyph/marker ${glyph.toFixed(2)}`).toBeGreaterThanOrEqual(3)
     }
   })
 })

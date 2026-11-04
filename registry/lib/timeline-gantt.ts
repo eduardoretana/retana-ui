@@ -20,6 +20,25 @@ export const GANTT_GROUP_HEIGHT = 32
 
 export const GANTT_LABEL_WIDTH = 176
 
+/** Label column. An explicit width wins. Otherwise it grows with the container and stays narrow on a phone. */
+export function ganttLabelWidth(containerWidth: number, explicit?: number) {
+  if (explicit != null) return explicit
+  if (!(containerWidth > 0)) return GANTT_LABEL_WIDTH
+  return Math.round(Math.min(320, Math.max(144, containerWidth * 0.24)))
+}
+
+/**
+ * Timeline width. When the container is wider than the natural scale, the days stretch
+ * so the board fills the card. A narrower container keeps the natural width and scrolls.
+ */
+export function ganttBoard(naturalWidth: number, containerWidth: number, labelWidth: number) {
+  const content = labelWidth + Math.max(0, naturalWidth)
+  const board = containerWidth > content ? containerWidth : content
+  const drawn = Math.max(0, board - labelWidth)
+  const scale = naturalWidth > 0 ? drawn / naturalWidth : 1
+  return { board, drawn, scale }
+}
+
 export const DAY_MS = 86_400_000
 
 export const GANTT_DAY_WIDTH: Record<GanttScale, number> = {

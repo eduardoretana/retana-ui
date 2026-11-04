@@ -169,8 +169,12 @@ describe("TimelineGantt progress", () => {
     )
     expect(screen.getByRole("button", { name: /En riesgo/ })).toHaveAttribute("data-status", "at-risk")
     expect(screen.getByRole("progressbar", { name: /En riesgo/ })).toBeInTheDocument()
-    expect(screen.getByText("Riesgo")).toHaveAttribute("data-slot", "timeline-gantt-status")
-    expect(document.querySelector("[data-slot=timeline-gantt-status-mark]")).toBeTruthy()
+    const chip = document.querySelector("[data-slot=timeline-gantt-status]")
+    expect(chip).toHaveAttribute("data-status", "at-risk")
+    expect(chip?.querySelector("svg")).toBeTruthy()
+    expect(chip?.textContent).toContain("En riesgo")
+    expect(screen.queryByText("Riesgo")).not.toBeInTheDocument()
+    expect(screen.queryByText("Bloq.")).not.toBeInTheDocument()
   })
 
   it("draws dependencies as elbows behind the bars and highlights the focused task", async () => {
