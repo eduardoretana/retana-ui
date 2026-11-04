@@ -32050,6 +32050,149 @@
           }
         ]
       }
+    },
+    {
+      "name": "model-router",
+      "type": "registry:ui",
+      "title": "Model router",
+      "description": "Edit a model routing policy: live blended cost per 1K, a traffic diagram, shares that sum to 100, and a keyboard-ordered fallback.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "alert",
+        "button",
+        "select",
+        "separator",
+        "skeleton",
+        "slider",
+        "switch",
+        "table",
+        "@retana/empty-state",
+        "@retana/segmented-control",
+        "@retana/status-pill"
+      ],
+      "categories": [
+        "agents"
+      ],
+      "meta": {
+        "titleEs": "Enrutador de modelos",
+        "descriptionEs": "Edita una política de enrutamiento: costo mezclado por 1K, diagrama de tráfico, partes que suman 100 % y un respaldo ordenable con el teclado.",
+        "preview": "app/examples/model-router/preview.tsx",
+        "previewHref": "/examples/model-router",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "unsaved",
+            "label": "Sin guardar",
+            "labelEn": "Unsaved"
+          },
+          {
+            "id": "deploying",
+            "label": "Desplegando",
+            "labelEn": "Deploying"
+          },
+          {
+            "id": "read-only",
+            "label": "Solo lectura",
+            "labelEn": "Read only"
+          },
+          {
+            "id": "invalid",
+            "label": "Inválida",
+            "labelEn": "Invalid"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Política de la bandeja",
+            "href": "/examples/model-router",
+            "description": "Cuatro modelos de un CRM de demostración, con costo en MXN."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/model-router/stress",
+            "description": "30 modelos, partes 0 y 100, 390 px y solo lectura."
+          }
+        ],
+        "usage": "<ModelRouter policy={policy} deployed={deployed} environments={environments} locale=\"es-MX\" currency=\"MXN\" onPolicyChange={setPolicy} onDeployRequest={deploy} />",
+        "api": [
+          {
+            "name": "policy / onPolicyChange",
+            "type": "RouterPolicy",
+            "description": "Controlled draft. Shares are integers and sum to 100 after every edit."
+          },
+          {
+            "name": "deployed",
+            "type": "RouterPolicy",
+            "description": "The policy that is live. The diff and the unsaved pill compare against it."
+          },
+          {
+            "name": "onDeployRequest",
+            "type": "(policy) => Promise<void>",
+            "description": "The host applies the policy. Rejection restores this draft and shows an error."
+          },
+          {
+            "name": "locale / currency",
+            "type": "string",
+            "description": "Intl money format. Amounts are already in currency. USD and MXN are typical."
+          },
+          {
+            "name": "routes / fallback",
+            "type": "ModelRoute[] / FallbackChain",
+            "description": "Share, p95, p99, amount per 1K, error rate, and an ordered fallback without duplicates."
+          },
+          {
+            "name": "status / readOnly / error",
+            "type": "ready | loading | error",
+            "description": "Loading, empty catalog, load error, or a role that cannot deploy."
+          },
+          {
+            "name": "labels / className",
+            "type": "Partial<ModelRouterLabels> / string",
+            "description": "English chrome by default. Spanish copy lives in the demo."
+          }
+        ]
+      },
+      "docs": "Clean-room de un post público de Maxim Kuznetsov (https://x.com/disarto_max/status/2117664457862033627). Sin licencia: solo la idea. No se copió código, datos ni assets. El costo mezclado por 1K está en registry/lib/model-router-cost.ts y es el candidato a delegar en el core de cost-waterfall (precio por 1M de input, output, cache read y cache write) cuando ese core esté en CPL. Esta pieza no calcula esas cuatro tarifas ni dibuja el costo por paso. La moneda se formatea con Intl (locale y currency). Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos.",
+      "files": [
+        {
+          "path": "registry/ui/model-router.tsx",
+          "type": "registry:component",
+          "target": "@ui/model-router.tsx"
+        },
+        {
+          "path": "registry/lib/model-router.ts",
+          "type": "registry:lib",
+          "target": "@lib/model-router.ts"
+        },
+        {
+          "path": "registry/lib/model-router-cost.ts",
+          "type": "registry:lib",
+          "target": "@lib/model-router-cost.ts"
+        }
+      ]
     }
   ]
 }

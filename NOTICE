@@ -916,3 +916,18 @@ callbacks. The table sorts in place and slides rows with layout motion. The
 voice note draws a waveform from numeric peaks and does not play a file.
 Answer no if the CLI asks to overwrite a primitive the host already has.
 The items ship no theme.
+
+---
+
+Model router
+
+model-router is a clean-room reading of a public post by Maxim Kuznetsov
+(https://x.com/disarto_max/status/2117664457862033627). The post ships no code
+and no license. Only the idea was used. No source, sample payload, icons, or
+assets were copied. The blended per-1K amount is a small local function in
+registry/lib/model-router-cost.ts. It is the candidate call site for the
+cost-waterfall pricing core (per-1M input, output, cache read, and cache write)
+once that core is on CPL. This piece does not price those four rates and does
+not draw a per-step cost chart. Money is formatted with Intl from locale and
+currency. Answer no if the CLI asks to overwrite a primitive the host already
+has. The item ships no theme.

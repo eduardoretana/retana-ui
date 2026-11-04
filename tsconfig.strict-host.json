@@ -24,6 +24,9 @@
     "registry/lib/csv.ts",
     "registry/lib/motion.ts",
     "registry/lib/dashboard-format.ts",
+    "registry/lib/model-router.ts",
+    "registry/lib/model-router-cost.ts",
+    "registry/ui/model-router.tsx",
     "registry/hooks/use-layered-panel-url-state.ts"
   ]
 }
