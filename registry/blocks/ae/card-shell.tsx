@@ -33,7 +33,7 @@ export function AeCard({ title, action, children, className, label, as = "sectio
       aria-label={typeof title === "string" ? title : label}
       variants={riseItem(reduce, index)}
       whileHover={liftOnHover(reduce)}
-      className={cn(aeCard, "flex min-w-0 flex-col gap-4 p-5 transition-shadow hover:shadow-md", className)}
+      className={cn(aeCard, "flex min-w-0 flex-col gap-4 p-5 hover:shadow-md", className)}
     >
       {title || action ? (
         <header className="flex min-w-0 flex-wrap items-center justify-between gap-x-3 gap-y-2">

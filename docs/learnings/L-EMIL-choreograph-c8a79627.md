@@ -4,7 +4,7 @@
 - **Fecha de revisión:** 2026-11-04.
 - **Licencia:** MIT. Copyright (c) 2026 Emil Kowalski. El aviso viaja con este documento. No se copia el cuerpo de `SKILL.md` ni de `RECIPES.md`; las reglas se parafrasean para el auditor.
 - **Inspiración aparte:** [Interaction Lab](https://aiforui.dev/lab), revisado el mismo día. Solo ideas. No hay licencia abierta visible para copiar código, así que no se porta ninguna implementación.
-- **ui-system 4.x:** sin acceso. `github.com/eduardoretana/hub-vibecoding` responde 404 (API y web). En retana-ui no existen `docs/learnings/`, `docs/audit/` ni las reglas `RUI-ANIM-PERF-001…007`, ni `anim_perf_lint`. La comparación usa el código vigente de esta rama (`registry/lib/motion.ts`, piezas y tests).
+- **ui-system:** snapshot de `eduardoretana/hub-vibecoding@419ad6481648c693d61f8e5ebfb8b8e80d8d8ab7` (2026-10-29), `VERSION` = `4.0.0`. Los ids viven en `ui-system/knowledge/rules.yaml` (el archivo todavía dice semilla 3.4.1; el CHANGELOG de 4.0.0 no retira `RUI-ANIM-PERF-*`). `rules/*.md` es prosa sin ids.
 
 Veredicto del aprendizaje: **adaptar**. Varias reglas ya estaban en piezas sueltas (`popLayout`, `custom` de dirección, `useReducedMotion`). Faltaban el presupuesto de stagger, la prohibición en UI de alta frecuencia, el colapso real con reduced motion y una sola familia de timing en el hero. Eso se implementó aquí. El texto de `RUI-ANIM-CHOREO-001` queda propuesto para que VibeBot lo lleve al hub. Este repo no edita el hub.
 
@@ -80,11 +80,65 @@ Revisión de https://aiforui.dev/lab el 2026-11-04. Veredicto: **descartar como 
 
 **No** vender el `SKILL.md` completo dentro del hub. La licencia MIT obliga a conservar el copyright si se copia el texto. Basta la regla de abajo, el pin `c8a79627` y los números de `motion.ts`.
 
+## Comparación con ui-system 4.0.0 (`419ad648`)
+
+Los ids están en `knowledge/rules.yaml`. No hay una regla de coreografía, stagger, `popLayout` ni familia de timing. `RUI-ANIM-PERF-001…007` dicen **qué propiedad** se puede animar. `/choreograph` dice **en qué orden** se mueven varias. No se duplican. La frase “solo transform y opacity” de la propuesta de coreografía se apoya en PERF-002; no la repite como regla nueva.
+
+| Regla del hub | Dónde | Qué exige | Relación con `/choreograph` |
+| --- | --- | --- | --- |
+| RUI-ANIM-PERF-001 | `knowledge/rules.yaml:117`. Lint `anim_perf_lint.mjs:5` y `:49`. SKILL.md `:209` | Nada de `transition: all`, `transition-all` ni `transition` sin propiedad | **Ya cubierto, otro eje.** El diff no introduce `transition-all`. El lint no marcó 001 en los 14 archivos tocados. |
+| RUI-ANIM-PERF-002 | `rules.yaml:118`. Lint `:6`, `:144`. SKILL.md `:210`. Nota: excepción citada para `height: auto` | No animar layout; usar `scale()` / `translate()` | **Ya cubierto como prohibición de propiedades.** La coreografía no la sustituye. El lint sí marca `height` previo en `comment-thread.tsx:368-370` y `shortcut-recorder.tsx:641`, `:642`, `:839`, `:858` (listas que abren en altura). Es el caso de la nota de excepción; no viene de este aprendizaje y no se reescribe aquí. |
+| RUI-ANIM-PERF-003 | `rules.yaml:119`. Lint `:7` | No animar `box-shadow` | **Ya cubierto.** Se quitó `transition-shadow` de `card-shell.tsx` (el hover de sombra queda sin transición). El lint no marcó 003 en el diff. |
+| RUI-ANIM-PERF-004 | `rules.yaml:120`. Lint `:8`, `:146`. SKILL.md `:212` | `blur()` animado &lt; 20 px | **Ya cubierto.** Los blurs de este diff usan `motionPresets.blur.subtle` (2 px). El lint no marcó 004. |
+| RUI-ANIM-PERF-005 | `rules.yaml:121`. Lint `:9`, `:153` | En un handler por frame no escribir variables CSS heredadas | **Ya cubierto como regla de rendimiento, no de coreografía.** El lint marca `user-menu.tsx:232` (`--index` del control segmentado, no es un frame) y `:380-381` (`--origin-x/y` al colocar el panel, con listener de `scroll`). Son señales previas del archivo; el origen se escribe en el propio panel, no en un árbol grande por frame. No se cambia en esta ronda. |
+| RUI-ANIM-PERF-006 | `rules.yaml:122`. Lint `:10` | `will-change` solo en el elemento que anima, solo `transform`/`opacity` | **Ya cubierto.** El lint no marcó 006. |
+| RUI-ANIM-PERF-007 | `rules.yaml:123`. AUDITOR.md `:197` y `:206`. SKILL.md `:216` | Sin `setState` por frame; el movimiento de carga/navegación va en CSS o WAAPI | **Ya cubierto como juicio.** Las entradas de esta ronda usan Motion/`AnimatePresence`, no `setState` por frame. El hold táctil hace un solo `setState` al cumplir los 360 ms, no por frame. |
+| UIS-LAYOUT-002 | `rules.yaml:91` | La página carga con `scrollY === 0` | **Sin relación.** No habla de stagger ni de gesto. Las páginas de ejemplo no hacen scroll al montar por este diff. |
+| a11y, reduced motion | `rules/a11y.md:10` | Respetar `prefers-reduced-motion`; nada de parpadeos &gt; 3/s | **La prosa existe; no dice cómo colapsar una coreografía.** `RUI-ANIM-CHOREO-001` precisa ese cómo (sin delays ni desplazamiento, opacidad compartida). No copia la línea 10. |
+| a11y, objetivo | `rules/a11y.md:9` | Hit area ≥ 24 px (AA) y ≥ 44 px recomendado en táctil | **No es coreografía.** El chip de calendario que tocamos queda en `min-h-6` (24 px). 44 px sigue siendo recomendación de layout, no de este aprendizaje. |
+| layout, táctil | `rules/layout.md:12` | Responsive desde móvil; áreas táctiles ≥ 44 px (ver `a11y.md`) | **No se duplica.** 44 px es objetivo de layout. Esta ronda no agranda la rejilla del calendario a 44 px. |
+
+### `anim_perf_lint.mjs`
+
+No se commitea: es herramienta del hub (cabecera MIT de `emilkowalski/skills@2d22863`, empaquetada en el snapshot privado). Se ejecutó desde la copia en `/tmp`.
+
+```
+node /tmp/lint-run/tools/anim_perf_lint.mjs /agent/repos/retana-ui \
+  --files registry/blocks/ae/card-shell.tsx,registry/blocks/hero-section.tsx,registry/lib/ae-dash.ts,registry/lib/motion.ts,registry/ui/comment-thread.tsx,registry/ui/multi-view-fields.tsx,registry/ui/notification-stack.tsx,registry/ui/shortcut-recorder.tsx,registry/ui/slide-to-confirm.tsx,registry/ui/stagger-reveal.tsx,registry/ui/user-menu.tsx,registry/ui/view-calendar.tsx,registry/ui/view-kanban.tsx,registry/ui/view-timeline.tsx \
+  --json
+```
+
+Exit code: **1**. `status: fail`, 14 archivos, 10 flags. Ninguno es de las reglas nuevas de coreografía (el lint no las conoce). Los 10 son PERF-002 (7, `height` previo) y PERF-005 (3, variables de posición del menú). 001, 003, 004 y 006: cero flags.
+
 ## Propuesta para VibeBot — `RUI-ANIM-CHOREO-001`
 
-Texto listo para el hub. No se aplicó allí.
+No duplica `RUI-ANIM-PERF-001…007` ni `UIS-LAYOUT-002`. Esas reglas no nombran stagger, orden, crossfade ni el colapso de una secuencia. La propuesta no repite “prohibido `transition: all`” ni “no animar width/height”: eso ya es PERF-001 y PERF-002. Formato de `knowledge/rules.yaml`. No se escribió en el hub.
 
-> **RUI-ANIM-CHOREO-001. Coreografía.**
-> Un contenedor tiene una sola entrada. Si el panel, la hoja o la tarjeta ya se mueven, sus hijos aparecen con ellos. Prohibido el stagger en menús, dropdowns, command palette, tabs y filas que se abren seguido o con teclado. El stagger uniforme está prohibido: el lead viaja más, el apoyo menos, la decoración solo desvanece, lo estático no se mueve. En producto, 30–80 ms entre ítems, tope del grupo ~300 ms, y a partir del sexto ítem el mismo delay que el sexto. En marketing o primera visita, 100–150 ms sobre entradas de 0.5–0.6 s. Quien sale deja el flujo al instante (`popLayout` o `absolute`). Un cambio de vista en el mismo contenedor es crossfade, salvo dos estados densos que se pisarían. Una sola familia de timing por componente (`motionPresets`, `MotionConfig` o una variable CSS). Si la altura cambia, la duración del fade es `clamp(0.15s, Δpx/500, 0.27s)`. Las salidas son simultáneas, más cortas que la entrada y en espejo; la dirección viaja en `custom` de `AnimatePresence` y del hijo. Una secuencia se puede cortar a la mitad. Un loop que invita al clic espera ~2.5 s y repite cada ~6 s, y se detiene mientras hay interacción. Con `prefers-reduced-motion: reduce` se quitan delays y desplazamiento y se conserva un fade de opacidad compartido. Solo `transform` y `opacity`. Prohibido `transition-all`.
+```yaml
+- id: RUI-ANIM-CHOREO-001
+  title: "Una coreografía por evento: sin doble entrada, sin stagger en UI frecuente, delays con tope"
+  description: >-
+    Si un contenedor ya entra, sus hijos aparecen con él. Prohibido el stagger en menús,
+    dropdowns, command palette, tabs y filas que se abren seguido o con teclado. El stagger
+    uniforme está prohibido: el lead viaja más, el apoyo menos, la decoración solo desvanece.
+    En producto, 30–80 ms entre ítems, tope del grupo ~300 ms, y desde el sexto ítem el mismo
+    delay que el sexto. En marketing o primera visita, 100–150 ms sobre entradas de 0.5–0.6 s.
+    Quien sale deja el flujo al instante (popLayout o absolute). Un cambio de vista en el mismo
+    contenedor es crossfade, salvo dos estados densos que se pisarían. Una sola familia de
+    timing por componente. Si la altura del contenedor cambia, el fade dura
+    clamp(0.15s, Δpx/500, 0.27s). Las salidas son simultáneas, más cortas que la entrada y en
+    espejo; la dirección viaja en custom. La secuencia se puede cortar. Un loop que invita al
+    clic espera ~2.5 s y repite cada ~6 s. Con prefers-reduced-motion se quitan delays y
+    desplazamiento y queda un fade de opacidad compartido (precisión de rules/a11y.md L10, no
+    un sustituto). Las propiedades animables siguen en RUI-ANIM-PERF-001…007.
+  severity: major
+  category: rendimiento
+  check: lint
+  check_tool: "retana-ui __tests__/choreography-lint.test.ts (alta frecuencia); el resto es juicio con cita"
+  origin:
+    source: "emilkowalski/skills@c8a79627b59d72d764d6ab6f2c87c09a48169833 skills/choreograph (MIT, Copyright (c) 2026 Emil Kowalski)"
+    date: 2026-11-04
+  status: proposed
+```
 
-El lint de alta frecuencia de `__tests__/choreography-lint.test.ts` es el chequeo automático de la segunda oración. `anim_perf_lint` del hub no está en esta máquina.
+El lint de alta frecuencia de `__tests__/choreography-lint.test.ts` cubre la prohibición de stagger en menús y filas. El resto de la regla es juicio hasta que el hub tenga un check.

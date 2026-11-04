@@ -5,7 +5,7 @@ import {
   DndContext,
   DragOverlay,
   KeyboardSensor,
-  PointerSensor,
+  MouseSensor,
   useDraggable,
   useDroppable,
   useSensor,
@@ -31,7 +31,7 @@ import {
   type MultiRecord,
   type ViewConfig,
 } from "@/registry/retana/lib/multi-view"
-import { useCoarsePointer, useContainerWidth, usePrefersReducedMotion } from "@/registry/retana/ui/multi-view-fields"
+import { TOUCH_HOLD_MS, TOUCH_SLOP_PX, touchIntent, useContainerWidth, usePrefersReducedMotion } from "@/registry/retana/ui/multi-view-fields"
 
 export type ViewCalendarProps = {
   records: readonly MultiRecord[]
@@ -105,7 +105,7 @@ export function ViewCalendar({
   }, [dateField, records])
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
+    useSensor(MouseSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor),
   )
 
@@ -366,19 +366,91 @@ function RecordChip({
 }) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: record.id, disabled: readOnly })
   const title = recordTitle(record, fields, titleField)
-  const coarse = useCoarsePointer()
-  const [armed, setArmed] = React.useState(false)
   const nodeRef = React.useRef<HTMLButtonElement | null>(null)
+  const touch = React.useRef<TouchSession | null>(null)
+  const openRef = React.useRef(onOpen)
+  const shiftRef = React.useRef(onReschedule)
+  const swallowClick = React.useRef(false)
+  const [holding, setHolding] = React.useState(false)
   React.useEffect(() => {
-    if (!armed) return
-    const down = (event: PointerEvent) => {
-      if (event.target instanceof Node && nodeRef.current?.contains(event.target)) return
-      setArmed(false)
+    openRef.current = onOpen
+    shiftRef.current = onReschedule
+  }, [onOpen, onReschedule])
+  React.useEffect(() => {
+    const move = (event: PointerEvent) => {
+      const session = touch.current
+      if (!session || session.pointerId !== event.pointerId || session.phase !== "pending") return
+      const intent = touchIntent({
+        dx: event.clientX - session.x,
+        dy: event.clientY - session.y,
+        elapsedMs: 0,
+        released: false,
+      })
+      if (intent !== "scroll" && intent !== "cancel") return
+      window.clearTimeout(session.timer)
+      session.phase = intent
+      setHolding(false)
     }
-    document.addEventListener("pointerdown", down)
-    return () => document.removeEventListener("pointerdown", down)
-  }, [armed])
-  const capture = !coarse || armed
+    const end = (event: PointerEvent) => {
+      const session = touch.current
+      if (!session || session.pointerId !== event.pointerId) return
+      window.clearTimeout(session.timer)
+      touch.current = null
+      setHolding(false)
+      const dx = event.clientX - session.x
+      const dy = event.clientY - session.y
+      if (session.phase === "scroll" || session.phase === "cancel") return
+      if (session.phase !== "hold" || Math.hypot(dx, dy) <= TOUCH_SLOP_PX) {
+        swallowClick.current = true
+        openRef.current?.(record.id)
+        return
+      }
+      const cell = nodeRef.current?.closest("[role='gridcell']")
+      const width = cell?.getBoundingClientRect().width ?? 0
+      const delta = width > 0 ? Math.round(dx / width) : 0
+      if (!delta) {
+        swallowClick.current = true
+        openRef.current?.(record.id)
+        return
+      }
+      swallowClick.current = true
+      shiftRef.current(delta)
+    }
+    window.addEventListener("pointermove", move)
+    window.addEventListener("pointerup", end)
+    window.addEventListener("pointercancel", end)
+    return () => {
+      window.removeEventListener("pointermove", move)
+      window.removeEventListener("pointerup", end)
+      window.removeEventListener("pointercancel", end)
+      const session = touch.current
+      if (session) window.clearTimeout(session.timer)
+    }
+  }, [record.id])
+  function beginTouch(event: React.PointerEvent<HTMLButtonElement>) {
+    if (readOnly) return
+    const session: TouchSession = {
+      pointerId: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+      phase: "pending",
+      timer: 0,
+    }
+    session.timer = window.setTimeout(() => {
+      if (touch.current !== session || session.phase !== "pending") return
+      session.phase = "hold"
+      setHolding(true)
+      const node = nodeRef.current
+      if (!node) return
+      try {
+        node.setPointerCapture(event.pointerId)
+      } catch {
+        /* The pointer already ended. */
+      }
+    }, TOUCH_HOLD_MS)
+    touch.current = session
+  }
+  const { onPointerDown: dragPointerDown, onKeyDown: dragKeyDown, ...restListeners } = listeners ?? {}
   return (
     <button
       ref={(node) => {
@@ -386,25 +458,32 @@ function RecordChip({
         setNodeRef(node)
       }}
       type="button"
-      data-gesture={coarse ? (armed ? "armed" : "dormant") : "direct"}
+      data-gesture={holding ? "holding" : "ready"}
       className={cn(
-        "truncate rounded-md bg-muted px-1.5 py-0.5 text-left text-xs focus-visible:ring-2 focus-visible:ring-ring",
+        "min-h-6 truncate rounded-md bg-muted px-1.5 py-0.5 text-left text-xs touch-pan-y focus-visible:ring-2 focus-visible:ring-ring",
         isDragging && "opacity-40",
-        coarse && armed && "touch-none",
+        holding && "touch-none",
         className,
       )}
       aria-label={`Reschedule ${title}`}
       dir="auto"
-      onClick={(event) => {
-        if (coarse && !readOnly && !armed) {
-          event.preventDefault()
-          setArmed(true)
+      onClick={() => {
+        if (swallowClick.current) {
+          swallowClick.current = false
           return
         }
         onOpen?.(record.id)
       }}
-      {...(readOnly || !capture ? {} : attributes)}
-      {...(readOnly || !capture ? {} : listeners)}
+      {...(readOnly ? {} : attributes)}
+      {...(readOnly ? {} : restListeners)}
+      onPointerDown={(event) => {
+        if (readOnly) return
+        if (event.pointerType === "touch") {
+          beginTouch(event)
+          return
+        }
+        dragPointerDown?.(event)
+      }}
       onKeyDown={(event) => {
         if (readOnly) return
         if (event.altKey && (event.key === "ArrowLeft" || event.key === "ArrowRight")) {
@@ -413,12 +492,20 @@ function RecordChip({
           onReschedule(event.key === "ArrowRight" ? 1 : -1)
           return
         }
-        listeners?.onKeyDown?.(event)
+        dragKeyDown?.(event)
       }}
     >
       {title}
     </button>
   )
+}
+
+type TouchSession = {
+  pointerId: number
+  x: number
+  y: number
+  phase: "pending" | "hold" | "scroll" | "cancel"
+  timer: number
 }
 
 function Agenda({
