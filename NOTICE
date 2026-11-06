@@ -916,3 +916,15 @@ callbacks. The table sorts in place and slides rows with layout motion. The
 voice note draws a waveform from numeric peaks and does not play a file.
 Answer no if the CLI asks to overwrite a primitive the host already has.
 The items ship no theme.
+
+---
+
+Sidebar islands
+
+sidebar-islands is a clean-room reading of a public navigation idea posted by
+Maxim Kuznetsov (https://x.com/disarto_max/status/2117664457862033627). The
+post ships no code and no license. Only the idea, the interaction, the
+layout, and the motion were used. No source, sample data, icons, or assets
+were copied. The catalog demo is Taller Norte, a fictional workshop. People,
+teams, and counts are invented. The host persists collapse, the active item,
+and the team. See docs/learnings/L-KUZNETSOV-sidebar-shard.md.

@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`422` items are in `registry.json` on this branch: `333` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`423` items are in `registry.json` on this branch: `334` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -635,6 +635,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`mega-menu`](registry/ui/mega-menu.tsx) · ui — Navigation bar whose triggers open a wide panel. A container under 768px stacks the same panel as an accordion. Install: `npx shadcn@latest add @retana/mega-menu`.
 - [`proposal-shell`](registry/blocks/proposal-shell.tsx) · block — Grouped app sidebar, command search, unread bell, people, a period menu, and a primary action that the screen can change. Install: `npx shadcn@latest add @retana/proposal-shell`.
 - [`proposal-workspace`](registry/ui/proposal-workspace.tsx) · ui — Breadcrumb header and a tab bar whose underline slides. The panel crossfades. Install: `npx shadcn@latest add @retana/proposal-workspace`.
+- [`sidebar-islands`](registry/ui/sidebar-islands.tsx) · ui — A collapsed rail, an expanded island, and a tree flyout for CRM navigation. The host persists collapse, the active item, and the team. Install: `npx shadcn@latest add @retana/sidebar-islands`.
 
 ### Page blocks
 

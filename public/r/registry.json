@@ -32050,6 +32050,105 @@
           }
         ]
       }
+    },
+    {
+      "name": "sidebar-islands",
+      "type": "registry:ui",
+      "title": "Sidebar islands",
+      "description": "A collapsed rail, an expanded island, and a tree flyout for CRM navigation. The host persists collapse, the active item, and the team.",
+      "author": "Eduardo Retana",
+      "dependencies": ["lucide-react", "motion"],
+      "registryDependencies": [
+        "tree-nav",
+        "workspace-switcher",
+        "avatar",
+        "badge",
+        "button",
+        "empty",
+        "popover",
+        "separator",
+        "sheet",
+        "skeleton",
+        "tooltip"
+      ],
+      "categories": ["navigation"],
+      "docs": "Clean-room. The idea comes from a public post with no license and no code (see NOTICE). Answer no if the CLI asks to overwrite avatar, badge, button, empty, popover, separator, sheet, skeleton, tooltip, tree-nav, or workspace-switcher. The flyout composes TreeNav. The team row composes WorkspaceSwitcher. The profile popover is local because UserMenu does not compile under exactOptionalPropertyTypes. Hover preview does not move focus. Below 480px a tap opens a sheet. The host persists collapsed, activeId, and teamId. No theme, cssVars, or fixed colors ship with the item.",
+      "files": [
+        {
+          "path": "registry/ui/sidebar-islands.tsx",
+          "type": "registry:component",
+          "target": "@ui/sidebar-islands.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Islas de navegación",
+        "descriptionEs": "Riel contraído, isla expandida y submenú en árbol. El anfitrión guarda el equipo, la sección activa y si el panel está contraído.",
+        "preview": "app/examples/sidebar-islands/preview.tsx",
+        "previewHref": "/examples/sidebar-islands",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "rail", "label": "Riel", "labelEn": "Rail" },
+          { "id": "role", "label": "Rol", "labelEn": "Role" }
+        ],
+        "examples": [
+          {
+            "title": "Taller Norte",
+            "href": "/examples/sidebar-islands",
+            "description": "Equipo, búsqueda, badges, informes anidados y el menú de Camila Ortega."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/sidebar-islands/stress",
+            "description": "Cincuenta filas, tres niveles, RTL, hoja de 390 px, carga, vacío y error."
+          }
+        ],
+        "usage": "<SidebarIslands\n  sections={sections}\n  teams={teams}\n  teamId={teamId}\n  onTeamChange={setTeamId}\n  collapsed={collapsed}\n  onCollapsedChange={setCollapsed}\n  activeId={activeId}\n  onNavigate={setActiveId}\n/>",
+        "api": [
+          {
+            "name": "sections",
+            "type": "NavSection[]",
+            "description": "id, label, icon, badge, hidden, and items. NavItem repeats that shape, plus href or onSelect, and children."
+          },
+          {
+            "name": "collapsed / onCollapsedChange",
+            "type": "boolean / (boolean) => void",
+            "description": "Controlled rail. The host persists it. defaultCollapsed covers the uncontrolled case."
+          },
+          {
+            "name": "activeId / onNavigate",
+            "type": "string / (id: string) => void",
+            "description": "The current item. onNavigate receives the id. href follows only when onNavigate is omitted."
+          },
+          {
+            "name": "teams / teamId / onTeamChange",
+            "type": "NavTeam[] / string / (id) => void",
+            "description": "Team switcher. The host persists the id."
+          },
+          {
+            "name": "status / onRetry / onEmptyAction",
+            "type": "ready | loading | empty | error",
+            "description": "Skeleton, empty copy with a first action, or an error that says what failed and how to retry."
+          },
+          {
+            "name": "profile / meter / utilities / onSearch",
+            "type": "objects and callbacks",
+            "description": "Account popover, usage line, footer items, and the search button. Omit any of them to hide that part."
+          },
+          {
+            "name": "labels / locale / layout",
+            "type": "SidebarIslandsLabels / es-MX | en / auto | rail | sheet",
+            "description": "Spanish labels are the default. sidebarIslandsLabelsEn is the English set. auto uses a sheet at 480px."
+          },
+          {
+            "name": "className / railClassName / panelClassName / previewClassName / itemClassName",
+            "type": "string",
+            "description": "Slot classes. Width and labels stay overridable. No theme tokens are added."
+          }
+        ]
+      }
     }
   ]
 }
