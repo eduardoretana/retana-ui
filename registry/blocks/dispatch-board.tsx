@@ -521,10 +521,12 @@ export function DispatchBoard({
             <DropdownMenuItem onSelect={() => void exportList("json")}>{labels.downloadJson}</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button type="button" variant="outline" className="min-h-11 md:hidden" onClick={() => setRailOpen(true)}>
-          {labels.openRail}
-          <span className="tabular-nums">({queue.length})</span>
-        </Button>
+        {loading || error ? null : (
+          <Button type="button" variant="outline" className="min-h-11 md:hidden" onClick={() => setRailOpen(true)}>
+            {labels.openRail}
+            <span className="tabular-nums">({queue.length})</span>
+          </Button>
+        )}
       </div>
       {filtersOpen ? (
         <div id="dispatch-filters" className="flex flex-wrap gap-3 rounded-md border border-border p-3">
@@ -554,17 +556,6 @@ export function DispatchBoard({
           live
         )}
       </div>
-      {error ? (
-        <div role="alert" className="flex flex-wrap items-center gap-3 rounded-md border border-border px-3 py-3 text-sm">
-          <TriangleAlert className="size-4" aria-hidden />
-          <p className="min-w-0 flex-1">{error}</p>
-          {onRetry ? (
-            <Button type="button" variant="outline" className="min-h-11" onClick={onRetry}>
-              {labels.retry}
-            </Button>
-          ) : null}
-        </div>
-      ) : null}
       <div className="flex min-h-0 min-w-0 flex-1 gap-3">
         <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-2">
           {loading ? (
@@ -572,6 +563,16 @@ export function DispatchBoard({
               <Skeleton className="h-10 w-full" />
               <Skeleton className="h-16 w-full" />
               <Skeleton className="h-16 w-full" />
+            </div>
+          ) : error ? (
+            <div role="alert" className="flex flex-wrap items-center gap-3 rounded-md border border-border px-3 py-8 text-sm">
+              <TriangleAlert className="size-4" aria-hidden />
+              <p className="min-w-0 flex-1">{error}</p>
+              {onRetry ? (
+                <Button type="button" variant="outline" className="min-h-11" onClick={onRetry}>
+                  {labels.retry}
+                </Button>
+              ) : null}
             </div>
           ) : filtered.resources.length === 0 ? (
             <div className="rounded-md border border-dashed border-border px-4 py-8">
@@ -667,14 +668,14 @@ export function DispatchBoard({
               </div>
             </div>
           )}
-          {canScrollNext ? (
+          {!loading && !error && filtered.resources.length > 0 && canScrollNext ? (
             <Button type="button" variant="ghost" className="min-h-11 self-end" onClick={() => scrollerRef.current?.scrollBy({ left: HOUR_COLUMN_PX * 2, behavior: reduced ? "auto" : "smooth" })}>
               {labels.moreHours}
               <ChevronRight aria-hidden />
             </Button>
           ) : null}
         </div>
-        {narrow ? (
+        {loading || error ? null : narrow ? (
           <Sheet open={railOpen} onOpenChange={setRailOpen}>
             <SheetContent side="right" className="w-full sm:max-w-sm" data-dispatch-rail="sheet">
               <SheetHeader>
