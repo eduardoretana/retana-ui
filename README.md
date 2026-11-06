@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`422` items are in `registry.json` on this branch: `333` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`425` items are in `registry.json` on this branch: `333` components, `76` blocks, `6` hooks, and `10` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -646,6 +646,9 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`page-header`](registry/blocks/page-header.tsx) · block — A project header that folds into a compact bar as you scroll. Install: `npx shadcn@latest add @retana/page-header`.
 - [`empty-states`](registry/blocks/empty-states.tsx) · block — Several empty states in one switchable set. Install: `npx shadcn@latest add @retana/empty-states`.
 - [`login-centered`](registry/blocks/login-centered.tsx) · block — A passkey-first login that continues through email and a code. Install: `npx shadcn@latest add @retana/login-centered`.
+- [`forgot-password`](registry/blocks/forgot-password.tsx) · block — Ask for a reset link. The confirmation does not reveal whether the address has an account. Install: `npx shadcn@latest add @retana/forgot-password`.
+- [`reset-password`](registry/blocks/reset-password.tsx) · block — Choose a new password with strength and a match. An invalid or expired link asks for another. Install: `npx shadcn@latest add @retana/reset-password`.
+- [`verify-email`](registry/blocks/verify-email.tsx) · block — Check your email, resend after a cooldown, and optionally enter the code. Install: `npx shadcn@latest add @retana/verify-email`.
 - [`site-header`](registry/blocks/site-header.tsx) · block — A sticky header that turns solid on scroll, with a mobile sheet. Install: `npx shadcn@latest add @retana/site-header`.
 - [`site-footer`](registry/blocks/site-footer.tsx) · block — A footer with link columns and a newsletter field. Install: `npx shadcn@latest add @retana/site-footer`.
 - [`hero-section`](registry/blocks/hero-section.tsx) · block — Three SaaS heroes: dashboard, workflow, and editorial. Install: `npx shadcn@latest add @retana/hero-section`.
