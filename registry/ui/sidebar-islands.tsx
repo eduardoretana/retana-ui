@@ -275,15 +275,15 @@ function toTree(items: readonly NavItem[] | undefined): TreeNavNode[] {
 }
 
 function useNarrowScreen(layout: "auto" | "rail" | "sheet") {
-  const [narrow, setNarrow] = React.useState(false)
-  React.useEffect(() => {
-    if (layout !== "auto") return
-    const media = window.matchMedia("(max-width: 480px)")
-    const apply = () => setNarrow(media.matches)
-    apply()
-    media.addEventListener("change", apply)
-    return () => media.removeEventListener("change", apply)
-  }, [layout])
+  const narrow = React.useSyncExternalStore(
+    (onChange) => {
+      const media = window.matchMedia("(max-width: 480px)")
+      media.addEventListener("change", onChange)
+      return () => media.removeEventListener("change", onChange)
+    },
+    () => window.matchMedia("(max-width: 480px)").matches,
+    () => false,
+  )
   return layout === "sheet" || (layout === "auto" && narrow)
 }
 
@@ -945,7 +945,7 @@ export function SidebarIslands({
       data-slot="sidebar-islands-panel"
       className={cn(
         "flex h-full w-68 flex-col overflow-hidden rounded-2xl bg-card text-card-foreground shadow-md ring-1 ring-foreground/10",
-        sheet ? "relative w-full" : "absolute inset-y-0 start-0",
+        sheet ? "relative h-dvh w-full pt-12" : "absolute inset-y-0 start-0",
         panelClassName,
       )}
       initial={false}
@@ -1014,7 +1014,7 @@ export function SidebarIslands({
           <PanelLeft />
         </Button>
         <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-          <SheetContent side="left" className="w-full! gap-0 p-0 sm:max-w-sm">
+          <SheetContent side="left" className="h-dvh w-full! gap-0 overflow-hidden bg-popover p-0 sm:max-w-sm">
             <SheetHeader className="sr-only">
               <SheetTitle>{labels.navigation}</SheetTitle>
             </SheetHeader>

@@ -117,5 +117,5 @@ No duplica `RUI-ANIM-PERF-*`, `RUI-TOUCH-001` ni `UIS-LAYOUT-002`.
 - `tree-nav` anima `grid-template-rows`. No se tocó.
 - Al terminar el `clip-path`, el ancho de layout pasa de `w-68` a `w-14` de un salto. El ancho no se transiciona.
 - El cierre de la hoja de shadcn dice "Close" en inglés.
-- Capturas de claro/oscuro, 1280, 390, hover, árbol, perfil y reduced motion: pendientes de copiar a `/cursor/stores/self/ai-crm/sidebar-islands/`.
+- Capturas en `/cursor/stores/self/ai-crm/sidebar-islands/`. La tira de frames cayó en el riel ya asentado: el clip de 240 ms terminó antes del primer disparo. El colapso instantáneo está en `reduced-light-1280.png`.
 - El anillo isométrico queda descartado.
