@@ -127,7 +127,20 @@ type ContextSource = {
 - ISP-001 sigue diferida y esta pieza pasa de 10 props.
 - El `CardFooter` del anfitrión trae banda `muted`. No se restylea.
 - Falta la medición numérica de contraste del par real del host.
+- El tema de demostración define `--chart-1` … `--chart-5` casi sin croma (`app/globals.css`). En esta demo la barra se ve en grises; el anfitrión que traiga escalas con tono separa las fuentes. El estado no depende de ese tono: hay pin, puntos suspensivos, borde discontinuo y flecha.
+- `anim_perf_lint.mjs` se leyó del snapshot al empezar. Al volver a correrlo el tarball ya no estaba en disco. Revisión de `registry/ui/context-window.tsx` contra esas reglas: sin `transition-all`, `animate` solo con `opacity`, sin blur, sin `will-change`, y el puntero escribe `transform` en el tooltip.
 
 ## Capturas
 
-Se copian a `/cursor/stores/self/context-window/` cuando la pasada visual cierra.
+Copiadas a `/cursor/stores/self/context-window/`.
+
+| Archivo | Qué es |
+| --- | --- |
+| `light-1280-filled.png` / `dark-1280-filled.png` | Lleno a 1280 |
+| `light-390.png` / `dark-390.png` | Misma card con viewport de 390 |
+| `light-near-limit.png` / `dark-near-limit.png` | Casi llena, badge |
+| `light-compact-before.png` / `dark-compact-before.png` | Compactando, charla en 45 k |
+| `light-compact-after.png` / `dark-compact-after.png` | Resumen, flecha, 33.9 k, nota de 39,800 |
+| `light-pinned.png` / `dark-pinned.png` | Fuentes fijadas |
+| `light-reduced.png` / `dark-reduced.png` | `prefers-reduced-motion: reduce` |
+| `motion-strip.png` | Recorrido a 0.4, 1.2, 2.4, 3.0, 3.6 y 4.3 s |

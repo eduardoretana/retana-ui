@@ -92,7 +92,11 @@ function WindowScene({
     </div>
   )
   if (!width) return view
-  return <div style={{ width }}>{view}</div>
+  return (
+    <div className="w-full max-w-full" style={{ maxWidth: width }}>
+      {view}
+    </div>
+  )
 }
 
 function scene(fixture: WindowFixture, options: { failEvict?: boolean; model?: (locale: SceneRenderProps["locale"]) => ContextWindowModel; width?: number } = {}) {
