@@ -17,7 +17,7 @@ export type ExpressionContext = {
 export type ExpressionFn = (args: readonly unknown[]) => unknown
 
 export type ExpressionResult = {
-  value: unknown
+  value?: unknown
   error?: string
 }
 
