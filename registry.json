@@ -25469,11 +25469,16 @@
           "name": "context-window",
           "type": "registry:ui",
           "title": "Context window",
-          "description": "The window as a decorative field of cells and the list under it. A file can be removed and the conversation can be compacted. Cells do not shimmer.",
+          "description": "Segmented context window for an agent. Sources load into a tick bar, pinned rows stay put, and crossing a threshold asks the host before chat becomes a summary.",
           "author": "Eduardo Retana",
+          "dependencies": [
+            "lucide-react",
+            "motion"
+          ],
           "registryDependencies": [
             "badge",
             "button",
+            "card",
             "skeleton"
           ],
           "categories": [
@@ -25481,7 +25486,7 @@
           ],
           "meta": {
             "titleEs": "Ventana de contexto",
-            "descriptionEs": "La ventana como un campo de celdas y la lista debajo. Se puede quitar un archivo y compactar la charla. Las celdas no brillan.",
+            "descriptionEs": "Ventana de contexto del agente. Las fuentes entran en una barra de ticks, lo fijado no se compacta, y al cruzar el umbral el anfitrión decide si la charla pasa a resumen.",
             "preview": "app/examples/context-window/preview.tsx",
             "previewHref": "/examples/context-window",
             "scenes": [
@@ -25506,73 +25511,108 @@
                 "labelEn": "Error"
               },
               {
-                "id": "tight",
-                "label": "Justa",
-                "labelEn": "Tight"
+                "id": "near-limit",
+                "label": "Casi llena",
+                "labelEn": "Near limit"
               },
               {
-                "id": "full",
-                "label": "Llena",
-                "labelEn": "Full"
+                "id": "compacting",
+                "label": "Compactando",
+                "labelEn": "Compacting"
               },
               {
                 "id": "compacted",
                 "label": "Compacta",
-                "labelEn": "Compact"
+                "labelEn": "Compacted"
+              },
+              {
+                "id": "over-limit",
+                "label": "Sobre el límite",
+                "labelEn": "Over limit"
+              },
+              {
+                "id": "pinned",
+                "label": "Fijadas",
+                "labelEn": "Pinned"
+              },
+              {
+                "id": "cache-heavy",
+                "label": "Mucha caché",
+                "labelEn": "Cache heavy"
+              },
+              {
+                "id": "390",
+                "label": "390",
+                "labelEn": "390"
+              },
+              {
+                "id": "playback",
+                "label": "Recorrido",
+                "labelEn": "Playback"
               }
             ],
             "examples": [
               {
-                "title": "24 000 tokens",
+                "title": "80 000 tokens",
                 "href": "/examples/context-window",
-                "description": "Cotización, foto del horno y la charla. En Error el primer quitar se deshace."
+                "description": "Recorrido de carga y compactación. En Error el primer quitar se deshace."
               },
               {
                 "title": "Estrés",
                 "href": "/examples/context-window/stress",
-                "description": "Vacío, textos largos, RTL y diez partes."
+                "description": "Cuarenta fuentes, 0 y 2 millones de tokens, nombres largos, todo fijado y eventos desordenados."
               }
             ],
-            "usage": "<ContextWindow parts={parts} limit={24000} onRemove={remove} onCompact={compact} />",
+            "usage": "<ContextWindow sources={sources} modelLimit={80000} warnAt={{ unit: \"percent\", value: 75 }} compactAt={{ unit: \"percent\", value: 90 }} onThreshold={onThreshold} onPinChange={onPinChange} onEvictRequest={onEvictRequest} />",
             "api": [
               {
-                "name": "parts",
-                "type": "WindowPart<TMeta>[]",
-                "description": "id, label, tokens or items, locked, compactable, compact. An item has id, label and tokens. meta is opaque."
+                "name": "sources / model",
+                "type": "ContextSource[] / ContextWindowModel",
+                "description": "Rows: kind, tokens, status, cached, cacheTokens, pinned, label, summaryOf. model also carries the last compact."
               },
               {
-                "name": "limit",
-                "type": "number",
-                "description": "Size of the window. From 80% the caption says it is getting full. From 95% it is full."
+                "name": "modelLimit / resolveLimit",
+                "type": "number / (modelId) => number",
+                "description": "Window size. resolveLimit is the host bridge for model-router. That branch is not imported. A positive resolver result wins."
               },
               {
-                "name": "onRemove / onCompact",
-                "type": "(partId, itemId) => void / (partId) => void",
-                "description": "Drop a file or compact a part. The piece does not change the list itself."
+                "name": "warnAt / compactAt / onThreshold",
+                "type": "ContextThreshold / (hit) => void",
+                "description": "Lines in percent or tokens. The callback fires once when usage crosses upward. The host decides whether to compact."
               },
               {
-                "name": "note",
-                "type": "string",
-                "description": "A small tag in the header, such as which window this is."
+                "name": "applyContextEvent",
+                "type": "(state, event) => state",
+                "description": "Pure reducer for load, update, evict, compact, pin, and unpin. Duplicates and wrong order are ignored. Pinned rows are not compacted."
               },
               {
-                "name": "loading / error",
-                "type": "boolean / string",
-                "description": "Loading skeleton, or an alert when a removal cannot be saved."
+                "name": "onPinChange / onEvictRequest",
+                "type": "(id, pinned) => Promise / (id) => Promise",
+                "description": "Controlled actions. The row updates immediately and rolls back if the promise rejects. Pinned rows cannot be removed until they are unpinned."
               },
               {
-                "name": "labels",
-                "type": "Partial<ContextWindowLabels>",
-                "description": "Chrome copy. English is the default. The cell field is decorative."
+                "name": "pricing / currency",
+                "type": "PricingLike / USD | MXN",
+                "description": "Stand-in for the cost-waterfall rate table: input, output, cache read, and cache write per 1M. Intl formats the currency."
+              },
+              {
+                "name": "labels / locale",
+                "type": "Partial<ContextWindowLabels> / string",
+                "description": "English is the default. contextWindowLabelsEs is es-MX. Pass locale so counts and currency match."
               }
             ]
           },
-          "docs": "Inspirado en el comportamiento público de Affect; reimplementación clean-room; no código, datos, iconos ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. El campo de celdas es decorativo: los números viven en la lista.",
+          "docs": "Clean-room del comportamiento público del find Context window de Juliette (@shedsgns) en bencho.dev. Esa página no publica código ni licencia; el MIT de Bencho cubre bloques gratis con panel de código, no finds, y la licencia Pro prohíbe republicar bloques como librería. No se copió código, datos, iconos ni assets. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. model-router y cost-waterfall viven en otras ramas y no se importan: el límite entra por resolveLimit y el costo por PricingLike.",
           "files": [
             {
               "path": "registry/ui/context-window.tsx",
               "type": "registry:component",
               "target": "@ui/context-window.tsx"
+            },
+            {
+              "path": "registry/lib/context-window.ts",
+              "type": "registry:lib",
+              "target": "@lib/context-window.ts"
             }
           ]
         },
