@@ -27,8 +27,8 @@ import {
   type RunStep,
 } from "@/registry/lib/cost-waterfall"
 
-const rapid: ModelPrice = { input: 150_000n, output: 600_000n, cacheRead: 15_000n, cacheWrite: 187_500n }
-const wide: ModelPrice = { input: 3_000_000n, output: 15_000_000n, cacheRead: 300_000n, cacheWrite: 3_750_000n }
+const rapid: ModelPrice = { input: BigInt(150_000), output: BigInt(600_000), cacheRead: BigInt(15_000), cacheWrite: BigInt(187_500) }
+const wide: ModelPrice = { input: BigInt(3_000_000), output: BigInt(15_000_000), cacheRead: BigInt(300_000), cacheWrite: BigInt(3_750_000) }
 const pricing: PricingTable = { currency: "USD", models: { "ejemplo-rapido": rapid, "ejemplo-amplio": wide } }
 
 function step(partial: Partial<RunStep> & Pick<RunStep, "id" | "name">): RunStep {
@@ -51,41 +51,41 @@ describe("family contract", () => {
       fromWorkflowNodes: runFromWorkflowNodes,
       blendedPer1k: blendedCostPer1k,
     }
-    expect(family.blendedPer1k(pricing, "ejemplo-rapido", { input: 1, output: 0, cacheRead: 0, cacheWrite: 0 })).toBeGreaterThanOrEqual(0n)
+    expect(family.blendedPer1k(pricing, "ejemplo-rapido", { input: 1, output: 0, cacheRead: 0, cacheWrite: 0 })).toBeGreaterThanOrEqual(BigInt(0))
   })
 })
 
 describe("money", () => {
   it("rounds half away from zero", () => {
-    expect(mulDiv(500_000n, 1n, 1_000_000n)).toBe(1n)
-    expect(mulDiv(499_999n, 1n, 1_000_000n)).toBe(0n)
-    expect(mulDiv(-500_000n, 1n, 1_000_000n)).toBe(-1n)
+    expect(mulDiv(BigInt(500_000), BigInt(1), BigInt(1_000_000))).toBe(BigInt(1))
+    expect(mulDiv(BigInt(499_999), BigInt(1), BigInt(1_000_000))).toBe(BigInt(0))
+    expect(mulDiv(-BigInt(500_000), BigInt(1), BigInt(1_000_000))).toBe(-BigInt(1))
   })
 
   it("prices tokens from the injected table", () => {
     const row = step({ id: "a", name: "a", model: "ejemplo-amplio", tokensIn: 1_000_000, tokensOut: 1_000, cacheRead: 2_000_000, cacheWrite: 0 })
-    expect(pricedCost(row, pricing)).toBe(3_000_000n + 15_000n + 600_000n)
-    expect(cacheSavings(row, pricing)).toBe(mulDiv(2_000_000n, 3_000_000n - 300_000n, 1_000_000n))
+    expect(pricedCost(row, pricing)).toBe(BigInt(3_000_000) + BigInt(15_000) + BigInt(600_000))
+    expect(cacheSavings(row, pricing)).toBe(mulDiv(BigInt(2_000_000), BigInt(3_000_000) - BigInt(300_000), BigInt(1_000_000)))
   })
 
   it("lets an explicit cost replace the priced amount", () => {
-    const row = step({ id: "a", name: "a", model: "ejemplo-amplio", tokensIn: 1_000_000, costMicro: 42n })
-    expect(ownCost(row, pricing)).toBe(42n)
-    expect(cacheSavings(row, pricing)).toBe(0n)
+    const row = step({ id: "a", name: "a", model: "ejemplo-amplio", tokensIn: 1_000_000, costMicro: BigInt(42) })
+    expect(ownCost(row, pricing)).toBe(BigInt(42))
+    expect(cacheSavings(row, pricing)).toBe(BigInt(0))
   })
 
   it("formats currency from integers", () => {
     const usd = { locale: "en-US", currency: "USD" }
-    expect(formatMicro(0n, usd)).toBe("$0.00")
-    expect(formatMicro(1_250_000n, usd)).toBe("$1.25")
-    expect(formatMicro(42n, usd)).toBe("$0.000042")
-    expect(formatMicro(-42n, usd)).toBe("-$0.000042")
-    const formatted = formatMicro(1_000_000n, { locale: "es-MX", currency: "MXN", fx: { numerator: 1725n, denominator: 100n } })
+    expect(formatMicro(BigInt(0), usd)).toBe("$0.00")
+    expect(formatMicro(BigInt(1_250_000), usd)).toBe("$1.25")
+    expect(formatMicro(BigInt(42), usd)).toBe("$0.000042")
+    expect(formatMicro(-BigInt(42), usd)).toBe("-$0.000042")
+    const formatted = formatMicro(BigInt(1_000_000), { locale: "es-MX", currency: "MXN", fx: { numerator: BigInt(1725), denominator: BigInt(100) } })
     expect(formatted).toContain("17.25")
   })
 
   it("formats a huge amount without losing the integer", () => {
-    const formatted = formatMicro(10n ** 20n + 500_000n, { locale: "en-US", currency: "USD" })
+    const formatted = formatMicro(BigInt(10) ** BigInt(20) + BigInt(500_000), { locale: "en-US", currency: "USD" })
     expect(formatted.replace(/\D/g, "")).toContain("100000000000000")
   })
 
@@ -103,14 +103,14 @@ describe("rollup", () => {
       run([
         step({ id: "parent", name: "Padre", kind: "agent" }),
         step({ id: "a", parentId: "parent", name: "A", model: "ejemplo-rapido", tokensIn: 1_000_000 }),
-        step({ id: "b", parentId: "parent", name: "B", costMicro: 9n, kind: "tool", destination: "ejemplo-archivo" }),
+        step({ id: "b", parentId: "parent", name: "B", costMicro: BigInt(9), kind: "tool", destination: "ejemplo-archivo" }),
       ]),
       pricing,
     )
     const rows = new Map(totals.steps.map((row) => [row.id, row]))
-    expect(rows.get("a")?.ownCost).toBe(150_000n)
-    expect(rows.get("parent")?.rolledCost).toBe(150_009n)
-    expect(totals.totalCost).toBe(150_009n)
+    expect(rows.get("a")?.ownCost).toBe(BigInt(150_000))
+    expect(rows.get("parent")?.rolledCost).toBe(BigInt(150_009))
+    expect(totals.totalCost).toBe(BigInt(150_009))
     expect(totals.mostExpensiveId).toBe("a")
   })
 
@@ -119,8 +119,8 @@ describe("rollup", () => {
   })
 
   it("keeps a zero explicit cost and a very large one", () => {
-    const totals = rollupRun(run([step({ id: "zero", name: "zero", costMicro: 0n, model: "ejemplo-amplio", tokensIn: 5_000_000 }), step({ id: "huge", name: "huge", costMicro: 10n ** 24n })]), pricing)
-    expect(totals.totalCost).toBe(10n ** 24n)
+    const totals = rollupRun(run([step({ id: "zero", name: "zero", costMicro: BigInt(0), model: "ejemplo-amplio", tokensIn: 5_000_000 }), step({ id: "huge", name: "huge", costMicro: BigInt(10) ** BigInt(24) })]), pricing)
+    expect(totals.totalCost).toBe(BigInt(10) ** BigInt(24))
     expect(totals.mostExpensiveId).toBe("huge")
   })
 })
@@ -130,38 +130,38 @@ describe("waterfall layout", () => {
     const layout = layoutWaterfall(
       run([
         step({ id: "root", name: "root", kind: "agent" }),
-        step({ id: "a", parentId: "root", name: "a", costMicro: 30n }),
-        step({ id: "b", parentId: "root", name: "b", costMicro: 70n }),
+        step({ id: "a", parentId: "root", name: "a", costMicro: BigInt(30) }),
+        step({ id: "b", parentId: "root", name: "b", costMicro: BigInt(70) }),
       ]),
       pricing,
       "cost",
       [],
     )
     const byId = new Map(layout.rows.map((row) => [row.id, row]))
-    expect(byId.get("a")).toMatchObject({ ownStart: 0n, ownEnd: 30n })
-    expect(byId.get("b")).toMatchObject({ ownStart: 30n, ownEnd: 100n })
-    expect(byId.get("root")).toMatchObject({ spanStart: 0n, spanEnd: 100n })
-    expect(layout.domain).toBe(100n)
+    expect(byId.get("a")).toMatchObject({ ownStart: BigInt(0), ownEnd: BigInt(30) })
+    expect(byId.get("b")).toMatchObject({ ownStart: BigInt(30), ownEnd: BigInt(100) })
+    expect(byId.get("root")).toMatchObject({ spanStart: BigInt(0), spanEnd: BigInt(100) })
+    expect(layout.domain).toBe(BigInt(100))
   })
 
   it("collapses a parent into one bar and counts hidden steps", () => {
     const layout = layoutWaterfall(
       run([
         step({ id: "root", name: "root", kind: "agent" }),
-        step({ id: "a", parentId: "root", name: "a", costMicro: 10n }),
-        step({ id: "a1", parentId: "a", name: "a1", costMicro: 5n }),
+        step({ id: "a", parentId: "root", name: "a", costMicro: BigInt(10) }),
+        step({ id: "a1", parentId: "a", name: "a1", costMicro: BigInt(5) }),
       ]),
       pricing,
       "cost",
       ["root"],
     )
     expect(layout.rows).toHaveLength(1)
-    expect(layout.rows[0]).toMatchObject({ id: "root", collapsed: true, hiddenCount: 2, ownEnd: 15n })
+    expect(layout.rows[0]).toMatchObject({ id: "root", collapsed: true, hiddenCount: 2, ownEnd: BigInt(15) })
   })
 
   it("measures tokens when asked", () => {
-    const layout = layoutWaterfall(run([step({ id: "a", name: "a", tokensIn: 100, tokensOut: 25, cacheRead: 10, costMicro: 1n })]), pricing, "tokens", [])
-    expect(layout.rows[0]?.ownEnd).toBe(135n)
+    const layout = layoutWaterfall(run([step({ id: "a", name: "a", tokensIn: 100, tokensOut: 25, cacheRead: 10, costMicro: BigInt(1) })]), pricing, "tokens", [])
+    expect(layout.rows[0]?.ownEnd).toBe(BigInt(135))
   })
 })
 
@@ -206,17 +206,17 @@ describe("applyRunEvent", () => {
   it("consumes an async iterable", async () => {
     async function* events(): AsyncGenerator<RunEvent> {
       yield { type: "step.started", at: 1, stepId: "a", name: "A", kind: "save" }
-      yield { type: "step.completed", at: 2, stepId: "a", costMicro: 4n }
+      yield { type: "step.completed", at: 2, stepId: "a", costMicro: BigInt(4) }
     }
     const done = await consumeRunEvents(empty, events())
-    expect(done.steps[0]).toMatchObject({ kind: "save", status: "success", costMicro: 4n })
+    expect(done.steps[0]).toMatchObject({ kind: "save", status: "success", costMicro: BigInt(4) })
   })
 
   it("builds 300 disordered steps without double counting", () => {
     const events: RunEvent[] = []
     for (let index = 0; index < 300; index += 1) {
       const parentId = index === 0 ? undefined : `s${Math.max(0, index - (index % 8) - 1)}`
-      events.push({ type: "step.completed", at: 1_000 + index, stepId: `s${index}`, tokensIn: index, costMicro: index === 10 ? 0n : BigInt(index + 1) })
+      events.push({ type: "step.completed", at: 1_000 + index, stepId: `s${index}`, tokensIn: index, costMicro: index === 10 ? BigInt(0) : BigInt(index + 1) })
       events.push({
         type: "step.started",
         at: index,
@@ -231,13 +231,13 @@ describe("applyRunEvent", () => {
     const next = reduceRunEvents(empty, events)
     expect(next.steps).toHaveLength(300)
     expect(next.status).toBe("done")
-    expect(rollupRun(next, pricing).totalCost).toBe(next.steps.reduce((sum, row) => sum + (row.costMicro ?? 0n), 0n))
+    expect(rollupRun(next, pricing).totalCost).toBe(next.steps.reduce((sum, row) => sum + (row.costMicro ?? BigInt(0)), BigInt(0)))
   })
 })
 
 describe("export and adapters", () => {
   it("exports json and csv with micro-units as strings", () => {
-    const ready = run([step({ id: "a", name: "=cmd", kind: "tool", costMicro: 7n, destination: "ejemplo-archivo" })])
+    const ready = run([step({ id: "a", name: "=cmd", kind: "tool", costMicro: BigInt(7), destination: "ejemplo-archivo" })])
     expect(exportRun(ready, pricing).totalCostMicro).toBe("7")
     expect(runToJson(ready, pricing)).toContain('"totalCostMicro": "7"')
     expect(runToCsv(ready, pricing)).toContain("'=cmd")
@@ -249,14 +249,14 @@ describe("export and adapters", () => {
       title: "Nodo",
       nodes: [
         { nodeId: "n1", label: "Leer", kind: "llm", model: "ejemplo-rapido", tokensIn: 500, tokensOut: 500, replay: true },
-        { nodeId: "n2", parentNodeId: "n1", label: "Guardar", kind: "save", destination: "ejemplo-archivo", costMicro: 3n, status: "success" },
+        { nodeId: "n2", parentNodeId: "n1", label: "Guardar", kind: "save", destination: "ejemplo-archivo", costMicro: BigInt(3), status: "success" },
       ],
     })
     expect(built.steps[0]?.payload).toEqual({ replay: true })
     const first = built.steps[0]
     expect(first).toBeDefined()
     if (!first) return
-    expect(rollupRun(built, pricing).totalCost).toBe(ownCost(first, pricing) + 3n)
+    expect(rollupRun(built, pricing).totalCost).toBe(ownCost(first, pricing) + BigInt(3))
     const direct = pricedCost(step({ id: "k", name: "k", model: "ejemplo-rapido", tokensIn: 750, tokensOut: 250 }), pricing)
     expect(blendedCostPer1k(pricing, "ejemplo-rapido", { input: 750, output: 250, cacheRead: 0, cacheWrite: 0 })).toBe(direct)
   })

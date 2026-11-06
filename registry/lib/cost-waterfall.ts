@@ -5,17 +5,17 @@
  * (https://github.com/flohoeller/affectui/blob/main/LICENSE). No Affect source,
  * sample data, icons, or assets are included.
  *
- * Money is an integer number of micro-units: 1_000_000n is 1.00 of the
+ * Money is an integer number of micro-units: BigInt(1_000_000) is 1.00 of the
  * pricing currency. Prices are micro-units per 1_000_000 tokens. Division
  * rounds half away from zero. Nothing here uses binary float for money.
  */
 
 import { toCsv, type CsvColumn } from "@/registry/retana/lib/csv"
 
-export const MICRO_SCALE = 1_000_000n
-export const TOKENS_PER_PRICE = 1_000_000n
+export const MICRO_SCALE = BigInt(1_000_000)
+export const TOKENS_PER_PRICE = BigInt(1_000_000)
 
-/** 1_000_000n = 1.00 of the pricing currency. */
+/** BigInt(1_000_000) = 1.00 of the pricing currency. */
 export type Micro = bigint
 
 export const STEP_STATUSES = ["queued", "running", "success", "error", "skipped"] as const
@@ -180,12 +180,12 @@ export type RunEvent =
   | { type: "run.completed"; eventId?: string; at: number }
 
 export function mulDiv(left: Micro, right: Micro, divisor: Micro): Micro {
-  if (divisor === 0n) throw new Error("divisor is 0")
-  const negative = (left < 0n) !== (right < 0n) !== (divisor < 0n)
-  const a = left < 0n ? -left : left
-  const b = right < 0n ? -right : right
-  const scale = divisor < 0n ? -divisor : divisor
-  const rounded = (a * b + scale / 2n) / scale
+  if (divisor === BigInt(0)) throw new Error("divisor is 0")
+  const negative = (left < BigInt(0)) !== (right < BigInt(0)) !== (divisor < BigInt(0))
+  const a = left < BigInt(0) ? -left : left
+  const b = right < BigInt(0) ? -right : right
+  const scale = divisor < BigInt(0) ? -divisor : divisor
+  const rounded = (a * b + scale / BigInt(2)) / scale
   return negative ? -rounded : rounded
 }
 
@@ -197,7 +197,7 @@ function count(value: number, label: string): Micro {
 }
 
 function countOrZero(value: number): Micro {
-  if (!Number.isSafeInteger(value) || value <= 0) return 0n
+  if (!Number.isSafeInteger(value) || value <= 0) return BigInt(0)
   return BigInt(value)
 }
 
@@ -212,7 +212,7 @@ export function pricedCost(
   table: PricingTable | undefined,
 ): Micro {
   const price = modelPrice(table, step.model)
-  if (!price) return 0n
+  if (!price) return BigInt(0)
   return (
     mulDiv(count(step.tokensIn, "tokensIn"), price.input, TOKENS_PER_PRICE) +
     mulDiv(count(step.tokensOut, "tokensOut"), price.output, TOKENS_PER_PRICE) +
@@ -230,9 +230,9 @@ export function ownCost(step: RunStep, table: PricingTable | undefined): Micro {
 /** What cache reads saved versus paying the input price. */
 export function cacheSavings(step: RunStep, table: PricingTable | undefined): Micro {
   const price = modelPrice(table, step.model)
-  if (!price) return 0n
+  if (!price) return BigInt(0)
   const delta = price.input - price.cacheRead
-  if (delta <= 0n || step.cacheRead <= 0) return 0n
+  if (delta <= BigInt(0) || step.cacheRead <= 0) return BigInt(0)
   return mulDiv(count(step.cacheRead, "cacheRead"), delta, TOKENS_PER_PRICE)
 }
 
@@ -273,12 +273,12 @@ export function rollupRun(run: Pick<Run, "steps">, table: PricingTable | undefin
     if (visiting.has(step.id)) {
       const broken: StepRollup = {
         id: step.id,
-        ownCost: 0n,
-        rolledCost: 0n,
+        ownCost: BigInt(0),
+        rolledCost: BigInt(0),
         ownTokens: 0,
         rolledTokens: 0,
-        cacheSavings: 0n,
-        rolledCacheSavings: 0n,
+        cacheSavings: BigInt(0),
+        rolledCacheSavings: BigInt(0),
       }
       byId.set(step.id, broken)
       return broken
@@ -312,15 +312,15 @@ export function rollupRun(run: Pick<Run, "steps">, table: PricingTable | undefin
   for (const step of run.steps) visit(step)
 
   const steps: StepRollup[] = []
-  let totalCost = 0n
+  let totalCost = BigInt(0)
   let totalTokens = 0
   let tokensIn = 0
   let tokensOut = 0
   let cacheRead = 0
   let cacheWrite = 0
-  let savings = 0n
+  let savings = BigInt(0)
   let mostExpensiveId: string | null = null
-  let most = 0n
+  let most = BigInt(0)
   for (const step of run.steps) {
     const row = rollupOf(byId, step.id)
     if (!row) continue
@@ -354,8 +354,8 @@ export function rollupRun(run: Pick<Run, "steps">, table: PricingTable | undefin
       tokensOut: 0,
       cacheRead: 0,
       cacheWrite: 0,
-      costMicro: 0n,
-      cacheSavings: 0n,
+      costMicro: BigInt(0),
+      cacheSavings: BigInt(0),
     }
     current.steps += 1
     current.tokensIn = addCount(current.tokensIn, step.tokensIn)
@@ -407,9 +407,9 @@ export function layoutWaterfall(
 ): WaterfallLayout {
   const folded = new Set(collapsed)
   const rows: WaterfallRow[] = []
-  let cursor = 0n
-  let min = 0n
-  let max = 0n
+  let cursor = BigInt(0)
+  let min = BigInt(0)
+  let max = BigInt(0)
   const visiting = new Set<string>()
 
   function bump(next: Micro) {
@@ -419,7 +419,7 @@ export function layoutWaterfall(
   }
 
   function rolled(step: RunStep, guard: Set<string>): Micro {
-    if (guard.has(step.id)) return 0n
+    if (guard.has(step.id)) return BigInt(0)
     guard.add(step.id)
     let total = measureOf(step, measure, table)
     for (const child of childSteps(run.steps, step.id)) total += rolled(child, guard)
@@ -474,8 +474,8 @@ export function layoutWaterfall(
 
 /** Share of `part` over `whole`, from 0 to 1, using integer math. */
 export function microRatio(part: Micro, whole: Micro): number {
-  if (whole <= 0n || part <= 0n) return 0
-  const scaled = (part * 1_000_000n) / whole
+  if (whole <= BigInt(0) || part <= BigInt(0)) return 0
+  const scaled = (part * BigInt(1_000_000)) / whole
   const ratio = Number(scaled) / 1_000_000
   if (ratio <= 0) return 0
   if (ratio >= 1) return 1
@@ -484,13 +484,13 @@ export function microRatio(part: Micro, whole: Micro): number {
 
 export function convertMicro(value: Micro, fx?: FxRate): Micro {
   if (!fx) return value
-  if (fx.denominator === 0n) throw new Error("fx denominator is 0")
+  if (fx.denominator === BigInt(0)) throw new Error("fx denominator is 0")
   return mulDiv(value, fx.numerator, fx.denominator)
 }
 
 function fractionDigits(absMicro: Micro): number {
-  if (absMicro === 0n || absMicro >= MICRO_SCALE) return 2
-  if (absMicro >= 10_000n) return 4
+  if (absMicro === BigInt(0) || absMicro >= MICRO_SCALE) return 2
+  if (absMicro >= BigInt(10_000)) return 4
   return 6
 }
 
@@ -517,10 +517,10 @@ function groupInteger(digits: string, group: string) {
 /** Formats micro-units with Intl currency placement. The amount itself is not a float. */
 export function formatMicro(value: Micro, format: MoneyFormat): string {
   const converted = convertMicro(value, format.fx)
-  const negative = converted < 0n
+  const negative = converted < BigInt(0)
   const abs = negative ? -converted : converted
   const digits = fractionDigits(abs)
-  const scale = 10n ** BigInt(digits)
+  const scale = BigInt(10) ** BigInt(digits)
   const rounded = mulDiv(abs, scale, MICRO_SCALE)
   const whole = rounded / scale
   const frac = (rounded % scale).toString().padStart(digits, "0").replace(/0+$/, "").padEnd(2, "0")
@@ -969,6 +969,6 @@ export function blendedCostPer1k(pricing: PricingTable, model: string, mix: Toke
     status: "success",
   }
   const total = count(mix.input, "input") + count(mix.output, "output") + count(mix.cacheRead, "cacheRead") + count(mix.cacheWrite, "cacheWrite")
-  if (total === 0n) return 0n
-  return mulDiv(pricedCost(sample, pricing), 1000n, total)
+  if (total === BigInt(0)) return BigInt(0)
+  return mulDiv(pricedCost(sample, pricing), BigInt(1000), total)
 }

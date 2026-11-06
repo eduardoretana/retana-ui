@@ -3,7 +3,7 @@
 import { StressCase } from "@/app/examples/stress-case"
 import { blendedCostPer1k, rollupRun, runFromWorkflowNodes } from "@/registry/lib/cost-waterfall"
 
-import { examplePricing, filledRun } from "../cost-waterfall/example-data"
+import { examplePricing, filledRun } from "../../cost-waterfall/example-data"
 
 export default function StressPage() {
   const rollup = rollupRun(filledRun("es"), examplePricing)

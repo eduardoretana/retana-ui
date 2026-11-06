@@ -6,12 +6,12 @@ import { createRun, reduceRunEvents, type MoneyFormat, type PricingTable, type R
 export const examplePricing: PricingTable = {
   currency: "USD",
   models: {
-    "ejemplo-rapido": { input: 150_000n, output: 600_000n, cacheRead: 15_000n, cacheWrite: 187_500n },
-    "ejemplo-amplio": { input: 3_000_000n, output: 15_000_000n, cacheRead: 300_000n, cacheWrite: 3_750_000n },
+    "ejemplo-rapido": { input: BigInt(150_000), output: BigInt(600_000), cacheRead: BigInt(15_000), cacheWrite: BigInt(187_500) },
+    "ejemplo-amplio": { input: BigInt(3_000_000), output: BigInt(15_000_000), cacheRead: BigInt(300_000), cacheWrite: BigInt(3_750_000) },
   },
 }
 
-export const exampleMxn: MoneyFormat = { locale: "es-MX", currency: "MXN", fx: { numerator: 1725n, denominator: 100n } }
+export const exampleMxn: MoneyFormat = { locale: "es-MX", currency: "MXN", fx: { numerator: BigInt(1725), denominator: BigInt(100) } }
 
 type Copy = { name: string; input?: string; output?: string; error?: string }
 type Seed = {
@@ -60,10 +60,10 @@ function fromSeeds(id: string, title: { es: string; en: string }, seeds: readonl
 const filledSeeds: Seed[] = [
   { id: "root", kind: "agent", latencyMs: 6400, es: { name: "Ejemplo: expediente", input: "Resume el expediente de ejemplo.", output: "Listo para archivar." }, en: { name: "Example: case file", input: "Summarize the example case file.", output: "Ready to file." } },
   { id: "plan", parentId: "root", kind: "llm", model: "ejemplo-amplio", tokensIn: 2000, tokensOut: 400, latencyMs: 1800, es: { name: "Planear el resumen", input: "Parte el expediente en tres puntos.", output: "Hechos, duda, cierre." }, en: { name: "Plan the summary", input: "Split the file into three points.", output: "Facts, question, close." } },
-  { id: "search", parentId: "root", kind: "tool", destination: "ejemplo-busqueda", costMicro: 25_000n, latencyMs: 900, es: { name: "Buscar el antecedente", input: "consulta: expediente ejemplo", output: "2 notas" }, en: { name: "Search the prior note", input: "query: example file", output: "2 notes" } },
+  { id: "search", parentId: "root", kind: "tool", destination: "ejemplo-busqueda", costMicro: BigInt(25_000), latencyMs: 900, es: { name: "Buscar el antecedente", input: "consulta: expediente ejemplo", output: "2 notas" }, en: { name: "Search the prior note", input: "query: example file", output: "2 notes" } },
   { id: "draft", parentId: "root", kind: "agent", latencyMs: 2200, es: { name: "Redactar", input: "Escribe en voz neutra.", output: "Borrador corto." }, en: { name: "Draft", input: "Write in a neutral voice.", output: "Short draft." } },
   { id: "write", parentId: "draft", kind: "llm", model: "ejemplo-rapido", tokensIn: 800, tokensOut: 1200, cacheRead: 4000, cacheWrite: 500, latencyMs: 1400, es: { name: "Escribir con caché", input: "Usa el plan en caché.", output: "Párrafo de ejemplo." }, en: { name: "Write with cache", input: "Use the cached plan.", output: "Example paragraph." } },
-  { id: "save", parentId: "draft", kind: "save", destination: "ejemplo-archivo", costMicro: 1_000n, latencyMs: 300, es: { name: "Guardar el borrador", input: "ruta: /ejemplo/borrador", output: "guardado" }, en: { name: "Save the draft", input: "path: /example/draft", output: "saved" } },
+  { id: "save", parentId: "draft", kind: "save", destination: "ejemplo-archivo", costMicro: BigInt(1_000), latencyMs: 300, es: { name: "Guardar el borrador", input: "ruta: /ejemplo/borrador", output: "guardado" }, en: { name: "Save the draft", input: "path: /example/draft", output: "saved" } },
   { id: "review", parentId: "root", kind: "llm", model: "ejemplo-amplio", tokensIn: 3000, tokensOut: 2000, latencyMs: 2100, es: { name: "Revisar el cierre", input: "Marca lo que falta.", output: "Falta la fecha." }, en: { name: "Review the close", input: "Mark what is missing.", output: "The date is missing." } },
 ]
 
@@ -109,7 +109,7 @@ const liveScript: RunEvent[] = [
   { type: "step.started", at: 2, stepId: "plan", parentId: "root", name: "Planear", kind: "llm", model: "ejemplo-rapido", input: "Haz un plan corto." },
   { type: "step.completed", at: 4, stepId: "plan", tokensIn: 900, tokensOut: 180, latencyMs: 800, output: "Tres puntos." },
   { type: "step.started", at: 5, stepId: "search", parentId: "root", name: "Buscar", kind: "tool", destination: "ejemplo-busqueda", input: "consulta ejemplo" },
-  { type: "step.progress", at: 6, stepId: "search", costMicro: 8_000n, latencyMs: 400 },
+  { type: "step.progress", at: 6, stepId: "search", costMicro: BigInt(8_000), latencyMs: 400 },
 ]
 
 export function liveRun(locale: SceneLocale) {
@@ -119,8 +119,8 @@ export function liveRun(locale: SceneLocale) {
 }
 
 export const liveTail: RunEvent[] = [
-  { type: "step.progress", at: 7, stepId: "search", costMicro: 18_000n, latencyMs: 700 },
-  { type: "step.completed", at: 8, stepId: "search", costMicro: 25_000n, latencyMs: 900, output: "1 nota" },
+  { type: "step.progress", at: 7, stepId: "search", costMicro: BigInt(18_000), latencyMs: 700 },
+  { type: "step.completed", at: 8, stepId: "search", costMicro: BigInt(25_000), latencyMs: 900, output: "1 nota" },
   { type: "step.started", at: 9, stepId: "write", parentId: "root", name: "Escribir", kind: "llm", model: "ejemplo-amplio" },
   { type: "step.completed", at: 11, stepId: "write", tokensIn: 2200, tokensOut: 600, latencyMs: 1600, output: "Texto de ejemplo." },
   { type: "run.completed", at: 12 },

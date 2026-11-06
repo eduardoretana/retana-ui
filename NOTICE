@@ -259,6 +259,16 @@ icons, assets, or internal strings were copied. The demos continue the same
 Guanajuato workshop scenario. Colors come from the host shadcn tokens.
 approval-card is not a tool receipt; tool calls stay on tool-approval.
 
+cost-waterfall and cost-waterfall-core are a clean-room reading of the public
+behavior description of Affect UI's Cost Waterfall. That item is Pro
+(https://www.affectui.com/components/cost-waterfall). The public repository
+is MIT (https://github.com/flohoeller/affectui/blob/main/LICENSE) and does
+not contain the component. Pro terms forbid republishing Pro source as a
+component library (https://www.affectui.com/terms). No source, sample data,
+icons, or assets were copied. Demo prices are illustrative and marked as
+examples. Money is an integer micro-unit. Colors come from the host shadcn
+tokens.
+
 agent-graph, agent-cursors, fan-out-grid, parallel-attempts, conflict-radar,
 and decision-tree are a clean-room reading of public behavior descriptions on
 Affect UI (a call network that is not a launch tree, pointers and suggestions

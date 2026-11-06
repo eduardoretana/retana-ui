@@ -24,6 +24,9 @@
     "registry/lib/csv.ts",
     "registry/lib/motion.ts",
     "registry/lib/dashboard-format.ts",
+    "registry/lib/cost-waterfall.ts",
+    "registry/hooks/use-cost-run.ts",
+    "registry/ui/cost-waterfall.tsx",
     "registry/hooks/use-layered-panel-url-state.ts"
   ]
 }

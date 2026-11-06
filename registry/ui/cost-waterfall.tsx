@@ -184,7 +184,7 @@ export type CostWaterfallProps = {
   onModeChange?: (mode: CostMeasure) => void
   collapsed?: readonly string[]
   defaultCollapsed?: readonly string[]
-  onCollapsedChange?: (ids: string[]) => void
+  onCollapsedChange?: (ids: readonly string[]) => void
   openId?: string | null
   defaultOpenId?: string | null
   onOpenChange?: (id: string | null) => void
@@ -243,7 +243,8 @@ function place(start: bigint, end: bigint, origin: bigint, domain: bigint) {
   const left = start < end ? start : end
   const right = start < end ? end : start
   const from = left - origin
-  return { x: microRatio(from > 0n ? from : 0n, domain) * 100, scale: microRatio(right - left, domain) }
+  const zero = BigInt(0)
+  return { x: microRatio(from > zero ? from : zero, domain) * 100, scale: microRatio(right - left, domain) }
 }
 
 function downloadText(filename: string, content: string, type: string) {
@@ -314,11 +315,9 @@ export function CostWaterfall({
   const [canHover, setCanHover] = React.useState(false)
   const [width, setWidth] = React.useState(1280)
   const [focusId, setFocusId] = React.useState<string | null>(null)
-  const [announcement, setAnnouncement] = React.useState("")
   const rootRef = React.useRef<HTMLDivElement>(null)
   const buttons = React.useRef(new Map<string, HTMLButtonElement>())
   const seenErrors = React.useRef(new Set<string>())
-  const previous = React.useRef("")
 
   React.useEffect(() => {
     const media = window.matchMedia("(hover: hover) and (pointer: fine)")
@@ -356,18 +355,16 @@ export function CostWaterfall({
     }
   }, [collapsed, setCollapsed, setOpenId, shown.steps])
 
-  React.useEffect(() => {
-    const signature = `${shown.status}|${shown.steps.map((step) => `${step.id}:${step.status}`).join(",")}`
-    if (signature === previous.current) return
-    const prior = previous.current
-    previous.current = signature
-    if (!prior) return
-    const running = shown.steps.find((step) => step.status === "running")
-    const failed = shown.steps.find((step) => step.status === "error")
-    if (shown.status === "done") setAnnouncement(labels.runDone)
-    else if (shown.status === "error" && failed) setAnnouncement(labels.stepFailed(failed.name, failed.error ?? labels.status.error))
-    else if (running) setAnnouncement(labels.stepRunning(running.name))
-  }, [labels, shown.status, shown.steps])
+  const runningStep = shown.steps.find((step) => step.status === "running")
+  const failedStep = shown.steps.find((step) => step.status === "error")
+  const announcement =
+    shown.status === "done"
+      ? labels.runDone
+      : shown.status === "error" && failedStep
+        ? labels.stepFailed(failedStep.name, failedStep.error ?? labels.status.error)
+        : runningStep
+          ? labels.stepRunning(runningStep.name)
+          : ""
 
   function focusRow(id: string) {
     setFocusId(id)

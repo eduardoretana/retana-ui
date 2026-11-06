@@ -14,29 +14,23 @@ const frame: SceneFrame = { size: "desk", surface: "canvas", padding: "md" }
 
 function WaterfallScene({ locale, log, id }: SceneRenderProps & { id: string }) {
   const sim = useSceneSim({ mode: id === "tokens" ? "tokens" : "cost" }, log)
-  const [cursor, setCursor] = React.useState(0)
-  const [live, setLive] = React.useState<Run | null>(null)
+  const [playback, setPlayback] = React.useState<{ locale: SceneRenderProps["locale"]; cursor: number; run: Run } | null>(null)
   const money = id === "mxn" ? exampleMxn : { locale: locale === "en" ? "en-US" : "es-MX", currency: "USD" as const }
   const collapsed = id === "step-error" ? ["root"] : id === "deep-tree" ? ["nivel-0"] : []
-  const run = id === "live-streaming" && live ? live : sceneRun(id, locale)
-
-  React.useEffect(() => {
-    setLive(null)
-    setCursor(0)
-  }, [locale])
+  const playing = playback?.locale === locale ? playback : null
+  const run = id === "live-streaming" && playing ? playing.run : sceneRun(id, locale)
 
   function advance() {
-    const event = liveTail[cursor]
+    const event = liveTail[playing?.cursor ?? 0]
     if (!event) return
-    setLive(applyRunEvent(run, event))
-    setCursor((value) => value + 1)
+    setPlayback({ locale, cursor: (playing?.cursor ?? 0) + 1, run: applyRunEvent(run, event) })
     log(formatSceneCall("applyRunEvent", [event.type]))
   }
 
   return (
     <div className="grid gap-3">
       {id === "live-streaming" ? (
-        <button type="button" className="min-h-11 justify-self-start rounded-md border border-border px-3 text-sm" onClick={advance} disabled={cursor >= liveTail.length}>
+        <button type="button" className="min-h-11 justify-self-start rounded-md border border-border px-3 text-sm" onClick={advance} disabled={(playing?.cursor ?? 0) >= liveTail.length}>
           {sceneText(locale, "Avanzar el paso", "Advance the step")}
         </button>
       ) : null}

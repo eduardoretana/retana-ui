@@ -28,8 +28,8 @@ function stressSteps(): RunStep[] {
     if (depth > 0) step.parentId = `n${index - 1}`
     if (index % 2 === 0) step.model = index % 4 === 0 ? "ejemplo-amplio" : "ejemplo-rapido"
     else step.destination = "ejemplo-archivo"
-    if (index === 0) step.costMicro = 0n
-    if (index === 20) step.costMicro = 10n ** 18n
+    if (index === 0) step.costMicro = BigInt(0)
+    if (index === 20) step.costMicro = BigInt(10) ** BigInt(18)
     if (index === 11) step.error = "El paso de ejemplo no pudo guardar."
     steps.push(step)
   }
@@ -82,8 +82,8 @@ export default function StressPage() {
               title: "مثال",
               status: "done",
               steps: [
-                { id: "a", name: token, kind: "llm", model: token, tokensIn: 0, tokensOut: 0, cacheRead: 0, cacheWrite: 0, costMicro: 0n, status: "success", input: token },
-                { id: "b", parentId: "a", name: "خطوة", kind: "tool", destination: "ejemplo-archivo", tokensIn: 3, tokensOut: 1, cacheRead: 0, cacheWrite: 0, costMicro: 10n ** 18n, status: "error", error: token },
+                { id: "a", name: token, kind: "llm", model: token, tokensIn: 0, tokensOut: 0, cacheRead: 0, cacheWrite: 0, costMicro: BigInt(0), status: "success", input: token },
+                { id: "b", parentId: "a", name: "خطوة", kind: "tool", destination: "ejemplo-archivo", tokensIn: 3, tokensOut: 1, cacheRead: 0, cacheWrite: 0, costMicro: BigInt(10) ** BigInt(18), status: "error", error: token },
               ],
             }}
           />
