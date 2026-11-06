@@ -32050,6 +32050,124 @@
           }
         ]
       }
+    },
+    {
+      "name": "knowledge-base",
+      "type": "registry:ui",
+      "title": "Knowledge base",
+      "description": "Connect RAG sources, watch sync progress and a chunk counter, and reset with confirmation. The host does the ingest.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "alert",
+        "alert-dialog",
+        "button",
+        "input",
+        "progress",
+        "select",
+        "skeleton",
+        "@retana/animated-counter",
+        "@retana/empty-state",
+        "@retana/status-pill",
+        "@retana/toast-stack"
+      ],
+      "categories": [
+        "agents"
+      ],
+      "meta": {
+        "titleEs": "Base de conocimiento",
+        "descriptionEs": "Conecta fuentes para RAG, sigue el progreso y el contador de fragmentos, y restablece con confirmación. La ingesta la hace el anfitrión.",
+        "preview": "app/examples/knowledge-base/preview.tsx",
+        "previewHref": "/examples/knowledge-base",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "syncing",
+            "label": "Sincronizando",
+            "labelEn": "Syncing"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Fuentes del taller",
+            "href": "/examples/knowledge-base",
+            "description": "Cuatro fuentes ficticias: documentos, repositorio, ayuda y notas."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/knowledge-base/stress",
+            "description": "390 px, nombres largos y una fuente que falla a la mitad."
+          }
+        ],
+        "usage": "<KnowledgeBase title=\"Base\" types={types} sources={sources} onSourcesChange={setSources} onConnect={connect} onSync={sync} onDisconnect={disconnect} onReset={reset} locale=\"es-MX\" />",
+        "api": [
+          {
+            "name": "types",
+            "type": "KnowledgeSourceType[]",
+            "description": "Source kinds the host registers: documents, repo, help center, notes, or any other id."
+          },
+          {
+            "name": "sources / onSourcesChange",
+            "type": "KnowledgeSource[]",
+            "description": "Controlled list. Status is disconnected, connecting, syncing, connected, error, or stale."
+          },
+          {
+            "name": "onConnect / onSync / onDisconnect",
+            "type": "KnowledgePort",
+            "description": "Return a promise. report() updates progress and chunks. AbortSignal cancels."
+          },
+          {
+            "name": "onReset",
+            "type": "(ctx) => Promise<void>",
+            "description": "Runs after the reader confirms. Failure restores the previous list."
+          },
+          {
+            "name": "status / readOnly / error",
+            "type": "ready | loading | error",
+            "description": "Loading skeleton, load error, or a role that cannot connect."
+          },
+          {
+            "name": "labels / locale",
+            "type": "Partial<KnowledgeBaseLabels> / string",
+            "description": "English chrome by default. The demo passes es-MX copy. The counter uses locale."
+          }
+        ]
+      },
+      "docs": "Clean-room de un post público de Maxim Kuznetsov (https://x.com/disarto_max/status/2117664457862033627). Sin licencia: solo la idea. No se copió código, datos ni assets. No hay fetch ni @supabase: el anfitrión implementa onConnect, onSync, onDisconnect y onReset. Los avisos usan toast-stack. El contador usa animated-counter y anuncia el total con aria-live. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos.",
+      "files": [
+        {
+          "path": "registry/ui/knowledge-base.tsx",
+          "type": "registry:component",
+          "target": "@ui/knowledge-base.tsx"
+        },
+        {
+          "path": "registry/lib/knowledge-base.ts",
+          "type": "registry:lib",
+          "target": "@lib/knowledge-base.ts"
+        }
+      ]
     }
   ]
 }
