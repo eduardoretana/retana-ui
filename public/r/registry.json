@@ -30957,6 +30957,57 @@
       }
     },
     {
+      "name": "dispatch-board",
+      "type": "registry:block",
+      "title": "Dispatch board",
+      "description": "Horizontal resource timeline for field visits: rows grouped by role, hour columns, a now line, occupancy, and an unassigned queue. Assign, move, and resize ask the host and roll back on refusal.",
+      "author": "Eduardo Retana",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["avatar", "button", "dropdown-menu", "sheet", "skeleton"],
+      "categories": ["block"],
+      "docs": "Clean-room dispatch board. People are rows and hours are columns. Unassigned jobs sit in a rail that becomes a sheet below 768px. findResourceConflicts and resourceLoads from the agenda core decide overlaps and the hour sum. validatePlacement also rejects an absence, a missing skill, and a window outside the visible shift. onAssignRequest, onMoveRequest, and onResizeRequest are async. { ok: false, reason, detail } rolls the preview back. Touch: a tap opens, a 360ms long-press drags, and a swipe scrolls. Arrow keys move a focused job. Occupancy is scheduled time over capacityHours minus absences. Spanish chrome is the default. dispatchLabelsEn is English. The demo is Campo Norte, a fictional cooperative. The Fikri Studio diary was an idea only, with no license. No source or assets were copied. Answer no if the CLI asks to overwrite a primitive the host already has, or agenda, date-range, csv, or status-tone. The item ships no theme.",
+      "files": [
+        { "path": "registry/blocks/dispatch-board.tsx", "type": "registry:component", "target": "@ui/dispatch-board.tsx" },
+        { "path": "registry/lib/dispatch-board.ts", "type": "registry:lib", "target": "@lib/dispatch-board.ts" },
+        { "path": "registry/lib/agenda.ts", "type": "registry:lib", "target": "@lib/agenda.ts" },
+        { "path": "registry/lib/date-range.ts", "type": "registry:lib", "target": "@lib/date-range.ts" },
+        { "path": "registry/lib/csv.ts", "type": "registry:lib", "target": "@lib/csv.ts" },
+        { "path": "registry/lib/status-tone.ts", "type": "registry:lib", "target": "@lib/status-tone.ts" }
+      ],
+      "meta": {
+        "titleEs": "Tablero de despacho",
+        "descriptionEs": "Timeline horizontal por persona: rol, ocupación, habilidades, choques, ausencias y una cola de visitas sin asignar.",
+        "preview": "app/examples/dispatch-board/preview.tsx",
+        "previewHref": "/examples/dispatch-board",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "conflicts", "label": "Choques", "labelEn": "Conflicts" },
+          { "id": "time-off", "label": "Ausencia", "labelEn": "Time off" },
+          { "id": "unassigned-queue", "label": "Cola", "labelEn": "Queue" },
+          { "id": "rows500", "label": "500 filas", "labelEn": "500 rows" },
+          { "id": "readonly", "label": "Solo lectura", "labelEn": "Read only" },
+          { "id": "filters", "label": "Filtros", "labelEn": "Filters" },
+          { "id": "rejected", "label": "Drop inválido", "labelEn": "Invalid drop" }
+        ],
+        "examples": [
+          { "title": "Campo Norte", "href": "/examples/dispatch-board", "description": "Visitas inventadas. Asignar, mover y exportar no salen del ejemplo." },
+          { "title": "Marco de estrés", "href": "/examples/dispatch-board/stress", "description": "500 filas, nombres largos, choques y una guardia que cruza la medianoche." }
+        ],
+        "usage": "<DispatchBoard\n  model={{ groups, resources, skills, statuses, jobs, absences }}\n  anchor=\"2026-11-04\"\n  hourStart={9}\n  hourEnd={16}\n  onAssignRequest={assign}\n  onMoveRequest={move}\n  onResizeRequest={resize}\n/>",
+        "api": [
+          { "name": "model", "type": "DispatchModel", "description": "Groups, resources, skills, extensible statuses, jobs, and absences. A job without resourceId stays in the queue." },
+          { "name": "view / anchor / hourStart / hourEnd", "type": "day or week, date, numbers", "description": "Daily columns are hours. Weekly columns are days." },
+          { "name": "onAssignRequest / onMoveRequest / onResizeRequest", "type": "(request) => Promise<DispatchDecision>", "description": "The host confirms. { ok: false, reason, detail } rolls the preview back." },
+          { "name": "filters / onExport", "type": "DispatchFilters, callback", "description": "Role, skill, status, occupancy, and text. Return false to skip the download." },
+          { "name": "loading / error / readOnly / rejection", "type": "boolean, string, boolean, notice", "description": "Loading and error replace the grid. rejection shows the reason in text." },
+          { "name": "labels / locale / timeZone / thresholds", "type": "partial labels", "description": "Spanish chrome, es-MX, and America/Mexico_City unless you pass something else." }
+        ]
+      }
+    },
+    {
       "name": "ats-core",
       "type": "registry:lib",
       "title": "ATS core",

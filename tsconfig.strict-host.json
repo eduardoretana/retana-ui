@@ -29,6 +29,9 @@
     "registry/lib/date-range.ts",
     "registry/blocks/agenda.tsx",
     "registry/ui/agenda-event.tsx",
-    "registry/ui/agenda-detail.tsx"
+    "registry/ui/agenda-detail.tsx",
+    "registry/lib/dispatch-board.ts",
+    "registry/lib/status-tone.ts",
+    "registry/blocks/dispatch-board.tsx"
   ]
 }

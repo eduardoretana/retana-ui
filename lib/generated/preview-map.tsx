@@ -410,19 +410,20 @@ import Preview405 from "@/app/examples/agenda-core/preview"
 import Preview406 from "@/app/examples/agenda-event/preview"
 import Preview407 from "@/app/examples/agenda-detail/preview"
 import Preview408 from "@/app/examples/agenda/preview"
-import Preview409 from "@/app/examples/ats-core/preview"
-import Preview410 from "@/app/examples/candidate-card/preview"
-import Preview411 from "@/app/examples/candidate-row/preview"
-import Preview412 from "@/app/examples/candidate-detail/preview"
-import Preview413 from "@/app/examples/assessment-form/preview"
-import Preview414 from "@/app/examples/pipeline-board/preview"
-import Preview415 from "@/app/examples/ats/preview"
-import Preview416 from "@/app/examples/tooltip-card/preview"
-import Preview417 from "@/app/examples/timeline-gantt/preview"
-import Preview418 from "@/app/examples/data-table-reorder/preview"
-import Preview419 from "@/app/examples/activity-chat/preview"
-import Preview420 from "@/app/examples/inline-approve-button/preview"
-import Preview421 from "@/app/examples/portfolio-desk/preview"
+import Preview409 from "@/app/examples/dispatch-board/preview"
+import Preview410 from "@/app/examples/ats-core/preview"
+import Preview411 from "@/app/examples/candidate-card/preview"
+import Preview412 from "@/app/examples/candidate-row/preview"
+import Preview413 from "@/app/examples/candidate-detail/preview"
+import Preview414 from "@/app/examples/assessment-form/preview"
+import Preview415 from "@/app/examples/pipeline-board/preview"
+import Preview416 from "@/app/examples/ats/preview"
+import Preview417 from "@/app/examples/tooltip-card/preview"
+import Preview418 from "@/app/examples/timeline-gantt/preview"
+import Preview419 from "@/app/examples/data-table-reorder/preview"
+import Preview420 from "@/app/examples/activity-chat/preview"
+import Preview421 from "@/app/examples/inline-approve-button/preview"
+import Preview422 from "@/app/examples/portfolio-desk/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -834,17 +835,18 @@ export const previewMap = {
   "agenda-event": Preview406,
   "agenda-detail": Preview407,
   "agenda": Preview408,
-  "ats-core": Preview409,
-  "candidate-card": Preview410,
-  "candidate-row": Preview411,
-  "candidate-detail": Preview412,
-  "assessment-form": Preview413,
-  "pipeline-board": Preview414,
-  "ats": Preview415,
-  "tooltip-card": Preview416,
-  "timeline-gantt": Preview417,
-  "data-table-reorder": Preview418,
-  "activity-chat": Preview419,
-  "inline-approve-button": Preview420,
-  "portfolio-desk": Preview421,
+  "dispatch-board": Preview409,
+  "ats-core": Preview410,
+  "candidate-card": Preview411,
+  "candidate-row": Preview412,
+  "candidate-detail": Preview413,
+  "assessment-form": Preview414,
+  "pipeline-board": Preview415,
+  "ats": Preview416,
+  "tooltip-card": Preview417,
+  "timeline-gantt": Preview418,
+  "data-table-reorder": Preview419,
+  "activity-chat": Preview420,
+  "inline-approve-button": Preview421,
+  "portfolio-desk": Preview422,
 }

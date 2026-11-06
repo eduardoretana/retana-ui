@@ -12,7 +12,8 @@
     "typecheck:strict-host": "node scripts/check-strict-host.mjs",
     "registry:build": "node --experimental-strip-types scripts/build-registry.ts",
     "readme:catalog": "node scripts/sync-readme-catalog.mjs",
-    "capture:agenda": "node scripts/capture-agenda.mjs"
+    "capture:agenda": "node scripts/capture-agenda.mjs",
+    "capture:dispatch": "node scripts/capture-dispatch.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
