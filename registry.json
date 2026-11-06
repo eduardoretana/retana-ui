@@ -3136,6 +3136,11 @@
             "description": "Optional hint under the field."
           },
           {
+            "name": "showLabel / hideLabel",
+            "type": "string",
+            "description": "Accessible names for the reveal control. English by default."
+          },
+          {
             "name": "className / classNames",
             "type": "string",
             "description": "Root class and slot classes for label, shell, input, toggle, and description."
@@ -4678,6 +4683,11 @@
             "name": "error",
             "type": "string",
             "description": "Error copy. The field shakes when a new error appears."
+          },
+          {
+            "name": "copy",
+            "type": "PasswordStrengthCopy",
+            "description": "Meter and reveal strings. Defaults stay in English."
           },
           {
             "name": "className / classNames",
@@ -7865,6 +7875,11 @@
             "description": "defaultEmail"
           },
           {
+            "name": "forgotPasswordHref",
+            "type": "string",
+            "description": "Optional recovery route. Omitted, the card does not show the link."
+          },
+          {
             "name": "className / classNames",
             "type": "string",
             "description": "Root class and slot classes."
@@ -8105,6 +8120,11 @@
             "description": "brand"
           },
           {
+            "name": "forgotPasswordHref",
+            "type": "string",
+            "description": "Optional recovery route. Omitted, the card does not show the link."
+          },
+          {
             "name": "className / classNames",
             "type": "string",
             "description": "Root class and slot classes."
@@ -8128,6 +8148,201 @@
           "type": "registry:lib",
           "target": "@lib/motion.ts"
         }
+      ]
+    },
+    {
+      "name": "forgot-password",
+      "type": "registry:block",
+      "title": "Forgot password",
+      "description": "Ask for a reset link. The confirmation does not reveal whether the address has an account.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "input",
+        "label"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Olvidé mi contraseña",
+        "descriptionEs": "Pide un enlace para restablecer la contraseña. El aviso es el mismo si la cuenta existe o no.",
+        "preview": "app/examples/forgot-password/preview.tsx",
+        "previewHref": "/examples/forgot-password",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "invalid", "label": "Correo inválido", "labelEn": "Invalid email" },
+          { "id": "sent", "label": "Enviado", "labelEn": "Sent" },
+          { "id": "390", "label": "390 px", "labelEn": "390 px" }
+        ],
+        "examples": [
+          {
+            "title": "Olvidé mi contraseña",
+            "href": "/examples/forgot-password",
+            "description": "El aviso no dice si el correo tiene cuenta."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/forgot-password/stress",
+            "description": "Vacío, error, 390 px y texto de derecha a izquierda."
+          }
+        ],
+        "usage": "<ForgotPassword onSubmit={sendReset} signInHref=\"/sign-in\" locale=\"es-MX\" />",
+        "api": [
+          { "name": "onSubmit", "type": "(email: string) => Promise<void>", "description": "Called with the address. Resolve it for every address; the card does not learn whether an account exists." },
+          { "name": "signInHref", "type": "string", "description": "Way back to sign-in." },
+          { "name": "brand", "type": "{ name: string; mark?: ReactNode }", "description": "Optional name shown above the title." },
+          { "name": "locale", "type": "\"es-MX\" | \"en\"", "description": "Copy language. Defaults to English." },
+          { "name": "labels", "type": "Partial<ForgotPasswordLabels>", "description": "Overrides. Keep them from revealing whether an account exists." },
+          { "name": "phase", "type": "\"idle\" | \"invalid\" | \"submitting\" | \"sent\" | \"error\"", "description": "Locked scene. Omit it and the card moves on its own." },
+          { "name": "className / classNames", "type": "string", "description": "Root class and slot classes." }
+        ]
+      },
+      "docs": "Clean-room. shadcn/studio forgot-password (Free and Pro) was not copied: the Free tier adds the Commons Clause, which blocks redistribution in a component library, and Pro was not purchased. No source, sample data, icons, or strings were copied. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion. The sent sentence is identical whether or not the address has an account (proposed hub rule RUI-AUTH-ENUM-001).",
+      "files": [
+        { "path": "registry/blocks/forgot-password.tsx", "type": "registry:component", "target": "@ui/forgot-password.tsx" },
+        { "path": "registry/blocks/auth-recovery-copy.ts", "type": "registry:component", "target": "@ui/auth-recovery-copy.ts" },
+        { "path": "registry/blocks/auth-recovery-frame.tsx", "type": "registry:component", "target": "@ui/auth-recovery-frame.tsx" },
+        { "path": "registry/lib/motion.ts", "type": "registry:lib", "target": "@lib/motion.ts" }
+      ]
+    },
+    {
+      "name": "reset-password",
+      "type": "registry:block",
+      "title": "Reset password",
+      "description": "Choose a new password with strength and a match. An invalid or expired link asks for another.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "input",
+        "label"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Restablecer contraseña",
+        "descriptionEs": "Elige una contraseña nueva, con fortaleza y confirmación. Un enlace inválido o vencido pide otro.",
+        "preview": "app/examples/reset-password/preview.tsx",
+        "previewHref": "/examples/reset-password",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "invalid", "label": "No coinciden", "labelEn": "Mismatch" },
+          { "id": "success", "label": "Listo", "labelEn": "Updated" },
+          { "id": "token-invalid", "label": "Enlace inválido", "labelEn": "Invalid link" },
+          { "id": "token-expired", "label": "Enlace vencido", "labelEn": "Expired link" },
+          { "id": "390", "label": "390 px", "labelEn": "390 px" }
+        ],
+        "examples": [
+          {
+            "title": "Restablecer contraseña",
+            "href": "/examples/reset-password",
+            "description": "Fortaleza, confirmación y enlace vencido."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/reset-password/stress",
+            "description": "Vacío, error, 390 px y texto de derecha a izquierda."
+          }
+        ],
+        "usage": "<ResetPassword onSubmit={savePassword} tokenState={tokenState} locale=\"es-MX\" />",
+        "api": [
+          { "name": "onSubmit", "type": "(values: { password: string }) => Promise<void>", "description": "Called only when the rules pass and the confirmation matches." },
+          { "name": "passwordRules", "type": "PasswordRule[]", "description": "Strength checks. Defaults to 12 characters, case, number, and symbol." },
+          { "name": "tokenState", "type": "\"ok\" | \"invalid\" | \"expired\"", "description": "An invalid or expired link replaces the form." },
+          { "name": "signInHref / requestHref", "type": "string", "description": "Back to sign-in, or a route that asks for a new link." },
+          { "name": "locale / labels / phase", "type": "AuthLocale / partial copy / phase", "description": "Language, copy overrides, and a locked scene." },
+          { "name": "className", "type": "string", "description": "Root class." }
+        ]
+      },
+      "docs": "Clean-room. shadcn/studio reset-password (Free and Pro) was not copied: the Free tier adds the Commons Clause, which blocks redistribution in a component library, and Pro was not purchased. No source, sample data, icons, or strings were copied. The card reuses password-field and password-strength. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion. Host errors are not rendered, so a rejection cannot reveal an account (proposed hub rule RUI-AUTH-ENUM-001).",
+      "files": [
+        { "path": "registry/blocks/reset-password.tsx", "type": "registry:component", "target": "@ui/reset-password.tsx" },
+        { "path": "registry/blocks/auth-recovery-copy.ts", "type": "registry:component", "target": "@ui/auth-recovery-copy.ts" },
+        { "path": "registry/blocks/auth-recovery-frame.tsx", "type": "registry:component", "target": "@ui/auth-recovery-frame.tsx" },
+        { "path": "registry/ui/password-field.tsx", "type": "registry:component", "target": "@ui/password-field.tsx" },
+        { "path": "registry/ui/password-strength.tsx", "type": "registry:component", "target": "@ui/password-strength.tsx" },
+        { "path": "registry/lib/motion.ts", "type": "registry:lib", "target": "@lib/motion.ts" }
+      ]
+    },
+    {
+      "name": "verify-email",
+      "type": "registry:block",
+      "title": "Verify email",
+      "description": "Check your email, resend after a cooldown, and optionally enter the code.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "input-otp"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Verificar correo",
+        "descriptionEs": "Revisa tu correo, reenvía cuando termina la espera y, si quieres, escribe el código.",
+        "preview": "app/examples/verify-email/preview.tsx",
+        "previewHref": "/examples/verify-email",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "invalid", "label": "Código inválido", "labelEn": "Invalid code" },
+          { "id": "cooldown", "label": "Espera", "labelEn": "Cooldown" },
+          { "id": "success", "label": "Verificado", "labelEn": "Verified" },
+          { "id": "390", "label": "390 px", "labelEn": "390 px" }
+        ],
+        "examples": [
+          {
+            "title": "Verificar correo",
+            "href": "/examples/verify-email",
+            "description": "Reenvío con espera y código opcional."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/verify-email/stress",
+            "description": "Vacío, espera, 390 px y texto de derecha a izquierda."
+          }
+        ],
+        "usage": "<VerifyEmail email={email} onResend={resend} onVerifyCode={checkCode} locale=\"es-MX\" />",
+        "api": [
+          { "name": "onResend", "type": "() => Promise<void>", "description": "Sends another message. The card waits cooldownSeconds before it can run again." },
+          { "name": "onVerifyCode", "type": "(code: string) => Promise<boolean>", "description": "Optional. True confirms the code. False is a mismatch. A throw becomes a generic error." },
+          { "name": "onVerified", "type": "() => void", "description": "Called after the code is accepted." },
+          { "name": "otp", "type": "boolean | { length?: number }", "description": "Shows the code field. Also shown when onVerifyCode is set." },
+          { "name": "email", "type": "string", "description": "Address the person typed. Shown as entered, not as proof of an account." },
+          { "name": "skipHref / onSkip", "type": "string / () => void", "description": "Optional way to leave verification for later." },
+          { "name": "cooldownSeconds / initialCooldown", "type": "number", "description": "How long resend stays disabled, and how much of that wait is already elapsed." },
+          { "name": "locale / labels / phase", "type": "AuthLocale / partial copy / phase", "description": "Language, copy overrides, and a locked scene." }
+        ]
+      },
+      "docs": "Clean-room. shadcn/studio verify-email (Free and Pro) was not copied: the Free tier adds the Commons Clause, which blocks redistribution in a component library, and Pro was not purchased. No source, sample data, icons, or strings were copied. The code field reuses otp-field, including its cooldown pattern. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion. Resend and failure copy do not reveal whether an account exists (proposed hub rule RUI-AUTH-ENUM-001).",
+      "files": [
+        { "path": "registry/blocks/verify-email.tsx", "type": "registry:component", "target": "@ui/verify-email.tsx" },
+        { "path": "registry/blocks/auth-recovery-copy.ts", "type": "registry:component", "target": "@ui/auth-recovery-copy.ts" },
+        { "path": "registry/blocks/auth-recovery-frame.tsx", "type": "registry:component", "target": "@ui/auth-recovery-frame.tsx" },
+        { "path": "registry/ui/otp-field.tsx", "type": "registry:component", "target": "@ui/otp-field.tsx" },
+        { "path": "registry/lib/motion.ts", "type": "registry:lib", "target": "@lib/motion.ts" }
       ]
     },
     {

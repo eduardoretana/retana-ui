@@ -22,6 +22,9 @@ export type PasswordFieldClassNames = {
 export type PasswordFieldProps = Omit<React.ComponentProps<"input">, "type"> & {
   label: string
   description?: string
+  /** Accessible name for the reveal control. Defaults to English. */
+  showLabel?: string
+  hideLabel?: string
   classNames?: PasswordFieldClassNames
 }
 
@@ -51,7 +54,7 @@ function EyeMorph({ slashed }: { slashed: boolean }) {
 }
 
 export const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldProps>(function PasswordField(
-  { label, description, id, className, classNames, ...props },
+  { label, description, showLabel = "Show password", hideLabel = "Hide password", id, className, classNames, ...props },
   ref,
 ) {
   const generated = React.useId()
@@ -91,7 +94,7 @@ export const PasswordField = React.forwardRef<HTMLInputElement, PasswordFieldPro
           size="icon-sm"
           data-slot="password-field-toggle"
           className={classNames?.toggle}
-          aria-label={visible ? "Hide password" : "Show password"}
+          aria-label={visible ? hideLabel : showLabel}
           aria-pressed={visible}
           onClick={() => {
             setVisible((current) => !current)

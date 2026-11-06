@@ -1,0 +1,196 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "verify-email",
+  "title": "Verify email",
+  "author": "Eduardo Retana",
+  "description": "Check your email, resend after a cooldown, and optionally enter the code.",
+  "dependencies": [
+    "motion",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button",
+    "card",
+    "input-otp"
+  ],
+  "files": [
+    {
+      "path": "registry/blocks/verify-email.tsx",
+      "content": "\"use client\"\n\n/**\n * Clean-room verify-email card.\n * Resend follows the otp-field cooldown: the control stays disabled while the\n * clock runs. The result copy does not say whether an account exists.\n */\n\nimport { useEffect, useState } from \"react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { cn } from \"@/lib/utils\"\nimport { verifyCopy, type AuthLocale } from \"./auth-recovery-copy\"\nimport { AuthRecoveryFrame, AuthRecoveryLink, type AuthBrand } from \"./auth-recovery-frame\"\nimport { OtpField, type OtpFieldState } from \"@/components/ui/otp-field\"\n\nexport type VerifyEmailPhase = \"idle\" | \"invalid\" | \"submitting\" | \"success\" | \"error\" | \"cooldown\"\n\nexport type VerifyEmailLabels = Partial<ReturnType<typeof verifyCopy>>\n\nexport type VerifyEmailOtp = boolean | { length?: number }\n\nexport type VerifyEmailProps = {\n  email?: string\n  onResend: () => Promise<void>\n  onVerifyCode?: (code: string) => Promise<boolean>\n  onVerified?: () => void\n  onSkip?: () => void\n  skipHref?: string\n  otp?: VerifyEmailOtp\n  labels?: VerifyEmailLabels\n  locale?: AuthLocale\n  brand?: AuthBrand\n  cooldownSeconds?: number\n  /** Seconds already elapsed on the cooldown when the card opens. */\n  initialCooldown?: number\n  phase?: VerifyEmailPhase\n  className?: string\n}\n\nfunction formatClock(total: number) {\n  const minutes = Math.floor(total / 60)\n  const seconds = total % 60\n  return `${minutes}:${seconds.toString().padStart(2, \"0\")}`\n}\n\nexport function VerifyEmail({\n  email,\n  onResend,\n  onVerifyCode,\n  onVerified,\n  onSkip,\n  skipHref,\n  otp,\n  labels,\n  locale = \"en\",\n  brand,\n  cooldownSeconds = 30,\n  initialCooldown = 0,\n  phase,\n  className,\n}: VerifyEmailProps) {\n  const copy = { ...verifyCopy(locale), ...labels }\n  const length = typeof otp === \"object\" && otp.length ? otp.length : 6\n  const showCode = otp !== false && (otp != null || onVerifyCode != null)\n  const [internal, setInternal] = useState<VerifyEmailPhase>(initialCooldown > 0 ? \"cooldown\" : \"idle\")\n  const [remaining, setRemaining] = useState(phase === \"cooldown\" ? cooldownSeconds : initialCooldown)\n  const [busy, setBusy] = useState(false)\n  const [code, setCode] = useState(\"\")\n  const [otpState, setOtpState] = useState<OtpFieldState>(\"idle\")\n  const [server, setServer] = useState(false)\n  const current = phase ?? internal\n  const success = current === \"success\"\n  const submitting = current === \"submitting\" || busy\n  const clock = formatClock(remaining)\n  const waiting = remaining > 0\n  const resendName = waiting ? `${copy.resendWait} ${clock}` : submitting ? copy.sending : copy.resend\n\n  useEffect(() => {\n    if (remaining <= 0) return\n    const timer = window.setTimeout(() => setRemaining((seconds) => Math.max(0, seconds - 1)), 1000)\n    return () => window.clearTimeout(timer)\n  }, [remaining])\n\n  async function resend() {\n    if (waiting || submitting || success || phase === \"submitting\") return\n    setBusy(true)\n    setServer(false)\n    setInternal(\"submitting\")\n    try {\n      await onResend()\n      setRemaining(cooldownSeconds)\n      setCode(\"\")\n      setOtpState(\"idle\")\n      setInternal(\"cooldown\")\n    } catch {\n      setServer(true)\n      setInternal(\"error\")\n    } finally {\n      setBusy(false)\n    }\n  }\n\n  async function verify(next: string) {\n    if (!onVerifyCode || submitting || next.length < length) return\n    setBusy(true)\n    setServer(false)\n    setOtpState(\"idle\")\n    try {\n      const ok = await onVerifyCode(next)\n      if (ok) {\n        setOtpState(\"success\")\n        setInternal(\"success\")\n        onVerified?.()\n        return\n      }\n      setCode(\"\")\n      setOtpState(\"error\")\n      setInternal(\"invalid\")\n    } catch {\n      setServer(true)\n      setInternal(\"error\")\n    } finally {\n      setBusy(false)\n    }\n  }\n\n  const showServer = server || current === \"error\"\n\n  return (\n    <AuthRecoveryFrame\n      slot=\"verify-email\"\n      phase={current}\n      title={success ? copy.successTitle : copy.title}\n      description={success ? copy.successBody : copy.description}\n      status={waiting ? resendName : success ? copy.successBody : \"\"}\n      brand={brand}\n      className={className}\n    >\n      {success ? null : (\n        <div className=\"grid min-w-0 gap-4\">\n          {email ? (\n            <p className=\"text-sm text-muted-foreground\">\n              {copy.address} <span className=\"font-medium break-all text-foreground\">{email}</span>\n            </p>\n          ) : null}\n          {showCode ? (\n            <form\n              className=\"grid gap-4\"\n              onSubmit={(event) => {\n                event.preventDefault()\n                void verify(code)\n              }}\n              noValidate\n            >\n              <OtpField\n                length={length}\n                label={copy.code}\n                hint={copy.codeHint}\n                errorLabel={copy.codeInvalid}\n                successLabel={copy.codeValid}\n                value={code}\n                onValueChange={(next) => {\n                  setCode(next)\n                  if (otpState === \"error\" && next) setOtpState(\"idle\")\n                }}\n                onComplete={(next) => void verify(next)}\n                state={current === \"invalid\" ? \"error\" : otpState}\n                disabled={submitting}\n              />\n              <Button type=\"submit\" className=\"min-h-11 w-full\" disabled={submitting} aria-busy={submitting || undefined}>\n                {submitting ? copy.checking : copy.verify}\n              </Button>\n            </form>\n          ) : null}\n          {showServer ? (\n            <p role=\"alert\" className=\"text-sm text-destructive\">\n              {copy.serverError}\n            </p>\n          ) : null}\n          <Button\n            type=\"button\"\n            variant=\"outline\"\n            className={cn(\"min-h-11 w-full\", waiting && \"font-normal\")}\n            disabled={waiting || submitting || success}\n            aria-disabled={waiting || undefined}\n            onClick={() => void resend()}\n          >\n            {resendName}\n          </Button>\n          {skipHref ? (\n            <AuthRecoveryLink href={skipHref}>{copy.skip}</AuthRecoveryLink>\n          ) : onSkip ? (\n            <Button type=\"button\" variant=\"ghost\" className=\"min-h-11 w-full\" onClick={onSkip}>\n              {copy.skip}\n            </Button>\n          ) : null}\n        </div>\n      )}\n    </AuthRecoveryFrame>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/verify-email.tsx"
+    },
+    {
+      "path": "registry/blocks/auth-recovery-copy.ts",
+      "content": "/**\n * Clean-room copy for password recovery and email verification.\n * One sentence per outcome. Nothing here takes an \"account exists\" flag.\n */\n\nexport type AuthLocale = \"es-MX\" | \"en\"\n\nconst LEAK =\n  /no account|not found|does not exist|doesn't exist|no existe|sin cuenta|no encontramos|unknown user|user not found|correo no registrado|email not registered/i\n\nexport function recoveryCopyLeaksAccount(text: string) {\n  return LEAK.test(text)\n}\n\nconst forgot = {\n  en: {\n    title: \"Forgot your password?\",\n    description: \"Enter your email and we will send reset instructions.\",\n    email: \"Email\",\n    emailPlaceholder: \"name@example.com\",\n    emailRequired: \"Enter your email address.\",\n    emailInvalid: \"Enter a full address, like name@example.com.\",\n    submit: \"Send link\",\n    sending: \"Sending\",\n    sentTitle: \"Check your inbox\",\n    sentBody: \"If an account uses that address, a reset link is on its way. Check the inbox and the spam folder.\",\n    back: \"Back to sign in\",\n    serverError: \"We could not send the link. Try again in a moment.\",\n  },\n  \"es-MX\": {\n    title: \"¿Olvidaste tu contraseña?\",\n    description: \"Escribe tu correo y enviaremos instrucciones para restablecerla.\",\n    email: \"Correo\",\n    emailPlaceholder: \"nombre@ejemplo.com\",\n    emailRequired: \"Escribe tu correo.\",\n    emailInvalid: \"Escribe un correo completo, como nombre@ejemplo.com.\",\n    submit: \"Enviar enlace\",\n    sending: \"Enviando\",\n    sentTitle: \"Revisa tu bandeja\",\n    sentBody: \"Si hay una cuenta con esa dirección, el enlace para restablecer va en camino. Revisa la bandeja y el correo no deseado.\",\n    back: \"Volver a entrar\",\n    serverError: \"No pudimos enviar el enlace. Inténtalo de nuevo en un momento.\",\n  },\n}\n\nconst reset = {\n  en: {\n    title: \"Choose a new password\",\n    description: \"Use a long password that you do not use anywhere else.\",\n    password: \"New password\",\n    confirm: \"Confirm password\",\n    submit: \"Update password\",\n    sending: \"Updating\",\n    rules: \"The password does not meet the rules yet.\",\n    mismatch: \"Those passwords do not match.\",\n    successTitle: \"Password updated\",\n    successBody: \"You can sign in with the new password.\",\n    back: \"Back to sign in\",\n    invalidTitle: \"This link is not valid\",\n    invalidBody: \"Request a new reset link and open the latest email.\",\n    expiredTitle: \"This link has expired\",\n    expiredBody: \"Reset links last for a short time. Request a new one.\",\n    request: \"Request a new link\",\n    serverError: \"We could not update the password. Try again in a moment.\",\n    ruleLength: \"At least 12 characters\",\n    ruleCase: \"Upper and lowercase letters\",\n    ruleNumber: \"At least one number\",\n    ruleSymbol: \"At least one symbol\",\n    show: \"Show password\",\n    hide: \"Hide password\",\n    tooShort: \"Too short\",\n    weak: \"Weak\",\n    fair: \"Fair\",\n    good: \"Good\",\n    strong: \"Strong\",\n    empty: \"No password yet\",\n    more: \"more\",\n    meter: \"Password strength\",\n    requirements: \"Password requirements\",\n    met: \", met\",\n    unmet: \", not met\",\n  },\n  \"es-MX\": {\n    title: \"Elige una contraseña nueva\",\n    description: \"Usa una contraseña larga que no repitas en otro sitio.\",\n    password: \"Contraseña nueva\",\n    confirm: \"Confirmar contraseña\",\n    submit: \"Actualizar contraseña\",\n    sending: \"Actualizando\",\n    rules: \"La contraseña todavía no cumple las reglas.\",\n    mismatch: \"Las contraseñas no coinciden.\",\n    successTitle: \"Contraseña actualizada\",\n    successBody: \"Ya puedes entrar con la contraseña nueva.\",\n    back: \"Volver a entrar\",\n    invalidTitle: \"Este enlace no es válido\",\n    invalidBody: \"Pide otro enlace y abre el correo más reciente.\",\n    expiredTitle: \"Este enlace caducó\",\n    expiredBody: \"Los enlaces duran poco. Pide uno nuevo.\",\n    request: \"Pedir un enlace nuevo\",\n    serverError: \"No pudimos actualizar la contraseña. Inténtalo de nuevo en un momento.\",\n    ruleLength: \"Al menos 12 caracteres\",\n    ruleCase: \"Mayúsculas y minúsculas\",\n    ruleNumber: \"Al menos un número\",\n    ruleSymbol: \"Al menos un símbolo\",\n    show: \"Mostrar contraseña\",\n    hide: \"Ocultar contraseña\",\n    tooShort: \"Corta\",\n    weak: \"Débil\",\n    fair: \"Regular\",\n    good: \"Buena\",\n    strong: \"Fuerte\",\n    empty: \"Aún no hay contraseña\",\n    more: \"más\",\n    meter: \"Fortaleza de la contraseña\",\n    requirements: \"Reglas de la contraseña\",\n    met: \", cumplida\",\n    unmet: \", pendiente\",\n  },\n}\n\nconst verify = {\n  en: {\n    title: \"Check your email\",\n    description: \"We sent a message so you can confirm the address. It expires in 10 minutes.\",\n    address: \"Address\",\n    resend: \"Resend email\",\n    resendWait: \"Resend email in\",\n    sending: \"Sending\",\n    resent: \"Check your email again.\",\n    code: \"Verification code\",\n    codeHint: \"Enter the code from the latest message.\",\n    codeInvalid: \"That code does not match. Check the latest message.\",\n    codeValid: \"Code confirmed\",\n    verify: \"Verify\",\n    checking: \"Checking\",\n    successTitle: \"Email verified\",\n    successBody: \"The address is confirmed. You can continue.\",\n    skip: \"Verify later\",\n    serverError: \"We could not send the email. Try again in a moment.\",\n  },\n  \"es-MX\": {\n    title: \"Revisa tu correo\",\n    description: \"Enviamos un mensaje para confirmar la dirección. Caduca en 10 minutos.\",\n    address: \"Dirección\",\n    resend: \"Reenviar correo\",\n    resendWait: \"Reenviar correo en\",\n    sending: \"Enviando\",\n    resent: \"Revisa tu correo otra vez.\",\n    code: \"Código de verificación\",\n    codeHint: \"Escribe el código del mensaje más reciente.\",\n    codeInvalid: \"Ese código no coincide. Revisa el mensaje más reciente.\",\n    codeValid: \"Código confirmado\",\n    verify: \"Verificar\",\n    checking: \"Revisando\",\n    successTitle: \"Correo verificado\",\n    successBody: \"La dirección quedó confirmada. Puedes continuar.\",\n    skip: \"Verificar más tarde\",\n    serverError: \"No pudimos enviar el correo. Inténtalo de nuevo en un momento.\",\n  },\n}\n\nexport const authRecoveryCopy = { forgot, reset, verify }\n\nexport function recoverySentBody(locale: AuthLocale) {\n  return forgot[locale].sentBody\n}\n\nexport function forgotCopy(locale: AuthLocale) {\n  return forgot[locale]\n}\n\nexport function resetCopy(locale: AuthLocale) {\n  return reset[locale]\n}\n\nexport function verifyCopy(locale: AuthLocale) {\n  return verify[locale]\n}\n",
+      "type": "registry:component",
+      "target": "@ui/auth-recovery-copy.ts"
+    },
+    {
+      "path": "registry/blocks/auth-recovery-frame.tsx",
+      "content": "\"use client\"\n\n/** Clean-room chrome for the recovery cards. No theme of its own. */\n\nimport { useEffect, useId, useRef, type ReactNode } from \"react\"\nimport { motion, useReducedMotionConfig } from \"motion/react\"\n\nimport { Card } from \"@/components/ui/card\"\nimport { cn } from \"@/lib/utils\"\nimport { motionPresets } from \"@/lib/motion\"\n\nexport type AuthBrand = { name: string; mark?: ReactNode }\n\nexport function AuthRecoveryLink({ href, children }: { href: string; children: ReactNode }) {\n  return (\n    <a\n      href={href}\n      className=\"inline-flex min-h-11 items-center self-start text-sm font-medium text-foreground underline-offset-4 hover:underline focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none\"\n    >\n      {children}\n    </a>\n  )\n}\n\nexport function AuthRecoveryFrame({\n  slot,\n  title,\n  description,\n  status,\n  brand,\n  phase,\n  className,\n  children,\n}: {\n  slot: string\n  title: string\n  description?: string\n  status?: string\n  brand?: AuthBrand\n  phase: string\n  className?: string\n  children: ReactNode\n}) {\n  const reduce = useReducedMotionConfig() ?? false\n  const titleId = useId()\n  const headingRef = useRef<HTMLHeadingElement>(null)\n  const focusTitle = phase === \"sent\" || phase === \"success\" || phase === \"invalid-link\" || phase === \"expired\"\n\n  useEffect(() => {\n    if (focusTitle) headingRef.current?.focus()\n  }, [focusTitle, phase, title])\n\n  return (\n    <Card\n      data-slot={slot}\n      data-phase={phase}\n      data-motion={reduce ? \"reduced\" : \"full\"}\n      role=\"region\"\n      aria-labelledby={titleId}\n      className={cn(\"@container w-full min-w-0 max-w-md gap-0 overflow-hidden py-0\", className)}\n    >\n      <div className=\"grid min-w-0 gap-5 p-6 @max-[380px]:p-5\">\n        {brand ? (\n          <p className=\"inline-flex min-w-0 items-center gap-2 text-sm font-medium\">\n            {brand.mark ? <span aria-hidden=\"true\">{brand.mark}</span> : null}\n            <span className=\"truncate\">{brand.name}</span>\n          </p>\n        ) : null}\n        <motion.div\n          key={phase}\n          className=\"grid min-w-0 gap-5\"\n          initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}\n          animate={{ opacity: 1, y: 0 }}\n          transition={{ duration: reduce ? 0 : motionPresets.duration.standard, ease: [...motionPresets.ease.enter] }}\n        >\n          <div className=\"grid gap-1\">\n            <h2 id={titleId} ref={headingRef} tabIndex={-1} className=\"text-xl font-medium text-balance outline-none @min-[380px]:text-2xl\">\n              {title}\n            </h2>\n            {description ? <p className=\"text-sm text-pretty text-muted-foreground\">{description}</p> : null}\n          </div>\n          {children}\n        </motion.div>\n      </div>\n      <p className=\"sr-only\" role=\"status\">\n        {status}\n      </p>\n    </Card>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/auth-recovery-frame.tsx"
+    },
+    {
+      "path": "registry/ui/otp-field.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { Check, RotateCcw } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Button } from \"@/components/ui/button\"\nimport { InputOTP, InputOTPGroup, InputOTPSlot } from \"@/components/ui/input-otp\"\n\nexport type OtpFieldState = \"idle\" | \"success\" | \"error\"\n\nexport type OtpFieldProps = {\n  length?: number\n  value?: string\n  defaultValue?: string\n  onValueChange?: (value: string) => void\n  onComplete?: (value: string) => void\n  state?: OtpFieldState\n  label?: string\n  hint?: string\n  errorLabel?: string\n  successLabel?: string\n  resendLabel?: string\n  resendWaitLabel?: string\n  /** Seconds the resend control stays disabled after each send. */\n  cooldownSeconds?: number\n  onResend?: () => void\n  disabled?: boolean\n  autoFocus?: boolean\n  inputMode?: \"numeric\" | \"text\"\n  className?: string\n}\n\nfunction formatClock(total: number) {\n  const minutes = Math.floor(total / 60)\n  const seconds = total % 60\n  return `${minutes}:${seconds.toString().padStart(2, \"0\")}`\n}\n\nexport function OtpField({\n  length = 6,\n  value,\n  defaultValue = \"\",\n  onValueChange,\n  onComplete,\n  state = \"idle\",\n  label = \"Verification code\",\n  hint,\n  errorLabel = \"That code is not valid\",\n  successLabel = \"Code confirmed\",\n  resendLabel = \"Resend code\",\n  resendWaitLabel = \"Resend in\",\n  cooldownSeconds = 30,\n  onResend,\n  disabled = false,\n  autoFocus = false,\n  inputMode = \"numeric\",\n  className,\n}: OtpFieldProps) {\n  const [uncontrolled, setUncontrolled] = React.useState(defaultValue)\n  const [remaining, setRemaining] = React.useState(0)\n  const groupRef = React.useRef<HTMLDivElement>(null)\n  const code = value ?? uncontrolled\n  const describedBy = React.useId()\n\n  React.useEffect(() => {\n    if (remaining <= 0) return\n    const id = window.setTimeout(() => setRemaining((current) => current - 1), 1000)\n    return () => window.clearTimeout(id)\n  }, [remaining])\n\n  React.useEffect(() => {\n    const node = groupRef.current\n    if (!node || state === \"idle\") return\n    if (window.matchMedia(\"(prefers-reduced-motion: reduce)\").matches) return\n    if (typeof node.animate !== \"function\") return\n    if (state === \"error\") {\n      node.animate(\n        [\n          { transform: \"translateX(0)\" },\n          { transform: \"translateX(-5px)\" },\n          { transform: \"translateX(5px)\" },\n          { transform: \"translateX(-3px)\" },\n          { transform: \"translateX(0)\" },\n        ],\n        { duration: 420, easing: \"ease-in-out\" },\n      )\n    } else {\n      node.animate(\n        [{ transform: \"scale(1)\" }, { transform: \"scale(1.03)\" }, { transform: \"scale(1)\" }],\n        { duration: 320, easing: \"ease-out\" },\n      )\n    }\n  }, [state])\n\n  function change(next: string) {\n    if (value === undefined) setUncontrolled(next)\n    onValueChange?.(next)\n  }\n\n  return (\n    <div data-slot=\"otp-field\" data-state={state} className={cn(\"flex flex-col gap-2\", className)}>\n      <span className=\"text-sm font-medium\" id={`${describedBy}-label`}>\n        {label}\n      </span>\n      <div ref={groupRef} className=\"w-fit\">\n        <InputOTP\n          maxLength={length}\n          value={code}\n          onChange={change}\n          onComplete={onComplete}\n          disabled={disabled || state === \"success\"}\n          autoFocus={autoFocus}\n          inputMode={inputMode}\n          aria-labelledby={`${describedBy}-label`}\n          aria-describedby={describedBy}\n          aria-invalid={state === \"error\" || undefined}\n          containerClassName={cn(state === \"success\" && \"rounded-lg ring-2 ring-primary\")}\n        >\n          <InputOTPGroup>\n            {Array.from({ length }, (_, index) => (\n              <InputOTPSlot key={index} index={index} aria-invalid={state === \"error\" || undefined} />\n            ))}\n          </InputOTPGroup>\n        </InputOTP>\n      </div>\n      <div className=\"flex items-center justify-between gap-3\">\n        <p\n          id={describedBy}\n          role={state === \"error\" ? \"alert\" : \"status\"}\n          className={cn(\n            \"text-xs text-muted-foreground\",\n            state === \"error\" && \"text-destructive\",\n            state === \"success\" && \"text-primary\",\n          )}\n        >\n          {state === \"error\" ? errorLabel : state === \"success\" ? (\n            <span className=\"inline-flex items-center gap-1\">\n              <Check className=\"size-3\" aria-hidden />\n              {successLabel}\n            </span>\n          ) : (\n            hint\n          )}\n        </p>\n        {onResend ? (\n          <Button\n            type=\"button\"\n            variant=\"ghost\"\n            size=\"xs\"\n            disabled={disabled || remaining > 0 || state === \"success\"}\n            onClick={() => {\n              onResend()\n              setRemaining(cooldownSeconds)\n            }}\n          >\n            <RotateCcw />\n            {remaining > 0 ? `${resendWaitLabel} ${formatClock(remaining)}` : resendLabel}\n          </Button>\n        ) : null}\n      </div>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/otp-field.tsx"
+    },
+    {
+      "path": "registry/lib/motion.ts",
+      "content": "/**\n * Timing presets for pieces adapted from Arc UI (MIT).\n * Durations and springs only. No colors, fonts, or theme tokens.\n */\nexport const motionPresets = {\n  duration: {\n    instant: 0.12,\n    fast: 0.16,\n    exit: 0.18,\n    standard: 0.24,\n    considered: 0.48,\n  },\n  ease: {\n    enter: [0.16, 1, 0.3, 1] as const,\n    // Exit decelerates, the same curve as CSS ease-out.\n    exit: [0, 0, 0.58, 1] as const,\n    standard: [0.22, 1, 0.36, 1] as const,\n    inOut: [0.65, 0, 0.35, 1] as const,\n  },\n  spring: {\n    responsive: { type: \"spring\" as const, stiffness: 520, damping: 38 },\n    gentle: { type: \"spring\" as const, stiffness: 340, damping: 34 },\n    snappy: { type: \"spring\" as const, visualDuration: 0.26, bounce: 0.12 },\n    smooth: { type: \"spring\" as const, visualDuration: 0.4, bounce: 0 },\n    morph: { type: \"spring\" as const, visualDuration: 0.42, bounce: 0.16 },\n  },\n  stagger: { char: 0.016, word: 0.04, line: 0.08, item: 0.035 },\n  blur: { subtle: 2, soft: 4, text: 8 },\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/motion.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Verificar correo",
+    "descriptionEs": "Revisa tu correo, reenvía cuando termina la espera y, si quieres, escribe el código.",
+    "preview": "app/examples/verify-email/preview.tsx",
+    "previewHref": "/examples/verify-email",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "invalid",
+        "label": "Código inválido",
+        "labelEn": "Invalid code"
+      },
+      {
+        "id": "cooldown",
+        "label": "Espera",
+        "labelEn": "Cooldown"
+      },
+      {
+        "id": "success",
+        "label": "Verificado",
+        "labelEn": "Verified"
+      },
+      {
+        "id": "390",
+        "label": "390 px",
+        "labelEn": "390 px"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Verificar correo",
+        "href": "/examples/verify-email",
+        "description": "Reenvío con espera y código opcional."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/verify-email/stress",
+        "description": "Vacío, espera, 390 px y texto de derecha a izquierda."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/verify-email?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/verify-email?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/verify-email?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/verify-email?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Código inválido",
+        "href": "/examples/verify-email?scene=invalid",
+        "description": "Invalid code"
+      },
+      {
+        "title": "Espera",
+        "href": "/examples/verify-email?scene=cooldown",
+        "description": "Cooldown"
+      },
+      {
+        "title": "Verificado",
+        "href": "/examples/verify-email?scene=success",
+        "description": "Verified"
+      },
+      {
+        "title": "390 px",
+        "href": "/examples/verify-email?scene=390",
+        "description": "390 px"
+      }
+    ],
+    "usage": "<VerifyEmail email={email} onResend={resend} onVerifyCode={checkCode} locale=\"es-MX\" />",
+    "api": [
+      {
+        "name": "onResend",
+        "type": "() => Promise<void>",
+        "description": "Sends another message. The card waits cooldownSeconds before it can run again."
+      },
+      {
+        "name": "onVerifyCode",
+        "type": "(code: string) => Promise<boolean>",
+        "description": "Optional. True confirms the code. False is a mismatch. A throw becomes a generic error."
+      },
+      {
+        "name": "onVerified",
+        "type": "() => void",
+        "description": "Called after the code is accepted."
+      },
+      {
+        "name": "otp",
+        "type": "boolean | { length?: number }",
+        "description": "Shows the code field. Also shown when onVerifyCode is set."
+      },
+      {
+        "name": "email",
+        "type": "string",
+        "description": "Address the person typed. Shown as entered, not as proof of an account."
+      },
+      {
+        "name": "skipHref / onSkip",
+        "type": "string / () => void",
+        "description": "Optional way to leave verification for later."
+      },
+      {
+        "name": "cooldownSeconds / initialCooldown",
+        "type": "number",
+        "description": "How long resend stays disabled, and how much of that wait is already elapsed."
+      },
+      {
+        "name": "locale / labels / phase",
+        "type": "AuthLocale / partial copy / phase",
+        "description": "Language, copy overrides, and a locked scene."
+      }
+    ]
+  },
+  "docs": "Clean-room. shadcn/studio verify-email (Free and Pro) was not copied: the Free tier adds the Commons Clause, which blocks redistribution in a component library, and Pro was not purchased. No source, sample data, icons, or strings were copied. The code field reuses otp-field, including its cooldown pattern. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion. Resend and failure copy do not reveal whether an account exists (proposed hub rule RUI-AUTH-ENUM-001).",
+  "categories": [
+    "block"
+  ],
+  "type": "registry:block"
+}

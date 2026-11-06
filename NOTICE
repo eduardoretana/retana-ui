@@ -216,6 +216,26 @@ on the host shadcn sidebar and the host's semantic classes.
 
 Clean-room pieces
 
+Auth recovery
+
+forgot-password, reset-password, and verify-email are a clean-room reading
+of a public password-recovery flow. The reference is the shadcn/studio
+forgot-password, reset-password, and verify-email category (Free and Pro
+variants):
+
+  https://shadcnstudio.com/blocks/marketing-ui/forgot-password
+  https://shadcnstudio.com/blocks/marketing-ui/reset-password
+  https://shadcnstudio.com/blocks/marketing-ui/verify-email
+  https://shadcnstudio.com/license
+
+The Free tier is MIT plus the Commons Clause, which does not allow
+redistributing those components inside a component library. Pro was not
+purchased, fetched, or ported. No source, sample data, icons, assets, or
+internal strings were copied. The cards reuse this registry's password-field,
+password-strength, and otp-field, and the host shadcn tokens. The sent and
+resent copy does not change based on whether an address has an account
+(proposed hub rule RUI-AUTH-ENUM-001, see docs/proposals/RUI-AUTH-ENUM-001.md).
+
 Affect UI — interfaces
 
 app-shell, assistant-home, agent-chat, agent-run, settings-billing,
