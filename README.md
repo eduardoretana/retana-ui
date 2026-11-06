@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`422` items are in `registry.json` on this branch: `333` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`423` items are in `registry.json` on this branch: `334` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -424,6 +424,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`language-pair`](registry/ui/language-pair.tsx) · ui — From and to language pickers with a swap. Install: `npx shadcn@latest add @retana/language-pair`.
 - [`install-command`](registry/ui/install-command.tsx) · ui — Package-manager tabs that rewrite one install command and copy it. Install: `npx shadcn@latest add @retana/install-command`.
 - [`demo-collage`](registry/blocks/demo-collage.tsx) · block — A grid of live mini demos that render when they scroll into view. Install: `npx shadcn@latest add @retana/demo-collage`.
+- [`agent-config`](registry/ui/agent-config.tsx) · ui — Configure CRM agents: example models, confidence bands, declarative guardrails, and draft versus published versions. Install: `npx shadcn@latest add @retana/agent-config`.
 - [`agent-tree`](registry/ui/agent-tree.tsx) · ui — A controlled tree of agents: who launched whom, with live status, cost, orthogonal edges, and a non-destructive retry. Install: `npx shadcn@latest add @retana/agent-tree`.
 - [`agent-queue`](registry/ui/agent-queue.tsx) · ui — Jobs waiting on agents, the slots they occupy, and how the backlog grows when the workers are held. Install: `npx shadcn@latest add @retana/agent-queue`.
 - [`agent-ledger`](registry/ui/agent-ledger.tsx) · ui — Changes an agent already made, with the later changes that revert too and the ones that have to stay. Install: `npx shadcn@latest add @retana/agent-ledger`.

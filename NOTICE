@@ -216,6 +216,19 @@ on the host shadcn sidebar and the host's semantic classes.
 
 Clean-room pieces
 
+Axon — agent configuration
+
+agent-config is a clean-room reading of one unlicensed screenshot, "AI
+configuration screen", posted by Jubayer:
+
+  https://x.com/jubayer6910/status/2117972634365550745
+
+The post supplies an image only. There is no source, license, sample data,
+icon, or asset to reuse. The console implements the observed arrangement
+(summary, KPI row, agent list, and a detail panel with model, bands, and
+guardrails) in original code. The demo brand is Nimbo. Prices are marked
+as examples. See docs/learnings/L-AXON-agent-config.md.
+
 Affect UI — interfaces
 
 app-shell, assistant-home, agent-chat, agent-run, settings-billing,

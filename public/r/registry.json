@@ -20816,6 +20816,117 @@
       "docs": "Inspirado en patrones de Affect UI (preview público); reimplementación clean-room; no código ni assets de Affect. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos. Instalar también trae @retana/app-shell."
     },
     {
+      "name": "agent-config",
+      "type": "registry:ui",
+      "title": "Agent configuration",
+      "description": "Configure CRM agents: example models, confidence bands, declarative guardrails, and draft versus published versions.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "alert",
+        "badge",
+        "button",
+        "card",
+        "empty",
+        "field",
+        "input",
+        "scroll-area",
+        "select",
+        "separator",
+        "skeleton",
+        "sparkline",
+        "switch",
+        "tabs",
+        "textarea"
+      ],
+      "categories": [
+        "agents"
+      ],
+      "meta": {
+        "titleEs": "Configuración de agentes",
+        "descriptionEs": "Configura los agentes de un CRM: modelos de ejemplo, bandas de confianza, guardas declarativas y borrador contra la versión publicada.",
+        "preview": "app/examples/agent-config/preview.tsx",
+        "previewHref": "/examples/agent-config",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "draft-dirty", "label": "Borrador", "labelEn": "Draft" },
+          { "id": "invalid-bands", "label": "Bandas inválidas", "labelEn": "Invalid bands" },
+          { "id": "publishing", "label": "Publicando", "labelEn": "Publishing" },
+          { "id": "publish-error", "label": "Fallo al publicar", "labelEn": "Publish error" },
+          { "id": "readonly-role", "label": "Solo lectura", "labelEn": "Read only" },
+          { "id": "390", "label": "390 px", "labelEn": "390 px" }
+        ],
+        "examples": [
+          {
+            "title": "Consola de Nimbo",
+            "href": "/examples/agent-config",
+            "description": "Seis agentes de ejemplo, bandas editables y una publicación que puede fallar."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/agent-config/stress",
+            "description": "Cuarenta agentes, nombres largos, bandas extremas, vacío y solo lectura."
+          }
+        ],
+        "usage": "<AgentConfig workspace={workspace} agents={agents} versions={versions} models={models} guardrailTypes={types} onSaveDraft={save} onPublishRequest={publish} onRollbackRequest={rollback} slots={{ navigation, usageCost, modelSelect }} />",
+        "api": [
+          {
+            "name": "agents / versions",
+            "type": "ConfiguredAgent[] / AgentVersion[]",
+            "description": "Agents plus draft and published versions. Version state is draft or published."
+          },
+          {
+            "name": "models / guardrailTypes",
+            "type": "ExampleModel[] / GuardrailType[]",
+            "description": "Example models (per 1M, converted to amountPer1k) and the host's guardrail catalog. Unknown rules do not run."
+          },
+          {
+            "name": "onSaveDraft / onPublishRequest / onRollbackRequest",
+            "type": "(version) => Promise<void>",
+            "description": "Host callbacks. The screen rolls back if the promise rejects."
+          },
+          {
+            "name": "runTest",
+            "type": "RunTest",
+            "description": "Host port for a test prompt. The default is a deterministic simulator."
+          },
+          {
+            "name": "slots",
+            "type": "AgentConfigSlots",
+            "description": "navigation, usageCost (cost-waterfall), modelSelect and fallbackSelect (model-router subset)."
+          },
+          {
+            "name": "locale / labels / readOnly / loading / error / busy",
+            "type": "es | en and flags",
+            "description": "es-MX or English copy, a read-only role, and loading, error, or busy chrome."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string / AgentConfigClassNames",
+            "description": "Root class and slot classes. No theme tokens of its own."
+          }
+        ]
+      },
+      "docs": "Clean-room de una imagen sin licencia (Jubayer, pantalla AI configuration de Axon). No hay código, datos, iconos ni assets copiados. La marca de la demo es Nimbo y los precios son de ejemplo. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene (alert, badge, button, card, empty, field, input, scroll-area, select, separator, skeleton, sparkline, switch, tabs, textarea), responde no. La pieza no trae tema, cssVars ni colores fijos. Uso y costo, el selector de modelo y la navegación son slots.",
+      "files": [
+        {
+          "path": "registry/ui/agent-config.tsx",
+          "type": "registry:component",
+          "target": "@ui/agent-config.tsx"
+        },
+        {
+          "path": "registry/lib/agent-config.ts",
+          "type": "registry:lib",
+          "target": "@lib/agent-config.ts"
+        }
+      ]
+    },
+    {
       "author": "Eduardo Retana",
       "type": "registry:block",
       "categories": [
