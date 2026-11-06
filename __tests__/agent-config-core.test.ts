@@ -107,8 +107,9 @@ describe("confidence bands", () => {
 
   it("clamps drag and keyboard edits so each band keeps the minimum width", () => {
     expect(clampThresholds(1, 2)).toEqual({ rejectBelow: 5, autoAbove: 10 })
-    expect(clampThresholds(90, 92)).toEqual({ rejectBelow: 87, autoAbove: 92 })
-    expect(bandsAreValid(partitionBands(clampThresholds(90, 92).rejectBelow, clampThresholds(90, 92).autoAbove))).toBe(true)
+    expect(clampThresholds(90, 92)).toEqual({ rejectBelow: 90, autoAbove: 95 })
+    const clamped = clampThresholds(90, 92)
+    expect(bandsAreValid(partitionBands(clamped.rejectBelow, clamped.autoAbove))).toBe(true)
   })
 
   it("counts decisions, leaves gaps unassigned, and treats an empty series as zero", () => {
@@ -118,6 +119,7 @@ describe("confidence bands", () => {
     distribution[80] = 3
     distribution[99] = 1
     expect(bandImpact(distribution, bands)).toMatchObject({ reject: 4, review: 3, auto: 1, unassigned: 0, total: 8 })
+    distribution[30] = 3
     const gapped = { reject: { min: 0, max: 20 }, review: { min: 40, max: 60 }, auto: { min: 60, max: 100 } }
     expect(bandImpact(distribution, gapped).unassigned).toBe(3)
     expect(bandImpact([], bands).total).toBe(0)
