@@ -45,6 +45,8 @@ export type StatStripProps = {
   locale?: string
   className?: string
   classNames?: StatStripClassNames
+  /** Extra content under one item. The summary strip uses it for a sparkline. */
+  renderExtra?: (item: StatStripItem) => React.ReactNode
 }
 
 function deltaDirection(delta: StatDelta): "up" | "down" {
@@ -70,7 +72,7 @@ export function statAccessibleName(item: StatStripItem, locale: string): string 
   return [item.label, value, direction, deltaText(item.delta, locale), item.caption, quality].filter(Boolean).join(", ")
 }
 
-export function StatStrip({ items, variant = "inline", locale = "en-US", className, classNames }: StatStripProps) {
+export function StatStrip({ items, variant = "inline", locale = "en-US", className, classNames, renderExtra }: StatStripProps) {
   return (
     <div
       data-slot="stat-strip"
@@ -91,6 +93,7 @@ export function StatStrip({ items, variant = "inline", locale = "en-US", classNa
         const direction = item.delta ? deltaDirection(item.delta) : null
         const good = item.delta ? deltaIsGood(item.delta) : false
         const Icon = direction === "down" ? ArrowDownRight : ArrowUpRight
+        const extra = renderExtra?.(item)
         return (
           <div
             key={item.id}
@@ -124,6 +127,7 @@ export function StatStrip({ items, variant = "inline", locale = "en-US", classNa
               ) : null}
             </p>
             {item.caption ? <p className={cn("mt-1 text-xs text-muted-foreground", classNames?.caption)}>{item.caption}</p> : null}
+            {extra ? <div data-slot="stat-strip-extra" className="mt-2 min-w-0">{extra}</div> : null}
             <span className="sr-only">{statAccessibleName(item, locale)}</span>
           </div>
         )

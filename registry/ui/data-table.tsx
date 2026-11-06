@@ -102,6 +102,8 @@ export type AdminDataTableProps<T extends { id: string }> = {
   selectAllLabel?: string
   selectRowLabel?: string
   actionErrorLabel?: string
+  /** Slot above the toolbar. Use it for a table summary strip. */
+  leading?: React.ReactNode
 }
 
 export function AdminDataTable<T extends { id: string }>({
@@ -130,6 +132,7 @@ export function AdminDataTable<T extends { id: string }>({
   selectAllLabel = "Select all",
   selectRowLabel = "Select row",
   actionErrorLabel = "That action failed",
+  leading,
 }: AdminDataTableProps<T>) {
   const [tab, setTab] = React.useState(tabs?.[0]?.id ?? "all")
   const [query, setQuery] = React.useState("")
@@ -220,7 +223,8 @@ export function AdminDataTable<T extends { id: string }>({
   }
 
   return (
-    <div className={cn("flex flex-col gap-3", className)}>
+    <div className={cn("@container flex min-w-0 flex-col gap-3", className)}>
+      {leading ? <div data-slot="data-table-leading" className="min-w-0">{leading}</div> : null}
       <div className="flex flex-col gap-3">
         {tabs && tabs.length > 0 ? (
           <div className="flex flex-wrap gap-1" role="tablist" aria-label={viewsLabel}>

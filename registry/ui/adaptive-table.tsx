@@ -58,6 +58,8 @@ export type AdaptiveTableProps<Row> = {
   groupClassName?: string
   rowClassName?: string
   cellClassName?: string
+  /** Slot above the grouped table. Use it for a table summary strip. */
+  leading?: React.ReactNode
 }
 
 export function formatAdaptiveNumber(
@@ -180,6 +182,7 @@ export function AdaptiveTable<Row>({
   groupClassName,
   rowClassName,
   cellClassName,
+  leading,
 }: AdaptiveTableProps<Row>) {
   const measureRef = React.useRef<HTMLDivElement>(null)
   const width = useElementWidth(measureRef)
@@ -205,8 +208,8 @@ export function AdaptiveTable<Row>({
     })
   }
 
-  return (
-    <section className={cn("flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card", className)}>
+  const section = (
+    <section className={cn("@container flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card", className)}>
       {title || filter || onFilter ? (
         <div className={cn("flex items-center gap-2 border-b border-border px-3 py-2", headerClassName)}>
           {title ? <h2 className="truncate text-sm font-semibold">{title}</h2> : null}
@@ -391,5 +394,12 @@ export function AdaptiveTable<Row>({
         )}
       </div>
     </section>
+  )
+  if (!leading) return section
+  return (
+    <div data-slot="adaptive-table-frame" className="@container flex min-w-0 flex-col gap-3">
+      <div data-slot="adaptive-table-leading" className="min-w-0">{leading}</div>
+      {section}
+    </div>
   )
 }

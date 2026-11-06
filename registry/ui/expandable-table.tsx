@@ -171,6 +171,8 @@ export type ExpandableTableProps<T extends ExpandableNode> = {
   error?: string
   labels?: Partial<ExpandableTableLabels>
   className?: string
+  /** Slot above the toolbar. Use it for a table summary strip. */
+  leading?: React.ReactNode
 }
 
 export function ExpandableTable<T extends ExpandableNode>({
@@ -200,6 +202,7 @@ export function ExpandableTable<T extends ExpandableNode>({
   error,
   labels: labelOverrides,
   className,
+  leading,
 }: ExpandableTableProps<T>) {
   const labels = resolveLabels(labelOverrides)
   const [query, setQuery] = React.useState("")
@@ -282,7 +285,8 @@ export function ExpandableTable<T extends ExpandableNode>({
   const pad = density === "compact" ? "px-2 py-1" : "px-3 py-2"
 
   return (
-    <section className={cn("flex flex-col gap-3 text-sm text-card-foreground", className)} aria-busy={loading || undefined}>
+    <section className={cn("@container flex min-w-0 flex-col gap-3 text-sm text-card-foreground", className)} aria-busy={loading || undefined}>
+      {leading ? <div data-slot="expandable-table-leading" className="min-w-0">{leading}</div> : null}
       <div className="flex flex-wrap items-center gap-2">
         <Input
           value={query}
