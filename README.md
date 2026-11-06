@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`422` items are in `registry.json` on this branch: `333` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`423` items are in `registry.json` on this branch: `334` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -740,6 +740,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`crm-new-company-dialog`](registry/ui/crm-new-company-dialog.tsx) · ui — Dialog form with a logo upload, identity, relationship, and commercial sections, and field validation. Install: `npx shadcn@latest add @retana/crm-new-company-dialog`.
 - [`crm-notifications`](registry/ui/crm-notifications.tsx) · ui — Header popover of company notices with an unread count, mark read, and mark all read. Install: `npx shadcn@latest add @retana/crm-notifications`.
 - [`crm-dashboard`](registry/blocks/crm-dashboard.tsx) · block — Companies page that composes the CRM table, toolbar, detail panel, command menu, create dialog, and notifications inside a sidebar shell. Spanish sample data and plain React state. Install: `npx shadcn@latest add @retana/crm-dashboard`.
+- [`stock-ledger`](registry/ui/stock-ledger.tsx) · ui — Running balance by SKU and warehouse, with an adjustment and transfer dialog. Signed quantities use a real minus and a spoken name. Install: `npx shadcn@latest add @retana/stock-ledger`.
 
 ### Other
 

@@ -32050,6 +32050,128 @@
           }
         ]
       }
+    },
+    {
+      "name": "stock-ledger",
+      "type": "registry:ui",
+      "title": "Stock ledger",
+      "description": "Running balance by SKU and warehouse, with an adjustment and transfer dialog. Signed quantities use a real minus and a spoken name.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [
+        "button",
+        "dialog",
+        "input",
+        "label",
+        "select",
+        "sheet",
+        "skeleton",
+        "textarea",
+        "@retana/data-table",
+        "@retana/event-log",
+        "@retana/number-field",
+        "@retana/stat-strip",
+        "@retana/status-pill",
+        "@retana/use-min-width"
+      ],
+      "categories": [
+        "admin",
+        "table"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/stock-ledger.tsx",
+          "type": "registry:component",
+          "target": "@ui/stock-ledger.tsx"
+        },
+        {
+          "path": "registry/ui/stock-movement-dialog.tsx",
+          "type": "registry:component",
+          "target": "@ui/stock-movement-dialog.tsx"
+        },
+        {
+          "path": "registry/lib/stock-ledger.ts",
+          "type": "registry:lib",
+          "target": "@lib/stock-ledger.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Libro de inventario",
+        "descriptionEs": "Saldo corriente por SKU y almacén, con un diálogo para ajustes y transferencias. La cantidad lleva signo y se lee en palabras.",
+        "preview": "app/examples/stock-ledger/preview.tsx",
+        "previewHref": "/examples/stock-ledger",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "filtered-empty", "label": "Sin coincidencias", "labelEn": "No matches" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "negative", "label": "Saldo negativo", "labelEn": "Negative balance" },
+          { "id": "product", "label": "Un SKU", "labelEn": "One SKU" },
+          { "id": "adjust", "label": "Ajuste", "labelEn": "Adjustment" },
+          { "id": "transfer", "label": "Transferencia", "labelEn": "Transfer" },
+          { "id": "invalid", "label": "Inválido", "labelEn": "Invalid" },
+          { "id": "insufficient", "label": "Sin existencia", "labelEn": "Not enough stock" },
+          { "id": "same-warehouse", "label": "Mismo almacén", "labelEn": "Same warehouse" },
+          { "id": "submitting", "label": "Guardando", "labelEn": "Saving" },
+          { "id": "submit-error", "label": "Error al guardar", "labelEn": "Save failed" },
+          { "id": "success", "label": "Listo", "labelEn": "Saved" }
+        ],
+        "examples": [
+          {
+            "title": "Libro de inventario",
+            "href": "/examples/stock-ledger",
+            "description": "Saldo corriente, ajuste y transferencia."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/stock-ledger/stress",
+            "description": "390px, SKU largo, 5 000 movimientos y en-US."
+          }
+        ],
+        "usage": "<StockLedger\n  movements={movements}\n  warehouses={warehouses}\n  locale=\"es-MX\"\n  onAdjust={openAdjust}\n/>\n\n<StockMovementDialog\n  open={open}\n  onOpenChange={setOpen}\n  mode=\"adjust\"\n  skus={skus}\n  warehouses={warehouses}\n  balances={balances}\n  reasons={reasons}\n  onSubmit={save}\n/>",
+        "api": [
+          {
+            "name": "movements",
+            "type": "StockMovement[]",
+            "description": "id, at, sku, warehouseId, kind, signed qty, optional reason, ref, and transferId."
+          },
+          {
+            "name": "runningBalances",
+            "type": "(movements, scope?) => StockBalanceRow[]",
+            "description": "Stable order by at, then id. Balance is per SKU and warehouse. Scope only hides rows."
+          },
+          {
+            "name": "balanceBy / validateMovement / toTransferPair / belowReorder",
+            "type": "functions",
+            "description": "Final balances, field errors, a transfer pair with one id, and the reorder check."
+          },
+          {
+            "name": "sku / filters",
+            "type": "string, StockLedgerFilters",
+            "description": "Product view adds the stat strip. Filters are controlled or internal. Balance stays global unless balanceScope is filter."
+          },
+          {
+            "name": "status / onRetry",
+            "type": "ready | loading | error",
+            "description": "Loading keeps a stable skeleton. Error keeps the message and a retry button."
+          },
+          {
+            "name": "StockMovementDialog mode",
+            "type": "adjust | transfer",
+            "description": "One dialog. onSubmit receives one adjustment or a transfer pair. Pending disables the button."
+          },
+          {
+            "name": "locale / unit / labels",
+            "type": "string",
+            "description": "Default es-MX. Locales starting with en use the English set. Unit defaults to unidades or units."
+          }
+        ]
+      },
+      "docs": "Clean-room reading of the public Cargorix inventory ledger (shadcn/studio Pro, not purchased). Only the idea, layout, and interaction were used. No source, sample data, icons, or assets were copied. The demo uses invented SKUs (SKU-0001) and warehouses (Almacén Norte / Almacén Sur). Signed quantities follow draft rule RUI-QTY-001 (U+2212, tabular-nums, spoken sign). The running balance follows draft rule RUI-BAL-001 (stable order, global by SKU and warehouse unless the column says the filter). Those rules are proposed, not applied to the hub. Answer no if the CLI asks to overwrite a primitive the host already has, or data-table, status-pill, number-field, event-log, stat-strip, or use-min-width when they are already installed. The item ships no theme."
     }
   ]
 }
