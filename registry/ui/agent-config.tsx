@@ -917,7 +917,7 @@ export function AgentConfig({
                                 {modelName(models, primary)} · {item.workflowCount} {labels.workflows}
                               </span>
                             </span>
-                            <Badge variant="outline" className="max-w-28 shrink-0">
+                            <Badge variant="outline" className="shrink-0">
                               <Level aria-hidden="true" />
                               <span className="tabular-nums">{item.accuracy}%</span>
                               <span>{levelCopy(item.accuracyLevel, labels)}</span>
