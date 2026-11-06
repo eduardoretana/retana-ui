@@ -24,6 +24,7 @@
     "registry/lib/csv.ts",
     "registry/lib/motion.ts",
     "registry/lib/dashboard-format.ts",
+    "registry/lib/knowledge-base.ts",
     "registry/hooks/use-layered-panel-url-state.ts"
   ]
 }
