@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`422` items are in `registry.json` on this branch: `333` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`423` items are in `registry.json` on this branch: `333` components, `74` blocks, `6` hooks, and `10` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -575,10 +575,10 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`task-card`](registry/ui/task-card.tsx) · ui — A task card with priority, assignee initials and a +N overflow, a due date, subtask and comment counts, and an overdue chip. Install: `npx shadcn@latest add @retana/task-card`.
 - [`task-detail`](registry/ui/task-detail.tsx) · ui — Task fields, subtasks, a comment thread with replies, a reminder, and attachments. Previous and next, including arrow keys outside fields. Install: `npx shadcn@latest add @retana/task-detail`.
 - [`task-board`](registry/blocks/task-board.tsx) · block — A CRM task board: priority counts, search, board or list, keyboard and pointer drag between stages, and a detail sheet that stays on the page. Install: `npx shadcn@latest add @retana/task-board`.
-- [`agenda-core`](registry/lib/agenda.ts) · lib — Types and pure helpers for a CRM agenda: time zones, Monday weeks, overlap columns, all-day and midnight-crossing slices. Install: `npx shadcn@latest add @retana/agenda-core`.
+- [`agenda-core`](registry/lib/agenda.ts) · lib — Types and pure helpers for a CRM agenda: time zones, Monday weeks, overlap columns, all-day slices, resource conflicts, and hours against capacity. Install: `npx shadcn@latest add @retana/agenda-core`.
 - [`agenda-event`](registry/ui/agenda-event.tsx) · ui — An agenda card with a category icon, a time range, an in-progress mark, and keyboard or menu reschedule. Install: `npx shadcn@latest add @retana/agenda-event`.
 - [`agenda-detail`](registry/ui/agenda-detail.tsx) · ui — Event detail with Detail and Participants tabs, attendance, and host actions for join, summary, room, task, and record. Install: `npx shadcn@latest add @retana/agenda-detail`.
-- [`agenda`](registry/blocks/agenda.tsx) · block — A CRM agenda: day, week, and month, a now line, overlap columns, drag or keyboard edits, and a sidebar with a mini month, upcoming items, and category filters. Install: `npx shadcn@latest add @retana/agenda`.
+- [`agenda`](registry/blocks/agenda.tsx) · block — A CRM agenda: day, week, and month, a now line, overlap columns, drag or keyboard edits, and a sidebar with a mini month, upcoming items, and category filters. Optional resources add a filter, day columns, conflict notices, and hours against capacity. Install: `npx shadcn@latest add @retana/agenda`.
 - [`ats-core`](registry/lib/ats.ts) · lib — Types and pure helpers for applicant tracking: derived stages, scorecards, funnel percentages, and Spanish labels. Install: `npx shadcn@latest add @retana/ats-core`.
 - [`candidate-card`](registry/ui/candidate-card.tsx) · ui — A hiring-board card with an avatar, an applied date, a score, stage progress, tags, and an add-evaluation action. Install: `npx shadcn@latest add @retana/candidate-card`.
 - [`candidate-row`](registry/ui/candidate-row.tsx) · ui — A candidate table row and a sortable table: stage pill, score, source, next step, and owner. Install: `npx shadcn@latest add @retana/candidate-row`.
@@ -681,6 +681,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`work-table-queue`](registry/blocks/work-table-queue.tsx) · block — Flat queue whose rank follows the manual order, with pagination. Install: `npx shadcn@latest add @retana/work-table-queue`.
 - [`work-table-support`](registry/blocks/work-table-support.tsx) · block — Support queue with SLA cells and bulk move. Install: `npx shadcn@latest add @retana/work-table-support`.
 - [`time-off`](registry/blocks/time-off.tsx) · block — An agenda with holiday chips, a table of requests, and approve or decline. Duplicating or deleting an event announces it. Install: `npx shadcn@latest add @retana/time-off`.
+- [`dispatch-board`](registry/blocks/dispatch-board.tsx) · block — Horizontal resource timeline for field visits: rows grouped by role, hour columns, a now line, occupancy, and an unassigned queue. Assign, move, and resize ask the host and roll back on refusal. Install: `npx shadcn@latest add @retana/dispatch-board`.
 
 ### Actions and overlays
 

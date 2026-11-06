@@ -58,20 +58,48 @@ export type AgendaEvent<TMeta = Record<string, unknown>> = {
   description?: string
   startsAt: string
   endsAt: string
-  allDay?: boolean
+  allDay?: boolean | undefined
   categoryId?: string | null
   location?: string
   attention?: boolean
   taskId?: string | null
   recordId?: string | null
   participants?: readonly AgendaParticipant[]
+  /**
+   * Host resource id. Empty and missing ids are not a resource:
+   * those events do not conflict with each other and do not consume capacity.
+   */
+  resourceId?: string | null
   meta?: TMeta
+}
+
+/** A room, person, or other host-defined column. `capacityHours` is the budget for one civil day. */
+export type AgendaResource = {
+  id: string
+  label: string
+  /** Hours available on one civil day in the agenda time zone. Omit it to skip the comparison. */
+  capacityHours?: number
+}
+
+/** One unordered pair of events that overlap on the same resource. Intervals are half-open. */
+export type AgendaConflict = {
+  resourceId: string
+  eventIds: readonly [string, string]
+}
+
+/** Scheduled time against the daily budget, clipped to the visible civil dates. */
+export type ResourceLoad = {
+  resourceId: string
+  scheduledMs: number
+  /** Null when the resource has no finite, non-negative `capacityHours`. */
+  capacityMs: number | null
+  overMs: number
 }
 
 export type AgendaMove = {
   startsAt: string
   endsAt: string
-  allDay?: boolean
+  allDay?: boolean | undefined
 }
 
 export type AgendaEventDraft = {
@@ -218,6 +246,20 @@ export type AgendaLabels = {
   duplicated: (title: string) => string
   deleted: (title: string) => string
   holiday: (title: string) => string
+  resourceFilter: string
+  conflict: string
+  allResources: string
+  unassignedResource: string
+  conflictWith: (titles: string) => string
+  conflictCount: (count: number) => string
+  goToConflict: string
+  capacitySummary: string
+  scheduledOf: (scheduled: string, capacity: string) => string
+  overCapacity: (amount: string) => string
+  hours: (amount: string) => string
+  noResourceMatchesHint: string
+  showAllResources: (count: number) => string
+  showFewerResources: string
 }
 
 export type AgendaHoliday = {
@@ -312,6 +354,20 @@ export const agendaLabels: AgendaLabels = {
   duplicated: () => "Evento duplicado",
   deleted: () => "Evento eliminado",
   holiday: (title) => `Festivo: ${title}`,
+  resourceFilter: "Recurso",
+  conflict: "Choque",
+  allResources: "Todos los recursos",
+  unassignedResource: "Sin recurso",
+  conflictWith: (titles) => `Choque con ${titles}`,
+  conflictCount: (count) => (count === 1 ? "1 choque" : `${count} choques`),
+  goToConflict: "Ir al primer choque",
+  capacitySummary: "Uso contra capacidad",
+  scheduledOf: (scheduled, capacity) => `${scheduled} de ${capacity}`,
+  overCapacity: (amount) => `${amount} de más`,
+  hours: (amount) => `${amount} h`,
+  noResourceMatchesHint: "Prueba con otro recurso.",
+  showAllResources: (count) => `Ver los ${count}`,
+  showFewerResources: "Ver menos",
 }
 
 export const agendaLabelsEn: AgendaLabels = {
@@ -401,6 +457,20 @@ export const agendaLabelsEn: AgendaLabels = {
   duplicated: () => "Event duplicated",
   deleted: () => "Event deleted",
   holiday: (title) => `Holiday: ${title}`,
+  resourceFilter: "Resource",
+  conflict: "Conflict",
+  allResources: "All resources",
+  unassignedResource: "Unassigned",
+  conflictWith: (titles) => `Conflicts with ${titles}`,
+  conflictCount: (count) => (count === 1 ? "1 conflict" : `${count} conflicts`),
+  goToConflict: "Go to the first conflict",
+  capacitySummary: "Scheduled time against capacity",
+  scheduledOf: (scheduled, capacity) => `${scheduled} of ${capacity}`,
+  overCapacity: (amount) => `${amount} over`,
+  hours: (amount) => `${amount} h`,
+  noResourceMatchesHint: "Try another resource.",
+  showAllResources: (count) => `Show all ${count}`,
+  showFewerResources: "Show fewer",
 }
 
 export function resolveAgendaLabels(partial?: Partial<AgendaLabels>): AgendaLabels {
@@ -1012,6 +1082,108 @@ export function upcomingEvents<TMeta>(
     })
     .sort((a, b) => Date.parse(a.startsAt) - Date.parse(b.startsAt))
     .slice(0, limit)
+}
+
+const HOUR_MS = 3_600_000
+
+/**
+ * Overlaps are absolute instants, half-open `[start, end)`.
+ * A shared endpoint is not a conflict. An all-day event uses the instants
+ * the host stored (a civil day in zone, including a 23h or 25h DST day).
+ * Events with no resource id are ignored. A repeated civil hour is two
+ * instants, so the fold does not collide unless the instants overlap.
+ */
+export function findResourceConflicts<TMeta>(
+  events: readonly Pick<AgendaEvent<TMeta>, "id" | "resourceId" | "startsAt" | "endsAt">[],
+): AgendaConflict[] {
+  const groups = new Map<string, { id: string; start: number; end: number }[]>()
+  for (const event of events) {
+    if (!event.resourceId) continue
+    const instants = eventInstants(event)
+    if (!instants) continue
+    const list = groups.get(event.resourceId) ?? []
+    list.push({ id: event.id, start: instants.start, end: instants.end })
+    groups.set(event.resourceId, list)
+  }
+  const conflicts: AgendaConflict[] = []
+  for (const [resourceId, list] of groups) {
+    const sorted = [...list].sort((a, b) => a.start - b.start || a.end - b.end || a.id.localeCompare(b.id))
+    for (let index = 0; index < sorted.length; index += 1) {
+      const left = sorted[index]
+      if (!left) continue
+      for (let next = index + 1; next < sorted.length; next += 1) {
+        const right = sorted[next]
+        if (!right) continue
+        if (right.start >= left.end) break
+        const [first, second] = left.id < right.id ? [left.id, right.id] : [right.id, left.id]
+        conflicts.push({ resourceId, eventIds: [first, second] })
+      }
+    }
+  }
+  conflicts.sort(
+    (a, b) =>
+      a.resourceId.localeCompare(b.resourceId) ||
+      a.eventIds[0].localeCompare(b.eventIds[0]) ||
+      a.eventIds[1].localeCompare(b.eventIds[1]),
+  )
+  return conflicts
+}
+
+export function conflictPartners(eventId: string, conflicts: readonly AgendaConflict[]) {
+  const ids: string[] = []
+  for (const conflict of conflicts) {
+    const [first, second] = conflict.eventIds
+    if (first === eventId) ids.push(second)
+    else if (second === eventId) ids.push(first)
+  }
+  return ids
+}
+
+/**
+ * Sums each event's intersection with the visible civil dates.
+ * Overlapping bookings are counted twice: the conflict list explains why.
+ * `capacityHours` scales by the number of distinct dates. A negative or
+ * non-finite budget is treated as "no comparison".
+ */
+export function resourceLoads<TMeta>(
+  events: readonly Pick<AgendaEvent<TMeta>, "resourceId" | "startsAt" | "endsAt">[],
+  resources: readonly AgendaResource[],
+  dates: readonly string[],
+  timeZone: string,
+): ResourceLoad[] {
+  const uniqueDates = [...new Set(dates)]
+  const windows: { start: number; end: number }[] = []
+  for (const date of uniqueDates) {
+    const bounds = zonedDayBounds(date, timeZone)
+    if (bounds) windows.push(bounds)
+  }
+  return resources.map((resource) => {
+    let scheduledMs = 0
+    for (const event of events) {
+      if (!event.resourceId || event.resourceId !== resource.id) continue
+      const instants = eventInstants(event)
+      if (!instants) continue
+      for (const window of windows) {
+        const start = Math.max(instants.start, window.start)
+        const end = Math.min(instants.end, window.end)
+        if (end > start) scheduledMs += end - start
+      }
+    }
+    const daily = resource.capacityHours
+    const capacityMs =
+      daily == null || !Number.isFinite(daily) || daily < 0 ? null : Math.round(daily * HOUR_MS) * windows.length
+    return {
+      resourceId: resource.id,
+      scheduledMs,
+      capacityMs,
+      overMs: capacityMs == null ? 0 : Math.max(0, scheduledMs - capacityMs),
+    }
+  })
+}
+
+export function formatHoursFromMs(ms: number, locale: string) {
+  const hours = Math.round((ms / HOUR_MS) * 10) / 10
+  return new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(hours)
 }
 
 export function attentionEvents<TMeta>(

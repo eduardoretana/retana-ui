@@ -1,0 +1,9 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0, declaration: "UI_SYSTEM: APPLIES"}
+cycle_state: AUDITORIA
+spec_id: agenda-resources
+profile: STANDARD
+spec_version: 0.1.0
+auditor_is_builder: true
+note: El mismo agente construyó. No emite veredicto. El ciclo queda en AUDITORIA para otro auditor.
+direction: inherited
