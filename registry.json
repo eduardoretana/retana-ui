@@ -32050,6 +32050,179 @@
           }
         ]
       }
+    },
+  {
+    "name": "workflow-builder",
+    "type": "registry:ui",
+    "title": "Workflow builder",
+    "description": "A typed workflow canvas: nodes, ports, a safe expression mapper, simulated runs, guards, and a draft that publishes only when writes are guarded.",
+    "author": "Eduardo Retana",
+    "dependencies": [
+      "lucide-react",
+      "motion"
+    ],
+    "registryDependencies": [
+      "alert",
+      "badge",
+      "button",
+      "dialog",
+      "empty",
+      "field",
+      "input",
+      "scroll-area",
+      "select",
+      "separator",
+      "skeleton",
+      "switch",
+      "table",
+      "tabs",
+      "textarea",
+      "tooltip"
+    ],
+    "categories": [
+      "tools"
+    ],
+    "docs": "Clean-room canvas. Unlicensed post by Adrian Kuleszo (i-Planner): idea only. The host registers node types and applies onGraphChangeRequest with applyWorkflowChange. Port kinds are main, model, tools, memory, and error. A write needs an upstream guard and a human approval or publish stays blocked. Secrets are credential ids scoped to the workflow brand. Expressions use braces and a private interpreter. Cost and tokens are whatever the executor reports. Step events are step.started, step.completed, and step.failed for a future cost-waterfall reducer. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme.",
+    "files": [
+      {
+        "path": "registry/ui/workflow-builder.tsx",
+        "type": "registry:component",
+        "target": "@ui/workflow-builder.tsx"
+      },
+      {
+        "path": "registry/lib/workflow-builder.ts",
+        "type": "registry:lib",
+        "target": "@lib/workflow-builder.ts"
+      },
+      {
+        "path": "registry/lib/workflow-expr.ts",
+        "type": "registry:lib",
+        "target": "@lib/workflow-expr.ts"
+      },
+      {
+        "path": "registry/lib/workflow-policy.ts",
+        "type": "registry:lib",
+        "target": "@lib/workflow-policy.ts"
+      }
+    ],
+    "meta": {
+      "titleEs": "Constructor de flujos",
+      "descriptionEs": "Lienzo con nodos, puertos tipados, expresiones seguras, corridas simuladas y publicación solo si cada escritura tiene guarda y aprobación.",
+      "preview": "app/examples/workflow-builder/preview.tsx",
+      "previewHref": "/examples/workflow-builder",
+      "scenes": [
+        {
+          "id": "filled",
+          "label": "Lleno",
+          "labelEn": "Filled"
+        },
+        {
+          "id": "empty",
+          "label": "Vacío",
+          "labelEn": "Empty"
+        },
+        {
+          "id": "loading",
+          "label": "Cargando",
+          "labelEn": "Loading"
+        },
+        {
+          "id": "error",
+          "label": "Error",
+          "labelEn": "Error"
+        },
+        {
+          "id": "invalid-graph",
+          "label": "Grafo inválido",
+          "labelEn": "Invalid graph"
+        },
+        {
+          "id": "running",
+          "label": "En curso",
+          "labelEn": "Running"
+        },
+        {
+          "id": "run-failed",
+          "label": "Corrida fallida",
+          "labelEn": "Run failed"
+        },
+        {
+          "id": "readonly",
+          "label": "Solo lectura",
+          "labelEn": "Read only"
+        },
+        {
+          "id": "390",
+          "label": "390",
+          "labelEn": "390"
+        },
+        {
+          "id": "expression",
+          "label": "Expresión",
+          "labelEn": "Expression"
+        },
+        {
+          "id": "pinned",
+          "label": "Fijado",
+          "labelEn": "Pinned"
+        },
+        {
+          "id": "publish-blocked",
+          "label": "Publicación bloqueada",
+          "labelEn": "Publish blocked"
+        },
+        {
+          "id": "diff",
+          "label": "Diferencias",
+          "labelEn": "Diff"
+        },
+        {
+          "id": "foreign-credential",
+          "label": "Otra marca",
+          "labelEn": "Other brand"
+        }
+      ],
+      "examples": [
+        {
+          "title": "Agente de mensajes",
+          "href": "/examples/workflow-builder",
+          "description": "Flujo inventado. La publicación la decide el anfitrión."
+        },
+        {
+          "title": "Marco de estrés",
+          "href": "/examples/workflow-builder/stress",
+          "description": "200 nodos, JSON corrupto, 390 px y un nombre de 60 caracteres."
+        }
+      ],
+      "usage": "<WorkflowBuilder\n  graph={draft}\n  onGraphChangeRequest={(request) => setDraft(applyWorkflowChange(draft, request))}\n  nodeTypes={types}\n  workspace=\"marca-norte\"\n  credentials={credentials}\n  onPublishRequest={publish}\n/>",
+      "api": [
+        {
+          "name": "graph / onGraphChange / onGraphChangeRequest",
+          "type": "WorkflowGraph, callbacks",
+          "description": "Controlled or uncontrolled draft. The request does not write. The host applies it with applyWorkflowChange."
+        },
+        {
+          "name": "selection / onSelectionChange",
+          "type": "WorkflowSelection, callback",
+          "description": "Controlled or uncontrolled selection."
+        },
+        {
+          "name": "nodeTypes",
+          "type": "NodeTypeDefinition[]",
+          "description": "Host registry. Ports are main, model, tools, memory, or error."
+        },
+        {
+          "name": "executor / pinnedData / onRunNodeRequest",
+          "type": "callbacks",
+          "description": "Modes are all, single, and from. A pin skips the executor. Cost and tokens are reported, not priced."
+        },
+        {
+          "name": "workspace / credentials / onPublishRequest / onRollbackRequest / onApprovalRequest",
+          "type": "callbacks",
+          "description": "A foreign credential fails validation. Publish stays blocked without a guard and a human approval."
+        }
+      ]
     }
+  }
   ]
 }

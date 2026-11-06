@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`422` items are in `registry.json` on this branch: `333` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`423` items are in `registry.json` on this branch: `334` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -703,6 +703,10 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`theme-toggle-icons`](registry/ui/theme-toggle-icons.tsx) · ui — Fourteen animated sun and moon icons. Pass one to theme-switch, or render ThemeToggleIcon on its own. Install: `npx shadcn@latest add @retana/theme-toggle-icons`.
 - [`morph-dialog`](registry/ui/morph-dialog.tsx) · ui — The trigger grows into a modal dialog. Focus is trapped, Escape and the backdrop close it, and focus returns to the trigger. Install: `npx shadcn@latest add @retana/morph-dialog`.
 - [`morph-popover`](registry/ui/morph-popover.tsx) · ui — A surface shared with the trigger grows into a non-modal panel. Escape and an outside pointer close it. Install: `npx shadcn@latest add @retana/morph-popover`.
+
+### Herramientas
+
+- [`workflow-builder`](registry/ui/workflow-builder.tsx) · ui — A typed workflow canvas: nodes, ports, a safe expression mapper, simulated runs, guards, and a draft that publishes only when writes are guarded. Install: `npx shadcn@latest add @retana/workflow-builder`.
 
 ### Animaciones
 

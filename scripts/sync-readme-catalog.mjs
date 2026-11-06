@@ -40,6 +40,7 @@ const GROUP_ORDER = [
   "Navigation",
   "Page blocks",
   "Actions and overlays",
+  "Herramientas",
   "Animaciones",
   "Admin",
   "Other",
@@ -78,6 +79,7 @@ function groupOf(item) {
   if (cats.has("block")) return "Page blocks"
   if (cats.has("form") || cats.has("input")) return "Forms"
   if (cats.has("media") || cats.has("content") || cats.has("hook")) return "Media and content"
+  if (cats.has("tools")) return "Herramientas"
   if (cats.has("dashboard")) return "Tables and views"
   if (
     cats.has("action") ||
