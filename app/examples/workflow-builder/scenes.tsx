@@ -7,7 +7,7 @@ import { blockedGraph, emptyGraph, expressionGraph, failedGraph, failedRun, fill
 
 const frame: SceneFrame = { size: "desk", surface: "canvas", padding: "none" }
 
-function BuilderScene(props: SceneRenderProps & { graph?: typeof filledGraph; error?: string; loading?: boolean; readOnly?: boolean; compact?: boolean; run?: typeof runningRun | null; pinned?: Record<string, unknown>; published?: typeof publishedSnapshot; workspace?: string; selection?: { nodeIds: string[]; edgeIds: string[] } }) {
+function BuilderScene(props: SceneRenderProps & { graph?: typeof filledGraph; error?: string; loading?: boolean; readOnly?: boolean; compact?: boolean; run?: typeof runningRun | null; pinned?: Record<string, unknown>; published?: typeof publishedSnapshot; workspace?: string; selection?: { nodeIds: string[]; edgeIds: string[] }; initialRunTab?: "payload" | "triggers" | "error" | "timeline" | "runs" }) {
   const { locale, log } = props
   return (
     <WorkflowBuilder
@@ -26,6 +26,7 @@ function BuilderScene(props: SceneRenderProps & { graph?: typeof filledGraph; er
       {...(props.pinned ? { pinnedData: props.pinned } : {})}
       {...(props.published ? { published: props.published } : {})}
       {...(props.selection ? { selection: props.selection } : {})}
+      {...(props.initialRunTab ? { initialRunTab: props.initialRunTab } : {})}
       onGraphChangeRequest={(request) => log(formatSceneCall("onGraphChangeRequest", [request.type]))}
       onPublishRequest={() => log(formatSceneCall("onPublishRequest"))}
       onRollbackRequest={(version) => log(formatSceneCall("onRollbackRequest", [version]))}
@@ -44,7 +45,7 @@ export const scenes: Scene[] = [
   { id: "error", label: "Error", labelEn: "Error", frame, render: (props) => <BuilderScene {...props} error={sceneText(props.locale, "No se pudo leer el flujo.", "The workflow could not be read.")} /> },
   { id: "invalid-graph", label: "Grafo inválido", labelEn: "Invalid graph", frame, render: (props) => <BuilderScene {...props} graph={invalidGraph} /> },
   { id: "running", label: "En curso", labelEn: "Running", frame, render: (props) => <BuilderScene {...props} graph={filledGraph} run={runningRun} /> },
-  { id: "run-failed", label: "Corrida fallida", labelEn: "Run failed", frame, render: (props) => <BuilderScene {...props} graph={failedGraph} run={failedRun} /> },
+  { id: "run-failed", label: "Corrida fallida", labelEn: "Run failed", frame, render: (props) => <BuilderScene {...props} graph={failedGraph} run={failedRun} initialRunTab="timeline" /> },
   { id: "readonly", label: "Solo lectura", labelEn: "Read only", frame, render: (props) => <BuilderScene {...props} graph={filledGraph} readOnly /> },
   { id: "390", label: "390", labelEn: "390", frame: { size: "sm", surface: "canvas", padding: "none" }, render: (props) => <BuilderScene {...props} graph={filledGraph} compact selection={{ nodeIds: ["respuesta"], edgeIds: [] }} /> },
   { id: "expression", label: "Expresión", labelEn: "Expression", frame, render: (props) => <BuilderScene {...props} graph={expressionGraph} selection={{ nodeIds: ["respuesta"], edgeIds: [] }} /> },

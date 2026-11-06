@@ -321,6 +321,8 @@ export type WorkflowBuilderProps = {
   onRunNodeRequest?: (nodeId: string, mode: "single" | "from") => void
   onReplayRequest?: (runId: string, fromNodeId?: string) => void
   onApprovalRequest?: (request: { nodeId: string; runId: string; input: unknown }) => Promise<"approve" | "reject">
+  /** Which execution tab is open on first paint. */
+  initialRunTab?: "payload" | "triggers" | "error" | "timeline" | "runs"
 }
 
 export function WorkflowBuilder({
@@ -352,6 +354,7 @@ export function WorkflowBuilder({
   onRunNodeRequest,
   onReplayRequest,
   onApprovalRequest,
+  initialRunTab = "runs",
 }: WorkflowBuilderProps) {
   const copy = withLabels(labels)
   const lang = localeOf(locale)
@@ -856,7 +859,7 @@ export function WorkflowBuilder({
               </div>
             )}
             <div className={cn("border-t border-border bg-card shadow-md transition-[transform,opacity] duration-200", reduced && "duration-0", runOpen ? "translate-y-0 opacity-100" : "pointer-events-none h-0 translate-y-full overflow-hidden opacity-0")}>
-              <RunPanel copy={copy} lang={lang} graph={graph} registry={nodeTypes} run={run} issues={issues} payloadText={payloadText} readOnly={readOnly} running={Boolean(running)} onPayload={setPayloadText} onStart={() => void startRun()} onClose={() => setRunOpen(false)} />
+              <RunPanel copy={copy} lang={lang} graph={graph} registry={nodeTypes} run={run} issues={issues} payloadText={payloadText} readOnly={readOnly} running={Boolean(running)} initialTab={initialRunTab} onPayload={setPayloadText} onStart={() => void startRun()} onClose={() => setRunOpen(false)} />
             </div>
             {!runOpen && !loading && !error ? (
               <div className="absolute end-3 bottom-3 z-20">
@@ -1167,7 +1170,7 @@ function expressionSuggestions(text: string, nodeId: string, graph: WorkflowGrap
   return expressionCompletions(text, text.length, { nodes }, extra)
 }
 
-function RunPanel({ copy, lang, graph, registry, run, issues, payloadText, readOnly, running, onPayload, onStart, onClose }: { copy: WorkflowBuilderLabels; lang: WorkflowLocale; graph: WorkflowGraph; registry: readonly NodeTypeDefinition[]; run: WorkflowRun | null; issues: WorkflowIssue[]; payloadText: string; readOnly: boolean; running: boolean; onPayload: (value: string) => void; onStart: () => void; onClose: () => void }) {
+function RunPanel({ copy, lang, graph, registry, run, issues, payloadText, readOnly, running, initialTab, onPayload, onStart, onClose }: { copy: WorkflowBuilderLabels; lang: WorkflowLocale; graph: WorkflowGraph; registry: readonly NodeTypeDefinition[]; run: WorkflowRun | null; issues: WorkflowIssue[]; payloadText: string; readOnly: boolean; running: boolean; initialTab: "payload" | "triggers" | "error" | "timeline" | "runs"; onPayload: (value: string) => void; onStart: () => void; onClose: () => void }) {
   const triggers = graph.nodes.filter((node) => typeByName(registry, node.type)?.startsRun)
   const records = run ? Object.entries(run.nodes) : []
   const rows = run && run.events.length > 0 ? run.events : []
@@ -1180,7 +1183,7 @@ function RunPanel({ copy, lang, graph, registry, run, issues, payloadText, readO
           <Button type="button" size="sm" variant="ghost" onClick={onClose}>{copy.hideRuns}</Button>
         </div>
       </div>
-      <Tabs defaultValue="runs">
+      <Tabs defaultValue={initialTab}>
         <TabsList>
           <TabsTrigger value="payload">{copy.payload}</TabsTrigger>
           <TabsTrigger value="triggers">{copy.triggers}</TabsTrigger>
