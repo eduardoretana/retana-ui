@@ -1,15 +1,16 @@
-import { render, screen } from "@testing-library/react"
+import { render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
 
 import { segmentsFrom, skipped, sourcesFrom } from "@/app/examples/cited-answer/fixtures"
 import { blocksFrom, earlier, filled as mapFilled, MAP_LIMIT, open } from "@/app/examples/context-map/fixtures"
-import { filled as windowFilled, full, partsFrom, tight, WINDOW_LIMIT } from "@/app/examples/context-window/fixtures"
+import { filled as windowFilled, MODEL_LIMIT, sourcesFrom as windowSourcesFrom } from "@/app/examples/context-window/fixtures"
 import { filled as memoryFilled, forgotten, memoriesFrom, paused, undoFrom } from "@/app/examples/memory-panel/fixtures"
 import { filled as libraryFilled, ready, templatesFrom } from "@/app/examples/prompt-library/fixtures"
+import { contextTokenTotal } from "@/registry/lib/context-window"
 import { CitedAnswer, visibleCites } from "@/registry/ui/cited-answer"
 import { ContextMap, mapUsage } from "@/registry/ui/context-map"
-import { ContextWindow, windowPressure, windowUsed } from "@/registry/ui/context-window"
+import { ContextWindow, contextWindowLabels } from "@/registry/ui/context-window"
 import { MemoryPanel, memoryCount } from "@/registry/ui/memory-panel"
 import { PromptLibrary, promptMissing, promptText } from "@/registry/ui/prompt-library"
 
@@ -32,22 +33,27 @@ describe("context map", () => {
 })
 
 describe("context window", () => {
-  it("warns when the window fills and removes a file", async () => {
+  it("counts the workshop sources and opens one from the keyboard", async () => {
     const user = userEvent.setup()
-    const onRemove = vi.fn()
-    const onCompact = vi.fn()
-    const parts = partsFrom(windowFilled.parts, "en")
-    expect(windowUsed(parts)).toBe(17000)
-    expect(windowPressure(17000, WINDOW_LIMIT)).toBe("room")
-    expect(windowPressure(windowUsed(partsFrom(tight.parts, "en")), WINDOW_LIMIT)).toBe("tight")
-    expect(windowPressure(windowUsed(partsFrom(full.parts, "en")), WINDOW_LIMIT)).toBe("full")
-    render(<ContextWindow parts={parts} limit={WINDOW_LIMIT} onRemove={onRemove} onCompact={onCompact} />)
-    expect(screen.getByText("17,000 of 24,000 tokens, 71%")).toBeInTheDocument()
-    await user.click(screen.getByRole("button", { name: "Compact “Conversation”" }))
-    expect(onCompact).toHaveBeenCalledWith("charla")
-    await user.click(screen.getByRole("button", { name: "Open “Files”" }))
-    await user.click(screen.getByRole("button", { name: "Remove “Quote PED-1048”" }))
-    expect(onRemove).toHaveBeenCalledWith("archivos", "cotizacion")
+    const onPinChange = vi.fn()
+    const sources = windowSourcesFrom(windowFilled.seeds, "en")
+    expect(contextTokenTotal(sources)).toBe(41500)
+    expect(MODEL_LIMIT).toBe(80000)
+    render(
+      <ContextWindow
+        sources={sources}
+        modelLimit={MODEL_LIMIT}
+        labels={contextWindowLabels}
+        locale="en-US"
+        onPinChange={onPinChange}
+      />,
+    )
+    expect(screen.getByRole("meter")).toHaveAttribute("aria-valuenow", "41500")
+    const rows = screen.getByRole("listbox", { name: "Sources" })
+    await user.click(within(rows).getByRole("option", { name: /Kiln 2 sheet/ }))
+    expect(screen.getByRole("region", { name: "Source detail" })).toBeInTheDocument()
+    await user.click(screen.getByRole("button", { name: "Pin source" }))
+    expect(onPinChange).toHaveBeenCalledWith("ficha", true)
   })
 })
 

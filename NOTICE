@@ -273,22 +273,33 @@ Guanajuato workshop scenario. Colors come from the host shadcn tokens.
 agent-graph is not agent-tree: it shows who is calling whom, not who launched
 whom.
 
-context-map, context-window, memory-panel, cited-answer, and prompt-library
+context-map, memory-panel, cited-answer, and prompt-library
 are a clean-room reading of public behavior descriptions on Affect UI (tiles
 of what fills one window, including free space and a before/after of
-compaction; a cell field where a file can be dropped and the chat compacted;
-memories kept across chats; a finished answer wired to the passage behind
-each sentence; and saved prompts with blanks):
+compaction; memories kept across chats; a finished answer wired to the
+passage behind each sentence; and saved prompts with blanks):
 
   https://www.affectui.com/components
 
 Affect Pro was not purchased, fetched, or ported. No source, sample data,
 icons, assets, or internal strings were copied. The demos continue the same
 Guanajuato workshop scenario. Colors come from the host shadcn tokens.
-context-map is not the usage ring. context-window is not that ring either:
-the cells are decorative and the list is what can be changed. memory-panel
+context-map is not the usage ring. memory-panel
 is what lasts across chats. cited-answer is not inline-citation and not
 source-list. prompt-library is not a row of suggestion chips.
+
+context-window is a clean-room reading of the public behavior of the
+"Context window" find by Juliette (@shedsgns) on Bencho:
+
+  https://bencho.dev/finds/shedsgns-context-window
+
+The find page publishes no source and no license. Bencho's MIT grant covers
+free blocks that have a Code pane (https://bencho.dev/licence, updated
+12 October 2026), not finds. The Pro licence forbids passing blocks on as a
+component library. No source, sample data, icons, or assets were copied.
+The demo continues the Guanajuato workshop scenario. The host supplies the
+model limit and decides whether to compact. Colors come from the host
+shadcn tokens.
 
 review-center, permission-request, inline-diff, email-draft, and
 message-actions are a clean-room reading of public behavior descriptions on
