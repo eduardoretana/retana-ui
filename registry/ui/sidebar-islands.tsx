@@ -18,7 +18,7 @@
 
 import * as React from "react"
 import { flushSync } from "react-dom"
-import { AnimatePresence, motion, useIsPresent, useReducedMotionConfig } from "motion/react"
+import { AnimatePresence, animate, motion, useIsPresent, useReducedMotionConfig } from "motion/react"
 import type { Transition } from "motion/react"
 import { ChevronRight, Monitor, Moon, PanelLeft, RotateCcw, Search, Sun } from "lucide-react"
 
@@ -274,6 +274,41 @@ function toTree(items: readonly NavItem[] | undefined): TreeNavNode[] {
   return nodes
 }
 
+function useFlipList(signature: string, reduced: boolean) {
+  const ref = React.useRef<HTMLDivElement>(null)
+  const tops = React.useRef<Map<string, number>>(new Map())
+  const frame = React.useRef(0)
+  React.useLayoutEffect(() => {
+    const root = ref.current
+    if (!root) return
+    const nodes = [...root.querySelectorAll<HTMLElement>("[data-flip]")]
+    const next = new Map<string, number>()
+    const moved: HTMLElement[] = []
+    for (const node of nodes) {
+      const id = node.dataset.flip
+      if (!id) continue
+      const top = node.offsetTop
+      next.set(id, top)
+      const before = tops.current.get(id)
+      if (before == null || before === top) continue
+      node.style.transition = "none"
+      node.style.transform = reduced ? "" : `translateY(${before - top}px)`
+      if (!reduced) moved.push(node)
+    }
+    tops.current = next
+    window.cancelAnimationFrame(frame.current)
+    if (!moved.length) return
+    frame.current = window.requestAnimationFrame(() => {
+      for (const node of moved) {
+        node.style.transition = "transform 240ms cubic-bezier(0.22, 1, 0.36, 1)"
+        node.style.transform = "translateY(0px)"
+      }
+    })
+    return () => window.cancelAnimationFrame(frame.current)
+  }, [signature, reduced])
+  return ref
+}
+
 function useNarrowScreen(layout: "auto" | "rail" | "sheet") {
   const narrow = React.useSyncExternalStore(
     (onChange) => {
@@ -297,11 +332,10 @@ function useDirection(ref: React.RefObject<HTMLElement | null>) {
   return rtl
 }
 
-function closedClip(rtl: boolean) {
-  return rtl ? "inset(0 0 0 79.5% round 1rem)" : "inset(0 79.5% 0 0 round 1rem)"
+function clipFor(insetPercent: number, rtl: boolean) {
+  const inset = `${insetPercent}%`
+  return rtl ? `inset(0px 0px 0px ${inset} round 1rem)` : `inset(0px ${inset} 0px 0px round 1rem)`
 }
-
-const openClip = "inset(0 0 0 0 round 1rem)"
 
 function CountBadge({ badge, locale, compact }: { badge: NavBadge; locale: SidebarLocale; compact?: boolean }) {
   const full = badge.label ?? formatNavCount(badge.count, locale)
@@ -380,22 +414,17 @@ function ProfileMenu({
         <button
           type="button"
           data-slot="sidebar-islands-profile"
-          className={cn(
-            "flex min-h-11 items-center gap-2 rounded-lg outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring",
-            showDetail ? "w-full px-2" : "size-11 justify-center",
-          )}
+          className="flex min-h-11 w-full items-center gap-2 rounded-lg px-2 outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
           aria-label={`${labels.account}, ${profile.name}`}
         >
           {face}
-          {showDetail ? (
-            <span className="min-w-0 flex-1 text-start">
+          <span className={cn("min-w-0 flex-1 text-start transition-opacity duration-200 motion-reduce:transition-none", !showDetail && "opacity-0")} aria-hidden={showDetail ? undefined : true}>
               <span className="flex min-w-0 items-center gap-2">
                 <span className="truncate text-sm font-medium">{profile.name}</span>
                 {profile.plan ? <Badge variant="secondary">{profile.plan}</Badge> : null}
               </span>
               <span className="block truncate text-xs text-muted-foreground">{profile.email}</span>
             </span>
-          ) : null}
         </button>
       </PopoverTrigger>
       <PopoverContent side="top" align="start" aria-label={labels.account} className="w-68">
@@ -530,12 +559,12 @@ export function SidebarIslands({
   const sheet = useNarrowScreen(layout)
   const uid = React.useId()
   const rootRef = React.useRef<HTMLDivElement>(null)
+  const panelRef = React.useRef<HTMLDivElement>(null)
   const previewRef = React.useRef<HTMLDivElement>(null)
   const rtl = useDirection(rootRef)
   const [uncontrolledCollapsed, setUncontrolledCollapsed] = React.useState(defaultCollapsed)
   const isCollapsed = collapsed ?? uncontrolledCollapsed
-  const [maskHold, setMaskHold] = React.useState(false)
-  const [seenCollapsed, setSeenCollapsed] = React.useState(isCollapsed)
+  const clipInset = React.useRef((collapsed ?? defaultCollapsed) ? 79.5 : 0)
   const [openIds, setOpenIds] = React.useState<readonly string[]>(defaultOpenIds)
   const [hoverId, setHoverId] = React.useState<string | null>(null)
   const [pinnedId, setPinnedId] = React.useState<string | null>(null)
@@ -545,11 +574,6 @@ export function SidebarIslands({
   const closeTimer = React.useRef(0)
   const typeahead = useTypeahead()
 
-  if (seenCollapsed !== isCollapsed || (maskHold && (reduced || sheet || !isCollapsed))) {
-    setSeenCollapsed(isCollapsed)
-    setMaskHold(isCollapsed && !reduced && !sheet)
-  }
-
   const topItems = React.useMemo(() => visibleItems(sections).map(sectionItem), [sections])
   const utilityItems = React.useMemo(() => visibleItems(utilities), [utilities])
   const allItems = React.useMemo(() => [...topItems, ...utilityItems], [topItems, utilityItems])
@@ -557,13 +581,34 @@ export function SidebarIslands({
   const rows = React.useMemo(() => flatten(allItems, openSet), [allItems, openSet])
   const view: SidebarIslandsStatus = status === "ready" && topItems.length === 0 ? "empty" : status
   const compact = isCollapsed && !sheet
-  const showDetail = !compact || maskHold
+  const showDetail = !compact
   const previewId = hoverId ?? pinnedId
   const previewSection =
-    compact && !maskHold && view === "ready"
+    compact && view === "ready"
       ? topItems.find((item) => item.id === previewId && visibleItems(item.children).length > 0)
       : undefined
   const motionTransition = islandMotion(reduced)
+  const flipRef = useFlipList(`${compact}:${openIds.join(",")}:${view}`, reduced)
+
+  React.useLayoutEffect(() => {
+    const node = panelRef.current
+    if (!node || sheet) return
+    const target = compact ? 79.5 : 0
+    const apply = (value: number) => {
+      clipInset.current = value
+      node.style.clipPath = clipFor(value, rtl)
+    }
+    if (reduced || clipInset.current === target) {
+      apply(target)
+      return
+    }
+    const controls = animate(clipInset.current, target, {
+      duration: 0.24,
+      ease: [0.22, 1, 0.36, 1],
+      onUpdate: apply,
+    })
+    return () => controls.stop()
+  }, [compact, reduced, rtl, sheet])
 
   React.useEffect(() => {
     return () => {
@@ -632,7 +677,7 @@ export function SidebarIslands({
   }
 
   function onRailPointerEnter(event: React.PointerEvent<HTMLElement>, item: NavItem) {
-    if (!compact || maskHold || view !== "ready") return
+    if (!compact || view !== "ready") return
     if (event.pointerType === "touch" || event.pointerType === "pen") return
     if (!visibleItems(item.children).length) return
     schedulePreview(item.id)
@@ -818,7 +863,7 @@ export function SidebarIslands({
           </button>
         )
       return (
-        <div key={item.id} className="relative min-w-0">
+        <div key={item.id} className="relative min-w-0" data-flip={depth === 0 ? item.id : undefined}>
           {depth === 0 && compact ? (
             <Tooltip>
               <TooltipTrigger asChild>{control}</TooltipTrigger>
@@ -842,15 +887,23 @@ export function SidebarIslands({
   }
 
   const islandBody = (
-    <div className="flex h-full min-h-0 flex-col">
-      <div className={cn("flex gap-1", showDetail ? "flex-row items-center p-2" : "flex-col items-center p-1")}>
-        {compact ? (
-          <Button type="button" variant="ghost" size="icon" className="size-11 shrink-0" aria-label={labels.expand} aria-expanded={false} onClick={() => commitCollapsed(false)}>
-            <PanelLeft className="rotate-180" />
+    <div ref={flipRef} className="flex h-full min-h-0 w-68 flex-col">
+      <div className="flex flex-row items-center gap-1 p-2">
+        {sheet ? null : (
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="size-11 shrink-0"
+            aria-label={compact ? labels.expand : labels.collapse}
+            aria-expanded={!compact}
+            onClick={() => commitCollapsed(!isCollapsed)}
+          >
+            <PanelLeft className={cn("transition-transform duration-200 motion-reduce:transition-none", compact && "rotate-180")} />
           </Button>
-        ) : null}
+        )}
         {teams.length ? (
-          <div className={cn("min-w-0", showDetail ? "flex-1" : "w-11 overflow-hidden")}>
+          <div className="min-w-0 flex-1">
             <WorkspaceSwitcher
               name={currentTeam?.name ?? labels.team}
               {...(currentTeam?.detail ? { detail: currentTeam.detail } : {})}
@@ -859,20 +912,23 @@ export function SidebarIslands({
               {...(teamId ? { value: teamId } : {})}
               {...(onTeamChange ? { onValueChange: onTeamChange } : {})}
               label={currentTeam ? `${labels.team}, ${currentTeam.name}` : labels.team}
-              {...(compact ? { className: "w-11 justify-center px-0 [&>span.min-w-0]:sr-only [&>svg]:hidden" } : {})}
             />
           </div>
         ) : (
           <span className="sr-only">{labels.team}</span>
         )}
-        {showDetail && onSearch ? (
-          <Button type="button" variant="ghost" size="icon" className="size-11 shrink-0" aria-label={labels.search} onClick={onSearch}>
+        {onSearch ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className={cn("size-11 shrink-0 transition-opacity duration-200 motion-reduce:transition-none", compact && "pointer-events-none opacity-0")}
+            aria-label={labels.search}
+            aria-hidden={compact || undefined}
+            tabIndex={compact ? -1 : 0}
+            onClick={onSearch}
+          >
             <Search />
-          </Button>
-        ) : null}
-        {showDetail && !sheet ? (
-          <Button type="button" variant="ghost" size="icon" className="size-11 shrink-0" aria-label={labels.collapse} aria-expanded onClick={() => commitCollapsed(true)}>
-            <PanelLeft />
           </Button>
         ) : null}
       </div>
@@ -924,8 +980,15 @@ export function SidebarIslands({
           </div>
         ) : null}
       </div>
-      {meter && showDetail ? (
-        <p className="mx-2 mb-2 flex items-center gap-2 rounded-lg bg-muted px-3 py-2 text-xs text-muted-foreground">
+      {meter ? (
+        <p
+          data-flip="meter"
+          className={cn(
+            "mx-2 mb-2 flex items-center gap-2 rounded-lg bg-muted px-3 py-2 text-xs text-muted-foreground transition-opacity duration-200 motion-reduce:transition-none",
+            compact && "pointer-events-none opacity-0",
+          )}
+          aria-hidden={compact || undefined}
+        >
           <span className="min-w-0 flex-1 truncate">{meter.label}</span>
           <span className="shrink-0 tabular-nums">
             {formatNavCount(meter.used, locale)}/{formatNavCount(meter.limit, locale)}
@@ -933,30 +996,25 @@ export function SidebarIslands({
         </p>
       ) : null}
       {profile ? (
-        <div className={cn(showDetail ? "p-2 pt-0" : "p-1")}>
-          <ProfileMenu profile={profile} labels={labels} showDetail={showDetail} />
+        <div data-flip="profile" className="p-2 pt-0">
+          <ProfileMenu profile={profile} labels={labels} showDetail={!compact} />
         </div>
       ) : null}
     </div>
   )
 
   const island = (
-    <motion.div
+    <div
+      ref={panelRef}
       data-slot="sidebar-islands-panel"
       className={cn(
         "flex h-full w-68 flex-col overflow-hidden rounded-2xl bg-card text-card-foreground shadow-md ring-1 ring-foreground/10",
-        sheet ? "relative h-dvh w-full pt-12" : "absolute inset-y-0 start-0",
+        sheet ? "relative h-dvh w-full pt-12" : "absolute inset-y-0 start-0 z-10",
         panelClassName,
       )}
-      initial={false}
-      animate={{ clipPath: sheet || !compact ? openClip : closedClip(rtl) }}
-      transition={motionTransition}
-      onAnimationComplete={() => {
-        setMaskHold((current) => (isCollapsed && current ? false : current))
-      }}
     >
       {islandBody}
-    </motion.div>
+    </div>
   )
 
   const preview = (
@@ -997,7 +1055,7 @@ export function SidebarIslands({
     "data-layout": sheet ? "sheet" : "rail",
     "data-status": view,
     "data-preview": previewSection?.id,
-    className: cn("relative h-full min-h-96", sheet ? "w-fit" : showDetail ? "w-68" : "w-14", className, railClassName),
+    className: cn("relative h-full min-h-96", sheet ? "w-fit" : "w-14", className, railClassName),
   }
 
   const nav = (
