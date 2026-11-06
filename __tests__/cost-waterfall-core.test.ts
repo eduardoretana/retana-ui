@@ -140,6 +140,8 @@ describe("waterfall layout", () => {
     const byId = new Map(layout.rows.map((row) => [row.id, row]))
     expect(byId.get("a")).toMatchObject({ ownStart: BigInt(0), ownEnd: BigInt(30) })
     expect(byId.get("b")).toMatchObject({ ownStart: BigInt(30), ownEnd: BigInt(100) })
+    expect(layout.rows.map((row) => row.id)).toEqual(["root", "a", "b"])
+    expect(layout.rows.map((row) => row.id)).toEqual(["root", "a", "b"])
     expect(byId.get("root")).toMatchObject({ spanStart: BigInt(0), spanEnd: BigInt(100) })
     expect(layout.domain).toBe(BigInt(100))
   })

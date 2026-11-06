@@ -453,7 +453,7 @@ export function layoutWaterfall(
       const ownStart = cursor
       bump(cursor + own)
       const ownEnd = cursor
-      for (const child of kids) walk(child, depth + 1)
+      const index = rows.length
       rows.push({
         id: step.id,
         depth,
@@ -464,6 +464,9 @@ export function layoutWaterfall(
         collapsed: false,
         hiddenCount: 0,
       })
+      for (const child of kids) walk(child, depth + 1)
+      const placed = rows[index]
+      if (placed) placed.spanEnd = cursor
     }
     visiting.delete(step.id)
   }
