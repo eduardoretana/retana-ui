@@ -423,6 +423,7 @@ import Preview418 from "@/app/examples/data-table-reorder/preview"
 import Preview419 from "@/app/examples/activity-chat/preview"
 import Preview420 from "@/app/examples/inline-approve-button/preview"
 import Preview421 from "@/app/examples/portfolio-desk/preview"
+import Preview422 from "@/app/examples/sidebar-islands/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -847,4 +848,5 @@ export const previewMap = {
   "activity-chat": Preview419,
   "inline-approve-button": Preview420,
   "portfolio-desk": Preview421,
+  "sidebar-islands": Preview422,
 }
