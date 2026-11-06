@@ -916,3 +916,18 @@ callbacks. The table sorts in place and slides rows with layout motion. The
 voice note draws a waveform from numeric peaks and does not play a file.
 Answer no if the CLI asks to overwrite a primitive the host already has.
 The items ship no theme.
+
+---
+
+Stock ledger — clean-room
+
+stock-ledger and stock-movement-dialog are a clean-room reading of the public
+Cargorix inventory screens (shadcn/studio Pro,
+https://shadcnstudio.com/templates/admin-dashboard/cargorix). The Pro license
+was not purchased. No source, sample data, icons, photos, or assets were
+copied. Only the observed idea, layout, and interaction were reimplemented
+on host tokens. Demo SKUs and warehouses are invented. Signed quantities and
+the running balance follow draft rules RUI-QTY-001 and RUI-BAL-001, recorded
+in docs/learnings/2026-11-06-stock-ledger.md. Those rules are not part of the
+hub. Answer no if the CLI asks to overwrite a primitive the host already has.
+The items ship no theme.

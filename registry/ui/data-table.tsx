@@ -48,6 +48,7 @@ import {
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -102,6 +103,23 @@ export type AdminDataTableProps<T extends { id: string }> = {
   selectAllLabel?: string
   selectRowLabel?: string
   actionErrorLabel?: string
+  /** Named caption inside the table. */
+  caption?: string
+  /** Selection column. On by default so existing tables keep bulk actions. */
+  selectable?: boolean
+  /** Search, filters, columns, and export. On by default. */
+  showToolbar?: boolean
+  tableClassName?: string
+  rowClassName?: (row: T) => string | undefined
+}
+
+function columnMeta(meta: unknown) {
+  if (!meta || typeof meta !== "object") return {}
+  const record = meta as { cellClassName?: unknown; headClassName?: unknown }
+  return {
+    cellClassName: typeof record.cellClassName === "string" ? record.cellClassName : undefined,
+    headClassName: typeof record.headClassName === "string" ? record.headClassName : undefined,
+  }
 }
 
 export function AdminDataTable<T extends { id: string }>({
@@ -130,6 +148,11 @@ export function AdminDataTable<T extends { id: string }>({
   selectAllLabel = "Select all",
   selectRowLabel = "Select row",
   actionErrorLabel = "That action failed",
+  caption,
+  selectable = true,
+  showToolbar = true,
+  tableClassName,
+  rowClassName,
 }: AdminDataTableProps<T>) {
   const [tab, setTab] = React.useState(tabs?.[0]?.id ?? "all")
   const [query, setQuery] = React.useState("")
@@ -198,7 +221,7 @@ export function AdminDataTable<T extends { id: string }>({
 
   const table = useLegacyTable({
     data: rows,
-    columns: [selectionColumn, ...columns],
+    columns: selectable ? [selectionColumn, ...columns] : columns,
     state: { sorting, columnVisibility, rowSelection },
     onSortingChange: setSorting,
     onColumnVisibilityChange: setColumnVisibility,
@@ -245,7 +268,7 @@ export function AdminDataTable<T extends { id: string }>({
             ))}
           </div>
         ) : null}
-        <div className="flex flex-wrap items-center gap-2">
+        {showToolbar ? <div className="flex flex-wrap items-center gap-2">
           <div className="relative min-w-40 flex-1 sm:max-w-xs">
             <Search className="pointer-events-none absolute top-1/2 left-2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -311,7 +334,7 @@ export function AdminDataTable<T extends { id: string }>({
               {csvLabel}
             </Button>
           ) : null}
-        </div>
+        </div> : null}
         {selected.length > 0 && bulkActions && bulkActions.length > 0 ? (
           <div className="flex flex-wrap items-center gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
             <span className="tabular-nums">
@@ -346,14 +369,16 @@ export function AdminDataTable<T extends { id: string }>({
       </div>
 
       <div className="overflow-x-auto rounded-xl ring-1 ring-foreground/10">
-        <Table>
+        <Table className={tableClassName}>
+          {caption ? <TableCaption className="caption-top mt-0 mb-3 text-start">{caption}</TableCaption> : null}
           <TableHeader>
             {table.getHeaderGroups().map((group) => (
               <TableRow key={group.id}>
                 {group.headers.map((header) => {
                   const sorted = header.column.getIsSorted()
+                  const meta = columnMeta(header.column.columnDef.meta)
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} className={meta.headClassName}>
                       {header.isPlaceholder ? null : header.column.getCanSort() ? (
                         <button
                           type="button"
@@ -390,7 +415,8 @@ export function AdminDataTable<T extends { id: string }>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() ? "selected" : undefined}
-                  className={renderDetail ? "cursor-pointer" : undefined}
+                  data-negative={rowClassName?.(row.original) ? "" : undefined}
+                  className={cn(renderDetail ? "cursor-pointer" : undefined, rowClassName?.(row.original))}
                   tabIndex={renderDetail ? 0 : undefined}
                   onClick={() => {
                     if (renderDetail) setOpenId(row.original.id)
@@ -405,7 +431,7 @@ export function AdminDataTable<T extends { id: string }>({
                   }}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className={columnMeta(cell.column.columnDef.meta).cellClassName}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}

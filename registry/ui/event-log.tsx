@@ -81,7 +81,8 @@ export function EventLog({ entries, paused = false, onPausedChange, onClear, max
           </button>
         ))}
       </div>
-      <ul role="log" aria-live={paused ? "off" : "polite"} className="flex max-h-80 flex-col gap-1 overflow-auto">
+      <div role="log" aria-live={paused ? "off" : "polite"}>
+      <ul className="flex max-h-80 flex-col gap-1 overflow-auto">
         {visible.map((entry) => {
           const space = entry.type.split(":")[0]
           const when = entry.time instanceof Date ? entry.time : new Date(entry.time)
@@ -108,6 +109,7 @@ export function EventLog({ entries, paused = false, onPausedChange, onClear, max
           )
         })}
       </ul>
+      </div>
       {filtered.length > shown ? (
         <Button type="button" size="sm" variant="ghost" onClick={() => setShown((count) => count + maxVisible)}>
           Show more
