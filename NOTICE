@@ -916,3 +916,28 @@ callbacks. The table sorts in place and slides rows with layout motion. The
 voice note draws a waveform from numeric peaks and does not play a file.
 Answer no if the CLI asks to overwrite a primitive the host already has.
 The items ship no theme.
+
+---
+
+shadcn/studio Checkout Page (Pro / Basic)
+
+checkout, order-summary, and checkout-form are a clean-room reading of the
+checkout page published by shadcn/studio:
+
+  https://shadcnstudio.com/blocks/ecommerce/checkout-page
+  https://shadcnstudio.com/license
+  https://x.com/ShadcnStudio/status/2118682355347095919
+
+The page is marked Pro and Basic. It is not in the free index. That license
+does not allow copying the block into this registry. No source, markup,
+sample data, icons, images, or assets were downloaded or copied. The piece
+implements the behavior only: an order summary, contact, shipping, payment,
+and a coupon, in a single column, two columns, or an accordion. Payment
+networks and wallets are not named and are not connected. Money is integer
+cents. The catalog demo uses invented products ("Producto A", "Envío
+estándar"). Spanish (es-MX) is the default chrome. checkoutLabelsEn is the
+English set. The piece reuses stepper, radio-cards, number-field,
+phone-input, action-button, action-footer, and bottom-sheet. Answer no if
+the CLI asks to overwrite a primitive the host already has (accordion,
+button, input, label, separator, skeleton) or any of those pieces when they
+are already installed. The item ships no theme.
