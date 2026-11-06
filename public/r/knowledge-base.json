@@ -1,0 +1,146 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "knowledge-base",
+  "title": "Knowledge base",
+  "author": "Eduardo Retana",
+  "description": "Connect RAG sources, watch sync progress and a chunk counter, and reset with confirmation. The host does the ingest.",
+  "dependencies": [
+    "lucide-react",
+    "motion"
+  ],
+  "registryDependencies": [
+    "alert",
+    "alert-dialog",
+    "button",
+    "input",
+    "progress",
+    "select",
+    "skeleton",
+    "@retana/animated-counter",
+    "@retana/empty-state",
+    "@retana/status-pill",
+    "@retana/toast-stack"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/knowledge-base.tsx",
+      "content": "\"use client\"\n\n/**\n * Clean-room knowledge ingest. The layout was observed in a public post\n * with no code and no license. No source, sample payload, or asset was copied.\n * Ports belong to the host. This file does not fetch.\n */\n\nimport * as React from \"react\"\nimport { BookOpen, Database, GitBranch, LifeBuoy, Plus, StickyNote } from \"lucide-react\"\nimport { motion, useReducedMotion } from \"motion/react\"\n\nimport { Alert, AlertDescription, AlertTitle } from \"@/components/ui/alert\"\nimport {\n  AlertDialog,\n  AlertDialogAction,\n  AlertDialogCancel,\n  AlertDialogContent,\n  AlertDialogDescription,\n  AlertDialogFooter,\n  AlertDialogHeader,\n  AlertDialogTitle,\n} from \"@/components/ui/alert-dialog\"\nimport { Button } from \"@/components/ui/button\"\nimport { Input } from \"@/components/ui/input\"\nimport { Progress } from \"@/components/ui/progress\"\nimport {\n  Select,\n  SelectContent,\n  SelectGroup,\n  SelectItem,\n  SelectTrigger,\n  SelectValue,\n} from \"@/components/ui/select\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { cn } from \"@/lib/utils\"\nimport {\n  connectedCount,\n  indexingCount,\n  totalChunks,\n  type KnowledgeGlyph,\n  type KnowledgePort,\n  type KnowledgeSource,\n  type KnowledgeSourceType,\n  type PortReport,\n  type SourceStatus,\n} from \"@/lib/knowledge-base\"\nimport { AnimatedCounter } from \"@/components/ui/animated-counter\"\nimport { EmptyState } from \"@/components/ui/empty-state\"\nimport { StatusPill } from \"@/components/ui/status-pill\"\nimport { ToastStack, ToastStackProvider, useToastStack } from \"@/components/ui/toast-stack\"\n\nexport type KnowledgeBaseStatus = \"ready\" | \"loading\" | \"error\"\n\nexport type KnowledgeBaseLabels = {\n  title: string\n  chunks: string\n  connect: string\n  disconnect: string\n  retry: string\n  sync: string\n  reset: string\n  resetTitle: string\n  resetBody: string\n  resetConfirm: string\n  cancel: string\n  add: string\n  name: string\n  type: string\n  emptyTitle: string\n  emptyDescription: string\n  loading: string\n  errorTitle: string\n  indexing: (count: number) => string\n  ready: (sources: number, chunks: number) => string\n  idle: string\n  chunksLive: (chunks: number) => string\n  connectedToast: (name: string, chunks: number) => string\n  errorToast: (name: string) => string\n  resetToast: string\n  toasts: string\n  status: Record<SourceStatus, string>\n}\n\nexport type KnowledgeBaseProps = {\n  title: string\n  types: readonly KnowledgeSourceType[]\n  sources: readonly KnowledgeSource[]\n  onSourcesChange: (sources: KnowledgeSource[]) => void\n  onConnect: KnowledgePort\n  onSync: KnowledgePort\n  onDisconnect: KnowledgePort\n  onReset: (ctx: { signal: AbortSignal }) => Promise<void>\n  status?: KnowledgeBaseStatus\n  error?: string\n  readOnly?: boolean\n  labels?: Partial<KnowledgeBaseLabels>\n  locale?: string\n  className?: string\n}\n\nconst glyphs: Record<KnowledgeGlyph, React.ComponentType<{ className?: string }>> = {\n  docs: BookOpen,\n  repo: GitBranch,\n  help: LifeBuoy,\n  notes: StickyNote,\n  generic: Database,\n}\n\nconst tones = {\n  disconnected: \"neutral\",\n  connecting: \"info\",\n  syncing: \"warning\",\n  connected: \"positive\",\n  error: \"critical\",\n  stale: \"warning\",\n} as const satisfies Record<SourceStatus, \"neutral\" | \"info\" | \"warning\" | \"positive\" | \"critical\">\n\nconst defaultLabels: KnowledgeBaseLabels = {\n  title: \"Knowledge base\",\n  chunks: \"chunks\",\n  connect: \"Connect\",\n  disconnect: \"Disconnect\",\n  retry: \"Try again\",\n  sync: \"Sync\",\n  reset: \"Reset\",\n  resetTitle: \"Reset the knowledge base?\",\n  resetBody: \"Connected sources go back to disconnected and the chunk count returns to zero.\",\n  resetConfirm: \"Reset knowledge base\",\n  cancel: \"Cancel\",\n  add: \"Connect source\",\n  name: \"Source name\",\n  type: \"Source type\",\n  emptyTitle: \"No sources\",\n  emptyDescription: \"Connect a document, a repository, or notes to start indexing.\",\n  loading: \"Loading sources\",\n  errorTitle: \"The knowledge base did not load\",\n  indexing: (count) => `Indexing ${count} ${count === 1 ? \"source\" : \"sources\"}`,\n  ready: (sources, chunks) => `Ready. ${sources} sources, ${chunks} chunks.`,\n  idle: \"Nothing is connected yet.\",\n  chunksLive: (chunks) => `${chunks} chunks`,\n  connectedToast: (name, chunks) => `${name} connected. ${chunks} chunks`,\n  errorToast: (name) => `${name} did not connect`,\n  resetToast: \"The knowledge base was reset\",\n  toasts: \"Notices\",\n  status: {\n    disconnected: \"Disconnected\",\n    connecting: \"Connecting\",\n    syncing: \"Syncing\",\n    connected: \"Connected\",\n    error: \"Error\",\n    stale: \"Stale\",\n  },\n}\n\nfunction labelsFrom(partial?: Partial<KnowledgeBaseLabels>): KnowledgeBaseLabels {\n  return {\n    ...defaultLabels,\n    ...partial,\n    status: { ...defaultLabels.status, ...partial?.status },\n  }\n}\n\nfunction useQuietMotion() {\n  const fromConfig = useReducedMotion()\n  const [fromMedia, setFromMedia] = React.useState(\n    () => typeof window !== \"undefined\" && window.matchMedia(\"(prefers-reduced-motion: reduce)\").matches,\n  )\n  React.useEffect(() => {\n    const query = window.matchMedia(\"(prefers-reduced-motion: reduce)\")\n    const update = () => setFromMedia(query.matches)\n    update()\n    query.addEventListener(\"change\", update)\n    return () => query.removeEventListener(\"change\", update)\n  }, [])\n  return fromConfig === true || fromMedia\n}\n\nfunction cleared(source: KnowledgeSource): KnowledgeSource {\n  return {\n    id: source.id,\n    typeId: source.typeId,\n    name: source.name,\n    detail: source.detail,\n    status: \"disconnected\",\n    chunks: 0,\n  }\n}\n\nfunction withPatch(source: KnowledgeSource, partial: Partial<KnowledgeSource>): KnowledgeSource {\n  const next: KnowledgeSource = { ...source }\n  if (partial.status) next.status = partial.status\n  if (partial.chunks != null) next.chunks = partial.chunks\n  if (partial.progress != null) next.progress = partial.progress\n  if (partial.error) next.error = partial.error\n  else if (\"error\" in partial) delete next.error\n  return next\n}\n\nfunction Illustration({ sources, reduced }: { sources: readonly KnowledgeSource[]; reduced: boolean }) {\n  const shown = sources.slice(0, 6)\n  return (\n    <svg\n      viewBox=\"0 0 360 140\"\n      className=\"h-auto w-full text-muted-foreground\"\n      role=\"presentation\"\n      aria-hidden=\"true\"\n      data-motion={reduced ? \"off\" : \"on\"}\n    >\n      <g className=\"fill-muted stroke-border\" strokeWidth=\"1.5\">\n        <rect x=\"150\" y=\"78\" width=\"60\" height=\"16\" rx=\"4\" />\n        <rect x=\"142\" y=\"60\" width=\"76\" height=\"16\" rx=\"4\" className=\"fill-card\" />\n        <rect x=\"134\" y=\"42\" width=\"92\" height=\"16\" rx=\"4\" />\n      </g>\n      {shown.map((source, index) => {\n        const live = source.status === \"connected\" || source.status === \"syncing\" || source.status === \"stale\"\n        const x = 36 + (index % 3) * 144\n        const y = index < 3 ? 28 : 108\n        const tone = source.status === \"error\" ? \"text-destructive\" : live ? \"text-foreground\" : \"text-muted-foreground\"\n        return (\n          <g key={source.id}>\n            {live ? (\n              <path\n                d={`M ${x + 10} ${y} C ${(x + 180) / 2} ${y}, ${(x + 180) / 2} 50, 180 50`}\n                fill=\"none\"\n                strokeWidth=\"1.5\"\n                className=\"stroke-current text-primary\"\n              />\n            ) : null}\n            {reduced ? (\n              <circle cx={x} cy={y} r=\"8\" className={cn(\"fill-current\", tone, live ? \"opacity-100\" : \"opacity-40\")} />\n            ) : (\n              <motion.circle\n                cx={x}\n                cy={y}\n                r=\"8\"\n                className={cn(\"fill-current\", tone)}\n                initial={{ opacity: 0.35 }}\n                animate={{ opacity: live ? 1 : 0.4 }}\n                transition={{ duration: 0.24 }}\n              />\n            )}\n          </g>\n        )\n      })}\n    </svg>\n  )\n}\n\nfunction KnowledgeBaseBody({\n  title,\n  types,\n  sources,\n  onSourcesChange,\n  onConnect,\n  onSync,\n  onDisconnect,\n  onReset,\n  status = \"ready\",\n  error,\n  readOnly = false,\n  labels: labelOverride,\n  locale = \"en-US\",\n  className,\n}: KnowledgeBaseProps) {\n  const labels = labelsFrom(labelOverride)\n  const notices = useToastStack()\n  const reduced = useQuietMotion()\n  const sourcesRef = React.useRef(sources)\n  const jobs = React.useRef(new Map<string, AbortController>())\n  const seq = React.useRef(sources.length)\n  const [typeId, setTypeId] = React.useState(types[0]?.id ?? \"\")\n  const [draftName, setDraftName] = React.useState(\"\")\n  const [confirmReset, setConfirmReset] = React.useState(false)\n  const headingId = React.useId()\n\n  React.useEffect(() => {\n    sourcesRef.current = sources\n  }, [sources])\n\n  function replace(next: KnowledgeSource[]) {\n    sourcesRef.current = next\n    onSourcesChange(next)\n  }\n\n  function patch(id: string, partial: Partial<KnowledgeSource>) {\n    replace(sourcesRef.current.map((source) => (source.id === id ? withPatch(source, partial) : source)))\n  }\n\n  async function run(id: string, mode: \"connect\" | \"sync\" | \"disconnect\") {\n    jobs.current.get(id)?.abort()\n    const controller = new AbortController()\n    jobs.current.set(id, controller)\n    const previous = sourcesRef.current.map((source) => ({ ...source }))\n    const report = (update: PortReport) => {\n      if (controller.signal.aborted) return\n      patch(id, {\n        status: \"syncing\",\n        ...(update.progress != null ? { progress: update.progress } : {}),\n        ...(update.chunks != null ? { chunks: update.chunks } : {}),\n      })\n    }\n    const ctx = { signal: controller.signal, report }\n    try {\n      if (mode === \"disconnect\") {\n        await onDisconnect(id, ctx)\n        if (controller.signal.aborted) return\n        const current = sourcesRef.current.find((source) => source.id === id)\n        if (current) patch(id, { status: \"disconnected\", chunks: 0, progress: 0, error: \"\" })\n        return\n      }\n      if (mode === \"connect\") {\n        patch(id, { status: \"connecting\", error: \"\" })\n        await onConnect(id, ctx)\n      }\n      if (controller.signal.aborted) {\n        replace(previous)\n        return\n      }\n      patch(id, { status: \"syncing\", progress: 0 })\n      await onSync(id, ctx)\n      if (controller.signal.aborted) {\n        replace(previous)\n        return\n      }\n      const current = sourcesRef.current.find((source) => source.id === id)\n      patch(id, { status: \"connected\", progress: 100, error: \"\" })\n      notices.toast({\n        type: \"success\",\n        title: labels.connectedToast(current?.name ?? id, current?.chunks ?? 0),\n      })\n    } catch (cause) {\n      if (controller.signal.aborted) {\n        replace(previous)\n        return\n      }\n      const message = cause instanceof Error && cause.message ? cause.message : labels.errorToast(id)\n      const current = sourcesRef.current.find((source) => source.id === id)\n      patch(id, { status: \"error\", error: message })\n      notices.toast({ type: \"error\", title: labels.errorToast(current?.name ?? id), description: message })\n    } finally {\n      if (jobs.current.get(id) === controller) jobs.current.delete(id)\n    }\n  }\n\n  function addSource() {\n    const name = draftName.trim()\n    const type = types.find((item) => item.id === typeId)\n    if (!name || !type || readOnly) return\n    seq.current += 1\n    const source: KnowledgeSource = {\n      id: `fuente-${seq.current}`,\n      typeId: type.id,\n      name,\n      detail: type.hint ?? type.label,\n      status: \"disconnected\",\n      chunks: 0,\n    }\n    replace([...sourcesRef.current, source])\n    setDraftName(\"\")\n    void run(source.id, \"connect\")\n  }\n\n  async function reset() {\n    for (const controller of jobs.current.values()) controller.abort()\n    const controller = new AbortController()\n    const previous = sourcesRef.current.map((source) => ({ ...source }))\n    try {\n      await onReset({ signal: controller.signal })\n      if (controller.signal.aborted) return\n      replace(previous.map(cleared))\n      notices.toast({ type: \"success\", title: labels.resetToast })\n    } catch (cause) {\n      replace(previous)\n      const message = cause instanceof Error && cause.message ? cause.message : labels.errorTitle\n      notices.toast({ type: \"error\", title: labels.errorTitle, description: message })\n    } finally {\n      setConfirmReset(false)\n    }\n  }\n\n  const chunks = totalChunks(sources)\n  const indexing = indexingCount(sources)\n  const linked = connectedCount(sources)\n  const summary = indexing > 0 ? labels.indexing(indexing) : linked > 0 ? labels.ready(linked, chunks) : labels.idle\n\n  return (\n    <section\n      className={cn(\n        \"relative flex min-w-0 flex-col gap-4 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm\",\n        className,\n      )}\n      aria-busy={status === \"loading\"}\n    >\n      <header className=\"flex flex-wrap items-center justify-between gap-3\">\n        <h2 id={headingId} className=\"text-base font-medium text-balance\">\n          {title}\n        </h2>\n        <p className=\"text-sm text-muted-foreground tabular-nums\">\n          <span className=\"sr-only\" aria-live=\"polite\">\n            {labels.chunksLive(chunks)}\n          </span>\n          <span aria-hidden=\"true\">\n            <AnimatedCounter value={chunks} locale={locale} className=\"text-sm font-medium\" />\n          </span>\n          <span className=\"ms-1\">{labels.chunks}</span>\n        </p>\n      </header>\n\n      {status === \"loading\" ? (\n        <div className=\"flex flex-col gap-3\" aria-label={labels.loading}>\n          <Skeleton className=\"h-28 w-full\" />\n          <Skeleton className=\"h-16 w-full\" />\n        </div>\n      ) : null}\n\n      {status === \"error\" ? (\n        <Alert variant=\"destructive\">\n          <AlertTitle>{labels.errorTitle}</AlertTitle>\n          <AlertDescription>{error}</AlertDescription>\n        </Alert>\n      ) : null}\n\n      {status === \"ready\" ? (\n        <>\n          <Illustration sources={sources} reduced={reduced} />\n          <p className=\"text-center text-sm font-medium text-balance\">{summary}</p>\n          {sources.length === 0 ? <EmptyState title={labels.emptyTitle} description={labels.emptyDescription} /> : null}\n          {readOnly ? null : (\n            <div className=\"flex flex-col gap-2 sm:flex-row\">\n              <Select value={typeId} onValueChange={setTypeId}>\n                <SelectTrigger aria-label={labels.type} className=\"w-full sm:w-44\">\n                  <SelectValue placeholder={labels.type}>{types.find((item) => item.id === typeId)?.label}</SelectValue>\n                </SelectTrigger>\n                <SelectContent>\n                  <SelectGroup>\n                    {types.map((type) => (\n                      <SelectItem key={type.id} value={type.id}>\n                        {type.label}\n                      </SelectItem>\n                    ))}\n                  </SelectGroup>\n                </SelectContent>\n              </Select>\n              <Input\n                aria-label={labels.name}\n                value={draftName}\n                onChange={(event) => setDraftName(event.target.value)}\n                placeholder={labels.name}\n                className=\"min-w-0 flex-1\"\n              />\n              <Button type=\"button\" disabled={draftName.trim() === \"\" || typeId === \"\"} onClick={addSource}>\n                <Plus data-icon=\"inline-start\" />\n                {labels.add}\n              </Button>\n            </div>\n          )}\n          <ul aria-labelledby={headingId} className=\"flex flex-col gap-2\">\n            {sources.map((source) => {\n              const type = types.find((item) => item.id === source.typeId)\n              const Glyph = glyphs[type?.glyph ?? \"generic\"]\n              return (\n                <li\n                  key={source.id}\n                  className=\"flex min-w-0 flex-col gap-2 rounded-lg border border-border px-3 py-2 sm:flex-row sm:items-center\"\n                >\n                  <Glyph className=\"size-4 shrink-0 text-muted-foreground\" />\n                  <div className=\"min-w-0 flex-1\">\n                    <p className=\"truncate text-sm font-medium\" title={source.name}>\n                      {source.name}\n                    </p>\n                    <p className=\"truncate text-xs text-muted-foreground\" title={source.detail}>\n                      {source.detail}\n                    </p>\n                    {source.status === \"syncing\" ? (\n                      <Progress value={source.progress ?? 0} aria-label={labels.status.syncing} />\n                    ) : null}\n                    {source.error ? <p className=\"text-xs text-destructive\">{source.error}</p> : null}\n                  </div>\n                  <span className=\"text-xs text-muted-foreground tabular-nums\">{source.chunks}</span>\n                  <StatusPill label={labels.status[source.status]} tone={tones[source.status]} />\n                  {readOnly ? null : (\n                    <div className=\"flex flex-wrap gap-2\">\n                      {source.status === \"disconnected\" ? (\n                        <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={() => void run(source.id, \"connect\")}>\n                          {labels.connect}\n                        </Button>\n                      ) : null}\n                      {source.status === \"error\" ? (\n                        <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={() => void run(source.id, \"connect\")}>\n                          {labels.retry}\n                        </Button>\n                      ) : null}\n                      {source.status === \"stale\" || source.status === \"connected\" ? (\n                        <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={() => void run(source.id, \"sync\")}>\n                          {labels.sync}\n                        </Button>\n                      ) : null}\n                      {source.status !== \"disconnected\" && source.status !== \"connecting\" ? (\n                        <Button type=\"button\" size=\"sm\" variant=\"ghost\" onClick={() => void run(source.id, \"disconnect\")}>\n                          {labels.disconnect}\n                        </Button>\n                      ) : null}\n                    </div>\n                  )}\n                </li>\n              )\n            })}\n          </ul>\n          <footer className=\"flex items-center justify-between gap-3 text-xs text-muted-foreground\">\n            <span className=\"tabular-nums\">\n              {sources.length} · {chunks} {labels.chunks}\n            </span>\n            {readOnly ? null : (\n              <Button type=\"button\" variant=\"outline\" onClick={() => setConfirmReset(true)}>\n                {labels.reset}\n              </Button>\n            )}\n          </footer>\n        </>\n      ) : null}\n\n      <AlertDialog open={confirmReset} onOpenChange={setConfirmReset}>\n        <AlertDialogContent>\n          <AlertDialogHeader>\n            <AlertDialogTitle>{labels.resetTitle}</AlertDialogTitle>\n            <AlertDialogDescription>{labels.resetBody}</AlertDialogDescription>\n          </AlertDialogHeader>\n          <AlertDialogFooter>\n            <AlertDialogCancel>{labels.cancel}</AlertDialogCancel>\n            <AlertDialogAction onClick={() => void reset()}>{labels.resetConfirm}</AlertDialogAction>\n          </AlertDialogFooter>\n        </AlertDialogContent>\n      </AlertDialog>\n    </section>\n  )\n}\n\nexport function KnowledgeBase(props: KnowledgeBaseProps) {\n  const labels = labelsFrom(props.labels)\n  return (\n    <ToastStackProvider>\n      <KnowledgeBaseBody {...props} />\n      <ToastStack contained label={labels.toasts} />\n    </ToastStackProvider>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/knowledge-base.tsx"
+    },
+    {
+      "path": "registry/lib/knowledge-base.ts",
+      "content": "/**\n * RAG source list for a host CRM. Pure data: no fetch and no Supabase.\n * The host connects, syncs, disconnects, and resets through ports.\n * Clean-room. No source, sample payload, or asset was copied.\n */\n\nexport const SOURCE_STATUSES = [\n  \"disconnected\",\n  \"connecting\",\n  \"syncing\",\n  \"connected\",\n  \"error\",\n  \"stale\",\n] as const\n\nexport type SourceStatus = (typeof SOURCE_STATUSES)[number]\n\nexport type KnowledgeGlyph = \"docs\" | \"repo\" | \"help\" | \"notes\" | \"generic\"\n\nexport type KnowledgeSourceType = {\n  id: string\n  label: string\n  /** Shown under a new source of this type. */\n  hint?: string\n  glyph?: KnowledgeGlyph\n}\n\nexport type KnowledgeSource = {\n  id: string\n  typeId: string\n  name: string\n  detail: string\n  status: SourceStatus\n  chunks: number\n  /** 0–100 while syncing. */\n  progress?: number\n  error?: string\n}\n\nexport type PortReport = {\n  progress?: number\n  chunks?: number\n}\n\nexport type KnowledgePort = (\n  sourceId: string,\n  ctx: { signal: AbortSignal; report: (update: PortReport) => void },\n) => Promise<void>\n\nexport function totalChunks(sources: readonly KnowledgeSource[]) {\n  return sources.reduce((sum, source) => sum + (Number.isFinite(source.chunks) ? source.chunks : 0), 0)\n}\n\nexport function connectedCount(sources: readonly KnowledgeSource[]) {\n  return sources.filter((source) => source.status === \"connected\" || source.status === \"stale\").length\n}\n\nexport function indexingCount(sources: readonly KnowledgeSource[]) {\n  return sources.filter((source) => source.status === \"connecting\" || source.status === \"syncing\").length\n}\n\n/** A failed, stale, or disconnected source can be asked again. A live sync cannot. */\nexport function canRetry(status: SourceStatus) {\n  return status === \"error\" || status === \"stale\" || status === \"disconnected\"\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/knowledge-base.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Base de conocimiento",
+    "descriptionEs": "Conecta fuentes para RAG, sigue el progreso y el contador de fragmentos, y restablece con confirmación. La ingesta la hace el anfitrión.",
+    "preview": "app/examples/knowledge-base/preview.tsx",
+    "previewHref": "/examples/knowledge-base",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "syncing",
+        "label": "Sincronizando",
+        "labelEn": "Syncing"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Fuentes del taller",
+        "href": "/examples/knowledge-base",
+        "description": "Cuatro fuentes ficticias: documentos, repositorio, ayuda y notas."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/knowledge-base/stress",
+        "description": "390 px, nombres largos y una fuente que falla a la mitad."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/knowledge-base?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/knowledge-base?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/knowledge-base?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/knowledge-base?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Sincronizando",
+        "href": "/examples/knowledge-base?scene=syncing",
+        "description": "Syncing"
+      }
+    ],
+    "usage": "<KnowledgeBase title=\"Base\" types={types} sources={sources} onSourcesChange={setSources} onConnect={connect} onSync={sync} onDisconnect={disconnect} onReset={reset} locale=\"es-MX\" />",
+    "api": [
+      {
+        "name": "types",
+        "type": "KnowledgeSourceType[]",
+        "description": "Source kinds the host registers: documents, repo, help center, notes, or any other id."
+      },
+      {
+        "name": "sources / onSourcesChange",
+        "type": "KnowledgeSource[]",
+        "description": "Controlled list. Status is disconnected, connecting, syncing, connected, error, or stale."
+      },
+      {
+        "name": "onConnect / onSync / onDisconnect",
+        "type": "KnowledgePort",
+        "description": "Return a promise. report() updates progress and chunks. AbortSignal cancels."
+      },
+      {
+        "name": "onReset",
+        "type": "(ctx) => Promise<void>",
+        "description": "Runs after the reader confirms. Failure restores the previous list."
+      },
+      {
+        "name": "status / readOnly / error",
+        "type": "ready | loading | error",
+        "description": "Loading skeleton, load error, or a role that cannot connect."
+      },
+      {
+        "name": "labels / locale",
+        "type": "Partial<KnowledgeBaseLabels> / string",
+        "description": "English chrome by default. The demo passes es-MX copy. The counter uses locale."
+      }
+    ]
+  },
+  "docs": "Clean-room de un post público de Maxim Kuznetsov (https://x.com/disarto_max/status/2117664457862033627). Sin licencia: solo la idea. No se copió código, datos ni assets. No hay fetch ni @supabase: el anfitrión implementa onConnect, onSync, onDisconnect y onReset. Los avisos usan toast-stack. El contador usa animated-counter y anuncia el total con aria-live. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema, cssVars ni colores fijos.",
+  "categories": [
+    "agents"
+  ],
+  "type": "registry:ui"
+}

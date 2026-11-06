@@ -51,11 +51,11 @@ function Harness({
 describe("KnowledgeBase", () => {
   it("connects, reports progress, and toasts the chunk count", async () => {
     const user = userEvent.setup()
-    const onConnect = vi.fn<KnowledgePort>(async (_id, ctx) => {
+    const onConnect = vi.fn(async (_id: string, ctx: { signal: AbortSignal }) => {
       expect(ctx.signal).toBeInstanceOf(AbortSignal)
     })
     render(<Harness onConnect={onConnect} />)
-    await user.click(screen.getByRole("button", { name: "Connect", exact: true }))
+    await user.click(screen.getByRole("button", { name: (value) => value === "Connect" }))
     expect(await screen.findByText("Sales manual connected. 12 chunks")).toBeInTheDocument()
     expect(onConnect).toHaveBeenCalledTimes(1)
     expect(screen.getByText("Connected")).toBeInTheDocument()
@@ -63,11 +63,11 @@ describe("KnowledgeBase", () => {
 
   it("marks an error when sync fails halfway and offers a retry", async () => {
     const user = userEvent.setup()
-    const onSync = vi.fn<KnowledgePort>(async () => {
+    const onSync = vi.fn(async () => {
       throw new Error("cut off")
     })
     render(<Harness onSync={onSync} />)
-    await user.click(screen.getByRole("button", { name: "Connect", exact: true }))
+    await user.click(screen.getByRole("button", { name: (value) => value === "Connect" }))
     expect((await screen.findAllByText("cut off")).length).toBeGreaterThan(0)
     expect(screen.getByRole("button", { name: "Try again" })).toBeInTheDocument()
   })
