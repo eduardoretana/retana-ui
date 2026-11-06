@@ -69,7 +69,6 @@ function blankDraft(partial?: Partial<CheckoutDraft>, couponCode = ""): Checkout
     country: "",
     shippingMethodId: "",
     paymentMethodId: "",
-    couponCode,
     ...partial,
     couponCode: partial?.couponCode ?? couponCode,
   }

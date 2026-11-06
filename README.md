@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`422` items are in `registry.json` on this branch: `333` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`423` items are in `registry.json` on this branch: `333` components, `74` blocks, `6` hooks, and `10` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -681,6 +681,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`work-table-queue`](registry/blocks/work-table-queue.tsx) · block — Flat queue whose rank follows the manual order, with pagination. Install: `npx shadcn@latest add @retana/work-table-queue`.
 - [`work-table-support`](registry/blocks/work-table-support.tsx) · block — Support queue with SLA cells and bulk move. Install: `npx shadcn@latest add @retana/work-table-support`.
 - [`time-off`](registry/blocks/time-off.tsx) · block — An agenda with holiday chips, a table of requests, and approve or decline. Duplicating or deleting an event announces it. Install: `npx shadcn@latest add @retana/time-off`.
+- [`checkout`](registry/lib/checkout.ts) · block — Order summary, contact, shipping, payment, and a coupon, as one page, two columns, or an accordion. No payment gateway. Install: `npx shadcn@latest add @retana/checkout`.
 
 ### Actions and overlays
 
