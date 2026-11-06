@@ -916,3 +916,26 @@ callbacks. The table sorts in place and slides rows with layout motion. The
 voice note draws a waveform from numeric peaks and does not play a file.
 Answer no if the CLI asks to overwrite a primitive the host already has.
 The items ship no theme.
+
+---
+
+Workflow builder
+
+workflow-builder is a clean-room canvas. The arrangement was observed in an
+unlicensed post by Adrian Kuleszo (i-Planner), status 2117685778264572393.
+No source, markup, copy, colors, icons, or assets were copied. License of
+that post: none. Idea only.
+
+Typed ports, braces, pins, retries, guards, and draft/publish are original.
+Licenses read on 2026-11-04: Langflow, Rivet, Temporal UI, and @xyflow/react
+are MIT. Node-RED is Apache-2.0. Flowise is Apache-2.0 outside enterprise.
+Activepieces is MIT outside ee. None of that source is included. xyflow was
+not used. n8n is Sustainable Use (idea only). Dify, Windmill, Inngest, and
+Pipedream are idea only. Vellum, OpenAI Agent Builder, Gumloop, and Retool
+were not verified as public source.
+
+The host registers node types. A write needs an upstream guard and a human
+approval. Secrets are credential ids. Cost and tokens are reported by the
+executor and are not priced here. The demo is a fictional message agent for
+Taller Nube. Answer no if the CLI asks to overwrite a primitive the host
+already has. The item ships no theme.
