@@ -289,6 +289,8 @@ export type WorkTableProps<T extends { id: string }> = {
   tableClassName?: string
   bulkClassName?: string
   paginationClassName?: string
+  /** Slot above the toolbar. Distinct from the tree summary row. */
+  leading?: React.ReactNode
 }
 
 export function WorkTable<T extends { id: string }>(props: WorkTableProps<T>) {
@@ -582,8 +584,9 @@ export function WorkTable<T extends { id: string }>(props: WorkTableProps<T>) {
         data-mode={mode}
         data-motion={reduced ? "reduce" : "full"}
         data-density={layout.layout.density}
-        className={cn("flex flex-col gap-3", className)}
+        className={cn("@container flex min-w-0 flex-col gap-3", className)}
       >
+        {props.leading ? <div data-slot="work-table-leading" className="min-w-0">{props.leading}</div> : null}
         <div className={cn("flex flex-wrap items-center gap-2", props.toolbarClassName)}>
           <ColumnMenu columns={columns} hidden={layout.layout.hidden} labels={labels} onToggle={(id) => layout.hideColumn(id, columns.filter((column) => column.locked).map((column) => column.id))} />
           <DensityMenu density={layout.layout.density} labels={labels} onChange={layout.setDensity} />

@@ -179,6 +179,14 @@ export function WorkNumberCell({
   return <span className={cn("text-sm tabular-nums", className)}>{label}</span>
 }
 
+export {
+  StatusActionCell,
+  statusActionAccessibleName,
+  type StatusAction,
+  type StatusActionCellProps,
+  type StatusActionVariant,
+} from "@/registry/retana/ui/status-action-cell"
+
 export function WorkRankCell({ rank, className }: { rank: number; className?: string }) {
   return (
     <span data-slot="work-rank" className={cn("inline-flex size-6 items-center justify-center rounded-md bg-muted text-xs font-medium text-foreground tabular-nums", className)}>

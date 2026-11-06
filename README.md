@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`422` items are in `registry.json` on this branch: `333` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`424` items are in `registry.json` on this branch: `335` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -548,6 +548,8 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`proposal-risks`](registry/ui/proposal-risks.tsx) · ui — A resolved note, an open timeline risk with the request in the destructive token, actions whose chosen button gains a check, a client-asked table, and scope approval. Install: `npx shadcn@latest add @retana/proposal-risks`.
 - [`proposal-activity`](registry/ui/proposal-activity.tsx) · ui — A deal's activity feed, newest first, using the shared timeline. Install: `npx shadcn@latest add @retana/proposal-activity`.
 - [`status-pill`](registry/ui/status-pill.tsx) · ui — Status chip. Tone, dot, and label come from props. Install: `npx shadcn@latest add @retana/status-pill`.
+- [`status-action-cell`](registry/ui/status-action-cell.tsx) · ui — A status pill and up to three row actions. Further actions, and every action at 390px, sit in a menu. The accessible name is the status plus the action labels. Install: `npx shadcn@latest add @retana/status-action-cell`.
+- [`table-summary-strip`](registry/ui/table-summary-strip.tsx) · ui — A KPI strip for the top of a table. Wraps stat-strip with loading, an error retry, explicit zeros, and an optional sparkline on each item. Install: `npx shadcn@latest add @retana/table-summary-strip`.
 - [`accent-callout`](registry/ui/accent-callout.tsx) · ui — Accent, soft, or inverted callout. Copy comes from props. Install: `npx shadcn@latest add @retana/accent-callout`.
 - [`insight-card`](registry/ui/insight-card.tsx) · ui — Inverted assistant card with bullets, a status, stats, or a checklist. Install: `npx shadcn@latest add @retana/insight-card`.
 - [`workspace-switcher`](registry/ui/workspace-switcher.tsx) · ui — Workspace row. The menu options come from props. Install: `npx shadcn@latest add @retana/workspace-switcher`.
@@ -567,7 +569,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`next-steps`](registry/ui/next-steps.tsx) · ui — What happens next, plus a pinned action. Install: `npx shadcn@latest add @retana/next-steps`.
 - [`work-table`](registry/ui/work-table.tsx) · ui — TanStack table with dnd-kit column and row reorder, layout presets, density, bulk actions, and pagination. Install: `npx shadcn@latest add @retana/work-table`.
 - [`work-table-toolbar`](registry/ui/work-table-toolbar.tsx) · ui — Search, priority toggle, assignee multiselect, cycle select, and sort menu for a work table. Install: `npx shadcn@latest add @retana/work-table-toolbar`.
-- [`work-table-cells`](registry/ui/work-table-cells.tsx) · ui — Title, person, priority, relative date, status, SLA, effort, compact numbers, and rank cells. Install: `npx shadcn@latest add @retana/work-table-cells`.
+- [`work-table-cells`](registry/ui/work-table-cells.tsx) · ui — Title, person, priority, relative date, status, status with actions, SLA, effort, compact numbers, and rank cells. Install: `npx shadcn@latest add @retana/work-table-cells`.
 - [`data-table-grouping`](registry/ui/data-table-grouping.tsx) · ui — TanStack table with live column grouping that keeps the selection, collapsible group headers, a nested tree with subtotals, master-detail rows, and a pinned grand-total footer. Column order, visibility, density, filters, and page size are in the toolbar. Install: `npx shadcn@latest add @retana/data-table-grouping`.
 - [`expandable-table`](registry/ui/expandable-table.tsx) · ui — A row opens into a checklist, a nested total, or a tree of subtasks. Several rows can stay open. Arrow keys, selection, filters, density, and pages stay on the host table. Install: `npx shadcn@latest add @retana/expandable-table`.
 - [`planning-grid`](registry/ui/planning-grid.tsx) · ui — Hierarchical plan by period. Actual stays solid, forecast stays light, and a growth slider spreads the forecast without touching locked cells. Install: `npx shadcn@latest add @retana/planning-grid`.
