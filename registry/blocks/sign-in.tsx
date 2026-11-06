@@ -36,6 +36,9 @@ export type SignInProps = {
   onSignIn?: (account: SignInAccount, method: SignInMethod) => void
   accounts?: SignInAccount[]
   defaultEmail?: string
+  /** Recovery route. Omitted, the card does not offer a password link. */
+  forgotPasswordHref?: string
+  forgotPasswordLabel?: string
   className?: string
   classNames?: SignInClassNames
 }
@@ -233,7 +236,16 @@ function swapMotion(reduce: boolean): Transition {
   return reduce ? { duration: motionPresets.duration.instant } : { duration: motionPresets.duration.standard, ease: motionPresets.ease.enter }
 }
 
-export function SignIn({ demoCode = "123456", onSignIn, accounts = exampleAccounts, defaultEmail = "", className, classNames }: SignInProps) {
+export function SignIn({
+  demoCode = "123456",
+  onSignIn,
+  accounts = exampleAccounts,
+  defaultEmail = "",
+  forgotPasswordHref,
+  forgotPasswordLabel = "Forgot password?",
+  className,
+  classNames,
+}: SignInProps) {
   const id = useId()
   const emailId = useId()
   const reduce = !!useReducedMotion()
@@ -465,6 +477,14 @@ export function SignIn({ demoCode = "123456", onSignIn, accounts = exampleAccoun
                     <Button type="submit" className="w-full" disabled={busy === "email"} aria-busy={busy === "email" || undefined}>
                       {busy === "email" ? "Sending" : "Continue"}
                     </Button>
+                    {forgotPasswordHref ? (
+                      <a
+                        href={forgotPasswordHref}
+                        className="inline-flex min-h-11 items-center self-start text-sm font-medium text-foreground underline-offset-4 hover:underline focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+                      >
+                        {forgotPasswordLabel}
+                      </a>
+                    ) : null}
                   </form>
                   <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
                     <Separator className="flex-1" />

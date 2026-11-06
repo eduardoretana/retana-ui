@@ -36,6 +36,22 @@ export type PasswordStrengthClassNames = {
   error?: string
 }
 
+export type PasswordStrengthCopy = {
+  show?: string
+  hide?: string
+  tooShort?: string
+  weak?: string
+  fair?: string
+  good?: string
+  strong?: string
+  empty?: string
+  more?: string
+  meter?: string
+  requirements?: string
+  met?: string
+  unmet?: string
+}
+
 export type PasswordStrengthProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   "type" | "value" | "defaultValue" | "children"
@@ -50,6 +66,8 @@ export type PasswordStrengthProps = Omit<
   error?: string
   revealed?: boolean
   onRevealedChange?: (revealed: boolean) => void
+  /** Visible and accessible strings. Defaults keep the English meter. */
+  copy?: PasswordStrengthCopy
   classNames?: PasswordStrengthClassNames
 }
 
@@ -232,6 +250,18 @@ function RuleMark({ met, delay, reduced }: { met: boolean; delay: number; reduce
   )
 }
 
+function strengthLabel(
+  strength: PasswordStrengthResult,
+  copy: Required<PasswordStrengthCopy>,
+) {
+  if (strength.label === "Too short") return copy.tooShort
+  if (strength.level === 1) return copy.weak
+  if (strength.level === 2) return copy.fair
+  if (strength.level === 3) return copy.good
+  if (strength.level === 4) return copy.strong
+  return ""
+}
+
 function ErrorRow({ id, text, reduced, className }: { id: string; text: string; reduced: boolean; className?: string }) {
   const copy = React.useRef<HTMLSpanElement>(null)
   const [height, setHeight] = React.useState<number | "auto">("auto")
@@ -262,7 +292,7 @@ function ErrorRow({ id, text, reduced, className }: { id: string; text: string; 
           : { height: motionPresets.spring.smooth, opacity: { duration: motionPresets.duration.fast } }
       }
     >
-      <span ref={copy} id={id} className={cn("relative block pt-2 text-xs text-destructive break-all", className)}>
+      <span ref={copy} id={id} role="alert" className={cn("relative block pt-2 text-xs text-destructive break-all", className)}>
         <AnimatePresence mode="popLayout" initial={false} custom={1}>
           <motion.span key={text} className="block" custom={1} variants={reduced ? fade : rise} initial="enter" animate="center" exit="exit">
             {text}
@@ -284,6 +314,7 @@ export const PasswordStrength = React.forwardRef<HTMLInputElement, PasswordStren
     error,
     revealed: revealedProp,
     onRevealedChange,
+    copy: copyProp,
     id,
     className,
     classNames,
@@ -291,6 +322,22 @@ export const PasswordStrength = React.forwardRef<HTMLInputElement, PasswordStren
   },
   ref,
 ) {
+  const copy = {
+    show: "Show password",
+    hide: "Hide password",
+    tooShort: "Too short",
+    weak: "Weak",
+    fair: "Fair",
+    good: "Good",
+    strong: "Strong",
+    empty: "No password yet",
+    more: "more",
+    meter: "Password strength",
+    requirements: "Password requirements",
+    met: ", met",
+    unmet: ", not met",
+    ...copyProp,
+  }
   const generated = React.useId()
   const controlId = id ?? generated
   const rulesId = `${controlId}-rules`
@@ -303,6 +350,7 @@ export const PasswordStrength = React.forwardRef<HTMLInputElement, PasswordStren
   const [revealedInternal, setRevealedInternal] = React.useState(false)
   const revealed = revealedProp ?? revealedInternal
   const strength = estimateStrength(value, rules)
+  const levelText = strengthLabel(strength, copy)
   const met = new Set(strength.met)
 
   const rank = strength.label === "Too short" ? 0.5 : strength.level
@@ -347,7 +395,7 @@ export const PasswordStrength = React.forwardRef<HTMLInputElement, PasswordStren
     onRevealedChange?.(!revealed)
   }
 
-  const summary = strength.level ? `Strength: ${strength.label}. ${strength.met.length} of ${rules.length} requirements met.` : ""
+  const summary = levelText ? `${copy.meter}: ${levelText}. ${strength.met.length} / ${rules.length}` : ""
   const describedBy = [props["aria-describedby"], error ? errorId : undefined, rulesId].filter(Boolean).join(" ")
 
   return (
@@ -395,7 +443,7 @@ export const PasswordStrength = React.forwardRef<HTMLInputElement, PasswordStren
           data-slot="password-strength-toggle"
           className={cn("text-muted-foreground aria-pressed:text-foreground", classNames?.toggle)}
           onClick={toggleReveal}
-          aria-label="Show password"
+          aria-label={revealed ? copy.hide : copy.show}
           aria-pressed={revealed}
           aria-controls={controlId}
         >
@@ -410,11 +458,11 @@ export const PasswordStrength = React.forwardRef<HTMLInputElement, PasswordStren
           data-slot="password-strength-meter"
           className={cn("grid min-w-0 flex-1 grid-cols-4 gap-1", classNames?.meter)}
           role="meter"
-          aria-label="Password strength"
+          aria-label={copy.meter}
           aria-valuemin={0}
           aria-valuemax={4}
           aria-valuenow={strength.level}
-          aria-valuetext={strength.level ? strength.label : "No password yet"}
+          aria-valuetext={levelText || copy.empty}
         >
           {[0, 1, 2, 3].map((index) => {
             const on = index < strength.level
@@ -439,7 +487,7 @@ export const PasswordStrength = React.forwardRef<HTMLInputElement, PasswordStren
           <AnimatePresence mode="popLayout" initial={false} custom={track.direction}>
             {strength.level ? (
               <motion.span
-                key={strength.label}
+                key={levelText}
                 className="inline-block"
                 custom={track.direction}
                 variants={reduced ? fade : rise}
@@ -447,13 +495,13 @@ export const PasswordStrength = React.forwardRef<HTMLInputElement, PasswordStren
                 animate="center"
                 exit="exit"
               >
-                {strength.label}
+                {levelText}
               </motion.span>
             ) : null}
           </AnimatePresence>
         </span>
       </div>
-      <ul id={rulesId} data-slot="password-strength-rules" className={cn("mt-4 grid list-none gap-1.5 p-0", classNames?.rules)} aria-label="Password requirements">
+      <ul id={rulesId} data-slot="password-strength-rules" className={cn("mt-4 grid list-none gap-1.5 p-0", classNames?.rules)} aria-label={copy.requirements}>
         {rules.map((rule) => {
           const ok = met.has(rule.id)
           const remaining = value && !ok ? (rule.remaining?.(value) ?? 0) : 0
@@ -463,7 +511,7 @@ export const PasswordStrength = React.forwardRef<HTMLInputElement, PasswordStren
               <RuleMark met={ok} delay={order > 0 ? order * 0.05 : 0} reduced={reduced} />
               <span className="min-w-0 break-all">
                 {rule.label}
-                <span className="sr-only">{ok ? ", met" : ", not met"}</span>
+                <span className="sr-only">{ok ? copy.met : copy.unmet}</span>
               </span>
               <span className="relative ml-auto block pl-2 text-xs whitespace-nowrap text-muted-foreground" aria-hidden="true">
                 <AnimatePresence mode="popLayout" initial={false} custom={1}>
@@ -477,7 +525,7 @@ export const PasswordStrength = React.forwardRef<HTMLInputElement, PasswordStren
                       animate="center"
                       exit="exit"
                     >
-                      <RollingNumber value={remaining} reduced={reduced} /> more
+                      <RollingNumber value={remaining} reduced={reduced} /> {copy.more}
                     </motion.span>
                   ) : null}
                 </AnimatePresence>

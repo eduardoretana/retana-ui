@@ -50,6 +50,9 @@ export type LoginCenteredProps = {
   /** Seconds before another code can be sent. */
   resendSeconds?: number
   onSignIn?: (email: string, method: LoginMethod, mode: LoginMode) => void
+  /** Recovery route. Omitted, the card does not offer a password link. */
+  forgotPasswordHref?: string
+  forgotPasswordLabel?: string
   className?: string
   classNames?: LoginCenteredClassNames
 }
@@ -95,6 +98,8 @@ export function LoginCentered({
   delays,
   resendSeconds = 30,
   onSignIn,
+  forgotPasswordHref,
+  forgotPasswordLabel = "Forgot password?",
   className,
   classNames,
 }: LoginCenteredProps) {
@@ -395,6 +400,11 @@ export function LoginCentered({
                   <p className="text-sm text-muted-foreground">Use the passkey saved on this device. No password needed.</p>
                 </div>
                 <div className="grid gap-2">
+                  {forgotPasswordHref ? (
+                    <a href={forgotPasswordHref} className="inline-flex min-h-11 items-center justify-center text-sm font-medium underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none">
+                      {forgotPasswordLabel}
+                    </a>
+                  ) : null}
                   <Button ref={passkeyRef} type="button" className="w-full" aria-busy={passkey === "waiting" || undefined} onClick={startPasskey}>
                     {passkey === "verified" ? <Check aria-hidden /> : <FingerprintPattern aria-hidden />}
                     {passkey === "waiting" ? "Waiting for your device" : passkey === "verified" ? "Passkey verified" : "Sign in with passkey"}
@@ -446,6 +456,11 @@ export function LoginCentered({
                   <Button type="submit" className="w-full" aria-busy={busy === "email" || undefined} disabled={busy === "email"}>
                     {signingUp ? "Create account" : "Send code"}
                   </Button>
+                  {forgotPasswordHref ? (
+                    <a href={forgotPasswordHref} className="inline-flex min-h-11 items-center justify-center text-sm font-medium underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none">
+                      {forgotPasswordLabel}
+                    </a>
+                  ) : null}
                 </form>
                 {signingUp ? null : (
                   <button type="button" className="inline-flex items-center justify-center gap-1.5 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none" onClick={switchToPasskey}>
