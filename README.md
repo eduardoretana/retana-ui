@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`422` items are in `registry.json` on this branch: `333` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`424` items are in `registry.json` on this branch: `334` components, `73` blocks, `6` hooks, and `11` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -453,6 +453,8 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`inline-diff`](registry/ui/inline-diff.tsx) · ui — A finished prose rewrite, word by word. Accept or reject each change. Until it is accepted, the original words stay. Install: `npx shadcn@latest add @retana/inline-diff`.
 - [`email-draft`](registry/ui/email-draft.tsx) · ui — An agent-written letter waiting for a person. Switch the recipient and the tone, edit the words, remove the file, then send or discard. Install: `npx shadcn@latest add @retana/email-draft`.
 - [`message-actions`](registry/ui/message-actions.tsx) · ui — The bar under a finished answer. Copy, try again, keep the versions, say why a thumb went down, or read it aloud. The host speaks and stores the note. Install: `npx shadcn@latest add @retana/message-actions`.
+- [`cost-waterfall-core`](registry/lib/cost-waterfall.ts) · lib — Integer micro-unit pricing, cache savings, rollups, and a streaming reducer for one agent run. Example adapters cover a workflow node and a blended cost per 1K tokens. Install: `npx shadcn@latest add @retana/cost-waterfall-core`.
+- [`cost-waterfall`](registry/ui/cost-waterfall.tsx) · ui — A run's cost and tokens as a cumulative waterfall, with cache savings, a live reducer, and JSON or CSV export. Install: `npx shadcn@latest add @retana/cost-waterfall`.
 
 ### Forms
 

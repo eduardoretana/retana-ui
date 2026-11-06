@@ -32050,6 +32050,257 @@
           }
         ]
       }
+    },
+    {
+      "name": "cost-waterfall-core",
+      "type": "registry:lib",
+      "title": "Run cost core",
+      "description": "Integer micro-unit pricing, cache savings, rollups, and a streaming reducer for one agent run. Example adapters cover a workflow node and a blended cost per 1K tokens.",
+      "author": "Eduardo Retana",
+      "categories": [
+        "agents"
+      ],
+      "meta": {
+        "titleEs": "Núcleo de costo",
+        "descriptionEs": "Precio en micro-unidades, ahorro de caché, agregados y un reducer de streaming para una corrida. Los adaptadores de ejemplo cubren un nodo de flujo y el costo mezclado por 1K tokens.",
+        "preview": "app/examples/cost-waterfall-core/preview.tsx",
+        "previewHref": "/examples/cost-waterfall-core",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "cache",
+            "label": "Caché",
+            "labelEn": "Cache"
+          },
+          {
+            "id": "mxn",
+            "label": "Pesos",
+            "labelEn": "MXN"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Expediente de ejemplo",
+            "href": "/examples/cost-waterfall-core",
+            "description": "Precios ilustrativos, no una tarjeta de proveedor."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/cost-waterfall-core/stress",
+            "description": "Costo vacío, nombre largo y mezcla por 1K."
+          }
+        ],
+        "usage": "rollupRun(run, pricing)\napplyRunEvent(run, event)\nblendedCostPer1k(pricing, model, mix)",
+        "api": [
+          {
+            "name": "PricingTable",
+            "type": "{ currency, models, fallback? }",
+            "description": "Micro-units per 1_000_000 tokens for input, output, cache read, and cache write."
+          },
+          {
+            "name": "ownCost / cacheSavings",
+            "type": "(step, table) => bigint",
+            "description": "Explicit costMicro wins. Savings are cache reads priced below input."
+          },
+          {
+            "name": "rollupRun",
+            "type": "(run, table) => RunRollup",
+            "description": "Parents roll up children. mostExpensiveId is the greatest own cost above zero."
+          },
+          {
+            "name": "applyRunEvent",
+            "type": "(run, event) => Run",
+            "description": "step.started, step.progress, step.completed, step.failed, run.completed. Duplicates and older stamps are ignored."
+          },
+          {
+            "name": "runFromWorkflowNodes",
+            "type": "(input) => Run",
+            "description": "Example adapter. replay is stored on payload and is not priced."
+          },
+          {
+            "name": "blendedCostPer1k",
+            "type": "(pricing, model, mix) => bigint",
+            "description": "Example adapter. Micro-units per 1_000 tokens of the mix."
+          }
+        ]
+      },
+      "docs": "Clean-room. Affect UI Cost Waterfall is Pro and was not fetched. Money is an integer micro-unit (1_000_000 = 1.00). Install this item alone when a host only needs the math. Answer no if the CLI asks to overwrite csv.",
+      "files": [
+        {
+          "path": "registry/lib/cost-waterfall.ts",
+          "type": "registry:lib",
+          "target": "@lib/cost-waterfall.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        }
+      ]
+    },
+    {
+      "name": "cost-waterfall",
+      "type": "registry:ui",
+      "title": "Run cost waterfall",
+      "description": "A run's cost and tokens as a cumulative waterfall, with cache savings, a live reducer, and JSON or CSV export.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "badge",
+        "button",
+        "card",
+        "empty",
+        "scroll-area",
+        "separator",
+        "skeleton",
+        "@retana/segmented-control",
+        "@retana/cost-waterfall-core"
+      ],
+      "categories": [
+        "agents"
+      ],
+      "meta": {
+        "titleEs": "Costo de la corrida",
+        "descriptionEs": "El costo y los tokens de una corrida en una cascada acumulada, con ahorro de caché, reducer en vivo y exportación JSON o CSV.",
+        "preview": "app/examples/cost-waterfall/preview.tsx",
+        "previewHref": "/examples/cost-waterfall",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "live-streaming",
+            "label": "En vivo",
+            "labelEn": "Live"
+          },
+          {
+            "id": "step-error",
+            "label": "Paso con error",
+            "labelEn": "Step error"
+          },
+          {
+            "id": "cache-heavy",
+            "label": "Mucha caché",
+            "labelEn": "Cache heavy"
+          },
+          {
+            "id": "deep-tree",
+            "label": "Árbol profundo",
+            "labelEn": "Deep tree"
+          },
+          {
+            "id": "mxn",
+            "label": "Pesos",
+            "labelEn": "MXN"
+          },
+          {
+            "id": "tokens",
+            "label": "Tokens",
+            "labelEn": "Tokens"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Expediente de ejemplo",
+            "href": "/examples/cost-waterfall",
+            "description": "Precios ilustrativos. El interruptor cambia la cascada a tokens."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/cost-waterfall/stress",
+            "description": "300 pasos, ocho niveles, costo 0 y costo enorme, 390 px."
+          }
+        ],
+        "usage": "<CostWaterfall run={run} pricing={pricing} money={money} labels={costWaterfallLabelsEs} />",
+        "api": [
+          {
+            "name": "run / pricing / events",
+            "type": "Run, PricingTable, AsyncIterable<RunEvent>",
+            "description": "Flat tree of steps. events drives useCostRun from the same starting run."
+          },
+          {
+            "name": "money",
+            "type": "MoneyFormat",
+            "description": "Intl locale and currency. fx is an integer fraction from the pricing currency."
+          },
+          {
+            "name": "mode / collapsed / openId / waterfallOpen",
+            "type": "controlled or uncontrolled",
+            "description": "Cost or tokens, folded parents, the open payload, and the waterfall disclosure."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<CostWaterfallLabels>",
+            "description": "English is the default. costWaterfallLabelsEs is es-MX."
+          },
+          {
+            "name": "loading / error / onRetry",
+            "type": "boolean, string, () => void",
+            "description": "Skeleton, or an alert with a retry when the host cannot read the run."
+          }
+        ]
+      },
+      "docs": "Clean-room reading of a public behavior description. Affect UI Cost Waterfall is Pro (https://www.affectui.com/components/cost-waterfall) and was not purchased or fetched. The public repo is MIT and does not contain this item. No Affect source, sample data, icons, or assets were copied. Prices in the demo are marked as examples. Answer no if the CLI asks to overwrite badge, button, card, empty, scroll-area, separator, skeleton, segmented-control, or csv. The item ships no theme and no cssVars. The pure core is cost-waterfall-core.",
+      "files": [
+        {
+          "path": "registry/ui/cost-waterfall.tsx",
+          "type": "registry:component",
+          "target": "@ui/cost-waterfall.tsx"
+        },
+        {
+          "path": "registry/hooks/use-cost-run.ts",
+          "type": "registry:hook",
+          "target": "@hooks/use-cost-run.ts"
+        },
+        {
+          "path": "registry/lib/cost-waterfall.ts",
+          "type": "registry:lib",
+          "target": "@lib/cost-waterfall.ts"
+        },
+        {
+          "path": "registry/lib/csv.ts",
+          "type": "registry:lib",
+          "target": "@lib/csv.ts"
+        }
+      ]
     }
   ]
 }
