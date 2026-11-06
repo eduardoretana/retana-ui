@@ -32050,6 +32050,176 @@
           }
         ]
       }
+    },
+    {
+      "name": "checkout",
+      "type": "registry:block",
+      "title": "Checkout",
+      "description": "Order summary, contact, shipping, payment, and a coupon, as one page, two columns, or an accordion. No payment gateway.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "accordion",
+        "button",
+        "input",
+        "label",
+        "skeleton",
+        "@retana/action-button",
+        "@retana/action-footer",
+        "@retana/bottom-sheet",
+        "@retana/number-field",
+        "@retana/phone-input",
+        "@retana/radio-cards",
+        "@retana/stepper",
+        "@retana/use-min-width"
+      ],
+      "categories": [
+        "block",
+        "form"
+      ],
+      "meta": {
+        "titleEs": "Caja",
+        "descriptionEs": "Resumen del pedido, contacto, envío, pago y cupón, en una página, dos columnas o acordeón. Sin pasarela.",
+        "preview": "app/examples/checkout/preview.tsx",
+        "previewHref": "/examples/checkout",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "coupon-invalid",
+            "label": "Cupón inválido",
+            "labelEn": "Invalid coupon"
+          },
+          {
+            "id": "coupon-applied",
+            "label": "Cupón aplicado",
+            "labelEn": "Coupon applied"
+          },
+          {
+            "id": "submitting",
+            "label": "Enviando",
+            "labelEn": "Submitting"
+          },
+          {
+            "id": "success",
+            "label": "Confirmado",
+            "labelEn": "Placed"
+          },
+          {
+            "id": "two-column",
+            "label": "Dos columnas",
+            "labelEn": "Two columns"
+          },
+          {
+            "id": "accordion",
+            "label": "Acordeón",
+            "labelEn": "Accordion"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Caja",
+            "href": "/examples/checkout",
+            "description": "Pedido de ejemplo con cupón, envío y pago. Nada se cobra."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/checkout/stress",
+            "description": "Vacío, textos largos, RTL, 320 px y diez productos."
+          }
+        ],
+        "usage": "<CheckoutPage\n  lines={lines}\n  layout=\"two-column\"\n  locale=\"es-MX\"\n  currency=\"MXN\"\n  shippingMethods={shipping}\n  paymentMethods={payments}\n  coupons={coupons}\n  onApplyCoupon={apply}\n  onPlaceOrder={place}\n/>",
+        "api": [
+          {
+            "name": "lines",
+            "type": "CheckoutLine[]",
+            "description": "id, title, variant, qty, unitPrice in integer cents, optional imageUrl."
+          },
+          {
+            "name": "layout",
+            "type": "\"single\" | \"two-column\" | \"accordion\"",
+            "description": "Single stacks the summary above the form. Two columns use a bottom sheet below 1024px. Accordion uses the host accordion."
+          },
+          {
+            "name": "shippingMethods / paymentMethods",
+            "type": "CheckoutMethod[]",
+            "description": "id, label, description, optional priceCents and icon. Each option shows text and an icon."
+          },
+          {
+            "name": "coupons / onApplyCoupon",
+            "type": "CouponOffer[] / (code) => void",
+            "description": "An invalid code leaves the totals unchanged. A valid code applies once."
+          },
+          {
+            "name": "onPlaceOrder",
+            "type": "(order: CheckoutOrder) => Promise<void>",
+            "description": "Called with lines, draft, coupon, and totals. Nothing is charged."
+          },
+          {
+            "name": "status",
+            "type": "ready | empty | loading | error | submitting | success",
+            "description": "Empty offers a way back. Loading keeps a skeleton. Error can be retried. Submitting sets aria-busy."
+          },
+          {
+            "name": "locale / currency / labels",
+            "type": "string / Partial<CheckoutLabels>",
+            "description": "es-MX is the default. checkoutLabelsEn is the English set. Money uses formatMoney."
+          },
+          {
+            "name": "onQtyChange / onRemove / taxCents",
+            "type": "callbacks / number",
+            "description": "Quantity and removal. Optional tax is integer cents."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Root class."
+          }
+        ]
+      },
+      "docs": "Clean-room de la Checkout Page de shadcn/studio (Pro/Basic, https://shadcnstudio.com/blocks/ecommerce/checkout-page, licencia https://shadcnstudio.com/license). No se copió código, copy, iconos ni assets. Reusa stepper, radio-cards, number-field, phone-input, action-button, action-footer y bottom-sheet. Si el CLI pregunta si debe sobrescribir accordion, button, input, label o skeleton, o una pieza @retana que el anfitrión ya tiene, responde no. Sin tema, cssVars ni colores fijos. Sin pasarela: onPlaceOrder y onApplyCoupon son callbacks. El dinero está en centavos enteros.",
+      "files": [
+        {
+          "path": "registry/lib/checkout.ts",
+          "type": "registry:lib",
+          "target": "@lib/checkout.ts"
+        },
+        {
+          "path": "registry/ui/order-summary.tsx",
+          "type": "registry:component",
+          "target": "@ui/order-summary.tsx"
+        },
+        {
+          "path": "registry/ui/checkout-form.tsx",
+          "type": "registry:component",
+          "target": "@ui/checkout-form.tsx"
+        },
+        {
+          "path": "registry/blocks/checkout-page.tsx",
+          "type": "registry:component",
+          "target": "@ui/checkout-page.tsx"
+        }
+      ]
     }
   ]
 }
