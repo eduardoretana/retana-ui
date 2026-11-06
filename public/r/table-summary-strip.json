@@ -1,0 +1,175 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-summary-strip",
+  "title": "Table summary strip",
+  "author": "Eduardo Retana",
+  "description": "A KPI strip for the top of a table. Wraps stat-strip with loading, an error retry, explicit zeros, and an optional sparkline on each item.",
+  "dependencies": [],
+  "registryDependencies": [
+    "button",
+    "skeleton",
+    "@retana/stat-strip"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/table-summary-strip.tsx",
+      "content": "\"use client\"\n\n/** KPI strip meant to sit above a table. Figures come from stat-strip. */\n\nimport * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Button } from \"@/components/ui/button\"\nimport { Skeleton } from \"@/components/ui/skeleton\"\nimport { sparklinePoints } from \"@/lib/data-table-reorder\"\nimport { StatStrip, type StatStripItem, type StatStripProps } from \"@/components/ui/stat-strip\"\n\nexport type TableSummaryItem = StatStripItem & {\n  sparkline?: readonly number[]\n  /** Names the trend. Required when a sparkline is set, so the line is not the only signal. */\n  sparklineLabel?: string\n}\n\nexport type TableSummaryStripLabels = {\n  loading?: string\n  retry?: string\n}\n\nexport type TableSummaryStripProps = Omit<StatStripProps, \"items\" | \"renderExtra\"> & {\n  items?: readonly TableSummaryItem[]\n  loading?: boolean\n  /** Replaces the figures with an alert and an optional retry. */\n  error?: string\n  onRetry?: () => void\n  /**\n   * `hide` removes the strip when there are no items, or every value is empty.\n   * `show` keeps explicit zeros on screen.\n   */\n  empty?: \"hide\" | \"show\"\n  /** Optional slot under each item, beside the sparkline when one is set. */\n  renderItem?: (item: TableSummaryItem) => React.ReactNode\n  labels?: TableSummaryStripLabels\n}\n\nfunction isBlank(item: TableSummaryItem) {\n  if (item.sparkline?.some((value) => value !== 0)) return false\n  if (typeof item.value === \"number\") return item.value === 0 && !item.delta\n  const text = String(item.value).trim()\n  return text === \"\" || text === \"0\"\n}\n\nfunction SummarySparkline({ values, label }: { values: readonly number[]; label: string }) {\n  const points = sparklinePoints(values, 72, 20)\n  if (!points) return null\n  return (\n    <svg viewBox=\"0 0 72 20\" role=\"img\" aria-label={label} className=\"h-5 w-16 max-w-full text-primary\">\n      <polyline points={points} fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.5\" strokeLinejoin=\"round\" strokeLinecap=\"round\" />\n    </svg>\n  )\n}\n\nexport function TableSummaryStrip({\n  items = [],\n  loading = false,\n  error,\n  onRetry,\n  empty = \"hide\",\n  renderItem,\n  labels,\n  variant = \"inline\",\n  locale = \"en-US\",\n  className,\n  classNames,\n}: TableSummaryStripProps) {\n  const loadingLabel = labels?.loading ?? \"Loading\"\n  const retryLabel = labels?.retry ?? \"Retry\"\n  const blank = items.length === 0 || items.every(isBlank)\n  const hide = !loading && !error && empty === \"hide\" && blank\n\n  if (hide) return null\n\n  if (loading) {\n    const count = Math.max(items.length, 3)\n    return (\n      <div\n        data-slot=\"table-summary-strip\"\n        data-state=\"loading\"\n        role=\"status\"\n        aria-busy=\"true\"\n        aria-live=\"polite\"\n        className={cn(\"flex min-w-0 max-w-full flex-wrap gap-x-6 gap-y-3\", className)}\n      >\n        <p className=\"w-full text-sm text-muted-foreground\">{loadingLabel}</p>\n        {Array.from({ length: count }, (_, index) => (\n          <div key={index} className=\"min-w-0 basis-36\">\n            <Skeleton aria-hidden className=\"h-3 w-16 motion-reduce:animate-none\" />\n            <Skeleton aria-hidden className=\"mt-2 h-8 w-24 motion-reduce:animate-none\" />\n          </div>\n        ))}\n      </div>\n    )\n  }\n\n  if (error) {\n    return (\n      <div data-slot=\"table-summary-strip\" data-state=\"error\" role=\"alert\" className={cn(\"flex min-w-0 max-w-full flex-wrap items-center gap-2\", className)}>\n        <p className=\"min-w-0 text-sm text-destructive\">{error}</p>\n        {onRetry ? (\n          <Button type=\"button\" size=\"sm\" variant=\"outline\" onClick={onRetry}>\n            {retryLabel}\n          </Button>\n        ) : null}\n      </div>\n    )\n  }\n\n  return (\n    <div data-slot=\"table-summary-strip\" data-state={blank ? \"empty\" : \"filled\"} className=\"min-w-0 max-w-full\">\n      <StatStrip\n        items={items}\n        variant={variant}\n        locale={locale}\n        className={className}\n        classNames={{\n          ...classNames,\n          item: cn(\"max-w-full\", classNames?.item),\n        }}\n        renderExtra={(item) => {\n          const summaryItem = item as TableSummaryItem\n          const spark = summaryItem.sparkline?.length ? (\n            <SummarySparkline values={summaryItem.sparkline} label={summaryItem.sparklineLabel ?? summaryItem.label} />\n          ) : null\n          const slot = renderItem?.(summaryItem)\n          if (!spark && !slot) return null\n          return (\n            <div className=\"flex min-w-0 flex-wrap items-center gap-2\">\n              {spark}\n              {slot}\n            </div>\n          )\n        }}\n      />\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/table-summary-strip.tsx"
+    },
+    {
+      "path": "registry/lib/data-table-reorder.ts",
+      "content": "/**\n * Stable column sort for a dense table.\n * Empty values stay last in both directions. Ties keep the original order.\n * Spanish collation is the default. The table never reads `meta`.\n */\n\nexport const SORT_DIRECTIONS = [\"asc\", \"desc\"] as const\n\nexport type SortDirection = (typeof SORT_DIRECTIONS)[number]\n\nexport type DataTableSort = {\n  columnId: string\n  direction: SortDirection\n}\n\nexport type DataTableReorderLabels = {\n  caption: string\n  emptyTitle: string\n  emptyHint: string\n  loading: string\n  errorTitle: string\n  retry: string\n  disabledNote: string\n  announcements: string\n  sortAscending: (column: string) => string\n  sortDescending: (column: string) => string\n  sorted: (column: string, direction: SortDirection) => string\n  rowDetail: (label: string) => string\n}\n\nexport const dataTableReorderLabels: DataTableReorderLabels = {\n  caption: \"Tabla\",\n  emptyTitle: \"Nada que mostrar\",\n  emptyHint: \"No hay filas con estos datos.\",\n  loading: \"Cargando la tabla\",\n  errorTitle: \"No se pudo mostrar la tabla\",\n  retry: \"Reintentar\",\n  disabledNote: \"La tabla está deshabilitada\",\n  announcements: \"Avisos de la tabla\",\n  sortAscending: (column) => `Ordenar ${column} ascendente`,\n  sortDescending: (column) => `Ordenar ${column} descendente`,\n  sorted: (column, direction) => `Ordenado por ${column}, ${direction === \"asc\" ? \"ascendente\" : \"descendente\"}`,\n  rowDetail: (label) => `Detalle de ${label}`,\n}\n\nexport const dataTableReorderLabelsEn: DataTableReorderLabels = {\n  caption: \"Table\",\n  emptyTitle: \"Nothing to show\",\n  emptyHint: \"There are no rows for this data.\",\n  loading: \"Loading the table\",\n  errorTitle: \"The table could not be shown\",\n  retry: \"Try again\",\n  disabledNote: \"The table is disabled\",\n  announcements: \"Table announcements\",\n  sortAscending: (column) => `Sort ${column} ascending`,\n  sortDescending: (column) => `Sort ${column} descending`,\n  sorted: (column, direction) => `Sorted by ${column}, ${direction === \"asc\" ? \"ascending\" : \"descending\"}`,\n  rowDetail: (label) => `Details for ${label}`,\n}\n\nexport function withTableLabels(labels?: Partial<DataTableReorderLabels>): DataTableReorderLabels {\n  return { ...dataTableReorderLabels, ...labels }\n}\n\nexport function nextSort(current: DataTableSort | null, columnId: string): DataTableSort {\n  if (!current || current.columnId !== columnId || current.direction === \"desc\") {\n    return { columnId, direction: \"asc\" }\n  }\n  return { columnId, direction: \"desc\" }\n}\n\nfunction isEmpty(value: string | number | null | undefined) {\n  return value == null || value === \"\"\n}\n\nexport function sortTableRows<T>(\n  rows: readonly T[],\n  read: (row: T) => string | number | null | undefined,\n  direction: SortDirection,\n  locale = \"es-MX\",\n): T[] {\n  return rows\n    .map((row, index) => ({ row, index, value: read(row) }))\n    .sort((a, b) => {\n      const aEmpty = isEmpty(a.value)\n      const bEmpty = isEmpty(b.value)\n      if (aEmpty && bEmpty) return a.index - b.index\n      if (aEmpty) return 1\n      if (bEmpty) return -1\n      const result =\n        typeof a.value === \"number\" && typeof b.value === \"number\"\n          ? a.value - b.value\n          : String(a.value).localeCompare(String(b.value), locale, { numeric: true, sensitivity: \"base\" })\n      if (result === 0) return a.index - b.index\n      return direction === \"asc\" ? result : -result\n    })\n    .map((entry) => entry.row)\n}\n\n/** Points for a dense sparkline. One value draws a centered dot. */\nexport function sparklinePoints(values: readonly number[], width: number, height: number) {\n  const finite = values.filter((value) => Number.isFinite(value))\n  if (!finite.length || width <= 0 || height <= 0) return \"\"\n  const min = Math.min(...finite)\n  const max = Math.max(...finite)\n  const span = max - min || 1\n  return finite\n    .map((value, index) => {\n      const x = finite.length === 1 ? width / 2 : (index / (finite.length - 1)) * width\n      const y = height - ((value - min) / span) * (height - 2) - 1\n      return `${x.toFixed(2)},${y.toFixed(2)}`\n    })\n    .join(\" \")\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/data-table-reorder.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Franja de cifras de la tabla",
+    "descriptionEs": "Cifras para ir arriba de una tabla. Envuelve la franja de cifras con carga, reintento, ceros explícitos y una tendencia opcional por cifra.",
+    "preview": "app/examples/table-summary-strip/preview.tsx",
+    "previewHref": "/examples/table-summary-strip",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "zeros",
+        "label": "Ceros",
+        "labelEn": "Zeros"
+      },
+      {
+        "id": "narrow",
+        "label": "390 px",
+        "labelEn": "390 px"
+      },
+      {
+        "id": "expandable",
+        "label": "Expansible",
+        "labelEn": "Expandable"
+      },
+      {
+        "id": "work",
+        "label": "Trabajo",
+        "labelEn": "Work"
+      },
+      {
+        "id": "adaptive",
+        "label": "Adaptativa",
+        "labelEn": "Adaptive"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Franja de cifras de la tabla",
+        "href": "/examples/table-summary-strip",
+        "description": "La franja encima de las tablas existentes, con estado y tendencia."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/table-summary-strip/stress",
+        "description": "Vacío, ceros, 390 px, RTL y un slot por cifra."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/table-summary-strip?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/table-summary-strip?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/table-summary-strip?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/table-summary-strip?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Ceros",
+        "href": "/examples/table-summary-strip?scene=zeros",
+        "description": "Zeros"
+      },
+      {
+        "title": "390 px",
+        "href": "/examples/table-summary-strip?scene=narrow",
+        "description": "390 px"
+      },
+      {
+        "title": "Expansible",
+        "href": "/examples/table-summary-strip?scene=expandable",
+        "description": "Expandable"
+      },
+      {
+        "title": "Trabajo",
+        "href": "/examples/table-summary-strip?scene=work",
+        "description": "Work"
+      },
+      {
+        "title": "Adaptativa",
+        "href": "/examples/table-summary-strip?scene=adaptive",
+        "description": "Adaptive"
+      }
+    ],
+    "usage": "<AdminDataTable leading={<TableSummaryStrip items={items} locale=\"es-MX\" />} data={rows} columns={columns} />",
+    "api": [
+      {
+        "name": "items",
+        "type": "TableSummaryItem[]",
+        "description": "StatStrip items plus an optional sparkline and sparklineLabel."
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "description": "Skeletons and a visible loading status. Motion is skipped when reduced."
+      },
+      {
+        "name": "error / onRetry",
+        "type": "string / () => void",
+        "description": "Replaces the figures with an alert and a retry button."
+      },
+      {
+        "name": "empty",
+        "type": "\"hide\" | \"show\"",
+        "description": "hide removes a blank strip. show keeps explicit zeros."
+      },
+      {
+        "name": "renderItem",
+        "type": "(item) => ReactNode",
+        "description": "Optional slot under each item, next to the sparkline."
+      },
+      {
+        "name": "variant / locale / className / classNames / labels",
+        "type": "StatStripProps",
+        "description": "Passed through to stat-strip. labels.loading and labels.retry are the status strings."
+      }
+    ]
+  },
+  "docs": "Clean-room helper for a KPI strip above a table. Shadcn Studio Pro was not purchased, fetched, or ported. No source, sample rows, icons, or assets were copied. Compose it with the leading slot on data-table, expandable-table, work-table, or adaptive-table, and put StatusActionCell plus DataTableSparkline in the columns. This is not a new table. Answer no if the CLI asks to overwrite button, skeleton, stat-strip, or data-table-reorder. The item ships no theme. Numbers use tabular-nums. The strip wraps; it does not scroll sideways.",
+  "categories": [
+    "table"
+  ],
+  "type": "registry:ui"
+}

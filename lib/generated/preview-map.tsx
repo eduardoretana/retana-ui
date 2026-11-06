@@ -247,182 +247,184 @@ import Preview242 from "@/app/examples/haptics/preview"
 import Preview243 from "@/app/examples/motion-preference/preview"
 import Preview244 from "@/app/examples/use-feedback/preview"
 import Preview245 from "@/app/examples/status-pill/preview"
-import Preview246 from "@/app/examples/accent-callout/preview"
-import Preview247 from "@/app/examples/insight-card/preview"
-import Preview248 from "@/app/examples/workspace-switcher/preview"
-import Preview249 from "@/app/examples/assistant-status-card/preview"
-import Preview250 from "@/app/examples/record-card/preview"
-import Preview251 from "@/app/examples/score-card/preview"
-import Preview252 from "@/app/examples/check-tiles/preview"
-import Preview253 from "@/app/examples/member-list/preview"
-import Preview254 from "@/app/examples/event-callout/preview"
-import Preview255 from "@/app/examples/document-list/preview"
-import Preview256 from "@/app/examples/issue-list/preview"
-import Preview257 from "@/app/examples/issue-detail/preview"
-import Preview258 from "@/app/examples/compare-panel/preview"
-import Preview259 from "@/app/examples/action-footer/preview"
-import Preview260 from "@/app/examples/status-banner/preview"
-import Preview261 from "@/app/examples/destination-card/preview"
-import Preview262 from "@/app/examples/next-steps/preview"
-import Preview263 from "@/app/examples/review-desk/preview"
-import Preview264 from "@/app/examples/use-scroll-progress/preview"
-import Preview265 from "@/app/examples/scroll-progress/preview"
-import Preview266 from "@/app/examples/reveal-on-scroll/preview"
-import Preview267 from "@/app/examples/stagger-reveal/preview"
-import Preview268 from "@/app/examples/scroll-snap-rail/preview"
-import Preview269 from "@/app/examples/sticky-section-list/preview"
-import Preview270 from "@/app/examples/parallax-layers/preview"
-import Preview271 from "@/app/examples/horizontal-scroll-rail/preview"
-import Preview272 from "@/app/examples/app-shell/preview"
-import Preview273 from "@/app/examples/assistant-home/preview"
-import Preview274 from "@/app/examples/agent-chat/preview"
-import Preview275 from "@/app/examples/agent-run/preview"
-import Preview276 from "@/app/examples/settings-billing/preview"
-import Preview277 from "@/app/examples/onboarding/preview"
-import Preview278 from "@/app/examples/integrations/preview"
-import Preview279 from "@/app/examples/crm/preview"
-import Preview280 from "@/app/examples/analytics/preview"
-import Preview281 from "@/app/examples/evals/preview"
-import Preview282 from "@/app/examples/stat-sparkline-card/preview"
-import Preview283 from "@/app/examples/radial-pair-card/preview"
-import Preview284 from "@/app/examples/highlight-cta-card/preview"
-import Preview285 from "@/app/examples/quick-notes-card/preview"
-import Preview286 from "@/app/examples/state-distribution-card/preview"
-import Preview287 from "@/app/examples/bar-trend-card/preview"
-import Preview288 from "@/app/examples/day-scroller-schedule/preview"
-import Preview289 from "@/app/examples/pill-top-nav/preview"
-import Preview290 from "@/app/examples/floating-pill-sidebar/preview"
-import Preview291 from "@/app/examples/process-card/preview"
-import Preview292 from "@/app/examples/multi-area-chart-card/preview"
-import Preview293 from "@/app/examples/task-progress-card/preview"
-import Preview294 from "@/app/examples/leaderboard-card/preview"
-import Preview295 from "@/app/examples/dashboard-analitico-ae/preview"
-import Preview296 from "@/app/examples/dashboard-capacitacion-ae/preview"
-import Preview297 from "@/app/examples/use-min-width/preview"
-import Preview298 from "@/app/examples/pinned-steps/preview"
-import Preview299 from "@/app/examples/scroll-linked/preview"
-import Preview300 from "@/app/examples/work-table/preview"
-import Preview301 from "@/app/examples/work-table-toolbar/preview"
-import Preview302 from "@/app/examples/work-table-cells/preview"
-import Preview303 from "@/app/examples/work-table-board/preview"
-import Preview304 from "@/app/examples/work-table-tree/preview"
-import Preview305 from "@/app/examples/work-table-queue/preview"
-import Preview306 from "@/app/examples/work-table-support/preview"
-import Preview307 from "@/app/examples/agent-tree/preview"
-import Preview308 from "@/app/examples/agent-queue/preview"
-import Preview309 from "@/app/examples/agent-ledger/preview"
-import Preview310 from "@/app/examples/agent-steering/preview"
-import Preview311 from "@/app/examples/autonomy-dial/preview"
-import Preview312 from "@/app/examples/decision-inbox/preview"
-import Preview313 from "@/app/examples/delegate-board/preview"
-import Preview314 from "@/app/examples/agent-inbox/preview"
-import Preview315 from "@/app/examples/agent-plan/preview"
-import Preview316 from "@/app/examples/plan-vs-actual/preview"
-import Preview317 from "@/app/examples/trace-waterfall/preview"
-import Preview318 from "@/app/examples/agent-lanes/preview"
-import Preview319 from "@/app/examples/approval-card/preview"
-import Preview320 from "@/app/examples/agent-graph/preview"
-import Preview321 from "@/app/examples/agent-cursors/preview"
-import Preview322 from "@/app/examples/fan-out-grid/preview"
-import Preview323 from "@/app/examples/parallel-attempts/preview"
-import Preview324 from "@/app/examples/conflict-radar/preview"
-import Preview325 from "@/app/examples/decision-tree/preview"
-import Preview326 from "@/app/examples/context-map/preview"
-import Preview327 from "@/app/examples/context-window/preview"
-import Preview328 from "@/app/examples/memory-panel/preview"
-import Preview329 from "@/app/examples/cited-answer/preview"
-import Preview330 from "@/app/examples/prompt-library/preview"
-import Preview331 from "@/app/examples/review-center/preview"
-import Preview332 from "@/app/examples/permission-request/preview"
-import Preview333 from "@/app/examples/inline-diff/preview"
-import Preview334 from "@/app/examples/email-draft/preview"
-import Preview335 from "@/app/examples/message-actions/preview"
-import Preview336 from "@/app/examples/data-table-grouping/preview"
-import Preview337 from "@/app/examples/expandable-table/preview"
-import Preview338 from "@/app/examples/time-off-core/preview"
-import Preview339 from "@/app/examples/time-off-stats/preview"
-import Preview340 from "@/app/examples/time-off-request/preview"
-import Preview341 from "@/app/examples/time-off/preview"
-import Preview342 from "@/app/examples/planning-grid/preview"
-import Preview343 from "@/app/examples/anatomy-tree/preview"
-import Preview344 from "@/app/examples/vital-signs/preview"
-import Preview345 from "@/app/examples/ecg-trace/preview"
-import Preview346 from "@/app/examples/body-map/preview"
-import Preview347 from "@/app/examples/organ-viewer/preview"
-import Preview348 from "@/app/examples/molecule-viewer/preview"
-import Preview349 from "@/app/examples/dna-helix/preview"
-import Preview350 from "@/app/examples/lab-results/preview"
-import Preview351 from "@/app/examples/growth-chart/preview"
-import Preview352 from "@/app/examples/medication-schedule/preview"
-import Preview353 from "@/app/examples/dermatome-map/preview"
-import Preview354 from "@/app/examples/image-viewer/preview"
-import Preview355 from "@/app/examples/organ-adrenals/preview"
-import Preview356 from "@/app/examples/organ-appendix/preview"
-import Preview357 from "@/app/examples/organ-bladder/preview"
-import Preview358 from "@/app/examples/organ-brain/preview"
-import Preview359 from "@/app/examples/organ-breast/preview"
-import Preview360 from "@/app/examples/organ-cell/preview"
-import Preview361 from "@/app/examples/organ-diaphragm/preview"
-import Preview362 from "@/app/examples/organ-ear/preview"
-import Preview363 from "@/app/examples/organ-esophagus/preview"
-import Preview364 from "@/app/examples/organ-eye/preview"
-import Preview365 from "@/app/examples/organ-gallbladder/preview"
-import Preview366 from "@/app/examples/organ-hair/preview"
-import Preview367 from "@/app/examples/organ-heart/preview"
-import Preview368 from "@/app/examples/organ-intestines/preview"
-import Preview369 from "@/app/examples/organ-joints/preview"
-import Preview370 from "@/app/examples/organ-kidneys/preview"
-import Preview371 from "@/app/examples/organ-larynx/preview"
-import Preview372 from "@/app/examples/organ-liver/preview"
-import Preview373 from "@/app/examples/organ-lungs/preview"
-import Preview374 from "@/app/examples/organ-lymph/preview"
-import Preview375 from "@/app/examples/organ-muscles/preview"
-import Preview376 from "@/app/examples/organ-nails/preview"
-import Preview377 from "@/app/examples/organ-nerves/preview"
-import Preview378 from "@/app/examples/organ-nose/preview"
-import Preview379 from "@/app/examples/organ-pancreas/preview"
-import Preview380 from "@/app/examples/organ-parathyroid/preview"
-import Preview381 from "@/app/examples/organ-pharynx/preview"
-import Preview382 from "@/app/examples/organ-pineal/preview"
-import Preview383 from "@/app/examples/organ-pituitary/preview"
-import Preview384 from "@/app/examples/organ-prostate/preview"
-import Preview385 from "@/app/examples/organ-salivary-glands/preview"
-import Preview386 from "@/app/examples/organ-skeleton/preview"
-import Preview387 from "@/app/examples/organ-skin/preview"
-import Preview388 from "@/app/examples/organ-spinal-cord/preview"
-import Preview389 from "@/app/examples/organ-spleen/preview"
-import Preview390 from "@/app/examples/organ-stomach/preview"
-import Preview391 from "@/app/examples/organ-teeth/preview"
-import Preview392 from "@/app/examples/organ-thymus/preview"
-import Preview393 from "@/app/examples/organ-thyroid/preview"
-import Preview394 from "@/app/examples/organ-tongue/preview"
-import Preview395 from "@/app/examples/organ-uterus/preview"
-import Preview396 from "@/app/examples/organ-vessels/preview"
-import Preview397 from "@/app/examples/organ-vestibular/preview"
-import Preview398 from "@/app/examples/organ-explorer/preview"
-import Preview399 from "@/app/examples/anatomy-workspace/preview"
-import Preview400 from "@/app/examples/organ-switcher/preview"
-import Preview401 from "@/app/examples/task-board-core/preview"
-import Preview402 from "@/app/examples/task-card/preview"
-import Preview403 from "@/app/examples/task-detail/preview"
-import Preview404 from "@/app/examples/task-board/preview"
-import Preview405 from "@/app/examples/agenda-core/preview"
-import Preview406 from "@/app/examples/agenda-event/preview"
-import Preview407 from "@/app/examples/agenda-detail/preview"
-import Preview408 from "@/app/examples/agenda/preview"
-import Preview409 from "@/app/examples/ats-core/preview"
-import Preview410 from "@/app/examples/candidate-card/preview"
-import Preview411 from "@/app/examples/candidate-row/preview"
-import Preview412 from "@/app/examples/candidate-detail/preview"
-import Preview413 from "@/app/examples/assessment-form/preview"
-import Preview414 from "@/app/examples/pipeline-board/preview"
-import Preview415 from "@/app/examples/ats/preview"
-import Preview416 from "@/app/examples/tooltip-card/preview"
-import Preview417 from "@/app/examples/timeline-gantt/preview"
-import Preview418 from "@/app/examples/data-table-reorder/preview"
-import Preview419 from "@/app/examples/activity-chat/preview"
-import Preview420 from "@/app/examples/inline-approve-button/preview"
-import Preview421 from "@/app/examples/portfolio-desk/preview"
+import Preview246 from "@/app/examples/status-action-cell/preview"
+import Preview247 from "@/app/examples/table-summary-strip/preview"
+import Preview248 from "@/app/examples/accent-callout/preview"
+import Preview249 from "@/app/examples/insight-card/preview"
+import Preview250 from "@/app/examples/workspace-switcher/preview"
+import Preview251 from "@/app/examples/assistant-status-card/preview"
+import Preview252 from "@/app/examples/record-card/preview"
+import Preview253 from "@/app/examples/score-card/preview"
+import Preview254 from "@/app/examples/check-tiles/preview"
+import Preview255 from "@/app/examples/member-list/preview"
+import Preview256 from "@/app/examples/event-callout/preview"
+import Preview257 from "@/app/examples/document-list/preview"
+import Preview258 from "@/app/examples/issue-list/preview"
+import Preview259 from "@/app/examples/issue-detail/preview"
+import Preview260 from "@/app/examples/compare-panel/preview"
+import Preview261 from "@/app/examples/action-footer/preview"
+import Preview262 from "@/app/examples/status-banner/preview"
+import Preview263 from "@/app/examples/destination-card/preview"
+import Preview264 from "@/app/examples/next-steps/preview"
+import Preview265 from "@/app/examples/review-desk/preview"
+import Preview266 from "@/app/examples/use-scroll-progress/preview"
+import Preview267 from "@/app/examples/scroll-progress/preview"
+import Preview268 from "@/app/examples/reveal-on-scroll/preview"
+import Preview269 from "@/app/examples/stagger-reveal/preview"
+import Preview270 from "@/app/examples/scroll-snap-rail/preview"
+import Preview271 from "@/app/examples/sticky-section-list/preview"
+import Preview272 from "@/app/examples/parallax-layers/preview"
+import Preview273 from "@/app/examples/horizontal-scroll-rail/preview"
+import Preview274 from "@/app/examples/app-shell/preview"
+import Preview275 from "@/app/examples/assistant-home/preview"
+import Preview276 from "@/app/examples/agent-chat/preview"
+import Preview277 from "@/app/examples/agent-run/preview"
+import Preview278 from "@/app/examples/settings-billing/preview"
+import Preview279 from "@/app/examples/onboarding/preview"
+import Preview280 from "@/app/examples/integrations/preview"
+import Preview281 from "@/app/examples/crm/preview"
+import Preview282 from "@/app/examples/analytics/preview"
+import Preview283 from "@/app/examples/evals/preview"
+import Preview284 from "@/app/examples/stat-sparkline-card/preview"
+import Preview285 from "@/app/examples/radial-pair-card/preview"
+import Preview286 from "@/app/examples/highlight-cta-card/preview"
+import Preview287 from "@/app/examples/quick-notes-card/preview"
+import Preview288 from "@/app/examples/state-distribution-card/preview"
+import Preview289 from "@/app/examples/bar-trend-card/preview"
+import Preview290 from "@/app/examples/day-scroller-schedule/preview"
+import Preview291 from "@/app/examples/pill-top-nav/preview"
+import Preview292 from "@/app/examples/floating-pill-sidebar/preview"
+import Preview293 from "@/app/examples/process-card/preview"
+import Preview294 from "@/app/examples/multi-area-chart-card/preview"
+import Preview295 from "@/app/examples/task-progress-card/preview"
+import Preview296 from "@/app/examples/leaderboard-card/preview"
+import Preview297 from "@/app/examples/dashboard-analitico-ae/preview"
+import Preview298 from "@/app/examples/dashboard-capacitacion-ae/preview"
+import Preview299 from "@/app/examples/use-min-width/preview"
+import Preview300 from "@/app/examples/pinned-steps/preview"
+import Preview301 from "@/app/examples/scroll-linked/preview"
+import Preview302 from "@/app/examples/work-table/preview"
+import Preview303 from "@/app/examples/work-table-toolbar/preview"
+import Preview304 from "@/app/examples/work-table-cells/preview"
+import Preview305 from "@/app/examples/work-table-board/preview"
+import Preview306 from "@/app/examples/work-table-tree/preview"
+import Preview307 from "@/app/examples/work-table-queue/preview"
+import Preview308 from "@/app/examples/work-table-support/preview"
+import Preview309 from "@/app/examples/agent-tree/preview"
+import Preview310 from "@/app/examples/agent-queue/preview"
+import Preview311 from "@/app/examples/agent-ledger/preview"
+import Preview312 from "@/app/examples/agent-steering/preview"
+import Preview313 from "@/app/examples/autonomy-dial/preview"
+import Preview314 from "@/app/examples/decision-inbox/preview"
+import Preview315 from "@/app/examples/delegate-board/preview"
+import Preview316 from "@/app/examples/agent-inbox/preview"
+import Preview317 from "@/app/examples/agent-plan/preview"
+import Preview318 from "@/app/examples/plan-vs-actual/preview"
+import Preview319 from "@/app/examples/trace-waterfall/preview"
+import Preview320 from "@/app/examples/agent-lanes/preview"
+import Preview321 from "@/app/examples/approval-card/preview"
+import Preview322 from "@/app/examples/agent-graph/preview"
+import Preview323 from "@/app/examples/agent-cursors/preview"
+import Preview324 from "@/app/examples/fan-out-grid/preview"
+import Preview325 from "@/app/examples/parallel-attempts/preview"
+import Preview326 from "@/app/examples/conflict-radar/preview"
+import Preview327 from "@/app/examples/decision-tree/preview"
+import Preview328 from "@/app/examples/context-map/preview"
+import Preview329 from "@/app/examples/context-window/preview"
+import Preview330 from "@/app/examples/memory-panel/preview"
+import Preview331 from "@/app/examples/cited-answer/preview"
+import Preview332 from "@/app/examples/prompt-library/preview"
+import Preview333 from "@/app/examples/review-center/preview"
+import Preview334 from "@/app/examples/permission-request/preview"
+import Preview335 from "@/app/examples/inline-diff/preview"
+import Preview336 from "@/app/examples/email-draft/preview"
+import Preview337 from "@/app/examples/message-actions/preview"
+import Preview338 from "@/app/examples/data-table-grouping/preview"
+import Preview339 from "@/app/examples/expandable-table/preview"
+import Preview340 from "@/app/examples/time-off-core/preview"
+import Preview341 from "@/app/examples/time-off-stats/preview"
+import Preview342 from "@/app/examples/time-off-request/preview"
+import Preview343 from "@/app/examples/time-off/preview"
+import Preview344 from "@/app/examples/planning-grid/preview"
+import Preview345 from "@/app/examples/anatomy-tree/preview"
+import Preview346 from "@/app/examples/vital-signs/preview"
+import Preview347 from "@/app/examples/ecg-trace/preview"
+import Preview348 from "@/app/examples/body-map/preview"
+import Preview349 from "@/app/examples/organ-viewer/preview"
+import Preview350 from "@/app/examples/molecule-viewer/preview"
+import Preview351 from "@/app/examples/dna-helix/preview"
+import Preview352 from "@/app/examples/lab-results/preview"
+import Preview353 from "@/app/examples/growth-chart/preview"
+import Preview354 from "@/app/examples/medication-schedule/preview"
+import Preview355 from "@/app/examples/dermatome-map/preview"
+import Preview356 from "@/app/examples/image-viewer/preview"
+import Preview357 from "@/app/examples/organ-adrenals/preview"
+import Preview358 from "@/app/examples/organ-appendix/preview"
+import Preview359 from "@/app/examples/organ-bladder/preview"
+import Preview360 from "@/app/examples/organ-brain/preview"
+import Preview361 from "@/app/examples/organ-breast/preview"
+import Preview362 from "@/app/examples/organ-cell/preview"
+import Preview363 from "@/app/examples/organ-diaphragm/preview"
+import Preview364 from "@/app/examples/organ-ear/preview"
+import Preview365 from "@/app/examples/organ-esophagus/preview"
+import Preview366 from "@/app/examples/organ-eye/preview"
+import Preview367 from "@/app/examples/organ-gallbladder/preview"
+import Preview368 from "@/app/examples/organ-hair/preview"
+import Preview369 from "@/app/examples/organ-heart/preview"
+import Preview370 from "@/app/examples/organ-intestines/preview"
+import Preview371 from "@/app/examples/organ-joints/preview"
+import Preview372 from "@/app/examples/organ-kidneys/preview"
+import Preview373 from "@/app/examples/organ-larynx/preview"
+import Preview374 from "@/app/examples/organ-liver/preview"
+import Preview375 from "@/app/examples/organ-lungs/preview"
+import Preview376 from "@/app/examples/organ-lymph/preview"
+import Preview377 from "@/app/examples/organ-muscles/preview"
+import Preview378 from "@/app/examples/organ-nails/preview"
+import Preview379 from "@/app/examples/organ-nerves/preview"
+import Preview380 from "@/app/examples/organ-nose/preview"
+import Preview381 from "@/app/examples/organ-pancreas/preview"
+import Preview382 from "@/app/examples/organ-parathyroid/preview"
+import Preview383 from "@/app/examples/organ-pharynx/preview"
+import Preview384 from "@/app/examples/organ-pineal/preview"
+import Preview385 from "@/app/examples/organ-pituitary/preview"
+import Preview386 from "@/app/examples/organ-prostate/preview"
+import Preview387 from "@/app/examples/organ-salivary-glands/preview"
+import Preview388 from "@/app/examples/organ-skeleton/preview"
+import Preview389 from "@/app/examples/organ-skin/preview"
+import Preview390 from "@/app/examples/organ-spinal-cord/preview"
+import Preview391 from "@/app/examples/organ-spleen/preview"
+import Preview392 from "@/app/examples/organ-stomach/preview"
+import Preview393 from "@/app/examples/organ-teeth/preview"
+import Preview394 from "@/app/examples/organ-thymus/preview"
+import Preview395 from "@/app/examples/organ-thyroid/preview"
+import Preview396 from "@/app/examples/organ-tongue/preview"
+import Preview397 from "@/app/examples/organ-uterus/preview"
+import Preview398 from "@/app/examples/organ-vessels/preview"
+import Preview399 from "@/app/examples/organ-vestibular/preview"
+import Preview400 from "@/app/examples/organ-explorer/preview"
+import Preview401 from "@/app/examples/anatomy-workspace/preview"
+import Preview402 from "@/app/examples/organ-switcher/preview"
+import Preview403 from "@/app/examples/task-board-core/preview"
+import Preview404 from "@/app/examples/task-card/preview"
+import Preview405 from "@/app/examples/task-detail/preview"
+import Preview406 from "@/app/examples/task-board/preview"
+import Preview407 from "@/app/examples/agenda-core/preview"
+import Preview408 from "@/app/examples/agenda-event/preview"
+import Preview409 from "@/app/examples/agenda-detail/preview"
+import Preview410 from "@/app/examples/agenda/preview"
+import Preview411 from "@/app/examples/ats-core/preview"
+import Preview412 from "@/app/examples/candidate-card/preview"
+import Preview413 from "@/app/examples/candidate-row/preview"
+import Preview414 from "@/app/examples/candidate-detail/preview"
+import Preview415 from "@/app/examples/assessment-form/preview"
+import Preview416 from "@/app/examples/pipeline-board/preview"
+import Preview417 from "@/app/examples/ats/preview"
+import Preview418 from "@/app/examples/tooltip-card/preview"
+import Preview419 from "@/app/examples/timeline-gantt/preview"
+import Preview420 from "@/app/examples/data-table-reorder/preview"
+import Preview421 from "@/app/examples/activity-chat/preview"
+import Preview422 from "@/app/examples/inline-approve-button/preview"
+import Preview423 from "@/app/examples/portfolio-desk/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -671,180 +673,182 @@ export const previewMap = {
   "motion-preference": Preview243,
   "use-feedback": Preview244,
   "status-pill": Preview245,
-  "accent-callout": Preview246,
-  "insight-card": Preview247,
-  "workspace-switcher": Preview248,
-  "assistant-status-card": Preview249,
-  "record-card": Preview250,
-  "score-card": Preview251,
-  "check-tiles": Preview252,
-  "member-list": Preview253,
-  "event-callout": Preview254,
-  "document-list": Preview255,
-  "issue-list": Preview256,
-  "issue-detail": Preview257,
-  "compare-panel": Preview258,
-  "action-footer": Preview259,
-  "status-banner": Preview260,
-  "destination-card": Preview261,
-  "next-steps": Preview262,
-  "review-desk": Preview263,
-  "use-scroll-progress": Preview264,
-  "scroll-progress": Preview265,
-  "reveal-on-scroll": Preview266,
-  "stagger-reveal": Preview267,
-  "scroll-snap-rail": Preview268,
-  "sticky-section-list": Preview269,
-  "parallax-layers": Preview270,
-  "horizontal-scroll-rail": Preview271,
-  "app-shell": Preview272,
-  "assistant-home": Preview273,
-  "agent-chat": Preview274,
-  "agent-run": Preview275,
-  "settings-billing": Preview276,
-  "onboarding": Preview277,
-  "integrations": Preview278,
-  "crm": Preview279,
-  "analytics": Preview280,
-  "evals": Preview281,
-  "stat-sparkline-card": Preview282,
-  "radial-pair-card": Preview283,
-  "highlight-cta-card": Preview284,
-  "quick-notes-card": Preview285,
-  "state-distribution-card": Preview286,
-  "bar-trend-card": Preview287,
-  "day-scroller-schedule": Preview288,
-  "pill-top-nav": Preview289,
-  "floating-pill-sidebar": Preview290,
-  "process-card": Preview291,
-  "multi-area-chart-card": Preview292,
-  "task-progress-card": Preview293,
-  "leaderboard-card": Preview294,
-  "dashboard-analitico-ae": Preview295,
-  "dashboard-capacitacion-ae": Preview296,
-  "use-min-width": Preview297,
-  "pinned-steps": Preview298,
-  "scroll-linked": Preview299,
-  "work-table": Preview300,
-  "work-table-toolbar": Preview301,
-  "work-table-cells": Preview302,
-  "work-table-board": Preview303,
-  "work-table-tree": Preview304,
-  "work-table-queue": Preview305,
-  "work-table-support": Preview306,
-  "agent-tree": Preview307,
-  "agent-queue": Preview308,
-  "agent-ledger": Preview309,
-  "agent-steering": Preview310,
-  "autonomy-dial": Preview311,
-  "decision-inbox": Preview312,
-  "delegate-board": Preview313,
-  "agent-inbox": Preview314,
-  "agent-plan": Preview315,
-  "plan-vs-actual": Preview316,
-  "trace-waterfall": Preview317,
-  "agent-lanes": Preview318,
-  "approval-card": Preview319,
-  "agent-graph": Preview320,
-  "agent-cursors": Preview321,
-  "fan-out-grid": Preview322,
-  "parallel-attempts": Preview323,
-  "conflict-radar": Preview324,
-  "decision-tree": Preview325,
-  "context-map": Preview326,
-  "context-window": Preview327,
-  "memory-panel": Preview328,
-  "cited-answer": Preview329,
-  "prompt-library": Preview330,
-  "review-center": Preview331,
-  "permission-request": Preview332,
-  "inline-diff": Preview333,
-  "email-draft": Preview334,
-  "message-actions": Preview335,
-  "data-table-grouping": Preview336,
-  "expandable-table": Preview337,
-  "time-off-core": Preview338,
-  "time-off-stats": Preview339,
-  "time-off-request": Preview340,
-  "time-off": Preview341,
-  "planning-grid": Preview342,
-  "anatomy-tree": Preview343,
-  "vital-signs": Preview344,
-  "ecg-trace": Preview345,
-  "body-map": Preview346,
-  "organ-viewer": Preview347,
-  "molecule-viewer": Preview348,
-  "dna-helix": Preview349,
-  "lab-results": Preview350,
-  "growth-chart": Preview351,
-  "medication-schedule": Preview352,
-  "dermatome-map": Preview353,
-  "image-viewer": Preview354,
-  "organ-adrenals": Preview355,
-  "organ-appendix": Preview356,
-  "organ-bladder": Preview357,
-  "organ-brain": Preview358,
-  "organ-breast": Preview359,
-  "organ-cell": Preview360,
-  "organ-diaphragm": Preview361,
-  "organ-ear": Preview362,
-  "organ-esophagus": Preview363,
-  "organ-eye": Preview364,
-  "organ-gallbladder": Preview365,
-  "organ-hair": Preview366,
-  "organ-heart": Preview367,
-  "organ-intestines": Preview368,
-  "organ-joints": Preview369,
-  "organ-kidneys": Preview370,
-  "organ-larynx": Preview371,
-  "organ-liver": Preview372,
-  "organ-lungs": Preview373,
-  "organ-lymph": Preview374,
-  "organ-muscles": Preview375,
-  "organ-nails": Preview376,
-  "organ-nerves": Preview377,
-  "organ-nose": Preview378,
-  "organ-pancreas": Preview379,
-  "organ-parathyroid": Preview380,
-  "organ-pharynx": Preview381,
-  "organ-pineal": Preview382,
-  "organ-pituitary": Preview383,
-  "organ-prostate": Preview384,
-  "organ-salivary-glands": Preview385,
-  "organ-skeleton": Preview386,
-  "organ-skin": Preview387,
-  "organ-spinal-cord": Preview388,
-  "organ-spleen": Preview389,
-  "organ-stomach": Preview390,
-  "organ-teeth": Preview391,
-  "organ-thymus": Preview392,
-  "organ-thyroid": Preview393,
-  "organ-tongue": Preview394,
-  "organ-uterus": Preview395,
-  "organ-vessels": Preview396,
-  "organ-vestibular": Preview397,
-  "organ-explorer": Preview398,
-  "anatomy-workspace": Preview399,
-  "organ-switcher": Preview400,
-  "task-board-core": Preview401,
-  "task-card": Preview402,
-  "task-detail": Preview403,
-  "task-board": Preview404,
-  "agenda-core": Preview405,
-  "agenda-event": Preview406,
-  "agenda-detail": Preview407,
-  "agenda": Preview408,
-  "ats-core": Preview409,
-  "candidate-card": Preview410,
-  "candidate-row": Preview411,
-  "candidate-detail": Preview412,
-  "assessment-form": Preview413,
-  "pipeline-board": Preview414,
-  "ats": Preview415,
-  "tooltip-card": Preview416,
-  "timeline-gantt": Preview417,
-  "data-table-reorder": Preview418,
-  "activity-chat": Preview419,
-  "inline-approve-button": Preview420,
-  "portfolio-desk": Preview421,
+  "status-action-cell": Preview246,
+  "table-summary-strip": Preview247,
+  "accent-callout": Preview248,
+  "insight-card": Preview249,
+  "workspace-switcher": Preview250,
+  "assistant-status-card": Preview251,
+  "record-card": Preview252,
+  "score-card": Preview253,
+  "check-tiles": Preview254,
+  "member-list": Preview255,
+  "event-callout": Preview256,
+  "document-list": Preview257,
+  "issue-list": Preview258,
+  "issue-detail": Preview259,
+  "compare-panel": Preview260,
+  "action-footer": Preview261,
+  "status-banner": Preview262,
+  "destination-card": Preview263,
+  "next-steps": Preview264,
+  "review-desk": Preview265,
+  "use-scroll-progress": Preview266,
+  "scroll-progress": Preview267,
+  "reveal-on-scroll": Preview268,
+  "stagger-reveal": Preview269,
+  "scroll-snap-rail": Preview270,
+  "sticky-section-list": Preview271,
+  "parallax-layers": Preview272,
+  "horizontal-scroll-rail": Preview273,
+  "app-shell": Preview274,
+  "assistant-home": Preview275,
+  "agent-chat": Preview276,
+  "agent-run": Preview277,
+  "settings-billing": Preview278,
+  "onboarding": Preview279,
+  "integrations": Preview280,
+  "crm": Preview281,
+  "analytics": Preview282,
+  "evals": Preview283,
+  "stat-sparkline-card": Preview284,
+  "radial-pair-card": Preview285,
+  "highlight-cta-card": Preview286,
+  "quick-notes-card": Preview287,
+  "state-distribution-card": Preview288,
+  "bar-trend-card": Preview289,
+  "day-scroller-schedule": Preview290,
+  "pill-top-nav": Preview291,
+  "floating-pill-sidebar": Preview292,
+  "process-card": Preview293,
+  "multi-area-chart-card": Preview294,
+  "task-progress-card": Preview295,
+  "leaderboard-card": Preview296,
+  "dashboard-analitico-ae": Preview297,
+  "dashboard-capacitacion-ae": Preview298,
+  "use-min-width": Preview299,
+  "pinned-steps": Preview300,
+  "scroll-linked": Preview301,
+  "work-table": Preview302,
+  "work-table-toolbar": Preview303,
+  "work-table-cells": Preview304,
+  "work-table-board": Preview305,
+  "work-table-tree": Preview306,
+  "work-table-queue": Preview307,
+  "work-table-support": Preview308,
+  "agent-tree": Preview309,
+  "agent-queue": Preview310,
+  "agent-ledger": Preview311,
+  "agent-steering": Preview312,
+  "autonomy-dial": Preview313,
+  "decision-inbox": Preview314,
+  "delegate-board": Preview315,
+  "agent-inbox": Preview316,
+  "agent-plan": Preview317,
+  "plan-vs-actual": Preview318,
+  "trace-waterfall": Preview319,
+  "agent-lanes": Preview320,
+  "approval-card": Preview321,
+  "agent-graph": Preview322,
+  "agent-cursors": Preview323,
+  "fan-out-grid": Preview324,
+  "parallel-attempts": Preview325,
+  "conflict-radar": Preview326,
+  "decision-tree": Preview327,
+  "context-map": Preview328,
+  "context-window": Preview329,
+  "memory-panel": Preview330,
+  "cited-answer": Preview331,
+  "prompt-library": Preview332,
+  "review-center": Preview333,
+  "permission-request": Preview334,
+  "inline-diff": Preview335,
+  "email-draft": Preview336,
+  "message-actions": Preview337,
+  "data-table-grouping": Preview338,
+  "expandable-table": Preview339,
+  "time-off-core": Preview340,
+  "time-off-stats": Preview341,
+  "time-off-request": Preview342,
+  "time-off": Preview343,
+  "planning-grid": Preview344,
+  "anatomy-tree": Preview345,
+  "vital-signs": Preview346,
+  "ecg-trace": Preview347,
+  "body-map": Preview348,
+  "organ-viewer": Preview349,
+  "molecule-viewer": Preview350,
+  "dna-helix": Preview351,
+  "lab-results": Preview352,
+  "growth-chart": Preview353,
+  "medication-schedule": Preview354,
+  "dermatome-map": Preview355,
+  "image-viewer": Preview356,
+  "organ-adrenals": Preview357,
+  "organ-appendix": Preview358,
+  "organ-bladder": Preview359,
+  "organ-brain": Preview360,
+  "organ-breast": Preview361,
+  "organ-cell": Preview362,
+  "organ-diaphragm": Preview363,
+  "organ-ear": Preview364,
+  "organ-esophagus": Preview365,
+  "organ-eye": Preview366,
+  "organ-gallbladder": Preview367,
+  "organ-hair": Preview368,
+  "organ-heart": Preview369,
+  "organ-intestines": Preview370,
+  "organ-joints": Preview371,
+  "organ-kidneys": Preview372,
+  "organ-larynx": Preview373,
+  "organ-liver": Preview374,
+  "organ-lungs": Preview375,
+  "organ-lymph": Preview376,
+  "organ-muscles": Preview377,
+  "organ-nails": Preview378,
+  "organ-nerves": Preview379,
+  "organ-nose": Preview380,
+  "organ-pancreas": Preview381,
+  "organ-parathyroid": Preview382,
+  "organ-pharynx": Preview383,
+  "organ-pineal": Preview384,
+  "organ-pituitary": Preview385,
+  "organ-prostate": Preview386,
+  "organ-salivary-glands": Preview387,
+  "organ-skeleton": Preview388,
+  "organ-skin": Preview389,
+  "organ-spinal-cord": Preview390,
+  "organ-spleen": Preview391,
+  "organ-stomach": Preview392,
+  "organ-teeth": Preview393,
+  "organ-thymus": Preview394,
+  "organ-thyroid": Preview395,
+  "organ-tongue": Preview396,
+  "organ-uterus": Preview397,
+  "organ-vessels": Preview398,
+  "organ-vestibular": Preview399,
+  "organ-explorer": Preview400,
+  "anatomy-workspace": Preview401,
+  "organ-switcher": Preview402,
+  "task-board-core": Preview403,
+  "task-card": Preview404,
+  "task-detail": Preview405,
+  "task-board": Preview406,
+  "agenda-core": Preview407,
+  "agenda-event": Preview408,
+  "agenda-detail": Preview409,
+  "agenda": Preview410,
+  "ats-core": Preview411,
+  "candidate-card": Preview412,
+  "candidate-row": Preview413,
+  "candidate-detail": Preview414,
+  "assessment-form": Preview415,
+  "pipeline-board": Preview416,
+  "ats": Preview417,
+  "tooltip-card": Preview418,
+  "timeline-gantt": Preview419,
+  "data-table-reorder": Preview420,
+  "activity-chat": Preview421,
+  "inline-approve-button": Preview422,
+  "portfolio-desk": Preview423,
 }

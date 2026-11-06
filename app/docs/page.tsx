@@ -11,7 +11,9 @@ export const metadata: Metadata = {
 }
 
 const tables = [
-  ["data-table", "Bookings-style admin list: tabs, search, filters, sorting, bulk actions, CSV, and a detail panel."],
+  ["data-table", "Bookings-style admin list: tabs, search, filters, sorting, bulk actions, CSV, and a detail panel. leading is the slot for a summary strip."],
+  ["table-summary-strip", "KPI strip for the top of a table. Wraps stat-strip with loading, retry, zeros, and an optional sparkline."],
+  ["status-action-cell", "Status and up to three actions in one cell. The rest, and every action at 390px, sit in a menu."],
   ["crm-table", "Fixed contact columns: avatar, name, status, stage, owner, and last activity."],
   ["crm-companies-table", "Company book: logo, status, owner, pipeline, score, sparkline, selection, paging, and CSV."],
   ["adaptive-table", "Grouped table in a narrow panel. Columns drop, fold, and stretch to the container."],
@@ -300,6 +302,15 @@ export default function DocsPage() {
             Nearby names do different jobs. Open the item page for the install command.
           </p>
           <ChoiceTable title="Tables" rows={tables} />
+          <p className="text-muted-foreground">
+            Put <code>table-summary-strip</code> in the <code>leading</code> slot of{" "}
+            <code>data-table</code>, <code>expandable-table</code>, <code>work-table</code>, or{" "}
+            <code>adaptive-table</code>. Render <code>status-action-cell</code> in a column, next to{" "}
+            <code>DataTableSparkline</code> or <code>DataTableMeter</code>. The tables stay as they
+            are. The strip wraps, and at 390px the actions collapse into a menu. The behavior is a
+            clean-room reading of a paid datatable reference: no source, sample rows, or assets were
+            copied, and there is no domain screen.
+          </p>
           <ChoiceTable title="Sales CRM" rows={salesCrm} />
           <ChoiceTable title="Boards" rows={boards} />
           <ChoiceTable title="Time" rows={time} />

@@ -820,10 +820,15 @@
             "name": "renderDetail",
             "type": "(row) => ReactNode",
             "description": "Opens a sheet. Previous and next walk the filtered rows."
+          },
+          {
+            "name": "leading",
+            "type": "ReactNode",
+            "description": "Slot above the toolbar. Pass a table summary strip here instead of forking the table."
           }
         ]
       },
-      "docs": "Uses useLegacyTable and flexRender from @tanstack/react-table v9. Pass searchText or the search box will not filter."
+      "docs": "Uses useLegacyTable and flexRender from @tanstack/react-table v9. Pass searchText or the search box will not filter. leading renders above the toolbar, for a summary strip."
     },
     {
       "author": "Eduardo Retana",
@@ -9097,6 +9102,11 @@
             "name": "className and slot classes",
             "type": "string",
             "description": "className, tableClassName, headerClassName, groupClassName, rowClassName, cellClassName."
+          },
+          {
+            "name": "leading",
+            "type": "ReactNode",
+            "description": "Slot above the bordered table. Pass a table summary strip here."
           }
         ]
       },
@@ -13313,6 +13323,11 @@
             "name": "variant=\"tiles\"",
             "type": "\"inline\" | \"panel\" | \"tiles\"",
             "description": "tiles lays the stats out as cards. featured inverts one tile."
+          },
+          {
+            "name": "renderExtra",
+            "type": "(item) => ReactNode",
+            "description": "Optional node under each item. table-summary-strip uses it for a sparkline."
           }
         ]
       }
@@ -18771,6 +18786,185 @@
       "docs": "Clean-room, domain-agnostic review workflow. The behavior was observed in an unlicensed operations-dashboard demonstration. No source, product name, sample copy, icons, photos, or assets were copied. Labels come from props or a typed config. Answer no if the CLI asks to overwrite a primitive the host already has. Inverted surfaces use foreground and background. Highlight uses the host primary. The item ships no theme."
     },
     {
+      "name": "status-action-cell",
+      "type": "registry:ui",
+      "title": "Status action cell",
+      "description": "A status pill and up to three row actions. Further actions, and every action at 390px, sit in a menu. The accessible name is the status plus the action labels.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "dropdown-menu",
+        "@retana/status-pill"
+      ],
+      "categories": [
+        "table"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/status-action-cell.tsx",
+          "type": "registry:component",
+          "target": "@ui/status-action-cell.tsx"
+        }
+      ],
+      "meta": {
+        "titleEs": "Celda de estado y acciones",
+        "descriptionEs": "Una pastilla de estado y hasta tres acciones en la fila. El resto, y todas cuando el contenedor mide 390 px, entran en un menú. El nombre accesible junta el estado y las acciones.",
+        "preview": "app/examples/status-action-cell/preview.tsx",
+        "previewHref": "/examples/status-action-cell",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "narrow", "label": "390 px", "labelEn": "390 px" },
+          { "id": "compact", "label": "Compacta", "labelEn": "Compact" }
+        ],
+        "examples": [
+          {
+            "title": "Celda de estado y acciones",
+            "href": "/examples/status-action-cell",
+            "description": "Estado, acciones, pendiente y error. es-MX y EN."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/status-action-cell/stress",
+            "description": "Vacío, diez acciones, 390 px, RTL y texto largo."
+          }
+        ],
+        "usage": "<StatusActionCell label=\"Paused\" tone=\"warning\" actions={[{ id: \"resume\", label: \"Resume\", onClick: resume }]} />",
+        "api": [
+          {
+            "name": "label",
+            "type": "string",
+            "description": "Visible status text. It starts the accessible name."
+          },
+          {
+            "name": "tone / status",
+            "type": "StatusTone",
+            "description": "neutral, accent, warning, critical, info, or positive. Passed through to status-pill."
+          },
+          {
+            "name": "actions",
+            "type": "StatusAction[]",
+            "description": "id, label, onClick, variant, disabled, and pending. At most three stay inline."
+          },
+          {
+            "name": "collapse",
+            "type": "boolean",
+            "description": "True forces the menu. Omit it to collapse at 390px on the viewport or the nearest container."
+          },
+          {
+            "name": "density / appearance / maxVisible",
+            "type": "regular | compact / soft | outline | text / number",
+            "description": "Tighter controls, the pill appearance, and how many actions stay inline."
+          },
+          {
+            "name": "menuLabel / moreLabel / error",
+            "type": "string",
+            "description": "Visible menu names and an inline alert when an action fails."
+          },
+          {
+            "name": "className",
+            "type": "string",
+            "description": "Class on the group."
+          }
+        ]
+      },
+      "docs": "Clean-room reading of a status-and-actions cell. Shadcn Studio Pro was not purchased, fetched, or ported. No source, sample rows, icons, or assets were copied. The accessible name is the status label plus the action labels (proposed hub rule RUI-CELL-ACTION-001). Status color comes from status-pill and is never the only signal. Answer no if the CLI asks to overwrite button, dropdown-menu, or status-pill. The item ships no theme. Reduced motion adds no animation of its own."
+    },
+    {
+      "name": "table-summary-strip",
+      "type": "registry:ui",
+      "title": "Table summary strip",
+      "description": "A KPI strip for the top of a table. Wraps stat-strip with loading, an error retry, explicit zeros, and an optional sparkline on each item.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "button",
+        "skeleton",
+        "@retana/stat-strip"
+      ],
+      "categories": [
+        "table"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/table-summary-strip.tsx",
+          "type": "registry:component",
+          "target": "@ui/table-summary-strip.tsx"
+        },
+        {
+          "path": "registry/lib/data-table-reorder.ts",
+          "type": "registry:lib",
+          "target": "@lib/data-table-reorder.ts"
+        }
+      ],
+      "meta": {
+        "titleEs": "Franja de cifras de la tabla",
+        "descriptionEs": "Cifras para ir arriba de una tabla. Envuelve la franja de cifras con carga, reintento, ceros explícitos y una tendencia opcional por cifra.",
+        "preview": "app/examples/table-summary-strip/preview.tsx",
+        "previewHref": "/examples/table-summary-strip",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "zeros", "label": "Ceros", "labelEn": "Zeros" },
+          { "id": "narrow", "label": "390 px", "labelEn": "390 px" },
+          { "id": "expandable", "label": "Expansible", "labelEn": "Expandable" },
+          { "id": "work", "label": "Trabajo", "labelEn": "Work" },
+          { "id": "adaptive", "label": "Adaptativa", "labelEn": "Adaptive" }
+        ],
+        "examples": [
+          {
+            "title": "Franja de cifras de la tabla",
+            "href": "/examples/table-summary-strip",
+            "description": "La franja encima de las tablas existentes, con estado y tendencia."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/table-summary-strip/stress",
+            "description": "Vacío, ceros, 390 px, RTL y un slot por cifra."
+          }
+        ],
+        "usage": "<AdminDataTable leading={<TableSummaryStrip items={items} locale=\"es-MX\" />} data={rows} columns={columns} />",
+        "api": [
+          {
+            "name": "items",
+            "type": "TableSummaryItem[]",
+            "description": "StatStrip items plus an optional sparkline and sparklineLabel."
+          },
+          {
+            "name": "loading",
+            "type": "boolean",
+            "description": "Skeletons and a visible loading status. Motion is skipped when reduced."
+          },
+          {
+            "name": "error / onRetry",
+            "type": "string / () => void",
+            "description": "Replaces the figures with an alert and a retry button."
+          },
+          {
+            "name": "empty",
+            "type": "\"hide\" | \"show\"",
+            "description": "hide removes a blank strip. show keeps explicit zeros."
+          },
+          {
+            "name": "renderItem",
+            "type": "(item) => ReactNode",
+            "description": "Optional slot under each item, next to the sparkline."
+          },
+          {
+            "name": "variant / locale / className / classNames / labels",
+            "type": "StatStripProps",
+            "description": "Passed through to stat-strip. labels.loading and labels.retry are the status strings."
+          }
+        ]
+      },
+      "docs": "Clean-room helper for a KPI strip above a table. Shadcn Studio Pro was not purchased, fetched, or ported. No source, sample rows, icons, or assets were copied. Compose it with the leading slot on data-table, expandable-table, work-table, or adaptive-table, and put StatusActionCell plus DataTableSparkline in the columns. This is not a new table. Answer no if the CLI asks to overwrite button, skeleton, stat-strip, or data-table-reorder. The item ships no theme. Numbers use tabular-nums. The strip wraps; it does not scroll sideways."
+    },
+    {
       "name": "accent-callout",
       "type": "registry:ui",
       "title": "Accent callout",
@@ -22802,6 +22996,11 @@
             "name": "state",
             "type": "\"ready\" | \"loading\" | \"error\"",
             "description": "Empty, loading, and error are built in. onRetry sits on the error state."
+          },
+          {
+            "name": "leading",
+            "type": "ReactNode",
+            "description": "Slot above the toolbar. The tree summary callback stays a footer row."
           }
         ]
       },
@@ -22903,14 +23102,15 @@
       "name": "work-table-cells",
       "type": "registry:ui",
       "title": "Work table cells",
-      "description": "Title, person, priority, relative date, status, SLA, effort, compact numbers, and rank cells.",
+      "description": "Title, person, priority, relative date, status, status with actions, SLA, effort, compact numbers, and rank cells.",
       "author": "Eduardo Retana",
       "dependencies": [
         "lucide-react"
       ],
       "registryDependencies": [
         "avatar",
-        "@retana/status-pill"
+        "@retana/status-pill",
+        "@retana/status-action-cell"
       ],
       "categories": [
         "table"
@@ -22939,7 +23139,7 @@
       ],
       "meta": {
         "titleEs": "Celdas de la tabla de trabajo",
-        "descriptionEs": "Título compuesto, persona, prioridad, fecha relativa, estado, SLA, esfuerzo, números compactos y rango.",
+        "descriptionEs": "Título compuesto, persona, prioridad, fecha relativa, estado, estado con acciones, SLA, esfuerzo, números compactos y rango.",
         "preview": "app/examples/work-table-cells/preview.tsx",
         "previewHref": "/examples/work-table-cells",
         "examples": [
@@ -22982,13 +23182,18 @@
             "description": "soft, outline, or text. The tone map stays in status-pill."
           },
           {
+            "name": "StatusActionCell",
+            "type": "label, tone, actions",
+            "description": "Re-export of status-action-cell. The accessible name is the status plus the action labels."
+          },
+          {
             "name": "WorkEffortCell / WorkNumberCell / WorkRankCell",
             "type": "number",
             "description": "Segmented points, 6.3k / % / min, and a rank badge."
           }
         ]
       },
-      "docs": "Clean-room cells. No paid-library source or assets. Semantic tones go through StatusPill and status-tone.ts; this file does not ship a second color map. Answer no if the CLI asks to overwrite avatar, status-pill, or the shared helpers. The item ships no theme."
+      "docs": "Clean-room cells. No paid-library source or assets. Semantic tones go through StatusPill and status-tone.ts; this file does not ship a second color map. StatusActionCell is re-exported from status-action-cell. Answer no if the CLI asks to overwrite avatar, status-pill, status-action-cell, button, dropdown-menu, or the shared helpers. The item ships no theme."
     },
     {
       "name": "work-table-board",
@@ -26626,6 +26831,11 @@
             "name": "loading / error / labels",
             "type": "boolean / string / Partial<ExpandableTableLabels>",
             "description": "Skeleton, alert, and English chrome. ExpansionChecklist and ExpansionLines are the two panel formats."
+          },
+          {
+            "name": "leading",
+            "type": "ReactNode",
+            "description": "Slot above the toolbar. Pass a table summary strip here."
           }
         ]
       },

@@ -324,6 +324,17 @@ icons, or assets were copied. The orders belong to the same fictional
 Guanajuato workshop. Colors come from the host shadcn tokens. The piece uses
 useLegacyTable and getExpandedRowModel. The host owns which rows are open.
 
+status-action-cell and table-summary-strip are a clean-room reading of the
+idea of a reusable status-and-actions cell and a KPI strip above a table.
+Shadcn Studio Pro (Datatable Advanced) was not purchased, fetched, or ported.
+No source, class names, sample rows, icons, screenshots, or assets were
+copied. The pieces do not include payout, attendance, ticket, regional, or
+budget screens. They compose with data-table, expandable-table, work-table,
+and adaptive-table through a leading slot and a column cell. The accessible
+name of the cell is the status label plus the action labels. Colors come from
+the host shadcn tokens. status-action-cell is also re-exported from
+work-table-cells.
+
 time-off-core, time-off-stats, time-off-request, and the time-off block
 count business days and show a balance, a request, and an agenda of
 requests. The holiday list for Mexico follows the Ley Federal del Trabajo,
