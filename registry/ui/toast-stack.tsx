@@ -4,7 +4,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react"
 import type { FocusEvent, KeyboardEvent, MouseEvent, PointerEvent as ReactPointerEvent, ReactNode } from "react"
-import { AnimatePresence, animate, motion, useIsPresent, useMotionValue, usePresence, useReducedMotion, useTransform } from "motion/react"
+import { AnimatePresence, animate, motion, useIsPresent, useMotionValue, usePresence, useReducedMotion, useReducedMotionConfig, useTransform } from "motion/react"
 import type { HTMLMotionProps, MotionProps, TargetAndTransition, Transition } from "motion/react"
 import { CircleCheck, CircleX, Info, TriangleAlert, X } from "lucide-react"
 
@@ -55,7 +55,9 @@ export interface ToastStackProviderProps {
 /**
  * The viewport for a toast stack. Render it once inside a `ToastStackProvider` and call `useToastStack()` anywhere below.
  * Use it for short, non-blocking results of what someone just did: new toasts rise from the bottom edge, older ones tuck behind,
- * and hovering or focusing the stack fans it out into a list. Toasts pause while the stack is open or the tab is hidden, and swipe right to dismiss.
+ * and hovering or focusing the stack fans it out into a list. Toasts pause while the stack is open or the tab is hidden.
+ * A toast enters on Y, rising from below, and dismisses downward on that same axis.
+ * Gesture rules: Emil Kowalski, emilkowalski/skills@715c1807e08c497cfd1dc4feb450a2a3300ef2a9 skills/gestures (MIT).
  */
 export interface ToastStackProps {
   /** Accessible name of the notification region. */
@@ -67,6 +69,19 @@ export interface ToastStackProps {
   visibleToasts?: number
   /** Alt+T moves focus into the stack. */
   hotkey?: boolean
+  /**
+   * Fraction of the toast height a downward release must cover, including a
+   * short velocity projection. Default 0.4, the ratio this piece already used
+   * on its width. Not a catalog-wide 40–50% rule.
+   */
+  dismissRatio?: number
+  /**
+   * Upward speed, in px/s, that cancels a dismiss. Default 200, this piece's
+   * existing guard. A downward flick dismisses through the projection.
+   */
+  cancelVelocity?: number
+  /** Seeds the front toast's downward offset for a fixture. */
+  previewSwipe?: number
   className?: string
   classNames?: ToastStackClassNames
 }
@@ -243,7 +258,7 @@ function Swap(props: HTMLMotionProps<"span">) {
   return <motion.span {...props} aria-hidden={present ? props["aria-hidden"] : true} />
 }
 
-type Gesture = { pointerId: number; startX: number; startY: number; origin: number; active: boolean; samples: { t: number; x: number }[] }
+type Gesture = { pointerId: number; startX: number; startY: number; origin: number; active: boolean; samples: { t: number; y: number }[] }
 
 interface ToastItemProps {
   toast: ToastRecord
@@ -253,6 +268,9 @@ interface ToastItemProps {
   hidden: boolean
   paused: boolean
   reduce: boolean
+  dismissRatio: number
+  cancelVelocity: number
+  previewSwipe: number
   store: ToastStore
   classNames?: ToastStackClassNames
   onMeasure: (id: string, height: number) => void
@@ -261,7 +279,7 @@ interface ToastItemProps {
   onHandOff: (leaving: HTMLElement, keyboard: boolean) => void
 }
 
-function ToastItem({ toast, target, expanded, front, hidden, paused, reduce, store, classNames, onMeasure, onDragChange, onTap, onHandOff }: ToastItemProps) {
+function ToastItem({ toast, target, expanded, front, hidden, paused, reduce, dismissRatio, cancelVelocity, previewSwipe, store, classNames, onMeasure, onDragChange, onTap, onHandOff }: ToastItemProps) {
   const { id } = toast
   const [isPresent, safeToRemove] = usePresence()
   const itemRef = useRef<HTMLLIElement>(null)
@@ -273,8 +291,8 @@ function ToastItem({ toast, target, expanded, front, hidden, paused, reduce, sto
   const height = useMotionValue(0)
   const opacity = useMotionValue(0)
   const contentOpacity = useMotionValue(1)
-  const x = useMotionValue(0)
-  const swipeFade = useTransform(x, (value) => (value > 0 ? 1 - Math.min(value / SWIPE_FADE, 1) * 0.75 : 1))
+  const swipeY = useMotionValue(previewSwipe)
+  const swipeFade = useTransform(swipeY, (value) => (value > 0 ? 1 - Math.min(value / SWIPE_FADE, 1) * 0.75 : 1))
   const applied = useRef<boolean | null>(null)
   const swiped = useRef(false)
   const remaining = useRef(toast.duration)
@@ -357,8 +375,8 @@ function ToastItem({ toast, target, expanded, front, hidden, paused, reduce, sto
     pointerType.current = event.pointerType
     suppressClick.current = false
     if (event.button !== 0 || !isPresent || (event.target as Element).closest("button, a")) return
-    x.stop()
-    gesture.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, origin: x.get(), active: false, samples: [] }
+    swipeY.stop()
+    gesture.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, origin: swipeY.get(), active: false, samples: [] }
   }
 
   function onPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
@@ -368,22 +386,23 @@ function ToastItem({ toast, target, expanded, front, hidden, paused, reduce, sto
       const dx = event.clientX - current.startX
       const dy = event.clientY - current.startY
       if (Math.hypot(dx, dy) < 6) return
-      if (Math.abs(dy) > Math.abs(dx)) {
+      if (Math.abs(dx) > Math.abs(dy)) {
         gesture.current = null
         return
       }
       current.active = true
-      current.startX = event.clientX
+      current.startY = event.clientY
       suppressClick.current = true
       event.currentTarget.setPointerCapture(event.pointerId)
       event.currentTarget.dataset.dragging = ""
       window.getSelection()?.removeAllRanges()
       onDragChange(true)
     }
-    const raw = current.origin + event.clientX - current.startX
-    x.set(raw >= 0 ? raw : -rubberBand(-raw, event.currentTarget.offsetWidth))
-    current.samples.push({ t: event.timeStamp, x: raw })
-    while (current.samples.length > 2 && event.timeStamp - current.samples[0].t > 100) current.samples.shift()
+    const raw = current.origin + event.clientY - current.startY
+    const band = event.currentTarget.offsetHeight || 80
+    swipeY.set(raw >= 0 ? raw : -rubberBand(-raw, band))
+    current.samples.push({ t: event.timeStamp, y: raw })
+    while (current.samples.length > 2 && current.samples[0] && event.timeStamp - current.samples[0].t > 100) current.samples.shift()
   }
 
   function onPointerEnd(event: ReactPointerEvent<HTMLDivElement>, cancelled: boolean) {
@@ -395,17 +414,17 @@ function ToastItem({ toast, target, expanded, front, hidden, paused, reduce, sto
     onDragChange(false)
     const first = current.samples[0]
     const last = current.samples[current.samples.length - 1]
-    const velocity = cancelled || !first || !last || last.t === first.t || event.timeStamp - last.t > 60 ? 0 : ((last.x - first.x) / (last.t - first.t)) * 1000
-    const width = event.currentTarget.offsetWidth
-    const offset = x.get()
-    if (!cancelled && offset > 0 && velocity > -200 && offset + project(velocity) > width * 0.4) {
+    const velocity = cancelled || !first || !last || last.t === first.t || event.timeStamp - last.t > 60 ? 0 : ((last.y - first.y) / (last.t - first.t)) * 1000
+    const height = event.currentTarget.offsetHeight || 80
+    const offset = swipeY.get()
+    if (!cancelled && offset > 0 && velocity > -cancelVelocity && offset + project(velocity) > height * dismissRatio) {
       swiped.current = true
-      if (!reduce) animate(x, width + 40, { type: "spring", visualDuration: 0.32, bounce: 0, velocity: Math.max(velocity, 0) })
+      if (!reduce) animate(swipeY, height + 40, { type: "spring", visualDuration: 0.32, bounce: 0, velocity: Math.max(velocity, 0) })
       store.dismiss(id)
       return
     }
-    if (reduce) x.jump(0)
-    else animate(x, 0, { ...motionPresets.spring.snappy, velocity: offset < 0 ? velocity * 0.3 : velocity })
+    if (reduce) swipeY.jump(0)
+    else animate(swipeY, 0, { ...motionPresets.spring.snappy, velocity: offset < 0 ? velocity * 0.3 : velocity })
   }
 
   function onCardClick(event: MouseEvent<HTMLDivElement>) {
@@ -440,13 +459,13 @@ function ToastItem({ toast, target, expanded, front, hidden, paused, reduce, sto
         data-slot="toast-stack-card"
         data-appearance={toast.appearance}
         className={cn(
-          "@container absolute inset-0 overflow-hidden rounded-xl border border-border bg-popover text-foreground shadow-md touch-pan-y data-[dragging]:cursor-grabbing data-[dragging]:select-none",
+          "@container absolute inset-0 overflow-hidden rounded-xl border border-border bg-popover text-foreground shadow-md touch-pan-x data-[dragging]:cursor-grabbing data-[dragging]:select-none",
           !front && !expanded && "bg-muted",
           (front || expanded) && "shadow-lg",
           toast.appearance === "undo" && "rounded-full border-transparent bg-primary text-primary-foreground",
           classNames?.card,
         )}
-        style={{ x, opacity: swipeFade }}
+        style={{ y: swipeY, opacity: swipeFade }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={(event) => onPointerEnd(event, false)}
@@ -478,10 +497,11 @@ function ToastItem({ toast, target, expanded, front, hidden, paused, reduce, sto
                 key="action"
                 ref={actionRef}
                 className="-mt-1 flex shrink-0 justify-end data-[moving=true]:overflow-hidden @max-[21rem]:order-1 @max-[21rem]:mt-0 @max-[21rem]:basis-full @max-[21rem]:justify-start @max-[21rem]:pl-[calc(18px+0.75rem)]"
-                initial={reduce ? { opacity: 0 } : { width: 0, opacity: 0 }}
-                animate={{ width: "auto", opacity: 1 }}
-                exit={reduce ? { opacity: 0 } : { width: 0, opacity: 0 }}
-                transition={reduce ? reducedFade : { width: motionPresets.spring.smooth, opacity: fade }}
+                initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.96 }}
+                style={{ originX: 0 }}
+                transition={reduce ? reducedFade : { opacity: fade, scale: fade }}
                 onAnimationStart={() => markMoving(true)}
                 onAnimationComplete={() => markMoving(false)}
               >
@@ -504,10 +524,12 @@ const positionClass = {
   "bottom-center": "inset-x-0 mx-auto",
 }
 
-export function ToastStack({ label = "Notifications", position = "bottom-right", contained = false, visibleToasts = 3, hotkey = true, className, classNames }: ToastStackProps) {
+export function ToastStack({ label = "Notifications", position = "bottom-right", contained = false, visibleToasts = 3, hotkey = true, dismissRatio = 0.4, cancelVelocity = 200, previewSwipe = 0, className, classNames }: ToastStackProps) {
   const store = useStore()
   const toasts = useSyncExternalStore(store.subscribe, store.getSnapshot, getServerSnapshot)
-  const reduce = !!useReducedMotion()
+  const mediaReduce = !!useReducedMotion()
+  const configReduce = useReducedMotionConfig() ?? false
+  const reduce = mediaReduce || configReduce
   const pageHidden = useSyncExternalStore(subscribeVisibility, () => document.visibilityState === "hidden", () => false)
   const [hovered, setHovered] = useState(false)
   const [focused, setFocused] = useState(false)
@@ -601,7 +623,7 @@ export function ToastStack({ label = "Notifications", position = "bottom-right",
       >
         <AnimatePresence onExitComplete={prune}>
           {toasts.map((item, index) => (
-            <ToastItem key={item.id} toast={item} target={targets[index]} expanded={expanded} front={index === 0} hidden={index >= visibleToasts} paused={paused} reduce={reduce} store={store} classNames={classNames} onMeasure={measure} onDragChange={setDragging} onTap={toggleTap} onHandOff={handOff} />
+            <ToastItem key={item.id} toast={item} target={targets[index]} expanded={expanded} front={index === 0} hidden={index >= visibleToasts} paused={paused} reduce={reduce} dismissRatio={dismissRatio} cancelVelocity={cancelVelocity} previewSwipe={index === 0 ? previewSwipe : 0} store={store} classNames={classNames} onMeasure={measure} onDragChange={setDragging} onTap={toggleTap} onHandOff={handOff} />
           ))}
         </AnimatePresence>
       </ol>

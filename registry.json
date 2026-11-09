@@ -6302,6 +6302,18 @@
         "descriptionEs": "Apila resultados cortos en el borde hasta que se descartan.",
         "preview": "app/examples/toast-stack/preview.tsx",
         "previewHref": "/examples/toast-stack",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "dragging", "label": "Arrastrando", "labelEn": "Dragging" },
+          { "id": "dismissed", "label": "Descartado", "labelEn": "Dismissed" },
+          { "id": "reduced", "label": "Menos movimiento", "labelEn": "Reduced motion" },
+          { "id": "keyboard", "label": "Teclado", "labelEn": "Keyboard" },
+          { "id": "390", "label": "390 px", "labelEn": "390 px" },
+          { "id": "extreme", "label": "Datos extremos", "labelEn": "Extreme data" }
+        ],
         "examples": [
           {
             "title": "Pila de avisos",
@@ -6327,13 +6339,23 @@
             "description": "limit"
           },
           {
+            "name": "dismissRatio",
+            "type": "number",
+            "description": "Fraction of the toast height a downward release must cover, including a short velocity projection. Default 0.4."
+          },
+          {
+            "name": "cancelVelocity",
+            "type": "number",
+            "description": "Upward speed in px/s that cancels a dismiss. Default 200."
+          },
+          {
             "name": "className / classNames",
             "type": "string",
             "description": "Root class and slot classes."
           }
         ]
       },
-      "docs": "Adapted from Arc UI (MIT). Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Motion is skipped when the reader prefers reduced motion.",
+      "docs": "Adapted from Arc UI (MIT). A toast enters on Y and dismisses downward on that same axis. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Under reduced motion the finger still tracks and the release jumps. Gesture axis follows Emil Kowalski, emilkowalski/skills@715c180 skills/gestures (MIT).",
       "files": [
         {
           "path": "registry/ui/toast-stack.tsx",
@@ -10709,7 +10731,8 @@
       "description": "A depth stack of notices. Dismiss the front card and the next one steps forward.",
       "author": "Eduardo Retana",
       "dependencies": [
-        "lucide-react"
+        "lucide-react",
+        "motion"
       ],
       "registryDependencies": [
         "button"
@@ -10722,6 +10745,18 @@
         "descriptionEs": "Avisos en capas. Al descartar el de enfrente, el siguiente avanza.",
         "preview": "app/examples/notification-stack/preview.tsx",
         "previewHref": "/examples/notification-stack",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "dragging", "label": "Arrastrando", "labelEn": "Dragging" },
+          { "id": "dismissed", "label": "Descartado", "labelEn": "Dismissed" },
+          { "id": "reduced", "label": "Menos movimiento", "labelEn": "Reduced motion" },
+          { "id": "keyboard", "label": "Teclado", "labelEn": "Keyboard" },
+          { "id": "390", "label": "390 px", "labelEn": "390 px" },
+          { "id": "extreme", "label": "Datos extremos", "labelEn": "Extreme data" }
+        ],
         "examples": [
           {
             "title": "Pila",
@@ -10772,6 +10807,21 @@
             "description": "Escape dismisses the focused card. Default true. Delete and Backspace always dismiss it."
           },
           {
+            "name": "dismissDistance",
+            "type": "number",
+            "description": "Pixels on +X that dismiss the front card. Default 88, about two 44px targets. Not a catalog-wide ratio."
+          },
+          {
+            "name": "dismissVelocity",
+            "type": "number",
+            "description": "px/s. A release this fast dismisses below dismissDistance when it moved toward +X. Default 640. Ignored under reduced motion."
+          },
+          {
+            "name": "rubberLimit",
+            "type": "number",
+            "description": "How far a drag toward -X can approach, in px. Default 96."
+          },
+          {
             "name": "label / dismissLabel",
             "type": "string / (item) => string",
             "description": "Region name and the accessible name of the done button."
@@ -10783,12 +10833,17 @@
           }
         ]
       },
-      "docs": "A depth stack, separate from toast-stack (short results at the edge), notification-center (a grouped list with read state), and card-stack (a left-or-right triage deck). Up to three cards peek above the front one. Only the front card is interactive. Answer no if the CLI asks to overwrite button. The item ships no theme, cssVars, or fixed colors. With reduced motion the dismiss does not slide and the tiers do not scale. Visual inspiration is a Facebook reel by Design & Code With AV (Notification Stack UI Upgrade). No code from that reel was used.",
+      "docs": "A depth stack, separate from toast-stack (short results at the edge), notification-center (a grouped list with read state), and card-stack (a left-or-right triage deck). Up to three cards peek above the front one. Only the front card is interactive. The swipe is +X, the same axis an expanded row enters on. Answer no if the CLI asks to overwrite button. The item ships no theme, cssVars, or fixed colors. With reduced motion the finger still tracks and the release jumps, with no spring. Gesture track follows Emil Kowalski, emilkowalski/skills@715c180 skills/gestures (MIT). Visual inspiration is a Facebook reel by Design & Code With AV (Notification Stack UI Upgrade). No code from that reel was used.",
       "files": [
         {
           "path": "registry/ui/notification-stack.tsx",
           "type": "registry:component",
           "target": "@ui/notification-stack.tsx"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
         }
       ]
     },

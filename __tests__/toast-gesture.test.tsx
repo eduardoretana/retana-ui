@@ -35,12 +35,13 @@ async function showCard() {
 
 describe("toast-stack gesture", () => {
   it("descarta hacia abajo, el eje de la entrada, y no hacia la derecha", async () => {
-    const { card } = await showCard()
-    fireEvent.pointerDown(card, { button: 0, pointerId: 4, pointerType: "mouse", clientX: 10, clientY: 10, timeStamp: 0 })
-    fireEvent.pointerMove(card, { pointerId: 4, pointerType: "mouse", clientX: 12, clientY: 30, timeStamp: 20 })
-    fireEvent.pointerMove(card, { pointerId: 4, pointerType: "mouse", clientX: 14, clientY: 90, timeStamp: 80 })
-    fireEvent.pointerUp(card, { pointerId: 4, pointerType: "mouse", clientX: 14, clientY: 90, timeStamp: 80 })
+    const downward = await showCard()
+    fireEvent.pointerDown(downward.card, { button: 0, pointerId: 4, pointerType: "mouse", clientX: 10, clientY: 10, timeStamp: 0 })
+    fireEvent.pointerMove(downward.card, { pointerId: 4, pointerType: "mouse", clientX: 12, clientY: 30, timeStamp: 20 })
+    fireEvent.pointerMove(downward.card, { pointerId: 4, pointerType: "mouse", clientX: 14, clientY: 90, timeStamp: 80 })
+    fireEvent.pointerUp(downward.card, { pointerId: 4, pointerType: "mouse", clientX: 14, clientY: 90, timeStamp: 80 })
     expect(screen.getByText("Kiln ready").closest("li")).toHaveAttribute("inert")
+    downward.unmount()
 
     const horizontal = await showCard()
     fireEvent.pointerDown(horizontal.card, { button: 0, pointerId: 5, pointerType: "mouse", clientX: 10, clientY: 10, timeStamp: 0 })

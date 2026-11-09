@@ -41,10 +41,11 @@ describe("ToastStack", () => {
     await user.click(screen.getByRole("button", { name: "Notify" }))
     const card = document.querySelector("[data-slot=toast-stack-card]") as HTMLElement
     Object.defineProperty(card, "offsetWidth", { configurable: true, value: 200 })
-    fireEvent.pointerDown(card, { button: 0, pointerId: 4, pointerType: "mouse", clientX: 10, clientY: 10 })
-    fireEvent.pointerMove(card, { pointerId: 4, pointerType: "mouse", clientX: 40, clientY: 10 })
-    fireEvent.pointerMove(card, { pointerId: 4, pointerType: "mouse", clientX: 160, clientY: 12 })
-    fireEvent.pointerUp(card, { pointerId: 4, pointerType: "mouse", clientX: 160, clientY: 12, timeStamp: 40 })
+    Object.defineProperty(card, "offsetHeight", { configurable: true, value: 80 })
+    fireEvent.pointerDown(card, { button: 0, pointerId: 4, pointerType: "mouse", clientX: 10, clientY: 10, timeStamp: 0 })
+    fireEvent.pointerMove(card, { pointerId: 4, pointerType: "mouse", clientX: 12, clientY: 24, timeStamp: 16 })
+    fireEvent.pointerMove(card, { pointerId: 4, pointerType: "mouse", clientX: 14, clientY: 70, timeStamp: 40 })
+    fireEvent.pointerUp(card, { pointerId: 4, pointerType: "mouse", clientX: 14, clientY: 70, timeStamp: 40 })
     expect(screen.getByText("Kiln ready").closest("li")).toHaveAttribute("inert")
   })
 

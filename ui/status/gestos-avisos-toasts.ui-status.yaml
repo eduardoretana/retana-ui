@@ -2,6 +2,7 @@ schema: uis.status/v2
 ui_system: {version: 4.0.0, declaration: "UI_SYSTEM: APPLIES"}
 spec_id: gestos-avisos-toasts
 profile: LITE
-cycle_state: PRUEBAS
+cycle_state: AUDITORIA
 retana_ui.sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
-head: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+ideas: [2, 5, 7, 8]
+profile_note: "IDEA 5 permanece en LITE. El descarte ya existía; se alinea el eje con la entrada."
