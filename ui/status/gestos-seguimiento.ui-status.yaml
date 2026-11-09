@@ -1,8 +1,12 @@
 schema: uis.status/v2
 ui_system: {version: 4.0.0, declaration: "UI_SYSTEM: APPLIES"}
 spec_id: gestos-seguimiento
-profile: LITE
+profile: STANDARD
 cycle_state: AUDITORIA
 retana_ui.sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
-head: e2891a50f9484f704e8dde0dc79894ba497d8a23
+# El blob no puede contener el sha del commit que lo incluye.
+# La evidencia de despacho declara el tip (git rev-parse HEAD) después de este commit.
+head: 92d5284068cd347d8e1f2bfbfe9cde26b96b8677
 ideas: [3, 8]
+gesture_rules: context_only
+blocking_snapshot: 419ad6481648c693d61f8e5ebfb8b8e80d8d8ab7

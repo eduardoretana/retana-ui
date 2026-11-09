@@ -1,7 +1,9 @@
 ---
 spec_id: gestos-seguimiento
 version: 0.1.0
-profile: LITE
+profile: STANDARD
+gesture_rules: context_only
+blocking_snapshot: 419ad6481648c693d61f8e5ebfb8b8e80d8d8ab7
 ui_system: 4.0.0
 retana_ui:
   sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
@@ -11,7 +13,11 @@ ideas: [3, 8]
 
 # Seguimiento 1:1
 
-Perfil LITE. El asa y la barra ya existían. No hay flujo nuevo ni variantes de Dirección.
+Perfil STANDARD, fijado por el UI Lead para el despacho. El asa y la barra ya existían. No se generaron variantes de Dirección en este commit.
+
+## Reglas
+
+`RUI-GESTURE` (hub #326) queda `context_only`. No está mergeado. El criterio de bloqueo es el snapshot `419ad648` (ui-system 4.0.0).
 
 El plan y los AC están en `docs/plans/2026-11-09-gestos-seguimiento.md`.
 
