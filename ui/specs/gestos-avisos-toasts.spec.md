@@ -1,7 +1,9 @@
 ---
 spec_id: gestos-avisos-toasts
 version: 0.1.0
-profile: LITE
+profile: STANDARD
+gesture_rules: context_only
+blocking_snapshot: 419ad6481648c693d61f8e5ebfb8b8e80d8d8ab7
 ui_system: 4.0.0
 retana_ui:
   sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
@@ -11,7 +13,11 @@ ideas: [2, 5, 7, 8]
 
 # Gestos de avisos y toasts
 
-Perfil LITE. La IDEA (5) corrige el eje de un descarte que ya existe. No abre un flujo nuevo, así que no sube a STANDARD y no hay variantes de Dirección.
+Perfil STANDARD, fijado por el UI Lead para el despacho. La IDEA (5) corrige el eje de un descarte que ya existe. No se generaron variantes de Dirección en este commit.
+
+## Reglas
+
+`RUI-GESTURE` (hub #326) queda `context_only`. No está mergeado. El criterio de bloqueo es el snapshot `419ad648` (ui-system 4.0.0).
 
 El plan con las tareas y los umbrales está en `docs/plans/2026-11-09-gestos-avisos-toasts.md`. Los AC-1…AC-10 de ese plan son los de esta spec. Cada uno tiene medida y prueba.
 

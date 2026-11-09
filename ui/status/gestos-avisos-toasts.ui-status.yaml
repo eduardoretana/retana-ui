@@ -1,9 +1,13 @@
 schema: uis.status/v2
 ui_system: {version: 4.0.0, declaration: "UI_SYSTEM: APPLIES"}
 spec_id: gestos-avisos-toasts
-profile: LITE
+profile: STANDARD
 cycle_state: AUDITORIA
 retana_ui.sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
-head: 66d4a2db072f063760c132cf2c504bbd18bc82c3
+# El blob no puede contener el sha del commit que lo incluye.
+# La evidencia de despacho declara el tip (git rev-parse HEAD) después de este commit.
+head: ccc5ae80533411660c6121e367c149aa2f061be9
 ideas: [2, 5, 7, 8]
-profile_note: "IDEA 5 permanece en LITE. El descarte ya existía; se alinea el eje con la entrada."
+profile_note: "Perfil STANDARD fijado por el UI Lead para el despacho. La IDEA (5) no abre un flujo nuevo."
+gesture_rules: context_only
+blocking_snapshot: 419ad6481648c693d61f8e5ebfb8b8e80d8d8ab7
