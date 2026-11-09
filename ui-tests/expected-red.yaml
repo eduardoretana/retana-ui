@@ -1,0 +1,43 @@
+schema: uis.expected-red/v1
+spec_id: piloto-vue
+green_forbidden: true
+commands:
+  - name: contrato
+    run: pnpm exec vitest run ui-tests/piloto-vue.test.ts
+    exit: 1
+    failed: 20
+    passed: 0
+  - name: vue
+    run: pnpm --dir vue exec vitest run
+    exit: 1
+    failed: 7
+    passed: 0
+log: ui-tests/logs/expected-red.log
+signatures:
+  - AC0-TOKENS-FILE
+  - AC0-DEMO
+  - AC0-ALIAS
+  - AC0-CONTRACT
+  - AC0-BRIDGE
+  - AC0-CSHARP
+  - AC0-SD
+  - AC-CSS-TW
+  - AC1-TIME-OFF-STATS-SFC
+  - AC2-STATS-JSON
+  - AC2-INBOX-JSON
+  - AC2-LIGHT-FILE
+  - AC6-RAZOR
+  - AC7-TOKENS
+  - AC-MANIFEST
+  - AC9-GESTOS
+  - AC-NOTICE
+  - AC-VUETIFY-DOC
+  - AC-DEMO-THEME
+  - AC-STATUS-STATE
+  - AC8-PREVIEW
+  - AC2-MOUNT-STATS-FILLED
+  - AC2-MOUNT-STATS-STATES
+  - AC2-MOUNT-STATS-EN
+  - AC1-CALLS
+  - AC5-INBOX-STATES
+  - AC2-MOUNT-LIGHTBOX
