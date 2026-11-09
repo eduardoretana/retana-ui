@@ -1,6 +1,12 @@
 "use client"
 
-/** Adapted from Arc UI (MIT). */
+/**
+ * Adapted from Arc UI (MIT).
+ * Hold timing: Emil Kowalski, emilkowalski/skills
+ * @715c1807e08c497cfd1dc4feb450a2a3300ef2a9 skills/gestures (MIT).
+ * The fill is linear. Releasing early uses a 0.16s ease-out, not a spring.
+ * The ::before is a 44px hit pad. It does not change the painted size.
+ */
 
 import * as React from "react"
 import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion, useTransform, type AnimationPlaybackControls, type MotionValue, type TargetAndTransition } from "motion/react"
@@ -187,7 +193,7 @@ export function HoldToConfirm({
   function rewind() {
     fill.current?.stop()
     if (reduced) progress.jump(0)
-    else fill.current = animate(progress, 0, { ...motionPresets.spring.smooth, velocity: 0 })
+    else fill.current = animate(progress, 0, { duration: motionPresets.duration.fast, ease: [...motionPresets.ease.exit] })
   }
 
   function stopHolding() {
@@ -280,10 +286,10 @@ export function HoldToConfirm({
         data-tone={tone}
         data-state={done ? "done" : holding ? "holding" : "idle"}
         className={cn(
-          "relative inline-flex w-max max-w-full min-w-0 min-h-9 touch-manipulation items-center justify-center overflow-hidden rounded-lg border bg-background px-4 text-sm font-medium select-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-default motion-reduce:transition-none",
+          "relative inline-flex w-max max-w-full min-w-0 min-h-9 touch-manipulation items-center justify-center overflow-hidden rounded-lg border bg-background px-4 text-sm font-medium select-none before:absolute before:top-1/2 before:left-1/2 before:h-11 before:w-11 before:-translate-x-1/2 before:-translate-y-1/2 before:content-[''] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-default motion-reduce:transition-none",
           tone === "danger"
-            ? "border-destructive/40 text-destructive enabled:hover:bg-destructive/10"
-            : "border-border text-foreground enabled:hover:bg-muted",
+            ? "border-destructive/40 text-destructive [@media(hover:hover)_and_(pointer:fine)]:enabled:hover:bg-destructive/10"
+            : "border-border text-foreground [@media(hover:hover)_and_(pointer:fine)]:enabled:hover:bg-muted",
           className,
           classNames?.root,
         )}

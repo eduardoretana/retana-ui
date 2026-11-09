@@ -1,0 +1,35 @@
+schema: uis.expected-red/v1
+spec_id: gestos-hold-hits
+retana_ui.sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+captured_against: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+command: pnpm exec vitest run __tests__/hold-gesture.test.tsx __tests__/sheet-gesture.test.tsx
+counts: { failed: 7, passed: 0 }
+tests:
+  - id: AC-1
+    name: hold-to-confirm gesture al soltar vuelve en 0.16 s con ease-out y sin spring
+    file: __tests__/hold-gesture.test.tsx
+    signature: "expected 'spring' not to be 'spring'"
+  - id: AC-2a
+    name: hold-to-confirm gesture el hold cubre 44 px y el hover va detrás del media query
+    file: __tests__/hold-gesture.test.tsx
+    signature: "to match /before:h-11/"
+  - id: AC-4a
+    name: hold-to-confirm gesture las escenas PLP exportan dragging, dismissed y reduced
+    file: __tests__/hold-gesture.test.tsx
+    signature: "ENOENT: no such file or directory, open '/agent/repos/retana-ui/app/examples/hold-to-confirm/scenes.tsx'"
+  - id: AC-2b
+    name: bottom sheet hits and detent return el grabber y el cerrar cubren 44 px y el hover está en el media query
+    file: __tests__/sheet-gesture.test.tsx
+    signature: "to match /before:h-11/"
+  - id: AC-3
+    name: bottom sheet hits and detent return volver al mismo detent usa un spring de 0.2 s sin rebote
+    file: __tests__/sheet-gesture.test.tsx
+    signature: "expected undefined to be truthy"
+  - id: AC-4b
+    name: bottom sheet hits and detent return las escenas PLP exportan dragging, dismissed y reduced
+    file: __tests__/sheet-gesture.test.tsx
+    signature: "ENOENT: no such file or directory, open '/agent/repos/retana-ui/app/examples/bottom-sheet/scenes.tsx'"
+  - id: AC-2c
+    name: slide handle hit el asa cubre 44 px sin crecer el dibujo de 40 px
+    file: __tests__/sheet-gesture.test.tsx
+    signature: "to match /before:h-11/"

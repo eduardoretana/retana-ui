@@ -313,7 +313,7 @@ export function SlideToConfirm({
         onBlur={handleBlur}
         style={{ x }}
         className={cn(
-          "absolute top-1 left-1 z-10 inline-flex size-10 touch-none items-center justify-center rounded-full border border-border bg-background text-foreground shadow-sm outline-none",
+          "absolute top-1 left-1 z-10 inline-flex size-10 touch-none items-center justify-center rounded-full border border-border bg-background text-foreground shadow-sm outline-none before:absolute before:top-1/2 before:left-1/2 before:h-11 before:w-11 before:-translate-x-1/2 before:-translate-y-1/2 before:content-['']",
           "focus-visible:ring-2 focus-visible:ring-ring",
           armed && "bg-primary text-primary-foreground",
           isSuccess && "bg-primary text-primary-foreground",
