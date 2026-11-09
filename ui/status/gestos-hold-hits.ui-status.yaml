@@ -1,0 +1,6 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0, declaration: "UI_SYSTEM: APPLIES"}
+spec_id: gestos-hold-hits
+profile: LITE
+cycle_state: PRUEBAS
+retana_ui.sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
