@@ -4,7 +4,7 @@ declaration: "UI_SYSTEM: APPLIES"
 cycle_state: AUDITORIA
 spec_id: bandeja-mensajes
 profile: STANDARD
-head: pendiente
+head: 24cb49bb8f8152299e93d3dadb4b4e678585b1b2
 retana_ui:
   sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
   registry_source: git-sha
