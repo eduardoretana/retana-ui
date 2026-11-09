@@ -4,4 +4,5 @@ spec_id: gestos-seguimiento
 profile: LITE
 cycle_state: AUDITORIA
 retana_ui.sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+head: e2891a50f9484f704e8dde0dc79894ba497d8a23
 ideas: [3, 8]
