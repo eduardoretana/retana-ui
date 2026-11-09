@@ -10,3 +10,12 @@ Nota de la idea 9 de la validación de `/gestures`. No hay código de gestos en 
 | `@vueuse/gesture` | 2.0.0 | MIT | `v-drag`, `v-pinch`, `v-move`. | inactivo. El último release es de febrero de 2024. No es base del port. |
 
 `useMotionValue` y `useTransform` no existen en Vue con esos nombres. Un port futuro usaría `motion-v`. Un drawer usaría `vaul-vue` solo si un ciclo posterior acepta esa dependencia. `@vueuse/gesture` queda fuera por inactivo.
+
+## Reglas que un port tendría que conservar
+
+No hay implementación en este piloto. Si más adelante se porta una pieza que se arrastra, el equivalente Vue sigue estas cuatro reglas, las mismas que la validación de `/gestures` dejó para el catálogo React:
+
+1. **Seguimiento 1:1.** Mientras el dedo está abajo, el elemento va con el puntero. Sin easing y sin spring en esa fase.
+2. **Spring con velocidad.** Al soltar, el spring se siembra con la velocidad medida. No se usan `@keyframes` en algo que el gesto puede retomar.
+3. **Umbrales por pieza.** La distancia o la velocidad de descarte las declara la pieza. No hay un 500 px/s único ni un 40–50 % único para todo el catálogo.
+4. **Reduced motion conserva el tracking.** Con `prefers-reduced-motion: reduce` el dedo sigue moviendo el elemento. Se quitan el momentum y el rebote.
