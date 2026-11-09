@@ -1,11 +1,9 @@
 "use client"
 
-import { SlideToConfirm } from "@/registry/ui/slide-to-confirm"
+import { ScenePreview } from "@/app/catalog/scene-preview"
+
+import { scenes } from "./scenes"
 
 export default function Preview() {
-  return (
-    <div className="grid h-full place-items-center bg-background px-4">
-      <SlideToConfirm className="w-full max-w-xs" label="Desliza" />
-    </div>
-  )
+  return <ScenePreview scenes={scenes} hero="filled" />
 }

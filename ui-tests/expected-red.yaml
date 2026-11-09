@@ -1,0 +1,39 @@
+schema: uis.expected-red/v1
+spec_id: gestos-seguimiento
+retana_ui.sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+captured_against: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+command: pnpm exec vitest run __tests__/slide-gesture.test.tsx __tests__/timeline-gesture.test.tsx
+counts: { failed: 8, passed: 0 }
+tests:
+  - id: AC-1
+    name: slide-to-confirm gesture sigue el dedo 1:1 sin spring y sin un render por move
+    file: __tests__/slide-gesture.test.tsx
+    signature: "expected 2 to be +0"
+  - id: AC-2
+    name: slide-to-confirm gesture pasa la velocidad al spring del release
+    file: __tests__/slide-gesture.test.tsx
+    signature: "expected undefined to be truthy"
+  - id: AC-2b
+    name: slide-to-confirm gesture con reduced motion el dedo sigue y el release no usa spring
+    file: __tests__/slide-gesture.test.tsx
+    signature: "expected 9.42890453889084 to be 30"
+  - id: AC-4a
+    name: slide-to-confirm gesture las escenas PLP exportan dragging, dismissed y reduced
+    file: __tests__/slide-gesture.test.tsx
+    signature: "ENOENT: no such file or directory, open '/agent/repos/retana-ui/app/examples/slide-to-confirm/scenes.tsx'"
+  - id: AC-3
+    name: view-timeline gesture la barra sigue el dedo y confirma al soltar
+    file: __tests__/timeline-gesture.test.tsx
+    signature: "expected '' to be 'translate3d(30px, 0, 0)'"
+  - id: AC-3b
+    name: view-timeline gesture con reduced motion el dedo sigue
+    file: __tests__/timeline-gesture.test.tsx
+    signature: "expected '' to be 'translate3d(30px, 0, 0)'"
+  - id: AC-3c
+    name: view-timeline gesture declara touch-pan-y porque el arrastre es horizontal
+    file: __tests__/timeline-gesture.test.tsx
+    signature: "to match /touch-pan-y/"
+  - id: AC-4b
+    name: view-timeline gesture las escenas PLP exportan dragging, dismissed y reduced
+    file: __tests__/timeline-gesture.test.tsx
+    signature: "ENOENT: no such file or directory, open '/agent/repos/retana-ui/app/examples/view-timeline/scenes.tsx'"
