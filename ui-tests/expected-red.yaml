@@ -1,0 +1,64 @@
+schema: uis.expected-red/v1
+spec_id: gestos-avisos-toasts
+retana_ui.sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+captured_against: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+command: pnpm exec vitest run __tests__/notification-gesture.test.tsx __tests__/toast-gesture.test.tsx __tests__/sonner-swipe.test.tsx
+counts: { failed: 13, passed: 1 }
+note: "La prueba que ya pasa es caracterización del comportamiento que se conserva (40 px lentos no descartan). Las 13 restantes fallan con la firma de abajo."
+tests:
+  - id: AC-1
+    name: notification-stack gesture no vuelve a renderizar en cada move y el transform es el del dedo
+    file: __tests__/notification-gesture.test.tsx
+    signature: "expected 4 to be 1"
+  - id: AC-2
+    name: notification-stack gesture pasa la velocidad al spring y no declara keyframes de salida
+    file: __tests__/notification-gesture.test.tsx
+    signature: "expected undefined to be truthy"
+  - id: AC-3
+    name: notification-stack gesture descarta por velocidad por debajo de la distancia
+    file: __tests__/notification-gesture.test.tsx
+    signature: "expected \"vi.fn()\" to be called with arguments: [ 'note' ]"
+  - id: AC-3b
+    name: notification-stack gesture un arrastre corto y lento no descarta
+    file: __tests__/notification-gesture.test.tsx
+    signature: already-green
+  - id: AC-4
+    name: notification-stack gesture con reduced motion el dedo sigue y no hay spring
+    file: __tests__/notification-gesture.test.tsx
+    signature: "expected +0 to be 30"
+  - id: AC-5
+    name: notification-stack gesture se retoma a mitad de la salida
+    file: __tests__/notification-gesture.test.tsx
+    signature: "expected \"vi.fn()\" to not be called at all, but actually been called 1 times"
+  - id: AC-6
+    name: notification-stack gesture la dirección contraria tiene goma
+    file: __tests__/notification-gesture.test.tsx
+    signature: "expected 0 to be less than 0"
+  - id: AC-7
+    name: notification-stack gesture declara touch-pan-y en la tarjeta arrastrable
+    file: __tests__/notification-gesture.test.tsx
+    signature: "to match /touch-pan-y/"
+  - id: AC-10a
+    name: notification-stack gesture las escenas PLP de gesto exportan dragging, dismissed y reduced
+    file: __tests__/notification-gesture.test.tsx
+    signature: "ENOENT: no such file or directory, open '/agent/repos/retana-ui/app/examples/notification-stack/scenes.tsx'"
+  - id: AC-9
+    name: layout toaster swipe no arrastra: el swipe de Sonner 2.0.8 no se puede retomar y queda delegado
+    file: __tests__/sonner-swipe.test.tsx
+    signature: "expected '80px' to be '0px'"
+  - id: AC-8
+    name: toast-stack gesture descarta hacia abajo, el eje de la entrada, y no hacia la derecha
+    file: __tests__/toast-gesture.test.tsx
+    signature: "toHaveAttribute(\"inert\")"
+  - id: AC-8b
+    name: toast-stack gesture no anima width auto
+    file: __tests__/toast-gesture.test.tsx
+    signature: "not to match /width:\\s*[\"']auto[\"']/"
+  - id: AC-8c
+    name: toast-stack gesture la tarjeta usa touch-pan-x porque el descarte es vertical
+    file: __tests__/toast-gesture.test.tsx
+    signature: "to match /touch-pan-x/"
+  - id: AC-10b
+    name: toast-stack gesture las escenas PLP de gesto exportan dragging, dismissed y reduced
+    file: __tests__/toast-gesture.test.tsx
+    signature: "ENOENT: no such file or directory, open '/agent/repos/retana-ui/app/examples/toast-stack/scenes.tsx'"

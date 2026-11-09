@@ -1,13 +1,9 @@
 "use client"
 
-import { NotificationStack } from "@/registry/ui/notification-stack"
+import { ScenePreview } from "@/app/catalog/scene-preview"
 
-import { sampleNotices } from "./sample"
+import { scenes } from "./scenes"
 
 export default function NotificationStackPreview() {
-  return (
-    <div className="flex h-full items-end justify-center overflow-hidden bg-background px-6 pt-8 pb-3">
-      <NotificationStack defaultItems={sampleNotices} expandable={false} className="max-w-sm" />
-    </div>
-  )
+  return <ScenePreview scenes={scenes} hero="filled" />
 }
