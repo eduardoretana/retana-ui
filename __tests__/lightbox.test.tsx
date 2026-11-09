@@ -21,4 +21,16 @@ describe("Lightbox", () => {
     await user.keyboard("{Escape}")
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
   })
+
+  it("pone el nombre accesible del closeLabel en el botón de cerrar", async () => {
+    const user = userEvent.setup()
+    render(
+      <LightboxGallery
+        closeLabel="Cerrar"
+        items={[{ src: "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'/%3E", alt: "Patio" }]}
+      />,
+    )
+    await user.click(screen.getByRole("button", { name: "Patio" }))
+    expect(screen.getByRole("button", { name: "Cerrar" })).toBeInTheDocument()
+  })
 })
