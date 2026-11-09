@@ -105,7 +105,7 @@ const iconButton = "retana-button rt:inline-flex rt:size-8 rt:items-center rt:ju
   <p v-else-if="items.length === 0" class="retana rt:p-3 rt:text-sm rt:text-muted-foreground" data-retana="lightbox">{{ emptyLabel }}</p>
   <DialogRoot v-else :open="isOpen" @update:open="setOpen">
     <div v-if="gallery" :class="className" data-retana="lightbox-gallery">
-      <ul class="rt:grid rt:grid-cols-3 rt:gap-2">
+      <ul class="rt:m-0 rt:list-none rt:grid rt:grid-cols-3 rt:gap-2 rt:p-0">
         <li v-for="(entry, itemIndex) in items" :key="entry.src">
           <button
             type="button"

@@ -98,7 +98,7 @@ const buttonClass = "retana-button rt:inline-flex rt:min-h-8 rt:items-center rt:
     <p v-else-if="items.length === 0" class="rt:text-muted-foreground">{{ labels.empty }}</p>
     <template v-else>
       <p v-if="error" role="alert" class="rt:text-destructive">{{ error }}</p>
-    <ul class="rt:flex rt:flex-col rt:gap-2">
+    <ul class="rt:m-0 rt:flex rt:list-none rt:flex-col rt:gap-2 rt:p-0">
       <li v-for="item in items" :key="item.id" class="rt:rounded-lg rt:border rt:border-border rt:px-3 rt:py-2" :class="classNames?.item">
         <div class="rt:flex rt:flex-wrap rt:items-baseline rt:gap-2">
           <h3 class="rt:font-medium">{{ item.title }}</h3>
