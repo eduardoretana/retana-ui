@@ -1,0 +1,64 @@
+{
+  "labels": {
+    "es": {
+      "title": "Saldo",
+      "available": "Disponible",
+      "pending": "Pendiente",
+      "left": "Queda este año",
+      "year": "Año",
+      "granted": "Otorgados",
+      "used": "Usados",
+      "empty": "No hay saldo que mostrar.",
+      "loading": "Cargando el saldo",
+      "amount": "{value} días"
+    },
+    "en": {
+      "amount": "{value} days"
+    }
+  },
+  "scenes": {
+    "filled": {
+      "available": 12,
+      "pending": 2,
+      "years": [
+        { "year": 2025, "granted": 12, "used": 9 },
+        { "year": 2026, "granted": 12, "used": 4 }
+      ]
+    },
+    "empty": { "available": null, "pending": 0, "years": [] },
+    "loading": {
+      "available": 12,
+      "pending": 2,
+      "years": [
+        { "year": 2025, "granted": 12, "used": 9 },
+        { "year": 2026, "granted": 12, "used": 4 }
+      ],
+      "loading": true
+    },
+    "error": {
+      "available": 12,
+      "pending": 2,
+      "years": [
+        { "year": 2025, "granted": 12, "used": 9 },
+        { "year": 2026, "granted": 12, "used": 4 }
+      ],
+      "error": {
+        "es": "No se pudo leer el saldo.",
+        "en": "The balance could not be read."
+      }
+    },
+    "zero": {
+      "available": 0,
+      "pending": 0,
+      "years": [{ "year": 2026, "granted": 12, "used": 12 }]
+    },
+    "pending": {
+      "available": 12,
+      "pending": 6,
+      "years": [
+        { "year": 2025, "granted": 12, "used": 9 },
+        { "year": 2026, "granted": 12, "used": 4 }
+      ]
+    }
+  }
+}

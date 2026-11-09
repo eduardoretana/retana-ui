@@ -1,0 +1,3821 @@
+{
+  "schema": "retana.catalog/v1",
+  "retana_ui": {
+    "sha": "6671cfac72f736739d2d3dd2740cc5f13416acb3"
+  },
+  "items": [
+    {
+      "name": "layered-panel",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "admin-utils",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "admin-shell",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "sortable-list",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "sortable-board",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "entity-form",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "settings-form",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "media-library",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "data-table",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "admin-charts",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "overview-dashboard",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "admin-kit",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "supabase-admin",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "chat-message",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "message-list",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "chat-composer",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "streaming-text",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "reasoning-steps",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "task-list",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "plan-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "question-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "inline-citation",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "code-block",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "file-diff",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "image-generation",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "ai-document",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "otp-field",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "dissolve-input",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "multi-select",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "color-picker",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "color-palette",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "magnetic-dropzone",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "gooey-slider",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "video-player",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "lightbox",
+      "frameworks": {
+        "react": "stable",
+        "vue": "pilot",
+        "css": "none",
+        "razor": "none"
+      },
+      "contract": {
+        "fixtures": "fixtures/lightbox.json",
+        "fixturesSha256": "8cbd125124180302c5ef5bca3c6d2d6a023907bb8063edd44ce0573124f661f2",
+        "apiSha256": "f0c1f6297e6885ad1f6e2c5fe31bea634c56f3df572308c2874c60a291515a09"
+      }
+    },
+    {
+      "name": "logo-marquee",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "halftone-image",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "attachment-chip",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "marker",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "press-sound",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "crm-table",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "dock-nav",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "theme-switch",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "password-field",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "search-field",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "copy-button",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "segmented-control",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "text-reveal",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "text-morph",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "text-shimmer",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "in-view-title",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "slot-text",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "expandable-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "action-button",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "split-button",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "hold-to-confirm",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "swipe-actions",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "user-menu",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "confirm-morph",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "number-field",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "tag-input",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "time-picker",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "inline-edit",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "expanding-search",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "chip-group",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "password-strength",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "signature-pad",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "date-range-picker",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "phone-input",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "shortcut-recorder",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "mention-input",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "rich-text-editor",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "billing-toggle",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "radio-cards",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "avatar-group",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "metric-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "empty-state",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "tree-view",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "filter-toolbar",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "sparkline",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "gauge",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "animated-counter",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "image-compare",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "carousel",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "card-stack",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "activity-heatmap",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "timeline",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "toast-stack",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "usage-meter",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "stepper",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "announcement-bar",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "command-palette",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "bar-chart",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "line-chart",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "donut-chart",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "streamgraph",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "brush-chart",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "ridgeline",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "treemap",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "waffle-chart",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "slope-chart",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "bottom-sheet",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "json-viewer",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "comment-thread",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "signup-form",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "plan-comparison",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "notification-center",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "changelog-feed",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "sign-in",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "page-header",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "empty-states",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "login-centered",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "site-header",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "site-footer",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "hero-section",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "faq-section",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "contact-section",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "blog-grid",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "comparison-table",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "stats-band",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "cta-section",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "newsletter-signup",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "rail-sidebar",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "adaptive-table",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "presence",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "presence-liveblocks",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "presence-supabase",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "presence-avatars",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "live-cursors",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "typing-indicator",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "presence-outline",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "multi-view-core",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "use-multi-view",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "view-table",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "view-kanban",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "view-calendar",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "view-timeline",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "view-grouped-list",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "view-gallery",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "record-properties",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "multi-view",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "magnetic-bento",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "two-factor-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "notification-stack",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "tool-call",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "tool-approval",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "message-branch",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "context-meter",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "prompt-suggestions",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "source-list",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "message-error",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "system-notice",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "slash-menu",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "char-limit",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "parameter-slider",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "confidence-badge",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "voice-orb",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "push-to-talk",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "audio-bars",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "audio-player",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "synced-transcript",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "mic-select",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "use-device-capabilities",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "capability-gate",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "capability-grid",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "storage-meter",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "network-status",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "download-progress",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "use-webcam",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "webcam-canvas",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "detection-overlay",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "scan-overlay",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "entity-text",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "force-graph",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "confusion-matrix",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "event-log",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "error-boundary",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "passphrase-gate",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "artifact-panel",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "language-pair",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "install-command",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "demo-collage",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "well-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "stat-strip",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "priority-badge",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "attention-list",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "annotated-trend-chart",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "ranked-bars",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "breakdown-bar",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "record-timeline",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "suggestion-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "suggested-choice-dialog",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "record-header",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "radial-gauge",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "tier-distribution",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "triage-dashboard",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "case-review",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "bug-report-form",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "tree-nav",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "mega-menu",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "crm-companies-table",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "crm-toolbar",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "crm-company-detail",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "crm-command-menu",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "crm-new-company-dialog",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "crm-notifications",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "crm-dashboard",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "gauge-kit",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "gauge-scenes",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "gauge-studio",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "proposal-shell",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "proposal-dashboard",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "proposal-opportunity",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "proposal-analyze",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "proposal-workspace",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "proposal-discovery",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "proposal-clarify",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "proposal-scope",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "proposal-similar",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "proposal-estimate",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "proposal-risks",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "proposal-document",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "proposal-sow",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "proposal-activity",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "proposal-send",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "proposal-builder",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "reply-composer",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "inbox-list",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "ticket-properties",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "contact-panel",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "view-customizer",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "support-inbox",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "ticket-desk",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "notification-inbox",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "ui-sounds",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "squircle",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "theme-toggle-icons",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "morph-dialog",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "morph-popover",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "shortcut-button",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "spotlight-button",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "slide-to-confirm",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "haptics",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "motion-preference",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "use-feedback",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "status-pill",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "accent-callout",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "insight-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "workspace-switcher",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "assistant-status-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "record-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "score-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "check-tiles",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "member-list",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "event-callout",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "document-list",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "issue-list",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "issue-detail",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "compare-panel",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "action-footer",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "status-banner",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "destination-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "next-steps",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "review-desk",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "use-scroll-progress",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "scroll-progress",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "reveal-on-scroll",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "stagger-reveal",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "scroll-snap-rail",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "sticky-section-list",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "parallax-layers",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "horizontal-scroll-rail",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "app-shell",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "assistant-home",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "agent-chat",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "agent-run",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "settings-billing",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "onboarding",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "integrations",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "crm",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "analytics",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "evals",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "stat-sparkline-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "radial-pair-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "highlight-cta-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "quick-notes-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "state-distribution-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "bar-trend-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "day-scroller-schedule",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "pill-top-nav",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "floating-pill-sidebar",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "process-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "multi-area-chart-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "task-progress-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "leaderboard-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "dashboard-analitico-ae",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "dashboard-capacitacion-ae",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "use-min-width",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "pinned-steps",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "scroll-linked",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "work-table",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "work-table-toolbar",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "work-table-cells",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "work-table-board",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "work-table-tree",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "work-table-queue",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "work-table-support",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "agent-tree",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "agent-queue",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "agent-ledger",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "agent-steering",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "autonomy-dial",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "decision-inbox",
+      "frameworks": {
+        "react": "stable",
+        "vue": "pilot",
+        "css": "none",
+        "razor": "none"
+      },
+      "contract": {
+        "fixtures": "fixtures/decision-inbox.json",
+        "fixturesSha256": "f307617b42c3c052df9dfb8241671fcef4d31cb3e5a620bf051d1b2d79bf435d",
+        "apiSha256": "b0354a8d9ad67691e5e6b861a9d379caec44a3be126aaaf4bd8e908d1679f59b"
+      }
+    },
+    {
+      "name": "delegate-board",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "agent-inbox",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "agent-plan",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "plan-vs-actual",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "trace-waterfall",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "agent-lanes",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "approval-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "agent-graph",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "agent-cursors",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "fan-out-grid",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "parallel-attempts",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "conflict-radar",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "decision-tree",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "context-map",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "context-window",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "memory-panel",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "cited-answer",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "prompt-library",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "review-center",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "permission-request",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "inline-diff",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "email-draft",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "message-actions",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "data-table-grouping",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "expandable-table",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "time-off-core",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "time-off-stats",
+      "frameworks": {
+        "react": "stable",
+        "vue": "pilot",
+        "css": "pilot",
+        "razor": "html"
+      },
+      "contract": {
+        "fixtures": "fixtures/time-off-stats.json",
+        "fixturesSha256": "cb943eddfd34377f201305b28ce0639a5471a66dcd4b1d256917d09aa4667649",
+        "apiSha256": "2c4cffc11f21c55cf06e9fcf7a6214fd44f10d7fe6603256bb1620a1720228b8"
+      }
+    },
+    {
+      "name": "time-off-request",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "time-off",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "planning-grid",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "anatomy-tree",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "vital-signs",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "ecg-trace",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "body-map",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-viewer",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "molecule-viewer",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "dna-helix",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "lab-results",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "growth-chart",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "medication-schedule",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "dermatome-map",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "image-viewer",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-adrenals",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-appendix",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-bladder",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-brain",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-breast",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-cell",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-diaphragm",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-ear",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-esophagus",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-eye",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-gallbladder",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-hair",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-heart",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-intestines",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-joints",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-kidneys",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-larynx",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-liver",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-lungs",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-lymph",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-muscles",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-nails",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-nerves",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-nose",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-pancreas",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-parathyroid",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-pharynx",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-pineal",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-pituitary",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-prostate",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-salivary-glands",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-skeleton",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-skin",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-spinal-cord",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-spleen",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-stomach",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-teeth",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-thymus",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-thyroid",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-tongue",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-uterus",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-vessels",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-vestibular",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-explorer",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "anatomy-workspace",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "organ-switcher",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "task-board-core",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "task-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "task-detail",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "task-board",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "agenda-core",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "agenda-event",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "agenda-detail",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "agenda",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "ats-core",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "candidate-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "candidate-row",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "candidate-detail",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "assessment-form",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "pipeline-board",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "ats",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "tooltip-card",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "timeline-gantt",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "data-table-reorder",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "activity-chat",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "inline-approve-button",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "portfolio-desk",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    }
+  ]
+}

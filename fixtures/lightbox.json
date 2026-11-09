@@ -1,0 +1,44 @@
+{
+  "labels": {
+    "es": {
+      "empty": "No hay imágenes.",
+      "loading": "Cargando imágenes",
+      "error": "No se pudo abrir la imagen.",
+      "close": "Cerrar",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "zoomIn": "Acercar",
+      "zoomOut": "Alejar"
+    },
+    "en": {
+      "empty": "No images.",
+      "loading": "Loading images",
+      "error": "The image could not be opened.",
+      "close": "Close",
+      "previous": "Previous",
+      "next": "Next",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out"
+    }
+  },
+  "items": [
+    {
+      "id": "estudio",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23c8c2b8'/%3E%3C/svg%3E",
+      "es": { "alt": "Estudio", "caption": "Estudio de Bruma, imagen de ejemplo." },
+      "en": { "alt": "Studio", "caption": "Bruma studio, example image." }
+    },
+    {
+      "id": "patio",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%238f877d'/%3E%3C/svg%3E",
+      "es": { "alt": "Patio", "caption": "Patio de Bruma, imagen de ejemplo." },
+      "en": { "alt": "Patio", "caption": "Bruma patio, example image." }
+    }
+  ],
+  "scenes": {
+    "filled": { "items": ["estudio", "patio"] },
+    "empty": { "items": [] },
+    "loading": { "items": ["estudio"], "loading": true },
+    "error": { "items": [], "error": true }
+  }
+}

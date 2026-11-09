@@ -1,0 +1,753 @@
+===== contrato: pnpm exec vitest run ui-tests/piloto-vue.test.ts =====
+
+ RUN  v5.0.2 /agent/repos/retana-ui
+
+ ❯ ui-tests/piloto-vue.test.ts (20 tests | 20 failed) 22ms
+   ❯ piloto vue (20)
+     × AC0 tokens DTCG y diff de nombres 7ms
+     × AC0 demo opt-in 1ms
+     × AC0 alias sin color 1ms
+     × AC0 contrato sin color 1ms
+     × AC0 puente Vuetify 1ms
+     × AC0 constantes C# 0ms
+     × AC0 Style Dictionary 0ms
+     × AC3 hoja compilada 0ms
+     × AC1 props en los SFC 1ms
+     × AC2 JSON de time-off-stats 4ms
+     × AC2 JSON de decision-inbox 2ms
+     × AC2 escenas de lightbox 0ms
+     × AC6 Razor estático 0ms
+     × AC7 registry intacto y dependencias del workspace 0ms
+     × AC manifiesto 0ms
+     × AC9 nota de gestos 0ms
+     × AC licencias 0ms
+     × AC puente documentado 0ms
+     × AC demo Cenit solo en vue/demo 0ms
+     × AC status de auditoría 1ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 20 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC0 tokens DTCG y diff de nombres
+AssertionError: AC0-TOKENS-FILE: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ ui-tests/piloto-vue.test.ts:63:77
+     61| describe("piloto vue", () => {
+     62|   it("AC0 tokens DTCG y diff de nombres", () => {
+     63|     expect(existsSync(abs("tokens/retana.tokens.json")), "AC0-TOKENS-F…
+       |                                                                             ^
+     64|     const tokens = JSON.parse(read("tokens/retana.tokens.json")) as {
+     65|       color: { light: Record<string, { $type?: string; $value?: string…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC0 demo opt-in
+AssertionError: AC0-DEMO: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ ui-tests/piloto-vue.test.ts:93:60
+     91|
+     92|   it("AC0 demo opt-in", () => {
+     93|     expect(existsSync(abs("tokens/demo.css")), "AC0-DEMO").toBe(true)
+       |                                                            ^
+     94|     const demo = read("tokens/demo.css")
+     95|     const css = read("app/globals.css")
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC0 alias sin color
+AssertionError: AC0-ALIAS: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ ui-tests/piloto-vue.test.ts:111:71
+    109|
+    110|   it("AC0 alias sin color", () => {
+    111|     expect(existsSync(abs("tokens/tailwind-alias.css")), "AC0-ALIAS").…
+       |                                                                       ^
+    112|     const alias = read("tokens/tailwind-alias.css")
+    113|     const theme = decls(block(read("app/globals.css"), "@theme inline"…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC0 contrato sin color
+AssertionError: AC0-CONTRACT: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ ui-tests/piloto-vue.test.ts:119:68
+    117|
+    118|   it("AC0 contrato sin color", () => {
+    119|     expect(existsSync(abs("tokens/contract.css")), "AC0-CONTRACT").toB…
+       |                                                                    ^
+    120|     const contract = read("tokens/contract.css")
+    121|     for (const name of decls(block(read("app/globals.css"), ":root {")…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC0 puente Vuetify
+AssertionError: AC0-BRIDGE: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ ui-tests/piloto-vue.test.ts:128:64
+    126|
+    127|   it("AC0 puente Vuetify", () => {
+    128|     expect(existsSync(abs("tokens/bridge.css")), "AC0-BRIDGE").toBe(tr…
+       |                                                                ^
+    129|     const bridge = read("tokens/bridge.css")
+    130|     const lines: [string, string][] = [
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC0 constantes C#
+AssertionError: AC0-CSHARP: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ ui-tests/piloto-vue.test.ts:175:73
+    173|
+    174|   it("AC0 constantes C#", () => {
+    175|     expect(existsSync(abs("tokens/RetanaTokenNames.cs")), "AC0-CSHARP"…
+       |                                                                         ^
+    176|     const cs = read("tokens/RetanaTokenNames.cs")
+    177|     expect(cs, "AC0-CSHARP-NS").toContain("namespace Retana.Ui")
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC0 Style Dictionary
+AssertionError: AC0-SD: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ ui-tests/piloto-vue.test.ts:185:71
+    183|
+    184|   it("AC0 Style Dictionary", () => {
+    185|     expect(existsSync(abs("vue/scripts/build-tokens.mjs")), "AC0-SD").…
+       |                                                                       ^
+    186|     expect(read("vue/scripts/build-tokens.mjs"), "AC0-SD-IMPORT").toMa…
+    187|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC3 hoja compilada
+AssertionError: AC-CSS-TW: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ ui-tests/piloto-vue.test.ts:190:71
+    188|
+    189|   it("AC3 hoja compilada", () => {
+    190|     expect(existsSync(abs("vue/scripts/build-css.mjs")), "AC-CSS-TW").…
+       |                                                                       ^
+    191|     expect(read("vue/scripts/build-css.mjs"), "AC-CSS-TW").toMatch(/ta…
+    192|     expect(existsSync(abs("vue/dist/pilot.css")), "AC-PILOT-CSS").toBe…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC1 props en los SFC
+AssertionError: AC1-TIME-OFF-STATS-SFC: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ ui-tests/piloto-vue.test.ts:211:66
+    209|     const inboxPath = "vue/src/decision-inbox/DecisionInbox.vue"
+    210|     const lightPath = "vue/src/lightbox/Lightbox.vue"
+    211|     expect(existsSync(abs(statsPath)), "AC1-TIME-OFF-STATS-SFC").toBe(…
+       |                                                                  ^
+    212|     const stats = read(statsPath)
+    213|     for (const name of ["available", "pending", "years", "loading", "e…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC2 JSON de time-off-stats
+AssertionError: AC2-STATS-JSON: expected 'import type { SceneLocale } from "@/a…' to contain 'fixtures/time-off-stats.json'
+
+- Expected
++ Received
+
+- fixtures/time-off-stats.json
++ import type { SceneLocale } from "@/app/catalog/scene-types"
++ import type { TimeOffStatsLabels, TimeOffYear } from "@/registry/ui/time-off-stats"
++
++ export const years: TimeOffYear[] = [
++   { year: 2025, granted: 12, used: 9 },
++   { year: 2026, granted: 12, used: 4 },
++ ]
++
++ export const filled = { available: 12, pending: 2, years }
++ export const empty = { available: null as number | null, pending: 0, years: [] as TimeOffYear[] }
++ export const loading = { ...filled, loading: true }
++ export const error = { ...filled, error: true }
++ export const zero = { available: 0, pending: 0, years: [{ year: 2026, granted: 12, used: 12 }] }
++ export const pending = { available: 12, pending: 6, years }
++
++ export function statsLabels(locale: SceneLocale): Partial<TimeOffStatsLabels> {
++   if (locale === "en") return { amount: (value) => `${value} days` }
++   return {
++     title: "Saldo",
++     available: "Disponible",
++     pending: "Pendiente",
++     left: "Queda este año",
++     year: "Año",
++     granted: "Otorgados",
++     used: "Usados",
++     empty: "No hay saldo que mostrar.",
++     loading: "Cargando el saldo",
++     amount: (value) => `${value} días`,
++   }
++ }
++
++ export const errorCopy = {
++   es: "No se pudo leer el saldo.",
++   en: "The balance could not be read.",
++ }
++
+
+ ❯ ui-tests/piloto-vue.test.ts:250:39
+    248|   it("AC2 JSON de time-off-stats", () => {
+    249|     const current = read("app/examples/time-off-stats/fixtures.ts")
+    250|     expect(current, "AC2-STATS-JSON").toContain("fixtures/time-off-sta…
+       |                                       ^
+    251|     expect(existsSync(abs("fixtures/time-off-stats.json")), "AC2-STATS…
+    252|     const json = JSON.parse(read("fixtures/time-off-stats.json"))
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC2 JSON de decision-inbox
+AssertionError: AC2-INBOX-JSON: expected 'import type { SceneLocale } from "@/a…' to contain 'fixtures/decision-inbox.json'
+
+- Expected
++ Received
+
+- fixtures/decision-inbox.json
++ import type { SceneLocale } from "@/app/catalog/scene-types"
++ import type { DecisionChoice, DecisionInboxLabels, DecisionItem } from "@/registry/ui/decision-inbox"
++
++ export type DecisionMeta = { pedido: string }
++
++ export type ChoiceSeed = { id: string; es: string; en: string }
++
++ export type DecisionSeed = {
++   id: string
++   agent: string
++   es: { title: string; detail: string }
++   en: { title: string; detail: string }
++   choices: readonly ChoiceSeed[]
++   answerId?: string | null
++ }
++
++ export type InboxFixture = {
++   items: readonly DecisionSeed[]
++   loading?: boolean
++   banner?: { es: string; en: string }
++   answerError?: { es: string; en: string }
++ }
++
++ const anticipo: DecisionSeed = {
++   id: "anticipo",
++   agent: "Bruma",
++   es: {
++     title: "¿Mandamos el anticipo hoy?",
++     detail: "Son $18,400.00 MXN a Cerámica del Bajío, pedido PED-1048.",
++   },
++   en: {
++     title: "Do we send the deposit today?",
++     detail: "$18,400.00 MXN to Cerámica del Bajío, order PED-1048.",
++   },
++   choices: [
++     { id: "hoy", es: "Hoy, antes de las 18:00", en: "Today, before 6:00 p.m." },
++     { id: "viernes", es: "Esperar al viernes", en: "Wait until Friday" },
++   ],
++ }
++
++ const muestras: DecisionSeed = {
++   id: "muestras",
++   agent: "Horno",
++   es: {
++     title: "¿Quién recibe las muestras?",
++     detail: "Salen hoy del taller hacia León.",
++   },
++   en: {
++     title: "Who receives the samples?",
++     detail: "They leave the workshop for León today.",
++   },
++   choices: [
++     { id: "mariana", es: "Mariana Ruiz en León", en: "Mariana Ruiz in León" },
++     { id: "taller", es: "El taller las guarda", en: "The workshop holds them" },
++   ],
++ }
++
++ export const filled: InboxFixture = { items: [anticipo, muestras] }
++
++ export const empty: InboxFixture = { items: [] }
++
++ export const loading: InboxFixture = { ...filled, loading: true }
++
++ export const error: InboxFixture = {
++   ...filled,
++   banner: {
++     es: "La respuesta no se guardó. La decisión sigue abierta.",
++     en: "The answer was not saved. The call is still open.",
++   },
++   answerError: {
++     es: "La respuesta no se guardó. La decisión sigue abierta.",
++     en: "The answer was not saved. The call is still open.",
++   },
++ }
++
++ export const answered: InboxFixture = {
++   items: [{ ...anticipo, answerId: "viernes" }, muestras],
++ }
++
++ export const folded: InboxFixture = {
++   items: [
++     { ...anticipo, answerId: "viernes" },
++     { ...muestras, answerId: "mariana" },
++   ],
++ }
++
++ export function inboxLabels(locale: SceneLocale): Partial<DecisionInboxLabels> {
++   if (locale === "en") return {}
++   return {
++     title: "Llamadas abiertas",
++     open: (count) => (count === 1 ? "1 sigue abierta" : `${count} siguen abiertas`),
++     empty: "Nada espera tu respuesta.",
++     loading: "Cargando llamadas",
++     answered: (choice) => `Respuesta: ${choice}`,
++     dismiss: "Cerrar",
++     dismissNamed: (title) => `Cerrar “${title}”`,
++     choose: (title, choice) => `${choice} para “${title}”`,
++     from: (agent) => `De ${agent}`,
++   }
++ }
++
++ export function itemsFrom(
++   seeds: readonly DecisionSeed[],
++   locale: SceneLocale,
++   answers: Record<string, string | null> = {},
++   hidden: readonly string[] = [],
++ ): DecisionItem<DecisionMeta>[] {
++   return seeds
++     .filter((seed) => !hidden.includes(seed.id))
++     .map((seed) => ({
++       id: seed.id,
++       title: seed[locale].title,
++       detail: seed[locale].detail,
++       agent: seed.agent,
++       answerId: answers[seed.id] ?? seed.answerId ?? null,
++       meta: { pedido: "PED-1048" },
++       choices: seed.choices.map((choice): DecisionChoice => ({ id: choice.id, label: choice[locale] })),
++     }))
++ }
++
+
+ ❯ ui-tests/piloto-vue.test.ts:263:79
+    261|
+    262|   it("AC2 JSON de decision-inbox", () => {
+    263|     expect(read("app/examples/decision-inbox/fixtures.ts"), "AC2-INBOX…
+       |                                                                               ^
+    264|     expect(existsSync(abs("fixtures/decision-inbox.json")), "AC2-INBOX…
+    265|     const json = JSON.parse(read("fixtures/decision-inbox.json"))
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC2 escenas de lightbox
+AssertionError: AC2-LIGHT-FILE: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ ui-tests/piloto-vue.test.ts:275:73
+    273|
+    274|   it("AC2 escenas de lightbox", () => {
+    275|     expect(existsSync(abs("fixtures/lightbox.json")), "AC2-LIGHT-FILE"…
+       |                                                                         ^
+    276|     expect(existsSync(abs("app/examples/lightbox/scenes.tsx")), "AC2-L…
+    277|     const scenes = read("app/examples/lightbox/scenes.tsx")
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC6 Razor estático
+AssertionError: AC6-RAZOR: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ ui-tests/piloto-vue.test.ts:288:77
+    286|
+    287|   it("AC6 Razor estático", () => {
+    288|     expect(existsSync(abs("hosts/razor/TimeOffStats.cshtml")), "AC6-RA…
+       |                                                                             ^
+    289|     const view = read("hosts/razor/TimeOffStats.cshtml")
+    290|     expect(view, "AC6-SCRIPT").not.toMatch(/<script/i)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC7 registry intacto y dependencias del workspace
+AssertionError: AC7-TOKENS: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ ui-tests/piloto-vue.test.ts:303:72
+    301|
+    302|   it("AC7 registry intacto y dependencias del workspace", () => {
+    303|     expect(existsSync(abs("tokens/retana.tokens.json")), "AC7-TOKENS")…
+       |                                                                        ^
+    304|     const registryText = read("registry.json")
+    305|     expect(registryText, "AC7-REGISTRY-JSON").not.toContain("retana.ca…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC manifiesto
+AssertionError: AC-MANIFEST: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ ui-tests/piloto-vue.test.ts:322:75
+    320|
+    321|   it("AC manifiesto", () => {
+    322|     expect(existsSync(abs("catalog/retana.catalog.json")), "AC-MANIFES…
+       |                                                                           ^
+    323|     const manifest = JSON.parse(read("catalog/retana.catalog.json")) a…
+    324|       schema: string
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC9 nota de gestos
+AssertionError: AC9-GESTOS: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ ui-tests/piloto-vue.test.ts:356:65
+    354|
+    355|   it("AC9 nota de gestos", () => {
+    356|     expect(existsSync(abs("docs/vue/gestos.md")), "AC9-GESTOS").toBe(t…
+       |                                                                 ^
+    357|     const doc = read("docs/vue/gestos.md")
+    358|     for (const phrase of ["motion-v", "2.11.1", "vaul-vue", "0.4.1", "…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC licencias
+AssertionError: AC-NOTICE: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ ui-tests/piloto-vue.test.ts:365:56
+    363|
+    364|   it("AC licencias", () => {
+    365|     expect(existsSync(abs("vue/NOTICE")), "AC-NOTICE").toBe(true)
+       |                                                        ^
+    366|     const notice = read("vue/NOTICE")
+    367|     expect(notice, "AC-NOTICE-APACHE").toMatch(/Apache-2\.0/)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC puente documentado
+AssertionError: AC-VUETIFY-DOC: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ ui-tests/piloto-vue.test.ts:375:70
+    373|
+    374|   it("AC puente documentado", () => {
+    375|     expect(existsSync(abs("docs/vue/vuetify.md")), "AC-VUETIFY-DOC").t…
+       |                                                                      ^
+    376|     const doc = read("docs/vue/vuetify.md")
+    377|     expect(doc, "AC-VUETIFY-APP").toContain("canal-semilla")
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC demo Cenit solo en vue/demo
+AssertionError: AC-DEMO-THEME: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ ui-tests/piloto-vue.test.ts:386:73
+    384|
+    385|   it("AC demo Cenit solo en vue/demo", () => {
+    386|     expect(existsSync(abs("vue/demo/cenit-theme.ts")), "AC-DEMO-THEME"…
+       |                                                                         ^
+    387|     const theme = read("vue/demo/cenit-theme.ts")
+    388|     expect(theme, "AC-DEMO-PRIMARY").toContain("#244BD6")
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/20]⎯
+
+ FAIL  ui-tests/piloto-vue.test.ts > piloto vue > AC status de auditoría
+AssertionError: AC-STATUS-STATE: expected 'schema: uis.status/v2\nui_system: {ve…' to contain 'cycle_state: AUDITORIA'
+
+- Expected
++ Received
+
+- cycle_state: AUDITORIA
++ schema: uis.status/v2
++ ui_system: {version: 4.0.0}
++ declaration: "UI_SYSTEM: APPLIES"
++ cycle_state: PRUEBAS
++ spec_id: piloto-vue
++ profile: LITE
++ retana_ui:
++   sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
++   registry_source: git-sha
++ host_app:
++   repo: eduardoretana/canal-semilla
++   sha: f93d77813207c979758cab3270f17ba7bac07694
++   note: "App viva confirmada por Eduardo. app-aldo-pensiones no lo es. Este ciclo no abre PR allí."
++ plan: docs/plans/plan-piloto-vue.md
++ idea: docs/plans/IDEA-piloto-vue.md
++ ui_system_snapshot: 419ad6481648c693d61f8e5ebfb8b8e80d8d8ab7
++ auditor: pendiente
++ auditor_is_builder: false
++
+
+ ❯ ui-tests/piloto-vue.test.ts:403:39
+    401|     const status = read("ui/status/piloto-vue.ui-status.yaml")
+    402|     expect(status, "AC-STATUS-LINE").toMatch(/ui_system:\s*\{version:\…
+    403|     expect(status, "AC-STATUS-STATE").toContain("cycle_state: AUDITORI…
+       |                                       ^
+    404|     expect(status, "AC-STATUS-SHA").toContain(sha)
+    405|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/20]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  20 failed (20)
+   Start at  16:00:08
+   Duration  710ms (environment 70%, setup 14%, transform 10%, tests 4%, import 1%, worker 1%)
+
+ROOT_EXIT:1
+
+===== vue: pnpm --dir vue exec vitest run =====
+
+ RUN  v5.1.0 /agent/repos/retana-ui/vue
+
+ ❯ tests/browser.test.ts (1 test | 1 failed) 7ms
+   ❯ navegador del piloto (1)
+     × axe, foco, 390, reduced-motion y Vuetify 6ms
+ ❯ tests/parity.test.ts (6 tests | 6 failed) 11ms
+   ❯ paridad Vue (6)
+     × time-off lleno en es-MX 6ms
+     × time-off vacío, carga, error, cero y pendiente 1ms
+     × time-off en inglés y el default inglés 1ms
+     × decision-inbox dispara las mismas llamadas que React 1ms
+     × decision-inbox vacío, carga, error, respondida y cierre 1ms
+     × lightbox vacío, carga, error y galería 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/browser.test.ts > navegador del piloto > axe, foco, 390, reduced-motion y Vuetify
+AssertionError: AC8-PREVIEW: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/browser.test.ts:16:48
+     14| describe("navegador del piloto", () => {
+     15|   it("axe, foco, 390, reduced-motion y Vuetify", async () => {
+     16|     expect(existsSync(preview), "AC8-PREVIEW").toBe(true)
+       |                                                ^
+     17|     const { createServer } = await import("vite")
+     18|     const { chromium } = await import("playwright")
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  tests/parity.test.ts > paridad Vue > time-off lleno en es-MX
+AssertionError: AC2-MOUNT-STATS-FILLED: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ gate tests/parity.test.ts:8:43
+      6|
+      7| function gate(signature: string) {
+      8|   expect(existsSync(sceneLib), signature).toBe(true)
+       |                                           ^
+      9| }
+     10|
+ ❯ tests/parity.test.ts:23:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  tests/parity.test.ts > paridad Vue > time-off vacío, carga, error, cero y pendiente
+AssertionError: AC2-MOUNT-STATS-STATES: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ gate tests/parity.test.ts:8:43
+      6|
+      7| function gate(signature: string) {
+      8|   expect(existsSync(sceneLib), signature).toBe(true)
+       |                                           ^
+      9| }
+     10|
+ ❯ tests/parity.test.ts:38:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  tests/parity.test.ts > paridad Vue > time-off en inglés y el default inglés
+AssertionError: AC2-MOUNT-STATS-EN: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ gate tests/parity.test.ts:8:43
+      6|
+      7| function gate(signature: string) {
+      8|   expect(existsSync(sceneLib), signature).toBe(true)
+       |                                           ^
+      9| }
+     10|
+ ❯ tests/parity.test.ts:58:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  tests/parity.test.ts > paridad Vue > decision-inbox dispara las mismas llamadas que React
+AssertionError: AC1-CALLS: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ gate tests/parity.test.ts:8:43
+      6|
+      7| function gate(signature: string) {
+      8|   expect(existsSync(sceneLib), signature).toBe(true)
+       |                                           ^
+      9| }
+     10|
+ ❯ tests/parity.test.ts:72:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+ FAIL  tests/parity.test.ts > paridad Vue > decision-inbox vacío, carga, error, respondida y cierre
+AssertionError: AC5-INBOX-STATES: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ gate tests/parity.test.ts:8:43
+      6|
+      7| function gate(signature: string) {
+      8|   expect(existsSync(sceneLib), signature).toBe(true)
+       |                                           ^
+      9| }
+     10|
+ ❯ tests/parity.test.ts:104:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯
+
+ FAIL  tests/parity.test.ts > paridad Vue > lightbox vacío, carga, error y galería
+AssertionError: AC2-MOUNT-LIGHTBOX: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ gate tests/parity.test.ts:8:43
+      6|
+      7| function gate(signature: string) {
+      8|   expect(existsSync(sceneLib), signature).toBe(true)
+       |                                           ^
+      9| }
+     10|
+ ❯ tests/parity.test.ts:136:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/7]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  7 failed (7)
+   Start at  16:00:09
+   Duration  557ms (environment 90%, transform 5%, tests 2%, import 2%, worker 1%)
+
+VUE_EXIT:1

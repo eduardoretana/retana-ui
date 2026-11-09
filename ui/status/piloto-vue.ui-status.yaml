@@ -1,0 +1,19 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0}
+declaration: "UI_SYSTEM: APPLIES"
+cycle_state: AUDITORIA
+spec_id: piloto-vue
+profile: STANDARD
+head: aa674bc8e3e58f98af4ad6ceb2bcf5a85ed914b8
+retana_ui:
+  sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+  registry_source: git-sha
+host_app:
+  repo: eduardoretana/canal-semilla
+  sha: f93d77813207c979758cab3270f17ba7bac07694
+  note: "App viva confirmada por Eduardo. app-aldo-pensiones no lo es. Este ciclo no abre PR allí."
+plan: docs/plans/plan-piloto-vue.md
+idea: docs/plans/IDEA-piloto-vue.md
+ui_system_snapshot: 419ad6481648c693d61f8e5ebfb8b8e80d8d8ab7
+auditor: pendiente
+auditor_is_builder: false

@@ -125,12 +125,13 @@ export function DecisionInbox<TMeta = unknown>({
       ) : items.length === 0 ? (
         <p className="text-muted-foreground">{labels.empty}</p>
       ) : (
-        <ul className="flex flex-col gap-2">
+        <>
           {error ? (
-            <li role="alert" className="text-destructive">
+            <p role="alert" className="text-destructive">
               {error}
-            </li>
+            </p>
           ) : null}
+        <ul className="flex flex-col gap-2">
           {items.map((item) => {
             const answer = item.choices.find((choice) => choice.id === item.answerId)
             return (
@@ -181,6 +182,7 @@ export function DecisionInbox<TMeta = unknown>({
             )
           })}
         </ul>
+        </>
       )}
     </section>
   )
