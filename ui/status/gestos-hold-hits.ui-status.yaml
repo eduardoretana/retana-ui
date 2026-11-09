@@ -1,8 +1,12 @@
 schema: uis.status/v2
 ui_system: {version: 4.0.0, declaration: "UI_SYSTEM: APPLIES"}
 spec_id: gestos-hold-hits
-profile: LITE
+profile: STANDARD
 cycle_state: AUDITORIA
 retana_ui.sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
-head: 8dbe0e2f7892ecd600a2507bf59f59d80975400d
+# El blob no puede contener el sha del commit que lo incluye.
+# La evidencia de despacho declara el tip (git rev-parse HEAD) después de este commit.
+head: e4ae0d324020a429d2f1befcf99c966afb9de43c
 ideas: [4, 8]
+gesture_rules: context_only
+blocking_snapshot: 419ad6481648c693d61f8e5ebfb8b8e80d8d8ab7
