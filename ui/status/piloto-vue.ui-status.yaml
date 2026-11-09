@@ -3,7 +3,8 @@ ui_system: {version: 4.0.0}
 declaration: "UI_SYSTEM: APPLIES"
 cycle_state: AUDITORIA
 spec_id: piloto-vue
-profile: LITE
+profile: STANDARD
+head: aa674bc8e3e58f98af4ad6ceb2bcf5a85ed914b8
 retana_ui:
   sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
   registry_source: git-sha

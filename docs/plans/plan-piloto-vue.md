@@ -2,7 +2,7 @@
 
 - spec_id: `piloto-vue`
 - version: 1.0.0
-- perfil: LITE
+- perfil: STANDARD
 - retana_ui.sha: `6671cfac72f736739d2d3dd2740cc5f13416acb3`
 - ui_system: 4.0.0
 - base: rama `CPL`, commit `6671cfac72f736739d2d3dd2740cc5f13416acb3`
@@ -163,7 +163,7 @@ Las 29 piezas fáciles. Órganos, tablas, drag, Liveblocks, Supabase, `layered-p
 
 ## 9. Perfil
 
-LITE. No hay flujo nuevo en la app: son tres piezas que ya existen en React y un contrato de nombres. La dirección se hereda (ley 7: el host trae el tema). No se generan imágenes. El Auditor, cuando VibeBot lo despache, puede subir el perfil; este plan no lo baja después.
+STANDARD. VibeBot, como UI Lead, subió el piloto desde LITE. No hay merge y no se toca canal-semilla. La dirección visual sigue siendo la del host: no se generan imágenes de Dirección en este corte. El Auditor no es quien construyó.
 
 ## 10. Hechos, supuestos, preguntas abiertas
 

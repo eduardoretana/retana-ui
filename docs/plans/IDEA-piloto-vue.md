@@ -2,7 +2,7 @@
 
 - spec_id: `piloto-vue`
 - fecha: 2026-11-09
-- perfil: LITE (la dirección visual se hereda del host; no hay flujo nuevo de producto)
+- perfil: STANDARD (UI Lead, VibeBot, sube el piloto desde LITE)
 - retana_ui.sha: `6671cfac72f736739d2d3dd2740cc5f13416acb3`
 - ui-system: 4.0.0 (snapshot `419ad6481648c693d61f8e5ebfb8b8e80d8d8ab7`; el Hub vivo respondió 404)
 
