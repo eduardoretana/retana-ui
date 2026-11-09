@@ -2,6 +2,10 @@
 
 import { LightboxGallery } from "@/registry/ui/lightbox"
 
+import { copy } from "./fixtures"
+
+const locale = "es" as const
+
 const tones = ["#ddd6cc", "#c9c1b6", "#b3aa9e", "#8f877d"]
 
 const items = ["Estudio", "Patio", "Mesa", "Cerro"].map((name, index) => ({
@@ -13,5 +17,14 @@ const items = ["Estudio", "Patio", "Mesa", "Cerro"].map((name, index) => ({
 }))
 
 export function Demo() {
-  return <LightboxGallery closeLabel="Cerrar" items={items} />
+  return (
+    <LightboxGallery
+      items={items}
+      closeLabel={copy[locale].close}
+      previousLabel={copy[locale].previous}
+      nextLabel={copy[locale].next}
+      zoomInLabel={copy[locale].zoomIn}
+      zoomOutLabel={copy[locale].zoomOut}
+    />
+  )
 }

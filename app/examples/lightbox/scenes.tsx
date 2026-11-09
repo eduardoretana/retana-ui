@@ -8,7 +8,16 @@ import { copy, lightboxItems } from "./fixtures"
 const frame = { size: "md" as const, surface: "card" as const, padding: "md" as const }
 
 function Filled({ locale }: SceneRenderProps) {
-  return <LightboxGallery closeLabel={copy[locale].close} items={lightboxItems(locale)} />
+  return (
+    <LightboxGallery
+      items={lightboxItems(locale)}
+      closeLabel={copy[locale].close}
+      previousLabel={copy[locale].previous}
+      nextLabel={copy[locale].next}
+      zoomInLabel={copy[locale].zoomIn}
+      zoomOutLabel={copy[locale].zoomOut}
+    />
+  )
 }
 
 function Empty({ locale }: SceneRenderProps) {
