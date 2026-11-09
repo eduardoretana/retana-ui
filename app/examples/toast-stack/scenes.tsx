@@ -2,13 +2,25 @@
 
 import { useEffect } from "react"
 import { MotionConfig } from "motion/react"
+import { toast as layoutToast } from "sonner"
 
 import type { Scene } from "@/app/catalog/scene-types"
 import { ToastStack, ToastStackProvider, useToastStack, type ToastType } from "@/registry/ui/toast-stack"
 
-import { copy } from "./fixtures"
+import { copy, layoutToast as layoutCopy, loadedStack } from "./fixtures"
 
 const card = { size: "md" as const, surface: "card" as const, padding: "md" as const }
+
+function LoadBoth() {
+  const { toast } = useToastStack()
+  useEffect(() => {
+    for (const item of loadedStack) {
+      toast({ id: item.title, title: item.title, description: item.description, type: item.type, duration: Infinity })
+    }
+    layoutToast(layoutCopy.title, { id: "layout-toaster", description: layoutCopy.description, duration: Infinity })
+  }, [toast])
+  return null
+}
 
 function Seed({ title, description, type }: { title: string; description?: string; type: ToastType }) {
   const { toast } = useToastStack()
@@ -116,5 +128,19 @@ export const scenes: Scene[] = [
     labelEn: "Extreme data",
     frame: card,
     render: (props) => <Stack {...props} seed={copy(props.locale).extreme} />,
+  },
+  {
+    id: "al-cargar",
+    label: "Al cargar",
+    labelEn: "On load",
+    frame: card,
+    render: () => (
+      <ToastStackProvider>
+        <div className="relative min-h-80">
+          <LoadBoth />
+          <ToastStack contained />
+        </div>
+      </ToastStackProvider>
+    ),
   },
 ]

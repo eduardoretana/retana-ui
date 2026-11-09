@@ -6312,7 +6312,8 @@
           { "id": "reduced", "label": "Menos movimiento", "labelEn": "Reduced motion" },
           { "id": "keyboard", "label": "Teclado", "labelEn": "Keyboard" },
           { "id": "390", "label": "390 px", "labelEn": "390 px" },
-          { "id": "extreme", "label": "Datos extremos", "labelEn": "Extreme data" }
+          { "id": "extreme", "label": "Datos extremos", "labelEn": "Extreme data" },
+          { "id": "al-cargar", "label": "Al cargar", "labelEn": "On load" }
         ],
         "examples": [
           {

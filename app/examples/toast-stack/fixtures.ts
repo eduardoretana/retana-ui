@@ -16,6 +16,14 @@ export const loading = { title: "Cocción", description: "El programa sigue en c
 
 export const error = { title: "La cocción falló", description: "No se pudo guardar la bitácora.", type: "error" as const }
 
+export const loadedStack: ToastSeed[] = [
+  { title: "Pila uno", description: "El swipe de la pila sigue activo.", type: "success" },
+  { title: "Pila dos", description: "Segundo aviso, detrás del de enfrente.", type: "info" },
+  { title: "Pila tres", description: "Tercer aviso de la pila.", type: "warning" },
+]
+
+export const layoutToast = { title: "Toaster del layout", description: "Este Toaster no tiene swipe." }
+
 export function copy(locale: SceneLocale) {
   if (locale === "en") {
     return {

@@ -80,6 +80,11 @@
         "id": "extreme",
         "label": "Datos extremos",
         "labelEn": "Extreme data"
+      },
+      {
+        "id": "al-cargar",
+        "label": "Al cargar",
+        "labelEn": "On load"
       }
     ],
     "examples": [
@@ -137,6 +142,11 @@
         "title": "Datos extremos",
         "href": "/examples/toast-stack?scene=extreme",
         "description": "Extreme data"
+      },
+      {
+        "title": "Al cargar",
+        "href": "/examples/toast-stack?scene=al-cargar",
+        "description": "On load"
       }
     ],
     "usage": "const toast = useToastStack()\ntoast.push({ title: \"Saved\" })",

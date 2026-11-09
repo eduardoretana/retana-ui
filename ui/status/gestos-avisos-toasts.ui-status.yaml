@@ -6,7 +6,7 @@ cycle_state: AUDITORIA
 retana_ui.sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
 # El blob no puede contener el sha del commit que lo incluye.
 # La evidencia de despacho declara el tip (git rev-parse HEAD) después de este commit.
-head: ccc5ae80533411660c6121e367c149aa2f061be9
+head: aab954c82fe524791460f99b20623dd3803b4713
 ideas: [2, 5, 7, 8]
 profile_note: "Perfil STANDARD fijado por el UI Lead para el despacho. La IDEA (5) no abre un flujo nuevo."
 gesture_rules: context_only
