@@ -4,4 +4,5 @@ spec_id: gestos-hold-hits
 profile: LITE
 cycle_state: AUDITORIA
 retana_ui.sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+head: 8dbe0e2f7892ecd600a2507bf59f59d80975400d
 ideas: [4, 8]
