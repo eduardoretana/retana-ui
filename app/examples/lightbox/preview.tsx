@@ -12,7 +12,7 @@ const items = [0, 1, 2].map((index) => ({
 export default function LightboxPreview() {
   return (
     <div className="h-full bg-background p-3">
-      <LightboxGallery items={items} />
+      <LightboxGallery closeLabel="Cerrar" items={items} />
     </div>
   )
 }

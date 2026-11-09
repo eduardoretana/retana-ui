@@ -156,9 +156,11 @@ export function Lightbox({
 export function LightboxGallery({
   items,
   className,
+  closeLabel,
 }: {
   items: readonly LightboxItem[]
   className?: string
+  closeLabel?: string
 }) {
   const [open, setOpen] = React.useState(false)
   const [index, setIndex] = React.useState(0)
@@ -182,7 +184,7 @@ export function LightboxGallery({
           </li>
         ))}
       </ul>
-      <Lightbox items={items} open={open} onOpenChange={setOpen} index={index} onIndexChange={setIndex} />
+      <Lightbox closeLabel={closeLabel} items={items} open={open} onOpenChange={setOpen} index={index} onIndexChange={setIndex} />
     </div>
   )
 }

@@ -13,5 +13,5 @@ const items = ["Estudio", "Patio", "Mesa", "Cerro"].map((name, index) => ({
 }))
 
 export function Demo() {
-  return <LightboxGallery items={items} />
+  return <LightboxGallery closeLabel="Cerrar" items={items} />
 }
