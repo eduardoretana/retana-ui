@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`422` items are in `registry.json` on this branch: `333` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`436` items are in `registry.json` on this branch: `346` components, `74` blocks, `6` hooks, and `10` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -383,6 +383,20 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`support-inbox`](registry/blocks/support-inbox.tsx) · block — A three-pane desk with folders, a conversation list, a reply thread, a contact panel, and a new-conversation form. Install: `npx shadcn@latest add @retana/support-inbox`.
 - [`ticket-desk`](registry/blocks/ticket-desk.tsx) · block — A ticket list with a status filter, a thread, a properties panel, and dialogs to create, edit, or delete a ticket. Install: `npx shadcn@latest add @retana/ticket-desk`.
 - [`notification-inbox`](registry/blocks/notification-inbox.tsx) · block — Notification tabs with counts, mark all read, snooze, archive, subscribe, a comment thread, and a properties column. Install: `npx shadcn@latest add @retana/notification-inbox`.
+- [`app-rail`](registry/ui/app-rail.tsx) · ui — A narrow rail of destinations, workspaces, and the current person. Active item is marked. No theme of its own. Install: `npx shadcn@latest add @retana/app-rail`.
+- [`inbox-page-header`](registry/ui/inbox-page-header.tsx) · ui — Breadcrumb, large title, subtitle, outline actions, and a notice bell. It is not the project page header. Install: `npx shadcn@latest add @retana/inbox-page-header`.
+- [`segmented-filter`](registry/ui/segmented-filter.tsx) · ui — Extends the segmented control with a 44 px target. The track, keyboard, and motion stay in segmented-control. Install: `npx shadcn@latest add @retana/segmented-filter`.
+- [`conversation-item`](registry/ui/conversation-item.tsx) · ui — One conversation or contact row: avatar, preview, time, unread count, and optional channel, stage, and window slots. Install: `npx shadcn@latest add @retana/conversation-item`.
+- [`conversation-list`](registry/ui/conversation-list.tsx) · ui — Search, segmented filter, and sections. Arrow keys move the selection. The filter reuses segmented-filter. Install: `npx shadcn@latest add @retana/conversation-list`.
+- [`message-bubble`](registry/ui/message-bubble.tsx) · ui — Incoming or outgoing bubble, grouped, with sent, delivered, read, or a failed send that can be retried. Install: `npx shadcn@latest add @retana/message-bubble`.
+- [`message-card-file`](registry/ui/message-card-file.tsx) · ui — A file row inside a thread: name, detail, optional validation status, and download. Install: `npx shadcn@latest add @retana/message-card-file`.
+- [`message-card-invoice`](registry/ui/message-card-invoice.tsx) · ui — A large amount and a due chip. The same card carries a quote when the host changes the title. Install: `npx shadcn@latest add @retana/message-card-invoice`.
+- [`message-card-metric`](registry/ui/message-card-metric.tsx) · ui — A title, a value, and a segmented bar. Filled segments use the primary token. Nothing animates the bar. Install: `npx shadcn@latest add @retana/message-card-metric`.
+- [`suggested-replies`](registry/ui/suggested-replies.tsx) · ui — Outline chips the person approves. Approving calls onApprove and never sends a message. Install: `npx shadcn@latest add @retana/suggested-replies`.
+- [`thread-composer`](registry/ui/thread-composer.tsx) · ui — Attach, ask the assistant, and send. A locked window disables send and offers a template action instead. Install: `npx shadcn@latest add @retana/thread-composer`.
+- [`party-panel`](registry/ui/party-panel.tsx) · ui — Profile column with progress, facts, members, files, and sensitive fields masked until reveal. Install: `npx shadcn@latest add @retana/party-panel`.
+- [`chat-thread`](registry/ui/chat-thread.tsx) · ui — A live log of bubbles and rich cards, plus a typing row and retry for a failed send. Install: `npx shadcn@latest add @retana/chat-thread`.
+- [`inbox-crm`](registry/blocks/inbox-crm.tsx) · block — Rail, header, conversation list, thread, and party panel. Channel, stage, and the closed window arrive as props. Suggestions never send by themselves. Install: `npx shadcn@latest add @retana/inbox-crm`.
 
 ### Agents
 
@@ -623,7 +637,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`presence-supabase`](registry/lib/presence-supabase.ts) · lib — Supabase Realtime Presence adapter. Tracks a channel and maps sync, join, and leave onto the shared presence hooks. Install: `npx shadcn@latest add @retana/presence-supabase`.
 - [`presence-avatars`](registry/ui/presence-avatars.tsx) · ui — Avatar stack for people in the room, with overflow, tooltips, a live dot, and an optional single avatar for all agents. Install: `npx shadcn@latest add @retana/presence-avatars`.
 - [`live-cursors`](registry/ui/live-cursors.tsx) · ui — Cursors and name labels positioned inside a relative container. Pointer updates are container-relative and throttled with requestAnimationFrame. Install: `npx shadcn@latest add @retana/live-cursors`.
-- [`typing-indicator`](registry/ui/typing-indicator.tsx) · ui — Polite live region that names who is typing, including “Ana and 2 others are typing…”. Install: `npx shadcn@latest add @retana/typing-indicator`.
+- [`typing-indicator`](registry/ui/typing-indicator.tsx) · ui — Polite live region that names who is typing, including “Ana and 2 others are typing…”. Pass names to draw the row without a presence provider. Install: `npx shadcn@latest add @retana/typing-indicator`.
 - [`presence-outline`](registry/ui/presence-outline.tsx) · ui — Outlines and labels an element when another person's selection presence matches. Install: `npx shadcn@latest add @retana/presence-outline`.
 
 ### Navigation

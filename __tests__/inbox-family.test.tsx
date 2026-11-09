@@ -69,7 +69,7 @@ describe("conversation list", () => {
 
     expect(screen.getByRole("listbox", { name: "Conversaciones" })).toBeInTheDocument()
     expect(screen.getByRole("option", { name: /Taller Ámbar/ })).toHaveAttribute("aria-selected", "true")
-    expect(screen.getByText("2")).toBeInTheDocument()
+    expect(screen.getByRole("option", { name: /Taller Ámbar/ })).toHaveTextContent("2")
     expect(screen.getByText("WhatsApp")).toBeInTheDocument()
     expect(screen.getByText("Propuesta")).toBeInTheDocument()
     expect(screen.getByText("6 h")).toBeInTheDocument()
@@ -131,7 +131,7 @@ describe("message bubble", () => {
         Llegué.
       </MessageBubble>,
     )
-    expect(screen.getByText("Llegué").closest("[data-motion]")).toHaveAttribute("data-motion", "rise")
+    expect(screen.getByText("Llegué.").closest("[data-motion]")).toHaveAttribute("data-motion", "rise")
 
     const original = window.matchMedia
     window.matchMedia = (query: string) =>
@@ -150,7 +150,7 @@ describe("message bubble", () => {
         Llegué.
       </MessageBubble>,
     )
-    expect(screen.getByText("Llegué").closest("[data-motion]")).toHaveAttribute("data-motion", "off")
+    expect(screen.getByText("Llegué.").closest("[data-motion]")).toHaveAttribute("data-motion", "off")
     window.matchMedia = original
   })
 })

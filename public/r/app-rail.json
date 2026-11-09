@@ -1,0 +1,111 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "app-rail",
+  "title": "App rail",
+  "author": "Eduardo Retana",
+  "description": "A narrow rail of destinations, workspaces, and the current person. Active item is marked. No theme of its own.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/app-rail.tsx",
+      "content": "\"use client\"\n\n/**\n * Bandeja de conversaciones.\n * Fuente: concepto visual de Divan Raj (@desdivj),\n * https://x.com/desdivj/status/2119738295039250507\n * Licencia: sin licencia, clean-room. No se copiaron assets, logos,\n * ilustraciones ni textos.\n */\n\nimport type { ReactNode } from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { deskInitials } from \"@/lib/inbox\"\n\nexport type AppRailItem = {\n  id: string\n  label: string\n  icon?: ReactNode\n  active?: boolean\n}\n\nexport type AppRailWorkspace = {\n  id: string\n  label: string\n}\n\nexport type AppRailProps = {\n  label: string\n  mark?: string\n  items?: readonly AppRailItem[]\n  workspaces?: readonly AppRailWorkspace[]\n  user?: { name: string }\n  settingsLabel?: string\n  onSelect?: (id: string) => void\n  onWorkspace?: (id: string) => void\n  onSettings?: () => void\n  status?: \"ready\" | \"loading\" | \"empty\" | \"error\"\n  emptyLabel?: string\n  loadingLabel?: string\n  error?: string\n  className?: string\n}\n\nconst buttonClass =\n  \"grid size-11 place-items-center rounded-xl text-sidebar-foreground hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n\nexport function AppRail({\n  label,\n  mark = \"R\",\n  items = [],\n  workspaces = [],\n  user,\n  settingsLabel = \"Ajustes\",\n  onSelect,\n  onWorkspace,\n  onSettings,\n  status = \"ready\",\n  emptyLabel = \"Sin destinos\",\n  loadingLabel = \"Cargando el riel\",\n  error,\n  className,\n}: AppRailProps) {\n  return (\n    <nav\n      aria-label={label}\n      data-slot=\"app-rail\"\n      className={cn(\"flex w-14 shrink-0 flex-col items-center gap-1 border-e border-sidebar-border bg-sidebar px-1.5 py-3\", className)}\n    >\n      <span className=\"mb-2 grid size-11 place-items-center rounded-full bg-foreground text-sm font-semibold text-background\" aria-hidden>\n        {mark.slice(0, 1)}\n      </span>\n      {status === \"loading\" ? (\n        <div role=\"status\" aria-label={loadingLabel} className=\"size-11 animate-pulse rounded-xl bg-sidebar-accent\" />\n      ) : null}\n      {status === \"error\" ? (\n        <p role=\"alert\" className=\"px-1 text-center text-[11px] text-destructive\">\n          {error}\n        </p>\n      ) : null}\n      {status === \"empty\" || (status === \"ready\" && items.length === 0) ? (\n        <p role=\"status\" className=\"px-1 text-center text-[11px] text-sidebar-foreground\">\n          {emptyLabel}\n        </p>\n      ) : null}\n      {status === \"ready\"\n        ? items.map((item) => (\n            <button\n              key={item.id}\n              type=\"button\"\n              aria-current={item.active ? \"page\" : undefined}\n              className={cn(buttonClass, item.active && \"bg-sidebar-accent text-sidebar-accent-foreground\")}\n              onClick={() => onSelect?.(item.id)}\n            >\n              {item.icon ?? <span className=\"size-4 rounded-sm border border-current\" aria-hidden />}\n              <span className=\"sr-only\">{item.label}</span>\n            </button>\n          ))\n        : null}\n      <span className=\"mt-auto\" />\n      {workspaces.map((space) => (\n        <button key={space.id} type=\"button\" className={buttonClass} onClick={() => onWorkspace?.(space.id)}>\n          <span aria-hidden className=\"text-xs font-medium\">\n            {deskInitials(space.label)}\n          </span>\n          <span className=\"sr-only\">{space.label}</span>\n        </button>\n      ))}\n      {onSettings ? (\n        <button type=\"button\" className={buttonClass} onClick={onSettings}>\n          <span className=\"sr-only\">{settingsLabel}</span>\n          <span aria-hidden className=\"size-4 rounded-full border border-current\" />\n        </button>\n      ) : null}\n      {user ? (\n        <span className=\"grid size-11 place-items-center rounded-full bg-sidebar-accent text-xs font-medium text-sidebar-accent-foreground\">\n          <span className=\"sr-only\">{user.name}</span>\n          <span aria-hidden>{deskInitials(user.name)}</span>\n        </span>\n      ) : null}\n    </nav>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/app-rail.tsx"
+    },
+    {
+      "path": "registry/lib/inbox.ts",
+      "content": "/**\n * Shared types for the desk pieces. No fetching, no theme.\n * Dates are calendar days (`YYYY-MM-DD`). The host owns locale and timezone.\n */\n\nexport const DESK_PRESENCES = [\"online\", \"offline\", \"away\"] as const\n\nexport type DeskPresence = (typeof DESK_PRESENCES)[number]\n\nexport type DeskMessage = {\n  id: string\n  author: string\n  body: string\n  /** Preformatted time. */\n  time: string\n  side: \"incoming\" | \"outgoing\"\n  note?: boolean\n  receipt?: \"seen\" | \"unseen\"\n}\n\nexport type DeskOption = {\n  value: string\n  label: string\n}\n\nconst DATE_RE = /^(\\d{4})-(\\d{2})-(\\d{2})$/\n\nexport function foldInboxText(value: string): string {\n  return value.normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g, \"\").toLowerCase()\n}\n\nexport function isCalendarDate(value: string | undefined): value is string {\n  return Boolean(value && DATE_RE.test(value))\n}\n\n/** True when `due` is a calendar day before `today`. */\nexport function isOverdueDate(due: string | undefined, today: string): boolean {\n  if (!isCalendarDate(due) || !isCalendarDate(today)) return false\n  return due < today\n}\n\nexport function formatDeskDate(iso: string, locale?: string): string {\n  if (!isCalendarDate(iso)) return iso\n  const [year, month, day] = iso.split(\"-\").map(Number)\n  return new Intl.DateTimeFormat(locale, { dateStyle: \"medium\", timeZone: \"UTC\" }).format(\n    new Date(Date.UTC(year, month - 1, day)),\n  )\n}\n\nexport function deskInitials(name: string): string {\n  const letters = name\n    .split(/\\s+/)\n    .filter(Boolean)\n    .slice(0, 2)\n    .map((part) => part[0]?.toUpperCase() ?? \"\")\n    .join(\"\")\n  return letters || \"?\"\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/inbox.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Riel de la app",
+    "descriptionEs": "Riel estrecho con destinos, espacios y la persona. El activo queda marcado. No trae tema.",
+    "preview": "app/examples/app-rail/preview.tsx",
+    "previewHref": "/examples/app-rail",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Riel de la app",
+        "href": "/examples/app-rail",
+        "description": "Riel estrecho con destinos, espacios y la persona. El activo queda marcado. No trae tema."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/app-rail/stress",
+        "description": "Vacío, textos largos, RTL y cantidad."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/app-rail?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/app-rail?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/app-rail?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/app-rail?scene=error",
+        "description": "Error"
+      }
+    ],
+    "usage": "<AppRail label=\"Espacios\" mark=\"Á\" items={[{ id: \"chat\", label: \"Mensajes\", active: true }]} />",
+    "api": [
+      {
+        "name": "items",
+        "type": "AppRailItem[]",
+        "description": "id, label, icon slot, active."
+      },
+      {
+        "name": "workspaces / user",
+        "type": "slots",
+        "description": "Marks at the bottom. The host owns the names."
+      },
+      {
+        "name": "onSelect",
+        "type": "(id: string) => void",
+        "description": "Chooses a destination. It does not navigate by itself."
+      },
+      {
+        "name": "status",
+        "type": "ready | loading | empty | error",
+        "description": "Loading pulse, empty copy, or an alert."
+      }
+    ]
+  },
+  "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+  "categories": [
+    "navigation"
+  ],
+  "type": "registry:ui"
+}

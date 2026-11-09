@@ -55,6 +55,20 @@ const GROUP_OVERRIDE = {
   "support-inbox": "Inbox",
   "ticket-desk": "Inbox",
   "notification-inbox": "Inbox",
+  "app-rail": "Inbox",
+  "inbox-page-header": "Inbox",
+  "segmented-filter": "Inbox",
+  "conversation-item": "Inbox",
+  "conversation-list": "Inbox",
+  "message-bubble": "Inbox",
+  "message-card-file": "Inbox",
+  "message-card-invoice": "Inbox",
+  "message-card-metric": "Inbox",
+  "suggested-replies": "Inbox",
+  "thread-composer": "Inbox",
+  "party-panel": "Inbox",
+  "chat-thread": "Inbox",
+  "inbox-crm": "Inbox",
 }
 
 /**

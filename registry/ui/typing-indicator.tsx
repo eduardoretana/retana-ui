@@ -11,6 +11,7 @@
  */
 
 import type { ReactNode } from "react"
+import { motion, useReducedMotion } from "motion/react"
 
 import { cn } from "@/lib/utils"
 import { readPresenceInfo, useOthers, type PresenceInfo } from "@/registry/retana/lib/presence"
@@ -32,12 +33,38 @@ export type TypingIndicatorProps = {
   dots?: boolean
 }
 
+function Dots() {
+  const reduced = Boolean(useReducedMotion()) || (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+  return (
+    <span aria-hidden className="inline-flex items-center gap-0.5">
+      {[0, 1, 2].map((dot) => (
+        <motion.span
+          key={dot}
+          className="size-1.5 rounded-full bg-muted-foreground"
+          animate={reduced ? { opacity: 0.7 } : { opacity: [0.35, 1, 0.35] }}
+          transition={reduced ? { duration: 0 } : { duration: 0.8, repeat: Infinity, delay: dot * 0.12, ease: [0, 0, 0.58, 1] }}
+        />
+      ))}
+    </span>
+  )
+}
+
 export function TypingIndicator({ field = "isTyping", className, label = defaultTypingLabel, names, avatar, dots }: TypingIndicatorProps) {
   if (names) {
-    void avatar
-    void dots
-    void label
-    return null
+    const text = label([...names])
+    if (!text && !dots) return null
+    return (
+      <p
+        data-slot="typing-indicator"
+        data-dots={dots ? "true" : undefined}
+        className={cn("flex min-h-11 items-center gap-2 text-sm text-muted-foreground", className)}
+        aria-live="polite"
+      >
+        {avatar}
+        {dots ? <Dots /> : null}
+        <span>{text}</span>
+      </p>
+    )
   }
   return <PresenceTyping field={field} className={className} label={label} />
 }

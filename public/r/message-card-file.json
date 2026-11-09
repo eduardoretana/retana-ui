@@ -1,0 +1,102 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "message-card-file",
+  "title": "File card",
+  "author": "Eduardo Retana",
+  "description": "A file row inside a thread: name, detail, optional validation status, and download.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/message-card-file.tsx",
+      "content": "\"use client\"\n\n/**\n * Bandeja de conversaciones.\n * Fuente: concepto visual de Divan Raj (@desdivj),\n * https://x.com/desdivj/status/2119738295039250507\n * Licencia: sin licencia, clean-room. No se copiaron assets, logos,\n * ilustraciones ni textos.\n */\n\nimport { Download, FileText } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type MessageCardFileProps = {\n  name?: string\n  detail?: string\n  status?: string\n  downloadLabel?: string\n  onDownload?: () => void\n  state?: \"ready\" | \"loading\" | \"empty\" | \"error\"\n  emptyLabel?: string\n  loadingLabel?: string\n  error?: string\n  onRetry?: () => void\n  retryLabel?: string\n  className?: string\n}\n\nexport function MessageCardFile({\n  name,\n  detail,\n  status,\n  downloadLabel = \"Descargar\",\n  onDownload,\n  state = \"ready\",\n  emptyLabel = \"Sin archivo\",\n  loadingLabel = \"Cargando archivo\",\n  error,\n  onRetry,\n  retryLabel = \"Reintentar\",\n  className,\n}: MessageCardFileProps) {\n  if (state === \"loading\") {\n    return <div role=\"status\" aria-label={loadingLabel} className=\"h-16 animate-pulse rounded-2xl bg-muted\" />\n  }\n  if (state === \"error\") {\n    return (\n      <div role=\"alert\" className=\"flex items-center justify-between gap-2 rounded-2xl border border-border p-3\">\n        <p className=\"text-sm text-destructive\">{error}</p>\n        {onRetry ? (\n          <button type=\"button\" className=\"h-11 rounded-full px-3 text-sm\" onClick={onRetry}>\n            {retryLabel}\n          </button>\n        ) : null}\n      </div>\n    )\n  }\n  if (state === \"empty\" || !name) {\n    return (\n      <p role=\"status\" className=\"rounded-2xl border border-dashed border-border px-3 py-4 text-sm text-muted-foreground\">\n        {emptyLabel}\n      </p>\n    )\n  }\n  return (\n    <div data-slot=\"message-card-file\" className={cn(\"flex items-center gap-3 rounded-2xl border border-border bg-card p-3\", className)}>\n      <span className=\"grid size-11 shrink-0 place-items-center rounded-xl bg-muted text-foreground\">\n        <FileText aria-hidden />\n      </span>\n      <span className=\"min-w-0 flex-1\">\n        <span className=\"block truncate text-sm font-medium\">{name}</span>\n        {detail ? <span className=\"block truncate text-xs text-muted-foreground\">{detail}</span> : null}\n        {status ? <span className=\"mt-1 inline-flex rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary\">{status}</span> : null}\n      </span>\n      {onDownload ? (\n        <button\n          type=\"button\"\n          aria-label={downloadLabel}\n          className=\"grid size-11 place-items-center rounded-full text-foreground hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n          onClick={onDownload}\n        >\n          <Download aria-hidden />\n        </button>\n      ) : null}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/message-card-file.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Tarjeta de archivo",
+    "descriptionEs": "Una fila de archivo dentro del hilo: nombre, detalle, estado de validación opcional y descarga.",
+    "preview": "app/examples/message-card-file/preview.tsx",
+    "previewHref": "/examples/message-card-file",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Tarjeta de archivo",
+        "href": "/examples/message-card-file",
+        "description": "Una fila de archivo dentro del hilo: nombre, detalle, estado de validación opcional y descarga."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/message-card-file/stress",
+        "description": "Vacío, textos largos, RTL y cantidad."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/message-card-file?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/message-card-file?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/message-card-file?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/message-card-file?scene=error",
+        "description": "Error"
+      }
+    ],
+    "usage": "<MessageCardFile name=\"corte-marca.pdf\" detail=\"248 KB · PDF\" status=\"En revisión\" onDownload={download} />",
+    "api": [
+      {
+        "name": "name / detail / status",
+        "type": "string",
+        "description": "Status is a label from the host, such as a validation state."
+      },
+      {
+        "name": "onDownload",
+        "type": "() => void",
+        "description": "Download stays a button. The card does not fetch."
+      },
+      {
+        "name": "state",
+        "type": "ready | loading | empty | error",
+        "description": "Skeleton, empty copy, or an alert."
+      }
+    ]
+  },
+  "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+  "categories": [
+    "chat"
+  ],
+  "type": "registry:ui"
+}

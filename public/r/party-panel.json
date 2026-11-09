@@ -1,0 +1,119 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "party-panel",
+  "title": "Party panel",
+  "author": "Eduardo Retana",
+  "description": "Profile column with progress, facts, members, files, and sensitive fields masked until reveal.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/party-panel.tsx",
+      "content": "\"use client\"\n\n/**\n * Bandeja de conversaciones.\n * Fuente: concepto visual de Divan Raj (@desdivj),\n * https://x.com/desdivj/status/2119738295039250507\n * Licencia: sin licencia, clean-room. No se copiaron assets, logos,\n * ilustraciones ni textos.\n * Los campos sensibles llegan enmascarados. Mostrar llama onReveal con el id.\n */\n\nimport { useState } from \"react\"\nimport { Download } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { deskInitials } from \"@/lib/inbox\"\nimport type { PartyDeal, PartyFact, PartyFile, PartyMember, SecretField } from \"@/lib/thread-desk\"\n\nexport type PartyAction = {\n  id: string\n  label: string\n  onSelect?: () => void\n}\n\nexport type PartyPanelProps = {\n  name?: string\n  meta?: string\n  actions?: readonly PartyAction[]\n  deal?: PartyDeal\n  facts?: readonly PartyFact[]\n  members?: readonly PartyMember[]\n  files?: readonly PartyFile[]\n  secrets?: readonly SecretField[]\n  revealLabel?: string\n  onReveal?: (id: string) => void\n  onDownload?: (id: string) => void\n  downloadLabel?: string\n  membersLabel?: string\n  filesLabel?: string\n  state?: \"ready\" | \"loading\" | \"empty\" | \"error\"\n  emptyLabel?: string\n  loadingLabel?: string\n  error?: string\n  className?: string\n}\n\nfunction SecretRow({ field, revealLabel, onReveal }: { field: SecretField; revealLabel: string; onReveal?: (id: string) => void }) {\n  const [open, setOpen] = useState(false)\n  return (\n    <div className=\"flex items-center justify-between gap-2 py-2\">\n      <span className=\"min-w-0\">\n        <span className=\"block text-xs text-muted-foreground\">{field.label}</span>\n        <span className=\"block text-sm tabular-nums\" data-revealed={open ? \"true\" : \"false\"}>\n          {open ? field.revealed : field.masked}\n        </span>\n      </span>\n      <button\n        type=\"button\"\n        className=\"h-11 shrink-0 rounded-full px-3 text-sm font-medium text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n        onClick={() => {\n          if (open) return\n          setOpen(true)\n          onReveal?.(field.id)\n        }}\n      >\n        {revealLabel}\n      </button>\n    </div>\n  )\n}\n\nexport function PartyPanel({\n  name,\n  meta,\n  actions = [],\n  deal,\n  facts = [],\n  members = [],\n  files = [],\n  secrets = [],\n  revealLabel = \"Mostrar\",\n  onReveal,\n  onDownload,\n  downloadLabel = \"Descargar\",\n  membersLabel = \"Miembros\",\n  filesLabel = \"Archivos\",\n  state = \"ready\",\n  emptyLabel = \"Sin ficha\",\n  loadingLabel = \"Cargando la ficha\",\n  error,\n  className,\n}: PartyPanelProps) {\n  if (state === \"loading\") return <div role=\"status\" aria-label={loadingLabel} className=\"h-48 animate-pulse rounded-2xl bg-muted\" />\n  if (state === \"error\") {\n    return (\n      <p role=\"alert\" className=\"text-sm text-destructive\">\n        {error}\n      </p>\n    )\n  }\n  if (state === \"empty\" || !name) {\n    return (\n      <p role=\"status\" className=\"text-sm text-muted-foreground\">\n        {emptyLabel}\n      </p>\n    )\n  }\n  return (\n    <aside data-slot=\"party-panel\" className={cn(\"flex flex-col gap-5\", className)}>\n      <div className=\"grid justify-items-center gap-2 text-center\">\n        <span className=\"grid size-16 place-items-center rounded-full bg-foreground text-lg font-semibold text-background\" aria-hidden>\n          {deskInitials(name)}\n        </span>\n        <h2 className=\"text-base font-semibold\">{name}</h2>\n        {meta ? <p className=\"text-xs text-muted-foreground\">{meta}</p> : null}\n      </div>\n      {actions.length ? (\n        <div className=\"grid grid-cols-3 gap-2\">\n          {actions.map((action) => (\n            <button\n              key={action.id}\n              type=\"button\"\n              className=\"grid h-16 place-items-center rounded-2xl bg-muted px-2 text-center text-xs font-medium focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n              onClick={action.onSelect}\n            >\n              {action.label}\n            </button>\n          ))}\n        </div>\n      ) : null}\n      {deal ? (\n        <section className=\"grid gap-2 rounded-2xl bg-muted/60 p-3\">\n          <div className=\"flex items-center justify-between gap-2\">\n            <h3 className=\"text-sm font-medium\">{deal.title}</h3>\n            <span className=\"text-xs text-muted-foreground\">{deal.status}</span>\n          </div>\n          <p className=\"text-sm tabular-nums\">{deal.amount}</p>\n          <div\n            role=\"progressbar\"\n            aria-valuemin={0}\n            aria-valuemax={100}\n            aria-valuenow={deal.value}\n            aria-label={deal.label}\n            className=\"h-2 overflow-hidden rounded-full bg-background\"\n          >\n            <div className=\"h-full rounded-full bg-primary\" style={{ width: `${Math.max(0, Math.min(100, deal.value))}%` }} />\n          </div>\n          <p className=\"text-end text-xs text-muted-foreground tabular-nums\">{deal.label}</p>\n        </section>\n      ) : null}\n      {facts.length ? (\n        <dl className=\"grid gap-3\">\n          {facts.map((fact) => (\n            <div key={fact.id} className=\"flex items-baseline justify-between gap-3\">\n              <dt className=\"text-xs text-muted-foreground\">{fact.label}</dt>\n              <dd className=\"text-sm font-medium\">{fact.value}</dd>\n            </div>\n          ))}\n        </dl>\n      ) : null}\n      {secrets.length ? (\n        <div className=\"divide-y divide-border border-y border-border\">\n          {secrets.map((field) => (\n            <SecretRow key={field.id} field={field} revealLabel={revealLabel} onReveal={onReveal} />\n          ))}\n        </div>\n      ) : null}\n      {members.length ? (\n        <section className=\"grid gap-2\">\n          <h3 className=\"text-xs font-medium tracking-wide text-muted-foreground uppercase\">{membersLabel}</h3>\n          <ul className=\"grid gap-2\">\n            {members.map((member) => (\n              <li key={member.id} className=\"flex min-h-11 items-center gap-2\">\n                <span className=\"grid size-8 place-items-center rounded-full bg-muted text-[10px] font-medium\" aria-hidden>\n                  {deskInitials(member.name)}\n                </span>\n                <span className=\"min-w-0\">\n                  <span className=\"block truncate text-sm font-medium\">{member.name}</span>\n                  <span className=\"block truncate text-xs text-muted-foreground\">{member.role}</span>\n                </span>\n              </li>\n            ))}\n          </ul>\n        </section>\n      ) : null}\n      {files.length ? (\n        <section className=\"grid gap-2\">\n          <h3 className=\"text-xs font-medium tracking-wide text-muted-foreground uppercase\">{filesLabel}</h3>\n          <ul className=\"grid gap-2\">\n            {files.map((file) => (\n              <li key={file.id} className=\"flex min-h-11 items-center gap-2\">\n                <span className=\"min-w-0 flex-1\">\n                  <span className=\"block truncate text-sm font-medium\">{file.name}</span>\n                  <span className=\"block truncate text-xs text-muted-foreground\">{file.detail}</span>\n                </span>\n                <button\n                  type=\"button\"\n                  aria-label={`${downloadLabel} ${file.name}`}\n                  className=\"grid size-11 place-items-center rounded-full hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n                  onClick={() => onDownload?.(file.id)}\n                >\n                  <Download className=\"size-4\" aria-hidden />\n                </button>\n              </li>\n            ))}\n          </ul>\n        </section>\n      ) : null}\n    </aside>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/party-panel.tsx"
+    },
+    {
+      "path": "registry/lib/thread-desk.ts",
+      "content": "/**\n * Bandeja de conversaciones.\n * Fuente: concepto visual de Divan Raj (@desdivj),\n * https://x.com/desdivj/status/2119738295039250507\n * Licencia: sin licencia, clean-room. No se copiaron assets, logos,\n * ilustraciones ni textos.\n * Tipos y puertos. Sin red, sin Supabase y sin dominio de un canal.\n */\n\nimport type { ReactNode } from \"react\"\n\nimport { foldInboxText, type DeskPresence } from \"@/lib/inbox\"\n\nexport type ThreadStatus = \"ready\" | \"loading\" | \"empty\" | \"error\" | \"offline\"\n\nexport type ThreadFilter = {\n  value: string\n  label: string\n}\n\nexport type ConversationSection = {\n  id: string\n  label: string\n  hint?: string\n}\n\nexport type ConversationItemData = {\n  id: string\n  title: string\n  preview?: string\n  time?: string\n  unread?: number\n  section?: string\n  tags?: readonly string[]\n  presence?: DeskPresence\n  role?: string\n  kind?: \"thread\" | \"contact\"\n  stage?: string\n  windowLabel?: string\n  channel?: ReactNode\n}\n\nexport type DeliveryState = \"sending\" | \"sent\" | \"delivered\" | \"read\" | \"failed\"\n\nexport type ThreadNote = {\n  title: string\n  detail: string\n  body?: string\n}\n\nexport type ThreadFile = {\n  name: string\n  detail: string\n  status?: string\n}\n\nexport type ThreadInvoice = {\n  title: string\n  amount: string\n  due: string\n}\n\nexport type ThreadMetric = {\n  title: string\n  chip?: string\n  value: string\n  caption?: string\n  filled: number\n  total: number\n  start: string\n  end: string\n}\n\nexport type ThreadMessageData = {\n  id: string\n  side: \"incoming\" | \"outgoing\"\n  author: string\n  time?: string\n  body?: string\n  delivery?: DeliveryState\n  deliveryLabel?: string\n  grouped?: \"single\" | \"start\" | \"middle\" | \"end\"\n  enter?: boolean\n  note?: ThreadNote\n  file?: ThreadFile\n  invoice?: ThreadInvoice\n  metric?: ThreadMetric\n}\n\nexport type SuggestionItem = {\n  id: string\n  label: string\n}\n\nexport type SecretField = {\n  id: string\n  label: string\n  masked: string\n  revealed: string\n}\n\nexport type PartyFact = {\n  id: string\n  label: string\n  value: string\n}\n\nexport type PartyMember = {\n  id: string\n  name: string\n  role: string\n}\n\nexport type PartyFile = {\n  id: string\n  name: string\n  detail: string\n}\n\nexport type PartyDeal = {\n  title: string\n  status: string\n  amount: string\n  value: number\n  label: string\n}\n\nexport type PartyPanelData = {\n  name: string\n  meta?: string\n  deal?: PartyDeal\n  facts?: readonly PartyFact[]\n  members?: readonly PartyMember[]\n  files?: readonly PartyFile[]\n  secrets?: readonly SecretField[]\n}\n\nexport function matchesConversation(item: ConversationItemData, filter: string | undefined, query: string) {\n  if (filter && filter !== \"all\") {\n    const tagged = item.tags?.includes(filter) || (filter === \"unread\" && (item.unread ?? 0) > 0)\n    if (!tagged) return false\n  }\n  const needle = query.trim()\n  if (!needle) return true\n  const hay = [item.title, item.preview, item.role, item.stage, item.windowLabel].filter(Boolean).join(\" \")\n  return foldInboxText(hay).includes(foldInboxText(needle))\n}\n\nexport function groupMessages(messages: readonly ThreadMessageData[]): ThreadMessageData[] {\n  return messages.map((message, index) => {\n    if (message.grouped) return message\n    const prev = messages[index - 1]\n    const next = messages[index + 1]\n    const same = (other?: ThreadMessageData) =>\n      Boolean(other && other.side === message.side && other.author === message.author && !other.file && !other.invoice && !other.metric && !message.file && !message.invoice && !message.metric)\n    const before = same(prev)\n    const after = same(next)\n    const grouped = before && after ? \"middle\" : before ? \"end\" : after ? \"start\" : \"single\"\n    return { ...message, grouped }\n  })\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/thread-desk.ts"
+    },
+    {
+      "path": "registry/lib/inbox.ts",
+      "content": "/**\n * Shared types for the desk pieces. No fetching, no theme.\n * Dates are calendar days (`YYYY-MM-DD`). The host owns locale and timezone.\n */\n\nexport const DESK_PRESENCES = [\"online\", \"offline\", \"away\"] as const\n\nexport type DeskPresence = (typeof DESK_PRESENCES)[number]\n\nexport type DeskMessage = {\n  id: string\n  author: string\n  body: string\n  /** Preformatted time. */\n  time: string\n  side: \"incoming\" | \"outgoing\"\n  note?: boolean\n  receipt?: \"seen\" | \"unseen\"\n}\n\nexport type DeskOption = {\n  value: string\n  label: string\n}\n\nconst DATE_RE = /^(\\d{4})-(\\d{2})-(\\d{2})$/\n\nexport function foldInboxText(value: string): string {\n  return value.normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g, \"\").toLowerCase()\n}\n\nexport function isCalendarDate(value: string | undefined): value is string {\n  return Boolean(value && DATE_RE.test(value))\n}\n\n/** True when `due` is a calendar day before `today`. */\nexport function isOverdueDate(due: string | undefined, today: string): boolean {\n  if (!isCalendarDate(due) || !isCalendarDate(today)) return false\n  return due < today\n}\n\nexport function formatDeskDate(iso: string, locale?: string): string {\n  if (!isCalendarDate(iso)) return iso\n  const [year, month, day] = iso.split(\"-\").map(Number)\n  return new Intl.DateTimeFormat(locale, { dateStyle: \"medium\", timeZone: \"UTC\" }).format(\n    new Date(Date.UTC(year, month - 1, day)),\n  )\n}\n\nexport function deskInitials(name: string): string {\n  const letters = name\n    .split(/\\s+/)\n    .filter(Boolean)\n    .slice(0, 2)\n    .map((part) => part[0]?.toUpperCase() ?? \"\")\n    .join(\"\")\n  return letters || \"?\"\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/inbox.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Ficha de la contraparte",
+    "descriptionEs": "Columna de ficha con avance, datos, miembros, archivos y campos sensibles enmascarados hasta mostrarlos.",
+    "preview": "app/examples/party-panel/preview.tsx",
+    "previewHref": "/examples/party-panel",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Ficha de la contraparte",
+        "href": "/examples/party-panel",
+        "description": "Columna de ficha con avance, datos, miembros, archivos y campos sensibles enmascarados hasta mostrarlos."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/party-panel/stress",
+        "description": "Vacío, textos largos, RTL y cantidad."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/party-panel?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/party-panel?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/party-panel?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/party-panel?scene=error",
+        "description": "Error"
+      }
+    ],
+    "usage": "<PartyPanel name=\"Taller Ámbar\" deal={{ title: \"Marca\", status: \"Abierto\", amount: \"$34,600 de $48,000\", value: 72, label: \"72 %\" }} secrets={[{ id: \"curp\", label: \"CURP\", masked: \"••••\", revealed }]} onReveal={audit} />",
+    "api": [
+      {
+        "name": "deal",
+        "type": "PartyDeal",
+        "description": "Title, status, amount, and a 0–100 bar. The bar does not animate."
+      },
+      {
+        "name": "facts / members / files",
+        "type": "lists",
+        "description": "Key values, people, and shared files. Download calls onDownload."
+      },
+      {
+        "name": "secrets / onReveal",
+        "type": "SecretField[] / (id) => void",
+        "description": "Masked by default. Show reveals and calls onReveal with the id only."
+      },
+      {
+        "name": "state",
+        "type": "ready | loading | empty | error",
+        "description": "Skeleton, empty copy, or an alert."
+      }
+    ]
+  },
+  "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+  "categories": [
+    "chat"
+  ],
+  "type": "registry:ui"
+}

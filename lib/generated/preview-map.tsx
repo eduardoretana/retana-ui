@@ -423,6 +423,20 @@ import Preview418 from "@/app/examples/data-table-reorder/preview"
 import Preview419 from "@/app/examples/activity-chat/preview"
 import Preview420 from "@/app/examples/inline-approve-button/preview"
 import Preview421 from "@/app/examples/portfolio-desk/preview"
+import Preview422 from "@/app/examples/app-rail/preview"
+import Preview423 from "@/app/examples/inbox-page-header/preview"
+import Preview424 from "@/app/examples/segmented-filter/preview"
+import Preview425 from "@/app/examples/conversation-item/preview"
+import Preview426 from "@/app/examples/conversation-list/preview"
+import Preview427 from "@/app/examples/message-bubble/preview"
+import Preview428 from "@/app/examples/message-card-file/preview"
+import Preview429 from "@/app/examples/message-card-invoice/preview"
+import Preview430 from "@/app/examples/message-card-metric/preview"
+import Preview431 from "@/app/examples/suggested-replies/preview"
+import Preview432 from "@/app/examples/thread-composer/preview"
+import Preview433 from "@/app/examples/party-panel/preview"
+import Preview434 from "@/app/examples/chat-thread/preview"
+import Preview435 from "@/app/examples/inbox-crm/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -847,4 +861,18 @@ export const previewMap = {
   "activity-chat": Preview419,
   "inline-approve-button": Preview420,
   "portfolio-desk": Preview421,
+  "app-rail": Preview422,
+  "inbox-page-header": Preview423,
+  "segmented-filter": Preview424,
+  "conversation-item": Preview425,
+  "conversation-list": Preview426,
+  "message-bubble": Preview427,
+  "message-card-file": Preview428,
+  "message-card-invoice": Preview429,
+  "message-card-metric": Preview430,
+  "suggested-replies": Preview431,
+  "thread-composer": Preview432,
+  "party-panel": Preview433,
+  "chat-thread": Preview434,
+  "inbox-crm": Preview435,
 }
