@@ -1,0 +1,29 @@
+schema: uis.expected-red/v1
+spec_id: bandeja-mensajes
+green_forbidden: true
+commands:
+  - name: estados
+    run: pnpm exec vitest run __tests__/inbox-family.test.tsx
+    exit: 1
+    failed: 18
+    passed: 0
+log: ui-tests/logs/expected-red.log
+signatures:
+  - LISTBOX
+  - LIST-STATES
+  - BUBBLE-READ
+  - BUBBLE-RETRY
+  - BUBBLE-MOTION
+  - CARDS
+  - TYPING
+  - SUGGESTIONS
+  - COMPOSER-SEND
+  - COMPOSER-LOCKED
+  - PARTY-MASK
+  - PHONE
+  - DRAWER
+  - SEARCH
+  - STATES
+  - SUGGESTION-DRAFT
+  - LOG
+  - CHROME

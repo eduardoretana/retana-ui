@@ -1,0 +1,569 @@
+
+ RUN  v5.0.2 /agent/repos/retana-ui
+
+ × __tests__/inbox-family.test.tsx > conversation list > announces unread rows and moves with the arrow keys 101ms
+   → Unable to find an accessible element with the role "listbox" and name "Conversaciones"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ × __tests__/inbox-family.test.tsx > conversation list > shows an empty, loading, and error state 6ms
+   → Unable to find an accessible element with the role "status"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ × __tests__/inbox-family.test.tsx > message bubble > marks an outgoing read message and hides the author inside a group 6ms
+   → Unable to find an element with the text: Solo falta el visto.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div />[39m
+  [36m</div>[39m
+[36m</body>[39m
+ × __tests__/inbox-family.test.tsx > message bubble > offers retry when sending fails 8ms
+   → Unable to find an accessible element with the role "button" and name "Reintentar"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ × __tests__/inbox-family.test.tsx > message bubble > rises on enter and stays still when motion is reduced 2ms
+   → Unable to find an element with the text: Llegué. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ × __tests__/inbox-family.test.tsx > rich cards > renders a file, an amount due, and a segmented bar 2ms
+   → Unable to find an element with the text: corte-marca.pdf. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div />[39m
+  [36m</div>[39m
+[36m</body>[39m
+ × __tests__/inbox-family.test.tsx > typing indicator > names who is typing without a presence provider 2ms
+   → Unable to find an element with the text: Marina escribe…. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ × __tests__/inbox-family.test.tsx > suggested replies > asks for approval and never sends 3ms
+   → Unable to find an accessible element with the role "button"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ × __tests__/inbox-family.test.tsx > thread composer > sends the draft and keeps ask-ai from sending 4ms
+   → Unable to find an accessible element with the role "textbox"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ × __tests__/inbox-family.test.tsx > thread composer > locks the field when the window is closed and only offers a template 3ms
+   → Unable to find an accessible element with the role "status"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ × __tests__/inbox-family.test.tsx > party panel > masks a sensitive field until someone asks to show it 1ms
+   → Unable to find an element with the text: ••••••••••••••••••. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ × __tests__/inbox-family.test.tsx > inbox shell > keeps one column on a phone and goes back to the list 4ms
+   → Unable to find an accessible element with the role "option" and name `/Taller Ámbar/`
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ × __tests__/inbox-family.test.tsx > inbox shell > hides the rail below the desk and closes the context drawer with escape 4ms
+   → Unable to find an accessible element with the role "navigation" and name "Espacios"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ × __tests__/inbox-family.test.tsx > inbox shell > focuses search with the command shortcut 13ms
+   → Unable to find an accessible element with the role "searchbox" and name "Buscar mensajes"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ × __tests__/inbox-family.test.tsx > inbox shell > covers loading, empty, error, and offline 4ms
+   → expect(received).toHaveAttribute()
+
+received value must be an HTMLElement or an SVGElement.
+Received has type:  Null
+Received has value: null
+ × __tests__/inbox-family.test.tsx > inbox shell > puts a suggestion into the draft and does not send it 3ms
+   → Unable to find an accessible element with the role "button" and name "Agendar llamada"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ × __tests__/inbox-family.test.tsx > inbox shell > threads a log with typing, a failed send, and a closed window 4ms
+   → Unable to find an accessible element with the role "log"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ × __tests__/inbox-family.test.tsx > page chrome > renders the rail, the header, and a touch-sized filter 4ms
+   → Unable to find an accessible element with the role "navigation" and name "Espacios"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div />[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 18 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  __tests__/inbox-family.test.tsx > conversation list > announces unread rows and moves with the arrow keys
+TestingLibraryElementError: Unable to find an accessible element with the role "listbox" and name "Conversaciones"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/inbox-family.test.tsx:70:19
+     68|     )
+     69|
+     70|     expect(screen.getByRole("listbox", { name: "Conversaciones" })).to…
+       |                   ^
+     71|     expect(screen.getByRole("option", { name: /Taller Ámbar/ })).toHav…
+     72|     expect(screen.getByText("2")).toBeInTheDocument()
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/18]⎯
+
+ FAIL  __tests__/inbox-family.test.tsx > conversation list > shows an empty, loading, and error state
+TestingLibraryElementError: Unable to find an accessible element with the role "status"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/inbox-family.test.tsx:84:19
+     82|   it("shows an empty, loading, and error state", () => {
+     83|     const { rerender } = render(<ConversationList label="Conversacione…
+     84|     expect(screen.getByRole("status")).toHaveTextContent("Sin chats")
+       |                   ^
+     85|
+     86|     rerender(<ConversationList label="Conversaciones" items={[]} statu…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/18]⎯
+
+ FAIL  __tests__/inbox-family.test.tsx > message bubble > marks an outgoing read message and hides the author inside a group
+TestingLibraryElementError: Unable to find an element with the text: Solo falta el visto.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div />[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/inbox-family.test.tsx:109:29
+    107|     )
+    108|
+    109|     const outgoing = screen.getByText("Solo falta el visto.").closest(…
+       |                             ^
+    110|     expect(outgoing).toHaveAttribute("data-side", "outgoing")
+    111|     expect(outgoing).toHaveAttribute("data-delivery", "read")
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/18]⎯
+
+ FAIL  __tests__/inbox-family.test.tsx > message bubble > offers retry when sending fails
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Reintentar"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/inbox-family.test.tsx:124:29
+    122|       </MessageBubble>,
+    123|     )
+    124|     await user.click(screen.getByRole("button", { name: "Reintentar" }…
+       |                             ^
+    125|     expect(onRetry).toHaveBeenCalledOnce()
+    126|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/18]⎯
+
+ FAIL  __tests__/inbox-family.test.tsx > message bubble > rises on enter and stays still when motion is reduced
+TestingLibraryElementError: Unable to find an element with the text: Llegué. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/inbox-family.test.tsx:134:19
+    132|       </MessageBubble>,
+    133|     )
+    134|     expect(screen.getByText("Llegué").closest("[data-motion]")).toHave…
+       |                   ^
+    135|
+    136|     const original = window.matchMedia
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/18]⎯
+
+ FAIL  __tests__/inbox-family.test.tsx > rich cards > renders a file, an amount due, and a segmented bar
+TestingLibraryElementError: Unable to find an element with the text: corte-marca.pdf. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div />[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/inbox-family.test.tsx:176:19
+    174|       </div>,
+    175|     )
+    176|     expect(screen.getByText("corte-marca.pdf")).toBeInTheDocument()
+       |                   ^
+    177|     expect(screen.getByText("En revisión")).toBeInTheDocument()
+    178|     expect(screen.getByRole("button", { name: "Descargar" })).toBeInTh…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/18]⎯
+
+ FAIL  __tests__/inbox-family.test.tsx > typing indicator > names who is typing without a presence provider
+TestingLibraryElementError: Unable to find an element with the text: Marina escribe…. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/inbox-family.test.tsx:190:19
+    188|   it("names who is typing without a presence provider", () => {
+    189|     render(<TypingIndicator names={["Marina Soler"]} label={() => "Mar…
+    190|     expect(screen.getByText("Marina escribe…")).toBeInTheDocument()
+       |                   ^
+    191|     expect(document.querySelector("[data-dots=true]")).toBeTruthy()
+    192|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/18]⎯
+
+ FAIL  __tests__/inbox-family.test.tsx > suggested replies > asks for approval and never sends
+TestingLibraryElementError: Unable to find an accessible element with the role "button"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:109:15
+ ❯ __tests__/inbox-family.test.tsx:209:26
+    207|       />,
+    208|     )
+    209|     const chips = screen.getAllByRole("button")
+       |                          ^
+    210|     expect(chips[1]).toHaveAttribute("data-stagger", "50")
+    211|     await user.click(screen.getByRole("button", { name: "Agendar llama…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/18]⎯
+
+ FAIL  __tests__/inbox-family.test.tsx > thread composer > sends the draft and keeps ask-ai from sending
+TestingLibraryElementError: Unable to find an accessible element with the role "textbox"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/inbox-family.test.tsx:232:28
+    230|       />,
+    231|     )
+    232|     await user.type(screen.getByRole("textbox"), "Va el jueves")
+       |                            ^
+    233|     await user.click(screen.getByRole("button", { name: "Preguntar a I…
+    234|     expect(onAsk).toHaveBeenCalledOnce()
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/18]⎯
+
+ FAIL  __tests__/inbox-family.test.tsx > thread composer > locks the field when the window is closed and only offers a template
+TestingLibraryElementError: Unable to find an accessible element with the role "status"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/inbox-family.test.tsx:252:19
+    250|       />,
+    251|     )
+    252|     expect(screen.getByRole("status")).toHaveTextContent("La ventana d…
+       |                   ^
+    253|     expect(screen.getByRole("button", { name: "Enviar" })).toBeDisable…
+    254|     await user.click(screen.getByRole("button", { name: "Usar plantill…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/18]⎯
+
+ FAIL  __tests__/inbox-family.test.tsx > party panel > masks a sensitive field until someone asks to show it
+TestingLibraryElementError: Unable to find an element with the text: ••••••••••••••••••. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/inbox-family.test.tsx:277:19
+    275|       />,
+    276|     )
+    277|     expect(screen.getByText("••••••••••••••••••")).toBeInTheDocument()
+       |                   ^
+    278|     expect(screen.queryByText("DEMO000000HDFXXX00")).not.toBeInTheDocu…
+    279|     await user.click(screen.getByRole("button", { name: "Mostrar" }))
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/18]⎯
+
+ FAIL  __tests__/inbox-family.test.tsx > inbox shell > keeps one column on a phone and goes back to the list
+TestingLibraryElementError: Unable to find an accessible element with the role "option" and name `/Taller Ámbar/`
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/inbox-family.test.tsx:334:29
+    332|     render(shell({ layout: "phone" }))
+    333|     expect(screen.queryByText("¿Podemos hablar el jueves?")).not.toBeI…
+    334|     await user.click(screen.getByRole("option", { name: /Taller Ámbar/…
+       |                             ^
+    335|     expect(screen.getByText("¿Podemos hablar el jueves?")).toBeInTheDo…
+    336|     await user.click(screen.getByRole("button", { name: "Volver" }))
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/18]⎯
+
+ FAIL  __tests__/inbox-family.test.tsx > inbox shell > hides the rail below the desk and closes the context drawer with escape
+TestingLibraryElementError: Unable to find an accessible element with the role "navigation" and name "Espacios"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/inbox-family.test.tsx:346:19
+    344|
+    345|     rerender(shell({ layout: "desk" }))
+    346|     expect(screen.getByRole("navigation", { name: "Espacios" })).toBeI…
+       |                   ^
+    347|     expect(screen.queryByText("Cliente desde 2024 · León")).not.toBeIn…
+    348|     await user.click(screen.getByRole("button", { name: "Contexto" }))
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/18]⎯
+
+ FAIL  __tests__/inbox-family.test.tsx > inbox shell > focuses search with the command shortcut
+TestingLibraryElementError: Unable to find an accessible element with the role "searchbox" and name "Buscar mensajes"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/inbox-family.test.tsx:358:19
+    356|     render(shell())
+    357|     await user.keyboard("{Meta>}k{/Meta}")
+    358|     expect(screen.getByRole("searchbox", { name: "Buscar mensajes" }))…
+       |                   ^
+    359|   })
+    360|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/18]⎯
+
+ FAIL  __tests__/inbox-family.test.tsx > inbox shell > covers loading, empty, error, and offline
+Error: expect(received).toHaveAttribute()
+
+received value must be an HTMLElement or an SVGElement.
+Received has type:  Null
+Received has value: null
+ ❯ __tests__/inbox-family.test.tsx:365:61
+    363|     const onRetry = vi.fn()
+    364|     const { rerender } = render(shell({ status: "loading" }))
+    365|     expect(document.querySelector("[data-slot=inbox-crm]")).toHaveAttr…
+       |                                                             ^
+    366|
+    367|     rerender(shell({ status: "empty", conversations: [], emptyLabel: "…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/18]⎯
+
+ FAIL  __tests__/inbox-family.test.tsx > inbox shell > puts a suggestion into the draft and does not send it
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Agendar llamada"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/inbox-family.test.tsx:384:29
+    382|     const onSend = vi.fn()
+    383|     render(shell({ onSend }))
+    384|     await user.click(screen.getByRole("button", { name: "Agendar llama…
+       |                             ^
+    385|     expect(screen.getByRole("textbox")).toHaveValue("Agendar llamada")
+    386|     expect(onSend).not.toHaveBeenCalled()
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/18]⎯
+
+ FAIL  __tests__/inbox-family.test.tsx > inbox shell > threads a log with typing, a failed send, and a closed window
+TestingLibraryElementError: Unable to find an accessible element with the role "log"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/inbox-family.test.tsx:410:24
+    408|       />,
+    409|     )
+    410|     const log = screen.getByRole("log")
+       |                        ^
+    411|     expect(log).toHaveAttribute("aria-live", "polite")
+    412|     expect(screen.getByText("Quedamos el jueves por la tarde.")).toBeI…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/18]⎯
+
+ FAIL  __tests__/inbox-family.test.tsx > page chrome > renders the rail, the header, and a touch-sized filter
+TestingLibraryElementError: Unable to find an accessible element with the role "navigation" and name "Espacios"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div />[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/inbox-family.test.tsx:447:19
+    445|       </div>,
+    446|     )
+    447|     expect(screen.getByRole("navigation", { name: "Espacios" })).toBeI…
+       |                   ^
+    448|     expect(screen.getByRole("heading", { name: "Mensajes" })).toBeInTh…
+    449|     expect(screen.getByRole("button", { name: /Avisos/ })).toBeInTheDo…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/18]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  18 failed (18)
+   Start at  23:23:53
+   Duration  1.11s (environment 54%, tests 18%, transform 12%, setup 11%, import 5%)
+
