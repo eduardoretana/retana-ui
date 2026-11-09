@@ -26,7 +26,8 @@ describe("navegador del piloto", () => {
     const port = typeof address === "object" && address ? address.port : 4179
     const base = `http://127.0.0.1:${port}`
     const browser = await chromium.launch()
-    const page = await browser.newPage()
+    const context = await browser.newContext()
+    const page = await context.newPage()
     const serious = async (label: string) => {
       const result = await new AxeBuilder({ page }).analyze()
       const bad = result.violations.filter((item) => item.impact === "serious" || item.impact === "critical")

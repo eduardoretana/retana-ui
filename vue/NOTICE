@@ -1,0 +1,27 @@
+Este workspace de desarrollo no se publica. Las dependencias nuevas están solo en devDependencies.
+
+vue
+  Fuente: https://github.com/vuejs/core
+  Licencia: MIT
+
+reka-ui 2.11.0
+  Fuente: https://github.com/unovue/reka-ui
+  Licencia: MIT
+
+vuetify 3.13.5
+  Fuente: https://github.com/vuetifyjs/vuetify
+  Licencia: MIT
+
+@mdi/font
+  Fuente: https://github.com/Templarian/MaterialDesign
+  Licencia: Apache-2.0
+
+style-dictionary 5.8.0
+  Fuente: https://github.com/style-dictionary/style-dictionary
+  Licencia: Apache-2.0
+  NOTICE del paquete, copiado debajo.
+
+---
+
+Style Dictionary
+Copyright Style Dictionary Contributors.

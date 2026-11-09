@@ -64,7 +64,7 @@ export function TimeOffStats({
       <h2 className="font-medium">{labels.title}</h2>
       {error ? <p role="alert" className="text-destructive">{error}</p> : null}
       {loading ? (
-        <div aria-label={labels.loading} className="grid gap-2">
+        <div role="status" aria-label={labels.loading} className="grid gap-2">
           <Skeleton className="h-14 w-full motion-reduce:animate-none" />
           <Skeleton className="h-8 w-full motion-reduce:animate-none" />
         </div>

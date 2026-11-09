@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <title>Saldo de ausencias</title>
+    <link rel="stylesheet" href="/tokens/demo.css" />
+    <link rel="stylesheet" href="/vue/dist/pilot.css" />
+  </head>
+  <body style="margin: 0">
+    <main class="retana rt:flex rt:flex-col rt:gap-3 rt:p-3" style="--muted-foreground: oklch(0.4 0 0); --destructive: oklch(0.45 0.16 27)">
+      <section class="retana rt:flex rt:flex-col rt:gap-3 rt:rounded-xl rt:border rt:border-border rt:bg-card rt:p-3 rt:text-sm rt:text-card-foreground">
+        <h2 class="rt:font-medium">Saldo</h2>
+        <dl class="rt:grid rt:grid-cols-3 rt:gap-2">
+          <div class="rt:rounded-lg rt:bg-muted rt:px-2 rt:py-2">
+            <dt class="rt:text-muted-foreground">Disponible</dt>
+            <dd class="rt:text-lg rt:font-medium rt:tabular-nums">12 días</dd>
+          </div>
+          <div class="rt:rounded-lg rt:bg-muted rt:px-2 rt:py-2">
+            <dt class="rt:text-muted-foreground">Pendiente</dt>
+            <dd class="rt:text-lg rt:font-medium rt:tabular-nums">2 días</dd>
+          </div>
+          <div class="rt:rounded-lg rt:bg-muted rt:px-2 rt:py-2">
+            <dt class="rt:text-muted-foreground">Queda este año</dt>
+            <dd class="rt:text-lg rt:font-medium rt:tabular-nums">10 días</dd>
+          </div>
+        </dl>
+      </section>
+      <section class="retana rt:rounded-xl rt:border rt:border-border rt:bg-card rt:p-3 rt:text-sm">
+        <h2 class="rt:font-medium">Saldo</h2>
+        <p class="rt:text-muted-foreground">No hay saldo que mostrar.</p>
+      </section>
+      <section class="retana rt:rounded-xl rt:border rt:border-border rt:bg-card rt:p-3 rt:text-sm" aria-busy="true">
+        <h2 class="rt:font-medium">Saldo</h2>
+        <div role="status" aria-label="Cargando el saldo">
+          <div data-slot="skeleton" class="rt:h-14 rt:w-full rt:animate-pulse rt:rounded-md rt:bg-muted rt:motion-reduce:animate-none"></div>
+        </div>
+      </section>
+      <section class="retana rt:rounded-xl rt:border rt:border-border rt:bg-card rt:p-3 rt:text-sm">
+        <h2 class="rt:font-medium">Saldo</h2>
+        <p role="alert" class="rt:text-destructive">No se pudo leer el saldo.</p>
+      </section>
+    </main>
+  </body>
+</html>

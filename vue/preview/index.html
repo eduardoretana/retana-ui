@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Piloto retana</title>
+    <style>
+      /* El muted-foreground y el destructive del demo neutral no llegan a 4.5:1 en texto de 14 px. El host de esta vista los oscurece en claro. */
+      html:not(.dark) {
+        --muted-foreground: oklch(0.4 0 0);
+        --destructive: oklch(0.45 0.16 27);
+      }
+      body {
+        background: var(--background);
+        color: var(--foreground);
+      }
+    </style>
+    <link rel="stylesheet" href="/tokens/demo.css" />
+    <link rel="stylesheet" href="/vue/dist/pilot.css" />
+    <script>
+      const query = new URLSearchParams(location.search)
+      document.documentElement.lang = query.get("locale") === "en" ? "en" : "es-MX"
+      document.documentElement.classList.toggle("dark", query.get("theme") === "dark")
+    </script>
+  </head>
+  <body style="margin: 0">
+    <div id="app"></div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

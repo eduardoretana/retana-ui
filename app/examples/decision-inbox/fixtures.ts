@@ -1,6 +1,8 @@
 import type { SceneLocale } from "@/app/catalog/scene-types"
 import type { DecisionChoice, DecisionInboxLabels, DecisionItem } from "@/registry/ui/decision-inbox"
 
+import data from "../../../fixtures/decision-inbox.json"
+
 export type DecisionMeta = { pedido: string }
 
 export type ChoiceSeed = { id: string; es: string; en: string }
@@ -21,91 +23,56 @@ export type InboxFixture = {
   answerError?: { es: string; en: string }
 }
 
-const anticipo: DecisionSeed = {
-  id: "anticipo",
-  agent: "Bruma",
-  es: {
-    title: "¿Mandamos el anticipo hoy?",
-    detail: "Son $18,400.00 MXN a Cerámica del Bajío, pedido PED-1048.",
-  },
-  en: {
-    title: "Do we send the deposit today?",
-    detail: "$18,400.00 MXN to Cerámica del Bajío, order PED-1048.",
-  },
-  choices: [
-    { id: "hoy", es: "Hoy, antes de las 18:00", en: "Today, before 6:00 p.m." },
-    { id: "viernes", es: "Esperar al viernes", en: "Wait until Friday" },
-  ],
+const seeds = data.items as DecisionSeed[]
+
+function scene(id: keyof typeof data.scenes): InboxFixture {
+  const spec = data.scenes[id]
+  return {
+    items: spec.items.map((ref) => {
+      const seed = seeds.find((item) => item.id === ref.id)
+      if (!seed) throw new Error(ref.id)
+      return { ...seed, answerId: "answerId" in ref ? ref.answerId : seed.answerId }
+    }),
+    loading: "loading" in spec ? spec.loading : undefined,
+    banner: "error" in spec && spec.error ? data.banner : undefined,
+    answerError: "error" in spec && spec.error ? data.banner : undefined,
+  }
 }
 
-const muestras: DecisionSeed = {
-  id: "muestras",
-  agent: "Horno",
-  es: {
-    title: "¿Quién recibe las muestras?",
-    detail: "Salen hoy del taller hacia León.",
-  },
-  en: {
-    title: "Who receives the samples?",
-    detail: "They leave the workshop for León today.",
-  },
-  choices: [
-    { id: "mariana", es: "Mariana Ruiz en León", en: "Mariana Ruiz in León" },
-    { id: "taller", es: "El taller las guarda", en: "The workshop holds them" },
-  ],
-}
+export const filled = scene("filled")
+export const empty = scene("empty")
+export const loading = scene("loading")
+export const error = scene("error")
+export const answered = scene("answered")
+export const folded = scene("folded")
 
-export const filled: InboxFixture = { items: [anticipo, muestras] }
-
-export const empty: InboxFixture = { items: [] }
-
-export const loading: InboxFixture = { ...filled, loading: true }
-
-export const error: InboxFixture = {
-  ...filled,
-  banner: {
-    es: "La respuesta no se guardó. La decisión sigue abierta.",
-    en: "The answer was not saved. The call is still open.",
-  },
-  answerError: {
-    es: "La respuesta no se guardó. La decisión sigue abierta.",
-    en: "The answer was not saved. The call is still open.",
-  },
-}
-
-export const answered: InboxFixture = {
-  items: [{ ...anticipo, answerId: "viernes" }, muestras],
-}
-
-export const folded: InboxFixture = {
-  items: [
-    { ...anticipo, answerId: "viernes" },
-    { ...muestras, answerId: "mariana" },
-  ],
+function fill(template: string, vars: Record<string, string | number>) {
+  return template.replace(/\{(\w+)\}/g, (_, key: string) => String(vars[key] ?? ""))
 }
 
 export function inboxLabels(locale: SceneLocale): Partial<DecisionInboxLabels> {
+  const pack = data.labels[locale]
   if (locale === "en") return {}
   return {
-    title: "Llamadas abiertas",
-    open: (count) => (count === 1 ? "1 sigue abierta" : `${count} siguen abiertas`),
-    empty: "Nada espera tu respuesta.",
-    loading: "Cargando llamadas",
-    answered: (choice) => `Respuesta: ${choice}`,
-    dismiss: "Cerrar",
-    dismissNamed: (title) => `Cerrar “${title}”`,
-    choose: (title, choice) => `${choice} para “${title}”`,
-    from: (agent) => `De ${agent}`,
+    title: pack.title,
+    open: (count) => (count === 1 ? pack.openOne : fill(pack.openOther, { count })),
+    empty: pack.empty,
+    loading: pack.loading,
+    answered: (choice) => fill(pack.answered, { choice }),
+    dismiss: pack.dismiss,
+    dismissNamed: (title) => fill(pack.dismissNamed, { title }),
+    choose: (title, choice) => fill(pack.choose, { choice, title }),
+    from: (agent) => fill(pack.from, { agent }),
   }
 }
 
 export function itemsFrom(
-  seeds: readonly DecisionSeed[],
+  source: readonly DecisionSeed[],
   locale: SceneLocale,
   answers: Record<string, string | null> = {},
   hidden: readonly string[] = [],
 ): DecisionItem<DecisionMeta>[] {
-  return seeds
+  return source
     .filter((seed) => !hidden.includes(seed.id))
     .map((seed) => ({
       id: seed.id,

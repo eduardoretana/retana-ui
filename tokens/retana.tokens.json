@@ -1,0 +1,815 @@
+{
+  "$description": "Contrato de nombres semánticos de retana-ui. Los $value de color son el demo opt-in del sitio (app/globals.css), no la marca de un producto. Un host como canal-semilla sustituye el valor y conserva el nombre.",
+  "color": {
+    "light": {
+      "background": {
+        "$type": "color",
+        "$value": "oklch(1 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--background",
+            "tailwind": "--color-background",
+            "tailwindValue": "var(--background)",
+            "vuetify": "rgb(var(--v-theme-background))"
+          }
+        }
+      },
+      "foreground": {
+        "$type": "color",
+        "$value": "oklch(0.145 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--foreground",
+            "tailwind": "--color-foreground",
+            "tailwindValue": "var(--foreground)",
+            "vuetify": "rgb(var(--v-theme-on-background))"
+          }
+        }
+      },
+      "sidebar-ring": {
+        "$type": "color",
+        "$value": "oklch(0.708 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--sidebar-ring",
+            "tailwind": "--color-sidebar-ring",
+            "tailwindValue": "var(--sidebar-ring)",
+            "vuetify": "rgb(var(--v-theme-on-barra))"
+          }
+        }
+      },
+      "sidebar-border": {
+        "$type": "color",
+        "$value": "oklch(0.922 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--sidebar-border",
+            "tailwind": "--color-sidebar-border",
+            "tailwindValue": "var(--sidebar-border)",
+            "vuetify": "rgb(var(--v-theme-sidebar-border))"
+          }
+        }
+      },
+      "sidebar-accent-foreground": {
+        "$type": "color",
+        "$value": "oklch(0.205 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--sidebar-accent-foreground",
+            "tailwind": "--color-sidebar-accent-foreground",
+            "tailwindValue": "var(--sidebar-accent-foreground)",
+            "vuetify": "rgb(var(--v-theme-on-barra))"
+          }
+        }
+      },
+      "sidebar-accent": {
+        "$type": "color",
+        "$value": "oklch(0.97 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--sidebar-accent",
+            "tailwind": "--color-sidebar-accent",
+            "tailwindValue": "var(--sidebar-accent)",
+            "vuetify": "rgba(var(--v-theme-on-barra), 0.16)"
+          }
+        }
+      },
+      "sidebar-primary-foreground": {
+        "$type": "color",
+        "$value": "oklch(0.985 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--sidebar-primary-foreground",
+            "tailwind": "--color-sidebar-primary-foreground",
+            "tailwindValue": "var(--sidebar-primary-foreground)",
+            "vuetify": "rgb(var(--v-theme-on-senal))"
+          }
+        }
+      },
+      "sidebar-primary": {
+        "$type": "color",
+        "$value": "oklch(0.205 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--sidebar-primary",
+            "tailwind": "--color-sidebar-primary",
+            "tailwindValue": "var(--sidebar-primary)",
+            "vuetify": "rgb(var(--v-theme-senal))"
+          }
+        }
+      },
+      "sidebar-foreground": {
+        "$type": "color",
+        "$value": "oklch(0.145 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--sidebar-foreground",
+            "tailwind": "--color-sidebar-foreground",
+            "tailwindValue": "var(--sidebar-foreground)",
+            "vuetify": "rgb(var(--v-theme-on-barra))"
+          }
+        }
+      },
+      "sidebar": {
+        "$type": "color",
+        "$value": "oklch(0.985 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--sidebar",
+            "tailwind": "--color-sidebar",
+            "tailwindValue": "var(--sidebar)",
+            "vuetify": "rgb(var(--v-theme-barra))"
+          }
+        }
+      },
+      "chart-5": {
+        "$type": "color",
+        "$value": "oklch(0.269 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--chart-5",
+            "tailwind": "--color-chart-5",
+            "tailwindValue": "var(--chart-5)",
+            "vuetify": "rgb(var(--v-theme-chart-5))"
+          }
+        }
+      },
+      "chart-4": {
+        "$type": "color",
+        "$value": "oklch(0.371 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--chart-4",
+            "tailwind": "--color-chart-4",
+            "tailwindValue": "var(--chart-4)",
+            "vuetify": "rgb(var(--v-theme-chart-4))"
+          }
+        }
+      },
+      "chart-3": {
+        "$type": "color",
+        "$value": "oklch(0.439 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--chart-3",
+            "tailwind": "--color-chart-3",
+            "tailwindValue": "var(--chart-3)",
+            "vuetify": "rgb(var(--v-theme-serie-neutra))"
+          }
+        }
+      },
+      "chart-2": {
+        "$type": "color",
+        "$value": "oklch(0.556 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--chart-2",
+            "tailwind": "--color-chart-2",
+            "tailwindValue": "var(--chart-2)",
+            "vuetify": "rgb(var(--v-theme-serie-humana))"
+          }
+        }
+      },
+      "chart-1": {
+        "$type": "color",
+        "$value": "oklch(0.87 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--chart-1",
+            "tailwind": "--color-chart-1",
+            "tailwindValue": "var(--chart-1)",
+            "vuetify": "rgb(var(--v-theme-serie-agente))"
+          }
+        }
+      },
+      "ring": {
+        "$type": "color",
+        "$value": "oklch(0.708 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--ring",
+            "tailwind": "--color-ring",
+            "tailwindValue": "var(--ring)",
+            "vuetify": "rgb(var(--v-theme-primary))"
+          }
+        }
+      },
+      "input": {
+        "$type": "color",
+        "$value": "oklch(0.922 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--input",
+            "tailwind": "--color-input",
+            "tailwindValue": "var(--input)",
+            "vuetify": "rgba(var(--v-theme-on-surface), 0.5)"
+          }
+        }
+      },
+      "border": {
+        "$type": "color",
+        "$value": "oklch(0.922 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--border",
+            "tailwind": "--color-border",
+            "tailwindValue": "var(--border)",
+            "vuetify": "rgba(var(--v-theme-on-surface), 0.12)"
+          }
+        }
+      },
+      "destructive": {
+        "$type": "color",
+        "$value": "oklch(0.577 0.245 27.325)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--destructive",
+            "tailwind": "--color-destructive",
+            "tailwindValue": "var(--destructive)",
+            "vuetify": "rgb(var(--v-theme-error))"
+          }
+        }
+      },
+      "accent-foreground": {
+        "$type": "color",
+        "$value": "oklch(0.205 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--accent-foreground",
+            "tailwind": "--color-accent-foreground",
+            "tailwindValue": "var(--accent-foreground)",
+            "vuetify": "rgb(var(--v-theme-on-retana-accent))"
+          }
+        }
+      },
+      "accent": {
+        "$type": "color",
+        "$value": "oklch(0.97 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--accent",
+            "tailwind": "--color-accent",
+            "tailwindValue": "var(--accent)",
+            "vuetify": "rgb(var(--v-theme-retana-accent))"
+          }
+        }
+      },
+      "muted-foreground": {
+        "$type": "color",
+        "$value": "oklch(0.556 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--muted-foreground",
+            "tailwind": "--color-muted-foreground",
+            "tailwindValue": "var(--muted-foreground)",
+            "vuetify": "rgb(var(--v-theme-secondary))"
+          }
+        }
+      },
+      "muted": {
+        "$type": "color",
+        "$value": "oklch(0.97 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--muted",
+            "tailwind": "--color-muted",
+            "tailwindValue": "var(--muted)",
+            "vuetify": "rgb(var(--v-theme-serie-pista))"
+          }
+        }
+      },
+      "secondary-foreground": {
+        "$type": "color",
+        "$value": "oklch(0.205 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--secondary-foreground",
+            "tailwind": "--color-secondary-foreground",
+            "tailwindValue": "var(--secondary-foreground)",
+            "vuetify": "rgb(var(--v-theme-on-retana-secondary))"
+          }
+        }
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": "oklch(0.97 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--secondary",
+            "tailwind": "--color-secondary",
+            "tailwindValue": "var(--secondary)",
+            "vuetify": "rgb(var(--v-theme-retana-secondary))"
+          }
+        }
+      },
+      "primary-foreground": {
+        "$type": "color",
+        "$value": "oklch(0.985 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--primary-foreground",
+            "tailwind": "--color-primary-foreground",
+            "tailwindValue": "var(--primary-foreground)",
+            "vuetify": "rgb(var(--v-theme-on-primary))"
+          }
+        }
+      },
+      "primary": {
+        "$type": "color",
+        "$value": "oklch(0.205 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--primary",
+            "tailwind": "--color-primary",
+            "tailwindValue": "var(--primary)",
+            "vuetify": "rgb(var(--v-theme-primary))"
+          }
+        }
+      },
+      "popover-foreground": {
+        "$type": "color",
+        "$value": "oklch(0.145 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--popover-foreground",
+            "tailwind": "--color-popover-foreground",
+            "tailwindValue": "var(--popover-foreground)",
+            "vuetify": "rgb(var(--v-theme-on-surface))"
+          }
+        }
+      },
+      "popover": {
+        "$type": "color",
+        "$value": "oklch(1 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--popover",
+            "tailwind": "--color-popover",
+            "tailwindValue": "var(--popover)",
+            "vuetify": "rgb(var(--v-theme-surface))"
+          }
+        }
+      },
+      "card-foreground": {
+        "$type": "color",
+        "$value": "oklch(0.145 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--card-foreground",
+            "tailwind": "--color-card-foreground",
+            "tailwindValue": "var(--card-foreground)",
+            "vuetify": "rgb(var(--v-theme-on-surface))"
+          }
+        }
+      },
+      "card": {
+        "$type": "color",
+        "$value": "oklch(1 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--card",
+            "tailwind": "--color-card",
+            "tailwindValue": "var(--card)",
+            "vuetify": "rgb(var(--v-theme-surface))"
+          }
+        }
+      }
+    },
+    "dark": {
+      "background": {
+        "$type": "color",
+        "$value": "oklch(0.145 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--background",
+            "mode": "dark"
+          }
+        }
+      },
+      "foreground": {
+        "$type": "color",
+        "$value": "oklch(0.985 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--foreground",
+            "mode": "dark"
+          }
+        }
+      },
+      "sidebar-ring": {
+        "$type": "color",
+        "$value": "oklch(0.556 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--sidebar-ring",
+            "mode": "dark"
+          }
+        }
+      },
+      "sidebar-border": {
+        "$type": "color",
+        "$value": "oklch(1 0 0 / 10%)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--sidebar-border",
+            "mode": "dark"
+          }
+        }
+      },
+      "sidebar-accent-foreground": {
+        "$type": "color",
+        "$value": "oklch(0.985 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--sidebar-accent-foreground",
+            "mode": "dark"
+          }
+        }
+      },
+      "sidebar-accent": {
+        "$type": "color",
+        "$value": "oklch(0.269 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--sidebar-accent",
+            "mode": "dark"
+          }
+        }
+      },
+      "sidebar-primary-foreground": {
+        "$type": "color",
+        "$value": "oklch(0.985 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--sidebar-primary-foreground",
+            "mode": "dark"
+          }
+        }
+      },
+      "sidebar-primary": {
+        "$type": "color",
+        "$value": "oklch(0.488 0.243 264.376)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--sidebar-primary",
+            "mode": "dark"
+          }
+        }
+      },
+      "sidebar-foreground": {
+        "$type": "color",
+        "$value": "oklch(0.985 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--sidebar-foreground",
+            "mode": "dark"
+          }
+        }
+      },
+      "sidebar": {
+        "$type": "color",
+        "$value": "oklch(0.205 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--sidebar",
+            "mode": "dark"
+          }
+        }
+      },
+      "chart-5": {
+        "$type": "color",
+        "$value": "oklch(0.269 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--chart-5",
+            "mode": "dark"
+          }
+        }
+      },
+      "chart-4": {
+        "$type": "color",
+        "$value": "oklch(0.371 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--chart-4",
+            "mode": "dark"
+          }
+        }
+      },
+      "chart-3": {
+        "$type": "color",
+        "$value": "oklch(0.439 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--chart-3",
+            "mode": "dark"
+          }
+        }
+      },
+      "chart-2": {
+        "$type": "color",
+        "$value": "oklch(0.556 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--chart-2",
+            "mode": "dark"
+          }
+        }
+      },
+      "chart-1": {
+        "$type": "color",
+        "$value": "oklch(0.87 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--chart-1",
+            "mode": "dark"
+          }
+        }
+      },
+      "ring": {
+        "$type": "color",
+        "$value": "oklch(0.556 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--ring",
+            "mode": "dark"
+          }
+        }
+      },
+      "input": {
+        "$type": "color",
+        "$value": "oklch(1 0 0 / 15%)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--input",
+            "mode": "dark"
+          }
+        }
+      },
+      "border": {
+        "$type": "color",
+        "$value": "oklch(1 0 0 / 10%)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--border",
+            "mode": "dark"
+          }
+        }
+      },
+      "destructive": {
+        "$type": "color",
+        "$value": "oklch(0.704 0.191 22.216)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--destructive",
+            "mode": "dark"
+          }
+        }
+      },
+      "accent-foreground": {
+        "$type": "color",
+        "$value": "oklch(0.985 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--accent-foreground",
+            "mode": "dark"
+          }
+        }
+      },
+      "accent": {
+        "$type": "color",
+        "$value": "oklch(0.269 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--accent",
+            "mode": "dark"
+          }
+        }
+      },
+      "muted-foreground": {
+        "$type": "color",
+        "$value": "oklch(0.708 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--muted-foreground",
+            "mode": "dark"
+          }
+        }
+      },
+      "muted": {
+        "$type": "color",
+        "$value": "oklch(0.269 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--muted",
+            "mode": "dark"
+          }
+        }
+      },
+      "secondary-foreground": {
+        "$type": "color",
+        "$value": "oklch(0.985 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--secondary-foreground",
+            "mode": "dark"
+          }
+        }
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": "oklch(0.269 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--secondary",
+            "mode": "dark"
+          }
+        }
+      },
+      "primary-foreground": {
+        "$type": "color",
+        "$value": "oklch(0.205 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--primary-foreground",
+            "mode": "dark"
+          }
+        }
+      },
+      "primary": {
+        "$type": "color",
+        "$value": "oklch(0.922 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--primary",
+            "mode": "dark"
+          }
+        }
+      },
+      "popover-foreground": {
+        "$type": "color",
+        "$value": "oklch(0.985 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--popover-foreground",
+            "mode": "dark"
+          }
+        }
+      },
+      "popover": {
+        "$type": "color",
+        "$value": "oklch(0.205 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--popover",
+            "mode": "dark"
+          }
+        }
+      },
+      "card-foreground": {
+        "$type": "color",
+        "$value": "oklch(0.985 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--card-foreground",
+            "mode": "dark"
+          }
+        }
+      },
+      "card": {
+        "$type": "color",
+        "$value": "oklch(0.205 0 0)",
+        "$extensions": {
+          "com.retana": {
+            "css": "--card",
+            "mode": "dark"
+          }
+        }
+      }
+    }
+  },
+  "dimension": {
+    "radius": {
+      "$type": "dimension",
+      "$value": "0.625rem",
+      "$extensions": {
+        "com.retana": {
+          "css": "--radius",
+          "vuetify": "var(--retana-radius, 0.5rem)"
+        }
+      }
+    }
+  },
+  "alias": {
+    "font-sans": {
+      "$type": "fontFamily",
+      "$value": "var(--font-geist-sans)",
+      "$extensions": {
+        "com.retana": {
+          "css": "--font-sans",
+          "tailwind": "--font-sans",
+          "tailwindValue": "var(--font-geist-sans)"
+        }
+      }
+    },
+    "font-mono": {
+      "$type": "fontFamily",
+      "$value": "var(--font-geist-mono)",
+      "$extensions": {
+        "com.retana": {
+          "css": "--font-mono",
+          "tailwind": "--font-mono",
+          "tailwindValue": "var(--font-geist-mono)"
+        }
+      }
+    },
+    "font-heading": {
+      "$type": "fontFamily",
+      "$value": "var(--font-sans)",
+      "$extensions": {
+        "com.retana": {
+          "css": "--font-heading",
+          "tailwind": "--font-heading",
+          "tailwindValue": "var(--font-sans)"
+        }
+      }
+    },
+    "radius-sm": {
+      "$type": "dimension",
+      "$value": "calc(var(--radius) * 0.6)",
+      "$extensions": {
+        "com.retana": {
+          "css": "--radius-sm",
+          "tailwind": "--radius-sm",
+          "tailwindValue": "calc(var(--radius) * 0.6)"
+        }
+      }
+    },
+    "radius-md": {
+      "$type": "dimension",
+      "$value": "calc(var(--radius) * 0.8)",
+      "$extensions": {
+        "com.retana": {
+          "css": "--radius-md",
+          "tailwind": "--radius-md",
+          "tailwindValue": "calc(var(--radius) * 0.8)"
+        }
+      }
+    },
+    "radius-lg": {
+      "$type": "dimension",
+      "$value": "var(--radius)",
+      "$extensions": {
+        "com.retana": {
+          "css": "--radius-lg",
+          "tailwind": "--radius-lg",
+          "tailwindValue": "var(--radius)"
+        }
+      }
+    },
+    "radius-xl": {
+      "$type": "dimension",
+      "$value": "calc(var(--radius) * 1.4)",
+      "$extensions": {
+        "com.retana": {
+          "css": "--radius-xl",
+          "tailwind": "--radius-xl",
+          "tailwindValue": "calc(var(--radius) * 1.4)"
+        }
+      }
+    },
+    "radius-2xl": {
+      "$type": "dimension",
+      "$value": "calc(var(--radius) * 1.8)",
+      "$extensions": {
+        "com.retana": {
+          "css": "--radius-2xl",
+          "tailwind": "--radius-2xl",
+          "tailwindValue": "calc(var(--radius) * 1.8)"
+        }
+      }
+    },
+    "radius-3xl": {
+      "$type": "dimension",
+      "$value": "calc(var(--radius) * 2.2)",
+      "$extensions": {
+        "com.retana": {
+          "css": "--radius-3xl",
+          "tailwind": "--radius-3xl",
+          "tailwindValue": "calc(var(--radius) * 2.2)"
+        }
+      }
+    },
+    "radius-4xl": {
+      "$type": "dimension",
+      "$value": "calc(var(--radius) * 2.6)",
+      "$extensions": {
+        "com.retana": {
+          "css": "--radius-4xl",
+          "tailwind": "--radius-4xl",
+          "tailwindValue": "calc(var(--radius) * 2.6)"
+        }
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 schema: uis.status/v2
 ui_system: {version: 4.0.0}
 declaration: "UI_SYSTEM: APPLIES"
-cycle_state: PRUEBAS
+cycle_state: AUDITORIA
 spec_id: piloto-vue
 profile: LITE
 retana_ui:
