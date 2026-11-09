@@ -1,6 +1,12 @@
 "use client"
 
-/** Adapted from Arc UI (MIT). */
+/**
+ * Adapted from Arc UI (MIT).
+ * Gesture release: Emil Kowalski, emilkowalski/skills
+ * @715c1807e08c497cfd1dc4feb450a2a3300ef2a9 skills/gestures (MIT).
+ * Returning to the same detent is a short spring with no bounce, written
+ * here so the shared smooth preset stays 0.4s. Hit pads are ::before.
+ */
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import type { CSSProperties, FocusEvent, KeyboardEvent, PointerEvent as ReactPointerEvent, ReactNode, WheelEvent } from "react"
@@ -64,6 +70,8 @@ const LOW_DIM = 0.78
 
 const settle = motionPresets.spring.smooth
 const leave = { ...motionPresets.spring.smooth, visualDuration: 0.3 }
+/** Same-detent return. Shorter than smooth (0.4) and without snappy's bounce. */
+const snapBack = { type: "spring" as const, visualDuration: 0.2, bounce: 0 }
 const fade = { duration: motionPresets.duration.fast, ease: "linear" } as const
 
 const rubber = (distance: number) => (1 - 1 / ((distance * 0.55) / STRETCH + 1)) * STRETCH
@@ -156,7 +164,7 @@ function Sheet({
     return clamp(dim, 0, 1) * shown
   })
 
-  const go = useCallback((stop: Stop, velocity?: number, onArrive?: () => void) => {
+  const go = useCallback((stop: Stop, velocity?: number, onArrive?: () => void, transition?: { type: "spring"; visualDuration: number; bounce: number }) => {
     aim.current = stop
     arrive.current = onArrive
     const target = offset(stop)
@@ -170,10 +178,11 @@ function Sheet({
       done()
       return
     }
-    animate(y, target, { ...(stop === "closed" ? leave : settle), ...(velocity === undefined ? {} : { velocity }), onComplete: done })
+    const base = stop === "closed" ? leave : (transition ?? settle)
+    animate(y, target, { ...base, ...(velocity === undefined ? {} : { velocity }), onComplete: done })
   }, [offset, reduced, y])
 
-  const rest = useCallback((stop: number, velocity?: number) => {
+  const rest = useCallback((stop: number, velocity?: number, transition?: { type: "spring"; visualDuration: number; bounce: number }) => {
     if (stop !== detentRef.current) {
       detentRef.current = stop
       setDetent(stop)
@@ -182,7 +191,7 @@ function Sheet({
     }
     const body = bodyRef.current
     if (stop !== top && body && body.scrollTop > 0) body.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" })
-    go(stop, velocity)
+    go(stop, velocity, undefined, transition)
   }, [go, onDetentChange, reduced, stops, top])
 
   useLayoutEffect(() => {
@@ -282,7 +291,8 @@ function Sheet({
       onDismiss()
       return
     }
-    rest(target, velocity)
+    const sameDetent = target === state.from
+    rest(target, reduced ? undefined : velocity, sameDetent ? snapBack : undefined)
   }, [go, offset, onDismiss, reduced, rest, stops, top, y])
 
   useEffect(() => {
@@ -429,6 +439,7 @@ function Sheet({
     y,
     opacity: presence,
     "--sheet-max": stops[top],
+    // rule-exception: RUI-ANIM-PERF-005 --sheet-max y --sheet-extension salen de los detents, no de cada pointermove
     "--sheet-extension": `${EXTENSION}px`,
   } as unknown as CSSProperties
 
@@ -462,7 +473,7 @@ function Sheet({
           style={style}
           onKeyDown={sheetKey}
           className={cn(
-            "group/sheet fixed inset-x-0 z-[51] mx-auto flex w-full max-w-xl touch-none flex-col overflow-hidden rounded-t-xl border border-b-0 border-border bg-popover text-popover-foreground shadow-lg outline-none will-change-transform",
+            "group/sheet fixed inset-x-0 z-[51] mx-auto flex w-full max-w-xl touch-none flex-col overflow-hidden rounded-t-xl border border-b-0 border-border bg-popover text-popover-foreground shadow-lg outline-none",
             "bottom-[calc(var(--sheet-extension)*-1)] h-[calc(var(--sheet-max)*100dvh+var(--sheet-extension))] pb-[calc(var(--sheet-extension)+env(safe-area-inset-bottom,0px))]",
             "data-[state=closed]:!pointer-events-none",
             className,
@@ -489,13 +500,13 @@ function Sheet({
               aria-label={expanded ? "Collapse sheet" : "Expand sheet"}
               aria-expanded={expanded}
               className={cn(
-                "group/grabber mx-auto mb-1 flex h-5 w-14 items-center justify-center rounded-full focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+                "group/grabber relative mx-auto mb-1 flex h-5 w-14 items-center justify-center rounded-full before:absolute before:inset-x-0 before:top-1/2 before:h-11 before:-translate-y-1/2 before:content-[''] focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
                 classNames?.grabber,
               )}
               onClick={grabberClick}
               onKeyDown={grabberKey}
             >
-              <span className="h-[5px] w-9 rounded-full bg-border transition-colors group-data-[dragging]/sheet:bg-muted-foreground group-hover/grabber:bg-muted-foreground motion-reduce:transition-none" aria-hidden="true" />
+              <span className="h-[5px] w-9 rounded-full bg-border transition-colors group-data-[dragging]/sheet:bg-muted-foreground motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)]:group-hover/grabber:bg-muted-foreground" aria-hidden="true" />
             </button>
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
@@ -509,7 +520,7 @@ function Sheet({
                 ) : null}
               </div>
               <Dialog.Close asChild>
-                <Button type="button" variant="outline" size="icon-sm" data-slot="bottom-sheet-close" aria-label={closeLabel} className={cn("shrink-0 rounded-full", classNames?.close)}>
+                <Button type="button" variant="outline" size="icon-sm" data-slot="bottom-sheet-close" aria-label={closeLabel} className={cn("relative shrink-0 rounded-full before:absolute before:top-1/2 before:left-1/2 before:h-11 before:w-11 before:-translate-x-1/2 before:-translate-y-1/2 before:content-['']", classNames?.close)}>
                   <X aria-hidden="true" />
                 </Button>
               </Dialog.Close>

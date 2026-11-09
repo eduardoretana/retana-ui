@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs"
 import path from "node:path"
-import { fireEvent, render, screen } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
 
@@ -15,6 +15,9 @@ vi.mock("motion/react", async () => {
     ...actual,
     animate: (...args: unknown[]) => {
       animateCalls.push(args)
+      const value = args[0] as { set?: (next: number) => void } | undefined
+      const target = args[1]
+      if (value && typeof value.set === "function" && typeof target === "number") value.set(target)
       return { stop() {}, then: () => Promise.resolve() }
     },
   }
@@ -34,8 +37,9 @@ describe("bottom sheet hits and detent return", () => {
     const sheet = screen.getByRole("dialog", { name: "Kiln" })
     expect(grabber.className).toMatch(/before:h-11/)
     expect(close.className).toMatch(/before:h-11/)
-    expect(grabber.className).toMatch(/hover:hover/)
-    expect(grabber.className).toMatch(/pointer:fine/)
+    const pill = grabber.querySelector("span")
+    expect(pill?.className).toMatch(/hover:hover/)
+    expect(pill?.className).toMatch(/pointer:fine/)
     expect(sheet.className).not.toMatch(/will-change/)
   })
 
@@ -52,9 +56,15 @@ describe("bottom sheet hits and detent return", () => {
     await user.click(screen.getByRole("button", { name: "Open" }))
     const header = document.querySelector("[data-slot='bottom-sheet-header']")
     if (!(header instanceof HTMLElement)) throw new Error("Missing header")
-    fireEvent.pointerDown(header, { button: 0, pointerId: 7, isPrimary: true, clientY: 500, timeStamp: 0 })
-    fireEvent.pointerMove(header, { pointerId: 7, buttons: 1, clientY: 540, timeStamp: 30 })
-    fireEvent.pointerUp(header, { pointerId: 7, clientY: 540, timeStamp: 80 })
+    const point = (type: string, y: number, time: number) => {
+      const event = new PointerEvent(type, { button: 0, pointerId: 7, clientY: y, buttons: type === "pointerup" ? 0 : 1, bubbles: true })
+      Object.defineProperty(event, "timeStamp", { value: time })
+      Object.defineProperty(event, "isPrimary", { value: true })
+      header.dispatchEvent(event)
+    }
+    point("pointerdown", 500, 0)
+    point("pointermove", 520, 360)
+    point("pointerup", 520, 400)
     const snap = animateCalls.find((call) => {
       const options = call[2] as { visualDuration?: number; bounce?: number } | undefined
       return options?.visualDuration === 0.2 && options.bounce === 0

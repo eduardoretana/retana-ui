@@ -3892,6 +3892,17 @@
         "descriptionEs": "Confirma una acción destructiva al mantener pulsado, no con un toque.",
         "preview": "app/examples/hold-to-confirm/preview.tsx",
         "previewHref": "/examples/hold-to-confirm",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "dragging", "label": "Manteniendo", "labelEn": "Holding" },
+          { "id": "dismissed", "label": "Soltado", "labelEn": "Released" },
+          { "id": "reduced", "label": "Menos movimiento", "labelEn": "Reduced motion" },
+          { "id": "keyboard", "label": "Teclado", "labelEn": "Keyboard" },
+          { "id": "390", "label": "390 px", "labelEn": "390 px" }
+        ],
         "examples": [
           {
             "title": "Mantener para confirmar",
@@ -7295,6 +7306,17 @@
         "descriptionEs": "Una hoja que se queda a media altura o se abre del todo.",
         "preview": "app/examples/bottom-sheet/preview.tsx",
         "previewHref": "/examples/bottom-sheet",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "dragging", "label": "Arrastrando", "labelEn": "Dragging" },
+          { "id": "dismissed", "label": "Cerrado", "labelEn": "Closed" },
+          { "id": "reduced", "label": "Menos movimiento", "labelEn": "Reduced motion" },
+          { "id": "keyboard", "label": "Teclado", "labelEn": "Keyboard" },
+          { "id": "390", "label": "390 px", "labelEn": "390 px" }
+        ],
         "examples": [
           {
             "title": "Hoja inferior",
