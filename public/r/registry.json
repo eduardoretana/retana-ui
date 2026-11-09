@@ -9996,6 +9996,17 @@
         "descriptionEs": "Barras de inicio a fin, grupos plegables, zoom y una línea de hoy.",
         "preview": "app/examples/view-timeline/preview.tsx",
         "previewHref": "/examples/view-timeline",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "dragging", "label": "Arrastrando", "labelEn": "Dragging" },
+          { "id": "dismissed", "label": "Soltado", "labelEn": "Released" },
+          { "id": "reduced", "label": "Menos movimiento", "labelEn": "Reduced motion" },
+          { "id": "keyboard", "label": "Teclado", "labelEn": "Keyboard" },
+          { "id": "390", "label": "390 px", "labelEn": "390 px" }
+        ],
         "examples": [
           {
             "title": "Proyectos",
@@ -18485,6 +18496,17 @@
         "descriptionEs": "Desliza el control, o mantén flecha derecha, más allá de un umbral antes de que corra la acción.",
         "preview": "app/examples/slide-to-confirm/preview.tsx",
         "previewHref": "/examples/slide-to-confirm",
+        "scenes": [
+          { "id": "filled", "label": "Lleno", "labelEn": "Filled" },
+          { "id": "empty", "label": "Vacío", "labelEn": "Empty" },
+          { "id": "loading", "label": "Cargando", "labelEn": "Loading" },
+          { "id": "error", "label": "Error", "labelEn": "Error" },
+          { "id": "dragging", "label": "Arrastrando", "labelEn": "Dragging" },
+          { "id": "dismissed", "label": "Confirmado", "labelEn": "Confirmed" },
+          { "id": "reduced", "label": "Menos movimiento", "labelEn": "Reduced motion" },
+          { "id": "keyboard", "label": "Teclado", "labelEn": "Keyboard" },
+          { "id": "390", "label": "390 px", "labelEn": "390 px" }
+        ],
         "examples": [
           {
             "title": "Deslizar para confirmar",
