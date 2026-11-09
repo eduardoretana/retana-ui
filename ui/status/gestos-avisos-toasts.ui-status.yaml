@@ -4,5 +4,6 @@ spec_id: gestos-avisos-toasts
 profile: LITE
 cycle_state: AUDITORIA
 retana_ui.sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+head: 66d4a2db072f063760c132cf2c504bbd18bc82c3
 ideas: [2, 5, 7, 8]
 profile_note: "IDEA 5 permanece en LITE. El descarte ya existía; se alinea el eje con la entrada."
