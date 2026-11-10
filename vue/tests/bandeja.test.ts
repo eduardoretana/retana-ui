@@ -262,7 +262,7 @@ describe("rich cards", () => {
       components: { MessageCardFile, MessageCardInvoice, MessageCardMetric },
       template: `
         <div>
-          <MessageCardFile name="corte-marca.pdf" detail="248 KB · PDF" status="En revisión" download-label="Descargar" />
+          <MessageCardFile name="corte-marca.pdf" detail="248 KB · PDF" status="En revisión" download-label="Descargar" downloadable />
           <MessageCardInvoice title="Monto a pagar" amount="$18,640" due="Vence 14 nov" />
           <MessageCardMetric title="Salud de entrega" chip="Analítica" value="92 %" caption="a tiempo" :filled="11" :total="12" start="11 de 12 hitos" end="Lanzamiento 10 dic" />
         </div>

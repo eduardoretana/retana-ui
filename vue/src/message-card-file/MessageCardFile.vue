@@ -12,6 +12,7 @@ withDefaults(defineProps<{
   detail?: string
   status?: string
   downloadLabel?: string
+  downloadable?: boolean
   state?: "ready" | "loading" | "empty" | "error"
   emptyLabel?: string
   loadingLabel?: string
@@ -19,6 +20,7 @@ withDefaults(defineProps<{
   retryLabel?: string
 }>(), {
   downloadLabel: "Descargar",
+  downloadable: false,
   state: "ready",
   emptyLabel: "Sin archivo",
   loadingLabel: "Cargando archivo",
@@ -52,7 +54,7 @@ const emit = defineEmits<{
       <span v-if="detail" class="ellipsis muted" style="display: block; font-size: 0.75rem">{{ detail }}</span>
       <span v-if="status" class="chip" style="min-height: 0; margin-top: 0.25rem; background: var(--muted); color: var(--primary)">{{ status }}</span>
     </span>
-    <button type="button" class="hit" :aria-label="downloadLabel" @click="emit('download')">
+    <button v-if="downloadable" type="button" class="hit" :aria-label="downloadLabel" @click="emit('download')">
       <slot name="download-icon">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M12 4 V16" />

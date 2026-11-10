@@ -277,11 +277,13 @@ export function bandejaProps(scene: string, locale: Locale = "es") {
     emptyLabel: t("No hay conversaciones.", "No conversations."),
     retryLabel: t("Reintentar", "Try again"),
     railLabel: t("Espacios", "Spaces"),
-    railMark: cenit ? "C" : "Á",
+    railMark: "Á",
     railItems: [
       { id: "inicio", label: t("Inicio", "Home"), icon: "mdi mdi-view-grid-outline" },
       { id: "archivos", label: t("Archivos", "Files"), icon: "mdi mdi-folder-outline" },
+      { id: "reportes", label: t("Reportes", "Reports"), icon: "mdi mdi-chart-pie" },
       { id: "chat", label: t("Mensajes", "Messages"), icon: "mdi mdi-message-text-outline", active: true },
+      { id: "pagos", label: t("Pagos", "Payments"), icon: "mdi mdi-wallet-outline" },
       { id: "gente", label: t("Contactos", "Contacts"), icon: "mdi mdi-account-group-outline" },
     ],
     crumbs: [
@@ -340,6 +342,7 @@ export function bandejaProps(scene: string, locale: Locale = "es") {
             { id: "sim", label: t("Enviar simulación", "Send simulation") },
             { id: "call", label: t("Agendar llamada", "Schedule a call") },
             { id: "docs", label: t("Pedir documentos", "Request documents") },
+            { id: "plantilla", label: t("Usar plantilla", "Use a template") },
           ]
         : [
             { id: "crono", label: t("Compartir cronograma", "Share the schedule") },
