@@ -4,9 +4,9 @@ declaration: "UI_SYSTEM: APPLIES"
 cycle_state: AUDITORIA
 spec_id: bandeja-vue
 profile: STANDARD
-head: pendiente
+head: de4856732b1a0c195cd6db7d0f19958b4ff418e0
 retana_ui:
-  sha: 07c1a8d2e9118ce49d02da029407835c8377c67d
+  sha: c6dd56829d0e34da7312cae5165c06c191cc3be1
   registry_source: git-sha
 host_app:
   repo: eduardoretana/canal-semilla
