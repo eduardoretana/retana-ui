@@ -1,0 +1,36 @@
+/* Contrato de nombres. El host asigna el valor. Generado con Style Dictionary. */
+:root {
+  /* retana-contract: --background */
+  /* retana-contract: --foreground */
+  /* retana-contract: --card */
+  /* retana-contract: --card-foreground */
+  /* retana-contract: --popover */
+  /* retana-contract: --popover-foreground */
+  /* retana-contract: --primary */
+  /* retana-contract: --primary-foreground */
+  /* retana-contract: --secondary */
+  /* retana-contract: --secondary-foreground */
+  /* retana-contract: --muted */
+  /* retana-contract: --muted-foreground */
+  /* retana-contract: --accent */
+  /* retana-contract: --accent-foreground */
+  /* retana-contract: --destructive */
+  /* retana-contract: --border */
+  /* retana-contract: --input */
+  /* retana-contract: --ring */
+  /* retana-contract: --chart-1 */
+  /* retana-contract: --chart-2 */
+  /* retana-contract: --chart-3 */
+  /* retana-contract: --chart-4 */
+  /* retana-contract: --chart-5 */
+  /* retana-contract: --success */
+  /* retana-contract: --radius */
+  /* retana-contract: --sidebar */
+  /* retana-contract: --sidebar-foreground */
+  /* retana-contract: --sidebar-primary */
+  /* retana-contract: --sidebar-primary-foreground */
+  /* retana-contract: --sidebar-accent */
+  /* retana-contract: --sidebar-accent-foreground */
+  /* retana-contract: --sidebar-border */
+  /* retana-contract: --sidebar-ring */
+}

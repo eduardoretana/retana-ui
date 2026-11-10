@@ -1,0 +1,32 @@
+schema: uis.expected-red/v1
+spec_id: bandeja-vue
+green_forbidden: true
+commands:
+  - name: estados
+    run: pnpm --dir vue exec vitest run tests/bandeja.test.ts
+    exit: 1
+    failed: 21
+    passed: 0
+log: ui-tests/logs/bandeja-vue-expected-red.log
+signatures:
+  - LISTBOX
+  - LIST-STATES
+  - FILTER-SCROLL
+  - PRESENCE-SUCCESS
+  - BUBBLE-READ
+  - BUBBLE-RETRY
+  - BUBBLE-MOTION
+  - CARDS
+  - CARDS-GENERIC
+  - TYPING
+  - SUGGESTIONS
+  - COMPOSER-SEND
+  - COMPOSER-LOCKED
+  - PARTY-MASK
+  - PHONE
+  - DRAWER
+  - SEARCH
+  - STATES
+  - SUGGESTION-DRAFT
+  - LOG
+  - CHROME

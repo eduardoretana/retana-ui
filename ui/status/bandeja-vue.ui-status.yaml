@@ -1,0 +1,20 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0}
+declaration: "UI_SYSTEM: APPLIES"
+cycle_state: AUDITORIA
+spec_id: bandeja-vue
+profile: STANDARD
+head: 38f379de196050c19d846bc1c25680fa3847c5be
+retana_ui:
+  sha: 2389a3e2b3544b301abc84ebd37c6685d86c6eef
+  registry_source: git-sha
+host_app:
+  repo: eduardoretana/canal-semilla
+  note: "Este ciclo no abre PR allí ni toca ese repo."
+plan: docs/vue-target/bandeja.md
+idea: docs/vue-target/bandeja.md
+depends_on:
+  - "https://github.com/eduardoretana/retana-ui/pull/87"
+  - "https://github.com/eduardoretana/retana-ui/pull/86"
+auditor: pendiente
+auditor_is_builder: false

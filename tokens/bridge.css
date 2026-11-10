@@ -1,0 +1,38 @@
+/* Puente opt-in a Vuetify 3.13. Canales R,G,B en --v-theme-*. No lo importa la app. Generado con Style Dictionary.
+   --secondary de RETANA no es --v-theme-secondary: ese nombre de Vuetify es muted-foreground.
+   --radius no sale de --v-theme-*: Vuetify 3.13 no emite un canal para el radio. */
+:root {
+  --background: rgb(var(--v-theme-background));
+  --foreground: rgb(var(--v-theme-on-background));
+  --card: rgb(var(--v-theme-surface));
+  --card-foreground: rgb(var(--v-theme-on-surface));
+  --popover: rgb(var(--v-theme-surface));
+  --popover-foreground: rgb(var(--v-theme-on-surface));
+  --primary: rgb(var(--v-theme-primary));
+  --primary-foreground: rgb(var(--v-theme-on-primary));
+  --secondary: rgb(var(--v-theme-retana-secondary));
+  --secondary-foreground: rgb(var(--v-theme-on-retana-secondary));
+  --muted: rgb(var(--v-theme-serie-pista));
+  --muted-foreground: rgb(var(--v-theme-secondary));
+  --accent: rgb(var(--v-theme-retana-accent));
+  --accent-foreground: rgb(var(--v-theme-on-retana-accent));
+  --destructive: rgb(var(--v-theme-error));
+  --border: rgba(var(--v-theme-on-surface), 0.12);
+  --input: rgba(var(--v-theme-on-surface), 0.5);
+  --ring: rgb(var(--v-theme-primary));
+  --chart-1: rgb(var(--v-theme-serie-agente));
+  --chart-2: rgb(var(--v-theme-serie-humana));
+  --chart-3: rgb(var(--v-theme-serie-neutra));
+  --chart-4: rgb(var(--v-theme-chart-4));
+  --chart-5: rgb(var(--v-theme-chart-5));
+  --success: rgb(var(--v-theme-success));
+  --radius: var(--retana-radius, 0.5rem);
+  --sidebar: rgb(var(--v-theme-barra));
+  --sidebar-foreground: rgb(var(--v-theme-on-barra));
+  --sidebar-primary: rgb(var(--v-theme-senal));
+  --sidebar-primary-foreground: rgb(var(--v-theme-on-senal));
+  --sidebar-accent: rgba(var(--v-theme-on-barra), 0.16);
+  --sidebar-accent-foreground: rgb(var(--v-theme-on-barra));
+  --sidebar-border: rgb(var(--v-theme-sidebar-border));
+  --sidebar-ring: rgb(var(--v-theme-on-barra));
+}

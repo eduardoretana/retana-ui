@@ -1,0 +1,30 @@
+schema: uis.expected-red/v1
+spec_id: bandeja-vue-verificacion
+green_forbidden: true
+commands:
+  - name: muted-foreground
+    run: pnpm --dir vue exec vitest run tests/muted-foreground.test.ts
+    exit: 1
+    failed: 1
+    passed: 0
+    commit: ea7a664d6f89268cdca537294f53847fcc0b407c
+  - name: empty-bubble
+    run: pnpm --dir vue exec vitest run tests/empty-bubble.test.ts
+    exit: 1
+    failed: 1
+    passed: 0
+    commit: 4b4b1aa4131675b7fab77df09811b99bfb959c2b
+  - name: receipts-fixture
+    run: pnpm --dir vue exec vitest run tests/receipts-fixture.test.ts
+    exit: 1
+    failed: 1
+    passed: 0
+    commit: 8bd6b7e36917a32f65c967da576ff56dfa7668bd
+signatures:
+  - TOKENS-MUTED-FG-REVERT
+  - VUE-EMPTY-BUBBLE-ABOVE-CARD
+  - PARITY-RECEIPTS-FIXTURE
+notes:
+  - "El rojo de muted-foreground recibió oklch(0.556 0 0); el generador volvió a 0.52 desde app/globals.css."
+  - "El rojo de la burbuja vacía recibió .bubble exists() true sobre la cotización sin texto."
+  - "El rojo de receipts recibió el filtro Míos; React usa Equipo, sin canal WhatsApp, con cronograma-v3.fig."
