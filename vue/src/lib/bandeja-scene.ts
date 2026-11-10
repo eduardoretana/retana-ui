@@ -230,6 +230,36 @@ export function bandejaProps(scene: string, locale: Locale = "es") {
         files: [{ id: "corte", name: "corte-marca.pdf", detail: t("248 KB · Hoy", "248 KB · Today") }],
       }
 
+  const receipts = [
+    {
+      id: "sent",
+      side: "outgoing" as const,
+      author: t("Tú", "You"),
+      time: "10:40",
+      body: t("Te mando el corte.", "Sending the cut."),
+      delivery: "sent" as const,
+      deliveryLabel: t("Enviado", "Sent"),
+    },
+    {
+      id: "delivered",
+      side: "outgoing" as const,
+      author: t("Tú", "You"),
+      time: "10:41",
+      body: t("¿Lo ves?", "Do you see it?"),
+      delivery: "delivered" as const,
+      deliveryLabel: t("Entregado", "Delivered"),
+    },
+    {
+      id: "read",
+      side: "outgoing" as const,
+      author: t("Tú", "You"),
+      time: "10:42",
+      body: t("Quedó leído.", "It was read."),
+      delivery: "read" as const,
+      deliveryLabel: t("Leído", "Read"),
+    },
+  ]
+
   const layout: InboxLayout = scene === "hilo" ? "phone" : "auto"
   const quiet = scene === "empty" || scene === "loading" || scene === "error"
 
@@ -301,7 +331,7 @@ export function bandejaProps(scene: string, locale: Locale = "es") {
     threadTitle: cenit ? "Casa Lerma" : "Taller Ámbar",
     threadStatus: cenit ? t("En línea · Simulación", "Online · Simulation") : t("En línea · Marca", "Online · Brand"),
     threadPresence: "online" as const,
-    messages: scene === "empty" ? [] : cenit ? credito : studio,
+    messages: scene === "empty" ? [] : scene === "receipts" ? receipts : cenit ? credito : studio,
     typing: scene === "typing" || scene === "filled" ? { names: [cenit ? "Casa Lerma" : "Marina Soler"], label: t("Marina escribe…", "Marina is typing…") } : undefined,
     suggestions: scene === "empty"
       ? []
