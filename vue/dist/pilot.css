@@ -1,0 +1,88 @@
+/*! tailwindcss v4.3.5 | MIT License | https://tailwindcss.com */
+@layer properties;
+@layer theme, base, components, utilities;
+@layer theme {
+  :root, :host {
+    --rt-spacing: 0.25rem;
+    --rt-default-font-family: var(--font-geist-sans);
+    --rt-default-mono-font-family: var(--font-geist-mono);
+  }
+}
+
+@layer utilities {
+  .rt\:flex {
+    display: flex;
+  }
+  .rt\:inline-flex {
+    display: inline-flex;
+  }
+  .rt\:size-4 {
+    width: calc(var(--rt-spacing) * 4);
+    height: calc(var(--rt-spacing) * 4);
+  }
+  .rt\:min-h-11 {
+    min-height: calc(var(--rt-spacing) * 11);
+  }
+  .rt\:w-14 {
+    width: calc(var(--rt-spacing) * 14);
+  }
+  .rt\:w-full {
+    width: 100%;
+  }
+  .rt\:min-w-0 {
+    min-width: 0px;
+  }
+  .rt\:flex-col {
+    flex-direction: column;
+  }
+  .rt\:items-center {
+    align-items: center;
+  }
+  .rt\:gap-4 {
+    gap: calc(var(--rt-spacing) * 4);
+  }
+  .rt\:overflow-hidden {
+    overflow: hidden;
+  }
+  .rt\:overflow-x-auto {
+    overflow-x: auto;
+  }
+  .rt\:border {
+    border-style: var(--tw-border-style);
+    border-width: 1px;
+  }
+  .rt\:border-border {
+    border-color: var(--border);
+  }
+  .rt\:bg-background {
+    background-color: var(--background);
+  }
+  .rt\:bg-card {
+    background-color: var(--card);
+  }
+  .rt\:bg-sidebar {
+    background-color: var(--sidebar);
+  }
+  .rt\:whitespace-nowrap {
+    white-space: nowrap;
+  }
+  .rt\:text-foreground {
+    color: var(--foreground);
+  }
+  .rt\:text-sidebar-foreground {
+    color: var(--sidebar-foreground);
+  }
+}
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@layer properties {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: block))) or ((-moz-orient: inline) and (not (color:canvastext))) {
+    *, ::before, ::after, ::backdrop {
+      --tw-border-style: solid;
+    }
+  }
+}
+

@@ -5,6 +5,7 @@
  * Licencia: sin licencia, clean-room. No se copiaron assets, logos,
  * ilustraciones ni textos.
  */
+import { nextTick } from "vue"
 import { mount, type VueWrapper } from "@vue/test-utils"
 import { describe, expect, it } from "vitest"
 
@@ -305,7 +306,7 @@ describe("typing indicator", () => {
   it("TYPING names who is typing without a presence provider", () => {
     const wrapper = mount(TypingIndicator, { props: { names: ["Marina Soler"], label: () => "Marina escribe…", dots: true } })
     expect(wrapper.text()).toContain("Marina escribe…")
-    expect(wrapper.get("[data-dots=true]").exists()).toBe(true)
+    expect(wrapper.get("[data-dots=true]").attributes("data-dots")).toBe("true")
     wrapper.unmount()
   })
 })
@@ -413,12 +414,13 @@ describe("inbox shell", () => {
     tablet.unmount()
 
     const desk = shell({ layout: "desk", party })
-    expect(desk.get('nav[aria-label="Espacios"]').exists()).toBe(true)
+    expect(desk.find('nav[aria-label="Espacios"]').exists()).toBe(true)
     expect(desk.text()).not.toContain("Cliente desde 2024 · León")
     const context = desk.findAll("button").find((button) => button.text() === "Contexto")
     await context?.trigger("click")
     expect(desk.text()).toContain("Cliente desde 2024 · León")
     window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }))
+    await nextTick()
     expect(desk.text()).not.toContain("Cliente desde 2024 · León")
     desk.unmount()
   })
@@ -498,7 +500,7 @@ describe("page chrome", () => {
         </div>
       `,
     })
-    expect(wrapper.get('nav[aria-label="Espacios"]').exists()).toBe(true)
+    expect(wrapper.find('nav[aria-label="Espacios"]').exists()).toBe(true)
     expect(wrapper.get("h1").text()).toBe("Mensajes")
     expect(wrapper.text()).toContain("Avisos")
     await wrapper.get('[data-value="unread"]').trigger("click")

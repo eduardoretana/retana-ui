@@ -27,3 +27,32 @@ Los emits conservan el significado de los callbacks de React: `suggestion` no en
 Tokens DTCG compartidos con el piloto: `--background`, `--foreground`, `--primary`, `--primary-foreground`, `--muted`, `--muted-foreground`, `--border`, `--card`, `--popover`, `--sidebar`, `--sidebar-foreground`, `--sidebar-accent`, `--sidebar-accent-foreground`, `--sidebar-border`, `--destructive`, `--ring`, `--radius`.
 
 El host de Cenit, si carga el puente, no necesita Tailwind. Los iconos entran por slot o por una clase, igual que en el piloto: la pieza Vue no importa `lucide`.
+
+## Hecho en el port
+
+Las 15 piezas están en `vue/src/<nombre>/`. La raíz lleva `.retana` y clases `rt:`. El color sale de `var(--*)`. Ningún SFC importa Vuetify: el puente es opt-in.
+
+`vue/src/vuetify/theme.ts` arma `createVuetify` en claro y oscuro desde `tokens/retana.tokens.json`. `primary` sigue siendo el acento único. Los defaults piden densidad `comfortable` y radio `lg`. Esos defaults aplican a componentes de Vuetify del host; las piezas no los usan.
+
+La presencia en línea usa `var(--success)`, no `primary` ni `accent`. El DTCG compartido no tiene `success`. `vue/src/styles/inbox-bridge.css` lo añade como `rgb(var(--v-theme-success))`. En React la presencia sigue en `primary`: paridad pendiente.
+
+`segmented-filter` no parte la etiqueta. La pista hace scroll horizontal, el botón no se encoge y el texto queda en una sola línea. Si sobra contenido, los extremos se desvanecen con una máscara.
+
+Voz, cotización, cita y documento no son piezas nuevas. La nota de voz y la cita usan `note`. La cotización usa `message-card-invoice`. El documento con estado de validación usa `message-card-file`. React ya hace lo mismo con props genéricas. No hay dominio de WhatsApp en el núcleo: el canal y la etapa llegan como texto.
+
+Los chips emiten `approve` o, en el bloque, `suggestion`. No existe un emit `send` en esa pieza. La ventana cerrada deja el campo y el envío inactivos; la única salida es `use-template`. En la escena Cenit los chips siguen visibles con la ventana cerrada, y aun así no envían. React los oculta cuando `locked` está puesto.
+
+`channel` en Vue es un string. En React es un nodo. El slot `channel` cubre el caso de un nodo.
+
+## Qué se deduplica cuando entre el #86
+
+Estos archivos se copiaron idénticos de `cursor/piloto-vue-tokens-5483` y el merge no debería tocarlos:
+
+- `vue/package.json` salvo el script `typecheck` y `vue-tsc`
+- `vue/vite.config.ts`, `vue/vitest.config.ts`, `vue/NOTICE`, `vue/pnpm-lock.yaml`
+- `vue/scripts/build-css.mjs`, `build-tokens.mjs`, `build-manifest.mjs`, `capturar.mjs`
+- `vue/src/styles/pilot.input.css`, `vue/src/icons/RetanaIcon.vue`
+- `tokens/*`, `docs/vue/vuetify.md`
+- la exclusión de `vue` en `tsconfig.json`, `vitest.config.mts` y `.gitignore`
+
+Al entrar el #86 se queda una sola copia. Lo que este PR añade y no está en el piloto es `vue/src/<pieza de la bandeja>`, `vue/src/styles/inbox.css`, `vue/src/styles/inbox-bridge.css`, `vue/src/vuetify/theme.ts`, `vue/src/lib/thread.ts`, `vue/src/lib/bandeja-scene.ts`, `vue/demo/bandeja/` y `vue/tsconfig.json`. `vue/dist/pilot.css` se regenera: al unir, hay que volver a correr `vue/scripts/build-css.mjs` para que la hoja cubra las clases de los dos PR.

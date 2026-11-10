@@ -1,0 +1,10 @@
+/*
+ * Extensión de la bandeja sobre el puente opt-in de Vuetify 3.13.
+ * tokens/bridge.css (idéntico al PR #86) no nombra --success.
+ * Este archivo es lo único que se añade al puente. Las piezas leen var(--success)
+ * y no importan Vuetify: si el anfitrión no carga el puente, define --success él mismo.
+ * La presencia en línea usa este token. No usa --primary ni --accent.
+ */
+:root {
+  --success: rgb(var(--v-theme-success));
+}
