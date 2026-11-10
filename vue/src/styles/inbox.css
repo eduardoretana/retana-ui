@@ -9,7 +9,9 @@
 
 .retana {
   color: var(--foreground);
-  font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  font-family: var(--font-sans, "Geist", ui-sans-serif, system-ui, sans-serif);
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .inbox {
@@ -50,6 +52,50 @@
 .hit {
   width: 44px;
   height: 44px;
+}
+
+.bell {
+  position: relative;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--background);
+  color: var(--foreground);
+  padding: 0;
+}
+
+.bell-badge {
+  position: absolute;
+  top: 4px;
+  inset-inline-end: 4px;
+  display: grid;
+  min-width: 1rem;
+  height: 1rem;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  padding: 0 0.25rem;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.inbox-rail .rail-icon.mdi::before {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.party-action {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font-weight: 500;
+  line-height: 1.25;
+  white-space: normal;
 }
 
 .avatar { position: relative; width: 2.5rem; height: 2.5rem; font-size: 0.75rem; flex-shrink: 0; }
@@ -114,7 +160,9 @@
 }
 
 .crumbs a { color: inherit; }
-.title { margin: 0; font-size: 1.875rem; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
+.title { margin: 0; font-size: 1.875rem; line-height: 2.25rem; font-weight: 600; letter-spacing: -0.025em; }
+.fine { font-size: 11px; line-height: 1.25; }
+.meta { font-size: 12px; line-height: 1.35; }
 .muted { color: var(--muted-foreground); }
 .danger { color: var(--destructive); }
 .accent { color: var(--primary); }

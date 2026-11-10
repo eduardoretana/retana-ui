@@ -239,7 +239,7 @@ function send(value: string) {
             :empty-label="emptyLabel"
             @retry-message="emit('retry-message', $event)"
           />
-          <SuggestedReplies v-if="suggestions.length" :items="suggestions" @approve="approve" />
+          <SuggestedReplies v-if="suggestions.length && !locked" :items="suggestions" @approve="approve" />
           <ThreadComposer
             :model-value="draft"
             :locked="locked"

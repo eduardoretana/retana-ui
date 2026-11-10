@@ -68,8 +68,15 @@ function reveal(id: string) {
       <h2 style="margin: 0; font-size: 1rem">{{ name }}</h2>
       <p v-if="meta" class="muted" style="margin: 0; font-size: 0.75rem">{{ meta }}</p>
     </div>
-    <div v-if="actions.length" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem">
-      <button v-for="action in actions" :key="action.id" type="button" class="ghost" style="height: 4rem" @click="emit('action', action.id)">
+    <div v-if="actions.length" class="party-actions" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem">
+      <button
+        v-for="action in actions"
+        :key="action.id"
+        type="button"
+        class="party-action"
+        style="height: 4rem; min-width: 0; border: 0; border-radius: calc(var(--radius, 0.625rem) * 1.8); background: var(--muted); color: var(--foreground); padding: 0.5rem; font-size: 12px"
+        @click="emit('action', action.id)"
+      >
         {{ action.label }}
       </button>
     </div>

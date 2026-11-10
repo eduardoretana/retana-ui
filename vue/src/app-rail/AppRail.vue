@@ -60,7 +60,7 @@ const showSettings = computed(() => Boolean(instance?.vnode.props?.onSettings))
         @click="emit('select', item.id)"
       >
         <slot name="icon" :item="item">
-          <span v-if="item.icon" :class="item.icon" aria-hidden="true" />
+          <span v-if="item.icon" :class="[item.icon, 'rail-icon']" aria-hidden="true" />
           <span v-else aria-hidden="true" style="width: 1rem; height: 1rem; border: 1px solid currentColor; border-radius: 0.25rem" />
         </slot>
         <span class="sr">{{ item.label }}</span>

@@ -55,20 +55,20 @@ const emit = defineEmits<{
     </span>
     <span class="grow">
       <span class="line">
-        <span class="ellipsis" :style="{ fontWeight: item.unread ? 600 : 500 }">{{ item.title }}</span>
+        <span class="ellipsis" :style="{ fontWeight: item.unread ? 600 : 500, fontSize: '14px' }">{{ item.title }}</span>
         <time v-if="item.time" class="muted" style="margin-inline-start: auto; flex-shrink: 0; font-size: 0.75rem">{{ item.time }}</time>
       </span>
       <span v-if="item.kind === 'contact' && item.role" class="ellipsis muted" style="display: block; font-size: 0.75rem">{{ item.role }}</span>
       <span v-else-if="item.preview" class="ellipsis muted" style="display: block; font-size: 0.75rem">{{ item.preview }}</span>
       <span v-if="item.channel || item.stage || item.windowLabel" style="display: flex; flex-wrap: wrap; gap: 0.375rem; margin-top: 0.25rem">
         <slot name="channel" :item="item">
-          <span v-if="item.channel" class="accent" style="font-size: 0.75rem; font-weight: 500">{{ item.channel }}</span>
+          <span v-if="item.channel" class="accent" style="font-size: 12px; font-weight: 500; color: var(--primary)">{{ item.channel }}</span>
         </slot>
         <span v-if="item.stage" class="tag">{{ item.stage }}</span>
-        <span v-if="item.windowLabel" class="accent" style="font-size: 0.6875rem; font-weight: 500">{{ item.windowLabel }}</span>
+          <span v-if="item.windowLabel" class="accent" style="font-size: 11px; font-weight: 500; color: var(--primary)">{{ item.windowLabel }}</span>
       </span>
     </span>
-    <span v-if="item.unread" class="pill">{{ item.unread }}</span>
+    <span v-if="item.unread" class="pill" style="background: var(--primary); color: var(--primary-foreground)">{{ item.unread }}</span>
   </button>
 </template>
 

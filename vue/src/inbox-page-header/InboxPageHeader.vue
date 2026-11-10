@@ -50,21 +50,21 @@ const emit = defineEmits<{
         </span>
       </nav>
       <span v-else />
-      <button v-if="bellLabel" type="button" class="hit" style="position: relative" :aria-label="bellCount > 0 ? `${bellLabel}, ${bellCount}` : bellLabel" @click="emit('bell')">
+      <button v-if="bellLabel" type="button" class="bell" :aria-label="bellCount > 0 ? `${bellLabel}, ${bellCount}` : bellLabel" @click="emit('bell')">
         <slot name="bell-icon">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6z" />
             <path d="M10 19a2 2 0 0 0 4 0" />
           </svg>
         </slot>
         <span class="sr">{{ bellLabel }}</span>
-        <span v-if="bellCount > 0" class="pill" style="position: absolute; top: 2px; inset-inline-end: 2px">{{ bellCount }}</span>
+        <span v-if="bellCount > 0" class="bell-badge" style="background: var(--primary); color: var(--primary-foreground)">{{ bellCount }}</span>
       </button>
     </div>
     <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 0.75rem">
       <div style="flex: 1 1 18rem; min-width: 0">
         <h1 class="title">{{ title }}</h1>
-        <p v-if="subtitle" class="muted" style="margin: 0.25rem 0 0">{{ subtitle }}</p>
+        <p v-if="subtitle" class="muted" style="margin: 0.25rem 0 0; font-size: 14px">{{ subtitle }}</p>
       </div>
       <div v-if="actions.length" style="display: flex; flex-wrap: wrap; gap: 0.5rem">
         <slot name="actions" :actions="actions">

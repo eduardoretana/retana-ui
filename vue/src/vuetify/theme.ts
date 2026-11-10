@@ -4,6 +4,9 @@
  *
  * Hueco: el DTCG del piloto #86 no lista `success`. Esta rama sí lo publica
  * en app/globals.css. El tema convierte ese mismo oklch. No es el acento.
+ *
+ * El primary de la demo no es el negro de :root. La captura React de la bandeja
+ * vive dentro de `.ae-ember` (app/globals.css). Esos oklch son el acento único.
  */
 import tokens from "../../../tokens/retana.tokens.json"
 
@@ -11,6 +14,12 @@ type ColorToken = { $value: string }
 type Mode = Record<string, ColorToken>
 
 const modes = tokens.color as unknown as { light: Mode; dark: Mode }
+
+/** Mismos valores que `.ae-ember` y `.dark .ae-ember` en app/globals.css. */
+const emberAccent = {
+  light: { primary: "oklch(0.55 0.18 40)", on: "oklch(0.99 0 0)" },
+  dark: { primary: "oklch(0.74 0.17 50)", on: "oklch(0.2 0.03 45)" },
+} as const
 
 function parseOklch(value: string) {
   const match = value.match(/oklch\(\s*([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)(?:\s*\/\s*([0-9.]+)(%?))?\s*\)/)
@@ -69,8 +78,8 @@ function theme(modeName: "light" | "dark") {
       "on-background": paint("foreground"),
       surface: paint("card"),
       "on-surface": paint("card-foreground"),
-      primary: paint("primary"),
-      "on-primary": paint("primary-foreground"),
+      primary: paintOklch(emberAccent[modeName].primary, backdrop),
+      "on-primary": paintOklch(emberAccent[modeName].on, backdrop),
       secondary: paint("muted-foreground"),
       error: paint("destructive"),
       success: paintOklch(modeName === "dark" ? "oklch(0.78 0.14 150)" : "oklch(0.45 0.12 145)", backdrop),

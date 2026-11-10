@@ -30,7 +30,7 @@ withDefaults(defineProps<{
     <p v-if="title" class="muted" style="margin: 0; font-size: 0.75rem">{{ title }}</p>
     <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem">
       <p style="margin: 0; font-size: 1.5rem; font-weight: 600">{{ amount }}</p>
-      <span v-if="due" class="pill" style="height: auto; padding: 0.25rem 0.625rem">{{ due }}</span>
+      <span v-if="due" class="pill" style="height: auto; padding: 0.25rem 0.625rem; background: var(--primary); color: var(--primary-foreground)">{{ due }}</span>
     </div>
   </div>
 </template>

@@ -32,7 +32,7 @@ El host de Cenit, si carga el puente, no necesita Tailwind. Los iconos entran po
 
 Las 15 piezas están en `vue/src/<nombre>/`. La raíz lleva `.retana` y clases `rt:`. El color sale de `var(--*)`. Ningún SFC importa Vuetify: el puente es opt-in.
 
-`vue/src/vuetify/theme.ts` arma `createVuetify` en claro y oscuro desde `tokens/retana.tokens.json`. `primary` sigue siendo el acento único. Los defaults piden densidad `comfortable` y radio `lg`. Esos defaults aplican a componentes de Vuetify del host; las piezas no los usan.
+`vue/src/vuetify/theme.ts` arma `createVuetify` en claro y oscuro desde `tokens/retana.tokens.json`, y sustituye `primary` por el oklch de `.ae-ember` en `app/globals.css` (el mismo host de la captura React). El puente sigue apuntando `--primary` a `rgb(var(--v-theme-primary))`. `primary` es el acento único. Los defaults piden densidad `comfortable` y radio `lg`. Esos defaults aplican a componentes de Vuetify del host; las piezas no los usan.
 
 La presencia en línea usa `var(--success, var(--chart-2))`, igual que React en esta rama. No usa `primary` ni `accent`. El DTCG del piloto #86 todavía no lista `success`; el valor vive en `app/globals.css` (`oklch(0.45 0.12 145)` en claro y `oklch(0.78 0.14 150)` en oscuro). La demo convierte ese mismo oklch al rol `success` de Vuetify. `vue/src/styles/inbox-bridge.css` lo publica como `rgb(var(--v-theme-success))`.
 
@@ -40,7 +40,7 @@ La presencia en línea usa `var(--success, var(--chart-2))`, igual que React en 
 
 Voz, cotización, cita y documento no son piezas nuevas. La nota de voz y la cita usan `note`. La cotización usa `message-card-invoice`. El documento con estado de validación usa `message-card-file`. React ya hace lo mismo con props genéricas. No hay dominio de WhatsApp en el núcleo: el canal y la etapa llegan como texto.
 
-Los chips emiten `approve` o, en el bloque, `suggestion`. No existe un emit `send` en esa pieza. La ventana cerrada deja el campo y el envío inactivos; la única salida es `use-template`. En la escena Cenit los chips siguen visibles con la ventana cerrada, y aun así no envían. React los oculta cuando `locked` está puesto.
+Los chips emiten `approve` o, en el bloque, `suggestion`. No existe un emit `send` en esa pieza. Con la ventana cerrada las dos implementaciones ocultan los chips: el campo y el envío quedan inactivos y la única salida es `use-template`. Mostrarlos deshabilitados no aporta un nombre accesible nuevo, porque el aviso y «Usar plantilla» ya están en el compositor.
 
 `channel` en Vue es un string. En React es un nodo. El slot `channel` cubre el caso de un nodo.
 

@@ -33,6 +33,7 @@ for (const shot of shots) {
   await page.setViewportSize({ width: shot.width, height: shot.height })
   await page.goto(`${base}?scene=${shot.scene}&theme=${shot.theme}&locale=es`)
   await page.waitForSelector("[data-slot=inbox-crm]")
+  await page.evaluate(() => document.fonts.ready)
   const file = path.join(out, shot.file)
   await page.screenshot({ path: file })
   written.push(file)

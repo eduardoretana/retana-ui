@@ -16,7 +16,7 @@ function text(locale: Locale, spanish: string, english: string) {
 export function bandejaProps(scene: string, locale: Locale = "es") {
   const t = (spanish: string, english: string) => text(locale, spanish, english)
   const cenit = scene === "cenit" || scene === "locked"
-  const closed = cenit
+  const closed = scene === "locked"
   const conversations = cenit
     ? [
         {
@@ -28,7 +28,7 @@ export function bandejaProps(scene: string, locale: Locale = "es") {
           section: "pinned",
           tags: ["leads", "mine", "unread"],
           stage: t("Simulación", "Simulation"),
-          windowLabel: t("Cerrada", "Closed"),
+          windowLabel: t("Quedan 6 h", "6 h left"),
           channel: "WhatsApp",
           presence: "online" as const,
         },
@@ -148,29 +148,11 @@ export function bandejaProps(scene: string, locale: Locale = "es") {
       },
     },
     {
-      id: "enviado",
-      side: "outgoing" as const,
-      author: t("Tú", "You"),
-      time: "10:42",
-      body: t("Te envié la simulación.", "I sent the simulation."),
-      delivery: "sent" as const,
-      deliveryLabel: t("Enviado", "Sent"),
-    },
-    {
       id: "cot",
       side: "incoming" as const,
       author: "Casa Lerma",
-      time: "10:43",
+      time: "10:42",
       invoice: { title: t("Cotización", "Quote"), amount: "$186,400", due: t("Vence 14 nov", "Due Nov 14") },
-    },
-    {
-      id: "entregado",
-      side: "outgoing" as const,
-      author: t("Tú", "You"),
-      time: "10:44",
-      body: t("¿Te llegó el monto?", "Did the amount arrive?"),
-      delivery: "delivered" as const,
-      deliveryLabel: t("Entregado", "Delivered"),
     },
     {
       id: "cita",
@@ -179,7 +161,6 @@ export function bandejaProps(scene: string, locale: Locale = "es") {
       time: "10:46",
       delivery: "read" as const,
       deliveryLabel: t("Leído", "Read"),
-      body: t("Confirmado el jueves.", "Thursday is confirmed."),
       note: {
         title: t("Cita agendada", "Appointment booked"),
         detail: t("Jueves 12 nov · 14:30 · 30 min", "Thu Nov 12 · 14:30 · 30 min"),
@@ -289,12 +270,20 @@ export function bandejaProps(scene: string, locale: Locale = "es") {
     listTitle: t("Mensajes", "Messages"),
     countLabel: scene === "empty" ? "0" : "12",
     searchLabel: t("Buscar mensajes", "Search messages"),
-    filters: [
-      { value: "all", label: t("Todos", "All") },
-      { value: "clients", label: t("Clientes", "Clients") },
-      { value: "unread", label: t("Sin leer", "Unread") },
-      { value: "mine", label: t("Míos", "Mine") },
-    ],
+    filters: cenit
+      ? [
+          { value: "all", label: t("Todos", "All") },
+          { value: "leads", label: t("Prospectos", "Leads") },
+          { value: "clients", label: t("Clientes", "Clients") },
+          { value: "unread", label: t("Sin leer", "Unread") },
+          { value: "mine", label: t("Míos", "Mine") },
+        ]
+      : [
+          { value: "all", label: t("Todos", "All") },
+          { value: "clients", label: t("Clientes", "Clients") },
+          { value: "unread", label: t("Sin leer", "Unread") },
+          { value: "mine", label: t("Míos", "Mine") },
+        ],
     filter: scene === "unread" ? "unread" : "all",
     sections: cenit
       ? [
