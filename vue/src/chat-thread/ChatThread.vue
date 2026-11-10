@@ -68,38 +68,40 @@ const grouped = computed(() => groupMessages(props.messages))
     <div v-else class="log" role="log" aria-live="polite" aria-relevant="additions" :aria-label="label">
       <p v-if="grouped.length === 0" class="muted">{{ emptyLabel }}</p>
       <div v-for="message in grouped" :key="message.id" style="display: grid; gap: 0.5rem">
-        <MessageBubble
-          v-if="message.body"
-          :side="message.side"
-          :author="message.author"
-          :time="message.time"
-          :delivery="message.delivery"
-          :delivery-label="message.deliveryLabel"
-          :grouped="message.grouped"
-          :enter="message.enter"
-          :retry-label="retryLabel"
-          @retry="emit('retry-message', message.id)"
-        >
-          {{ message.body }}
-        </MessageBubble>
-        <div v-if="message.note" class="card" style="max-width: 28rem">
-          <p style="margin: 0; font-weight: 500">{{ message.note.title }}</p>
-          <p class="muted" style="margin: 0.125rem 0 0; font-size: 0.75rem">{{ message.note.detail }}</p>
-          <p v-if="message.note.body" style="margin: 0.5rem 0 0">{{ message.note.body }}</p>
-        </div>
-        <MessageCardFile v-if="message.file" :name="message.file.name" :detail="message.file.detail" :status="message.file.status" />
-        <MessageCardInvoice v-if="message.invoice" :title="message.invoice.title" :amount="message.invoice.amount" :due="message.invoice.due" />
-        <MessageCardMetric
-          v-if="message.metric"
-          :title="message.metric.title"
-          :chip="message.metric.chip"
-          :value="message.metric.value"
-          :caption="message.metric.caption"
-          :filled="message.metric.filled"
-          :total="message.metric.total"
-          :start="message.metric.start"
-          :end="message.metric.end"
-        />
+      <MessageBubble
+        v-if="message.body || message.note || message.file || message.invoice || message.metric"
+        :side="message.side"
+        :author="message.author"
+        :time="message.time"
+        :delivery="message.delivery"
+        :delivery-label="message.deliveryLabel"
+        :grouped="message.grouped"
+        :enter="message.enter"
+        :retry-label="retryLabel"
+        @retry="emit('retry-message', message.id)"
+      >
+        <template v-if="message.body">{{ message.body }}</template>
+        <template #attachment>
+          <div v-if="message.note" class="card" style="max-width: 28rem">
+            <p style="margin: 0; font-weight: 500">{{ message.note.title }}</p>
+            <p class="muted" style="margin: 0.125rem 0 0; font-size: 12px">{{ message.note.detail }}</p>
+            <p v-if="message.note.body" style="margin: 0.5rem 0 0">{{ message.note.body }}</p>
+          </div>
+          <MessageCardFile v-if="message.file" :name="message.file.name" :detail="message.file.detail" :status="message.file.status" />
+          <MessageCardInvoice v-if="message.invoice" :title="message.invoice.title" :amount="message.invoice.amount" :due="message.invoice.due" />
+          <MessageCardMetric
+            v-if="message.metric"
+            :title="message.metric.title"
+            :chip="message.metric.chip"
+            :value="message.metric.value"
+            :caption="message.metric.caption"
+            :filled="message.metric.filled"
+            :total="message.metric.total"
+            :start="message.metric.start"
+            :end="message.metric.end"
+          />
+        </template>
+      </MessageBubble>
       </div>
       <TypingIndicator v-if="typing?.names?.length" :names="typing.names" :label="() => typing?.label ?? ''" dots />
     </div>

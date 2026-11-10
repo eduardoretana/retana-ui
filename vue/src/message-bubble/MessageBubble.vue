@@ -7,7 +7,7 @@ ilustraciones ni textos.
 La tinta propia usa foreground. El acento único es primary. Las palomitas no son de un canal.
 -->
 <script setup lang="ts">
-import { computed } from "vue"
+import { computed, useSlots } from "vue"
 
 import { deskInitials, motionReduced, type DeliveryState } from "../lib/thread"
 
@@ -30,6 +30,7 @@ const emit = defineEmits<{
   retry: []
 }>()
 
+const slots = useSlots()
 const mine = computed(() => props.side === "outgoing")
 const showMeta = computed(() => props.grouped === "single" || props.grouped === "start")
 const showAvatar = computed(() => !mine.value && (props.grouped === "single" || props.grouped === "end"))
@@ -61,9 +62,10 @@ const motion = computed(() => (props.enter && !motionReduced() ? "rise" : "off")
           <time v-if="time" style="margin-inline-start: 0.5rem">{{ time }}</time>
         </template>
       </p>
-      <div class="bubble" :data-side="side">
+      <div v-if="slots.default" class="bubble" :data-side="side">
         <slot />
       </div>
+      <slot name="attachment" />
       <p v-if="delivery && delivery !== 'sending'" :class="delivery === 'failed' ? 'danger' : 'muted'" style="display: flex; align-items: center; gap: 0.25rem; margin: 0; font-size: 0.6875rem">
         <svg v-if="delivery === 'sent'" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <polyline points="5,12 10,17 19,7" />
