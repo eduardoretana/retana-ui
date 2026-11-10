@@ -13,7 +13,7 @@ import { Folder, LayoutGrid, MessageSquare, PieChart, Users, Wallet } from "luci
 import { formatSceneCall, sceneText, type Scene, type SceneFrame, type SceneRenderProps } from "@/app/catalog/scene-types"
 import { InboxCrm } from "@/registry/blocks/inbox-crm"
 
-import { cenit, empty, error, failed, filled, hilo, loading, locked, offline, typing, unread } from "./fixtures"
+import { cenit, empty, error, failed, filled, hilo, loading, locked, offline, receipts, typing, unread } from "./fixtures"
 
 const frame: SceneFrame = { size: "desk", surface: "canvas", padding: "sm" }
 
@@ -335,7 +335,41 @@ function Studio({ locale, log, id }: SceneRenderProps & { id: string }) {
         threadTitle={cenitScene ? "Casa Lerma" : "Taller Ámbar"}
         threadStatus={cenitScene ? t("En línea · Simulación", "Online · Simulation") : t("En línea · Marca", "Online · Brand")}
         threadPresence="online"
-        messages={id === "empty" ? [] : messages}
+        messages={
+          id === "empty"
+            ? []
+            : id === "receipts"
+              ? [
+                  {
+                    id: "sent",
+                    side: "outgoing" as const,
+                    author: t("Tú", "You"),
+                    time: "10:40",
+                    body: t("Te mando el corte.", "Sending the cut."),
+                    delivery: "sent" as const,
+                    deliveryLabel: t("Enviado", "Sent"),
+                  },
+                  {
+                    id: "delivered",
+                    side: "outgoing" as const,
+                    author: t("Tú", "You"),
+                    time: "10:41",
+                    body: t("¿Lo ves?", "Do you see it?"),
+                    delivery: "delivered" as const,
+                    deliveryLabel: t("Entregado", "Delivered"),
+                  },
+                  {
+                    id: "read",
+                    side: "outgoing" as const,
+                    author: t("Tú", "You"),
+                    time: "10:42",
+                    body: t("Quedó leído.", "It was read."),
+                    delivery: "read" as const,
+                    deliveryLabel: t("Leído", "Read"),
+                  },
+                ]
+              : messages
+        }
         typing={id === "typing" || id === "filled" ? { names: [cenitScene ? "Casa Lerma" : "Marina Soler"], label: t("Marina escribe…", "Marina is typing…") } : undefined}
         suggestions={id === "empty" ? [] : suggestions}
         onSuggestion={(suggestionId) => log(formatSceneCall("onSuggestion", [suggestionId]))}
@@ -380,4 +414,5 @@ export const scenes: Scene[] = [
   { id: unread.id, label: "Sin leer", labelEn: "Unread", render: scene(unread.id), frame },
   { id: cenit.id, label: "Cenit", labelEn: "Cenit", render: scene(cenit.id), frame },
   { id: hilo.id, label: "Hilo", labelEn: "Thread", render: scene(hilo.id), frame },
+  { id: receipts.id, label: "Acuses", labelEn: "Receipts", render: scene(receipts.id), frame },
 ]

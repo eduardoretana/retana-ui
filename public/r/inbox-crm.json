@@ -94,6 +94,11 @@
         "id": "hilo",
         "label": "Hilo",
         "labelEn": "Thread"
+      },
+      {
+        "id": "receipts",
+        "label": "Acuses",
+        "labelEn": "Receipts"
       }
     ],
     "examples": [
@@ -161,6 +166,11 @@
         "title": "Hilo",
         "href": "/examples/inbox-crm?scene=hilo",
         "description": "Thread"
+      },
+      {
+        "title": "Acuses",
+        "href": "/examples/inbox-crm?scene=receipts",
+        "description": "Receipts"
       }
     ],
     "usage": "<InboxCrm layout=\"auto\" conversations={conversations} messages={messages} suggestions={suggestions} onSend={send} onSuggestion={approve} party={party} onReveal={audit} />",

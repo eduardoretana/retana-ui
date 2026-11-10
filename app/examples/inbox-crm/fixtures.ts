@@ -17,3 +17,4 @@ export const typing = { id: "typing" }
 export const unread = { id: "unread" }
 export const cenit = { id: "cenit" }
 export const hilo = { id: "hilo" }
+export const receipts = { id: "receipts" }

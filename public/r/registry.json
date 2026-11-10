@@ -33327,6 +33327,11 @@
             "id": "hilo",
             "label": "Hilo",
             "labelEn": "Thread"
+          },
+          {
+            "id": "receipts",
+            "label": "Acuses",
+            "labelEn": "Receipts"
           }
         ],
         "examples": [
