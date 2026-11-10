@@ -7,7 +7,7 @@ ilustraciones ni textos.
 La tinta propia usa foreground. El acento único es primary. Las palomitas no son de un canal.
 -->
 <script setup lang="ts">
-import { computed, useSlots } from "vue"
+import { Comment, Fragment, Text, computed, useSlots, type VNode } from "vue"
 
 import { deskInitials, motionReduced, type DeliveryState } from "../lib/thread"
 
@@ -31,6 +31,19 @@ const emit = defineEmits<{
 }>()
 
 const slots = useSlots()
+
+function nodeHasText(node: VNode): boolean {
+  if (node.type === Comment) return false
+  if (node.type === Text || typeof node.children === "string") return String(node.children ?? "").trim().length > 0
+  if (Array.isArray(node.children)) return node.children.some((child) => (typeof child === "string" ? child.trim().length > 0 : nodeHasText(child as VNode)))
+  if (node.type === Fragment && Array.isArray(node.children)) return (node.children as VNode[]).some(nodeHasText)
+  return false
+}
+
+function hasBody() {
+  return (slots.default?.() ?? []).some(nodeHasText)
+}
+
 const mine = computed(() => props.side === "outgoing")
 const showMeta = computed(() => props.grouped === "single" || props.grouped === "start")
 const showAvatar = computed(() => !mine.value && (props.grouped === "single" || props.grouped === "end"))
@@ -62,7 +75,7 @@ const motion = computed(() => (props.enter && !motionReduced() ? "rise" : "off")
           <time v-if="time" style="margin-inline-start: 0.5rem">{{ time }}</time>
         </template>
       </p>
-      <div v-if="slots.default" class="bubble" :data-side="side">
+      <div v-if="hasBody()" class="bubble" :data-side="side">
         <slot />
       </div>
       <slot name="attachment" />
