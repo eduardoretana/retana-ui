@@ -1,0 +1,43 @@
+schema: uis.expected-red/v1
+spec_id: bandeja-vue-ronda
+green_forbidden: true
+commands:
+  - name: card-read
+    run: pnpm --dir vue exec vitest run tests/card-receipt.test.ts
+    exit: 1
+    failed: 1
+    passed: 0
+    commit: ab1ba77
+  - name: receipts
+    run: pnpm --dir vue exec vitest run tests/receipts-scene.test.ts
+    exit: 1
+    failed: 1
+    passed: 0
+    commit: 9c0d7bd
+  - name: audit
+    run: pnpm --dir vue exec vitest run tests/audit-log.test.ts
+    exit: 1
+    failed: 1
+    passed: 0
+    commit: c4d113e
+  - name: tokens-success
+    run: pnpm --dir vue exec vitest run tests/tokens-success.test.ts
+    exit: 1
+    failed: 1
+    passed: 0
+    commit: 9d3012d
+  - name: fixtures
+    run: pnpm --dir vue exec vitest run tests/fixture-parity.test.ts
+    exit: 1
+    failed: 1
+    passed: 0
+    commit: c101aac
+signatures:
+  - CARD-READ
+  - RECEIPTS
+  - AUDIT
+  - TOKENS-REGEN-SUCCESS
+  - FIXTURES
+notes:
+  - "NSS ya pasaba en PartyPanel: commit 256ab42, sin rojo."
+  - "var(--success, var(--chart-2)) ya era el estilo renderizado: commit 6b2a569, sin rojo."
