@@ -1,0 +1,371 @@
+
+ RUN  v5.1.0 /agent/repos/retana-ui/vue
+
+ × tests/bandeja.test.ts > conversation list > LISTBOX announces unread rows and moves with the arrow keys 25ms
+   → Unable to get [role="listbox"] within: <div data-stub="conversation-list"></div>
+ × tests/bandeja.test.ts > conversation list > LIST-STATES shows an empty, loading, and error state 4ms
+   → Unable to get [role="status"] within: <div data-stub="conversation-list"></div>
+ × tests/bandeja.test.ts > segmented filter > FILTER-SCROLL keeps Sin leer whole and scrolls instead of clipping a word 3ms
+   → Unable to get [data-value="unread"] within: <div data-stub="segmented-filter"></div>
+ × tests/bandeja.test.ts > presence > PRESENCE-SUCCESS paints the online dot with the success token 3ms
+   → Unable to get [data-presence=online] within: <div data-stub="conversation-item"></div>
+ × tests/bandeja.test.ts > message bubble > BUBBLE-READ marks sent, delivered, and read, and hides a grouped author 11ms
+   → Unable to get [data-delivery=sent] within: <div>
+  <div data-stub="message-bubble"></div>
+  <div data-stub="message-bubble"></div>
+  <div data-stub="message-bubble"></div>
+  <div data-stub="message-bubble"></div>
+</div>
+ × tests/bandeja.test.ts > message bubble > BUBBLE-RETRY offers retry when sending fails 4ms
+   → Unable to get button within: <div data-stub="message-bubble"></div>
+ × tests/bandeja.test.ts > message bubble > BUBBLE-MOTION rises on enter and stays still when motion is reduced 6ms
+   → Unable to get [data-motion] within: <div data-stub="message-bubble"></div>
+ × tests/bandeja.test.ts > rich cards > CARDS renders a file, an amount due, and a segmented bar 4ms
+   → expected '' to contain 'corte-marca.pdf'
+ × tests/bandeja.test.ts > rich cards > CARDS-GENERIC keeps voice, quote, appointment, and document on generic props 2ms
+   → expected '' to contain 'Nota de voz · 0:18'
+ × tests/bandeja.test.ts > typing indicator > TYPING names who is typing without a presence provider 1ms
+   → expected '' to contain 'Marina escribe…'
+ × tests/bandeja.test.ts > suggested replies > SUGGESTIONS asks for approval and never emits a send 2ms
+   → expected undefined to be '50' // Object.is equality
+ × tests/bandeja.test.ts > thread composer > COMPOSER-SEND sends the draft and keeps ask-ai from sending 2ms
+   → Unable to get textarea within: <div data-stub="thread-composer"></div>
+ × tests/bandeja.test.ts > thread composer > COMPOSER-LOCKED blocks free text and only offers a template 1ms
+   → Unable to get [role="status"] within: <div data-stub="thread-composer"></div>
+ × tests/bandeja.test.ts > party panel > PARTY-MASK masks a sensitive field until someone asks to show it 2ms
+   → expected '' to contain '••••••••••••••••••'
+ × tests/bandeja.test.ts > inbox shell > PHONE keeps one column and goes back to the list 2ms
+   → Unable to get [role="option"] within: <div data-stub="inbox-crm"></div>
+ × tests/bandeja.test.ts > inbox shell > DRAWER hides the rail on a tablet and closes the context with escape 4ms
+   → Unable to get nav[aria-label="Espacios"] within: <div data-stub="inbox-crm"></div>
+ × tests/bandeja.test.ts > inbox shell > SEARCH focuses the field with the command shortcut 2ms
+   → Unable to get [data-slot=conversation-search] within: <div data-stub="inbox-crm"></div>
+ × tests/bandeja.test.ts > inbox shell > STATES covers loading, empty, error, and offline 2ms
+   → Unable to get [data-slot=inbox-crm] within: <div data-stub="inbox-crm"></div>
+ × tests/bandeja.test.ts > inbox shell > SUGGESTION-DRAFT puts a suggestion into the draft and does not send it 2ms
+   → Unable to get textarea within: <div data-stub="inbox-crm"></div>
+ × tests/bandeja.test.ts > inbox shell > LOG threads a log with typing, a failed send, and a closed window 1ms
+   → Unable to get [role="log"] within: <div data-stub="chat-thread"></div>
+ × tests/bandeja.test.ts > page chrome > CHROME renders the rail, the header, and a touch-sized filter 4ms
+   → Unable to get nav[aria-label="Espacios"] within: <div>
+  <div data-stub="app-rail"></div>
+  <div data-stub="inbox-page-header"></div>
+  <div data-stub="segmented-filter"></div>
+</div>
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 21 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/bandeja.test.ts > conversation list > LISTBOX announces unread rows and moves with the arrow keys
+Error: Unable to get [role="listbox"] within: <div data-stub="conversation-list"></div>
+ ❯ VueWrapper.get node_modules/.pnpm/@vue+test-utils@2.5.1_@vue+compiler-dom@3.5.45_@vue+server-renderer@3.5.45_vue@3.5.45_typescript@6.0.3_/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js:7333:15
+ ❯ tests/bandeja.test.ts:117:26
+    115|       },
+    116|     })
+    117|     const list = wrapper.get('[role="listbox"]')
+       |                          ^
+    118|     expect(list.attributes("aria-label")).toBe("Conversaciones")
+    119|     const selected = wrapper.get('[role="option"][aria-selected="true"…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/21]⎯
+
+ FAIL  tests/bandeja.test.ts > conversation list > LIST-STATES shows an empty, loading, and error state
+Error: Unable to get [role="status"] within: <div data-stub="conversation-list"></div>
+ ❯ VueWrapper.get node_modules/.pnpm/@vue+test-utils@2.5.1_@vue+compiler-dom@3.5.45_@vue+server-renderer@3.5.45_vue@3.5.45_typescript@6.0.3_/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js:7333:15
+ ❯ tests/bandeja.test.ts:133:18
+    131|   it("LIST-STATES shows an empty, loading, and error state", () => {
+    132|     const empty = mount(ConversationList, { props: { label: "Conversac…
+    133|     expect(empty.get('[role="status"]').text()).toContain("Sin chats")
+       |                  ^
+    134|     empty.unmount()
+    135|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/21]⎯
+
+ FAIL  tests/bandeja.test.ts > segmented filter > FILTER-SCROLL keeps Sin leer whole and scrolls instead of clipping a word
+Error: Unable to get [data-value="unread"] within: <div data-stub="segmented-filter"></div>
+ ❯ VueWrapper.get node_modules/.pnpm/@vue+test-utils@2.5.1_@vue+compiler-dom@3.5.45_@vue+server-renderer@3.5.45_vue@3.5.45_typescript@6.0.3_/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js:7333:15
+ ❯ tests/bandeja.test.ts:161:28
+    159|       },
+    160|     })
+    161|     const unread = wrapper.get('[data-value="unread"]')
+       |                            ^
+    162|     expect(unread.text()).toBe("Sin leer")
+    163|     expect(getComputedStyle(unread.element).whiteSpace).toBe("nowrap")
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/21]⎯
+
+ FAIL  tests/bandeja.test.ts > presence > PRESENCE-SUCCESS paints the online dot with the success token
+Error: Unable to get [data-presence=online] within: <div data-stub="conversation-item"></div>
+ ❯ VueWrapper.get node_modules/.pnpm/@vue+test-utils@2.5.1_@vue+compiler-dom@3.5.45_@vue+server-renderer@3.5.45_vue@3.5.45_typescript@6.0.3_/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js:7333:15
+ ❯ tests/bandeja.test.ts:178:25
+    176|       props: { item: conversations[0], selected: true },
+    177|     })
+    178|     const dot = wrapper.get("[data-presence=online]")
+       |                         ^
+    179|     const style = dot.attributes("style") ?? ""
+    180|     expect(style).toContain("var(--success)")
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/21]⎯
+
+ FAIL  tests/bandeja.test.ts > message bubble > BUBBLE-READ marks sent, delivered, and read, and hides a grouped author
+Error: Unable to get [data-delivery=sent] within: <div>
+  <div data-stub="message-bubble"></div>
+  <div data-stub="message-bubble"></div>
+  <div data-stub="message-bubble"></div>
+  <div data-stub="message-bubble"></div>
+</div>
+ ❯ VueWrapper.get node_modules/.pnpm/@vue+test-utils@2.5.1_@vue+compiler-dom@3.5.45_@vue+server-renderer@3.5.45_vue@3.5.45_typescript@6.0.3_/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js:7333:15
+ ❯ tests/bandeja.test.ts:200:20
+    198|       `,
+    199|     })
+    200|     expect(wrapper.get("[data-delivery=sent]").text()).toContain("Envi…
+       |                    ^
+    201|     expect(wrapper.get("[data-delivery=delivered]").text()).toContain(…
+    202|     const read = wrapper.get("[data-delivery=read]")
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/21]⎯
+
+ FAIL  tests/bandeja.test.ts > message bubble > BUBBLE-RETRY offers retry when sending fails
+Error: Unable to get button within: <div data-stub="message-bubble"></div>
+ ❯ VueWrapper.get node_modules/.pnpm/@vue+test-utils@2.5.1_@vue+compiler-dom@3.5.45_@vue+server-renderer@3.5.45_vue@3.5.45_typescript@6.0.3_/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js:7333:15
+ ❯ tests/bandeja.test.ts:214:19
+    212|       slots: { default: "Va el corte." },
+    213|     })
+    214|     await wrapper.get("button").trigger("click")
+       |                   ^
+    215|     expect(emitted(wrapper, "retry")).toHaveLength(1)
+    216|     wrapper.unmount()
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/21]⎯
+
+ FAIL  tests/bandeja.test.ts > message bubble > BUBBLE-MOTION rises on enter and stays still when motion is reduced
+Error: Unable to get [data-motion] within: <div data-stub="message-bubble"></div>
+ ❯ VueWrapper.get node_modules/.pnpm/@vue+test-utils@2.5.1_@vue+compiler-dom@3.5.45_@vue+server-renderer@3.5.45_vue@3.5.45_typescript@6.0.3_/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js:7333:15
+ ❯ tests/bandeja.test.ts:235:19
+    233|       slots: { default: "Llegué." },
+    234|     })
+    235|     expect(rising.get("[data-motion]").attributes("data-motion")).toBe…
+       |                   ^
+    236|     rising.unmount()
+    237|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/21]⎯
+
+ FAIL  tests/bandeja.test.ts > rich cards > CARDS renders a file, an amount due, and a segmented bar
+AssertionError: expected '' to contain 'corte-marca.pdf'
+
+- Expected
++ Received
+
+- corte-marca.pdf
+
+ ❯ tests/bandeja.test.ts:270:28
+    268|       `,
+    269|     })
+    270|     expect(wrapper.text()).toContain("corte-marca.pdf")
+       |                            ^
+    271|     expect(wrapper.text()).toContain("En revisión")
+    272|     await wrapper.get("button").trigger("click")
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/21]⎯
+
+ FAIL  tests/bandeja.test.ts > rich cards > CARDS-GENERIC keeps voice, quote, appointment, and document on generic props
+AssertionError: expected '' to contain 'Nota de voz · 0:18'
+
+- Expected
++ Received
+
+- Nota de voz · 0:18
+
+ ❯ tests/bandeja.test.ts:295:28
+    293|       },
+    294|     })
+    295|     expect(wrapper.text()).toContain("Nota de voz · 0:18")
+       |                            ^
+    296|     expect(wrapper.text()).toContain("Cotización")
+    297|     expect(wrapper.text()).toContain("Cita agendada")
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/21]⎯
+
+ FAIL  tests/bandeja.test.ts > typing indicator > TYPING names who is typing without a presence provider
+AssertionError: expected '' to contain 'Marina escribe…'
+
+- Expected
++ Received
+
+- Marina escribe…
+
+ ❯ tests/bandeja.test.ts:307:28
+    305|   it("TYPING names who is typing without a presence provider", () => {
+    306|     const wrapper = mount(TypingIndicator, { props: { names: ["Marina …
+    307|     expect(wrapper.text()).toContain("Marina escribe…")
+       |                            ^
+    308|     expect(wrapper.get("[data-dots=true]").exists()).toBe(true)
+    309|     wrapper.unmount()
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/21]⎯
+
+ FAIL  tests/bandeja.test.ts > suggested replies > SUGGESTIONS asks for approval and never emits a send
+AssertionError: expected undefined to be '50' // Object.is equality
+
+- Expected:
+"50"
+
++ Received:
+undefined
+
+ ❯ tests/bandeja.test.ts:325:50
+    323|     })
+    324|     const chips = wrapper.findAll("button")
+    325|     expect(chips[1]?.attributes("data-stagger")).toBe("50")
+       |                                                  ^
+    326|     await chips[1]?.trigger("click")
+    327|     expect(emitted(wrapper, "approve")?.[0]).toEqual(["call"])
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/21]⎯
+
+ FAIL  tests/bandeja.test.ts > thread composer > COMPOSER-SEND sends the draft and keeps ask-ai from sending
+Error: Unable to get textarea within: <div data-stub="thread-composer"></div>
+ ❯ VueWrapper.get node_modules/.pnpm/@vue+test-utils@2.5.1_@vue+compiler-dom@3.5.45_@vue+server-renderer@3.5.45_vue@3.5.45_typescript@6.0.3_/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js:7333:15
+ ❯ tests/bandeja.test.ts:339:19
+    337|       props: { placeholder: "Mensaje a Taller Ámbar…", sendLabel: "Env…
+    338|     })
+    339|     await wrapper.get("textarea").setValue("Va el jueves")
+       |                   ^
+    340|     const ask = wrapper.findAll("button").find((button) => button.text…
+    341|     await ask?.trigger("click")
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/21]⎯
+
+ FAIL  tests/bandeja.test.ts > thread composer > COMPOSER-LOCKED blocks free text and only offers a template
+Error: Unable to get [role="status"] within: <div data-stub="thread-composer"></div>
+ ❯ VueWrapper.get node_modules/.pnpm/@vue+test-utils@2.5.1_@vue+compiler-dom@3.5.45_@vue+server-renderer@3.5.45_vue@3.5.45_typescript@6.0.3_/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js:7333:15
+ ❯ tests/bandeja.test.ts:354:20
+    352|       props: { sendLabel: "Enviar", locked: { title: "La ventana de 24…
+    353|     })
+    354|     expect(wrapper.get('[role="status"]').text()).toContain("La ventan…
+       |                    ^
+    355|     const send = wrapper.findAll("button").find((button) => button.att…
+    356|     expect(send?.attributes("disabled")).toBeDefined()
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/21]⎯
+
+ FAIL  tests/bandeja.test.ts > party panel > PARTY-MASK masks a sensitive field until someone asks to show it
+AssertionError: expected '' to contain '••••••••••••••••••'
+
+- Expected
++ Received
+
+- ••••••••••••••••••
+
+ ❯ tests/bandeja.test.ts:379:28
+    377|       },
+    378|     })
+    379|     expect(wrapper.text()).toContain("••••••••••••••••••")
+       |                            ^
+    380|     expect(wrapper.text()).not.toContain("DEMO000000HDFXXX00")
+    381|     await wrapper.get("button").trigger("click")
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/21]⎯
+
+ FAIL  tests/bandeja.test.ts > inbox shell > PHONE keeps one column and goes back to the list
+Error: Unable to get [role="option"] within: <div data-stub="inbox-crm"></div>
+ ❯ VueWrapper.get node_modules/.pnpm/@vue+test-utils@2.5.1_@vue+compiler-dom@3.5.45_@vue+server-renderer@3.5.45_vue@3.5.45_typescript@6.0.3_/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js:7333:15
+ ❯ tests/bandeja.test.ts:401:19
+    399|     const wrapper = shell({ layout: "phone", party })
+    400|     expect(wrapper.text()).not.toContain("¿Podemos hablar el jueves?")
+    401|     await wrapper.get('[role="option"]').trigger("click")
+       |                   ^
+    402|     expect(wrapper.text()).toContain("¿Podemos hablar el jueves?")
+    403|     const back = wrapper.findAll("button").find((button) => button.tex…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/21]⎯
+
+ FAIL  tests/bandeja.test.ts > inbox shell > DRAWER hides the rail on a tablet and closes the context with escape
+Error: Unable to get nav[aria-label="Espacios"] within: <div data-stub="inbox-crm"></div>
+ ❯ VueWrapper.get node_modules/.pnpm/@vue+test-utils@2.5.1_@vue+compiler-dom@3.5.45_@vue+server-renderer@3.5.45_vue@3.5.45_typescript@6.0.3_/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js:7333:15
+ ❯ tests/bandeja.test.ts:416:17
+    414|
+    415|     const desk = shell({ layout: "desk", party })
+    416|     expect(desk.get('nav[aria-label="Espacios"]').exists()).toBe(true)
+       |                 ^
+    417|     expect(desk.text()).not.toContain("Cliente desde 2024 · León")
+    418|     const context = desk.findAll("button").find((button) => button.tex…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/21]⎯
+
+ FAIL  tests/bandeja.test.ts > inbox shell > SEARCH focuses the field with the command shortcut
+Error: Unable to get [data-slot=conversation-search] within: <div data-stub="inbox-crm"></div>
+ ❯ VueWrapper.get node_modules/.pnpm/@vue+test-utils@2.5.1_@vue+compiler-dom@3.5.45_@vue+server-renderer@3.5.45_vue@3.5.45_typescript@6.0.3_/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js:7333:15
+ ❯ tests/bandeja.test.ts:429:49
+    427|     const wrapper = shell()
+    428|     window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", meta…
+    429|     expect(document.activeElement).toBe(wrapper.get('[data-slot=conver…
+       |                                                 ^
+    430|     wrapper.unmount()
+    431|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/21]⎯
+
+ FAIL  tests/bandeja.test.ts > inbox shell > STATES covers loading, empty, error, and offline
+Error: Unable to get [data-slot=inbox-crm] within: <div data-stub="inbox-crm"></div>
+ ❯ VueWrapper.get node_modules/.pnpm/@vue+test-utils@2.5.1_@vue+compiler-dom@3.5.45_@vue+server-renderer@3.5.45_vue@3.5.45_typescript@6.0.3_/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js:7333:15
+ ❯ tests/bandeja.test.ts:435:20
+    433|   it("STATES covers loading, empty, error, and offline", async () => {
+    434|     const loading = shell({ status: "loading" })
+    435|     expect(loading.get("[data-slot=inbox-crm]").attributes("aria-busy"…
+       |                    ^
+    436|     loading.unmount()
+    437|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/21]⎯
+
+ FAIL  tests/bandeja.test.ts > inbox shell > SUGGESTION-DRAFT puts a suggestion into the draft and does not send it
+Error: Unable to get textarea within: <div data-stub="inbox-crm"></div>
+ ❯ VueWrapper.get node_modules/.pnpm/@vue+test-utils@2.5.1_@vue+compiler-dom@3.5.45_@vue+server-renderer@3.5.45_vue@3.5.45_typescript@6.0.3_/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js:7333:15
+ ❯ tests/bandeja.test.ts:460:21
+    458|     const chip = wrapper.findAll("button").find((button) => button.tex…
+    459|     await chip?.trigger("click")
+    460|     expect((wrapper.get("textarea").element as HTMLTextAreaElement).va…
+       |                     ^
+    461|     expect(emitted(wrapper, "send")).toBeUndefined()
+    462|     expect(emitted(wrapper, "suggestion")?.[0]).toEqual(["call"])
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/21]⎯
+
+ FAIL  tests/bandeja.test.ts > inbox shell > LOG threads a log with typing, a failed send, and a closed window
+Error: Unable to get [role="log"] within: <div data-stub="chat-thread"></div>
+ ❯ VueWrapper.get node_modules/.pnpm/@vue+test-utils@2.5.1_@vue+compiler-dom@3.5.45_@vue+server-renderer@3.5.45_vue@3.5.45_typescript@6.0.3_/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js:7333:15
+ ❯ tests/bandeja.test.ts:480:25
+    478|       },
+    479|     })
+    480|     const log = wrapper.get('[role="log"]')
+       |                         ^
+    481|     expect(log.attributes("aria-live")).toBe("polite")
+    482|     expect(wrapper.text()).toContain("Quedamos el jueves por la tarde.…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/21]⎯
+
+ FAIL  tests/bandeja.test.ts > page chrome > CHROME renders the rail, the header, and a touch-sized filter
+Error: Unable to get nav[aria-label="Espacios"] within: <div>
+  <div data-stub="app-rail"></div>
+  <div data-stub="inbox-page-header"></div>
+  <div data-stub="segmented-filter"></div>
+</div>
+ ❯ VueWrapper.get node_modules/.pnpm/@vue+test-utils@2.5.1_@vue+compiler-dom@3.5.45_@vue+server-renderer@3.5.45_vue@3.5.45_typescript@6.0.3_/node_modules/@vue/test-utils/dist/vue-test-utils.cjs.js:7333:15
+ ❯ tests/bandeja.test.ts:501:20
+    499|       `,
+    500|     })
+    501|     expect(wrapper.get('nav[aria-label="Espacios"]').exists()).toBe(tr…
+       |                    ^
+    502|     expect(wrapper.get("h1").text()).toBe("Mensajes")
+    503|     expect(wrapper.text()).toContain("Avisos")
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/21]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  21 failed (21)
+   Start at  04:30:50
+   Duration  874ms (environment 55%, transform 19%, tests 13%, import 12%)
+
