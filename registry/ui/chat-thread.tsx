@@ -93,46 +93,52 @@ export function ChatThread({
       {state === "ready" ? (
         <div role="log" aria-live="polite" aria-relevant="additions" aria-label={label} className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-1 py-4">
           {grouped.length === 0 ? <p className="text-sm text-muted-foreground">{emptyLabel}</p> : null}
-          {grouped.map((message) => (
-            <div key={message.id} className="grid gap-2">
-              {message.body ? (
-                <MessageBubble
-                  side={message.side}
-                  author={message.author}
-                  time={message.time}
-                  delivery={message.delivery}
-                  deliveryLabel={message.deliveryLabel}
-                  grouped={message.grouped}
-                  enter={message.enter}
-                  onRetry={message.delivery === "failed" ? () => onRetryMessage?.(message.id) : undefined}
-                  retryLabel={retryLabel}
-                >
-                  {message.body}
-                </MessageBubble>
-              ) : null}
-              {message.note ? (
-                <div className="max-w-md rounded-2xl border border-border bg-card p-3">
-                  <p className="text-sm font-medium">{message.note.title}</p>
-                  <p className="text-xs text-muted-foreground">{message.note.detail}</p>
-                  {message.note.body ? <p className="mt-2 text-sm">{message.note.body}</p> : null}
-                </div>
-              ) : null}
-              {message.file ? <MessageCardFile name={message.file.name} detail={message.file.detail} status={message.file.status} /> : null}
-              {message.invoice ? <MessageCardInvoice title={message.invoice.title} amount={message.invoice.amount} due={message.invoice.due} /> : null}
-              {message.metric ? (
-                <MessageCardMetric
-                  title={message.metric.title}
-                  chip={message.metric.chip}
-                  value={message.metric.value}
-                  caption={message.metric.caption}
-                  filled={message.metric.filled}
-                  total={message.metric.total}
-                  start={message.metric.start}
-                  end={message.metric.end}
-                />
-              ) : null}
-            </div>
-          ))}
+          {grouped.map((message) => {
+            const attachment = (
+              <>
+                {message.note ? (
+                  <div className="max-w-md rounded-2xl border border-border bg-card p-3">
+                    <p className="text-sm font-medium">{message.note.title}</p>
+                    <p className="text-xs text-muted-foreground">{message.note.detail}</p>
+                    {message.note.body ? <p className="mt-2 text-sm">{message.note.body}</p> : null}
+                  </div>
+                ) : null}
+                {message.file ? <MessageCardFile name={message.file.name} detail={message.file.detail} status={message.file.status} /> : null}
+                {message.invoice ? <MessageCardInvoice title={message.invoice.title} amount={message.invoice.amount} due={message.invoice.due} /> : null}
+                {message.metric ? (
+                  <MessageCardMetric
+                    title={message.metric.title}
+                    chip={message.metric.chip}
+                    value={message.metric.value}
+                    caption={message.metric.caption}
+                    filled={message.metric.filled}
+                    total={message.metric.total}
+                    start={message.metric.start}
+                    end={message.metric.end}
+                  />
+                ) : null}
+              </>
+            )
+            const hasAttachment = Boolean(message.note || message.file || message.invoice || message.metric)
+            if (!message.body && !hasAttachment) return null
+            return (
+              <MessageBubble
+                key={message.id}
+                side={message.side}
+                author={message.author}
+                time={message.time}
+                delivery={message.delivery}
+                deliveryLabel={message.deliveryLabel}
+                grouped={message.grouped}
+                enter={message.enter}
+                onRetry={message.delivery === "failed" ? () => onRetryMessage?.(message.id) : undefined}
+                retryLabel={retryLabel}
+                attachment={hasAttachment ? attachment : undefined}
+              >
+                {message.body}
+              </MessageBubble>
+            )
+          })}
           {typing?.names?.length ? (
             <TypingIndicator names={typing.names} label={() => typing.label ?? ""} dots />
           ) : null}

@@ -22,6 +22,8 @@ export type MessageBubbleProps = {
   author: string
   time?: string
   children?: ReactNode
+  /** Rich card rendered in the same column, outside the ink bubble. */
+  attachment?: ReactNode
   delivery?: DeliveryState
   deliveryLabel?: string
   grouped?: "single" | "start" | "middle" | "end"
@@ -43,6 +45,7 @@ export function MessageBubble({
   author,
   time,
   children,
+  attachment,
   delivery,
   deliveryLabel,
   grouped = "single",
@@ -84,14 +87,17 @@ export function MessageBubble({
             )}
           </p>
         ) : null}
-        <div
-          className={cn(
-            "rounded-2xl px-3 py-2 text-sm leading-relaxed wrap-break-word",
-            mine ? "rounded-ee-md bg-foreground text-background" : "rounded-es-md bg-muted text-foreground",
-          )}
-        >
-          {children}
-        </div>
+        {children != null && children !== false && children !== "" ? (
+          <div
+            className={cn(
+              "rounded-2xl px-3 py-2 text-sm leading-relaxed wrap-break-word",
+              mine ? "rounded-ee-md bg-foreground text-background" : "rounded-es-md bg-muted text-foreground",
+            )}
+          >
+            {children}
+          </div>
+        ) : null}
+        {attachment}
         {delivery && delivery !== "sending" ? (
           <p className={cn("flex items-center gap-1 px-1 text-[11px]", delivery === "failed" ? "text-destructive" : "text-muted-foreground")}>
             <DeliveryIcon delivery={delivery} />
