@@ -178,9 +178,9 @@ describe("presence", () => {
     })
     const dot = wrapper.get("[data-presence=online]")
     const style = dot.attributes("style") ?? ""
-    expect(style).toContain("var(--success)")
-    expect(style).not.toContain("var(--primary)")
-    expect(style).not.toContain("var(--accent)")
+    expect(style).toContain("var(--success")
+    expect(style.includes("var(--primary)")).toBe(false)
+    expect(style.includes("var(--accent)")).toBe(false)
     wrapper.unmount()
   })
 })

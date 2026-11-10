@@ -34,7 +34,7 @@ Las 15 piezas están en `vue/src/<nombre>/`. La raíz lleva `.retana` y clases `
 
 `vue/src/vuetify/theme.ts` arma `createVuetify` en claro y oscuro desde `tokens/retana.tokens.json`. `primary` sigue siendo el acento único. Los defaults piden densidad `comfortable` y radio `lg`. Esos defaults aplican a componentes de Vuetify del host; las piezas no los usan.
 
-La presencia en línea usa `var(--success)`, no `primary` ni `accent`. El DTCG compartido no tiene `success`. `vue/src/styles/inbox-bridge.css` lo añade como `rgb(var(--v-theme-success))`. En React la presencia sigue en `primary`: paridad pendiente.
+La presencia en línea usa `var(--success, var(--chart-2))`, igual que React en esta rama. No usa `primary` ni `accent`. El DTCG del piloto #86 todavía no lista `success`; el valor vive en `app/globals.css` (`oklch(0.45 0.12 145)` en claro y `oklch(0.78 0.14 150)` en oscuro). La demo convierte ese mismo oklch al rol `success` de Vuetify. `vue/src/styles/inbox-bridge.css` lo publica como `rgb(var(--v-theme-success))`.
 
 `segmented-filter` no parte la etiqueta. La pista hace scroll horizontal, el botón no se encoge y el texto queda en una sola línea. Si sobra contenido, los extremos se desvanecen con una máscara.
 

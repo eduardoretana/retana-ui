@@ -128,7 +128,7 @@ export function motionReduced() {
 }
 
 export function presenceStyle(presence: Presence) {
-  if (presence === "online") return { background: "var(--success)" }
+  if (presence === "online") return { background: "var(--success, var(--chart-2))" }
   if (presence === "offline") return { background: "var(--muted-foreground)" }
   return { background: "var(--accent-foreground)" }
 }

@@ -2,10 +2,8 @@
  * Tema Vuetify 3.13 generado desde tokens/retana.tokens.json.
  * Los hex salen de convertir el oklch del DTCG. No viven en los SFC.
  *
- * Hueco: el DTCG compartido no tiene `success`. La presencia en línea lo
- * necesita y no puede usar `primary` (el acento). El rol `success` de Vuetify
- * se rellena aquí, solo en esta capa. React sigue pintando la presencia con
- * `primary`: paridad pendiente.
+ * Hueco: el DTCG del piloto #86 no lista `success`. Esta rama sí lo publica
+ * en app/globals.css. El tema convierte ese mismo oklch. No es el acento.
  */
 import tokens from "../../../tokens/retana.tokens.json"
 
@@ -45,12 +43,16 @@ function hex(rgb: [number, number, number]) {
   return `#${rgb.map((channel) => Math.round(Math.min(1, Math.max(0, channel)) * 255).toString(16).padStart(2, "0")).join("")}`
 }
 
-function color(mode: Mode, name: string, backdrop: [number, number, number]): string {
-  const parsed = parseOklch(mode[name]?.$value ?? "")
+function paintOklch(value: string, backdrop: [number, number, number]): string {
+  const parsed = parseOklch(value)
   if (!parsed) return "#000000"
   const rgb = oklchToRgb(parsed.l, parsed.c, parsed.h)
   if (parsed.alpha >= 1) return hex(rgb)
-  return hex(rgb.map((channel, index) => channel * parsed.alpha + backdrop[index] * (1 - parsed.alpha)) as [number, number, number])
+  return hex(rgb.map((channel, index) => channel * parsed.alpha + (backdrop[index] ?? 0) * (1 - parsed.alpha)) as [number, number, number])
+}
+
+function color(mode: Mode, name: string, backdrop: [number, number, number]): string {
+  return paintOklch(mode[name]?.$value ?? "", backdrop)
 }
 
 function theme(modeName: "light" | "dark") {
@@ -71,7 +73,7 @@ function theme(modeName: "light" | "dark") {
       "on-primary": paint("primary-foreground"),
       secondary: paint("muted-foreground"),
       error: paint("destructive"),
-      success: modeName === "dark" ? "#7DCEA0" : "#146C43",
+      success: paintOklch(modeName === "dark" ? "oklch(0.78 0.14 150)" : "oklch(0.45 0.12 145)", backdrop),
       "serie-pista": paint("muted"),
       "serie-agente": paint("chart-1"),
       "serie-humana": paint("chart-2"),
