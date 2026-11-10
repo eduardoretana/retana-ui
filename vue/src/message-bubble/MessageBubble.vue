@@ -64,7 +64,7 @@ const motion = computed(() => (props.enter && !motionReduced() ? "rise" : "off")
       <span v-else class="avatar-sm" aria-hidden="true" />
     </template>
     <div :data-motion="motion" :class="motion === 'rise' ? 'rise' : undefined" :style="{ display: 'flex', maxWidth: 'min(100%, 28rem)', flexDirection: 'column', gap: '0.25rem', alignItems: mine ? 'flex-end' : 'flex-start' }">
-      <p v-if="showMeta" class="muted" :style="{ margin: 0, fontSize: '0.75rem', textAlign: mine ? 'end' : 'start' }">
+      <p v-if="showMeta" class="muted" :style="{ margin: 0, fontSize: '12px', lineHeight: '16px', textAlign: mine ? 'end' : 'start' }">
         <template v-if="mine">
           <time v-if="time">{{ time }}</time>
           <template v-if="time"> · </template>

@@ -82,10 +82,10 @@ const grouped = computed(() => groupMessages(props.messages))
       >
         <template v-if="message.body">{{ message.body }}</template>
         <template #attachment>
-          <div v-if="message.note" class="card" style="max-width: 28rem">
-            <p style="margin: 0; font-weight: 500">{{ message.note.title }}</p>
-            <p class="muted" style="margin: 0.125rem 0 0; font-size: 12px">{{ message.note.detail }}</p>
-            <p v-if="message.note.body" style="margin: 0.5rem 0 0">{{ message.note.body }}</p>
+          <div v-if="message.note" class="card" style="max-width: 28rem; padding: 12px">
+            <p style="margin: 0; font-size: 14px; line-height: 20px; font-weight: 500">{{ message.note.title }}</p>
+            <p class="muted" style="margin: 0; font-size: 12px; line-height: 16px">{{ message.note.detail }}</p>
+            <p v-if="message.note.body" style="margin: 8px 0 0; font-size: 14px; line-height: 20px">{{ message.note.body }}</p>
           </div>
           <MessageCardFile v-if="message.file" :name="message.file.name" :detail="message.file.detail" :status="message.file.status" />
           <MessageCardInvoice v-if="message.invoice" :title="message.invoice.title" :amount="message.invoice.amount" :due="message.invoice.due" />
