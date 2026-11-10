@@ -12,7 +12,7 @@ import type { ReactNode } from "react"
 
 import { cn } from "@/lib/utils"
 import { deskInitials } from "@/registry/retana/lib/inbox"
-import { groupMessages, type ThreadMessageData } from "@/registry/retana/lib/thread-desk"
+import { groupMessages, presenceDotStyle, type ThreadMessageData } from "@/registry/retana/lib/thread-desk"
 import { MessageBubble } from "@/registry/retana/ui/message-bubble"
 import { MessageCardFile } from "@/registry/retana/ui/message-card-file"
 import { MessageCardInvoice } from "@/registry/retana/ui/message-card-invoice"
@@ -63,12 +63,8 @@ export function ChatThread({
           {presence ? (
             <span
               data-presence={presence}
-              className={cn(
-                "absolute end-0 bottom-0 size-2.5 rounded-full ring-2 ring-background",
-                presence === "online" && "bg-primary",
-                presence === "offline" && "bg-muted-foreground",
-                presence === "away" && "bg-accent-foreground",
-              )}
+              className="absolute end-0 bottom-0 size-2.5 rounded-full ring-2 ring-background"
+              style={presenceDotStyle(presence)}
             />
           ) : null}
         </span>

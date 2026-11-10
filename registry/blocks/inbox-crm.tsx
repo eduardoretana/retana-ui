@@ -293,7 +293,7 @@ export function InboxCrm({
             ) : null}
             {showParty && party ? (
               <div className="min-w-0 border-s border-border ps-4">
-                <PartyPanel {...party} revealLabel={revealLabel} onReveal={onReveal} />
+                <PartyPanel {...party} presence={threadPresence} revealLabel={revealLabel} onReveal={onReveal} />
               </div>
             ) : null}
           </div>
@@ -304,7 +304,7 @@ export function InboxCrm({
           <button type="button" className="mb-3 h-11 self-end rounded-full px-3 text-sm" onClick={() => setDrawer(false)}>
             {backLabel}
           </button>
-          <PartyPanel {...party} revealLabel={revealLabel} onReveal={onReveal} />
+          <PartyPanel {...party} presence={threadPresence} revealLabel={revealLabel} onReveal={onReveal} />
         </div>
       ) : null}
     </div>

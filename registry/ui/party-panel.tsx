@@ -13,8 +13,8 @@ import { useState } from "react"
 import { Download } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { deskInitials } from "@/registry/retana/lib/inbox"
-import type { PartyDeal, PartyFact, PartyFile, PartyMember, SecretField } from "@/registry/retana/lib/thread-desk"
+import { deskInitials, type DeskPresence } from "@/registry/retana/lib/inbox"
+import { presenceDotStyle, type PartyDeal, type PartyFact, type PartyFile, type PartyMember, type SecretField } from "@/registry/retana/lib/thread-desk"
 
 export type PartyAction = {
   id: string
@@ -25,6 +25,7 @@ export type PartyAction = {
 export type PartyPanelProps = {
   name?: string
   meta?: string
+  presence?: DeskPresence
   actions?: readonly PartyAction[]
   deal?: PartyDeal
   facts?: readonly PartyFact[]
@@ -72,6 +73,7 @@ function SecretRow({ field, revealLabel, onReveal }: { field: SecretField; revea
 export function PartyPanel({
   name,
   meta,
+  presence,
   actions = [],
   deal,
   facts = [],
@@ -108,8 +110,11 @@ export function PartyPanel({
   return (
     <aside data-slot="party-panel" className={cn("flex flex-col gap-5", className)}>
       <div className="grid justify-items-center gap-2 text-center">
-        <span className="grid size-16 place-items-center rounded-full bg-foreground text-lg font-semibold text-background" aria-hidden>
+        <span className="relative grid size-16 place-items-center rounded-full bg-foreground text-lg font-semibold text-background" aria-hidden>
           {deskInitials(name)}
+          {presence ? (
+            <span data-presence={presence} className="absolute end-1 bottom-1 size-3 rounded-full ring-2 ring-background" style={presenceDotStyle(presence)} />
+          ) : null}
         </span>
         <h2 className="text-base font-semibold">{name}</h2>
         {meta ? <p className="text-xs text-muted-foreground">{meta}</p> : null}

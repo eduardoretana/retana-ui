@@ -10,7 +10,7 @@
 
 import { cn } from "@/lib/utils"
 import { deskInitials } from "@/registry/retana/lib/inbox"
-import type { ConversationItemData } from "@/registry/retana/lib/thread-desk"
+import { presenceDotStyle, type ConversationItemData } from "@/registry/retana/lib/thread-desk"
 
 export type ConversationItemProps = {
   item: ConversationItemData
@@ -58,12 +58,8 @@ export function ConversationItem({
         {item.presence ? (
           <span
             data-presence={item.presence}
-            className={cn(
-              "absolute end-0 bottom-0 size-2.5 rounded-full ring-2 ring-background",
-              item.presence === "online" && "bg-primary",
-              item.presence === "offline" && "bg-muted-foreground",
-              item.presence === "away" && "bg-accent-foreground",
-            )}
+            className="absolute end-0 bottom-0 size-2.5 rounded-full ring-2 ring-background"
+            style={presenceDotStyle(item.presence)}
           />
         ) : null}
       </span>

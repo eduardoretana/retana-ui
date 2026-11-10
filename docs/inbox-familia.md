@@ -4,7 +4,7 @@ Fuente: concepto visual de Divan Raj (@desdivj), <https://x.com/desdivj/status/2
 
 Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Los nombres, montos y documentos de la demo son ficticios.
 
-La familia no trae tema. El único acento es el token `primary` del anfitrión (el mismo que ya usa la lista de encargos para lo no leído). La tinta de la burbuja propia y del botón de enviar es `foreground`. `--accent` en este catálogo es una superficie quieta, no la señal.
+La familia no trae tema. El único acento es el token `primary` del anfitrión (el mismo que ya usa la lista de encargos para lo no leído). La tinta de la burbuja propia y del botón de enviar es `foreground`. `--accent` en este catálogo es una superficie quieta, no la señal. El punto de presencia en línea usa `--success` y, si el anfitrión no lo define, `--chart-2`.
 
 No hay cliente de Supabase. Los datos entran por props. El canal, la etapa del embudo y la ventana cerrada son etiquetas y un bloqueo genérico: la escena Cenit los llena, el núcleo no conoce WhatsApp.
 

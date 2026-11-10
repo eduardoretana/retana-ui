@@ -7,9 +7,16 @@
  * Tipos y puertos. Sin red, sin Supabase y sin dominio de un canal.
  */
 
-import type { ReactNode } from "react"
+import type { CSSProperties, ReactNode } from "react"
 
 import { foldInboxText, type DeskPresence } from "@/registry/retana/lib/inbox"
+
+/** Online uses the host success token, then chart-2. It is not the accent. */
+export function presenceDotStyle(presence: DeskPresence): CSSProperties {
+  if (presence === "online") return { backgroundColor: "var(--success, var(--chart-2))" }
+  if (presence === "offline") return { backgroundColor: "var(--muted-foreground)" }
+  return { backgroundColor: "var(--accent-foreground)" }
+}
 
 export type ThreadStatus = "ready" | "loading" | "empty" | "error" | "offline"
 
