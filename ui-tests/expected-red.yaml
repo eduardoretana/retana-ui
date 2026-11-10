@@ -27,3 +27,16 @@ signatures:
   - SUGGESTION-DRAFT
   - LOG
   - CHROME
+round_2:
+  note: "Histórico de la segunda ronda. Los comandos fallaron en el commit rojo y pasan después del fix."
+  reds:
+    - sha: 22b7db87
+      file: __tests__/thread-card-delivery.test.tsx
+      failed: 1
+      passed: 0
+      signature: THREAD-CARD-DELIVERY-DROPPED
+    - sha: 9714787
+      file: __tests__/delivery-receipts.test.tsx
+      failed: 1
+      passed: 1
+      signature: RECEIPTS-SCENE
