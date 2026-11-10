@@ -3,13 +3,15 @@
   "name": "typing-indicator",
   "title": "Typing indicator",
   "author": "Eduardo Retana",
-  "description": "Polite live region that names who is typing, including “Ana and 2 others are typing…”.",
-  "dependencies": [],
+  "description": "Polite live region that names who is typing, including “Ana and 2 others are typing…”. Pass names to draw the row without a presence provider.",
+  "dependencies": [
+    "motion"
+  ],
   "registryDependencies": [],
   "files": [
     {
       "path": "registry/ui/typing-indicator.tsx",
-      "content": "\"use client\"\n\nimport { cn } from \"@/lib/utils\"\nimport { readPresenceInfo, useOthers, type PresenceInfo } from \"@/lib/presence\"\n\nexport function defaultTypingLabel(names: readonly string[]) {\n  if (names.length === 0) return \"\"\n  if (names.length === 1) return `${names[0]} is typing…`\n  if (names.length === 2) return `${names[0]} and ${names[1]} are typing…`\n  return `${names[0]} and ${names.length - 1} others are typing…`\n}\n\nexport type TypingIndicatorProps = {\n  field?: string\n  className?: string\n  label?: (names: string[]) => string\n}\n\nexport function TypingIndicator({ field = \"isTyping\", className, label = defaultTypingLabel }: TypingIndicatorProps) {\n  const others = useOthers<Record<string, unknown>, PresenceInfo>()\n  const names = others\n    .filter((user) => {\n      const presence = user.presence as Record<string, unknown>\n      return presence?.[field] === true\n    })\n    .map((user) => readPresenceInfo(user.info).name)\n  const text = label(names)\n\n  return (\n    <p className={cn(\"min-h-5 truncate text-sm text-muted-foreground\", className)} aria-live=\"polite\">\n      {text}\n    </p>\n  )\n}\n",
+      "content": "\"use client\"\n\n/**\n * Bandeja de conversaciones.\n * Fuente: concepto visual de Divan Raj (@desdivj),\n * https://x.com/desdivj/status/2119738295039250507\n * Licencia: sin licencia, clean-room. No se copiaron assets, logos,\n * ilustraciones ni textos.\n * El modo con presencia sigue el adaptador de este repo. El modo con `names`\n * es presentacional y no exige proveedor.\n */\n\nimport type { ReactNode } from \"react\"\nimport { motion, useReducedMotion } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { readPresenceInfo, useOthers, type PresenceInfo } from \"@/lib/presence\"\n\nexport function defaultTypingLabel(names: readonly string[]) {\n  if (names.length === 0) return \"\"\n  if (names.length === 1) return `${names[0]} is typing…`\n  if (names.length === 2) return `${names[0]} and ${names[1]} are typing…`\n  return `${names[0]} and ${names.length - 1} others are typing…`\n}\n\nexport type TypingIndicatorProps = {\n  field?: string\n  className?: string\n  label?: (names: string[]) => string\n  /** When set, the row is presentational and does not read presence. */\n  names?: readonly string[]\n  avatar?: ReactNode\n  dots?: boolean\n}\n\nfunction Dots() {\n  const reduced = Boolean(useReducedMotion()) || (typeof window !== \"undefined\" && window.matchMedia(\"(prefers-reduced-motion: reduce)\").matches)\n  return (\n    <span aria-hidden className=\"inline-flex items-center gap-0.5\">\n      {[0, 1, 2].map((dot) => (\n        <motion.span\n          key={dot}\n          className=\"size-1.5 rounded-full bg-muted-foreground\"\n          animate={reduced ? { opacity: 0.7 } : { opacity: [0.35, 1, 0.35] }}\n          transition={reduced ? { duration: 0 } : { duration: 0.8, repeat: Infinity, delay: dot * 0.12, ease: [0, 0, 0.58, 1] }}\n        />\n      ))}\n    </span>\n  )\n}\n\nexport function TypingIndicator({ field = \"isTyping\", className, label = defaultTypingLabel, names, avatar, dots }: TypingIndicatorProps) {\n  if (names) {\n    const text = label([...names])\n    if (!text && !dots) return null\n    return (\n      <p\n        data-slot=\"typing-indicator\"\n        data-dots={dots ? \"true\" : undefined}\n        className={cn(\"flex min-h-11 items-center gap-2 text-sm text-muted-foreground\", className)}\n        aria-live=\"polite\"\n      >\n        {avatar}\n        {dots ? <Dots /> : null}\n        <span>{text}</span>\n      </p>\n    )\n  }\n  return <PresenceTyping field={field} className={className} label={label} />\n}\n\nfunction PresenceTyping({ field = \"isTyping\", className, label = defaultTypingLabel }: TypingIndicatorProps) {\n  const others = useOthers<Record<string, unknown>, PresenceInfo>()\n  const names = others\n    .filter((user) => {\n      const presence = user.presence as Record<string, unknown>\n      return presence?.[field] === true\n    })\n    .map((user) => readPresenceInfo(user.info).name)\n  const text = label(names)\n\n  return (\n    <p className={cn(\"min-h-5 truncate text-sm text-muted-foreground\", className)} aria-live=\"polite\">\n      {text}\n    </p>\n  )\n}\n",
       "type": "registry:component",
       "target": "@ui/typing-indicator.tsx"
     },
@@ -25,24 +27,91 @@
     "descriptionEs": "Región en vivo que dice quién escribe.",
     "preview": "app/examples/typing-indicator/preview.tsx",
     "previewHref": "/examples/typing-indicator",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "presence",
+        "label": "Presencia",
+        "labelEn": "Presence"
+      }
+    ],
     "examples": [
       {
         "title": "Campo",
         "href": "/examples/typing-indicator",
-        "description": "Priya escribe y el campo propio se apaga tras un segundo."
+        "description": "Marina escribe, o Priya dentro de la sala."
       },
       {
         "title": "Estrés",
         "href": "/examples/typing-indicator/stress",
         "description": "Cero, uno, dos y varios nombres."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/typing-indicator?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/typing-indicator?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/typing-indicator?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/typing-indicator?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Presencia",
+        "href": "/examples/typing-indicator?scene=presence",
+        "description": "Presence"
       }
     ],
-    "usage": "<TypingIndicator />",
+    "usage": "<TypingIndicator names={[\"Marina\"]} label={() => \"Marina escribe…\"} dots />",
     "api": [
+      {
+        "name": "names",
+        "type": "string[]",
+        "description": "Presentational names. When set, the row does not read presence."
+      },
+      {
+        "name": "dots",
+        "type": "boolean",
+        "description": "Shows three dots. Opacity only, and it stops when motion is reduced."
+      },
+      {
+        "name": "avatar",
+        "type": "ReactNode",
+        "description": "Optional mark beside the sentence."
+      },
       {
         "name": "field",
         "type": "string",
-        "description": "Presence key that is true while typing. Default isTyping."
+        "description": "Presence key that is true while typing. Default isTyping. Ignored when names is set."
       },
       {
         "name": "label",
@@ -56,7 +125,7 @@
       }
     ]
   },
-  "docs": "Requires PresenceProvider. The region uses aria-live=\"polite\". Pair it with useTypingPresence on the local field.",
+  "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. Sin names, sigue exigiendo PresenceProvider y aria-live polite. Con names, la fila es presentacional y no lee presencia. Si el CLI pregunta si debe sobrescribir un primitivo, responde no.",
   "categories": [
     "collaboration"
   ],

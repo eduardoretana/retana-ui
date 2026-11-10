@@ -1,0 +1,42 @@
+schema: uis.expected-red/v1
+spec_id: bandeja-mensajes
+green_forbidden: true
+commands:
+  - name: estados
+    run: pnpm exec vitest run __tests__/inbox-family.test.tsx
+    exit: 1
+    failed: 18
+    passed: 0
+log: ui-tests/logs/expected-red.log
+signatures:
+  - LISTBOX
+  - LIST-STATES
+  - BUBBLE-READ
+  - BUBBLE-RETRY
+  - BUBBLE-MOTION
+  - CARDS
+  - TYPING
+  - SUGGESTIONS
+  - COMPOSER-SEND
+  - COMPOSER-LOCKED
+  - PARTY-MASK
+  - PHONE
+  - DRAWER
+  - SEARCH
+  - STATES
+  - SUGGESTION-DRAFT
+  - LOG
+  - CHROME
+round_2:
+  note: "Histórico de la segunda ronda. Los comandos fallaron en el commit rojo y pasan después del fix."
+  reds:
+    - sha: 22b7db8675a4eaf5052ee03b8e5b67973388d6ea
+      file: __tests__/thread-card-delivery.test.tsx
+      failed: 1
+      passed: 0
+      signature: THREAD-CARD-DELIVERY-DROPPED
+    - sha: 9714787086f081e896607b4007b643cdcbf1293b
+      file: __tests__/delivery-receipts.test.tsx
+      failed: 1
+      passed: 1
+      signature: RECEIPTS-SCENE

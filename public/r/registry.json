@@ -9452,8 +9452,10 @@
       "name": "typing-indicator",
       "type": "registry:ui",
       "title": "Typing indicator",
-      "description": "Polite live region that names who is typing, including “Ana and 2 others are typing…”.",
-      "dependencies": [],
+      "description": "Polite live region that names who is typing, including “Ana and 2 others are typing…”. Pass names to draw the row without a presence provider.",
+      "dependencies": [
+        "motion"
+      ],
       "registryDependencies": [],
       "categories": [
         "collaboration"
@@ -9475,11 +9477,38 @@
         "descriptionEs": "Región en vivo que dice quién escribe.",
         "preview": "app/examples/typing-indicator/preview.tsx",
         "previewHref": "/examples/typing-indicator",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "presence",
+            "label": "Presencia",
+            "labelEn": "Presence"
+          }
+        ],
         "examples": [
           {
             "title": "Campo",
             "href": "/examples/typing-indicator",
-            "description": "Priya escribe y el campo propio se apaga tras un segundo."
+            "description": "Marina escribe, o Priya dentro de la sala."
           },
           {
             "title": "Estrés",
@@ -9487,12 +9516,27 @@
             "description": "Cero, uno, dos y varios nombres."
           }
         ],
-        "usage": "<TypingIndicator />",
+        "usage": "<TypingIndicator names={[\"Marina\"]} label={() => \"Marina escribe…\"} dots />",
         "api": [
+          {
+            "name": "names",
+            "type": "string[]",
+            "description": "Presentational names. When set, the row does not read presence."
+          },
+          {
+            "name": "dots",
+            "type": "boolean",
+            "description": "Shows three dots. Opacity only, and it stops when motion is reduced."
+          },
+          {
+            "name": "avatar",
+            "type": "ReactNode",
+            "description": "Optional mark beside the sentence."
+          },
           {
             "name": "field",
             "type": "string",
-            "description": "Presence key that is true while typing. Default isTyping."
+            "description": "Presence key that is true while typing. Default isTyping. Ignored when names is set."
           },
           {
             "name": "label",
@@ -9506,7 +9550,7 @@
           }
         ]
       },
-      "docs": "Requires PresenceProvider. The region uses aria-live=\"polite\". Pair it with useTypingPresence on the local field."
+      "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. Sin names, sigue exigiendo PresenceProvider y aria-live polite. Con names, la fila es presentacional y no lee presencia. Si el CLI pregunta si debe sobrescribir un primitivo, responde no."
     },
     {
       "author": "Eduardo Retana",
@@ -32050,6 +32094,1310 @@
           }
         ]
       }
+    },
+    {
+      "name": "app-rail",
+      "type": "registry:ui",
+      "title": "App rail",
+      "description": "A narrow rail of destinations, workspaces, and the current person. Active item is marked. No theme of its own.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "navigation"
+      ],
+      "meta": {
+        "titleEs": "Riel de la app",
+        "descriptionEs": "Riel estrecho con destinos, espacios y la persona. El activo queda marcado. No trae tema.",
+        "preview": "app/examples/app-rail/preview.tsx",
+        "previewHref": "/examples/app-rail",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Riel de la app",
+            "href": "/examples/app-rail",
+            "description": "Riel estrecho con destinos, espacios y la persona. El activo queda marcado. No trae tema."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/app-rail/stress",
+            "description": "Vacío, textos largos, RTL y cantidad."
+          }
+        ],
+        "usage": "<AppRail label=\"Espacios\" mark=\"Á\" items={[{ id: \"chat\", label: \"Mensajes\", active: true }]} />",
+        "api": [
+          {
+            "name": "items",
+            "type": "AppRailItem[]",
+            "description": "id, label, icon slot, active."
+          },
+          {
+            "name": "workspaces / user",
+            "type": "slots",
+            "description": "Marks at the bottom. The host owns the names."
+          },
+          {
+            "name": "onSelect",
+            "type": "(id: string) => void",
+            "description": "Chooses a destination. It does not navigate by itself."
+          },
+          {
+            "name": "status",
+            "type": "ready | loading | empty | error",
+            "description": "Loading pulse, empty copy, or an alert."
+          }
+        ]
+      },
+      "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+      "files": [
+        {
+          "path": "registry/ui/app-rail.tsx",
+          "type": "registry:component",
+          "target": "@ui/app-rail.tsx"
+        },
+        {
+          "path": "registry/lib/inbox.ts",
+          "type": "registry:lib",
+          "target": "@lib/inbox.ts"
+        }
+      ]
+    },
+    {
+      "name": "inbox-page-header",
+      "type": "registry:ui",
+      "title": "Inbox page header",
+      "description": "Breadcrumb, large title, subtitle, outline actions, and a notice bell. It is not the project page header.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "categories": [
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Encabezado de mensajes",
+        "descriptionEs": "Miga, título grande, subtítulo, acciones de contorno y campana. No es el encabezado de proyecto.",
+        "preview": "app/examples/inbox-page-header/preview.tsx",
+        "previewHref": "/examples/inbox-page-header",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Encabezado de mensajes",
+            "href": "/examples/inbox-page-header",
+            "description": "Miga, título grande, subtítulo, acciones de contorno y campana. No es el encabezado de proyecto."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/inbox-page-header/stress",
+            "description": "Vacío, textos largos, RTL y cantidad."
+          }
+        ],
+        "usage": "<InboxPageHeader crumbs={[{ label: \"Espacio\", href: \"#espacio\" }, { label: \"Mensajes\" }]} title=\"Mensajes\" subtitle=\"2 sin leer\" actions={[{ id: \"chat\", label: \"Nuevo chat\" }]} bellLabel=\"Avisos\" bellCount={3} />",
+        "api": [
+          {
+            "name": "crumbs",
+            "type": "{ label, href? }[]",
+            "description": "The last crumb is the current page."
+          },
+          {
+            "name": "title / subtitle",
+            "type": "string",
+            "description": "Page title and the quiet line under it."
+          },
+          {
+            "name": "actions",
+            "type": "{ id, label, onSelect }[]",
+            "description": "Outline buttons. The host decides what they open."
+          },
+          {
+            "name": "bellLabel / bellCount",
+            "type": "string / number",
+            "description": "Notice button. The count uses the primary token."
+          }
+        ]
+      },
+      "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+      "files": [
+        {
+          "path": "registry/ui/inbox-page-header.tsx",
+          "type": "registry:component",
+          "target": "@ui/inbox-page-header.tsx"
+        }
+      ]
+    },
+    {
+      "name": "segmented-filter",
+      "type": "registry:ui",
+      "title": "Segmented filter",
+      "description": "Extends the segmented control with a 44 px target. The track, keyboard, and motion stay in segmented-control.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/segmented-control"
+      ],
+      "categories": [
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Filtro segmentado",
+        "descriptionEs": "Extiende el control segmentado con un objetivo de 44 px. La pista, el teclado y el movimiento siguen en segmented-control.",
+        "preview": "app/examples/segmented-filter/preview.tsx",
+        "previewHref": "/examples/segmented-filter",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "crowded",
+            "label": "Cinco filtros",
+            "labelEn": "Five filters"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Filtro segmentado",
+            "href": "/examples/segmented-filter",
+            "description": "Extiende el control segmentado con un objetivo de 44 px. La pista, el teclado y el movimiento siguen en segmented-control."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/segmented-filter/stress",
+            "description": "Vacío, textos largos, RTL y cantidad."
+          }
+        ],
+        "usage": "<SegmentedFilter label=\"Filtro\" value={filter} onValueChange={setFilter} options={[{ value: \"all\", label: \"Todos\" }, { value: \"unread\", label: \"Sin leer\" }]} />",
+        "api": [
+          {
+            "name": "options / value / onValueChange",
+            "type": "SegmentedControl props",
+            "description": "Same contract as segmented-control."
+          },
+          {
+            "name": "status",
+            "type": "ready | loading | empty | error",
+            "description": "Loading, empty copy, or an alert instead of the track."
+          }
+        ]
+      },
+      "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+      "files": [
+        {
+          "path": "registry/ui/segmented-filter.tsx",
+          "type": "registry:component",
+          "target": "@ui/segmented-filter.tsx"
+        }
+      ]
+    },
+    {
+      "name": "conversation-item",
+      "type": "registry:ui",
+      "title": "Conversation item",
+      "description": "One conversation or contact row: avatar, preview, time, unread count, and optional channel, stage, and window slots.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Fila de conversación",
+        "descriptionEs": "Una fila de conversación o contacto: avatar, vista previa, hora, no leídos y ranuras de canal, etapa y ventana.",
+        "preview": "app/examples/conversation-item/preview.tsx",
+        "previewHref": "/examples/conversation-item",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Fila de conversación",
+            "href": "/examples/conversation-item",
+            "description": "Una fila de conversación o contacto: avatar, vista previa, hora, no leídos y ranuras de canal, etapa y ventana."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/conversation-item/stress",
+            "description": "Vacío, textos largos, RTL y cantidad."
+          }
+        ],
+        "usage": "<ConversationItem item={{ id: \"ambar\", title: \"Taller Ámbar\", preview: \"Tú: Va el corte\", time: \"10:44\", unread: 2 }} selected onSelect={open} />",
+        "api": [
+          {
+            "name": "item",
+            "type": "ConversationItemData",
+            "description": "title, preview, time, unread, stage, windowLabel, channel slot, presence."
+          },
+          {
+            "name": "selected / onSelect",
+            "type": "boolean / (id) => void",
+            "description": "The row is an option. Enter and click select it."
+          },
+          {
+            "name": "status",
+            "type": "ready | loading | empty | error",
+            "description": "Loading pulse, empty copy, or an alert."
+          }
+        ]
+      },
+      "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+      "files": [
+        {
+          "path": "registry/ui/conversation-item.tsx",
+          "type": "registry:component",
+          "target": "@ui/conversation-item.tsx"
+        },
+        {
+          "path": "registry/lib/thread-desk.ts",
+          "type": "registry:lib",
+          "target": "@lib/thread-desk.ts"
+        },
+        {
+          "path": "registry/lib/inbox.ts",
+          "type": "registry:lib",
+          "target": "@lib/inbox.ts"
+        }
+      ]
+    },
+    {
+      "name": "conversation-list",
+      "type": "registry:ui",
+      "title": "Conversation list",
+      "description": "Search, segmented filter, and sections. Arrow keys move the selection. The filter reuses segmented-filter.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/conversation-item",
+        "@retana/segmented-filter"
+      ],
+      "categories": [
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Lista de conversaciones",
+        "descriptionEs": "Búsqueda, filtro segmentado y secciones. Las flechas mueven la selección. El filtro reutiliza segmented-filter.",
+        "preview": "app/examples/conversation-list/preview.tsx",
+        "previewHref": "/examples/conversation-list",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Lista de conversaciones",
+            "href": "/examples/conversation-list",
+            "description": "Búsqueda, filtro segmentado y secciones. Las flechas mueven la selección. El filtro reutiliza segmented-filter."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/conversation-list/stress",
+            "description": "Vacío, textos largos, RTL y cantidad."
+          }
+        ],
+        "usage": "<ConversationList label=\"Conversaciones\" items={items} filter={filter} onFilterChange={setFilter} selectedId={id} onSelect={open} />",
+        "api": [
+          {
+            "name": "items / sections",
+            "type": "ConversationItemData[] / sections",
+            "description": "Rows grouped by section id. Contacts use kind contact."
+          },
+          {
+            "name": "filters / filter",
+            "type": "ThreadFilter[] / string",
+            "description": "all shows every row. Other values match tags or unread."
+          },
+          {
+            "name": "search",
+            "type": "query",
+            "description": "Filters with foldInboxText. ⌘K is owned by the shell."
+          },
+          {
+            "name": "status",
+            "type": "ready | loading | empty | error",
+            "description": "Skeleton, empty copy, or an alert with retry."
+          }
+        ]
+      },
+      "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+      "files": [
+        {
+          "path": "registry/ui/conversation-list.tsx",
+          "type": "registry:component",
+          "target": "@ui/conversation-list.tsx"
+        },
+        {
+          "path": "registry/lib/thread-desk.ts",
+          "type": "registry:lib",
+          "target": "@lib/thread-desk.ts"
+        },
+        {
+          "path": "registry/lib/inbox.ts",
+          "type": "registry:lib",
+          "target": "@lib/inbox.ts"
+        }
+      ]
+    },
+    {
+      "name": "message-bubble",
+      "type": "registry:ui",
+      "title": "Message bubble",
+      "description": "Incoming or outgoing bubble, grouped, with sent, delivered, read, or a failed send that can be retried.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Burbuja de mensaje",
+        "descriptionEs": "Burbuja entrante o saliente, agrupada, con enviado, entregado, leído o un envío fallido que se puede reintentar.",
+        "preview": "app/examples/message-bubble/preview.tsx",
+        "previewHref": "/examples/message-bubble",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Burbuja de mensaje",
+            "href": "/examples/message-bubble",
+            "description": "Burbuja entrante o saliente, agrupada, con enviado, entregado, leído o un envío fallido que se puede reintentar."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/message-bubble/stress",
+            "description": "Vacío, textos largos, RTL y cantidad."
+          }
+        ],
+        "usage": "<MessageBubble side=\"outgoing\" author=\"Tú\" time=\"10:42\" delivery=\"read\" deliveryLabel=\"Leído\">Sí.</MessageBubble>",
+        "api": [
+          {
+            "name": "side",
+            "type": "incoming | outgoing",
+            "description": "Incoming sits on the muted ground. Outgoing uses foreground ink."
+          },
+          {
+            "name": "delivery",
+            "type": "sending | sent | delivered | read | failed",
+            "description": "The host passes deliveryLabel. failed shows retry."
+          },
+          {
+            "name": "grouped",
+            "type": "single | start | middle | end",
+            "description": "Hides the repeated name. The avatar stays on the last incoming row."
+          },
+          {
+            "name": "enter",
+            "type": "boolean",
+            "description": "Fades and rises 8 px in 200 ms. Reduced motion skips it."
+          }
+        ]
+      },
+      "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+      "files": [
+        {
+          "path": "registry/ui/message-bubble.tsx",
+          "type": "registry:component",
+          "target": "@ui/message-bubble.tsx"
+        },
+        {
+          "path": "registry/ui/thread-enter.tsx",
+          "type": "registry:component",
+          "target": "@ui/thread-enter.tsx"
+        },
+        {
+          "path": "registry/lib/thread-desk.ts",
+          "type": "registry:lib",
+          "target": "@lib/thread-desk.ts"
+        },
+        {
+          "path": "registry/lib/inbox.ts",
+          "type": "registry:lib",
+          "target": "@lib/inbox.ts"
+        }
+      ]
+    },
+    {
+      "name": "message-card-file",
+      "type": "registry:ui",
+      "title": "File card",
+      "description": "A file row inside a thread: name, detail, optional validation status, and download.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de archivo",
+        "descriptionEs": "Una fila de archivo dentro del hilo: nombre, detalle, estado de validación opcional y descarga.",
+        "preview": "app/examples/message-card-file/preview.tsx",
+        "previewHref": "/examples/message-card-file",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Tarjeta de archivo",
+            "href": "/examples/message-card-file",
+            "description": "Una fila de archivo dentro del hilo: nombre, detalle, estado de validación opcional y descarga."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/message-card-file/stress",
+            "description": "Vacío, textos largos, RTL y cantidad."
+          }
+        ],
+        "usage": "<MessageCardFile name=\"corte-marca.pdf\" detail=\"248 KB · PDF\" status=\"En revisión\" onDownload={download} />",
+        "api": [
+          {
+            "name": "name / detail / status",
+            "type": "string",
+            "description": "Status is a label from the host, such as a validation state."
+          },
+          {
+            "name": "onDownload",
+            "type": "() => void",
+            "description": "Download stays a button. The card does not fetch."
+          },
+          {
+            "name": "state",
+            "type": "ready | loading | empty | error",
+            "description": "Skeleton, empty copy, or an alert."
+          }
+        ]
+      },
+      "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+      "files": [
+        {
+          "path": "registry/ui/message-card-file.tsx",
+          "type": "registry:component",
+          "target": "@ui/message-card-file.tsx"
+        }
+      ]
+    },
+    {
+      "name": "message-card-invoice",
+      "type": "registry:ui",
+      "title": "Amount card",
+      "description": "A large amount and a due chip. The same card carries a quote when the host changes the title.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de monto",
+        "descriptionEs": "Un monto grande y un chip de vencimiento. La misma tarjeta muestra una cotización si el anfitrión cambia el título.",
+        "preview": "app/examples/message-card-invoice/preview.tsx",
+        "previewHref": "/examples/message-card-invoice",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Tarjeta de monto",
+            "href": "/examples/message-card-invoice",
+            "description": "Un monto grande y un chip de vencimiento. La misma tarjeta muestra una cotización si el anfitrión cambia el título."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/message-card-invoice/stress",
+            "description": "Vacío, textos largos, RTL y cantidad."
+          }
+        ],
+        "usage": "<MessageCardInvoice title=\"Monto a pagar\" amount=\"$18,640\" due=\"Vence 14 nov\" />",
+        "api": [
+          {
+            "name": "title / amount / due",
+            "type": "string",
+            "description": "Copy and currency stay in the props. The due chip uses primary."
+          },
+          {
+            "name": "state",
+            "type": "ready | loading | empty | error",
+            "description": "Skeleton, empty copy, or an alert."
+          }
+        ]
+      },
+      "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+      "files": [
+        {
+          "path": "registry/ui/message-card-invoice.tsx",
+          "type": "registry:component",
+          "target": "@ui/message-card-invoice.tsx"
+        }
+      ]
+    },
+    {
+      "name": "message-card-metric",
+      "type": "registry:ui",
+      "title": "Metric card",
+      "description": "A title, a value, and a segmented bar. Filled segments use the primary token. Nothing animates the bar.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [],
+      "categories": [
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Tarjeta de métrica",
+        "descriptionEs": "Título, valor y barra en píldoras. Los segmentos llenos usan el token primary. La barra no se anima.",
+        "preview": "app/examples/message-card-metric/preview.tsx",
+        "previewHref": "/examples/message-card-metric",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Tarjeta de métrica",
+            "href": "/examples/message-card-metric",
+            "description": "Título, valor y barra en píldoras. Los segmentos llenos usan el token primary. La barra no se anima."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/message-card-metric/stress",
+            "description": "Vacío, textos largos, RTL y cantidad."
+          }
+        ],
+        "usage": "<MessageCardMetric title=\"Salud de entrega\" value=\"92 %\" filled={11} total={12} start=\"11 de 12 hitos\" end=\"Lanzamiento 10 dic\" />",
+        "api": [
+          {
+            "name": "filled / total",
+            "type": "number",
+            "description": "How many pills are marked. The host owns the meaning."
+          },
+          {
+            "name": "value / caption / chip",
+            "type": "string",
+            "description": "The big figure, the quiet caption, and the corner chip."
+          },
+          {
+            "name": "state",
+            "type": "ready | loading | empty | error",
+            "description": "Skeleton, empty copy, or an alert."
+          }
+        ]
+      },
+      "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+      "files": [
+        {
+          "path": "registry/ui/message-card-metric.tsx",
+          "type": "registry:component",
+          "target": "@ui/message-card-metric.tsx"
+        }
+      ]
+    },
+    {
+      "name": "suggested-replies",
+      "type": "registry:ui",
+      "title": "Suggested replies",
+      "description": "Outline chips the person approves. Approving calls onApprove and never sends a message.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react",
+        "motion"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Respuestas sugeridas",
+        "descriptionEs": "Chips de contorno que la persona aprueba. Aprobar llama onApprove y nunca envía el mensaje.",
+        "preview": "app/examples/suggested-replies/preview.tsx",
+        "previewHref": "/examples/suggested-replies",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Respuestas sugeridas",
+            "href": "/examples/suggested-replies",
+            "description": "Chips de contorno que la persona aprueba. Aprobar llama onApprove y nunca envía el mensaje."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/suggested-replies/stress",
+            "description": "Vacío, textos largos, RTL y cantidad."
+          }
+        ],
+        "usage": "<SuggestedReplies items={[{ id: \"call\", label: \"Agendar llamada\" }]} onApprove={approve} />",
+        "api": [
+          {
+            "name": "items",
+            "type": "{ id, label }[]",
+            "description": "Suggestions computed by the host from the last message."
+          },
+          {
+            "name": "onApprove",
+            "type": "(id: string) => void",
+            "description": "The only action. There is no send."
+          },
+          {
+            "name": "status",
+            "type": "ready | loading | empty | error",
+            "description": "Skeleton, empty copy, or an alert."
+          }
+        ]
+      },
+      "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+      "files": [
+        {
+          "path": "registry/ui/suggested-replies.tsx",
+          "type": "registry:component",
+          "target": "@ui/suggested-replies.tsx"
+        },
+        {
+          "path": "registry/ui/thread-enter.tsx",
+          "type": "registry:component",
+          "target": "@ui/thread-enter.tsx"
+        },
+        {
+          "path": "registry/lib/thread-desk.ts",
+          "type": "registry:lib",
+          "target": "@lib/thread-desk.ts"
+        },
+        {
+          "path": "registry/lib/inbox.ts",
+          "type": "registry:lib",
+          "target": "@lib/inbox.ts"
+        }
+      ]
+    },
+    {
+      "name": "thread-composer",
+      "type": "registry:ui",
+      "title": "Thread composer",
+      "description": "Attach, ask the assistant, and send. A locked window disables send and offers a template action instead.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@retana/attachment-chip"
+      ],
+      "categories": [
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Compositor del hilo",
+        "descriptionEs": "Adjuntar, preguntar al asistente y enviar. Una ventana cerrada desactiva el envío y ofrece una plantilla.",
+        "preview": "app/examples/thread-composer/preview.tsx",
+        "previewHref": "/examples/thread-composer",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Compositor del hilo",
+            "href": "/examples/thread-composer",
+            "description": "Adjuntar, preguntar al asistente y enviar. Una ventana cerrada desactiva el envío y ofrece una plantilla."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/thread-composer/stress",
+            "description": "Vacío, textos largos, RTL y cantidad."
+          }
+        ],
+        "usage": "<ThreadComposer onSend={send} onAsk={ask} locked={{ title: \"La ventana está cerrada.\", action: \"Usar plantilla\" }} onUseTemplate={useTemplate} />",
+        "api": [
+          {
+            "name": "onSend",
+            "type": "(value: string) => void",
+            "description": "Sends the draft. Empty and locked drafts do not send."
+          },
+          {
+            "name": "onAsk",
+            "type": "() => void",
+            "description": "Asks the assistant. It does not send."
+          },
+          {
+            "name": "onAttach",
+            "type": "(files: File[]) => void",
+            "description": "The host receives the files. The chip reuses attachment-chip."
+          },
+          {
+            "name": "locked",
+            "type": "{ title, action }",
+            "description": "Disables the field and send. The action calls onUseTemplate."
+          },
+          {
+            "name": "offline",
+            "type": "boolean",
+            "description": "Disables send while the shell is offline."
+          }
+        ]
+      },
+      "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+      "files": [
+        {
+          "path": "registry/ui/thread-composer.tsx",
+          "type": "registry:component",
+          "target": "@ui/thread-composer.tsx"
+        }
+      ]
+    },
+    {
+      "name": "party-panel",
+      "type": "registry:ui",
+      "title": "Party panel",
+      "description": "Profile column with progress, facts, members, files, and sensitive fields masked until reveal.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [],
+      "categories": [
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Ficha de la contraparte",
+        "descriptionEs": "Columna de ficha con avance, datos, miembros, archivos y campos sensibles enmascarados hasta mostrarlos.",
+        "preview": "app/examples/party-panel/preview.tsx",
+        "previewHref": "/examples/party-panel",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Ficha de la contraparte",
+            "href": "/examples/party-panel",
+            "description": "Columna de ficha con avance, datos, miembros, archivos y campos sensibles enmascarados hasta mostrarlos."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/party-panel/stress",
+            "description": "Vacío, textos largos, RTL y cantidad."
+          }
+        ],
+        "usage": "<PartyPanel name=\"Taller Ámbar\" deal={{ title: \"Marca\", status: \"Abierto\", amount: \"$34,600 de $48,000\", value: 72, label: \"72 %\" }} secrets={[{ id: \"curp\", label: \"CURP\", masked: \"••••\", revealed }]} onReveal={audit} />",
+        "api": [
+          {
+            "name": "deal",
+            "type": "PartyDeal",
+            "description": "Title, status, amount, and a 0–100 bar. The bar does not animate."
+          },
+          {
+            "name": "facts / members / files",
+            "type": "lists",
+            "description": "Key values, people, and shared files. Download calls onDownload."
+          },
+          {
+            "name": "secrets / onReveal",
+            "type": "SecretField[] / (id) => void",
+            "description": "Masked by default. Show reveals and calls onReveal with the id only."
+          },
+          {
+            "name": "state",
+            "type": "ready | loading | empty | error",
+            "description": "Skeleton, empty copy, or an alert."
+          }
+        ]
+      },
+      "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+      "files": [
+        {
+          "path": "registry/ui/party-panel.tsx",
+          "type": "registry:component",
+          "target": "@ui/party-panel.tsx"
+        },
+        {
+          "path": "registry/lib/thread-desk.ts",
+          "type": "registry:lib",
+          "target": "@lib/thread-desk.ts"
+        },
+        {
+          "path": "registry/lib/inbox.ts",
+          "type": "registry:lib",
+          "target": "@lib/inbox.ts"
+        }
+      ]
+    },
+    {
+      "name": "chat-thread",
+      "type": "registry:ui",
+      "title": "Chat thread",
+      "description": "A live log of bubbles and rich cards, plus a typing row and retry for a failed send.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/message-bubble",
+        "@retana/message-card-file",
+        "@retana/message-card-invoice",
+        "@retana/message-card-metric",
+        "@retana/typing-indicator"
+      ],
+      "categories": [
+        "chat"
+      ],
+      "meta": {
+        "titleEs": "Hilo de conversación",
+        "descriptionEs": "Un registro en vivo de burbujas y tarjetas, con la fila de escritura y el reintento de un envío fallido.",
+        "preview": "app/examples/chat-thread/preview.tsx",
+        "previewHref": "/examples/chat-thread",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Hilo de conversación",
+            "href": "/examples/chat-thread",
+            "description": "Un registro en vivo de burbujas y tarjetas, con la fila de escritura y el reintento de un envío fallido."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/chat-thread/stress",
+            "description": "Vacío, textos largos, RTL y cantidad."
+          }
+        ],
+        "usage": "<ChatThread label=\"Hilo\" title=\"Taller Ámbar\" messages={messages} typing={{ names: [\"Marina\"], label: \"Marina escribe…\" }} onRetryMessage={retry} />",
+        "api": [
+          {
+            "name": "messages",
+            "type": "ThreadMessageData[]",
+            "description": "body, note, file, invoice, or metric. Cards are generic props, not a channel."
+          },
+          {
+            "name": "typing",
+            "type": "{ names, label }",
+            "description": "Presentational typing row. It does not read presence."
+          },
+          {
+            "name": "onRetryMessage",
+            "type": "(id) => void",
+            "description": "Shown when delivery is failed."
+          },
+          {
+            "name": "state",
+            "type": "ready | loading | empty | error",
+            "description": "The log uses role log and aria-live polite."
+          }
+        ]
+      },
+      "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+      "files": [
+        {
+          "path": "registry/ui/chat-thread.tsx",
+          "type": "registry:component",
+          "target": "@ui/chat-thread.tsx"
+        },
+        {
+          "path": "registry/lib/thread-desk.ts",
+          "type": "registry:lib",
+          "target": "@lib/thread-desk.ts"
+        },
+        {
+          "path": "registry/lib/inbox.ts",
+          "type": "registry:lib",
+          "target": "@lib/inbox.ts"
+        }
+      ]
+    },
+    {
+      "name": "inbox-crm",
+      "type": "registry:block",
+      "title": "Inbox",
+      "description": "Rail, header, conversation list, thread, and party panel. Channel, stage, and the closed window arrive as props. Suggestions never send by themselves.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/app-rail",
+        "@retana/inbox-page-header",
+        "@retana/conversation-list",
+        "@retana/chat-thread",
+        "@retana/party-panel",
+        "@retana/suggested-replies",
+        "@retana/thread-composer"
+      ],
+      "categories": [
+        "block"
+      ],
+      "meta": {
+        "titleEs": "Bandeja de mensajes",
+        "descriptionEs": "Riel, encabezado, lista, hilo y ficha. El canal, la etapa y la ventana cerrada llegan por props. Las sugerencias no se envían solas.",
+        "preview": "app/examples/inbox-crm/preview.tsx",
+        "previewHref": "/examples/inbox-crm",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "offline",
+            "label": "Sin conexión",
+            "labelEn": "Offline"
+          },
+          {
+            "id": "failed",
+            "label": "Envío fallido",
+            "labelEn": "Send failed"
+          },
+          {
+            "id": "locked",
+            "label": "Ventana cerrada",
+            "labelEn": "Window closed"
+          },
+          {
+            "id": "typing",
+            "label": "Escribiendo",
+            "labelEn": "Typing"
+          },
+          {
+            "id": "unread",
+            "label": "Sin leer",
+            "labelEn": "Unread"
+          },
+          {
+            "id": "cenit",
+            "label": "Cenit",
+            "labelEn": "Cenit"
+          },
+          {
+            "id": "hilo",
+            "label": "Hilo",
+            "labelEn": "Thread"
+          },
+          {
+            "id": "receipts",
+            "label": "Acuses",
+            "labelEn": "Receipts"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Bandeja de mensajes",
+            "href": "/examples/inbox-crm",
+            "description": "Riel, encabezado, lista, hilo y ficha. El canal, la etapa y la ventana cerrada llegan por props. Las sugerencias no se envían solas."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/inbox-crm/stress",
+            "description": "Vacío, textos largos, RTL y cantidad."
+          }
+        ],
+        "usage": "<InboxCrm layout=\"auto\" conversations={conversations} messages={messages} suggestions={suggestions} onSend={send} onSuggestion={approve} party={party} onReveal={audit} />",
+        "api": [
+          {
+            "name": "layout",
+            "type": "auto | wide | desk | tablet | phone",
+            "description": "auto: rail hides under 1024, context becomes a drawer under 1280, and under 640 one column shows at a time."
+          },
+          {
+            "name": "conversations / messages / party",
+            "type": "props",
+            "description": "The host owns the data. There is no fetch and no Supabase client."
+          },
+          {
+            "name": "suggestions / onSuggestion",
+            "type": "chips / (id) => void",
+            "description": "Approving fills the draft. onSend is not called."
+          },
+          {
+            "name": "locked",
+            "type": "{ title, action }",
+            "description": "Closed window. Send stays disabled until the host clears it."
+          },
+          {
+            "name": "onReveal",
+            "type": "(id: string) => void",
+            "description": "Audit hook for a sensitive field. The value is not included."
+          },
+          {
+            "name": "status",
+            "type": "ready | loading | empty | error | offline",
+            "description": "Skeleton, empty copy, alert with retry, or an offline banner that disables send."
+          }
+        ]
+      },
+      "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+      "files": [
+        {
+          "path": "registry/blocks/inbox-crm.tsx",
+          "type": "registry:component",
+          "target": "@ui/inbox-crm.tsx"
+        },
+        {
+          "path": "registry/lib/thread-desk.ts",
+          "type": "registry:lib",
+          "target": "@lib/thread-desk.ts"
+        },
+        {
+          "path": "registry/lib/inbox.ts",
+          "type": "registry:lib",
+          "target": "@lib/inbox.ts"
+        }
+      ]
     }
   ]
 }

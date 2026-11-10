@@ -1,0 +1,126 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "message-bubble",
+  "title": "Message bubble",
+  "author": "Eduardo Retana",
+  "description": "Incoming or outgoing bubble, grouped, with sent, delivered, read, or a failed send that can be retried.",
+  "dependencies": [
+    "lucide-react",
+    "motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/message-bubble.tsx",
+      "content": "\"use client\"\n\n/**\n * Bandeja de conversaciones.\n * Fuente: concepto visual de Divan Raj (@desdivj),\n * https://x.com/desdivj/status/2119738295039250507\n * Licencia: sin licencia, clean-room. No se copiaron assets, logos,\n * ilustraciones ni textos.\n * La tinta propia usa foreground. El acento único es primary.\n */\n\nimport type { ReactNode } from \"react\"\nimport { AlertCircle, Check, CheckCheck } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { deskInitials } from \"@/lib/inbox\"\nimport type { DeliveryState } from \"@/lib/thread-desk\"\nimport { ThreadEnter } from \"@/components/ui/thread-enter\"\n\nexport type MessageBubbleProps = {\n  side: \"incoming\" | \"outgoing\"\n  author: string\n  time?: string\n  children?: ReactNode\n  /** Rich card rendered in the same column, outside the ink bubble. */\n  attachment?: ReactNode\n  delivery?: DeliveryState\n  deliveryLabel?: string\n  grouped?: \"single\" | \"start\" | \"middle\" | \"end\"\n  enter?: boolean\n  onRetry?: () => void\n  retryLabel?: string\n  className?: string\n}\n\nfunction DeliveryIcon({ delivery }: { delivery: DeliveryState }) {\n  if (delivery === \"sent\") return <Check className=\"size-3\" aria-hidden />\n  if (delivery === \"delivered\" || delivery === \"read\") return <CheckCheck className={cn(\"size-3\", delivery === \"read\" && \"text-primary\")} aria-hidden />\n  if (delivery === \"failed\") return <AlertCircle className=\"size-3\" aria-hidden />\n  return null\n}\n\nexport function MessageBubble({\n  side,\n  author,\n  time,\n  children,\n  attachment,\n  delivery,\n  deliveryLabel,\n  grouped = \"single\",\n  enter = false,\n  onRetry,\n  retryLabel = \"Reintentar\",\n  className,\n}: MessageBubbleProps) {\n  const mine = side === \"outgoing\"\n  const showMeta = grouped === \"single\" || grouped === \"start\"\n  const showAvatar = !mine && (grouped === \"single\" || grouped === \"end\")\n  return (\n    <article data-slot=\"message-bubble\" data-side={side} data-delivery={delivery} data-grouped={grouped} className={cn(\"flex w-full gap-2\", mine && \"justify-end\", className)}>\n      {!mine ? (\n        showAvatar ? (\n          <span className=\"mt-auto grid size-8 shrink-0 place-items-center rounded-full bg-foreground text-[10px] font-medium text-background\" aria-hidden>\n            {deskInitials(author)}\n          </span>\n        ) : (\n          <span className=\"size-8 shrink-0\" aria-hidden />\n        )\n      ) : null}\n      <ThreadEnter play={enter} className={cn(\"flex max-w-[min(100%,28rem)] flex-col gap-1\", mine && \"items-end\")}>\n        {showMeta ? (\n          <p className={cn(\"px-1 text-xs text-muted-foreground\", mine && \"text-end\")}>\n            {mine ? (\n              <>\n                {time ? <time className=\"tabular-nums\">{time}</time> : null}\n                {time ? \" · \" : null}\n                {author}\n              </>\n            ) : (\n              <>\n                <span className=\"font-medium text-foreground\">{author}</span>\n                {time ? (\n                  <time className=\"ms-2 tabular-nums\">{time}</time>\n                ) : null}\n              </>\n            )}\n          </p>\n        ) : null}\n        {children != null && children !== false && children !== \"\" ? (\n          <div\n            className={cn(\n              \"rounded-2xl px-3 py-2 text-sm leading-relaxed wrap-break-word\",\n              mine ? \"rounded-ee-md bg-foreground text-background\" : \"rounded-es-md bg-muted text-foreground\",\n            )}\n          >\n            {children}\n          </div>\n        ) : null}\n        {attachment}\n        {delivery && delivery !== \"sending\" ? (\n          <p className={cn(\"flex items-center gap-1 px-1 text-[11px]\", delivery === \"failed\" ? \"text-destructive\" : \"text-muted-foreground\")}>\n            <DeliveryIcon delivery={delivery} />\n            {deliveryLabel}\n          </p>\n        ) : null}\n        {delivery === \"failed\" && onRetry ? (\n          <button type=\"button\" className=\"h-11 rounded-full px-3 text-sm font-medium text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\" onClick={onRetry}>\n            {retryLabel}\n          </button>\n        ) : null}\n      </ThreadEnter>\n    </article>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/message-bubble.tsx"
+    },
+    {
+      "path": "registry/ui/thread-enter.tsx",
+      "content": "\"use client\"\n\n/**\n * Bandeja de conversaciones.\n * Fuente: concepto visual de Divan Raj (@desdivj),\n * https://x.com/desdivj/status/2119738295039250507\n * Licencia: sin licencia, clean-room. No se copiaron assets, logos,\n * ilustraciones ni textos.\n * Entrada de 8 px y 200 ms, solo opacity y transform.\n */\n\nimport type { ReactNode } from \"react\"\nimport { useReducedMotion } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport function motionReduced() {\n  if (typeof window === \"undefined\" || typeof window.matchMedia !== \"function\") return false\n  return window.matchMedia(\"(prefers-reduced-motion: reduce)\").matches\n}\n\nconst RISE =\n  \"@keyframes thread-rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}@media (prefers-reduced-motion:reduce){.thread-rise{animation:none}}\"\n\nexport function ThreadEnter({\n  play = false,\n  delay = 0,\n  className,\n  children,\n}: {\n  play?: boolean\n  delay?: number\n  className?: string\n  children: ReactNode\n}) {\n  const reduced = Boolean(useReducedMotion()) || motionReduced()\n  const on = play && !reduced\n  return (\n    <div\n      data-motion={on ? \"rise\" : \"off\"}\n      className={cn(on && \"thread-rise\", className)}\n      style={on ? { animation: `thread-rise 200ms cubic-bezier(0,0,0.58,1) ${delay}s both` } : undefined}\n    >\n      {on ? <style>{RISE}</style> : null}\n      {children}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/thread-enter.tsx"
+    },
+    {
+      "path": "registry/lib/thread-desk.ts",
+      "content": "/**\n * Bandeja de conversaciones.\n * Fuente: concepto visual de Divan Raj (@desdivj),\n * https://x.com/desdivj/status/2119738295039250507\n * Licencia: sin licencia, clean-room. No se copiaron assets, logos,\n * ilustraciones ni textos.\n * Tipos y puertos. Sin red, sin Supabase y sin dominio de un canal.\n */\n\nimport type { CSSProperties, ReactNode } from \"react\"\n\nimport { foldInboxText, type DeskPresence } from \"@/lib/inbox\"\n\n/** Online uses the host success token, then chart-2. It is not the accent. */\nexport function presenceDotStyle(presence: DeskPresence): CSSProperties {\n  if (presence === \"online\") return { backgroundColor: \"var(--success, var(--chart-2))\" }\n  if (presence === \"offline\") return { backgroundColor: \"var(--muted-foreground)\" }\n  return { backgroundColor: \"var(--accent-foreground)\" }\n}\n\nexport type ThreadStatus = \"ready\" | \"loading\" | \"empty\" | \"error\" | \"offline\"\n\nexport type ThreadFilter = {\n  value: string\n  label: string\n}\n\nexport type ConversationSection = {\n  id: string\n  label: string\n  hint?: string\n}\n\nexport type ConversationItemData = {\n  id: string\n  title: string\n  preview?: string\n  time?: string\n  unread?: number\n  section?: string\n  tags?: readonly string[]\n  presence?: DeskPresence\n  role?: string\n  kind?: \"thread\" | \"contact\"\n  stage?: string\n  windowLabel?: string\n  channel?: ReactNode\n}\n\nexport type DeliveryState = \"sending\" | \"sent\" | \"delivered\" | \"read\" | \"failed\"\n\nexport type ThreadNote = {\n  title: string\n  detail: string\n  body?: string\n}\n\nexport type ThreadFile = {\n  name: string\n  detail: string\n  status?: string\n}\n\nexport type ThreadInvoice = {\n  title: string\n  amount: string\n  due: string\n}\n\nexport type ThreadMetric = {\n  title: string\n  chip?: string\n  value: string\n  caption?: string\n  filled: number\n  total: number\n  start: string\n  end: string\n}\n\nexport type ThreadMessageData = {\n  id: string\n  side: \"incoming\" | \"outgoing\"\n  author: string\n  time?: string\n  body?: string\n  delivery?: DeliveryState\n  deliveryLabel?: string\n  grouped?: \"single\" | \"start\" | \"middle\" | \"end\"\n  enter?: boolean\n  note?: ThreadNote\n  file?: ThreadFile\n  invoice?: ThreadInvoice\n  metric?: ThreadMetric\n}\n\nexport type SuggestionItem = {\n  id: string\n  label: string\n}\n\nexport type SecretField = {\n  id: string\n  label: string\n  masked: string\n  revealed: string\n}\n\nexport type PartyFact = {\n  id: string\n  label: string\n  value: string\n}\n\nexport type PartyMember = {\n  id: string\n  name: string\n  role: string\n}\n\nexport type PartyFile = {\n  id: string\n  name: string\n  detail: string\n}\n\nexport type PartyDeal = {\n  title: string\n  status: string\n  amount: string\n  value: number\n  label: string\n}\n\nexport type PartyPanelData = {\n  name: string\n  meta?: string\n  deal?: PartyDeal\n  facts?: readonly PartyFact[]\n  members?: readonly PartyMember[]\n  files?: readonly PartyFile[]\n  secrets?: readonly SecretField[]\n}\n\nexport function matchesConversation(item: ConversationItemData, filter: string | undefined, query: string) {\n  if (filter && filter !== \"all\") {\n    const tagged = item.tags?.includes(filter) || (filter === \"unread\" && (item.unread ?? 0) > 0)\n    if (!tagged) return false\n  }\n  const needle = query.trim()\n  if (!needle) return true\n  const hay = [item.title, item.preview, item.role, item.stage, item.windowLabel].filter(Boolean).join(\" \")\n  return foldInboxText(hay).includes(foldInboxText(needle))\n}\n\nexport function groupMessages(messages: readonly ThreadMessageData[]): ThreadMessageData[] {\n  return messages.map((message, index) => {\n    if (message.grouped) return message\n    const prev = messages[index - 1]\n    const next = messages[index + 1]\n    const same = (other?: ThreadMessageData) =>\n      Boolean(other && other.side === message.side && other.author === message.author && !other.file && !other.invoice && !other.metric && !message.file && !message.invoice && !message.metric)\n    const before = same(prev)\n    const after = same(next)\n    const grouped = before && after ? \"middle\" : before ? \"end\" : after ? \"start\" : \"single\"\n    return { ...message, grouped }\n  })\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/thread-desk.ts"
+    },
+    {
+      "path": "registry/lib/inbox.ts",
+      "content": "/**\n * Shared types for the desk pieces. No fetching, no theme.\n * Dates are calendar days (`YYYY-MM-DD`). The host owns locale and timezone.\n */\n\nexport const DESK_PRESENCES = [\"online\", \"offline\", \"away\"] as const\n\nexport type DeskPresence = (typeof DESK_PRESENCES)[number]\n\nexport type DeskMessage = {\n  id: string\n  author: string\n  body: string\n  /** Preformatted time. */\n  time: string\n  side: \"incoming\" | \"outgoing\"\n  note?: boolean\n  receipt?: \"seen\" | \"unseen\"\n}\n\nexport type DeskOption = {\n  value: string\n  label: string\n}\n\nconst DATE_RE = /^(\\d{4})-(\\d{2})-(\\d{2})$/\n\nexport function foldInboxText(value: string): string {\n  return value.normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g, \"\").toLowerCase()\n}\n\nexport function isCalendarDate(value: string | undefined): value is string {\n  return Boolean(value && DATE_RE.test(value))\n}\n\n/** True when `due` is a calendar day before `today`. */\nexport function isOverdueDate(due: string | undefined, today: string): boolean {\n  if (!isCalendarDate(due) || !isCalendarDate(today)) return false\n  return due < today\n}\n\nexport function formatDeskDate(iso: string, locale?: string): string {\n  if (!isCalendarDate(iso)) return iso\n  const [year, month, day] = iso.split(\"-\").map(Number)\n  return new Intl.DateTimeFormat(locale, { dateStyle: \"medium\", timeZone: \"UTC\" }).format(\n    new Date(Date.UTC(year, month - 1, day)),\n  )\n}\n\nexport function deskInitials(name: string): string {\n  const letters = name\n    .split(/\\s+/)\n    .filter(Boolean)\n    .slice(0, 2)\n    .map((part) => part[0]?.toUpperCase() ?? \"\")\n    .join(\"\")\n  return letters || \"?\"\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/inbox.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Burbuja de mensaje",
+    "descriptionEs": "Burbuja entrante o saliente, agrupada, con enviado, entregado, leído o un envío fallido que se puede reintentar.",
+    "preview": "app/examples/message-bubble/preview.tsx",
+    "previewHref": "/examples/message-bubble",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Burbuja de mensaje",
+        "href": "/examples/message-bubble",
+        "description": "Burbuja entrante o saliente, agrupada, con enviado, entregado, leído o un envío fallido que se puede reintentar."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/message-bubble/stress",
+        "description": "Vacío, textos largos, RTL y cantidad."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/message-bubble?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/message-bubble?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/message-bubble?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/message-bubble?scene=error",
+        "description": "Error"
+      }
+    ],
+    "usage": "<MessageBubble side=\"outgoing\" author=\"Tú\" time=\"10:42\" delivery=\"read\" deliveryLabel=\"Leído\">Sí.</MessageBubble>",
+    "api": [
+      {
+        "name": "side",
+        "type": "incoming | outgoing",
+        "description": "Incoming sits on the muted ground. Outgoing uses foreground ink."
+      },
+      {
+        "name": "delivery",
+        "type": "sending | sent | delivered | read | failed",
+        "description": "The host passes deliveryLabel. failed shows retry."
+      },
+      {
+        "name": "grouped",
+        "type": "single | start | middle | end",
+        "description": "Hides the repeated name. The avatar stays on the last incoming row."
+      },
+      {
+        "name": "enter",
+        "type": "boolean",
+        "description": "Fades and rises 8 px in 200 ms. Reduced motion skips it."
+      }
+    ]
+  },
+  "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+  "categories": [
+    "chat"
+  ],
+  "type": "registry:ui"
+}

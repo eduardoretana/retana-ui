@@ -1,0 +1,17 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0}
+declaration: "UI_SYSTEM: APPLIES"
+cycle_state: AUDITORIA
+spec_id: bandeja-mensajes
+profile: STANDARD
+head: 59a58d6853ee07ac6d9c17d3c079c83b0679175e
+retana_ui:
+  sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+  registry_source: git-sha
+host_app:
+  repo: eduardoretana/canal-semilla
+  note: "Este ciclo no abre PR allí ni toca ese repo."
+plan: docs/inbox-familia.md
+idea: docs/vue-target/bandeja.md
+auditor: pendiente
+auditor_is_builder: false

@@ -1,0 +1,121 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "suggested-replies",
+  "title": "Suggested replies",
+  "author": "Eduardo Retana",
+  "description": "Outline chips the person approves. Approving calls onApprove and never sends a message.",
+  "dependencies": [
+    "lucide-react",
+    "motion"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "registry/ui/suggested-replies.tsx",
+      "content": "\"use client\"\n\n/**\n * Bandeja de conversaciones.\n * Fuente: concepto visual de Divan Raj (@desdivj),\n * https://x.com/desdivj/status/2119738295039250507\n * Licencia: sin licencia, clean-room. No se copiaron assets, logos,\n * ilustraciones ni textos.\n * Cada chip pide aprobación. Esta pieza no envía el mensaje.\n */\n\nimport { Sparkles } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport type { SuggestionItem } from \"@/lib/thread-desk\"\nimport { ThreadEnter } from \"@/components/ui/thread-enter\"\n\nexport type SuggestedRepliesProps = {\n  label?: string\n  items?: readonly SuggestionItem[]\n  onApprove?: (id: string) => void\n  status?: \"ready\" | \"loading\" | \"empty\" | \"error\"\n  emptyLabel?: string\n  loadingLabel?: string\n  error?: string\n  className?: string\n}\n\nexport function SuggestedReplies({\n  label = \"Sugerencias\",\n  items = [],\n  onApprove,\n  status = \"ready\",\n  emptyLabel = \"Sin sugerencias\",\n  loadingLabel = \"Cargando sugerencias\",\n  error,\n  className,\n}: SuggestedRepliesProps) {\n  if (status === \"loading\") {\n    return <div role=\"status\" aria-label={loadingLabel} className=\"h-11 w-40 animate-pulse rounded-full bg-muted\" />\n  }\n  if (status === \"error\") {\n    return (\n      <p role=\"alert\" className=\"text-sm text-destructive\">\n        {error}\n      </p>\n    )\n  }\n  if (status === \"empty\" || items.length === 0) {\n    return (\n      <p role=\"status\" className=\"text-sm text-muted-foreground\">\n        {emptyLabel}\n      </p>\n    )\n  }\n  return (\n    <div role=\"list\" aria-label={label} data-slot=\"suggested-replies\" className={cn(\"flex flex-wrap gap-2\", className)}>\n      {items.map((item, index) => (\n        <div role=\"listitem\" key={item.id}>\n          <ThreadEnter play delay={index * 0.05}>\n            <button\n              type=\"button\"\n              data-stagger={String(index * 50)}\n              className=\"inline-flex h-11 items-center gap-1.5 rounded-full border border-border bg-background px-3 text-sm hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\"\n              onClick={() => onApprove?.(item.id)}\n            >\n              <Sparkles className=\"size-3.5 text-primary\" aria-hidden />\n              {item.label}\n            </button>\n          </ThreadEnter>\n        </div>\n      ))}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/suggested-replies.tsx"
+    },
+    {
+      "path": "registry/ui/thread-enter.tsx",
+      "content": "\"use client\"\n\n/**\n * Bandeja de conversaciones.\n * Fuente: concepto visual de Divan Raj (@desdivj),\n * https://x.com/desdivj/status/2119738295039250507\n * Licencia: sin licencia, clean-room. No se copiaron assets, logos,\n * ilustraciones ni textos.\n * Entrada de 8 px y 200 ms, solo opacity y transform.\n */\n\nimport type { ReactNode } from \"react\"\nimport { useReducedMotion } from \"motion/react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport function motionReduced() {\n  if (typeof window === \"undefined\" || typeof window.matchMedia !== \"function\") return false\n  return window.matchMedia(\"(prefers-reduced-motion: reduce)\").matches\n}\n\nconst RISE =\n  \"@keyframes thread-rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}@media (prefers-reduced-motion:reduce){.thread-rise{animation:none}}\"\n\nexport function ThreadEnter({\n  play = false,\n  delay = 0,\n  className,\n  children,\n}: {\n  play?: boolean\n  delay?: number\n  className?: string\n  children: ReactNode\n}) {\n  const reduced = Boolean(useReducedMotion()) || motionReduced()\n  const on = play && !reduced\n  return (\n    <div\n      data-motion={on ? \"rise\" : \"off\"}\n      className={cn(on && \"thread-rise\", className)}\n      style={on ? { animation: `thread-rise 200ms cubic-bezier(0,0,0.58,1) ${delay}s both` } : undefined}\n    >\n      {on ? <style>{RISE}</style> : null}\n      {children}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/thread-enter.tsx"
+    },
+    {
+      "path": "registry/lib/thread-desk.ts",
+      "content": "/**\n * Bandeja de conversaciones.\n * Fuente: concepto visual de Divan Raj (@desdivj),\n * https://x.com/desdivj/status/2119738295039250507\n * Licencia: sin licencia, clean-room. No se copiaron assets, logos,\n * ilustraciones ni textos.\n * Tipos y puertos. Sin red, sin Supabase y sin dominio de un canal.\n */\n\nimport type { CSSProperties, ReactNode } from \"react\"\n\nimport { foldInboxText, type DeskPresence } from \"@/lib/inbox\"\n\n/** Online uses the host success token, then chart-2. It is not the accent. */\nexport function presenceDotStyle(presence: DeskPresence): CSSProperties {\n  if (presence === \"online\") return { backgroundColor: \"var(--success, var(--chart-2))\" }\n  if (presence === \"offline\") return { backgroundColor: \"var(--muted-foreground)\" }\n  return { backgroundColor: \"var(--accent-foreground)\" }\n}\n\nexport type ThreadStatus = \"ready\" | \"loading\" | \"empty\" | \"error\" | \"offline\"\n\nexport type ThreadFilter = {\n  value: string\n  label: string\n}\n\nexport type ConversationSection = {\n  id: string\n  label: string\n  hint?: string\n}\n\nexport type ConversationItemData = {\n  id: string\n  title: string\n  preview?: string\n  time?: string\n  unread?: number\n  section?: string\n  tags?: readonly string[]\n  presence?: DeskPresence\n  role?: string\n  kind?: \"thread\" | \"contact\"\n  stage?: string\n  windowLabel?: string\n  channel?: ReactNode\n}\n\nexport type DeliveryState = \"sending\" | \"sent\" | \"delivered\" | \"read\" | \"failed\"\n\nexport type ThreadNote = {\n  title: string\n  detail: string\n  body?: string\n}\n\nexport type ThreadFile = {\n  name: string\n  detail: string\n  status?: string\n}\n\nexport type ThreadInvoice = {\n  title: string\n  amount: string\n  due: string\n}\n\nexport type ThreadMetric = {\n  title: string\n  chip?: string\n  value: string\n  caption?: string\n  filled: number\n  total: number\n  start: string\n  end: string\n}\n\nexport type ThreadMessageData = {\n  id: string\n  side: \"incoming\" | \"outgoing\"\n  author: string\n  time?: string\n  body?: string\n  delivery?: DeliveryState\n  deliveryLabel?: string\n  grouped?: \"single\" | \"start\" | \"middle\" | \"end\"\n  enter?: boolean\n  note?: ThreadNote\n  file?: ThreadFile\n  invoice?: ThreadInvoice\n  metric?: ThreadMetric\n}\n\nexport type SuggestionItem = {\n  id: string\n  label: string\n}\n\nexport type SecretField = {\n  id: string\n  label: string\n  masked: string\n  revealed: string\n}\n\nexport type PartyFact = {\n  id: string\n  label: string\n  value: string\n}\n\nexport type PartyMember = {\n  id: string\n  name: string\n  role: string\n}\n\nexport type PartyFile = {\n  id: string\n  name: string\n  detail: string\n}\n\nexport type PartyDeal = {\n  title: string\n  status: string\n  amount: string\n  value: number\n  label: string\n}\n\nexport type PartyPanelData = {\n  name: string\n  meta?: string\n  deal?: PartyDeal\n  facts?: readonly PartyFact[]\n  members?: readonly PartyMember[]\n  files?: readonly PartyFile[]\n  secrets?: readonly SecretField[]\n}\n\nexport function matchesConversation(item: ConversationItemData, filter: string | undefined, query: string) {\n  if (filter && filter !== \"all\") {\n    const tagged = item.tags?.includes(filter) || (filter === \"unread\" && (item.unread ?? 0) > 0)\n    if (!tagged) return false\n  }\n  const needle = query.trim()\n  if (!needle) return true\n  const hay = [item.title, item.preview, item.role, item.stage, item.windowLabel].filter(Boolean).join(\" \")\n  return foldInboxText(hay).includes(foldInboxText(needle))\n}\n\nexport function groupMessages(messages: readonly ThreadMessageData[]): ThreadMessageData[] {\n  return messages.map((message, index) => {\n    if (message.grouped) return message\n    const prev = messages[index - 1]\n    const next = messages[index + 1]\n    const same = (other?: ThreadMessageData) =>\n      Boolean(other && other.side === message.side && other.author === message.author && !other.file && !other.invoice && !other.metric && !message.file && !message.invoice && !message.metric)\n    const before = same(prev)\n    const after = same(next)\n    const grouped = before && after ? \"middle\" : before ? \"end\" : after ? \"start\" : \"single\"\n    return { ...message, grouped }\n  })\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/thread-desk.ts"
+    },
+    {
+      "path": "registry/lib/inbox.ts",
+      "content": "/**\n * Shared types for the desk pieces. No fetching, no theme.\n * Dates are calendar days (`YYYY-MM-DD`). The host owns locale and timezone.\n */\n\nexport const DESK_PRESENCES = [\"online\", \"offline\", \"away\"] as const\n\nexport type DeskPresence = (typeof DESK_PRESENCES)[number]\n\nexport type DeskMessage = {\n  id: string\n  author: string\n  body: string\n  /** Preformatted time. */\n  time: string\n  side: \"incoming\" | \"outgoing\"\n  note?: boolean\n  receipt?: \"seen\" | \"unseen\"\n}\n\nexport type DeskOption = {\n  value: string\n  label: string\n}\n\nconst DATE_RE = /^(\\d{4})-(\\d{2})-(\\d{2})$/\n\nexport function foldInboxText(value: string): string {\n  return value.normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g, \"\").toLowerCase()\n}\n\nexport function isCalendarDate(value: string | undefined): value is string {\n  return Boolean(value && DATE_RE.test(value))\n}\n\n/** True when `due` is a calendar day before `today`. */\nexport function isOverdueDate(due: string | undefined, today: string): boolean {\n  if (!isCalendarDate(due) || !isCalendarDate(today)) return false\n  return due < today\n}\n\nexport function formatDeskDate(iso: string, locale?: string): string {\n  if (!isCalendarDate(iso)) return iso\n  const [year, month, day] = iso.split(\"-\").map(Number)\n  return new Intl.DateTimeFormat(locale, { dateStyle: \"medium\", timeZone: \"UTC\" }).format(\n    new Date(Date.UTC(year, month - 1, day)),\n  )\n}\n\nexport function deskInitials(name: string): string {\n  const letters = name\n    .split(/\\s+/)\n    .filter(Boolean)\n    .slice(0, 2)\n    .map((part) => part[0]?.toUpperCase() ?? \"\")\n    .join(\"\")\n  return letters || \"?\"\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/inbox.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Respuestas sugeridas",
+    "descriptionEs": "Chips de contorno que la persona aprueba. Aprobar llama onApprove y nunca envía el mensaje.",
+    "preview": "app/examples/suggested-replies/preview.tsx",
+    "previewHref": "/examples/suggested-replies",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Respuestas sugeridas",
+        "href": "/examples/suggested-replies",
+        "description": "Chips de contorno que la persona aprueba. Aprobar llama onApprove y nunca envía el mensaje."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/suggested-replies/stress",
+        "description": "Vacío, textos largos, RTL y cantidad."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/suggested-replies?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/suggested-replies?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/suggested-replies?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/suggested-replies?scene=error",
+        "description": "Error"
+      }
+    ],
+    "usage": "<SuggestedReplies items={[{ id: \"call\", label: \"Agendar llamada\" }]} onApprove={approve} />",
+    "api": [
+      {
+        "name": "items",
+        "type": "{ id, label }[]",
+        "description": "Suggestions computed by the host from the last message."
+      },
+      {
+        "name": "onApprove",
+        "type": "(id: string) => void",
+        "description": "The only action. There is no send."
+      },
+      {
+        "name": "status",
+        "type": "ready | loading | empty | error",
+        "description": "Skeleton, empty copy, or an alert."
+      }
+    ]
+  },
+  "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+  "categories": [
+    "chat"
+  ],
+  "type": "registry:ui"
+}

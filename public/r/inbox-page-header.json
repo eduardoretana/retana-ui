@@ -1,0 +1,109 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "inbox-page-header",
+  "title": "Inbox page header",
+  "author": "Eduardo Retana",
+  "description": "Breadcrumb, large title, subtitle, outline actions, and a notice bell. It is not the project page header.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/inbox-page-header.tsx",
+      "content": "\"use client\"\n\n/**\n * Bandeja de conversaciones.\n * Fuente: concepto visual de Divan Raj (@desdivj),\n * https://x.com/desdivj/status/2119738295039250507\n * Licencia: sin licencia, clean-room. No se copiaron assets, logos,\n * ilustraciones ni textos.\n * No reutiliza page-header: esa pieza es el encabezado de un proyecto.\n */\n\nimport { Bell } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\nimport { Button } from \"@/components/ui/button\"\n\nexport type InboxCrumb = {\n  label: string\n  href?: string\n}\n\nexport type InboxHeaderAction = {\n  id: string\n  label: string\n  onSelect?: () => void\n}\n\nexport type InboxPageHeaderProps = {\n  crumbs?: readonly InboxCrumb[]\n  title: string\n  subtitle?: string\n  actions?: readonly InboxHeaderAction[]\n  bellLabel?: string\n  bellCount?: number\n  onBell?: () => void\n  status?: \"ready\" | \"loading\" | \"empty\" | \"error\"\n  emptyLabel?: string\n  loadingLabel?: string\n  error?: string\n  className?: string\n}\n\nexport function InboxPageHeader({\n  crumbs = [],\n  title,\n  subtitle,\n  actions = [],\n  bellLabel,\n  bellCount = 0,\n  onBell,\n  status = \"ready\",\n  emptyLabel = \"Sin encabezado\",\n  loadingLabel = \"Cargando el encabezado\",\n  error,\n  className,\n}: InboxPageHeaderProps) {\n  if (status === \"loading\") {\n    return (\n      <div role=\"status\" aria-label={loadingLabel} className=\"h-24 animate-pulse rounded-2xl bg-muted\" />\n    )\n  }\n  if (status === \"error\") {\n    return (\n      <p role=\"alert\" className=\"text-sm text-destructive\">\n        {error}\n      </p>\n    )\n  }\n  if (status === \"empty\") {\n    return (\n      <p role=\"status\" className=\"text-sm text-muted-foreground\">\n        {emptyLabel}\n      </p>\n    )\n  }\n  return (\n    <header data-slot=\"inbox-page-header\" className={cn(\"flex flex-col gap-4\", className)}>\n      <div className=\"flex items-center justify-between gap-3\">\n        {crumbs.length ? (\n          <nav aria-label=\"Breadcrumb\" className=\"inline-flex max-w-full items-center gap-1.5 overflow-hidden rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground\">\n            {crumbs.map((crumb, index) => {\n              const last = index === crumbs.length - 1\n              return (\n                <span key={`${crumb.label}-${index}`} className=\"inline-flex items-center gap-1.5\">\n                  {index > 0 ? <span aria-hidden>/</span> : null}\n                  {last || !crumb.href ? (\n                    <span className={last ? \"text-foreground\" : undefined}>{crumb.label}</span>\n                  ) : (\n                    <a href={crumb.href} className=\"hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none\">\n                      {crumb.label}\n                    </a>\n                  )}\n                </span>\n              )\n            })}\n          </nav>\n        ) : (\n          <span />\n        )}\n        {bellLabel ? (\n          <Button type=\"button\" variant=\"outline\" className=\"relative size-11 rounded-full\" aria-label={bellCount > 0 ? `${bellLabel}, ${bellCount}` : bellLabel} onClick={onBell}>\n            <Bell aria-hidden />\n            {bellCount > 0 ? (\n              <span className=\"absolute end-1 top-1 grid min-w-4 place-items-center rounded-full bg-primary px-1 text-[10px] font-medium text-primary-foreground\">\n                {bellCount}\n              </span>\n            ) : null}\n          </Button>\n        ) : null}\n      </div>\n      <div className=\"flex flex-wrap items-end justify-between gap-3\">\n        <div className=\"min-w-0\">\n          <h1 className=\"text-3xl font-semibold tracking-tight text-foreground\">{title}</h1>\n          {subtitle ? <p className=\"mt-1 text-sm text-muted-foreground\">{subtitle}</p> : null}\n        </div>\n        {actions.length ? (\n          <div className=\"flex flex-wrap gap-2\">\n            {actions.map((action) => (\n              <Button key={action.id} type=\"button\" variant=\"outline\" className=\"h-11 rounded-full px-4\" onClick={action.onSelect}>\n                {action.label}\n              </Button>\n            ))}\n          </div>\n        ) : null}\n      </div>\n    </header>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/inbox-page-header.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Encabezado de mensajes",
+    "descriptionEs": "Miga, título grande, subtítulo, acciones de contorno y campana. No es el encabezado de proyecto.",
+    "preview": "app/examples/inbox-page-header/preview.tsx",
+    "previewHref": "/examples/inbox-page-header",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Encabezado de mensajes",
+        "href": "/examples/inbox-page-header",
+        "description": "Miga, título grande, subtítulo, acciones de contorno y campana. No es el encabezado de proyecto."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/inbox-page-header/stress",
+        "description": "Vacío, textos largos, RTL y cantidad."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/inbox-page-header?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/inbox-page-header?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/inbox-page-header?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/inbox-page-header?scene=error",
+        "description": "Error"
+      }
+    ],
+    "usage": "<InboxPageHeader crumbs={[{ label: \"Espacio\", href: \"#espacio\" }, { label: \"Mensajes\" }]} title=\"Mensajes\" subtitle=\"2 sin leer\" actions={[{ id: \"chat\", label: \"Nuevo chat\" }]} bellLabel=\"Avisos\" bellCount={3} />",
+    "api": [
+      {
+        "name": "crumbs",
+        "type": "{ label, href? }[]",
+        "description": "The last crumb is the current page."
+      },
+      {
+        "name": "title / subtitle",
+        "type": "string",
+        "description": "Page title and the quiet line under it."
+      },
+      {
+        "name": "actions",
+        "type": "{ id, label, onSelect }[]",
+        "description": "Outline buttons. The host decides what they open."
+      },
+      {
+        "name": "bellLabel / bellCount",
+        "type": "string / number",
+        "description": "Notice button. The count uses the primary token."
+      }
+    ]
+  },
+  "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+  "categories": [
+    "chat"
+  ],
+  "type": "registry:ui"
+}

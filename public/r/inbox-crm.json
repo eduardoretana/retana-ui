@@ -1,0 +1,215 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "inbox-crm",
+  "title": "Inbox",
+  "author": "Eduardo Retana",
+  "description": "Rail, header, conversation list, thread, and party panel. Channel, stage, and the closed window arrive as props. Suggestions never send by themselves.",
+  "dependencies": [],
+  "registryDependencies": [
+    "@retana/app-rail",
+    "@retana/inbox-page-header",
+    "@retana/conversation-list",
+    "@retana/chat-thread",
+    "@retana/party-panel",
+    "@retana/suggested-replies",
+    "@retana/thread-composer"
+  ],
+  "files": [
+    {
+      "path": "registry/blocks/inbox-crm.tsx",
+      "content": "\"use client\"\n\n/**\n * Bandeja de conversaciones.\n * Fuente: concepto visual de Divan Raj (@desdivj),\n * https://x.com/desdivj/status/2119738295039250507\n * Licencia: sin licencia, clean-room. No se copiaron assets, logos,\n * ilustraciones ni textos.\n * Compone el riel, el encabezado, la lista, el hilo y la ficha.\n * El canal, la etapa y la ventana llegan por props. Nada se envía solo.\n */\n\nimport { useEffect, useRef, useState, useSyncExternalStore } from \"react\"\n\nimport { cn } from \"@/lib/utils\"\nimport type { ConversationItemData, ConversationSection, PartyPanelData, SuggestionItem, ThreadFilter, ThreadMessageData, ThreadStatus } from \"@/lib/thread-desk\"\nimport { AppRail, type AppRailItem } from \"@/components/ui/app-rail\"\nimport { ChatThread } from \"@/components/ui/chat-thread\"\nimport { ConversationList } from \"@/components/ui/conversation-list\"\nimport { InboxPageHeader, type InboxCrumb, type InboxHeaderAction } from \"@/components/ui/inbox-page-header\"\nimport { PartyPanel } from \"@/components/ui/party-panel\"\nimport { SuggestedReplies } from \"@/components/ui/suggested-replies\"\nimport { ThreadComposer, type ComposerLock } from \"@/components/ui/thread-composer\"\n\nexport type InboxLayout = \"auto\" | \"wide\" | \"desk\" | \"tablet\" | \"phone\"\n\nexport type InboxCrmProps = {\n  layout?: InboxLayout\n  railLabel?: string\n  railMark?: string\n  railItems?: readonly AppRailItem[]\n  onRail?: (id: string) => void\n  crumbs?: readonly InboxCrumb[]\n  title?: string\n  subtitle?: string\n  actions?: readonly InboxHeaderAction[]\n  bellLabel?: string\n  bellCount?: number\n  onBell?: () => void\n  listLabel?: string\n  listTitle?: string\n  countLabel?: string\n  searchLabel?: string\n  shortcut?: string\n  filters?: readonly ThreadFilter[]\n  filter?: string\n  onFilterChange?: (value: string) => void\n  sections?: readonly ConversationSection[]\n  conversations?: readonly ConversationItemData[]\n  selectedId?: string | null\n  onSelect?: (id: string) => void\n  threadLabel?: string\n  threadTitle?: string\n  threadStatus?: string\n  threadPresence?: \"online\" | \"offline\" | \"away\"\n  messages?: readonly ThreadMessageData[]\n  typing?: { names: readonly string[]; label?: string }\n  suggestions?: readonly SuggestionItem[]\n  onSuggestion?: (id: string) => void\n  onSend?: (value: string) => void\n  onAsk?: () => void\n  onAttach?: (files: File[]) => void\n  onUseTemplate?: () => void\n  locked?: ComposerLock | null\n  party?: PartyPanelData\n  onReveal?: (id: string) => void\n  revealLabel?: string\n  status?: ThreadStatus\n  emptyLabel?: string\n  loadingLabel?: string\n  error?: string\n  offlineLabel?: string\n  onRetry?: () => void\n  onRetryMessage?: (id: string) => void\n  retryLabel?: string\n  backLabel?: string\n  contextLabel?: string\n  initialColumn?: \"list\" | \"thread\"\n  sendLabel?: string\n  askLabel?: string\n  attachLabel?: string\n  placeholder?: string\n  className?: string\n}\n\nfunction readViewportLayout(): Exclude<InboxLayout, \"auto\"> {\n  if (window.matchMedia(\"(max-width: 639px)\").matches) return \"phone\"\n  if (window.matchMedia(\"(max-width: 1023px)\").matches) return \"tablet\"\n  if (window.matchMedia(\"(max-width: 1279px)\").matches) return \"desk\"\n  return \"wide\"\n}\n\nfunction useAutoLayout(forced: InboxLayout) {\n  const auto = useSyncExternalStore(\n    (onChange) => {\n      const queries = [\"(max-width: 639px)\", \"(max-width: 1023px)\", \"(max-width: 1279px)\"].map((query) => window.matchMedia(query))\n      queries.forEach((query) => query.addEventListener(\"change\", onChange))\n      return () => queries.forEach((query) => query.removeEventListener(\"change\", onChange))\n    },\n    readViewportLayout,\n    () => \"wide\" as const,\n  )\n  return forced === \"auto\" ? auto : forced\n}\n\nexport function InboxCrm({\n  layout: layoutProp = \"auto\",\n  railLabel = \"Espacios\",\n  railMark,\n  railItems = [],\n  onRail,\n  crumbs = [],\n  title = \"Mensajes\",\n  subtitle,\n  actions = [],\n  bellLabel,\n  bellCount,\n  onBell,\n  listLabel = \"Conversaciones\",\n  listTitle = \"Mensajes\",\n  countLabel,\n  searchLabel = \"Buscar mensajes\",\n  shortcut = \"⌘K\",\n  filters,\n  filter,\n  onFilterChange,\n  sections,\n  conversations = [],\n  selectedId,\n  onSelect,\n  threadLabel = \"Hilo\",\n  threadTitle,\n  threadStatus,\n  threadPresence,\n  messages = [],\n  typing,\n  suggestions = [],\n  onSuggestion,\n  onSend,\n  onAsk,\n  onAttach,\n  onUseTemplate,\n  locked = null,\n  party,\n  onReveal,\n  revealLabel = \"Mostrar\",\n  status = \"ready\",\n  emptyLabel = \"No hay conversaciones\",\n  loadingLabel = \"Cargando la bandeja\",\n  error,\n  offlineLabel = \"Sin conexión\",\n  onRetry,\n  onRetryMessage,\n  retryLabel = \"Reintentar\",\n  backLabel = \"Volver\",\n  contextLabel = \"Contexto\",\n  initialColumn = \"list\",\n  sendLabel = \"Enviar\",\n  askLabel = \"Preguntar a IA\",\n  attachLabel = \"Adjuntar\",\n  placeholder,\n  className,\n}: InboxCrmProps) {\n  const rootRef = useRef<HTMLDivElement>(null)\n  const layout = useAutoLayout(layoutProp)\n  const [column, setColumn] = useState<\"list\" | \"thread\" | \"context\">(initialColumn)\n  const [drawer, setDrawer] = useState(false)\n  const [draft, setDraft] = useState(\"\")\n  const showRail = layout === \"wide\" || layout === \"desk\"\n  const showList = layout !== \"phone\" || column === \"list\"\n  const showThread = layout !== \"phone\" || column === \"thread\" || column === \"context\"\n  const showParty = layout === \"wide\"\n\n  useEffect(() => {\n    function onKey(event: KeyboardEvent) {\n      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === \"k\") {\n        event.preventDefault()\n        rootRef.current?.querySelector<HTMLElement>(\"[data-slot=conversation-search]\")?.focus()\n      }\n      if (event.key === \"Escape\") setDrawer(false)\n    }\n    window.addEventListener(\"keydown\", onKey)\n    return () => window.removeEventListener(\"keydown\", onKey)\n  }, [])\n\n  function approve(id: string) {\n    const item = suggestions.find((suggestion) => suggestion.id === id)\n    if (item) setDraft(item.label)\n    onSuggestion?.(id)\n  }\n\n  return (\n    <div\n      ref={rootRef}\n      data-slot=\"inbox-crm\"\n      data-layout={layout}\n      aria-busy={status === \"loading\" ? true : undefined}\n      className={cn(\"flex min-h-[32rem] overflow-hidden rounded-2xl border border-border bg-background text-foreground\", className)}\n    >\n      {showRail ? <AppRail label={railLabel} mark={railMark} items={railItems} onSelect={onRail} /> : null}\n      <div className=\"flex min-w-0 flex-1 flex-col gap-4 p-4\">\n        <InboxPageHeader crumbs={crumbs} title={title} subtitle={subtitle} actions={actions} bellLabel={bellLabel} bellCount={bellCount} onBell={onBell} />\n        {status === \"loading\" ? (\n          <div role=\"status\" aria-label={loadingLabel} className=\"grid flex-1 gap-3\">\n            <span className=\"sr-only\">{loadingLabel}</span>\n            <span className=\"h-24 animate-pulse rounded-2xl bg-muted\" />\n            <span className=\"h-40 animate-pulse rounded-2xl bg-muted\" />\n          </div>\n        ) : null}\n        {status === \"error\" ? (\n          <div role=\"alert\" className=\"grid gap-3 rounded-2xl border border-border p-4\">\n            <p className=\"text-sm text-destructive\">{error}</p>\n            {onRetry ? (\n              <button type=\"button\" className=\"h-11 justify-self-start rounded-full bg-foreground px-4 text-sm text-background\" onClick={onRetry}>\n                {retryLabel}\n              </button>\n            ) : null}\n          </div>\n        ) : null}\n        {status !== \"loading\" && status !== \"error\" ? (\n          <div className={cn(\"grid min-h-0 flex-1 gap-4\", showParty ? \"xl:grid-cols-[18rem_minmax(0,1fr)_18rem]\" : \"md:grid-cols-[18rem_minmax(0,1fr)]\")}>\n            {showList ? (\n              <ConversationList\n                label={listLabel}\n                title={listTitle}\n                countLabel={countLabel}\n                searchLabel={searchLabel}\n                shortcut={shortcut}\n                filters={filters}\n                filter={filter}\n                onFilterChange={onFilterChange}\n                sections={sections}\n                items={conversations}\n                selectedId={selectedId}\n                status={status === \"empty\" ? \"empty\" : \"ready\"}\n                emptyTitle={emptyLabel}\n                onSelect={(id) => {\n                  onSelect?.(id)\n                  setColumn(\"thread\")\n                }}\n              />\n            ) : null}\n            {showThread ? (\n              <div className=\"flex min-h-0 min-w-0 flex-col gap-3\">\n                <div className=\"flex items-center gap-2\">\n                  {layout === \"phone\" ? (\n                    <button type=\"button\" className=\"h-11 rounded-full px-3 text-sm font-medium hover:bg-muted\" onClick={() => setColumn(\"list\")}>\n                      {backLabel}\n                    </button>\n                  ) : null}\n                  {!showParty ? (\n                    <button type=\"button\" className=\"ms-auto h-11 rounded-full px-3 text-sm font-medium hover:bg-muted\" onClick={() => setDrawer(true)}>\n                      {contextLabel}\n                    </button>\n                  ) : null}\n                </div>\n                {status === \"offline\" ? (\n                  <p role=\"status\" className=\"rounded-xl bg-muted px-3 py-2 text-sm text-foreground\">\n                    {offlineLabel}\n                  </p>\n                ) : null}\n                <ChatThread\n                  label={threadLabel}\n                  title={threadTitle}\n                  status={threadStatus}\n                  presence={threadPresence}\n                  messages={messages}\n                  typing={typing}\n                  onRetryMessage={onRetryMessage}\n                  retryLabel={retryLabel}\n                  state={status === \"empty\" ? \"empty\" : \"ready\"}\n                  emptyLabel={emptyLabel}\n                />\n                {suggestions.length && !locked ? <SuggestedReplies items={suggestions} onApprove={approve} /> : null}\n                <ThreadComposer\n                  value={draft}\n                  onValueChange={setDraft}\n                  onSend={(value) => {\n                    onSend?.(value)\n                    setDraft(\"\")\n                  }}\n                  onAsk={onAsk}\n                  onAttach={onAttach}\n                  onUseTemplate={onUseTemplate}\n                  locked={locked}\n                  offline={status === \"offline\"}\n                  placeholder={placeholder}\n                  sendLabel={sendLabel}\n                  askLabel={askLabel}\n                  attachLabel={attachLabel}\n                />\n              </div>\n            ) : null}\n            {showParty && party ? (\n              <div className=\"min-w-0 border-s border-border ps-4\">\n                <PartyPanel {...party} presence={threadPresence} revealLabel={revealLabel} onReveal={onReveal} />\n              </div>\n            ) : null}\n          </div>\n        ) : null}\n      </div>\n      {drawer && party ? (\n        <div role=\"dialog\" aria-label={contextLabel} className=\"fixed inset-y-0 end-0 z-40 flex w-80 max-w-full flex-col border-s border-border bg-popover p-4 shadow-none\">\n          <button type=\"button\" className=\"mb-3 h-11 self-end rounded-full px-3 text-sm\" onClick={() => setDrawer(false)}>\n            {backLabel}\n          </button>\n          <PartyPanel {...party} presence={threadPresence} revealLabel={revealLabel} onReveal={onReveal} />\n        </div>\n      ) : null}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/inbox-crm.tsx"
+    },
+    {
+      "path": "registry/lib/thread-desk.ts",
+      "content": "/**\n * Bandeja de conversaciones.\n * Fuente: concepto visual de Divan Raj (@desdivj),\n * https://x.com/desdivj/status/2119738295039250507\n * Licencia: sin licencia, clean-room. No se copiaron assets, logos,\n * ilustraciones ni textos.\n * Tipos y puertos. Sin red, sin Supabase y sin dominio de un canal.\n */\n\nimport type { CSSProperties, ReactNode } from \"react\"\n\nimport { foldInboxText, type DeskPresence } from \"@/lib/inbox\"\n\n/** Online uses the host success token, then chart-2. It is not the accent. */\nexport function presenceDotStyle(presence: DeskPresence): CSSProperties {\n  if (presence === \"online\") return { backgroundColor: \"var(--success, var(--chart-2))\" }\n  if (presence === \"offline\") return { backgroundColor: \"var(--muted-foreground)\" }\n  return { backgroundColor: \"var(--accent-foreground)\" }\n}\n\nexport type ThreadStatus = \"ready\" | \"loading\" | \"empty\" | \"error\" | \"offline\"\n\nexport type ThreadFilter = {\n  value: string\n  label: string\n}\n\nexport type ConversationSection = {\n  id: string\n  label: string\n  hint?: string\n}\n\nexport type ConversationItemData = {\n  id: string\n  title: string\n  preview?: string\n  time?: string\n  unread?: number\n  section?: string\n  tags?: readonly string[]\n  presence?: DeskPresence\n  role?: string\n  kind?: \"thread\" | \"contact\"\n  stage?: string\n  windowLabel?: string\n  channel?: ReactNode\n}\n\nexport type DeliveryState = \"sending\" | \"sent\" | \"delivered\" | \"read\" | \"failed\"\n\nexport type ThreadNote = {\n  title: string\n  detail: string\n  body?: string\n}\n\nexport type ThreadFile = {\n  name: string\n  detail: string\n  status?: string\n}\n\nexport type ThreadInvoice = {\n  title: string\n  amount: string\n  due: string\n}\n\nexport type ThreadMetric = {\n  title: string\n  chip?: string\n  value: string\n  caption?: string\n  filled: number\n  total: number\n  start: string\n  end: string\n}\n\nexport type ThreadMessageData = {\n  id: string\n  side: \"incoming\" | \"outgoing\"\n  author: string\n  time?: string\n  body?: string\n  delivery?: DeliveryState\n  deliveryLabel?: string\n  grouped?: \"single\" | \"start\" | \"middle\" | \"end\"\n  enter?: boolean\n  note?: ThreadNote\n  file?: ThreadFile\n  invoice?: ThreadInvoice\n  metric?: ThreadMetric\n}\n\nexport type SuggestionItem = {\n  id: string\n  label: string\n}\n\nexport type SecretField = {\n  id: string\n  label: string\n  masked: string\n  revealed: string\n}\n\nexport type PartyFact = {\n  id: string\n  label: string\n  value: string\n}\n\nexport type PartyMember = {\n  id: string\n  name: string\n  role: string\n}\n\nexport type PartyFile = {\n  id: string\n  name: string\n  detail: string\n}\n\nexport type PartyDeal = {\n  title: string\n  status: string\n  amount: string\n  value: number\n  label: string\n}\n\nexport type PartyPanelData = {\n  name: string\n  meta?: string\n  deal?: PartyDeal\n  facts?: readonly PartyFact[]\n  members?: readonly PartyMember[]\n  files?: readonly PartyFile[]\n  secrets?: readonly SecretField[]\n}\n\nexport function matchesConversation(item: ConversationItemData, filter: string | undefined, query: string) {\n  if (filter && filter !== \"all\") {\n    const tagged = item.tags?.includes(filter) || (filter === \"unread\" && (item.unread ?? 0) > 0)\n    if (!tagged) return false\n  }\n  const needle = query.trim()\n  if (!needle) return true\n  const hay = [item.title, item.preview, item.role, item.stage, item.windowLabel].filter(Boolean).join(\" \")\n  return foldInboxText(hay).includes(foldInboxText(needle))\n}\n\nexport function groupMessages(messages: readonly ThreadMessageData[]): ThreadMessageData[] {\n  return messages.map((message, index) => {\n    if (message.grouped) return message\n    const prev = messages[index - 1]\n    const next = messages[index + 1]\n    const same = (other?: ThreadMessageData) =>\n      Boolean(other && other.side === message.side && other.author === message.author && !other.file && !other.invoice && !other.metric && !message.file && !message.invoice && !message.metric)\n    const before = same(prev)\n    const after = same(next)\n    const grouped = before && after ? \"middle\" : before ? \"end\" : after ? \"start\" : \"single\"\n    return { ...message, grouped }\n  })\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/thread-desk.ts"
+    },
+    {
+      "path": "registry/lib/inbox.ts",
+      "content": "/**\n * Shared types for the desk pieces. No fetching, no theme.\n * Dates are calendar days (`YYYY-MM-DD`). The host owns locale and timezone.\n */\n\nexport const DESK_PRESENCES = [\"online\", \"offline\", \"away\"] as const\n\nexport type DeskPresence = (typeof DESK_PRESENCES)[number]\n\nexport type DeskMessage = {\n  id: string\n  author: string\n  body: string\n  /** Preformatted time. */\n  time: string\n  side: \"incoming\" | \"outgoing\"\n  note?: boolean\n  receipt?: \"seen\" | \"unseen\"\n}\n\nexport type DeskOption = {\n  value: string\n  label: string\n}\n\nconst DATE_RE = /^(\\d{4})-(\\d{2})-(\\d{2})$/\n\nexport function foldInboxText(value: string): string {\n  return value.normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g, \"\").toLowerCase()\n}\n\nexport function isCalendarDate(value: string | undefined): value is string {\n  return Boolean(value && DATE_RE.test(value))\n}\n\n/** True when `due` is a calendar day before `today`. */\nexport function isOverdueDate(due: string | undefined, today: string): boolean {\n  if (!isCalendarDate(due) || !isCalendarDate(today)) return false\n  return due < today\n}\n\nexport function formatDeskDate(iso: string, locale?: string): string {\n  if (!isCalendarDate(iso)) return iso\n  const [year, month, day] = iso.split(\"-\").map(Number)\n  return new Intl.DateTimeFormat(locale, { dateStyle: \"medium\", timeZone: \"UTC\" }).format(\n    new Date(Date.UTC(year, month - 1, day)),\n  )\n}\n\nexport function deskInitials(name: string): string {\n  const letters = name\n    .split(/\\s+/)\n    .filter(Boolean)\n    .slice(0, 2)\n    .map((part) => part[0]?.toUpperCase() ?? \"\")\n    .join(\"\")\n  return letters || \"?\"\n}\n",
+      "type": "registry:lib",
+      "target": "@lib/inbox.ts"
+    }
+  ],
+  "meta": {
+    "titleEs": "Bandeja de mensajes",
+    "descriptionEs": "Riel, encabezado, lista, hilo y ficha. El canal, la etapa y la ventana cerrada llegan por props. Las sugerencias no se envían solas.",
+    "preview": "app/examples/inbox-crm/preview.tsx",
+    "previewHref": "/examples/inbox-crm",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "offline",
+        "label": "Sin conexión",
+        "labelEn": "Offline"
+      },
+      {
+        "id": "failed",
+        "label": "Envío fallido",
+        "labelEn": "Send failed"
+      },
+      {
+        "id": "locked",
+        "label": "Ventana cerrada",
+        "labelEn": "Window closed"
+      },
+      {
+        "id": "typing",
+        "label": "Escribiendo",
+        "labelEn": "Typing"
+      },
+      {
+        "id": "unread",
+        "label": "Sin leer",
+        "labelEn": "Unread"
+      },
+      {
+        "id": "cenit",
+        "label": "Cenit",
+        "labelEn": "Cenit"
+      },
+      {
+        "id": "hilo",
+        "label": "Hilo",
+        "labelEn": "Thread"
+      },
+      {
+        "id": "receipts",
+        "label": "Acuses",
+        "labelEn": "Receipts"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Bandeja de mensajes",
+        "href": "/examples/inbox-crm",
+        "description": "Riel, encabezado, lista, hilo y ficha. El canal, la etapa y la ventana cerrada llegan por props. Las sugerencias no se envían solas."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/inbox-crm/stress",
+        "description": "Vacío, textos largos, RTL y cantidad."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/inbox-crm?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/inbox-crm?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/inbox-crm?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/inbox-crm?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Sin conexión",
+        "href": "/examples/inbox-crm?scene=offline",
+        "description": "Offline"
+      },
+      {
+        "title": "Envío fallido",
+        "href": "/examples/inbox-crm?scene=failed",
+        "description": "Send failed"
+      },
+      {
+        "title": "Ventana cerrada",
+        "href": "/examples/inbox-crm?scene=locked",
+        "description": "Window closed"
+      },
+      {
+        "title": "Escribiendo",
+        "href": "/examples/inbox-crm?scene=typing",
+        "description": "Typing"
+      },
+      {
+        "title": "Sin leer",
+        "href": "/examples/inbox-crm?scene=unread",
+        "description": "Unread"
+      },
+      {
+        "title": "Cenit",
+        "href": "/examples/inbox-crm?scene=cenit",
+        "description": "Cenit"
+      },
+      {
+        "title": "Hilo",
+        "href": "/examples/inbox-crm?scene=hilo",
+        "description": "Thread"
+      },
+      {
+        "title": "Acuses",
+        "href": "/examples/inbox-crm?scene=receipts",
+        "description": "Receipts"
+      }
+    ],
+    "usage": "<InboxCrm layout=\"auto\" conversations={conversations} messages={messages} suggestions={suggestions} onSend={send} onSuggestion={approve} party={party} onReveal={audit} />",
+    "api": [
+      {
+        "name": "layout",
+        "type": "auto | wide | desk | tablet | phone",
+        "description": "auto: rail hides under 1024, context becomes a drawer under 1280, and under 640 one column shows at a time."
+      },
+      {
+        "name": "conversations / messages / party",
+        "type": "props",
+        "description": "The host owns the data. There is no fetch and no Supabase client."
+      },
+      {
+        "name": "suggestions / onSuggestion",
+        "type": "chips / (id) => void",
+        "description": "Approving fills the draft. onSend is not called."
+      },
+      {
+        "name": "locked",
+        "type": "{ title, action }",
+        "description": "Closed window. Send stays disabled until the host clears it."
+      },
+      {
+        "name": "onReveal",
+        "type": "(id: string) => void",
+        "description": "Audit hook for a sensitive field. The value is not included."
+      },
+      {
+        "name": "status",
+        "type": "ready | loading | empty | error | offline",
+        "description": "Skeleton, empty copy, alert with retry, or an offline banner that disables send."
+      }
+    ]
+  },
+  "docs": "Fuente: concepto visual de Divan Raj (@desdivj), https://x.com/desdivj/status/2119738295039250507. Licencia: sin licencia, clean-room. No se copiaron assets, logos, ilustraciones ni textos. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no. La pieza no trae tema.",
+  "categories": [
+    "block"
+  ],
+  "type": "registry:block"
+}

@@ -916,3 +916,21 @@ callbacks. The table sorts in place and slides rows with layout motion. The
 voice note draws a waveform from numeric peaks and does not play a file.
 Answer no if the CLI asks to overwrite a primitive the host already has.
 The items ship no theme.
+
+---
+
+Bandeja de mensajes
+
+app-rail, inbox-page-header, segmented-filter, conversation-item,
+conversation-list, message-bubble, message-card-file, message-card-invoice,
+message-card-metric, suggested-replies, thread-composer, party-panel,
+chat-thread, and inbox-crm are a clean-room reading of a public visual
+concept by Divan Raj (@desdivj),
+https://x.com/desdivj/status/2119738295039250507.
+License: no license, clean-room. No assets, logos, illustrations, or copy
+were copied. typing-indicator grew a presentational mode (names and dots)
+and keeps the previous presence behavior when names are omitted.
+segmented-filter wraps segmented-control. The composer reuses
+attachment-chip. The catalog demo is Taller Ámbar, a fictional studio in
+León, plus a Cenit scene with invented credit data. Answer no if the CLI
+asks to overwrite a primitive the host already has. The items ship no theme.
