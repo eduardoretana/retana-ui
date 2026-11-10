@@ -1,0 +1,2 @@
+@import "tailwindcss" prefix(rt) source("../");
+@source "../../../hosts";
