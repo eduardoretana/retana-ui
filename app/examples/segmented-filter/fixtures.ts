@@ -9,3 +9,4 @@ export const filled = { id: "filled" }
 export const empty = { id: "empty" }
 export const loading = { id: "loading" }
 export const error = { id: "error" }
+export const crowded = { id: "crowded" }

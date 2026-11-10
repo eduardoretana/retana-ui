@@ -14,6 +14,19 @@ export default function StressPage() {
       <StressCase label="320px" width={320}>
         <SegmentedFilter label="Filtro" value="all" options={Array.from({ length: 8 }, (_, index) => ({ value: `v${index}`, label: index === 0 ? token : `Filtro ${index}` }))} />
       </StressCase>
+      <StressCase label="Cinco filtros largos en inglés" width={220}>
+        <SegmentedFilter
+          label="Filter"
+          value="mine"
+          options={[
+            { value: "all", label: "All conversations" },
+            { value: "leads", label: "Open leads this quarter" },
+            { value: "clients", label: "Active clients" },
+            { value: "unread", label: "Unread messages" },
+            { value: "mine", label: "Assigned to me this week" },
+          ]}
+        />
+      </StressCase>
       <StressCase label="RTL" width={320}><div dir="rtl"><SegmentedFilter label="تصفية" value="a" options={[{ value: "a", label: "الكل" }, { value: "b", label: "غير مقروء" }]} /></div></StressCase>
     </main>
   )

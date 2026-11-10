@@ -10,9 +10,9 @@
 import { sceneText, type Scene, type SceneFrame, type SceneRenderProps } from "@/app/catalog/scene-types"
 import { SegmentedFilter } from "@/registry/ui/segmented-filter"
 
-import { empty, error, filled, loading } from "./fixtures"
+import { crowded, empty, error, filled, loading } from "./fixtures"
 
-const packs = { filled, empty, loading, error }
+const packs = { filled, empty, loading, error, crowded }
 void packs
 
 const frame: SceneFrame = { size: "md", surface: "card", padding: "md" }
@@ -23,6 +23,23 @@ function Piece({ locale, id }: SceneRenderProps & { id: string }) {
   if (id === "loading") return <SegmentedFilter label={t("Filtro", "Filter")} options={[]} status="loading" />
   if (id === "error") return <SegmentedFilter label={t("Filtro", "Filter")} options={[]} status="error" error={t("No se pudo leer el filtro.", "The filter could not be read.")} />
   if (id === "empty") return <SegmentedFilter label={t("Filtro", "Filter")} options={[]} status="empty" emptyLabel={t("Sin filtros", "No filters")} />
+  if (id === "crowded") {
+    return (
+      <div className="w-full max-w-xs">
+        <SegmentedFilter
+          label="Filter"
+          value="mine"
+          options={[
+            { value: "all", label: "All conversations" },
+            { value: "leads", label: "Open leads this quarter" },
+            { value: "clients", label: "Active clients" },
+            { value: "unread", label: "Unread messages" },
+            { value: "mine", label: "Assigned to me this week" },
+          ]}
+        />
+      </div>
+    )
+  }
   return (
     <SegmentedFilter
       label={t("Filtro", "Filter")}
@@ -38,7 +55,7 @@ function Piece({ locale, id }: SceneRenderProps & { id: string }) {
 }
 
 
-function scene(id: "filled" | "empty" | "loading" | "error") {
+function scene(id: "filled" | "empty" | "loading" | "error" | "crowded") {
   return function Render(props: SceneRenderProps) {
     return <Piece {...props} id={id} />
   }
@@ -49,4 +66,5 @@ export const scenes: Scene[] = [
   { id: "empty", label: "Vacío", labelEn: "Empty", render: scene("empty"), frame },
   { id: "loading", label: "Cargando", labelEn: "Loading", render: scene("loading"), frame },
   { id: "error", label: "Error", labelEn: "Error", render: scene("error"), frame },
+  { id: "crowded", label: "Cinco filtros", labelEn: "Five filters", render: scene("crowded"), frame: { size: "sm", surface: "card", padding: "md" } },
 ]
