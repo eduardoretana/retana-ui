@@ -177,8 +177,8 @@ describe("presence", () => {
       props: { item: conversations[0], selected: true },
     })
     const dot = wrapper.get("[data-presence=online]")
-    const style = dot.attributes("style") ?? ""
-    expect(style).toContain("var(--success")
+    const style = (dot.attributes("style") ?? "").replace(/\s+/g, " ").trim()
+    expect(style).toBe("background: var(--success, var(--chart-2));")
     expect(style.includes("var(--primary)")).toBe(false)
     expect(style.includes("var(--accent)")).toBe(false)
     wrapper.unmount()
