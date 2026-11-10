@@ -4,7 +4,7 @@ declaration: "UI_SYSTEM: APPLIES"
 cycle_state: AUDITORIA
 spec_id: bandeja-vue
 profile: STANDARD
-head: e59847554570bd22eeac908f1ea3e4c095993761
+head: 38f379de196050c19d846bc1c25680fa3847c5be
 retana_ui:
   sha: 2389a3e2b3544b301abc84ebd37c6685d86c6eef
   registry_source: git-sha
