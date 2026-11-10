@@ -54,7 +54,6 @@ export function bandejaProps(scene: string, locale: Locale = "es") {
           tags: ["clients", "unread"],
           stage: t("Propuesta", "Proposal"),
           windowLabel: t("6 h", "6 h"),
-          channel: "WhatsApp",
           presence: "online" as const,
         },
         {
@@ -222,12 +221,17 @@ export function bandejaProps(scene: string, locale: Locale = "es") {
         facts: [
           { id: "hito", label: t("Próximo hito", "Next milestone"), value: t("10 dic", "Dec 10") },
           { id: "horas", label: t("Horas del sprint", "Sprint hours"), value: "52 h" },
+          { id: "abiertas", label: t("Facturas abiertas", "Open invoices"), value: "1" },
         ],
         members: [
           { id: "marina", name: "Marina Soler", role: t("Cliente · Finanzas", "Client · Finance") },
           { id: "diego", name: "Diego Rueda", role: t("Admin · Tú", "Admin · You") },
+          { id: "renata", name: "Renata Vidal", role: t("Diseñadora", "Designer") },
         ],
-        files: [{ id: "corte", name: "corte-marca.pdf", detail: t("248 KB · Hoy", "248 KB · Today") }],
+        files: [
+          { id: "corte", name: "corte-marca.pdf", detail: t("248 KB · Hoy", "248 KB · Today") },
+          { id: "crono", name: "cronograma-v3.fig", detail: t("1.2 MB · 6 nov", "1.2 MB · Nov 6") },
+        ],
       }
 
   const receipts = [
@@ -313,8 +317,8 @@ export function bandejaProps(scene: string, locale: Locale = "es") {
       : [
           { value: "all", label: t("Todos", "All") },
           { value: "clients", label: t("Clientes", "Clients") },
+          { value: "team", label: t("Equipo", "Team") },
           { value: "unread", label: t("Sin leer", "Unread") },
-          { value: "mine", label: t("Míos", "Mine") },
         ],
     filter: scene === "unread" ? "unread" : "all",
     sections: cenit
