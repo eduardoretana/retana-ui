@@ -83,7 +83,7 @@ const groups = computed(() => {
 <template>
   <section class="retana rt:flex rt:min-w-0 rt:flex-col" data-slot="conversation-list" style="display: flex; min-width: 0; flex-direction: column; gap: 0.75rem">
     <div v-if="title || countLabel" style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem">
-      <h2 v-if="title" class="ellipsis" style="margin: 0; font-size: 0.875rem">{{ title }}</h2>
+      <h2 v-if="title" class="ellipsis" style="margin: 0; font-size: 14px; line-height: 20px">{{ title }}</h2>
       <span v-else />
       <p v-if="countLabel" class="tag">
         <span class="sr">Total {{ countLabel }}</span>

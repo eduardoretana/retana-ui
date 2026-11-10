@@ -46,14 +46,14 @@ const grouped = computed(() => groupMessages(props.messages))
 
 <template>
   <section class="retana" data-slot="chat-thread" style="display: flex; min-width: 0; min-height: 0; flex: 1; flex-direction: column">
-    <header style="display: flex; align-items: center; gap: 0.75rem; border-bottom: 1px solid var(--border); padding: 0.75rem 0.25rem">
+    <header style="display: flex; align-items: center; gap: 0.75rem; border-bottom: 1px solid var(--border); padding: 12px 4px">
       <span class="avatar" aria-hidden="true">
         {{ title ? deskInitials(title) : "?" }}
         <span v-if="presence" class="presence" :data-presence="presence" :data-token="presence === 'online' ? 'success' : undefined" :style="presenceStyle(presence)" />
       </span>
       <span class="grow">
-        <span v-if="title" class="ellipsis" style="display: block; font-weight: 600">{{ title }}</span>
-        <span v-if="status" class="ellipsis muted" style="display: block; font-size: 0.75rem">{{ status }}</span>
+        <span v-if="title" class="ellipsis" style="display: block; font-size: 14px; line-height: 20px; font-weight: 600">{{ title }}</span>
+        <span v-if="status" class="ellipsis muted" style="display: block; font-size: 12px; line-height: 16px">{{ status }}</span>
       </span>
       <slot name="actions" />
     </header>

@@ -55,11 +55,11 @@ const emit = defineEmits<{
     </span>
     <span class="grow">
       <span class="line">
-        <span class="ellipsis" :style="{ fontWeight: item.unread ? 600 : 500, fontSize: '14px' }">{{ item.title }}</span>
+        <span class="ellipsis" :style="{ fontWeight: item.unread ? 600 : 500, fontSize: '14px', lineHeight: '20px' }">{{ item.title }}</span>
         <time v-if="item.time" class="muted" style="margin-inline-start: auto; flex-shrink: 0; font-size: 0.75rem">{{ item.time }}</time>
       </span>
       <span v-if="item.kind === 'contact' && item.role" class="ellipsis muted" style="display: block; font-size: 0.75rem">{{ item.role }}</span>
-      <span v-else-if="item.preview" class="ellipsis muted" style="display: block; font-size: 0.75rem">{{ item.preview }}</span>
+      <span v-else-if="item.preview" class="ellipsis muted" style="display: block; font-size: 12px; line-height: 16px">{{ item.preview }}</span>
       <span v-if="item.channel || item.stage || item.windowLabel" style="display: flex; flex-wrap: wrap; gap: 0.375rem; margin-top: 0.25rem">
         <slot name="channel" :item="item">
           <span v-if="item.channel" class="accent" style="font-size: 12px; font-weight: 500; color: var(--primary)">{{ item.channel }}</span>

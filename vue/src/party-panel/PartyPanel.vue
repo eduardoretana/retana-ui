@@ -65,8 +65,8 @@ function reveal(id: string) {
   <aside v-else class="retana party" data-slot="party-panel">
     <div style="display: grid; justify-items: center; gap: 0.5rem; text-align: center">
       <span class="avatar-lg" aria-hidden="true">{{ deskInitials(name) }}</span>
-      <h2 style="margin: 0; font-size: 1rem">{{ name }}</h2>
-      <p v-if="meta" class="muted" style="margin: 0; font-size: 0.75rem">{{ meta }}</p>
+      <h2 style="margin: 0; font-size: 1rem; line-height: 24px">{{ name }}</h2>
+      <p v-if="meta" class="muted" style="margin: 0; font-size: 12px; line-height: 16px">{{ meta }}</p>
     </div>
     <div v-if="actions.length" class="party-actions" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem">
       <button
@@ -82,19 +82,19 @@ function reveal(id: string) {
     </div>
     <section v-if="deal" style="display: grid; gap: 0.5rem; border-radius: 1rem; background: var(--muted); padding: 0.75rem">
       <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem">
-        <h3 style="margin: 0; font-size: 0.875rem">{{ deal.title }}</h3>
-        <span class="muted" style="font-size: 0.75rem">{{ deal.status }}</span>
+        <h3 style="margin: 0; font-size: 14px; line-height: 20px">{{ deal.title }}</h3>
+        <span class="muted" style="font-size: 12px; line-height: 16px">{{ deal.status }}</span>
       </div>
-      <p style="margin: 0">{{ deal.amount }}</p>
+      <p style="margin: 0; font-size: 14px; line-height: 20px">{{ deal.amount }}</p>
       <div role="progressbar" aria-valuemin="0" aria-valuemax="100" :aria-valuenow="deal.value" :aria-label="deal.label" style="height: 0.5rem; overflow: hidden; border-radius: 999px; background: var(--background)">
         <div style="height: 100%; border-radius: 999px; background: var(--primary)" :style="{ width: `${Math.max(0, Math.min(100, deal.value))}%` }" />
       </div>
-      <p class="muted" style="margin: 0; text-align: end; font-size: 0.75rem">{{ deal.label }}</p>
+      <p class="muted" style="margin: 0; text-align: end; font-size: 12px; line-height: 16px">{{ deal.label }}</p>
     </section>
     <dl v-if="facts.length" style="display: grid; gap: 0.75rem; margin: 0">
       <div v-for="fact in facts" :key="fact.id" style="display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem">
-        <dt class="muted" style="font-size: 0.75rem">{{ fact.label }}</dt>
-        <dd style="margin: 0; font-weight: 500">{{ fact.value }}</dd>
+        <dt class="muted" style="font-size: 12px; line-height: 16px">{{ fact.label }}</dt>
+        <dd style="margin: 0; font-size: 14px; line-height: 20px; font-weight: 500">{{ fact.value }}</dd>
       </div>
     </dl>
     <div v-if="secrets.length" style="border-block: 1px solid var(--border)">
@@ -112,8 +112,8 @@ function reveal(id: string) {
         <li v-for="member in members" :key="member.id" style="display: flex; min-height: 44px; align-items: center; gap: 0.5rem">
           <span class="avatar-sm" style="background: var(--muted); color: var(--foreground)" aria-hidden="true">{{ deskInitials(member.name) }}</span>
           <span class="grow">
-            <span class="ellipsis" style="display: block; font-weight: 500">{{ member.name }}</span>
-            <span class="ellipsis muted" style="display: block; font-size: 0.75rem">{{ member.role }}</span>
+            <span class="ellipsis" style="display: block; font-size: 14px; line-height: 20px; font-weight: 500">{{ member.name }}</span>
+            <span class="ellipsis muted" style="display: block; font-size: 12px; line-height: 16px">{{ member.role }}</span>
           </span>
         </li>
       </ul>
@@ -123,8 +123,8 @@ function reveal(id: string) {
       <ul style="display: grid; gap: 0.5rem; margin: 0; padding: 0; list-style: none">
         <li v-for="file in files" :key="file.id" style="display: flex; min-height: 44px; align-items: center; gap: 0.5rem">
           <span class="grow">
-            <span class="ellipsis" style="display: block; font-weight: 500">{{ file.name }}</span>
-            <span class="ellipsis muted" style="display: block; font-size: 0.75rem">{{ file.detail }}</span>
+            <span class="ellipsis" style="display: block; font-size: 14px; line-height: 20px; font-weight: 500">{{ file.name }}</span>
+            <span class="ellipsis muted" style="display: block; font-size: 12px; line-height: 16px">{{ file.detail }}</span>
           </span>
           <button type="button" class="hit" :aria-label="`${downloadLabel} ${file.name}`" @click="emit('download', file.id)">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">

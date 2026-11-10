@@ -93,7 +93,7 @@ function onFile(event: Event) {
           @input="setText(($event.target as HTMLTextAreaElement).value)"
           @keydown.enter.exact.prevent="send"
         />
-        <div style="display: flex; align-items: center; gap: 0.25rem; padding: 0.5rem">
+        <div style="display: flex; align-items: center; gap: 0.25rem; padding: 0 8px 8px">
           <button type="button" class="hit" :aria-label="attachLabel" :disabled="blocked" @click="fileRef?.click()">
             <slot name="attach-icon">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
