@@ -25,6 +25,7 @@
   --chart-3: rgb(var(--v-theme-serie-neutra));
   --chart-4: rgb(var(--v-theme-chart-4));
   --chart-5: rgb(var(--v-theme-chart-5));
+  --success: rgb(var(--v-theme-success));
   --radius: var(--retana-radius, 0.5rem);
   --sidebar: rgb(var(--v-theme-barra));
   --sidebar-foreground: rgb(var(--v-theme-on-barra));

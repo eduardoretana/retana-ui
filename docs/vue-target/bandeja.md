@@ -34,7 +34,7 @@ Las 15 piezas están en `vue/src/<nombre>/`. La raíz lleva `.retana` y clases `
 
 `vue/src/vuetify/theme.ts` arma `createVuetify` en claro y oscuro desde `tokens/retana.tokens.json`, y sustituye `primary` por el oklch de `.ae-ember` en `app/globals.css` (el mismo host de la captura React). El puente sigue apuntando `--primary` a `rgb(var(--v-theme-primary))`. `primary` es el acento único. Los defaults piden densidad `comfortable` y radio `lg`. Esos defaults aplican a componentes de Vuetify del host; las piezas no los usan.
 
-La presencia en línea usa `var(--success, var(--chart-2))`, igual que React en esta rama. No usa `primary` ni `accent`. El DTCG del piloto #86 todavía no lista `success`; el valor vive en `app/globals.css` (`oklch(0.45 0.12 145)` en claro y `oklch(0.78 0.14 150)` en oscuro). La demo convierte ese mismo oklch al rol `success` de Vuetify. `vue/src/styles/inbox-bridge.css` lo publica como `rgb(var(--v-theme-success))`.
+La presencia en línea usa `var(--success, var(--chart-2))`, igual que React. El generador escribe `--success: rgb(var(--v-theme-success))` en `tokens/bridge.css`. La demo convierte el oklch de `app/globals.css` al rol `success` de Vuetify.
 
 `segmented-filter` no parte la etiqueta. La pista hace scroll horizontal, el botón no se encoge y el texto queda en una sola línea. Si sobra contenido, los extremos se desvanecen con una máscara.
 
@@ -55,4 +55,4 @@ Estos archivos se copiaron idénticos de `cursor/piloto-vue-tokens-5483` y el me
 - `tokens/*`, `docs/vue/vuetify.md`
 - la exclusión de `vue` en `tsconfig.json`, `vitest.config.mts` y `.gitignore`
 
-Al entrar el #86 se queda una sola copia. Lo que este PR añade y no está en el piloto es `vue/src/<pieza de la bandeja>`, `vue/src/styles/inbox.css`, `vue/src/styles/inbox-bridge.css`, `vue/src/vuetify/theme.ts`, `vue/src/lib/thread.ts`, `vue/src/lib/bandeja-scene.ts`, `vue/demo/bandeja/` y `vue/tsconfig.json`. `vue/dist/pilot.css` se regenera: al unir, hay que volver a correr `vue/scripts/build-css.mjs` para que la hoja cubra las clases de los dos PR.
+Al entrar el #86 se queda una sola copia. Lo que este PR añade y no está en el piloto es `vue/src/<pieza de la bandeja>`, `vue/src/styles/inbox.css`, `vue/src/vuetify/theme.ts`, `vue/src/lib/thread.ts`, `vue/src/lib/bandeja-scene.ts`, `vue/demo/bandeja/` y `vue/tsconfig.json`. `vue/dist/pilot.css` se regenera: al unir, hay que volver a correr `vue/scripts/build-css.mjs` para que la hoja cubra las clases de los dos PR.

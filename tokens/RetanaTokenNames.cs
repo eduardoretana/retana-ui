@@ -26,6 +26,7 @@ public static class RetanaTokenNames
     public const string Chart3 = "--chart-3";
     public const string Chart4 = "--chart-4";
     public const string Chart5 = "--chart-5";
+    public const string Success = "--success";
     public const string Radius = "--radius";
     public const string Sidebar = "--sidebar";
     public const string SidebarForeground = "--sidebar-foreground";

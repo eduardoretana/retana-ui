@@ -256,7 +256,7 @@
       },
       "muted-foreground": {
         "$type": "color",
-        "$value": "oklch(0.52 0 0)",
+        "$value": "oklch(0.556 0 0)",
         "$extensions": {
           "com.retana": {
             "css": "--muted-foreground",

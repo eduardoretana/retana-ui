@@ -41,6 +41,7 @@ const vuetifyByCss = {
   "--sidebar-border": "rgb(var(--v-theme-sidebar-border))",
   "--sidebar-ring": "rgb(var(--v-theme-on-barra))",
   "--radius": "var(--retana-radius, 0.5rem)",
+  "--success": "rgb(var(--v-theme-success))",
 }
 
 function block(css, header) {

@@ -2,7 +2,6 @@ import "@mdi/font/css/materialdesignicons.css"
 import "vuetify/styles"
 import "../../dist/pilot.css"
 import "../../../tokens/bridge.css"
-import "../../src/styles/inbox-bridge.css"
 import "../../src/styles/inbox.css"
 
 import { createApp } from "vue"
