@@ -38,6 +38,8 @@ export interface FilterMenuProps {
   label?: string | undefined
   /** The trigger edge the panel lines up with. It flips or shifts when the viewport, or a clipping ancestor, has no room. */
   align?: "start" | "end" | undefined
+  /** Accessible name of the back button in the value step. */
+  backLabel?: string | undefined
   className?: string | undefined
   classNames?: FilterMenuClassNames | undefined
 }
@@ -54,6 +56,8 @@ export interface FilterToolbarProps {
   label?: string | undefined
   /** Adds an Add filter trigger that morphs into a two step field and value menu. */
   addFilter?: { fields: FilterField[]; onAdd: (filter: FilterChip, field: FilterField) => void; label?: string | undefined; align?: "start" | "end" | undefined } | undefined
+  /** Chrome copy and announcements. English is the default. Pass filterToolbarLabelsEs for es-MX. */
+  labels?: Partial<FilterToolbarLabels> | undefined
   className?: string | undefined
   classNames?: FilterToolbarClassNames | undefined
 }
@@ -192,13 +196,49 @@ function useReflowGlide(list: RefObject<HTMLElement | null>, armed: RefObject<nu
   }, [armed, list, reduced])
 }
 
-function describeChange(before: FilterChip[], after: FilterChip[]) {
+/** Chrome copy. English is the default; filterToolbarLabelsEs is the es-MX set. */
+export type FilterToolbarLabels = {
+  clearAll: string
+  /** Accessible name of a chip's remove button. `text` is "Label: value". */
+  remove: (text: string) => string
+  added: (text: string) => string
+  removed: (text: string) => string
+  changed: (label: string, value: string) => string
+  /** Value shown when a changed chip has no value. */
+  anyValue: string
+  cleared: string
+  back: string
+}
+
+export const filterToolbarLabelsEn: FilterToolbarLabels = {
+  clearAll: "Clear all",
+  remove: (text) => `Remove ${text}`,
+  added: (text) => `Added ${text}`,
+  removed: (text) => `Removed ${text}`,
+  changed: (label, value) => `${label} changed to ${value}`,
+  anyValue: "any",
+  cleared: "All filters cleared",
+  back: "Back to fields",
+}
+
+export const filterToolbarLabelsEs: FilterToolbarLabels = {
+  clearAll: "Limpiar todo",
+  remove: (text) => `Quitar ${text}`,
+  added: (text) => `Se agregó ${text}`,
+  removed: (text) => `Se quitó ${text}`,
+  changed: (label, value) => `${label} cambió a ${value}`,
+  anyValue: "cualquiera",
+  cleared: "Se quitaron todos los filtros",
+  back: "Volver a los campos",
+}
+
+function describeChange(before: FilterChip[], after: FilterChip[], labels: FilterToolbarLabels = filterToolbarLabelsEn) {
   const text = (filter: FilterChip) => (filter.value ? `${filter.label}: ${filter.value}` : filter.label)
   const removed = before.filter((old) => !after.some((filter) => filter.id === old.id))
-  if (!after.length && removed.length > 1) return "All filters cleared"
+  if (!after.length && removed.length > 1) return labels.cleared
   const added = after.filter((filter) => !before.some((old) => old.id === filter.id))
   const changed = after.filter((filter) => before.some((old) => old.id === filter.id && old.value !== filter.value))
-  return [...added.map((filter) => `Added ${text(filter)}`), ...changed.map((filter) => `${filter.label} changed to ${filter.value ?? "any"}`), ...removed.map((filter) => `Removed ${text(filter)}`)].join(". ")
+  return [...added.map((filter) => labels.added(text(filter))), ...changed.map((filter) => labels.changed(filter.label, filter.value ?? labels.anyValue)), ...removed.map((filter) => labels.removed(text(filter)))].join(". ")
 }
 
 type Row = { key: string; label: string; icon?: ReactNode | undefined; meta?: ReactNode | undefined; checked?: boolean | undefined; drill?: boolean | undefined }
@@ -332,7 +372,7 @@ function roomFor(node: HTMLElement) {
 
 /** An Add filter button that grows into its own menu: pick a field, then a value. The shape springs between the
  *  button and the panel, and the panel renders in place, so keep its ancestors free of overflow clipping. */
-export function FilterMenu({ fields, onSelect, active = [], label = "Add filter", align = "end", className, classNames }: FilterMenuProps) {
+export function FilterMenu({ fields, onSelect, active = [], label = "Add filter", align = "end", backLabel = "Back to fields", className, classNames }: FilterMenuProps) {
   const reduced = useReducedMotion() ?? false
   const id = useId()
   const panelId = `${id}panel`
@@ -615,7 +655,7 @@ export function FilterMenu({ fields, onSelect, active = [], label = "Add filter"
                     key="back"
                     type="button"
                     className="mr-0.5 -ml-1.5 grid size-7 shrink-0 place-items-center rounded-full border-0 bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-                    aria-label="Back to fields"
+                    aria-label={backLabel}
                     onClick={(event) => goBack(event.detail === 0)}
                     initial={reduced ? { opacity: 0, width: 28, marginRight: 2 } : { opacity: 0, width: 0, marginRight: 0, scale: 0.6 }}
                     animate={{ opacity: 1, width: 28, marginRight: 2, scale: 1 }}
@@ -650,7 +690,8 @@ export function FilterMenu({ fields, onSelect, active = [], label = "Add filter"
   )
 }
 
-export function FilterToolbar({ filters, onRemove, onClearAll, children, leading, variant = "panel", emptyLabel = "No filters applied", label = "Active filters", addFilter, className, classNames }: FilterToolbarProps) {
+export function FilterToolbar({ filters, onRemove, onClearAll, children, leading, variant = "panel", emptyLabel = "No filters applied", label = "Active filters", addFilter, labels: labelsProp, className, classNames }: FilterToolbarProps) {
+  const labels = { ...filterToolbarLabelsEn, ...labelsProp }
   const reduced = useReducedMotion() ?? false
   const root = useRef<HTMLDivElement>(null)
   const list = useRef<HTMLDivElement>(null)
@@ -660,7 +701,7 @@ export function FilterToolbar({ filters, onRemove, onClearAll, children, leading
   const [message, setMessage] = useState("")
   if (seen !== filters) {
     setSeen(filters)
-    const next = describeChange(seen, filters)
+    const next = describeChange(seen, filters, labels)
     if (next) setMessage(next)
   }
   const signature = filters.map((filter) => `${filter.id}:${filter.value ?? ""}`).join("|")
@@ -716,7 +757,7 @@ export function FilterToolbar({ filters, onRemove, onClearAll, children, leading
                     size="icon-xs"
                     data-chip-remove={filter.id}
                     className="size-6 rounded-full text-muted-foreground"
-                    aria-label={`Remove ${filter.label}${filter.value ? `: ${filter.value}` : ""}`}
+                    aria-label={labels.remove(`${filter.label}${filter.value ? `: ${filter.value}` : ""}`)}
                     onClick={(event) => {
                       if (document.activeElement === event.currentTarget) pendingFocus.current = index
                       onRemove(filter.id)
@@ -738,7 +779,7 @@ export function FilterToolbar({ filters, onRemove, onClearAll, children, leading
         </div>
       </motion.div>
       <div data-slot="filter-toolbar-actions" className={cn("inline-flex shrink-0 items-center gap-3 max-[520px]:justify-end", classNames?.actions)}>
-        {addFilter ? <FilterMenu fields={addFilter.fields} onSelect={addFilter.onAdd} active={filters} label={addFilter.label} align={addFilter.align} className={classNames?.menu} /> : null}
+        {addFilter ? <FilterMenu fields={addFilter.fields} onSelect={addFilter.onAdd} active={filters} label={addFilter.label} align={addFilter.align} backLabel={labels.back} className={classNames?.menu} /> : null}
         {children}
         <AnimatePresence initial={false}>
           {filters.length > 0 ? (
@@ -753,7 +794,7 @@ export function FilterToolbar({ filters, onRemove, onClearAll, children, leading
                   onClearAll?.()
                 }}
               >
-                <motion.span className="block" {...text}>Clear all</motion.span>
+                <motion.span className="block" {...text}>{labels.clearAll}</motion.span>
               </Button>
             </motion.span>
           ) : null}
