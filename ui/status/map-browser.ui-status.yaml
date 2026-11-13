@@ -1,0 +1,22 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0}
+declaration: "UI_SYSTEM: APPLIES"
+cycle_state: AUDITORIA
+spec_id: map-browser
+profile: STANDARD
+head: a88a922aed48a302cd5f7327e151b09a66d6b4dd
+head_note: "Último commit de código y generados. El commit que agrega este archivo solo suma docs/map-browser.md, ui/specs/map-browser.md y este estado."
+retana_ui:
+  sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+  registry_source: git-sha
+red:
+  manifest: ui-tests/expected-red.yaml
+  sha: 516ec6272623dbc27e66d20e5b08da503e27bbb9
+  failed: 23
+  passed: 0
+plan: ui/specs/map-browser.md
+docs: docs/map-browser.md
+family_contract: contracts/map-browser.contract.tsx
+decision: "Eduardo, 'Si hazlo end to end' (2026-11-13)"
+auditor: pendiente
+auditor_is_builder: false
