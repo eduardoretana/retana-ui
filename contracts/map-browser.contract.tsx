@@ -3,7 +3,7 @@
 // list as the accessible source, names the map region, shows the provider
 // attribution, and gives each place one named control on the map.
 import type { ReactElement } from "react"
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react"
 import { afterEach, describe, expect, it } from "vitest"
 
 type Place = { id: string; title: string; subtitle?: string; position: { lng: number; lat: number }; category?: string }
@@ -53,7 +53,7 @@ export function describeMapBrowserContract(name: string, renderPiece: (props: an
     it("CONTRACT-SELECT: selecting from the list reports the id", async () => {
       const picked: Array<string | null> = []
       render(renderPiece({ ...base, onSelectedChange: (id: string | null) => picked.push(id) }))
-      fireEvent.click(screen.getByRole("button", { name: /^Lugar B/ }))
+      fireEvent.click(within(screen.getAllByRole("list")[0]).getByRole("button", { name: /^Lugar B/ }))
       await waitFor(() => expect(picked).toEqual(["b"]))
     })
 
