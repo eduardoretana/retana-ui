@@ -41,7 +41,8 @@ function mount(props: Partial<Parameters<typeof MapBrowser>[0]> = {}) {
 }
 const mapRoot = () => document.querySelector("[data-slot='geo-map']") as HTMLElement
 const pin = (name: string) => screen.findByRole("button", { name })
-const card = (title: string) => screen.getByRole("button", { name: new RegExp(`^${title}`) })
+const card = (title: string) =>
+  within(screen.getByRole("list", { name: "Resultados" })).getByRole("button", { name: new RegExp(`^${title}`) })
 
 beforeEach(() => fake.reset())
 afterEach(() => cleanup())
@@ -239,10 +240,11 @@ describe("map-browser", () => {
   })
 
   it("MB-PLP: registry entry, scenes, notice and docs are in place", () => {
-    const registry = JSON.parse(read("registry.json")) as { items: Array<Record<string, any>> }
+    type Item = { name: string; dependencies: string[]; docs: string; meta: { scenes: Array<{ id: string }> } }
+    const registry = JSON.parse(read("registry.json")) as { items: Item[] }
     const item = registry.items.find((i) => i.name === "map-browser")
     expect(item).toBeTruthy()
-    const ids = (item!.meta.scenes as Array<{ id: string }>).map((s) => s.id)
+    const ids = item!.meta.scenes.map((s) => s.id)
     for (const id of ["filled", "empty", "loading", "error", "nomatch", "map-error", "cluster", "selected", "hover"]) {
       expect(ids).toContain(id)
     }

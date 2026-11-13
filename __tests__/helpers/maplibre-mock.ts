@@ -36,7 +36,7 @@ class FakeSource {
   setData(data: { features: Feature[] }) {
     this.data = data
   }
-  getClusterExpansionZoom(_id: number) {
+  getClusterExpansionZoom() {
     return Promise.resolve(fake.expansionZoom)
   }
 }
