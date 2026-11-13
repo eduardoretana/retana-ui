@@ -19,6 +19,14 @@ commands:
     failed: 3
     passed: 1
     log: ui-tests/logs/filter-toolbar-labels-artifacts.expected-red.log
+  - name: defaults
+    note: "Hallazgo de las capturas de #91 sobre 8cd562f: con el juego es-MX, el vacío, Agregar filtro y el nombre del grupo seguían en inglés. Rojo sobre 8cd562f8ad5c3e61638b4273acca567424650d78."
+    red_on: 8cd562f8ad5c3e61638b4273acca567424650d78
+    run: DEBUG_PRINT_LIMIT=0 pnpm exec vitest run --reporter=verbose __tests__/filter-toolbar-labels-defaults.test.tsx
+    exit: 1
+    failed: 1
+    passed: 2
+    log: ui-tests/logs/filter-toolbar-labels-defaults.expected-red.log
 log: ui-tests/logs/filter-toolbar-labels.expected-red.log
 signatures:
   - FT-LABELS-ES
@@ -26,6 +34,9 @@ signatures:
   - FTL-STATUS
   - FTL-SPEC
   - FTL-DEMO-ES
+  - FT-LABELS-DEFAULTS-ES
 passing_in_red:
   - FT-LABELS-DEFAULT
   - FTL-DEMO-EN
+  - FT-LABELS-DEFAULTS-PROPS
+  - FT-LABELS-DEFAULTS-EN

@@ -1,0 +1,38 @@
+
+ RUN  v5.0.2 <repo>
+
+ × __tests__/filter-toolbar-labels-defaults.test.tsx > filter-toolbar labels · prop defaults > FT-LABELS-DEFAULTS-ES: the es-MX set also covers the empty message, Add filter and the group name 61ms
+   → Unable to find an element with the text: Sin filtros aplicados. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+...
+ ✓ __tests__/filter-toolbar-labels-defaults.test.tsx > filter-toolbar labels · prop defaults > FT-LABELS-DEFAULTS-PROPS: explicit props still win over the labels set 90ms
+ ✓ __tests__/filter-toolbar-labels-defaults.test.tsx > filter-toolbar labels · prop defaults > FT-LABELS-DEFAULTS-EN: without labels the English defaults stay 16ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  __tests__/filter-toolbar-labels-defaults.test.tsx > filter-toolbar labels · prop defaults > FT-LABELS-DEFAULTS-ES: the es-MX set also covers the empty message, Add filter and the group name
+TestingLibraryElementError: Unable to find an element with the text: Sin filtros aplicados. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+...
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/filter-toolbar-labels-defaults.test.tsx:15:19
+     13|   it("FT-LABELS-DEFAULTS-ES: the es-MX set also covers the empty messa…
+     14|     render(<FilterToolbar filters={[]} onRemove={() => {}} addFilter={…
+     15|     expect(screen.getByText("Sin filtros aplicados")).toBeTruthy()
+       |                   ^
+     16|     expect(screen.getByRole("button", { name: /Agregar filtro/ })).toB…
+     17|     expect(screen.getByRole("group", { name: "Filtros activos" })).toB…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  14:49:36
+   Duration  1.64s (environment 52%, import 17%, setup 12%, tests 11%, transform 8%)
+
