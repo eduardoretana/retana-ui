@@ -1,0 +1,40 @@
+schema: uis.expected-red/v1
+spec_id: map-browser
+green_forbidden: true
+note: "maplibre-gl va mockeado en Vitest (__tests__/helpers/maplibre-mock.ts). El commit rojo trae stubs que exportan tipos y lanzan 'not implemented'."
+commands:
+  - name: pieza
+    run: pnpm exec vitest run __tests__/map-browser.test.tsx
+    exit: 1
+    failed: 18
+    passed: 0
+  - name: contrato
+    run: pnpm exec vitest run __tests__/map-browser-contract.test.tsx
+    exit: 1
+    failed: 5
+    passed: 0
+log: ui-tests/logs/expected-red.log
+signatures:
+  - MB-VIEWSTATE
+  - MB-BOUNDS
+  - MB-STATES
+  - MB-IDLE
+  - MB-SYNC-HOVER
+  - MB-SELECT
+  - MB-FILTER-COUNT
+  - MB-CLUSTER
+  - MB-DETAIL
+  - MB-ATTR
+  - MB-PROVIDER
+  - MB-KEYBOARD
+  - MB-ANNOUNCE
+  - MB-TOKENS
+  - MB-REDUCED
+  - MB-I18N
+  - MB-MAP-ERROR
+  - MB-PLP
+  - CONTRACT-API
+  - CONTRACT-A11Y-REGION
+  - CONTRACT-A11Y-PINS
+  - CONTRACT-SELECT
+  - CONTRACT-STATES

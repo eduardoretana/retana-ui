@@ -1,0 +1,29 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0}
+declaration: "UI_SYSTEM: APPLIES"
+cycle_state: AUDITORIA
+spec_id: map-browser
+profile: STANDARD
+head: 6311f9c358bf3ff8c28717ee1866c7df57155644
+head_note: "Último commit de código y generados (arreglos de captura sobre a88a922). El commit que actualiza este archivo solo toca ui/specs/map-browser.md y este estado."
+previous_heads:
+  - {sha: 07e04e48dcf50ce42b502d9d001c3cd0e0e569e3, reason: "las capturas revelaron scroll de la página al seleccionar y anillo de pin sin contraste"}
+retana_ui:
+  sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+  registry_source: git-sha
+red:
+  manifest: ui-tests/expected-red.yaml
+  sha: 516ec6272623dbc27e66d20e5b08da503e27bbb9
+  failed: 23
+  passed: 0
+fix_red:
+  tests: [MB-SCROLL-LOCAL, MB-PIN-CONTRAST]
+  red_on: 07e04e48dcf50ce42b502d9d001c3cd0e0e569e3
+  green_on: 6311f9c358bf3ff8c28717ee1866c7df57155644
+tests: {files: 234, passed: 685}
+plan: ui/specs/map-browser.md
+docs: docs/map-browser.md
+family_contract: contracts/map-browser.contract.tsx
+decision: "Eduardo, 'Si hazlo end to end' (2026-11-13)"
+auditor: pendiente
+auditor_is_builder: false

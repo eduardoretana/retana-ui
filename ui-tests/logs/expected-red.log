@@ -1,0 +1,570 @@
+
+ RUN  v5.0.2 <repo>
+
+ ❯ __tests__/map-browser-contract.test.tsx (5 tests | 5 failed) 1110ms
+   ❯ map-browser · map-browser family contract (5)
+     × CONTRACT-API: renders one list item per place and a count 91ms
+     × CONTRACT-A11Y-REGION: the map is a named region with visible attribution 5ms
+     × CONTRACT-A11Y-PINS: every place has a named map control and a single tab stop 1004ms
+     × CONTRACT-SELECT: selecting from the list reports the id 6ms
+     × CONTRACT-STATES: empty and nomatch are told apart 3ms
+ ❯ __tests__/map-browser.test.tsx (18 tests | 18 failed) 10157ms
+   ❯ map-browser (18)
+     × MB-VIEWSTATE: viewState separates loading, error, empty, nomatch and ready 4ms
+     × MB-BOUNDS: boundsOf wraps every place and is null with none 1ms
+     × MB-STATES: each data state shows its es-MX copy and action 20ms
+     × MB-IDLE: the map root reports data-map-state idle once the map settles 1004ms
+     × MB-SYNC-HOVER: hover on a card lights its pin, and hover on a pin lights its card 1003ms
+     × MB-SELECT: a pin click selects its card once 1003ms
+     × MB-FILTER-COUNT: when the host filters, pins and cards stay equal 1003ms
+     × MB-CLUSTER: a native cluster renders as a named button that zooms in 1005ms
+     × MB-DETAIL: the selected place opens a side panel; Escape closes it and focus returns 76ms
+     × MB-ATTR: attribution is always visible and an empty one throws 2ms
+     × MB-PROVIDER: the worker comes from the host and registry code names no tile CDN 1004ms
+     × MB-KEYBOARD: pins are one tab stop, arrows follow list order, Enter selects 1005ms
+     × MB-ANNOUNCE: a filter change is announced once as N resultados 1006ms
+     × MB-TOKENS: canvas colors are resolved from CSS tokens, not literals 2ms
+     × MB-REDUCED: with reduced motion the camera jumps 1004ms
+     × MB-I18N: English labels replace every chrome string 2ms
+     × MB-MAP-ERROR: without WebGL the map says so and the list keeps working 1002ms
+     × MB-PLP: registry entry, scenes, notice and docs are in place 10ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 23 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  __tests__/map-browser-contract.test.tsx > map-browser · map-browser family contract > CONTRACT-API: renders one list item per place and a count
+TestingLibraryElementError: Unable to find an accessible element with the role "listitem"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:109:15
+ ❯ contracts/map-browser.contract.tsx:36:21
+     34|     it("CONTRACT-API: renders one list item per place and a count", ()…
+     35|       render(renderPiece(base))
+     36|       expect(screen.getAllByRole("listitem")).toHaveLength(2)
+       |                     ^
+     37|       expect(screen.getByText("2 resultados")).toBeTruthy()
+     38|     })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/23]⎯
+
+ FAIL  __tests__/map-browser-contract.test.tsx > map-browser · map-browser family contract > CONTRACT-A11Y-REGION: the map is a named region with visible attribution
+TestingLibraryElementError: Unable to find an accessible element with the role "region" and name "Mapa"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ contracts/map-browser.contract.tsx:42:21
+     40|     it("CONTRACT-A11Y-REGION: the map is a named region with visible a…
+     41|       render(renderPiece(base))
+     42|       expect(screen.getByRole("region", { name: "Mapa" })).toBeTruthy()
+       |                     ^
+     43|       expect(screen.getByText("© Contrato")).toBeTruthy()
+     44|     })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/23]⎯
+
+ FAIL  __tests__/map-browser-contract.test.tsx > map-browser · map-browser family contract > CONTRACT-A11Y-PINS: every place has a named map control and a single tab stop
+TestingLibraryElementError: Unable to find role="button" and name "Lugar A, Tipo X"
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ waitForWrapper node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ contracts/map-browser.contract.tsx:48:30
+     46|     it("CONTRACT-A11Y-PINS: every place has a named map control and a …
+     47|       render(renderPiece(base))
+     48|       const a = await screen.findByRole("button", { name: "Lugar A, Ti…
+       |                              ^
+     49|       const b = await screen.findByRole("button", { name: "Lugar B, Ti…
+     50|       expect([a.tabIndex, b.tabIndex].sort()).toEqual([-1, 0])
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/23]⎯
+
+ FAIL  __tests__/map-browser-contract.test.tsx > map-browser · map-browser family contract > CONTRACT-SELECT: selecting from the list reports the id
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name `/^Lugar B/`
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ contracts/map-browser.contract.tsx:56:30
+     54|       const picked: Array<string | null> = []
+     55|       render(renderPiece({ ...base, onSelectedChange: (id: string | nu…
+     56|       fireEvent.click(screen.getByRole("button", { name: /^Lugar B/ }))
+       |                              ^
+     57|       await waitFor(() => expect(picked).toEqual(["b"]))
+     58|     })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/23]⎯
+
+ FAIL  __tests__/map-browser-contract.test.tsx > map-browser · map-browser family contract > CONTRACT-STATES: empty and nomatch are told apart
+TestingLibraryElementError: Unable to find an element with the text: Aún no hay lugares.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ contracts/map-browser.contract.tsx:62:21
+     60|     it("CONTRACT-STATES: empty and nomatch are told apart", () => {
+     61|       const { rerender } = render(renderPiece({ ...base, places: [], t…
+     62|       expect(screen.getByText("Aún no hay lugares.")).toBeTruthy()
+       |                     ^
+     63|       rerender(renderPiece({ ...base, places: [], total: 5 }))
+     64|       expect(screen.getByText("Ningún resultado con estos filtros.")).…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/23]⎯
+
+ FAIL  __tests__/map-browser.test.tsx > map-browser > MB-VIEWSTATE: viewState separates loading, error, empty, nomatch and ready
+Error: not implemented
+ ❯ todo registry/lib/map-browser.ts:11:9
+      9| export type MapProvider = { styles: { light: MapStyle; dark?: MapStyle…
+     10| const todo = (): never => {
+     11|   throw new Error("not implemented")
+       |         ^
+     12| }
+     13| export const viewState = (_: { places: readonly unknown[]; total: numb…
+ ❯ Module.viewState registry/lib/map-browser.ts:13:105
+ ❯ __tests__/map-browser.test.tsx:51:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/23]⎯
+
+ FAIL  __tests__/map-browser.test.tsx > map-browser > MB-BOUNDS: boundsOf wraps every place and is null with none
+Error: not implemented
+ ❯ todo registry/lib/map-browser.ts:11:9
+      9| export type MapProvider = { styles: { light: MapStyle; dark?: MapStyle…
+     10| const todo = (): never => {
+     11|   throw new Error("not implemented")
+       |         ^
+     12| }
+     13| export const viewState = (_: { places: readonly unknown[]; total: numb…
+ ❯ Module.boundsOf registry/lib/map-browser.ts:14:62
+ ❯ __tests__/map-browser.test.tsx:59:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/23]⎯
+
+ FAIL  __tests__/map-browser.test.tsx > map-browser > MB-STATES: each data state shows its es-MX copy and action
+TestingLibraryElementError: Unable to find an element with the text: Cargando resultados. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:109:15
+ ❯ __tests__/map-browser.test.tsx:67:19
+     65|     const onClearFilters = vi.fn()
+     66|     const { rerender } = mount({ status: "loading" })
+     67|     expect(screen.getAllByText("Cargando resultados").length).toBeGrea…
+       |                   ^
+     68|     rerender(<MapBrowser places={[]} total={3} status="error" provider…
+     69|     fireEvent.click(screen.getByRole("button", { name: "Reintentar" }))
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/23]⎯
+
+ FAIL  __tests__/map-browser.test.tsx > map-browser > MB-IDLE: the map root reports data-map-state idle once the map settles
+TypeError: Cannot read properties of null (reading 'dataset')
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div />[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ __tests__/map-browser.test.tsx:81:41
+     79|   it("MB-IDLE: the map root reports data-map-state idle once the map s…
+     80|     mount()
+     81|     await waitFor(() => expect(mapRoot().dataset.mapState).toBe("idle"…
+       |                                         ^
+     82|   })
+     83|
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/23]⎯
+
+ FAIL  __tests__/map-browser.test.tsx > map-browser > MB-SYNC-HOVER: hover on a card lights its pin, and hover on a pin lights its card
+TestingLibraryElementError: Unable to find role="button" and name "Nodo Alba, Oficina"
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ waitForWrapper node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ pin __tests__/map-browser.test.tsx:43:38
+     41| }
+     42| const mapRoot = () => document.querySelector("[data-slot='geo-map']") …
+     43| const pin = (name: string) => screen.findByRole("button", { name })
+       |                                      ^
+     44| const card = (title: string) => screen.getByRole("button", { name: new…
+     45|
+ ❯ __tests__/map-browser.test.tsx:86:24
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/23]⎯
+
+ FAIL  __tests__/map-browser.test.tsx > map-browser > MB-SELECT: a pin click selects its card once
+TestingLibraryElementError: Unable to find role="button" and name "Nodo Cima, Oficina"
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ waitForWrapper node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ pin __tests__/map-browser.test.tsx:43:38
+     41| }
+     42| const mapRoot = () => document.querySelector("[data-slot='geo-map']") …
+     43| const pin = (name: string) => screen.findByRole("button", { name })
+       |                                      ^
+     44| const card = (title: string) => screen.getByRole("button", { name: new…
+     45|
+ ❯ __tests__/map-browser.test.tsx:98:27
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/23]⎯
+
+ FAIL  __tests__/map-browser.test.tsx > map-browser > MB-FILTER-COUNT: when the host filters, pins and cards stay equal
+TestingLibraryElementError: Unable to find role="button" and name "Nodo Alba, Oficina"
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ waitForWrapper node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ pin __tests__/map-browser.test.tsx:43:38
+     41| }
+     42| const mapRoot = () => document.querySelector("[data-slot='geo-map']") …
+     43| const pin = (name: string) => screen.findByRole("button", { name })
+       |                                      ^
+     44| const card = (title: string) => screen.getByRole("button", { name: new…
+     45|
+ ❯ __tests__/map-browser.test.tsx:107:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/23]⎯
+
+ FAIL  __tests__/map-browser.test.tsx > map-browser > MB-CLUSTER: a native cluster renders as a named button that zooms in
+AssertionError: expected undefined to be 1 // Object.is equality
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div />[39m
+  [36m</body>[39m
+[36m</html>[39m
+
+- Expected:
+1
+
++ Received:
+undefined
+
+ ❯ __tests__/map-browser.test.tsx:115:59
+    113|   it("MB-CLUSTER: a native cluster renders as a named button that zoom…
+    114|     mount({ cluster: true })
+    115|     await waitFor(() => expect(fake.last()?.sources.size).toBe(1))
+       |                                                           ^
+    116|     fake.clusters = [
+    117|       { type: "Feature", geometry: { type: "Point", coordinates: [-99.…
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/23]⎯
+
+ FAIL  __tests__/map-browser.test.tsx > map-browser > MB-DETAIL: the selected place opens a side panel; Escape closes it and focus returns
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name `/^Nodo Brisa/`
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ card __tests__/map-browser.test.tsx:44:40
+     42| const mapRoot = () => document.querySelector("[data-slot='geo-map']") …
+     43| const pin = (name: string) => screen.findByRole("button", { name })
+     44| const card = (title: string) => screen.getByRole("button", { name: new…
+       |                                        ^
+     45|
+     46| beforeEach(() => fake.reset())
+ ❯ __tests__/map-browser.test.tsx:132:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/23]⎯
+
+ FAIL  __tests__/map-browser.test.tsx > map-browser > MB-ATTR: attribution is always visible and an empty one throws
+TestingLibraryElementError: Unable to find an element with the text: © Mapa de prueba. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/map-browser.test.tsx:144:19
+    142|   it("MB-ATTR: attribution is always visible and an empty one throws",…
+    143|     mount()
+    144|     expect(screen.getByText("© Mapa de prueba")).toBeTruthy()
+       |                   ^
+    145|     await waitFor(() => expect(fake.last()?.options.attributionControl…
+    146|     const spy = vi.spyOn(console, "error").mockImplementation(() => {})
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/23]⎯
+
+ FAIL  __tests__/map-browser.test.tsx > map-browser > MB-PROVIDER: the worker comes from the host and registry code names no tile CDN
+AssertionError: expected '' to be '/vendor/maplibre-worker.mjs' // Object.is equality
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div />[39m
+  [36m</body>[39m
+[36m</html>[39m
+
+- Expected
++ Received
+
+- /vendor/maplibre-worker.mjs
+
+ ❯ __tests__/map-browser.test.tsx:153:48
+    151|   it("MB-PROVIDER: the worker comes from the host and registry code na…
+    152|     mount({ provider: { ...provider, workerUrl: "/vendor/maplibre-work…
+    153|     await waitFor(() => expect(fake.workerUrl).toBe("/vendor/maplibre-…
+       |                                                ^
+    154|     for (const file of ["registry/blocks/map-browser.tsx", "registry/u…
+    155|       const source = read(file)
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/23]⎯
+
+ FAIL  __tests__/map-browser.test.tsx > map-browser > MB-KEYBOARD: pins are one tab stop, arrows follow list order, Enter selects
+TestingLibraryElementError: Unable to find role="button" and name "Nodo Alba, Oficina"
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ waitForWrapper node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ pin __tests__/map-browser.test.tsx:43:38
+     41| }
+     42| const mapRoot = () => document.querySelector("[data-slot='geo-map']") …
+     43| const pin = (name: string) => screen.findByRole("button", { name })
+       |                                      ^
+     44| const card = (title: string) => screen.getByRole("button", { name: new…
+     45|
+ ❯ __tests__/map-browser.test.tsx:165:25
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/23]⎯
+
+ FAIL  __tests__/map-browser.test.tsx > map-browser > MB-ANNOUNCE: a filter change is announced once as N resultados
+TypeError: Cannot read properties of null (reading 'textContent')
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div />[39m
+  [36m</body>[39m
+[36m</html>[39m
+ ❯ __tests__/map-browser.test.tsx:181:39
+    179|     rerender(<MapBrowser places={places.slice(0, 2)} total={3} provide…
+    180|     const status = document.querySelector("[data-slot='map-browser-sta…
+    181|     await waitFor(() => expect(status.textContent).toBe("2 resultados"…
+       |                                       ^
+    182|     expect(status.getAttribute("role")).toBe("status")
+    183|   })
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/23]⎯
+
+ FAIL  __tests__/map-browser.test.tsx > map-browser > MB-TOKENS: canvas colors are resolved from CSS tokens, not literals
+Error: not implemented
+ ❯ todo registry/lib/map-browser.ts:11:9
+      9| export type MapProvider = { styles: { light: MapStyle; dark?: MapStyle…
+     10| const todo = (): never => {
+     11|   throw new Error("not implemented")
+       |         ^
+     12| }
+     13| export const viewState = (_: { places: readonly unknown[]; total: numb…
+ ❯ Module.tokenColor registry/lib/map-browser.ts:15:64
+ ❯ __tests__/map-browser.test.tsx:189:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/23]⎯
+
+ FAIL  __tests__/map-browser.test.tsx > map-browser > MB-REDUCED: with reduced motion the camera jumps
+AssertionError: expected undefined to be 1 // Object.is equality
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div[39m
+      [33mstyle[39m=[32m"--primary: red;"[39m
+    [36m/>[39m
+    [36m<div />[39m
+  [36m</body>[39m
+[36m</html>[39m
+
+- Expected:
+1
+
++ Received:
+undefined
+
+ ❯ __tests__/map-browser.test.tsx:210:61
+    208|     try {
+    209|       mount({ cluster: true })
+    210|       await waitFor(() => expect(fake.last()?.sources.size).toBe(1))
+       |                                                             ^
+    211|       fake.clusters = [
+    212|         { type: "Feature", geometry: { type: "Point", coordinates: [-9…
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/23]⎯
+
+ FAIL  __tests__/map-browser.test.tsx > map-browser > MB-I18N: English labels replace every chrome string
+TestingLibraryElementError: Unable to find an element with the text: 3 results. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div[39m
+    [33mstyle[39m=[32m"--primary: red;"[39m
+  [36m/>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/map-browser.test.tsx:227:19
+    225|   it("MB-I18N: English labels replace every chrome string", async () =…
+    226|     mount({ labels: mapBrowserLabelsEn })
+    227|     expect(screen.getByText("3 results")).toBeTruthy()
+       |                   ^
+    228|     expect(screen.getByRole("region", { name: "Map" })).toBeTruthy()
+    229|     expect(screen.getByRole("button", { name: "Zoom in" })).toBeTruthy…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/23]⎯
+
+ FAIL  __tests__/map-browser.test.tsx > map-browser > MB-MAP-ERROR: without WebGL the map says so and the list keeps working
+TestingLibraryElementError: Unable to find an element with the text: No se pudo mostrar el mapa. La lista sigue disponible.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div[39m
+    [33mstyle[39m=[32m"--primary: red;"[39m
+  [36m/>[39m
+  [36m<div />[39m
+[36m</body>[39m
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div[39m
+    [33mstyle[39m=[32m"--primary: red;"[39m
+  [36m/>[39m
+  [36m<div />[39m
+[36m</body>[39m
+ ❯ waitForWrapper node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:86:33
+ ❯ __tests__/map-browser.test.tsx:235:25
+    233|     fake.failConstructor = true
+    234|     mount()
+    235|     expect(await screen.findByText("No se pudo mostrar el mapa. La lis…
+       |                         ^
+    236|     expect(mapRoot().dataset.mapState).toBe("error")
+    237|     fireEvent.click(card("Nodo Alba"))
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/23]⎯
+
+ FAIL  __tests__/map-browser.test.tsx > map-browser > MB-PLP: registry entry, scenes, notice and docs are in place
+AssertionError: expected undefined to be truthy
+
+- Expected:
+true
+
++ Received:
+undefined
+
+ ❯ __tests__/map-browser.test.tsx:244:18
+    242|     const registry = JSON.parse(read("registry.json")) as { items: Arr…
+    243|     const item = registry.items.find((i) => i.name === "map-browser")
+    244|     expect(item).toBeTruthy()
+       |                  ^
+    245|     const ids = (item!.meta.scenes as Array<{ id: string }>).map((s) =…
+    246|     for (const id of ["filled", "empty", "loading", "error", "nomatch"…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/23]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  23 failed (23)
+   Start at  13:42:40
+   Duration  11.08s (tests 88%, environment 9%, setup 2%, transform 1%)
+

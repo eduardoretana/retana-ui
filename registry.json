@@ -32050,6 +32050,174 @@
           }
         ]
       }
+    },
+    {
+      "name": "map-browser",
+      "type": "registry:block",
+      "title": "Map browser",
+      "description": "A filterable list and a map that stay in sync: hover, selection, native clusters and a detail panel. The list is the accessible source.",
+      "author": "Eduardo Retana",
+      "dependencies": [
+        "maplibre-gl@6.18.0",
+        "motion",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "skeleton",
+        "@retana/bottom-sheet",
+        "@retana/empty-state"
+      ],
+      "categories": [
+        "block",
+        "content"
+      ],
+      "meta": {
+        "titleEs": "Explorador de mapa",
+        "descriptionEs": "Lista filtrable y mapa sincronizados: hover, selección, clústeres nativos y panel de detalle. La lista es la fuente accesible.",
+        "preview": "app/examples/map-browser/preview.tsx",
+        "previewHref": "/examples/map-browser",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "nomatch",
+            "label": "Sin coincidencias",
+            "labelEn": "No match"
+          },
+          {
+            "id": "map-error",
+            "label": "Mapa caído",
+            "labelEn": "Map down"
+          },
+          {
+            "id": "cluster",
+            "label": "Clústeres",
+            "labelEn": "Clusters"
+          },
+          {
+            "id": "selected",
+            "label": "Seleccionado",
+            "labelEn": "Selected"
+          },
+          {
+            "id": "hover",
+            "label": "Hover",
+            "labelEn": "Hover"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Valle inventado",
+            "href": "/examples/map-browser",
+            "description": "Dieciséis lugares ficticios, filtro por tipo, clústeres y detalle."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/map-browser/stress",
+            "description": "Cero, uno y quinientos lugares, textos largos, 390 px, inglés y RTL."
+          }
+        ],
+        "usage": "<MapBrowser places={filtered} total={all.length} provider={provider} categories={categories} toolbar={<FilterToolbar … />} onSelectedChange={setId} />",
+        "api": [
+          {
+            "name": "places / total",
+            "type": "MapPlace<TMeta>[] / number",
+            "description": "Places already filtered by the host, and the count before filtering. total tells empty (0) from nomatch."
+          },
+          {
+            "name": "provider",
+            "type": "MapProvider",
+            "description": "styles.light and styles.dark (URL, style object, or a factory that reads host tokens), attribution (required, always expanded), workerUrl (self-hosted), maxZoom. No tile provider is built in."
+          },
+          {
+            "name": "status",
+            "type": "\"ready\" | \"loading\" | \"error\"",
+            "description": "Data state. A map that cannot render is its own state: the list keeps working."
+          },
+          {
+            "name": "categories",
+            "type": "MapCategory[]",
+            "description": "id, label and a chart-1..5 tone. Tones are host tokens, never colors."
+          },
+          {
+            "name": "toolbar",
+            "type": "ReactNode",
+            "description": "Usually a host-controlled FilterToolbar. Filtering lives in the host."
+          },
+          {
+            "name": "selectedId / defaultSelectedId / onSelectedChange",
+            "type": "string | null / (id) => void",
+            "description": "One selection shared by the card and the pin. Escape or close returns focus to where it came from."
+          },
+          {
+            "name": "renderCard / renderDetail",
+            "type": "(place, state) => ReactNode / (place) => ReactNode",
+            "description": "Slots for the card body and the detail. The detail is a side panel when the piece is 48rem or wider, a bottom sheet below."
+          },
+          {
+            "name": "cluster",
+            "type": "boolean | { radius, minPoints }",
+            "description": "Native maplibre clustering drawn as named DOM buttons. On by default above 50 places."
+          },
+          {
+            "name": "onRetry / onClearFilters",
+            "type": "() => void",
+            "description": "Actions for the error and nomatch states."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<MapBrowserLabels>",
+            "description": "Chrome copy. es-MX is the default; mapBrowserLabelsEn is exported."
+          },
+          {
+            "name": "className / classNames",
+            "type": "string / MapBrowserClassNames",
+            "description": "Root class and slot classes: toolbar, body, list, card, map, pin, cluster, detail."
+          }
+        ]
+      },
+      "docs": "PropXYZ: referencia clean-room, no se copió código ni assets. El mapa se adaptó de MapCN (MIT License · Copyright (c) 2025 Anmoldeep Singh); ver NOTICE. maplibre-gl es BSD-3-Clause. La pieza no trae proveedor de tiles, CSS global, tema, cssVars ni colores fijos: el anfitrión importa maplibre-gl/dist/maplibre-gl.css, sirve el worker y pasa provider.workerUrl. Con CARTO se usa una API key propia, la atribución queda visible y sin colapsar, el tope comercial es de 1M de tiles al mes y no se cachean ni se pasan tiles por un proxy; ver docs/map-browser.md. Si el CLI pregunta si debe sobrescribir un primitivo que el anfitrión ya tiene, responde no.",
+      "files": [
+        {
+          "path": "registry/blocks/map-browser.tsx",
+          "type": "registry:component",
+          "target": "@ui/map-browser.tsx"
+        },
+        {
+          "path": "registry/ui/geo-map.tsx",
+          "type": "registry:component",
+          "target": "@ui/geo-map.tsx"
+        },
+        {
+          "path": "registry/lib/map-browser.ts",
+          "type": "registry:lib",
+          "target": "@lib/map-browser.ts"
+        },
+        {
+          "path": "registry/lib/motion.ts",
+          "type": "registry:lib",
+          "target": "@lib/motion.ts"
+        }
+      ]
     }
   ]
 }
