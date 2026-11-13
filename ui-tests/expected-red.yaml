@@ -1,0 +1,31 @@
+schema: uis.expected-red/v1
+spec_id: filter-toolbar-labels
+profile: LITE
+green_forbidden: true
+note: "Rojo del PR #91. FT-LABELS corre sobre la fuente de filter-toolbar de CPL 6671cfac (sin el prop labels): 2 fallan y FT-LABELS-DEFAULT pasa porque el inglés por defecto no cambia. FTL-* corre en el commit rojo de esta rama, antes del estado, el spec y el demo es-MX. Ojo: el PR #90 (map-browser) agrega este mismo archivo con su propia entrada; quien entre segundo a CPL debe combinar las dos."
+red_on:
+  base: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+  source: "registry/ui/filter-toolbar.tsx@6671cfac"
+commands:
+  - name: labels
+    run: DEBUG_PRINT_LIMIT=0 pnpm exec vitest run --reporter=verbose __tests__/filter-toolbar-labels.test.tsx
+    exit: 1
+    failed: 2
+    passed: 1
+    log: ui-tests/logs/filter-toolbar-labels.expected-red.log
+  - name: artefactos
+    run: DEBUG_PRINT_LIMIT=0 pnpm exec vitest run --reporter=verbose __tests__/filter-toolbar-labels-artifacts.test.tsx
+    exit: 1
+    failed: 3
+    passed: 1
+    log: ui-tests/logs/filter-toolbar-labels-artifacts.expected-red.log
+log: ui-tests/logs/filter-toolbar-labels.expected-red.log
+signatures:
+  - FT-LABELS-ES
+  - FT-LABELS-PARTIAL
+  - FTL-STATUS
+  - FTL-SPEC
+  - FTL-DEMO-ES
+passing_in_red:
+  - FT-LABELS-DEFAULT
+  - FTL-DEMO-EN

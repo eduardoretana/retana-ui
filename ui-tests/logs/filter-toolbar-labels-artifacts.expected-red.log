@@ -1,0 +1,348 @@
+
+ RUN  v5.0.2 <repo>
+
+ × __tests__/filter-toolbar-labels-artifacts.test.tsx > filter-toolbar labels · LITE artifacts > FTL-STATUS: ui-status declares ui-system 4.0.0 on one line, LITE and AUDITORIA 6ms
+   → expected '' to match /^schema: uis\.status\/v2$/v2$
+ × __tests__/filter-toolbar-labels-artifacts.test.tsx > filter-toolbar labels · LITE artifacts > FTL-SPEC: the LITE spec has a brief, AC with measure and test, and states 1ms
+   → expected '' to match /^## Brief$/m
+ × __tests__/filter-toolbar-labels-artifacts.test.tsx > filter-toolbar labels · LITE artifacts > FTL-DEMO-ES: the example renders the es-MX chrome when asked 337ms
+   → Unable to find an accessible element with the role "button" and name "Limpiar todo"
+
+Here are the accessible roles:
+
+  group:
+
+  Name "Active filters":
+  ...
+
+  Name "Active filters":
+  ...
+
+  Name "Active filters":
+  ...
+
+  Name "Active filters":
+  ...
+
+  --------------------------------------------------
+  button:
+
+  Name "Remove Canal: kiln":
+  ...
+
+  Name "Remove Etiqueta: glaze":
+  ...
+
+  Name "Añadir filtro":
+  ...
+
+  Name "Clear all":
+  ...
+
+  Name "Remove Etiqueta: NorthPacificClayBodySpecificationWithoutSpacesOrBreaksForStressLayout":
+  ...
+
+  Name "Clear all":
+  ...
+
+  Name "Add filter":
+  ...
+
+  Name "Remove clay: clay":
+  ...
+
+  Name "Remove glaze: glaze":
+  ...
+
+  Name "Remove shipping: shipping":
+  ...
+
+  Name "Remove wholesale: wholesale":
+  ...
+
+  Name "Remove gallery: gallery":
+  ...
+
+  Name "Remove workshop: workshop":
+  ...
+
+  Name "Remove archive: archive":
+  ...
+
+  Name "Remove export: export":
+  ...
+
+  Name "Remove repair: repair":
+  ...
+
+  Name "Remove studio: studio":
+  ...
+
+  Name "Clear all":
+  ...
+
+  --------------------------------------------------
+  dialog:
+
+  Name "Añadir filtro":
+  ...
+
+  Name "Add filter":
+  ...
+
+  --------------------------------------------------
+  menu:
+
+  Name "Añadir filtro":
+  ...
+
+  Name "Add filter":
+  ...
+
+  --------------------------------------------------
+  menuitem:
+
+  Name "Canalkiln":
+  ...
+
+  Name "Etiquetaglaze":
+  ...
+
+  Name "Canal":
+  ...
+
+  Name "Etiqueta":
+  ...
+
+  --------------------------------------------------
+  status:
+
+  Name "":
+  ...
+
+  Name "":
+  ...
+
+  Name "":
+  ...
+
+  Name "":
+  ...
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  ...
+
+  Name "":
+  ...
+
+  Name "":
+  ...
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+...
+ ✓ __tests__/filter-toolbar-labels-artifacts.test.tsx > filter-toolbar labels · LITE artifacts > FTL-DEMO-EN: English stays the default of the example 62ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  __tests__/filter-toolbar-labels-artifacts.test.tsx > filter-toolbar labels · LITE artifacts > FTL-STATUS: ui-status declares ui-system 4.0.0 on one line, LITE and AUDITORIA
+AssertionError: expected '' to match /^schema: uis\.status\/v2$/v2$
+
+- Expected:
+/^schema: uis\.status\/v2$/m
+
++ Received:
+""
+
+ ❯ __tests__/filter-toolbar-labels-artifacts.test.tsx:17:20
+     15|   it("FTL-STATUS: ui-status declares ui-system 4.0.0 on one line, LITE…
+     16|     const status = read("ui/status/filter-toolbar-labels.ui-status.yam…
+     17|     expect(status).toMatch(/^schema: uis\.status\/v2$/m)
+       |                    ^
+     18|     expect(status).toMatch(/^ui_system: \{version: 4\.0\.0\}$/m)
+     19|     expect(status).toMatch(/^cycle_state: AUDITORIA$/m)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  __tests__/filter-toolbar-labels-artifacts.test.tsx > filter-toolbar labels · LITE artifacts > FTL-SPEC: the LITE spec has a brief, AC with measure and test, and states
+AssertionError: expected '' to match /^## Brief$/m
+
+- Expected:
+/^## Brief$/m
+
++ Received:
+""
+
+ ❯ __tests__/filter-toolbar-labels-artifacts.test.tsx:28:18
+     26|   it("FTL-SPEC: the LITE spec has a brief, AC with measure and test, a…
+     27|     const spec = read("ui/specs/filter-toolbar-labels.md")
+     28|     expect(spec).toMatch(/^## Brief$/m)
+       |                  ^
+     29|     expect(spec).toMatch(/^## Criterios de aceptación$/m)
+     30|     expect(spec).toMatch(/\| AC \| Criterio \| Medida \| Prueba \|/)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  __tests__/filter-toolbar-labels-artifacts.test.tsx > filter-toolbar labels · LITE artifacts > FTL-DEMO-ES: the example renders the es-MX chrome when asked
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Limpiar todo"
+
+Here are the accessible roles:
+
+  group:
+
+  Name "Active filters":
+  ...
+
+  Name "Active filters":
+  ...
+
+  Name "Active filters":
+  ...
+
+  Name "Active filters":
+  ...
+
+  --------------------------------------------------
+  button:
+
+  Name "Remove Canal: kiln":
+  ...
+
+  Name "Remove Etiqueta: glaze":
+  ...
+
+  Name "Añadir filtro":
+  ...
+
+  Name "Clear all":
+  ...
+
+  Name "Remove Etiqueta: NorthPacificClayBodySpecificationWithoutSpacesOrBreaksForStressLayout":
+  ...
+
+  Name "Clear all":
+  ...
+
+  Name "Add filter":
+  ...
+
+  Name "Remove clay: clay":
+  ...
+
+  Name "Remove glaze: glaze":
+  ...
+
+  Name "Remove shipping: shipping":
+  ...
+
+  Name "Remove wholesale: wholesale":
+  ...
+
+  Name "Remove gallery: gallery":
+  ...
+
+  Name "Remove workshop: workshop":
+  ...
+
+  Name "Remove archive: archive":
+  ...
+
+  Name "Remove export: export":
+  ...
+
+  Name "Remove repair: repair":
+  ...
+
+  Name "Remove studio: studio":
+  ...
+
+  Name "Clear all":
+  ...
+
+  --------------------------------------------------
+  dialog:
+
+  Name "Añadir filtro":
+  ...
+
+  Name "Add filter":
+  ...
+
+  --------------------------------------------------
+  menu:
+
+  Name "Añadir filtro":
+  ...
+
+  Name "Add filter":
+  ...
+
+  --------------------------------------------------
+  menuitem:
+
+  Name "Canalkiln":
+  ...
+
+  Name "Etiquetaglaze":
+  ...
+
+  Name "Canal":
+  ...
+
+  Name "Etiqueta":
+  ...
+
+  --------------------------------------------------
+  status:
+
+  Name "":
+  ...
+
+  Name "":
+  ...
+
+  Name "":
+  ...
+
+  Name "":
+  ...
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  ...
+
+  Name "":
+  ...
+
+  Name "":
+  ...
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+...
+ ❯ Object.getElementError ../retana-ui-cpl/node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../retana-ui-cpl/node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../retana-ui-cpl/node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:109:15
+ ❯ __tests__/filter-toolbar-labels-artifacts.test.tsx:37:19
+     35|   it("FTL-DEMO-ES: the example renders the es-MX chrome when asked", (…
+     36|     render(<Demo locale="es" />)
+     37|     expect(screen.getAllByRole("button", { name: "Limpiar todo" }).len…
+       |                   ^
+     38|     expect(screen.getAllByRole("button", { name: /^Quitar Canal: / }).…
+     39|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 1 passed (4)
+   Start at  14:43:58
+   Duration  1.44s (environment 34%, tests 31%, import 21%, transform 8%, setup 6%)
+
