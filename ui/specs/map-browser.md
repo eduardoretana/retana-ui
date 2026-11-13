@@ -55,12 +55,14 @@ Capturas en la evidencia (`variants/overlay|split|stacked-{1280,390}.png`), rend
 | Pin seleccionado debajo del panel | **Encontrado:** el panel tapaba el pin elegido. **Arreglado:** `revealInset` lleva la cámara con offset cuando el pin queda bajo el panel o fuera de vista |
 | Mapa encogido al montar | **Encontrado:** el encuadre inicial se calculaba antes de medir. **Arreglado:** `resize()` + `fitBounds` en `load` y `ResizeObserver` |
 | Stress con detalle abierto en 390 | el sheet es modal; abrirlo al cargar bloqueaba los demás casos. El stress ya no preselecciona |
+| Capturas (harness 21db9481, 07e04e4): selección inicial | **Encontrado:** `scrollIntoView` de la tarjeta elegida también desplazaba la página del anfitrión (~22 px en 1280 y 390; el encabezado quedaba cortado). **Arreglado** en 6311f9c: solo se desplaza el contenedor de la lista (`data-map-browser-scroll`). Prueba MB-SCROLL-LOCAL |
+| Capturas: pin activo y seleccionado | **Encontrado:** el anillo usaba `--ring` (gris medio); en dark casi no se distinguía del pin normal y con reduced motion era la única señal del hover sincronizado. **Arreglado** en 6311f9c: `ring-foreground` (contraste con el fondo del mapa en ambos temas). Prueba MB-PIN-CONTRAST |
 
 ## 5. review-animations y animation-performance
 
 | Elemento | Antes | Después | Por qué |
 |---|---|---|---|
-| Pin activo | — | `translateY(-4px)` 150 ms ease-out + anillo; nada con reduced | causa-efecto entre tarjeta y pin, de alta frecuencia, corto |
+| Pin activo | — | `translateY(-4px)` 150 ms ease-out + anillo `foreground`; con reduced solo el anillo | causa-efecto entre tarjeta y pin, de alta frecuencia, corto |
 | Panel de detalle | — | `x: 16 → 0` + opacidad, 240 ms `ease.enter`; solo opacidad con reduced | entra desde el mapa, sin escala |
 | Tarjeta hover | `transition-colors` | sin transición | se repite cientos de veces al día; el color cambia al instante y no se animan colores |
 | Cámara | `easeTo` 400 ms | `duration: 0` con reduced | maplibre respeta reduced motion; la pieza también lo hace explícito |
