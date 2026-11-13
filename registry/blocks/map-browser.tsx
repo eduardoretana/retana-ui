@@ -157,10 +157,17 @@ export function MapBrowser<TMeta = unknown>({
     }
   }, [select])
 
-  // Keep the selected card in view when the map picks it.
+  // Keep the selected card in view when the map picks it. Only the list scrolls:
+  // scrollIntoView would also move the host page.
   useEffect(() => {
     if (!selectedId) return
-    cardRefs.current.get(selectedId)?.scrollIntoView({ block: "nearest", behavior: reduced ? "auto" : "smooth" })
+    const card = cardRefs.current.get(selectedId)
+    const scroller = card?.closest<HTMLElement>("[data-map-browser-scroll]")
+    if (!card || !scroller) return
+    const c = card.getBoundingClientRect()
+    const s = scroller.getBoundingClientRect()
+    const top = c.top < s.top ? c.top - s.top : c.bottom > s.bottom ? c.bottom - s.bottom : 0
+    if (top) scroller.scrollBy({ top, behavior: reduced ? "auto" : "smooth" })
   }, [reduced, selectedId])
 
   // One polite announcement after the count settles (300 ms), never on mount.
@@ -216,7 +223,7 @@ export function MapBrowser<TMeta = unknown>({
           <h2 id={titleId} className="shrink-0 border-b px-4 py-3 text-sm font-medium tabular-nums">
             {state === "loading" ? <span>{labels.loading}</span> : labels.count(places.length)}
           </h2>
-          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+          <div data-map-browser-scroll="" className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
             {state === "loading" ? (
               <ul aria-busy="true" aria-label={labels.loading} className="flex flex-col gap-2 p-3">
                 {Array.from({ length: 5 }, (_, i) => (

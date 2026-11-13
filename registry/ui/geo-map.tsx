@@ -511,7 +511,7 @@ export function GeoMap({
                     "grid size-7 place-items-center rounded-full border-2 border-background bg-foreground shadow-sm outline-none",
                     "transition-transform duration-150 ease-out motion-reduce:transition-none",
                     "data-[active=true]:-translate-y-1 motion-reduce:data-[active=true]:translate-y-0",
-                    "data-[active=true]:ring-2 data-[active=true]:ring-ring data-[selected=true]:bg-primary data-[selected=true]:ring-2 data-[selected=true]:ring-ring data-[selected=true]:ring-offset-2 data-[selected=true]:ring-offset-background",
+                    "data-[active=true]:ring-2 data-[active=true]:ring-foreground data-[selected=true]:bg-primary data-[selected=true]:ring-2 data-[selected=true]:ring-foreground data-[selected=true]:ring-offset-2 data-[selected=true]:ring-offset-background",
                     "focus-visible:ring-[3px] focus-visible:ring-ring/50",
                     classNames?.pin,
                   )}
