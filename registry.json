@@ -5667,6 +5667,11 @@
             "name": "variant=\"pill\"",
             "type": "\"panel\" | \"pill\"",
             "description": "Pill bar, a leading slot, and emptyLabel. An empty string hides the empty message."
+          },
+          {
+            "name": "labels",
+            "type": "Partial<FilterToolbarLabels>",
+            "description": "Chrome copy and announcements: clear all, remove, added, removed, changed, cleared and back. English is the default; filterToolbarLabelsEs is the es-MX set."
           }
         ]
       },
