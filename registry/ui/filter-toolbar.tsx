@@ -208,6 +208,10 @@ export type FilterToolbarLabels = {
   anyValue: string
   cleared: string
   back: string
+  /** Fallback for `emptyLabel`, `addFilter.label` and `label` when those props are not set. */
+  empty: string
+  addFilter: string
+  group: string
 }
 
 export const filterToolbarLabelsEn: FilterToolbarLabels = {
@@ -219,6 +223,9 @@ export const filterToolbarLabelsEn: FilterToolbarLabels = {
   anyValue: "any",
   cleared: "All filters cleared",
   back: "Back to fields",
+  empty: "No filters applied",
+  addFilter: "Add filter",
+  group: "Active filters",
 }
 
 export const filterToolbarLabelsEs: FilterToolbarLabels = {
@@ -230,6 +237,9 @@ export const filterToolbarLabelsEs: FilterToolbarLabels = {
   anyValue: "cualquiera",
   cleared: "Se quitaron todos los filtros",
   back: "Volver a los campos",
+  empty: "Sin filtros aplicados",
+  addFilter: "Agregar filtro",
+  group: "Filtros activos",
 }
 
 function describeChange(before: FilterChip[], after: FilterChip[], labels: FilterToolbarLabels = filterToolbarLabelsEn) {
@@ -690,8 +700,10 @@ export function FilterMenu({ fields, onSelect, active = [], label = "Add filter"
   )
 }
 
-export function FilterToolbar({ filters, onRemove, onClearAll, children, leading, variant = "panel", emptyLabel = "No filters applied", label = "Active filters", addFilter, labels: labelsProp, className, classNames }: FilterToolbarProps) {
+export function FilterToolbar({ filters, onRemove, onClearAll, children, leading, variant = "panel", emptyLabel: emptyLabelProp, label: labelProp, addFilter, labels: labelsProp, className, classNames }: FilterToolbarProps) {
   const labels = { ...filterToolbarLabelsEn, ...labelsProp }
+  const emptyLabel = emptyLabelProp ?? labels.empty
+  const label = labelProp ?? labels.group
   const reduced = useReducedMotion() ?? false
   const root = useRef<HTMLDivElement>(null)
   const list = useRef<HTMLDivElement>(null)
@@ -779,7 +791,7 @@ export function FilterToolbar({ filters, onRemove, onClearAll, children, leading
         </div>
       </motion.div>
       <div data-slot="filter-toolbar-actions" className={cn("inline-flex shrink-0 items-center gap-3 max-[520px]:justify-end", classNames?.actions)}>
-        {addFilter ? <FilterMenu fields={addFilter.fields} onSelect={addFilter.onAdd} active={filters} label={addFilter.label} align={addFilter.align} backLabel={labels.back} className={classNames?.menu} /> : null}
+        {addFilter ? <FilterMenu fields={addFilter.fields} onSelect={addFilter.onAdd} active={filters} label={addFilter.label ?? labels.addFilter} align={addFilter.align} backLabel={labels.back} className={classNames?.menu} /> : null}
         {children}
         <AnimatePresence initial={false}>
           {filters.length > 0 ? (
