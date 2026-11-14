@@ -4,8 +4,8 @@ declaration: "UI_SYSTEM: APPLIES"
 cycle_state: AUDITORIA
 spec_id: filter-toolbar-labels
 profile: LITE
-head: c3015fc0fed35bc86ed80f9d6a32180ab4ddc63a
-head_note: "PENDIENTE: último head publicado (rojo de FT-LABELS-DEFAULTS). Se reemplaza por el head de código del verde cuando se publique."
+head: c187173208336cc2ce5781f5a7495a35928921b9
+head_note: "Head de código del verde (c61a8446 + c1871732). Los commits posteriores solo tocan ui/ (docs)."
 retana_ui:
   sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
   registry_source: git-sha
