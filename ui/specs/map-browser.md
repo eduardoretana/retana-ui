@@ -1,6 +1,24 @@
+---
+artifact_id: spec-map-browser
+owner: lead
+spec_id: map-browser
+version: 1.0.0
+profile: STANDARD
+states: [filled, empty, loading, error, nomatch, map-error, cluster, selected, hover, overflow, i18n_long]
+direction:
+  mode: visual
+  references:
+    - {reference_id: REF-propxyz-browse, screen_id: map-browser, path: ui/direction/map-browser/ref-propxyz-browse.png, sha256: 2de484fd8069ede6bf38f369cc0c724310c0869f947edc41e59234ec0140838e, status: current, valid_for_spec_version: "1.0.0"}
+    - {reference_id: REF-propxyz-detail, screen_id: map-browser, path: ui/direction/map-browser/ref-propxyz-detail.png, sha256: e8d0c28f7005cc982e78643ddd3c15b8194a10eaa76dc1b65e36a5cb51dc4eee, status: current, valid_for_spec_version: "1.0.0"}
+data:
+  fixture: ui/direction/fixtures/map-browser.yaml
+---
+
 # map-browser · spec y ciclo de calidad
 
-- spec_id: `map-browser` · perfil **STANDARD** (Interaction flow: SÍ) · ui-system 4.0.0
+- spec_id: `map-browser` · ui-system 4.0.0 · Interaction flow: SÍ
+- **Profile**: STANDARD
+- **States**: filled, loading, error, nomatch, map-error, cluster, selected, hover, empty
 - Decisión: Eduardo, "Si hazlo end to end" (2026-11-13). Fuente del brief: fase 1 (veredicto ADAPT).
 - Constructor: Retana UI · Design Engineer. Auditor: pendiente (no es el constructor).
 
@@ -79,3 +97,26 @@ Capturas en la evidencia (`variants/overlay|split|stacked-{1280,390}.png`), rend
 5. El layout cambia por el ancho de la pieza (container query, 48rem), no por el viewport.
 6. En el layout apilado el mapa va arriba visualmente y la lista primero en el DOM: la lista es la fuente accesible y el mapa es complementario.
 7. `pnpm tokens` no existe en CPL (solo en `vue/` de #86/#88). La verificación de tokens es `registry:build` (`validate-registry.ts`) + `anim_perf_lint` + grep.
+
+## 7. Criterios de aceptación (measure + test)
+
+Traídos sin cambios del brief de fase 1 (§4).
+
+| AC | Measure | Test |
+|---|---|---|
+| AC-1 Sincronía de hover y foco | con hover o foco en la tarjeta *i*, el pin *i* tiene `data-active="true"` en ≤ 1 frame, y al revés; solo hay un activo a la vez | Playwright `hover`/`focus` en las dos direcciones + RTL `fireEvent.pointerEnter` con maplibre mockeado |
+| AC-2 Selección única | clic o Enter en el pin o en la tarjeta → los dos con `aria-current="true"`/`data-selected`; se llama `onSelectedChange(id)` una vez; la tarjeta queda visible en el scroll (`getBoundingClientRect` dentro del contenedor) | Vitest + Playwright |
+| AC-3 Filtros en vivo | si el host cambia `places`, el número de pines + Σ `point_count` de los clústeres es igual al de tarjetas, en el mismo commit de React | Vitest (helpers) + Playwright con `filter-toolbar` real |
+| AC-4 Clúster | con más de 50 lugares (o `cluster: true`), los pines cercanos se agrupan; el clúster es un `<button>` con nombre "N resultados, acercar" y con Enter o clic hace zoom a la expansión | Vitest `clusterPlaces` + Playwright |
+| AC-5 Detalle responsive | a 1280 px el detalle es un panel lateral de ≤ 400 px sin tapar la lista; a 390 px es `BottomSheet` con `detents=[0.5,0.92]`; Esc o cerrar devuelve el foco al pin o tarjeta de origen | Playwright perfiles desktop y touch; `document.activeElement` |
+| AC-6 Estados | las 6 escenas PLP (filled, empty, nomatch, loading, error, map-error) se renderizan con su copy; `viewState` devuelve el estado correcto para las 5 combinaciones | Vitest tabla + capturas del harness |
+| AC-7 Atribución | el texto `provider.attribution` es visible (no colapsado, no `display:none`, dentro del viewport) a 390 y 1280, con contraste ≥ 4.5:1; un `attribution` vacío lanza error | Playwright + axe `color-contrast` + Vitest |
+| AC-8 Proveedor configurable | `registry/**` no tiene ninguna URL de cartocdn, maptiler ni unpkg; el demo y el harness corren con la red externa bloqueada (`page.route('**', abort)` salvo localhost) y cero requests fuera | grep en CI + Playwright `request` listener = 0 externos |
+| AC-9 Teclado | Tab llega a la lista (un tab stop), al grupo de pines (un tab stop, roving con flechas en el orden de la lista), a los controles de zoom y a la atribución; Enter selecciona; Esc cierra el detalle | Playwright keyboard |
+| AC-10 Anuncios | después de cambiar filtros, `role="status"` dice "N resultados" una sola vez (debounce de 300 ms) y no repite el anuncio de `filter-toolbar` | Vitest + Playwright (texto del live region) |
+| AC-11 Targets | los pines y clústeres tienen un área táctil ≥ 24 px (RUI-TOUCH-001) y ≥ 44 px en el perfil touch, o bien un aviso explicado | harness RUI-TOUCH |
+| AC-12 Tokens | 0 hex, rgb u oklch en `registry/`; los pines usan `bg-primary`/`bg-chart-n`/`ring-background`; el contraste del pin contra el fondo del mapa es ≥ 3:1 (WCAG 1.4.11) en claro y oscuro | `registry:build` + `contrast_pairs` |
+| AC-13 Motion | solo se animan `transform` y `opacity`; `anim_perf_lint` limpio; con `prefers-reduced-motion` la cámara salta (`duration: 0`) y no hay escalas | `anim_perf_lint` + Playwright `emulateMedia({reducedMotion})` |
+| AC-14 Carga y peso | maplibre se carga con `import()` solo en cliente; con slow-3g la lista y su conteo se ven en DCL+1000 ms y el mapa muestra el skeleton; el bundle del primer render no trae maplibre | harness slow-3g + reporte de `next build` |
+| AC-15 jsdom | la suite de Vitest pasa sin WebGL (con `vi.mock("maplibre-gl")`) | `pnpm test` |
+| AC-16 Licencias | NOTICE con "MIT License · Copyright (c) 2025 Anmoldeep Singh" (MapCN) y el aviso BSD-3-Clause de MapLibre; `docs` del item dice "PropXYZ: referencia clean-room, no se copió código ni assets" | revisión + test de que NOTICE contiene las líneas |
