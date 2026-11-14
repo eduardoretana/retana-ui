@@ -1,0 +1,19 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0}
+declaration: "UI_SYSTEM: APPLIES"
+cycle_state: AUDITORIA
+spec_id: filter-toolbar-labels
+profile: LITE
+head: c3015fc0fed35bc86ed80f9d6a32180ab4ddc63a
+head_note: "PENDIENTE: último head publicado (rojo de FT-LABELS-DEFAULTS). Se reemplaza por el head de código del verde cuando se publique."
+retana_ui:
+  sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+  registry_source: git-sha
+red:
+  manifest: ui-tests/expected-red.yaml
+  commits: [6d7ab36e228c509b3f5e5c4d44de53f1e775934d, 37f994b6c6e8c0171662a369ee40f68e7e2a50a5, c3015fc0fed35bc86ed80f9d6a32180ab4ddc63a]
+plan: ui/specs/filter-toolbar-labels.md
+decision: "Eduardo, 'Si hazlo end to end' (2026-11-13)"
+related: "PR #90 map-browser; ambos agregan ui-tests/expected-red.yaml"
+auditor: pendiente
+auditor_is_builder: false
