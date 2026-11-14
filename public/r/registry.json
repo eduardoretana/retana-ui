@@ -5671,7 +5671,7 @@
           {
             "name": "labels",
             "type": "Partial<FilterToolbarLabels>",
-            "description": "Chrome copy and announcements: clear all, remove, added, removed, changed, cleared and back. English is the default; filterToolbarLabelsEs is the es-MX set."
+            "description": "Chrome copy and announcements: clear all, remove, added, removed, changed, cleared, back, and the fallbacks for emptyLabel, addFilter.label and label (explicit props win). English is the default; filterToolbarLabelsEs is the es-MX set."
           }
         ]
       },
