@@ -1,0 +1,24 @@
+# Fixture de comparación (E14) · timeline-gantt-avance
+# Transcripción por puntero de los datos de ejemplo en H a28a5a7c36b7c0701db6f3e12c4701adf20d9b49.
+# Los datos viven en los archivos de cada pieza; aquí se fijan por prefijo de sha256 (12) y se listan los estados.
+# Prefijos cortos para que fixture_lint no lea los hash como teléfono o tarjeta; el blob completo sale de git en H.
+# Datos inventados del catálogo. Sin datos de producción.
+fixture_id: timeline-gantt-avance-plp-v1
+spec_id: timeline-gantt-avance
+spec_version: "1.0.0"
+generator: {kind: transcripcion, by: retana-ui-design-engineer}
+render:
+  viewports: [390x844, 1280x800]
+  themes: [light, dark]
+  reduced_motion: [reduce, no-preference]
+  network: bloqueada salvo loopback
+pieces:
+  - id: timeline-gantt
+    route: "/examples/timeline-gantt"
+    stress: "/examples/timeline-gantt/stress"
+    sources:
+      - {path: app/examples/timeline-gantt/demo.tsx, sha256_prefix: 2a0a39dd4817}
+      - {path: app/examples/timeline-gantt/fixtures.ts, sha256_prefix: 138f361b5e33}
+      - {path: app/examples/timeline-gantt/scenes.tsx, sha256_prefix: 3501a7456707}
+comparison_states: [filled]
+states: [filled, empty, loading, error, progress, complete, plain, extremes, long, oneday, many, editor, "390"]
