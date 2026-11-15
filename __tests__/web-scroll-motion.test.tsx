@@ -60,6 +60,29 @@ describe("web scroll motion: CSS contract (UIS-WEB-MOTION-001…005)", () => {
   }
 })
 
+/**
+ * Every animated element in these pieces carries text. Muted text in the theme sits close to 4.5:1 at full
+ * opacity, so any opacity below 1 drops it under WCAG AA while the animation runs (axe color-contrast at
+ * mid-entry and mid-exit). Motion moves text with transform only; opacity stays at 1 in every keyframe.
+ */
+const TEXT_MIN_OPACITY = 1
+
+function keyframeOpacities(css: string) {
+  const frames = [...css.matchAll(/@keyframes\s+([\w-]+)\s*\{([\s\S]*?)\n\}/g)]
+  return frames.flatMap((match) =>
+    [...(match[2] ?? "").matchAll(/opacity\s*:\s*([\d.]+)/g)].map((value) => ({ name: match[1], value: Number(value[1]) })),
+  )
+}
+
+describe("web scroll motion: text keeps AA contrast while it moves", () => {
+  for (const [name, css] of Object.entries(SHEETS)) {
+    it(`${name}: no keyframe fades text below opacity ${TEXT_MIN_OPACITY}`, () => {
+      const faded = keyframeOpacities(css).filter((entry) => entry.value < TEXT_MIN_OPACITY)
+      expect(faded).toEqual([])
+    })
+  }
+})
+
 describe("scroll-reveal-grid", () => {
   const items = [
     { id: "a", title: "Visita al taller", eyebrow: "Paso 1", description: "Elegimos la arcilla." },
