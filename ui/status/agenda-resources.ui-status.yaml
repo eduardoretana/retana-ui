@@ -6,10 +6,12 @@ profile: STANDARD
 spec_version: 0.1.1
 auditor_is_builder: false
 note: "Builder = Retana UI (7b12821f-663c-4038-a8a2-2984c3e1cb66). No emite veredicto. El Auditor es otro agente, lo despacha el UI Lead."
-retana_ui.sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+retana_ui:
+  sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+  registry_source: local-clone
 # El blob no puede contener el sha del commit que lo incluye.
 # La evidencia de despacho declara el tip (git rev-parse HEAD) después de este commit.
-head: 9682d29ba97c8f3fd5fabf34318bf7351318f7cc
+head: d9e01ac8919e999b6c5a22de2590f6017acbc165
 head_note: "head = tip de código antes del commit de insumos de auditoría. Ese commit solo añade ui/direction/** y edita la Spec y este status."
 direction_mode: visual
 direction: {mode: visual, reference_meta: ui/direction/agenda-resources/reference-meta.yaml, references: [REF-cpl-agenda, REF-shadcnstudio-user-schedule-05], chosen_by: null, decision: "STANDARD: la elección de la referencia es del UI Lead"}

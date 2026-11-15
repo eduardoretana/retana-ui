@@ -8,7 +8,10 @@ spec_changelog:
     note: Eje de recursos, choques y cupo sobre la agenda existente.
   - version: 0.1.1
     origin: lead
-    note: "Pedido del UI Lead (DSP-retana-ui-67-r1): Profile, States y tabla de AC en el cuerpo; dirección por referencia. La tabla resume los AC-1…AC-8 que ya estaban en §Aceptación; no hay AC nuevos."
+    note: "Pedido del UI Lead (DSP-retana-ui-67-r1): Profile, States y tabla de AC en el cuerpo; dirección por referencia. La tabla resume los AC-1…AC-8 que ya estaban en §Aceptación; no hay AC nuevos. Rev. 2 (revisión del UI Lead, 2026-11-15): §Estados usa los ids de `states`; sha de retana_ui completo (40 caracteres). Sin cambio de AC ni de referencias."
+retana_ui:
+  sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+  registry_source: local-clone
 states: [filled, empty, loading, error, resources, conflicts, over, many]
 data_fixture: ui/direction/fixtures/agenda-resources.yaml
 direction:
@@ -39,7 +42,7 @@ direction:
 
 - **Outcome:** La agenda puede mostrar recursos, decir un choque con texto y comparar horas contra un cupo, sin cambiar el comportamiento cuando el anfitrión no pasa `resources`.
 - **Benefit:** Un taller inventado ve qué horno está doble y cuándo se pasa del día.
-- **Sources:** shadcn/studio User Schedule #5, idea only, Pro no comprado. Evidencia en `docs/learnings/L-SHADCNSTUDIO-user-schedule-05.md`. Pieza de partida `agenda` en `6671cfa`.
+- **Sources:** shadcn/studio User Schedule #5, idea only, Pro no comprado. Evidencia en `docs/learnings/L-SHADCNSTUDIO-user-schedule-05.md`. Pieza de partida `agenda` en `6671cfac72f736739d2d3dd2740cc5f13416acb3`.
 - **Scope:** `registry/lib/agenda.ts`, `registry/blocks/agenda.tsx`, `registry/ui/agenda-event.tsx`, ejemplos de `app/examples/agenda/`, pruebas y estos artefactos. No se crea una pieza nueva. No se toca el hub.
 - **Checks:** AC-1 a AC-8. Suite `__tests__/agenda.test.tsx` sigue verde.
 - **Stop when:** Sin `resources` el DOM de filtro, choque y cupo no aparece; con `resources` los AC se cumplen en es-MX y en inglés, a ancho de columnas y a 390px.
@@ -60,7 +63,18 @@ Quien arma el día de un taller. No hay cuenta real ni nombres de clientes.
 
 ## Estados
 
-idle, pending (loading), error, empty, y los de esta extensión: conflicto, sobrecapacidad, muchos recursos (30 × 200), nombre largo, 390px, reducido en movimiento, es-MX y EN.
+Los mismos ids de `states` en el front-matter y de escena en `app/examples/agenda/scenes.tsx`:
+
+- `filled`: el taller con sus recursos y eventos del día.
+- `empty`: los recursos sin eventos.
+- `loading`: la escena arranca cargando (antes `pending`).
+- `error`: la escena arranca en el error y deja reintentar.
+- `resources`: el eje de recursos en columnas, mismo fixture que `filled`.
+- `conflicts`: un choque en el mismo recurso (AC-4).
+- `over`: horas por encima del cupo (AC-6).
+- `many`: 30 recursos y 200 eventos, con un nombre largo (AC-7).
+
+No son ids de estado sino condiciones de captura o de prueba: 390px (AC-3), movimiento reducido, es-MX y EN (AC-7). El `idle` de 0.1.0 es `filled`.
 
 ## Datos
 
@@ -72,7 +86,7 @@ Hereda el tema del anfitrión. Cero tokens nuevos. La dirección visual no se ge
 
 ## retana_ui
 
-- sha de partida: `6671cfa` (el head del PR lo fija el commit de esta rama)
+- sha de partida: `6671cfac72f736739d2d3dd2740cc5f13416acb3` (el head del PR lo fija el commit de esta rama)
 - registry_source: local-clone
 
 ## Componentes
