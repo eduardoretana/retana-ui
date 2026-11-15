@@ -38,3 +38,17 @@ signatures:
   - CONTRACT-A11Y-PINS
   - CONTRACT-SELECT
   - CONTRACT-STATES
+fix_rounds:
+  - round: 1
+    finding: F-001
+    rule: RUI-CONTRAST-001
+    verdict_sha256: d198ab6ad40481825413520eac369735ad96a119857343613881c0c33279a226
+    base_head: 91a701fedbacf4fb97d9bbbe792d1cb4d2edb16d
+    run: pnpm exec vitest run __tests__/map-browser-contrast.test.tsx
+    exit: 1
+    failed: 2
+    passed: 3
+    log: ui-tests/logs/mb-card-contrast.expected-red.log
+    signatures:
+      - "MB-CARD-CONTRAST: every text on the hover card reaches 4.5:1 in light"
+      - "MB-CARD-CONTRAST: every text on the active card reaches 4.5:1 in light"
