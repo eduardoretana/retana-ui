@@ -10,7 +10,7 @@ retana_ui:
 spec_changelog:
   - version: 1.0.0
     origin: builder
-    note: "Spec de despacho escrita por el builder sobre el código del head 6cdabab074a6. Los AC se trasladan de docs/learnings/L-EMIL-choreograph-c8a79627.md y de las pruebas del PR; no hay AC nuevos. Pendiente de la revisión del UI Lead antes del despacho."
+    note: "Spec de despacho escrita por el builder sobre el código del head 6cdabab074a6. Los AC se trasladan de docs/learnings/L-EMIL-choreograph-c8a79627.md y de las pruebas del PR; no hay AC nuevos. Pendiente de la revisión del UI Lead antes del despacho. Rev. 2 (revisión del UI Lead, 2026-11-15): la Spec y el reference-meta se fijan en el mismo commit; el reference-meta suma el control CPL de las rutas /stress (React #418 preexistente en multi-view/stress y view-kanban/stress). Sin cambio de AC, estados ni referencias."
 states: [filled, stress, reduced, touch-tap, touch-scroll, long-press, "390"]
 data_fixture: ui/direction/fixtures/coreografia-touch.yaml
 direction:
