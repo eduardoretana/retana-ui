@@ -1,0 +1,169 @@
+
+ RUN  v5.0.2 <repo>
+
+ ✓ __tests__/filter-toolbar-labels.test.tsx > filter-toolbar labels > FT-LABELS-DEFAULT: English stays the default 141ms
+ × __tests__/filter-toolbar-labels.test.tsx > filter-toolbar labels > FT-LABELS-ES: es-MX labels replace the chrome and the announcements 48ms
+   → Unable to find an accessible element with the role "button" and name "Limpiar todo"
+
+Here are the accessible roles:
+
+  group:
+
+  Name "Active filters":
+  ...
+
+  --------------------------------------------------
+  button:
+
+  Name "Remove Tipo: Oficina":
+  ...
+
+  Name "Remove Zona: Norte":
+  ...
+
+  Name "Clear all":
+  ...
+
+  --------------------------------------------------
+  status:
+
+  Name "":
+  ...
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+...
+ × __tests__/filter-toolbar-labels.test.tsx > filter-toolbar labels > FT-LABELS-PARTIAL: a partial set keeps English for the rest 27ms
+   → Unable to find an accessible element with the role "button" and name "Borrar"
+
+Here are the accessible roles:
+
+  group:
+
+  Name "Active filters":
+  ...
+
+  --------------------------------------------------
+  button:
+
+  Name "Remove Tipo: Oficina":
+  ...
+
+  Name "Remove Zona: Norte":
+  ...
+
+  Name "Clear all":
+  ...
+
+  --------------------------------------------------
+  status:
+
+  Name "":
+  ...
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+...
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  __tests__/filter-toolbar-labels.test.tsx > filter-toolbar labels > FT-LABELS-ES: es-MX labels replace the chrome and the announcements
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Limpiar todo"
+
+Here are the accessible roles:
+
+  group:
+
+  Name "Active filters":
+  ...
+
+  --------------------------------------------------
+  button:
+
+  Name "Remove Tipo: Oficina":
+  ...
+
+  Name "Remove Zona: Norte":
+  ...
+
+  Name "Clear all":
+  ...
+
+  --------------------------------------------------
+  status:
+
+  Name "":
+  ...
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+...
+ ❯ Object.getElementError ../retana-ui-cpl/node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../retana-ui-cpl/node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../retana-ui-cpl/node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../retana-ui-cpl/node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/filter-toolbar-labels.test.tsx:23:19
+     21|     const onRemove = vi.fn()
+     22|     const { rerender } = render(<FilterToolbar filters={chips} onRemov…
+     23|     expect(screen.getByRole("button", { name: "Limpiar todo" })).toBeT…
+       |                   ^
+     24|     fireEvent.click(screen.getByRole("button", { name: "Quitar Zona: N…
+     25|     expect(onRemove).toHaveBeenCalledWith("zone")
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  __tests__/filter-toolbar-labels.test.tsx > filter-toolbar labels > FT-LABELS-PARTIAL: a partial set keeps English for the rest
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Borrar"
+
+Here are the accessible roles:
+
+  group:
+
+  Name "Active filters":
+  ...
+
+  --------------------------------------------------
+  button:
+
+  Name "Remove Tipo: Oficina":
+  ...
+
+  Name "Remove Zona: Norte":
+  ...
+
+  Name "Clear all":
+  ...
+
+  --------------------------------------------------
+  status:
+
+  Name "":
+  ...
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+...
+ ❯ Object.getElementError ../retana-ui-cpl/node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ ../retana-ui-cpl/node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ ../retana-ui-cpl/node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ ../retana-ui-cpl/node_modules/.pnpm/@testing-library+dom@10.4.2/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ __tests__/filter-toolbar-labels.test.tsx:36:19
+     34|   it("FT-LABELS-PARTIAL: a partial set keeps English for the rest", ()…
+     35|     render(<FilterToolbar filters={chips} onRemove={() => {}} onClearA…
+     36|     expect(screen.getByRole("button", { name: "Borrar" })).toBeTruthy()
+       |                   ^
+     37|     expect(screen.getByRole("button", { name: "Remove Zona: Norte" }))…
+     38|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 1 passed (3)
+   Start at  14:43:54
+   Duration  1.31s (environment 43%, import 22%, tests 18%, transform 9%, setup 8%)
+
