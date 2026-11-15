@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url"
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
 const registry = JSON.parse(readFileSync(path.join(repo, "registry.json"), "utf8"))
-const sha = "6671cfac72f736739d2d3dd2740cc5f13416acb3"
+const sha = "33438d12520bbf9fe18ebc87f29df2a3122d02b6"
 const pilot = new Set(["time-off-stats", "decision-inbox", "lightbox"])
 
 const items = registry.items.map((item) => {

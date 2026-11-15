@@ -1,7 +1,7 @@
 {
   "schema": "retana.catalog/v1",
   "retana_ui": {
-    "sha": "6671cfac72f736739d2d3dd2740cc5f13416acb3"
+    "sha": "33438d12520bbf9fe18ebc87f29df2a3122d02b6"
   },
   "items": [
     {
@@ -3810,6 +3810,15 @@
     },
     {
       "name": "portfolio-desk",
+      "frameworks": {
+        "react": "stable",
+        "vue": "none",
+        "css": "none",
+        "razor": "none"
+      }
+    },
+    {
+      "name": "map-browser",
       "frameworks": {
         "react": "stable",
         "vue": "none",
