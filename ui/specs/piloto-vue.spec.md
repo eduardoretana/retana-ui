@@ -10,7 +10,7 @@ retana_ui:
 spec_changelog:
   - version: 1.0.0
     origin: builder
-    note: "Spec de despacho escrita por el builder sobre el código del head 4476214dbabe. Los AC se trasladan de docs/plans/plan-piloto-vue.md y de las pruebas del PR; no hay AC nuevos. Pendiente de la revisión del UI Lead antes del despacho."
+    note: "Spec de despacho escrita por el builder sobre el código del head 4476214dbabe. Los AC se trasladan de docs/plans/plan-piloto-vue.md y de las pruebas del PR; no hay AC nuevos. Pendiente de la revisión del UI Lead antes del despacho. Rev. 2 (revisión del UI Lead, 2026-11-15): se agrega AC10, el reenvío de las etiquetas del lightbox que ya hacen 4f44233a y 470588b8 y que ya miden sus pruebas; no hay comportamiento nuevo. La Spec y el reference-meta se fijan en el mismo commit."
 states: [filled, empty, loading, error, zero, pending, answered, folded, "390"]
 data_fixture: ui/direction/fixtures/piloto-vue.yaml
 direction:
@@ -58,7 +58,7 @@ Estados de AC2 y AC8 del plan (`docs/plans/plan-piloto-vue.md` §6). `zero` y `p
 
 ## Criterios de aceptación
 
-Trasladados de `docs/plans/plan-piloto-vue.md` §6. El texto de la medida queda igual; la columna Criterio lo resume. No hay AC nuevos.
+AC0…AC9 trasladados de `docs/plans/plan-piloto-vue.md` §6. El texto de la medida queda igual; la columna Criterio lo resume. AC10 lo pidió el UI Lead en su revisión: documenta el reenvío de etiquetas que el PR ya hace (`4f44233a`, `470588b8`) con sus pruebas existentes. No hay comportamiento nuevo.
 
 | ID | Criterio | Medida | Prueba |
 | --- | --- | --- | --- |
@@ -72,6 +72,7 @@ Trasladados de `docs/plans/plan-piloto-vue.md` §6. El texto de la medida queda 
 | AC7 | El registry y el build siguen en verde y Vue no entra al registry. | `pnpm test`, `pnpm registry:build` y `pnpm build` pasan. `validateRegistryTree` sin errores. `registry.json` no declara frameworks. Dependencias nuevas solo en `vue/package.json` `devDependencies`. | CI existente |
 | AC8 | Accesibilidad y desborde en claro, oscuro, es-MX, EN y 390. | axe serious y critical = 0 en claro y oscuro, React y Vue, es-MX y EN, viewport 390. `scrollWidth` no pasa de 1 px el ancho. Con `prefers-reduced-motion: reduce` el esqueleto tiene `animation-name: none`. | `vue/tests/browser.test.ts` |
 | AC9 | La nota de gestos nombra las librerías y el SFC no las importa. | `docs/vue/gestos.md` nombra motion-v 2.11.1 MIT, vaul-vue 0.4.1 MIT, `@formkit/drag-and-drop` 0.7.0 MIT y `@vueuse/gesture` inactivo. `vue/src` no importa esos paquetes. | lectura |
+| AC10 | `LightboxGallery` reenvía al lightbox las etiquetas de cerrar, anterior, siguiente y zoom. | Con `closeLabel`, `previousLabel`, `nextLabel`, `zoomInLabel` y `zoomOutLabel` tomados de `fixtures/lightbox.json` (es-MX: Cerrar, Anterior, Siguiente, Acercar, Alejar), al abrir la galería los cinco botones tienen ese nombre accesible; con solo `closeLabel="Cerrar"`, el botón de cerrar se llama Cerrar. El SFC Vue declara las mismas cinco props. | `__tests__/lightbox.test.tsx` («pone el nombre accesible del closeLabel en el botón de cerrar» y «pone los cinco nombres accesibles de es-MX cuando se pasan a LightboxGallery»); `ui-tests/piloto-vue.test.ts` (`AC1-LIGHT-closeLabel`, `-previousLabel`, `-nextLabel`, `-zoomInLabel`, `-zoomOutLabel`) |
 
 ## Dirección
 
@@ -89,7 +90,7 @@ La referencia visual es la UI vigente de cada pieza en CPL `33438d12` (Anti-Slop
 - Benefit: el catálogo deja de ser solo React sin reescribir las piezas ni publicar un tema.
 - Sources: plan multiframework, validación de gestos, snapshot ui-system `419ad648`, token-map de CENIT en `eduardoretana/canal-semilla@f93d7781` (solo lectura).
 - Scope: `tokens/`, `vue/`, `fixtures/`, `catalog/retana.catalog.json`, `hosts/razor/`, `docs/plans/`, `docs/vue/`, `ui/`, `ui-tests/` y los `fixtures.ts`/`scenes.tsx` de las tres piezas.
-- Checks: AC0…AC9; `pnpm test`, `pnpm registry:build` y `pnpm build` en verde; axe serious y critical en cero.
+- Checks: AC0…AC10; `pnpm test`, `pnpm registry:build` y `pnpm build` en verde; axe serious y critical en cero.
 - Stop when: los AC pasan en el head del PR y el status queda en `AUDITORIA`. Sin autoauditoría.
 - Deliverable: PR borrador contra CPL. Sin merge, sin deploy, sin paquete npm, sin PR en canal-semilla.
 
