@@ -74,7 +74,9 @@ function useReducedFlag() {
     () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     () => false,
   )
-  return hydrated && (Boolean(useReducedMotion()) || media)
+  // useReducedMotion runs on every render: behind the short-circuit it only ran after hydration (React error 311).
+  const motionReduced = Boolean(useReducedMotion())
+  return hydrated && (motionReduced || media)
 }
 
 export type TimelineGanttClassNames = {
