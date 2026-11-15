@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`422` items are in `registry.json` on this branch: `333` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`426` items are in `registry.json` on this branch: `337` components, `73` blocks, `6` hooks, and `10` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -718,6 +718,10 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`use-min-width`](registry/hooks/use-min-width.ts) · hook — True when the viewport is at least a given number of CSS pixels wide. The first paint uses the narrow layout. Install: `npx shadcn@latest add @retana/use-min-width`.
 - [`pinned-steps`](registry/ui/pinned-steps.tsx) · ui — A sticky visual column that cross-fades as each step crosses the center of the viewport. Narrow viewports and reduced motion stack the step with its visual. Install: `npx shadcn@latest add @retana/pinned-steps`.
 - [`scroll-linked`](registry/ui/scroll-linked.tsx) · ui — Maps scroll progress to a fade, rise, scale, or rotate. CSS scroll-driven animations run first. Reduced motion shows the finished state. Install: `npx shadcn@latest add @retana/scroll-linked`.
+- [`scroll-reveal-grid`](registry/ui/scroll-reveal-grid.tsx) · ui — Cards that reveal as they enter the viewport with animation-timeline view() and animation-range. Pure CSS, no JavaScript. Install: `npx shadcn@latest add @retana/scroll-reveal-grid`.
+- [`scroll-chapters`](registry/ui/scroll-chapters.tsx) · ui — Chapters with a sticky index. A total bar follows scroll(); each chapter's bar follows its own named view-timeline through timeline-scope. Pure CSS. Install: `npx shadcn@latest add @retana/scroll-chapters`.
+- [`hero-view-timeline`](registry/ui/hero-view-timeline.tsx) · ui — A hero that names its view-timeline; the headline splits apart while the hero leaves. It never animates in, so the LCP paints at full opacity. Pure CSS. Install: `npx shadcn@latest add @retana/hero-view-timeline`.
+- [`variable-font-morph`](registry/ui/variable-font-morph.tsx) · ui — Display text whose variable-font axis follows the scroll: @property registers a number, view() animates it, font-variation-settings reads it. No layout shift. Pure CSS. Install: `npx shadcn@latest add @retana/variable-font-morph`.
 
 ### Admin
 

@@ -22695,6 +22695,355 @@
       ]
     },
     {
+      "name": "scroll-reveal-grid",
+      "type": "registry:ui",
+      "title": "Scroll reveal grid",
+      "description": "Cards that reveal as they enter the viewport with animation-timeline view() and animation-range. Pure CSS, no JavaScript.",
+      "author": "Eduardo Retana",
+      "categories": [
+        "animation"
+      ],
+      "meta": {
+        "titleEs": "Rejilla que aparece al desplazar",
+        "descriptionEs": "Tarjetas que entran al cruzar el viewport con animation-timeline view() y animation-range. CSS puro, sin JavaScript; sin soporte se ven quietas.",
+        "preview": "app/examples/scroll-reveal-grid/preview.tsx",
+        "previewHref": "/examples/scroll-reveal-grid",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "long",
+            "label": "Texto largo",
+            "labelEn": "Long text"
+          },
+          {
+            "id": "static",
+            "label": "Sin soporte",
+            "labelEn": "No support"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Seis pasos del taller",
+            "href": "/examples/scroll-reveal-grid",
+            "description": "Las pares entran un poco después."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/scroll-reveal-grid/stress",
+            "description": "Vacío, 320px, RTL y treinta tarjetas."
+          }
+        ],
+        "usage": "<ScrollRevealGrid items={steps} columns={3} />",
+        "api": [
+          {
+            "name": "items / renderItem",
+            "type": "ScrollRevealGridItem[] / (item, index) => ReactNode",
+            "description": "id, title, description and eyebrow. renderItem replaces the card body; the shell and the reveal stay."
+          },
+          {
+            "name": "columns / headingAs",
+            "type": "2 | 3 / \"h2\" | \"h3\" | \"h4\"",
+            "description": "Columns from sm up. Card title tag, default h3."
+          },
+          {
+            "name": "loading / error / labels / motion",
+            "type": "boolean / ReactNode / Partial<ScrollRevealGridLabels> / \"auto\" | \"off\"",
+            "description": "Skeleton, alert, copy, and a still mode for reduced-motion toggles."
+          }
+        ]
+      },
+      "docs": "Idea from Midudev's scroll-driven animations demo (reel, 2026). Technical reference: MDN, CSS scroll-driven animations. Implementation is Retana UI's own; no code from the reel. Pure CSS with a local <style>: no JavaScript, no client boundary, safe in a Server Component. The animation sits inside @media (prefers-reduced-motion: no-preference) and @supports (animation-timeline: …), and animation-timeline comes after the animation shorthand. Without support or with reduced motion the content is visible and still. Pass motion=\"off\" to hold it still from a toggle. Baseline 2026 newly available (27 Oct 2026): Chrome and Edge 115+, Safari 26+, Firefox 159+. The item ships no theme, cssVars, or fixed colors. Loading and error are host states: the piece renders a skeleton or an alert. Ranges: entry 0% cover 40%, even cards entry 15% cover 45%. Keyframes animate opacity, translate, and scale only.",
+      "files": [
+        {
+          "path": "registry/ui/scroll-reveal-grid.tsx",
+          "type": "registry:component",
+          "target": "@ui/scroll-reveal-grid.tsx"
+        }
+      ]
+    },
+    {
+      "name": "scroll-chapters",
+      "type": "registry:ui",
+      "title": "Scroll chapters",
+      "description": "Chapters with a sticky index. A total bar follows scroll(); each chapter's bar follows its own named view-timeline through timeline-scope. Pure CSS.",
+      "author": "Eduardo Retana",
+      "categories": [
+        "animation"
+      ],
+      "meta": {
+        "titleEs": "Capítulos con progreso",
+        "descriptionEs": "Índice fijo con una barra total por scroll() y una barra por capítulo con view-timeline con nombre y timeline-scope. CSS puro; sin soporte, el índice es una lista de enlaces.",
+        "preview": "app/examples/scroll-chapters/preview.tsx",
+        "previewHref": "/examples/scroll-chapters",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "long",
+            "label": "Títulos largos",
+            "labelEn": "Long titles"
+          },
+          {
+            "id": "static",
+            "label": "Sin soporte",
+            "labelEn": "No support"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Guía del taller",
+            "href": "/examples/scroll-chapters",
+            "description": "Barro, torno, horno y esmalte."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/scroll-chapters/stress",
+            "description": "Vacío, 320px, RTL y veinte capítulos."
+          }
+        ],
+        "usage": "<ScrollChapters chapters={[{ id: \"barro\", title: \"El barro\", content: <p>…</p> }]} />",
+        "api": [
+          {
+            "name": "chapters",
+            "type": "{ id, title, content }[]",
+            "description": "id is the anchor and names the chapter's timeline (--retana-chapter-<id>), so it must be unique on the page."
+          },
+          {
+            "name": "headingAs",
+            "type": "\"h2\" | \"h3\"",
+            "description": "Chapter title tag. Default h2."
+          },
+          {
+            "name": "loading / error / labels / motion",
+            "type": "boolean / ReactNode / Partial<ScrollChaptersLabels> / \"auto\" | \"off\"",
+            "description": "Skeleton, alert, nav label and copy, and a still mode that hides the bars."
+          }
+        ]
+      },
+      "docs": "Idea from Midudev's scroll-driven animations demo (reel, 2026). Technical reference: MDN, CSS scroll-driven animations. Implementation is Retana UI's own; no code from the reel. Pure CSS with a local <style>: no JavaScript, no client boundary, safe in a Server Component. The animation sits inside @media (prefers-reduced-motion: no-preference) and @supports (animation-timeline: …), and animation-timeline comes after the animation shorthand. Without support or with reduced motion the content is visible and still. Pass motion=\"off\" to hold it still from a toggle. Baseline 2026 newly available (27 Oct 2026): Chrome and Edge 115+, Safari 26+, Firefox 159+. The item ships no theme, cssVars, or fixed colors. Loading and error are host states: the piece renders a skeleton or an alert. The total bar uses scroll(nearest block), so it follows the page or the nearest scroller. Chapter bars use animation-range contain 0% contain 100% and animate transform scaleX only. Bars are aria-hidden; the index links are real anchors.",
+      "files": [
+        {
+          "path": "registry/ui/scroll-chapters.tsx",
+          "type": "registry:component",
+          "target": "@ui/scroll-chapters.tsx"
+        }
+      ]
+    },
+    {
+      "name": "hero-view-timeline",
+      "type": "registry:ui",
+      "title": "Hero view timeline",
+      "description": "A hero that names its view-timeline; the headline splits apart while the hero leaves. It never animates in, so the LCP paints at full opacity. Pure CSS.",
+      "author": "Eduardo Retana",
+      "categories": [
+        "animation"
+      ],
+      "meta": {
+        "titleEs": "Hero con view-timeline",
+        "descriptionEs": "Hero que nombra su view-timeline; el titular se abre hacia los lados mientras el hero sale. Nunca entra animado, así el LCP pinta completo. CSS puro.",
+        "preview": "app/examples/hero-view-timeline/preview.tsx",
+        "previewHref": "/examples/hero-view-timeline",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "long",
+            "label": "Titular largo",
+            "labelEn": "Long headline"
+          },
+          {
+            "id": "static",
+            "label": "Sin soporte",
+            "labelEn": "No support"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Taller cerámico",
+            "href": "/examples/hero-view-timeline",
+            "description": "Titular partido en dos mitades."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/hero-view-timeline/stress",
+            "description": "Vacío, una palabra, 320px y RTL."
+          }
+        ],
+        "usage": "<HeroViewTimeline title=\"Vajillas por encargo hechas a mano\" lead={lead} actions={<Button>Agenda una visita</Button>} />",
+        "api": [
+          {
+            "name": "title / eyebrow / lead / actions",
+            "type": "string / ReactNode",
+            "description": "The title splits at its middle word. Actions are the host's own buttons or links."
+          },
+          {
+            "name": "headingAs / range",
+            "type": "\"h1\" | \"h2\" / string",
+            "description": "Default h1 (the page's only h1). Exit range on the hero's timeline, default exit 0% exit 70%."
+          },
+          {
+            "name": "loading / error / labels / motion",
+            "type": "boolean / ReactNode / Partial<HeroViewTimelineLabels> / \"auto\" | \"off\"",
+            "description": "Skeleton, alert in place of the actions, copy, and a still mode."
+          }
+        ]
+      },
+      "docs": "Idea from Midudev's scroll-driven animations demo (reel, 2026). Technical reference: MDN, CSS scroll-driven animations. Implementation is Retana UI's own; no code from the reel. Pure CSS with a local <style>: no JavaScript, no client boundary, safe in a Server Component. The animation sits inside @media (prefers-reduced-motion: no-preference) and @supports (animation-timeline: …), and animation-timeline comes after the animation shorthand. Without support or with reduced motion the content is visible and still. Pass motion=\"off\" to hold it still from a toggle. Baseline 2026 newly available (27 Oct 2026): Chrome and Edge 115+, Safari 26+, Firefox 159+. The item ships no theme, cssVars, or fixed colors. Loading and error are host states: the piece renders a skeleton or an alert. The section declares view-timeline: --retana-hero block; the halves animate opacity and translate on the exit range only.",
+      "files": [
+        {
+          "path": "registry/ui/hero-view-timeline.tsx",
+          "type": "registry:component",
+          "target": "@ui/hero-view-timeline.tsx"
+        }
+      ]
+    },
+    {
+      "name": "variable-font-morph",
+      "type": "registry:ui",
+      "title": "Variable font morph",
+      "description": "Display text whose variable-font axis follows the scroll: @property registers a number, view() animates it, font-variation-settings reads it. No layout shift. Pure CSS.",
+      "author": "Eduardo Retana",
+      "categories": [
+        "animation"
+      ],
+      "meta": {
+        "titleEs": "Morph de fuente variable",
+        "descriptionEs": "Texto display cuyo eje de fuente variable sigue el scroll: @property registra un número, view() lo anima y font-variation-settings lo lee. Sin desplazar el layout. CSS puro.",
+        "preview": "app/examples/variable-font-morph/preview.tsx",
+        "previewHref": "/examples/variable-font-morph",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "long",
+            "label": "Texto largo",
+            "labelEn": "Long text"
+          },
+          {
+            "id": "static",
+            "label": "Sin soporte",
+            "labelEn": "No support"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Del barro al horno",
+            "href": "/examples/variable-font-morph",
+            "description": "Eje wght de Geist, de 100 a 900."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/variable-font-morph/stress",
+            "description": "Vacío, 320px, RTL y eje inválido."
+          }
+        ],
+        "usage": "<VariableFontMorph as=\"h2\" text=\"Del barro al horno\" axis=\"wght\" from={100} to={900} />",
+        "api": [
+          {
+            "name": "text / as",
+            "type": "string / \"h1\" | \"h2\" | \"h3\" | \"p\"",
+            "description": "The display line and its tag."
+          },
+          {
+            "name": "axis / from / to / range",
+            "type": "string / number / number / string",
+            "description": "Four-letter axis of the host font (default wght), start and end values, and the view() range (default cover 10% cover 60%). Without motion the text rests at to."
+          },
+          {
+            "name": "reserve",
+            "type": "boolean",
+            "description": "Invisible copy at the widest value reserves the box so the morph causes no layout shift. Turn off only for an axis that keeps glyph advances, such as ELSH."
+          },
+          {
+            "name": "loading / error / labels / motion",
+            "type": "boolean / ReactNode / Partial<VariableFontMorphLabels> / \"auto\" | \"off\"",
+            "description": "Skeleton, alert, copy, and a still mode."
+          }
+        ]
+      },
+      "docs": "Idea from Midudev's scroll-driven animations demo (reel, 2026). Technical reference: MDN, CSS scroll-driven animations. Implementation is Retana UI's own; no code from the reel. Pure CSS with a local <style>: no JavaScript, no client boundary, safe in a Server Component. The animation sits inside @media (prefers-reduced-motion: no-preference) and @supports (animation-timeline: …), and animation-timeline comes after the animation shorthand. Without support or with reduced motion the content is visible and still. Pass motion=\"off\" to hold it still from a toggle. Baseline 2026 newly available (27 Oct 2026): Chrome and Edge 115+, Safari 26+, Firefox 159+. The item ships no theme, cssVars, or fixed colors. Loading and error are host states: the piece renders a skeleton or an alert. The host loads the font. Any variable font works: wght on the host's sans, or ELSH on Geist Pixel (SIL OFL-1.1, Copyright 2024 The Geist Project Authors; ship its license with the font file). This item does not bundle a font. The keyframes animate a registered number (--retana-font-morph); font-variation-settings repaints text each frame, so keep one morph per viewport.",
+      "files": [
+        {
+          "path": "registry/ui/variable-font-morph.tsx",
+          "type": "registry:component",
+          "target": "@ui/variable-font-morph.tsx"
+        }
+      ]
+    },
+    {
       "name": "work-table",
       "type": "registry:ui",
       "title": "Work table",
