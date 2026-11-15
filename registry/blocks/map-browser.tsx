@@ -279,7 +279,7 @@ export function MapBrowser<TMeta = unknown>({
                         onBlur={() => setActiveId(null)}
                         onClick={() => select(place.id)}
                         className={cn(
-                          "w-full min-w-0 rounded-lg border bg-background p-3 text-left outline-none",
+                          "group/card w-full min-w-0 rounded-lg border bg-background p-3 text-left outline-none",
                           "hover:bg-accent data-[active=true]:bg-accent data-[selected=true]:border-primary data-[selected=true]:ring-1 data-[selected=true]:ring-primary",
                           "focus-visible:ring-[3px] focus-visible:ring-ring/50",
                           classNames?.card,
@@ -390,9 +390,13 @@ function useCompactContainer(ref: RefObject<HTMLElement | null>) {
   return compact
 }
 
+// F-001 (RUI-CONTRAST-001): muted-foreground on accent is 4.35:1 in light. On the hover or
+// active card (bg-accent) secondary text steps up to foreground; outside the card nothing changes.
+const cardSecondaryText = "text-muted-foreground group-hover/card:text-foreground group-data-[active=true]/card:text-foreground"
+
 function CategoryBadge({ category }: { category: MapCategory }) {
   return (
-    <span className="inline-flex max-w-full items-center gap-1.5 rounded-full border px-2 py-0.5 text-xs text-muted-foreground">
+    <span className={cn("inline-flex max-w-full items-center gap-1.5 rounded-full border px-2 py-0.5 text-xs", cardSecondaryText)}>
       <span aria-hidden className={cn("size-2 shrink-0 rounded-full bg-foreground", category.tone && toneDot[category.tone])} />
       <span className="truncate">{category.label}</span>
     </span>
@@ -403,7 +407,7 @@ function DefaultCard({ place, category }: { place: MapPlace<unknown>; category?:
   return (
     <span className="flex min-w-0 flex-col gap-1">
       <span className="break-words text-sm font-medium [overflow-wrap:anywhere]">{place.title}</span>
-      {place.subtitle ? <span className="break-words text-xs text-muted-foreground [overflow-wrap:anywhere]">{place.subtitle}</span> : null}
+      {place.subtitle ? <span className={cn("break-words text-xs [overflow-wrap:anywhere]", cardSecondaryText)}>{place.subtitle}</span> : null}
       {category ? (
         <span className="mt-1 flex">
           <CategoryBadge category={category} />
