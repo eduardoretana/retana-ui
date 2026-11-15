@@ -10,6 +10,7 @@ direction:
   references:
     - {reference_id: REF-propxyz-browse, screen_id: map-browser, path: ui/direction/map-browser/ref-propxyz-browse.png, sha256: 2de484fd8069ede6bf38f369cc0c724310c0869f947edc41e59234ec0140838e, status: current, valid_for_spec_version: "1.0.0"}
     - {reference_id: REF-propxyz-detail, screen_id: map-browser, path: ui/direction/map-browser/ref-propxyz-detail.png, sha256: e8d0c28f7005cc982e78643ddd3c15b8194a10eaa76dc1b65e36a5cb51dc4eee, status: current, valid_for_spec_version: "1.0.0"}
+    - {reference_id: REF-mapcn-map, screen_id: map-browser, kind: code, path: "github.com/AnmolSaini16/mapcn@b243a4d3e99164e37428f7ac3b30592eb46c21ea:src/registry/map.tsx", sha256: e1acb95064ff2642d64d5b3b80b3dd8973ad09fca9ae9b6ec5a68be4a237816f, license: {spdx: MIT, notice: "Copyright (c) 2025 Anmoldeep Singh", license_file_sha256: 73020a10c41b48b72fbcc0f8bc38fbc24ff13df874a3142ab48094162490bb29}, status: current, valid_for_spec_version: "1.0.0"}
 data:
   fixture: ui/direction/fixtures/map-browser.yaml
 ---
@@ -120,3 +121,11 @@ Traídos sin cambios del brief de fase 1 (§4).
 | AC-14 Carga y peso | maplibre se carga con `import()` solo en cliente; con slow-3g la lista y su conteo se ven en DCL+1000 ms y el mapa muestra el skeleton; el bundle del primer render no trae maplibre | harness slow-3g + reporte de `next build` |
 | AC-15 jsdom | la suite de Vitest pasa sin WebGL (con `vi.mock("maplibre-gl")`) | `pnpm test` |
 | AC-16 Licencias | NOTICE con "MIT License · Copyright (c) 2025 Anmoldeep Singh" (MapCN) y el aviso BSD-3-Clause de MapLibre; `docs` del item dice "PropXYZ: referencia clean-room, no se copió código ni assets" | revisión + test de que NOTICE contiene las líneas |
+
+## 8. Rondas de auditoría y seguimiento
+
+| Ronda | Hallazgo | Cambio | Prueba |
+|---|---|---|---|
+| 1 (veredicto sha256 d198ab6a…, CHANGES_REQUIRED) | F-001 · RUI-CONTRAST-001: `text-muted-foreground` sobre `bg-accent` en la tarjeta hover/activa = 4.35:1 en claro | dentro de la tarjeta (`group/card`), con hover o `data-active` el subtítulo y el chip de categoría pasan a `text-foreground`. Solo tokens, sin literales ni cambios globales. Claro 4.35:1 → 18.16:1; oscuro 5.86:1 → 14.50:1 | `MB-CARD-CONTRAST` (calcula la razón desde `app/globals.css`) + axe `color-contrast` a 390/1280 claro/oscuro |
+
+**Seguimiento (fuera de esta ronda):** AC-11, área táctil de 44 px en el perfil touch. Hoy los pines miden 28×28 px y los clústeres 36×36 px (cumplen ≥ 24 px), sin aviso de 44 px. RUI-TOUCH-001 no está registrada en `rules.yaml@419ad648`.
