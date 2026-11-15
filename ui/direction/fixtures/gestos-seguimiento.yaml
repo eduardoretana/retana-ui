@@ -1,0 +1,28 @@
+# Fixture de comparación (E14) · gestos-seguimiento
+# Transcripción por puntero de los datos de ejemplo en H f572f34b4fca79d38c0bf811dd4aee737cf533d3.
+# Los datos viven en los fixtures.ts y scenes.tsx de cada pieza; aquí se fijan por sha256 y se listan las escenas.
+# Datos inventados del catálogo. Sin datos de producción.
+fixture_id: gestos-seguimiento-plp-v1
+spec_id: gestos-seguimiento
+spec_version: "0.1.1"
+generator: {kind: transcripcion, by: retana-ui-design-engineer}
+render:
+  viewports: [390x844, 1280x800]
+  themes: [light, dark]
+  reduced_motion: [reduce, no-preference]
+  network: bloqueada salvo loopback
+pieces:
+  - id: slide-to-confirm
+    route: "/examples/slide-to-confirm?scene=<escena>"
+    sources:
+      - {path: app/examples/slide-to-confirm/fixtures.ts, sha256: 7b06cd41eb3f1c692fe402a6a150aa7db4e5727b7b70a37a97184fe370a3e005}
+      - {path: app/examples/slide-to-confirm/scenes.tsx, sha256: 6378ceff2e10175dcc086dd3957e70c86f428845b58a6a40a44f9902188f6abb}
+    scenes: [filled, empty, loading, error, dragging, dismissed, reduced, keyboard, "390"]
+  - id: view-timeline
+    route: "/examples/view-timeline?scene=<escena>"
+    sources:
+      - {path: app/examples/view-timeline/fixtures.ts, sha256: 71f6304dbeed838c995587eb77d481b89e6135915c63e28edc99ca90ab6041aa}
+      - {path: app/examples/view-timeline/scenes.tsx, sha256: 3af14f40afbd0fe985103b6df4b7fd53aa7f888e78ce433242301427a5747b49}
+    scenes: [filled, empty, loading, error, dragging, dismissed, reduced, keyboard, "390"]
+comparison_scenes: [filled]
+states: [filled, empty, loading, error, dragging, dismissed, reduced, keyboard, "390"]
