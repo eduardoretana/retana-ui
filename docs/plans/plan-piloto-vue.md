@@ -155,7 +155,7 @@ No hay umbral de píxeles. Las capturas (React junto a Vue, anchos de `sceneSize
 
 ## 7. Pruebas antes del build
 
-`ui-tests/expected-red.yaml` y el log `ui-tests/logs/expected-red.log` salen de un commit anterior al código. Cada `it` falla con su firma. Un verde en ese commit invalidaría la fase.
+`ui-tests/expected-red.yaml` y el log `ui-tests/logs/piloto-vue.expected-red.log` salen de un commit anterior al código. Cada `it` falla con su firma. Un verde en ese commit invalidaría la fase.
 
 ## 8. Fuera de alcance
 

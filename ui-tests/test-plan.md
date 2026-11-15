@@ -7,4 +7,4 @@ La fase PRUEBAS corre antes del código de las piezas.
 2. `pnpm --dir vue exec vitest run`  
    Mount y navegador. En esta fase el módulo de escenas no existe: cada caso falla en su `gate`.
 
-Un caso verde en este commit invalida la fase. El build llega en el commit siguiente. El log de esta corrida está en `ui-tests/logs/expected-red.log`.
+Un caso verde en este commit invalida la fase. El build llega en el commit siguiente. El log de esta corrida está en `ui-tests/logs/piloto-vue.expected-red.log`.
