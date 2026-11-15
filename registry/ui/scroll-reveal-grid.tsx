@@ -2,6 +2,7 @@
  * Grid whose cards reveal as they enter the viewport. Pure CSS: animation-timeline view() + animation-range.
  * No JavaScript and no client boundary, so it renders in a Server Component.
  * Without support for scroll-driven animations, or with reduced motion, every card is visible and still.
+ * Text never fades: the motion is transform only, so contrast stays at WCAG AA mid-animation.
  * Idea: Midudev's scroll-driven animations demo. Reference: MDN. Implementation: Retana UI, clean-room.
  */
 
@@ -65,8 +66,8 @@ export const SCROLL_REVEAL_GRID_CSS = `
   }
 }
 @keyframes retana-scroll-reveal {
-  from { opacity: 0; translate: 0 1.5rem; scale: 0.97; }
-  to { opacity: 1; translate: 0 0; scale: 1; }
+  from { translate: 0 2.5rem; scale: 0.94; }
+  to { translate: 0 0; scale: 1; }
 }
 `
 

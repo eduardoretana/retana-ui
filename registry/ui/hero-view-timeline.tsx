@@ -2,6 +2,7 @@
  * Hero whose title splits apart while the hero leaves the viewport. Pure CSS:
  * the section names a view-timeline (--retana-hero) and the title halves animate on its exit range.
  * The hero never animates in: the title, often the LCP element, paints at full opacity on load.
+ * Text never fades: the motion is transform only, so contrast stays at WCAG AA mid-animation.
  * No JavaScript and no client boundary. Without support, or with reduced motion, the hero stays still.
  * Idea: Midudev's scroll-driven animations demo. Reference: MDN. Implementation: Retana UI, clean-room.
  */
@@ -66,20 +67,20 @@ export const HERO_VIEW_TIMELINE_CSS = `
       animation-range: var(--retana-hero-range, exit 0% exit 70%);
     }
     [data-slot="hero-view-timeline"]:not([data-motion="off"]) [data-slot="hero-view-timeline-lead"] {
-      animation: retana-hero-fade linear both;
+      animation: retana-hero-lift linear both;
       animation-timeline: --retana-hero;
       animation-range: var(--retana-hero-range, exit 0% exit 70%);
     }
   }
 }
 @keyframes retana-hero-split-start {
-  to { opacity: 0.15; translate: -40% 0; }
+  to { translate: -40% 0; }
 }
 @keyframes retana-hero-split-end {
-  to { opacity: 0.15; translate: 40% 0; }
+  to { translate: 40% 0; }
 }
-@keyframes retana-hero-fade {
-  to { opacity: 0; translate: 0 -1rem; }
+@keyframes retana-hero-lift {
+  to { translate: 0 -2.5rem; }
 }
 `
 
