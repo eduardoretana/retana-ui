@@ -1,0 +1,18 @@
+# Referencias de Dirección (E3) · piloto-vue
+# Cada referencia tiene una ficha en la rama (ruta + sha256). Las PNG de CPL viven en el box.
+schema: retana.reference-meta/v1
+spec_id: piloto-vue
+valid_for_spec_version: "1.0.0"
+mode: visual
+chosen_by: null   # STANDARD: la confirma el UI Lead en el sobre. No es decisión de Eduardo.
+cpl_control: {dir: /workspace/retana-ui-entregas/pr-sweep/cpl-control-sweep2, manifest_sha256: a6ed2081dd628e9e9af5a8337fa8840c4e61d42030ab84e3e62aa759d26de1fb, head: 33438d12520bbf9fe18ebc87f29df2a3122d02b6, harness: 21db9481b331}
+license_visual: "capturas propias de retana-ui (MIT del repo)"
+references:
+  - {reference_id: REF-cpl-time-off-stats, screen_id: time-off-stats, kind: visual, path: ui/direction/piloto-vue/ref-cpl-time-off-stats.md, sha256: b47b1a798f3edbc6b053ac1aa82928ee58fdfc141a01c77711e80db3bb2bd31f, status: current, valid_for_spec_version: "1.0.0"}
+  - {reference_id: REF-cpl-decision-inbox, screen_id: decision-inbox, kind: visual, path: ui/direction/piloto-vue/ref-cpl-decision-inbox.md, sha256: dda4cf9be5d00c5422db71ac4289531fc6b7adbbe7a6b02774f9e2863182d60a, status: current, valid_for_spec_version: "1.0.0"}
+  - {reference_id: REF-cpl-lightbox, screen_id: lightbox, kind: visual, path: ui/direction/piloto-vue/ref-cpl-lightbox.md, sha256: f8ab547dddee4a3aca9c227ce79a79817c98a67e84dce5a7c4fff16328c1c555, status: current, valid_for_spec_version: "1.0.0"}
+code_sources:
+  []
+inspiration:
+  []
+side_by_side: "compare-*.png en el box, en la evidencia del head final; referencia a la izquierda y build a la derecha"

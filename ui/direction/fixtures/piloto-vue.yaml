@@ -1,0 +1,42 @@
+# Fixture de comparación (E14) · piloto-vue
+# Transcripción por puntero de los datos de ejemplo en H 4476214dbabe6708f9b3755f0aee6c81e7d5b367.
+# Los datos viven en los archivos de cada pieza; aquí se fijan por prefijo de sha256 (12) y se listan los estados.
+# Prefijos cortos para que fixture_lint no lea los hash como teléfono o tarjeta; el blob completo sale de git en H.
+# Datos inventados del catálogo. Sin datos de producción.
+fixture_id: piloto-vue-plp-v1
+spec_id: piloto-vue
+spec_version: "1.0.0"
+generator: {kind: transcripcion, by: retana-ui-design-engineer}
+render:
+  viewports: [390x844, 1280x800]
+  themes: [light, dark]
+  reduced_motion: [reduce, no-preference]
+  network: bloqueada salvo loopback
+pieces:
+  - id: time-off-stats
+    route: "/examples/time-off-stats"
+    stress: "/examples/time-off-stats/stress"
+    sources:
+      - {path: app/examples/time-off-stats/demo.tsx, sha256_prefix: 2a0a39dd4817}
+      - {path: app/examples/time-off-stats/fixtures.ts, sha256_prefix: 9583eb2cf0e3}
+      - {path: app/examples/time-off-stats/scenes.tsx, sha256_prefix: ed89c1503013}
+  - id: decision-inbox
+    route: "/examples/decision-inbox"
+    stress: "/examples/decision-inbox/stress"
+    sources:
+      - {path: app/examples/decision-inbox/demo.tsx, sha256_prefix: 2a0a39dd4817}
+      - {path: app/examples/decision-inbox/fixtures.ts, sha256_prefix: e188a5e0d6c9}
+      - {path: app/examples/decision-inbox/scenes.tsx, sha256_prefix: 727406b34289}
+  - id: lightbox
+    route: "/examples/lightbox"
+    stress: "/examples/lightbox/stress"
+    sources:
+      - {path: app/examples/lightbox/demo.tsx, sha256_prefix: 8968261db9d5}
+      - {path: app/examples/lightbox/fixtures.ts, sha256_prefix: 947851ac0833}
+      - {path: app/examples/lightbox/scenes.tsx, sha256_prefix: 8b3cfbfb6be3}
+shared_json:
+  - {path: fixtures/decision-inbox.json, sha256_prefix: f307617b42c3}
+  - {path: fixtures/lightbox.json, sha256_prefix: 8cbd12512418}
+  - {path: fixtures/time-off-stats.json, sha256_prefix: cb943eddfd34}
+comparison_states: [filled]
+states: [filled, empty, loading, error, zero, pending, answered, folded, "390"]
