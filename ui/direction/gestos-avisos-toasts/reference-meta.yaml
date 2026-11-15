@@ -1,0 +1,23 @@
+# Referencias de Dirección (E3) · gestos-avisos-toasts
+# Cada referencia tiene una ficha en la rama (ruta + sha256). Las PNG de CPL viven en el box: /workspace/retana-ui-entregas/pr-sweep/cpl-control-gestos-agenda
+spec_id: gestos-avisos-toasts
+valid_for_spec_version: "0.1.1"
+mode: visual
+chosen_by: null   # STANDARD: la confirma el UI Lead en el sobre
+cpl_control: {dir: /workspace/retana-ui-entregas/pr-sweep/cpl-control-gestos-agenda, manifest_sha256: 6828c0243bd35365eb3f3bf5a5ea4557dbe7cd53b616736e4792ffa754af0ff2, head: 33438d12520bbf9fe18ebc87f29df2a3122d02b6, harness: 21db9481b331}
+references:
+  - {reference_id: REF-cpl-notification-stack, screen_id: notification-stack, kind: visual, path: ui/direction/gestos-avisos-toasts/ref-cpl-notification-stack.md, sha256: e1829aa41187a7c3d95d0387421ba0324b7e1ced4fdbf9fa3743562051982368, status: current, valid_for_spec_version: "0.1.1"}
+      # imagen: before/notification-stack/desktop-light-reduced.png sha256 c7191dfc72a286b4cb3179a1ae57e2510ea415c35ad391a9166327bd5943f610
+      # imagen: before/notification-stack/desktop-dark-reduced.png sha256 3316d0b2095d38b83273f0e3e7eebee20f9a98b6af644cc4658dd7e3141e89b1
+      # imagen: before/notification-stack/390-light-reduced.png sha256 02534228af37aaab32d2ec6fb84cdbfcbbb812e2fc5515627b25f9699447e022
+      # imagen: before/notification-stack/390-dark-reduced.png sha256 b6f021c16827cd0f7e1674e5fd8c9ecd94ff1d4548a3ccfe4b99413bec5bf77a
+  - {reference_id: REF-cpl-toast-stack, screen_id: toast-stack, kind: visual, path: ui/direction/gestos-avisos-toasts/ref-cpl-toast-stack.md, sha256: f93b09d8a239b3659b0d8e7e8db1f2f6c1c648f4b8972244b8a20d5125786663, status: current, valid_for_spec_version: "0.1.1"}
+      # imagen: before/toast-stack/desktop-light-reduced.png sha256 0ed0d33393365ab592ed52cd3a13802f399ad5deaab8b27f6e8b04e7bb43ad96
+      # imagen: before/toast-stack/desktop-dark-reduced.png sha256 e7c710ad4291790d1af861378968da0f7acbab8029f316ad6d4e419c416473e1
+      # imagen: before/toast-stack/390-light-reduced.png sha256 8965a1b72e13bd625e4926feb95c8b7d42a6e418dc794cd13e8c358e0eb20a01
+      # imagen: before/toast-stack/390-dark-reduced.png sha256 4efe228ea60c31039844d91399eb29a4a1d5dae272a0ad12f3b9c011e4a0b1e9
+  - {reference_id: REF-emil-gestures, screen_id: all, kind: code, path: ui/direction/gestos-avisos-toasts/ref-emil-gestures.md, sha256: 2dbd2982e0c81a6ba19dfc21838f49f315f7681c85170519fdbb3e6922b26466, status: current, valid_for_spec_version: "0.1.1"}
+      # fuente: github.com/emilkowalski/skills@715c1807e08c497cfd1dc4feb450a2a3300ef2a9:skills/gestures/SKILL.md sha256 0835dddc0ce4f4257fdc707ec137d75810f0bdbd8d4eaf69d1de55bfbbf260c2; licencia MIT
+  - {reference_id: REF-sonner-2-0-8, screen_id: all, kind: code, path: ui/direction/gestos-avisos-toasts/ref-sonner-2-0-8.md, sha256: 80639562fe8437ef21f14101d35b9a796c729b51324b78b455951a8ebe9845c9, status: current, valid_for_spec_version: "0.1.1"}
+      # fuente: npm:sonner@2.0.8/dist/index.mjs (69795 bytes) sha256 f04470f1daac31d00185b2361b4da0c7b25e51dbec0f13f785ce8ccc68211a9a; licencia MIT
+side_by_side: "compare-*.png en el box (evidencia del head final), referencia a la izquierda y build a la derecha"
