@@ -1,41 +1,96 @@
-# Firmas observadas el 2026-11-03, antes del build, con
-# `pnpm exec vitest run __tests__/agenda-resources.test.ts`.
-# 14 pruebas, 0 verdes. El archivo .ts se renombró a .tsx porque el
-# parser rechazó el JSX; esa corrección no añade producción.
-schema: uis.expected-red/v1
-spec_id: agenda-resources
-profile: STANDARD
-command: pnpm exec vitest run __tests__/agenda-resources.test.tsx
-observed_at: "2026-11-03"
-result:
-  failed: 14
-  passed: 0
-cases:
-  - name: findResourceConflicts does not treat a shared endpoint as a conflict
-    signature: "TypeError: findResourceConflicts is not a function"
-  - name: findResourceConflicts pairs overlapping events on the same resource only
-    signature: "TypeError: findResourceConflicts is not a function"
-  - name: findResourceConflicts counts an all-day event against the same resource and not the next boundary
-    signature: "TypeError: findResourceConflicts is not a function"
-  - name: findResourceConflicts uses absolute instants across a DST fold and a short spring day
-    signature: "TypeError: findResourceConflicts is not a function"
-  - name: findResourceConflicts reports each overlapping pair and stays quiet for two hundred chained touches
-    signature: "TypeError: findResourceConflicts is not a function"
-  - name: resourceLoads sums clipped hours, ignores a missing resource, and reports the overage
-    signature: "TypeError: resourceLoads is not a function"
-  - name: resourceLoads counts a spring-forward all-day as 23 hours and doubles overlapping bookings
-    signature: "TypeError: resourceLoads is not a function"
-  - name: agenda resources keeps the previous agenda when resources are omitted
-    signature: 'Expected the element to have attribute data-resource-layout="off"'
-  - name: agenda resources filters by resource, controlled or not, and lays the day out in columns
-    signature: 'Expected the element to have attribute data-resource-layout="columns"'
-  - name: agenda resources announces a conflict on the event and in the header, and keyboard reaches it
-    signature: "Expected element to have accessible name /Choque con Esmalte húmedo/"
-  - name: agenda resources shows scheduled hours against capacity, including the overage
-    signature: "expected null not to be null (data-slot=agenda-capacity)"
-  - name: agenda resources uses a list instead of columns at a narrow width
-    signature: 'Expected the element to have attribute data-resource-layout="list"'
-  - name: agenda resources switches the chrome to English
-    signature: 'Unable to find an accessible element with the role "combobox" and name "Resource"'
-  - name: agenda resources keeps thirty resources and long names in the day axis
-    signature: 'Unable to find an accessible element with the role "option"'
+- schema: uis.expected-red/v1
+  spec_id: filter-toolbar-labels
+  profile: LITE
+  green_forbidden: true
+  note: "Rojo del PR #91. FT-LABELS corre sobre la fuente de filter-toolbar de CPL 6671cfac (sin el prop labels): 2 fallan y FT-LABELS-DEFAULT pasa porque el inglés por defecto no cambia. FTL-* corre en el commit rojo de esta rama, antes del estado, el spec y el demo es-MX. Ojo: el PR #90 (map-browser) agrega este mismo archivo con su propia entrada; quien entre segundo a CPL debe combinar las dos."
+  red_on:
+    base: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+    source: "registry/ui/filter-toolbar.tsx@6671cfac"
+  commands:
+    - name: labels
+      run: DEBUG_PRINT_LIMIT=0 pnpm exec vitest run --reporter=verbose __tests__/filter-toolbar-labels.test.tsx
+      exit: 1
+      failed: 2
+      passed: 1
+      log: ui-tests/logs/filter-toolbar-labels.expected-red.log
+    - name: artefactos
+      run: DEBUG_PRINT_LIMIT=0 pnpm exec vitest run --reporter=verbose __tests__/filter-toolbar-labels-artifacts.test.tsx
+      exit: 1
+      failed: 3
+      passed: 1
+      log: ui-tests/logs/filter-toolbar-labels-artifacts.expected-red.log
+    - name: defaults
+      note: "Hallazgo de las capturas de #91 sobre 8cd562f: con el juego es-MX, el vacío, Agregar filtro y el nombre del grupo seguían en inglés. Rojo sobre 8cd562f8ad5c3e61638b4273acca567424650d78."
+      red_on: 8cd562f8ad5c3e61638b4273acca567424650d78
+      run: DEBUG_PRINT_LIMIT=0 pnpm exec vitest run --reporter=verbose __tests__/filter-toolbar-labels-defaults.test.tsx
+      exit: 1
+      failed: 1
+      passed: 2
+      log: ui-tests/logs/filter-toolbar-labels-defaults.expected-red.log
+  log: ui-tests/logs/filter-toolbar-labels.expected-red.log
+  signatures:
+    - FT-LABELS-ES
+    - FT-LABELS-PARTIAL
+    - FTL-STATUS
+    - FTL-SPEC
+    - FTL-DEMO-ES
+    - FT-LABELS-DEFAULTS-ES
+  passing_in_red:
+    - FT-LABELS-DEFAULT
+    - FTL-DEMO-EN
+    - FT-LABELS-DEFAULTS-PROPS
+    - FT-LABELS-DEFAULTS-EN
+- schema: uis.expected-red/v1
+  spec_id: map-browser
+  green_forbidden: true
+  note: "maplibre-gl va mockeado en Vitest (__tests__/helpers/maplibre-mock.ts). El commit rojo trae stubs que exportan tipos y lanzan 'not implemented'."
+  commands:
+    - name: pieza
+      run: pnpm exec vitest run __tests__/map-browser.test.tsx
+      exit: 1
+      failed: 18
+      passed: 0
+    - name: contrato
+      run: pnpm exec vitest run __tests__/map-browser-contract.test.tsx
+      exit: 1
+      failed: 5
+      passed: 0
+  log: ui-tests/logs/expected-red.log
+  signatures:
+    - MB-VIEWSTATE
+    - MB-BOUNDS
+    - MB-STATES
+    - MB-IDLE
+    - MB-SYNC-HOVER
+    - MB-SELECT
+    - MB-FILTER-COUNT
+    - MB-CLUSTER
+    - MB-DETAIL
+    - MB-ATTR
+    - MB-PROVIDER
+    - MB-KEYBOARD
+    - MB-ANNOUNCE
+    - MB-TOKENS
+    - MB-REDUCED
+    - MB-I18N
+    - MB-MAP-ERROR
+    - MB-PLP
+    - CONTRACT-API
+    - CONTRACT-A11Y-REGION
+    - CONTRACT-A11Y-PINS
+    - CONTRACT-SELECT
+    - CONTRACT-STATES
+  fix_rounds:
+    - round: 1
+      finding: F-001
+      rule: RUI-CONTRAST-001
+      verdict_sha256: d198ab6ad40481825413520eac369735ad96a119857343613881c0c33279a226
+      base_head: 91a701fedbacf4fb97d9bbbe792d1cb4d2edb16d
+      run: pnpm exec vitest run __tests__/map-browser-contrast.test.tsx
+      exit: 1
+      failed: 2
+      passed: 3
+      log: ui-tests/logs/mb-card-contrast.expected-red.log
+      signatures:
+        - "MB-CARD-CONTRAST: every text on the hover card reaches 4.5:1 in light"
+        - "MB-CARD-CONTRAST: every text on the active card reaches 4.5:1 in light"
