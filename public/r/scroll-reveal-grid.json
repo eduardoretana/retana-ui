@@ -1,0 +1,118 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scroll-reveal-grid",
+  "title": "Scroll reveal grid",
+  "author": "Eduardo Retana",
+  "description": "Cards that reveal as they enter the viewport with animation-timeline view() and animation-range. Pure CSS, no JavaScript.",
+  "files": [
+    {
+      "path": "registry/ui/scroll-reveal-grid.tsx",
+      "content": "/**\n * Grid whose cards reveal as they enter the viewport. Pure CSS: animation-timeline view() + animation-range.\n * No JavaScript and no client boundary, so it renders in a Server Component.\n * Without support for scroll-driven animations, or with reduced motion, every card is visible and still.\n * Idea: Midudev's scroll-driven animations demo. Reference: MDN. Implementation: Retana UI, clean-room.\n */\n\nimport type { ReactNode } from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type ScrollRevealGridItem = {\n  id: string\n  title: string\n  description?: string\n  /** Short line above the title, e.g. a step number or a category. */\n  eyebrow?: string\n}\n\nexport type ScrollRevealGridLabels = {\n  loading: string\n  empty: string\n}\n\nexport type ScrollRevealGridProps = {\n  items?: readonly ScrollRevealGridItem[]\n  /** Custom card body. The card shell and the reveal stay the same. */\n  renderItem?: (item: ScrollRevealGridItem, index: number) => ReactNode\n  /** Columns from the sm breakpoint up. One column below it. Default 3. */\n  columns?: 2 | 3\n  /** Heading tag for each card title. Default h3, under the section's h2. */\n  headingAs?: \"h2\" | \"h3\" | \"h4\"\n  loading?: boolean\n  /** Message shown instead of the cards. */\n  error?: ReactNode\n  labels?: Partial<ScrollRevealGridLabels>\n  /** \"off\" keeps every card still. Use it for a reduced-motion toggle or a static preview. Default \"auto\". */\n  motion?: \"auto\" | \"off\"\n  className?: string\n  itemClassName?: string\n}\n\nexport const SCROLL_REVEAL_GRID_LABELS: ScrollRevealGridLabels = {\n  loading: \"Loading\",\n  empty: \"Nothing to show yet.\",\n}\n\n/** Even cards start a little later, so a row does not move as one block. */\nexport const SCROLL_REVEAL_GRID_RANGES = {\n  odd: \"entry 0% cover 40%\",\n  even: \"entry 15% cover 45%\",\n} as const\n\nexport const SCROLL_REVEAL_GRID_CSS = `\n@media (prefers-reduced-motion: no-preference) {\n  @supports (animation-timeline: view()) {\n    [data-slot=\"scroll-reveal-grid\"]:not([data-motion=\"off\"]) > [data-slot=\"scroll-reveal-grid-item\"] {\n      animation: retana-scroll-reveal linear both;\n      animation-timeline: view();\n      animation-range: ${SCROLL_REVEAL_GRID_RANGES.odd};\n    }\n    [data-slot=\"scroll-reveal-grid\"]:not([data-motion=\"off\"]) > [data-slot=\"scroll-reveal-grid-item\"]:nth-child(even) {\n      animation-range: ${SCROLL_REVEAL_GRID_RANGES.even};\n    }\n  }\n}\n@keyframes retana-scroll-reveal {\n  from { opacity: 0; translate: 0 1.5rem; scale: 0.97; }\n  to { opacity: 1; translate: 0 0; scale: 1; }\n}\n`\n\nconst columnClass = { 2: \"sm:grid-cols-2\", 3: \"sm:grid-cols-2 lg:grid-cols-3\" } as const\n\nexport function ScrollRevealGrid({\n  items = [],\n  renderItem,\n  columns = 3,\n  headingAs: Heading = \"h3\",\n  loading = false,\n  error,\n  labels,\n  motion = \"auto\",\n  className,\n  itemClassName,\n}: ScrollRevealGridProps) {\n  const text = { ...SCROLL_REVEAL_GRID_LABELS, ...labels }\n\n  if (loading) {\n    return (\n      <div data-slot=\"scroll-reveal-grid\" data-state=\"loading\" aria-busy=\"true\" className={cn(\"grid gap-4\", columnClass[columns], className)}>\n        <span className=\"sr-only\" role=\"status\">\n          {text.loading}\n        </span>\n        {Array.from({ length: columns }, (_, index) => (\n          <div key={index} aria-hidden=\"true\" className={cn(\"flex min-h-32 flex-col gap-3 rounded-xl border bg-card p-5\", itemClassName)}>\n            <div className=\"h-3 w-16 rounded bg-muted\" />\n            <div className=\"h-5 w-3/4 rounded bg-muted\" />\n            <div className=\"h-3 w-full rounded bg-muted\" />\n          </div>\n        ))}\n      </div>\n    )\n  }\n\n  if (error) {\n    return (\n      <div data-slot=\"scroll-reveal-grid\" data-state=\"error\" role=\"alert\" className={cn(\"rounded-xl border border-destructive/40 bg-destructive/5 p-5 text-sm text-foreground\", className)}>\n        {error}\n      </div>\n    )\n  }\n\n  if (items.length === 0) {\n    return (\n      <div data-slot=\"scroll-reveal-grid\" data-state=\"empty\" className={cn(\"rounded-xl border border-dashed p-8 text-center text-sm text-muted-foreground\", className)}>\n        {text.empty}\n      </div>\n    )\n  }\n\n  return (\n    <>\n      <style>{SCROLL_REVEAL_GRID_CSS}</style>\n      <ul data-slot=\"scroll-reveal-grid\" data-state=\"filled\" data-motion={motion} className={cn(\"grid list-none gap-4 p-0\", columnClass[columns], className)}>\n        {items.map((item, index) => (\n          <li\n            key={item.id}\n            data-slot=\"scroll-reveal-grid-item\"\n            className={cn(\"flex min-w-0 flex-col gap-2 rounded-xl border bg-card p-5 text-card-foreground\", itemClassName)}\n          >\n            {renderItem ? (\n              renderItem(item, index)\n            ) : (\n              <>\n                {item.eyebrow ? <p className=\"text-xs font-medium text-muted-foreground\">{item.eyebrow}</p> : null}\n                <Heading className=\"text-base font-semibold text-balance break-words\">{item.title}</Heading>\n                {item.description ? <p className=\"text-sm text-pretty break-words text-muted-foreground\">{item.description}</p> : null}\n              </>\n            )}\n          </li>\n        ))}\n      </ul>\n    </>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/scroll-reveal-grid.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Rejilla que aparece al desplazar",
+    "descriptionEs": "Tarjetas que entran al cruzar el viewport con animation-timeline view() y animation-range. CSS puro, sin JavaScript; sin soporte se ven quietas.",
+    "preview": "app/examples/scroll-reveal-grid/preview.tsx",
+    "previewHref": "/examples/scroll-reveal-grid",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "long",
+        "label": "Texto largo",
+        "labelEn": "Long text"
+      },
+      {
+        "id": "static",
+        "label": "Sin soporte",
+        "labelEn": "No support"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Seis pasos del taller",
+        "href": "/examples/scroll-reveal-grid",
+        "description": "Las pares entran un poco después."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/scroll-reveal-grid/stress",
+        "description": "Vacío, 320px, RTL y treinta tarjetas."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/scroll-reveal-grid?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/scroll-reveal-grid?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/scroll-reveal-grid?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/scroll-reveal-grid?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Texto largo",
+        "href": "/examples/scroll-reveal-grid?scene=long",
+        "description": "Long text"
+      },
+      {
+        "title": "Sin soporte",
+        "href": "/examples/scroll-reveal-grid?scene=static",
+        "description": "No support"
+      }
+    ],
+    "usage": "<ScrollRevealGrid items={steps} columns={3} />",
+    "api": [
+      {
+        "name": "items / renderItem",
+        "type": "ScrollRevealGridItem[] / (item, index) => ReactNode",
+        "description": "id, title, description and eyebrow. renderItem replaces the card body; the shell and the reveal stay."
+      },
+      {
+        "name": "columns / headingAs",
+        "type": "2 | 3 / \"h2\" | \"h3\" | \"h4\"",
+        "description": "Columns from sm up. Card title tag, default h3."
+      },
+      {
+        "name": "loading / error / labels / motion",
+        "type": "boolean / ReactNode / Partial<ScrollRevealGridLabels> / \"auto\" | \"off\"",
+        "description": "Skeleton, alert, copy, and a still mode for reduced-motion toggles."
+      }
+    ]
+  },
+  "docs": "Idea from Midudev's scroll-driven animations demo (reel, 2026). Technical reference: MDN, CSS scroll-driven animations. Implementation is Retana UI's own; no code from the reel. Pure CSS with a local <style>: no JavaScript, no client boundary, safe in a Server Component. The animation sits inside @media (prefers-reduced-motion: no-preference) and @supports (animation-timeline: …), and animation-timeline comes after the animation shorthand. Without support or with reduced motion the content is visible and still. Pass motion=\"off\" to hold it still from a toggle. Baseline 2026 newly available (27 Oct 2026): Chrome and Edge 115+, Safari 26+, Firefox 159+. The item ships no theme, cssVars, or fixed colors. Loading and error are host states: the piece renders a skeleton or an alert. Ranges: entry 0% cover 40%, even cards entry 15% cover 45%. Keyframes animate opacity, translate, and scale only.",
+  "categories": [
+    "animation"
+  ],
+  "type": "registry:ui"
+}
