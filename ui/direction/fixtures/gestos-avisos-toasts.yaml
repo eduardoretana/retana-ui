@@ -1,0 +1,29 @@
+# Fixture de comparación (E14) · gestos-avisos-toasts
+# Transcripción por puntero de los datos de ejemplo en H bcd4c44d81d8287dde8cf291d7c364ee74d8ea83.
+# Los datos viven en los fixtures.ts y scenes.tsx de cada pieza; aquí se fijan por sha256 y se listan las escenas.
+# Datos inventados del catálogo. Sin datos de producción.
+fixture_id: gestos-avisos-toasts-plp-v1
+spec_id: gestos-avisos-toasts
+spec_version: "0.1.1"
+generator: {kind: transcripcion, by: retana-ui-design-engineer}
+render:
+  viewports: [390x844, 1280x800]
+  themes: [light, dark]
+  reduced_motion: [reduce, no-preference]
+  network: bloqueada salvo loopback
+pieces:
+  - id: notification-stack
+    route: "/examples/notification-stack?scene=<escena>"
+    sources:
+      - {path: app/examples/notification-stack/fixtures.ts, sha256: 3d0b16cc06a096a7ce74e53d4eacac35fb7e677a2762273a5c1e70b1ea0d0e78}
+      - {path: app/examples/notification-stack/sample.tsx, sha256: 8edb3e5840cafbbc9d6315672c2452582e9622906a0cb8626b31c5d015443c20}
+      - {path: app/examples/notification-stack/scenes.tsx, sha256: 699a47cc745e35a75b759ceb5352a26340a3ac8f58246ff65be376a85eda39e7}
+    scenes: [filled, empty, loading, error, dragging, dismissed, reduced, keyboard, "390", extreme]
+  - id: toast-stack
+    route: "/examples/toast-stack?scene=<escena>"
+    sources:
+      - {path: app/examples/toast-stack/fixtures.ts, sha256: 12ffac386d820f683239a3f98f234593f1d8e5bb5b6262ed744022c43658178d}
+      - {path: app/examples/toast-stack/scenes.tsx, sha256: cf3d1c990c1ce6563e6bbddc16835c27305abce568822b1ccd6365005bb2aa6a}
+    scenes: [filled, empty, loading, error, dragging, dismissed, reduced, keyboard, "390", extreme, al-cargar]
+comparison_scenes: [filled]
+states: [filled, empty, loading, error, dragging, dismissed, reduced, keyboard, "390"]
