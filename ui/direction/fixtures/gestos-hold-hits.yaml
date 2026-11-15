@@ -1,0 +1,28 @@
+# Fixture de comparación (E14) · gestos-hold-hits
+# Transcripción por puntero de los datos de ejemplo en H cd46531b8ab39f9a40c31c8dbd6f6b8b2c3eb619.
+# Los datos viven en los fixtures.ts y scenes.tsx de cada pieza; aquí se fijan por sha256 y se listan las escenas.
+# Datos inventados del catálogo. Sin datos de producción.
+fixture_id: gestos-hold-hits-plp-v1
+spec_id: gestos-hold-hits
+spec_version: "0.1.1"
+generator: {kind: transcripcion, by: retana-ui-design-engineer}
+render:
+  viewports: [390x844, 1280x800]
+  themes: [light, dark]
+  reduced_motion: [reduce, no-preference]
+  network: bloqueada salvo loopback
+pieces:
+  - id: hold-to-confirm
+    route: "/examples/hold-to-confirm?scene=<escena>"
+    sources:
+      - {path: app/examples/hold-to-confirm/fixtures.ts, sha256: e7d3f461f9b838acacb2b4a43703d80973147be54723ef43ce4a1310c15d196e}
+      - {path: app/examples/hold-to-confirm/scenes.tsx, sha256: 93db02be6bf5d0792832f5ee447190c0c81f22b8b506039fcc348055d320cb70}
+    scenes: [filled, empty, loading, error, dragging, dismissed, reduced, keyboard, "390"]
+  - id: bottom-sheet
+    route: "/examples/bottom-sheet?scene=<escena>"
+    sources:
+      - {path: app/examples/bottom-sheet/fixtures.ts, sha256: e2c83db152a4199d5c459e9b36eba4a27c9ec836aa551141d3421dbebf082ea2}
+      - {path: app/examples/bottom-sheet/scenes.tsx, sha256: d02b44be354070d0ff24416490b719917ff05bc3e77b75e5716b41bf7a42e7d7}
+    scenes: [filled, empty, loading, error, dragging, dismissed, reduced, keyboard, "390"]
+comparison_scenes: [filled]
+states: [filled, empty, loading, error, dragging, dismissed, reduced, keyboard, "390"]
