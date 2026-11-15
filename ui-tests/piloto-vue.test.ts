@@ -56,7 +56,7 @@ function collect(node: unknown, acc: { css: string[]; tailwind: string[] }) {
   for (const value of Object.values(node)) collect(value, acc)
 }
 
-const sha = "6671cfac72f736739d2d3dd2740cc5f13416acb3"
+const sha = "33438d12520bbf9fe18ebc87f29df2a3122d02b6"
 
 describe("piloto vue", () => {
   it("AC0 tokens DTCG y diff de nombres", () => {
