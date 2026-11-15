@@ -1,0 +1,123 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "variable-font-morph",
+  "title": "Variable font morph",
+  "author": "Eduardo Retana",
+  "description": "Display text whose variable-font axis follows the scroll: @property registers a number, view() animates it, font-variation-settings reads it. No layout shift. Pure CSS.",
+  "files": [
+    {
+      "path": "registry/ui/variable-font-morph.tsx",
+      "content": "/**\n * Display text whose variable-font axis follows the scroll. Pure CSS:\n * @property registers a number, a view() timeline animates it, and font-variation-settings reads it.\n * The host loads the font. Any variable font works: wght on the host's sans, or ELSH on Geist Pixel (OFL-1.1).\n * An invisible copy at the widest value reserves the box, so the morph causes no layout shift.\n * No JavaScript and no client boundary. Without support, or with reduced motion, the text rests at `to`.\n * Idea: Midudev's scroll-driven animations demo. Reference: MDN. Implementation: Retana UI, clean-room.\n */\n\nimport type { CSSProperties, ReactNode } from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type VariableFontMorphLabels = {\n  loading: string\n  empty: string\n}\n\nexport type VariableFontMorphProps = {\n  text?: string\n  as?: \"h1\" | \"h2\" | \"h3\" | \"p\"\n  /** Four-letter axis tag of the host font. Default \"wght\". */\n  axis?: string\n  /** Axis value when the text enters. Default 100. */\n  from?: number\n  /** Axis value at the end of the range, and the resting value without motion. Default 900. */\n  to?: number\n  /** Range on the text's view timeline. Default \"cover 10% cover 60%\". */\n  range?: string\n  /**\n   * Reserve the box with an invisible copy at the widest value. Default true.\n   * Turn it off only for an axis that keeps glyph advances, such as ELSH.\n   */\n  reserve?: boolean\n  loading?: boolean\n  error?: ReactNode\n  labels?: Partial<VariableFontMorphLabels>\n  /** \"off\" rests the text at `to`. Default \"auto\". */\n  motion?: \"auto\" | \"off\"\n  className?: string\n}\n\nexport const VARIABLE_FONT_MORPH_LABELS: VariableFontMorphLabels = {\n  loading: \"Loading\",\n  empty: \"No text to show.\",\n}\n\n/** Axis tags are four characters: letters, digits or spaces. Anything else falls back to wght. */\nexport function morphAxis(axis: string | undefined) {\n  return axis && /^[A-Za-z0-9 ]{4}$/.test(axis) ? axis : \"wght\"\n}\n\nexport const VARIABLE_FONT_MORPH_CSS = `\n@property --retana-font-morph {\n  syntax: \"<number>\";\n  inherits: true;\n  initial-value: 400;\n}\n[data-slot=\"variable-font-morph-text\"] {\n  --retana-font-morph: var(--retana-font-morph-to);\n  font-variation-settings: var(--retana-font-morph-axis) var(--retana-font-morph);\n}\n@media (prefers-reduced-motion: no-preference) {\n  @supports (animation-timeline: view()) {\n    [data-slot=\"variable-font-morph\"]:not([data-motion=\"off\"]) [data-slot=\"variable-font-morph-text\"] {\n      animation: retana-font-morph linear both;\n      animation-timeline: view();\n      animation-range: var(--retana-font-morph-range, cover 10% cover 60%);\n    }\n  }\n}\n/* Animates a registered number. font-variation-settings repaints text each frame: one morph per viewport (UIS-WEB-RHYTHM-002). */\n@keyframes retana-font-morph {\n  from { --retana-font-morph: var(--retana-font-morph-from); }\n  to { --retana-font-morph: var(--retana-font-morph-to); }\n}\n`\n\nexport function VariableFontMorph({\n  text = \"\",\n  as: Tag = \"p\",\n  axis,\n  from = 100,\n  to = 900,\n  range,\n  reserve = true,\n  loading = false,\n  error,\n  labels,\n  motion = \"auto\",\n  className,\n}: VariableFontMorphProps) {\n  const copy = { ...VARIABLE_FONT_MORPH_LABELS, ...labels }\n  const shell = cn(\"text-5xl leading-none tracking-tight break-words sm:text-7xl\", className)\n\n  if (loading) {\n    return (\n      <div data-slot=\"variable-font-morph\" data-state=\"loading\" aria-busy=\"true\" className=\"flex flex-col gap-3\">\n        <span className=\"sr-only\" role=\"status\">\n          {copy.loading}\n        </span>\n        <div aria-hidden=\"true\" className=\"h-14 w-3/4 rounded bg-muted\" />\n      </div>\n    )\n  }\n\n  if (error) {\n    return (\n      <div data-slot=\"variable-font-morph\" data-state=\"error\" role=\"alert\" className=\"rounded-xl border border-destructive/40 bg-destructive/5 p-5 text-sm text-foreground\">\n        {error}\n      </div>\n    )\n  }\n\n  if (!text.trim()) {\n    return (\n      <div data-slot=\"variable-font-morph\" data-state=\"empty\" className=\"rounded-xl border border-dashed p-6 text-center text-sm text-muted-foreground\">\n        {copy.empty}\n      </div>\n    )\n  }\n\n  const tag = morphAxis(axis)\n  const widest = Math.max(from, to)\n  const style = {\n    \"--retana-font-morph-axis\": `\"${tag}\"`,\n    \"--retana-font-morph-from\": String(from),\n    \"--retana-font-morph-to\": String(to),\n    ...(range ? { \"--retana-font-morph-range\": range } : {}),\n  } as CSSProperties\n\n  return (\n    <>\n      <style>{VARIABLE_FONT_MORPH_CSS}</style>\n      <Tag data-slot=\"variable-font-morph\" data-state=\"filled\" data-motion={motion} data-axis={tag} className={cn(\"grid\", shell)} style={style}>\n        {reserve ? (\n          <span aria-hidden=\"true\" className=\"invisible col-start-1 row-start-1\" style={{ fontVariationSettings: `\"${tag}\" ${widest}` }}>\n            {text}\n          </span>\n        ) : null}\n        <span data-slot=\"variable-font-morph-text\" className=\"col-start-1 row-start-1\">\n          {text}\n        </span>\n      </Tag>\n    </>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/variable-font-morph.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Morph de fuente variable",
+    "descriptionEs": "Texto display cuyo eje de fuente variable sigue el scroll: @property registra un número, view() lo anima y font-variation-settings lo lee. Sin desplazar el layout. CSS puro.",
+    "preview": "app/examples/variable-font-morph/preview.tsx",
+    "previewHref": "/examples/variable-font-morph",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "long",
+        "label": "Texto largo",
+        "labelEn": "Long text"
+      },
+      {
+        "id": "static",
+        "label": "Sin soporte",
+        "labelEn": "No support"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Del barro al horno",
+        "href": "/examples/variable-font-morph",
+        "description": "Eje wght de Geist, de 100 a 900."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/variable-font-morph/stress",
+        "description": "Vacío, 320px, RTL y eje inválido."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/variable-font-morph?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/variable-font-morph?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/variable-font-morph?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/variable-font-morph?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Texto largo",
+        "href": "/examples/variable-font-morph?scene=long",
+        "description": "Long text"
+      },
+      {
+        "title": "Sin soporte",
+        "href": "/examples/variable-font-morph?scene=static",
+        "description": "No support"
+      }
+    ],
+    "usage": "<VariableFontMorph as=\"h2\" text=\"Del barro al horno\" axis=\"wght\" from={100} to={900} />",
+    "api": [
+      {
+        "name": "text / as",
+        "type": "string / \"h1\" | \"h2\" | \"h3\" | \"p\"",
+        "description": "The display line and its tag."
+      },
+      {
+        "name": "axis / from / to / range",
+        "type": "string / number / number / string",
+        "description": "Four-letter axis of the host font (default wght), start and end values, and the view() range (default cover 10% cover 60%). Without motion the text rests at to."
+      },
+      {
+        "name": "reserve",
+        "type": "boolean",
+        "description": "Invisible copy at the widest value reserves the box so the morph causes no layout shift. Turn off only for an axis that keeps glyph advances, such as ELSH."
+      },
+      {
+        "name": "loading / error / labels / motion",
+        "type": "boolean / ReactNode / Partial<VariableFontMorphLabels> / \"auto\" | \"off\"",
+        "description": "Skeleton, alert, copy, and a still mode."
+      }
+    ]
+  },
+  "docs": "Idea from Midudev's scroll-driven animations demo (reel, 2026). Technical reference: MDN, CSS scroll-driven animations. Implementation is Retana UI's own; no code from the reel. Pure CSS with a local <style>: no JavaScript, no client boundary, safe in a Server Component. The animation sits inside @media (prefers-reduced-motion: no-preference) and @supports (animation-timeline: …), and animation-timeline comes after the animation shorthand. Without support or with reduced motion the content is visible and still. Pass motion=\"off\" to hold it still from a toggle. Baseline 2026 newly available (27 Oct 2026): Chrome and Edge 115+, Safari 26+, Firefox 159+. The item ships no theme, cssVars, or fixed colors. Loading and error are host states: the piece renders a skeleton or an alert. The host loads the font. Any variable font works: wght on the host's sans, or ELSH on Geist Pixel (SIL OFL-1.1, Copyright 2024 The Geist Project Authors; ship its license with the font file). This item does not bundle a font. The keyframes animate a registered number (--retana-font-morph); font-variation-settings repaints text each frame, so keep one morph per viewport.",
+  "categories": [
+    "animation"
+  ],
+  "type": "registry:ui"
+}
