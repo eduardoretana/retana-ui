@@ -1,0 +1,118 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scroll-chapters",
+  "title": "Scroll chapters",
+  "author": "Eduardo Retana",
+  "description": "Chapters with a sticky index. A total bar follows scroll(); each chapter's bar follows its own named view-timeline through timeline-scope. Pure CSS.",
+  "files": [
+    {
+      "path": "registry/ui/scroll-chapters.tsx",
+      "content": "/**\n * Long page split into chapters, with a sticky index. Pure CSS:\n * - the total bar follows the scroller with animation-timeline scroll();\n * - each chapter exposes a named view-timeline, and timeline-scope lifts it to the index,\n *   so the chapter's bar fills while that chapter is read.\n * No JavaScript and no client boundary. Without support the bars are hidden and the index is a plain list of links.\n * Idea: Midudev's scroll-driven animations demo. Reference: MDN. Implementation: Retana UI, clean-room.\n */\n\nimport type { CSSProperties, ReactNode } from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nexport type ScrollChapter = {\n  /** Anchor id. It also names the chapter's timeline, so it must be unique on the page. */\n  id: string\n  title: string\n  content: ReactNode\n}\n\nexport type ScrollChaptersLabels = {\n  nav: string\n  loading: string\n  empty: string\n}\n\nexport type ScrollChaptersProps = {\n  chapters?: readonly ScrollChapter[]\n  /** Heading tag for chapter titles. Default h2. */\n  headingAs?: \"h2\" | \"h3\"\n  loading?: boolean\n  error?: ReactNode\n  labels?: Partial<ScrollChaptersLabels>\n  /** \"off\" hides the bars and keeps the page still. Default \"auto\". */\n  motion?: \"auto\" | \"off\"\n  className?: string\n  navClassName?: string\n  chapterClassName?: string\n}\n\nexport const SCROLL_CHAPTERS_LABELS: ScrollChaptersLabels = {\n  nav: \"Chapters\",\n  loading: \"Loading\",\n  empty: \"No chapters yet.\",\n}\n\n/** Lowercase slug of a chapter id. Characters outside [a-z0-9-] become \"-\". */\nexport function chapterSlug(id: string) {\n  return id.toLowerCase().replace(/[^a-z0-9-]+/g, \"-\").replace(/^-+|-+$/g, \"\") || \"x\"\n}\n\n/** Dashed ident for a chapter's timeline. */\nexport function chapterTimelineName(id: string) {\n  return `--retana-chapter-${chapterSlug(id)}`\n}\n\nexport const SCROLL_CHAPTERS_CSS = `\n[data-slot=\"scroll-chapters-track\"] { display: none; }\n@media (prefers-reduced-motion: no-preference) {\n  @supports (animation-timeline: scroll()) and (timeline-scope: --a) {\n    [data-slot=\"scroll-chapters\"]:not([data-motion=\"off\"]) {\n      timeline-scope: var(--retana-chapters-scope);\n    }\n    [data-slot=\"scroll-chapters\"]:not([data-motion=\"off\"]) [data-slot=\"scroll-chapters-track\"] { display: block; }\n    [data-slot=\"scroll-chapters\"]:not([data-motion=\"off\"]) [data-slot=\"scroll-chapters-section\"] {\n      view-timeline-name: var(--retana-chapter-timeline);\n    }\n    [data-slot=\"scroll-chapters\"]:not([data-motion=\"off\"]) [data-slot=\"scroll-chapters-total\"] {\n      animation: retana-scroll-chapters-fill linear both;\n      animation-timeline: scroll(nearest block);\n    }\n    [data-slot=\"scroll-chapters\"]:not([data-motion=\"off\"]) [data-slot=\"scroll-chapters-bar\"] {\n      animation: retana-scroll-chapters-fill linear both;\n      animation-timeline: var(--retana-chapter-timeline);\n      animation-range: contain 0% contain 100%;\n    }\n  }\n}\n@keyframes retana-scroll-chapters-fill {\n  from { transform: scaleX(0); }\n  to { transform: scaleX(1); }\n}\n`\n\nexport function ScrollChapters({\n  chapters = [],\n  headingAs: Heading = \"h2\",\n  loading = false,\n  error,\n  labels,\n  motion = \"auto\",\n  className,\n  navClassName,\n  chapterClassName,\n}: ScrollChaptersProps) {\n  const text = { ...SCROLL_CHAPTERS_LABELS, ...labels }\n\n  if (loading) {\n    return (\n      <div data-slot=\"scroll-chapters\" data-state=\"loading\" aria-busy=\"true\" className={cn(\"flex flex-col gap-4\", className)}>\n        <span className=\"sr-only\" role=\"status\">\n          {text.loading}\n        </span>\n        <div aria-hidden=\"true\" className=\"flex gap-3 border-b pb-3\">\n          {[0, 1, 2].map((index) => (\n            <div key={index} className=\"h-4 w-20 rounded bg-muted\" />\n          ))}\n        </div>\n        <div aria-hidden=\"true\" className=\"flex flex-col gap-2\">\n          <div className=\"h-6 w-1/2 rounded bg-muted\" />\n          <div className=\"h-3 w-full rounded bg-muted\" />\n          <div className=\"h-3 w-5/6 rounded bg-muted\" />\n        </div>\n      </div>\n    )\n  }\n\n  if (error) {\n    return (\n      <div data-slot=\"scroll-chapters\" data-state=\"error\" role=\"alert\" className={cn(\"rounded-xl border border-destructive/40 bg-destructive/5 p-5 text-sm text-foreground\", className)}>\n        {error}\n      </div>\n    )\n  }\n\n  if (chapters.length === 0) {\n    return (\n      <div data-slot=\"scroll-chapters\" data-state=\"empty\" className={cn(\"rounded-xl border border-dashed p-8 text-center text-sm text-muted-foreground\", className)}>\n        {text.empty}\n      </div>\n    )\n  }\n\n  const names = chapters.map((chapter) => chapterTimelineName(chapter.id))\n  const rootStyle = { \"--retana-chapters-scope\": names.join(\", \") } as CSSProperties\n\n  return (\n    <div data-slot=\"scroll-chapters\" data-state=\"filled\" data-motion={motion} className={cn(\"relative flex flex-col\", className)} style={rootStyle}>\n      <style>{SCROLL_CHAPTERS_CSS}</style>\n      <nav aria-label={text.nav} className={cn(\"sticky top-0 z-10 border-b bg-background/95 backdrop-blur-sm\", navClassName)}>\n        <div data-slot=\"scroll-chapters-track\" aria-hidden=\"true\" className=\"h-0.5 w-full bg-muted\">\n          <div data-slot=\"scroll-chapters-total\" className=\"h-full w-full origin-left bg-primary\" />\n        </div>\n        <ol className=\"flex list-none gap-1 overflow-x-auto p-1\">\n          {chapters.map((chapter, index) => (\n            <li key={chapter.id} className=\"min-w-0 shrink-0\">\n              <a\n                href={`#${chapter.id}`}\n                className=\"flex flex-col gap-1 rounded-md px-3 py-2 text-sm text-muted-foreground outline-none hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring\"\n                style={{ \"--retana-chapter-timeline\": names[index] } as CSSProperties}\n              >\n                <span className=\"max-w-48 truncate\">{chapter.title}</span>\n                <span data-slot=\"scroll-chapters-track\" aria-hidden=\"true\" className=\"h-0.5 w-full overflow-hidden rounded-full bg-muted\">\n                  <span data-slot=\"scroll-chapters-bar\" className=\"block h-full w-full origin-left bg-foreground\" />\n                </span>\n              </a>\n            </li>\n          ))}\n        </ol>\n      </nav>\n      {chapters.map((chapter, index) => (\n        <section\n          key={chapter.id}\n          id={chapter.id}\n          data-slot=\"scroll-chapters-section\"\n          aria-labelledby={`retana-chapter-${chapterSlug(chapter.id)}-title`}\n          className={cn(\"flex scroll-mt-16 flex-col gap-3 py-8\", chapterClassName)}\n          style={{ \"--retana-chapter-timeline\": names[index] } as CSSProperties}\n        >\n          <Heading id={`retana-chapter-${chapterSlug(chapter.id)}-title`} className=\"text-xl font-semibold text-balance break-words\">\n            {chapter.title}\n          </Heading>\n          <div className=\"text-sm leading-relaxed text-pretty break-words text-muted-foreground\">{chapter.content}</div>\n        </section>\n      ))}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "@ui/scroll-chapters.tsx"
+    }
+  ],
+  "meta": {
+    "titleEs": "Capítulos con progreso",
+    "descriptionEs": "Índice fijo con una barra total por scroll() y una barra por capítulo con view-timeline con nombre y timeline-scope. CSS puro; sin soporte, el índice es una lista de enlaces.",
+    "preview": "app/examples/scroll-chapters/preview.tsx",
+    "previewHref": "/examples/scroll-chapters",
+    "scenes": [
+      {
+        "id": "filled",
+        "label": "Lleno",
+        "labelEn": "Filled"
+      },
+      {
+        "id": "empty",
+        "label": "Vacío",
+        "labelEn": "Empty"
+      },
+      {
+        "id": "loading",
+        "label": "Cargando",
+        "labelEn": "Loading"
+      },
+      {
+        "id": "error",
+        "label": "Error",
+        "labelEn": "Error"
+      },
+      {
+        "id": "long",
+        "label": "Títulos largos",
+        "labelEn": "Long titles"
+      },
+      {
+        "id": "static",
+        "label": "Sin soporte",
+        "labelEn": "No support"
+      }
+    ],
+    "examples": [
+      {
+        "title": "Guía del taller",
+        "href": "/examples/scroll-chapters",
+        "description": "Barro, torno, horno y esmalte."
+      },
+      {
+        "title": "Estrés",
+        "href": "/examples/scroll-chapters/stress",
+        "description": "Vacío, 320px, RTL y veinte capítulos."
+      },
+      {
+        "title": "Lleno",
+        "href": "/examples/scroll-chapters?scene=filled",
+        "description": "Filled"
+      },
+      {
+        "title": "Vacío",
+        "href": "/examples/scroll-chapters?scene=empty",
+        "description": "Empty"
+      },
+      {
+        "title": "Cargando",
+        "href": "/examples/scroll-chapters?scene=loading",
+        "description": "Loading"
+      },
+      {
+        "title": "Error",
+        "href": "/examples/scroll-chapters?scene=error",
+        "description": "Error"
+      },
+      {
+        "title": "Títulos largos",
+        "href": "/examples/scroll-chapters?scene=long",
+        "description": "Long titles"
+      },
+      {
+        "title": "Sin soporte",
+        "href": "/examples/scroll-chapters?scene=static",
+        "description": "No support"
+      }
+    ],
+    "usage": "<ScrollChapters chapters={[{ id: \"barro\", title: \"El barro\", content: <p>…</p> }]} />",
+    "api": [
+      {
+        "name": "chapters",
+        "type": "{ id, title, content }[]",
+        "description": "id is the anchor and names the chapter's timeline (--retana-chapter-<id>), so it must be unique on the page."
+      },
+      {
+        "name": "headingAs",
+        "type": "\"h2\" | \"h3\"",
+        "description": "Chapter title tag. Default h2."
+      },
+      {
+        "name": "loading / error / labels / motion",
+        "type": "boolean / ReactNode / Partial<ScrollChaptersLabels> / \"auto\" | \"off\"",
+        "description": "Skeleton, alert, nav label and copy, and a still mode that hides the bars."
+      }
+    ]
+  },
+  "docs": "Idea from Midudev's scroll-driven animations demo (reel, 2026). Technical reference: MDN, CSS scroll-driven animations. Implementation is Retana UI's own; no code from the reel. Pure CSS with a local <style>: no JavaScript, no client boundary, safe in a Server Component. The animation sits inside @media (prefers-reduced-motion: no-preference) and @supports (animation-timeline: …), and animation-timeline comes after the animation shorthand. Without support or with reduced motion the content is visible and still. Pass motion=\"off\" to hold it still from a toggle. Baseline 2026 newly available (27 Oct 2026): Chrome and Edge 115+, Safari 26+, Firefox 159+. The item ships no theme, cssVars, or fixed colors. Loading and error are host states: the piece renders a skeleton or an alert. The total bar uses scroll(nearest block), so it follows the page or the nearest scroller. Chapter bars use animation-range contain 0% contain 100% and animate transform scaleX only. Bars are aria-hidden; the index links are real anchors.",
+  "categories": [
+    "animation"
+  ],
+  "type": "registry:ui"
+}
