@@ -2,11 +2,11 @@
  * Clean-room agenda model.
  * The behavior was observed. No mockup source, copy, colors, or assets were copied.
  * Chrome defaults to Spanish. Pass `labels` for another language.
- * Time zones reuse `date-range` (`timeZoneOffsetMs`, `startOfZonedDay`, `addZonedDays`).
+ * Time zones reuse `date-range` (`startOfZonedDay`, `addZonedDays`); offsets go through a cached formatter.
  * `view-calendar` stays the date-field month inside multi-view.
  */
 
-import { addZonedDays, startOfZonedDay, timeZoneOffsetMs } from "@/registry/retana/lib/date-range"
+import { addZonedDays, startOfZonedDay } from "@/registry/retana/lib/date-range"
 
 export const AGENDA_VIEWS = ["day", "week", "month"] as const
 
@@ -577,8 +577,8 @@ export function zonedDateTimeToUtc(
   timeZone: string,
 ): { instant: number; snapped: boolean } {
   const wall = Date.UTC(year, month - 1, day, hour, minute, 0)
-  const rough = wall - timeZoneOffsetMs(timeZone, wall)
-  const instant = wall - timeZoneOffsetMs(timeZone, rough)
+  const rough = wall - zonedOffsetMs(timeZone, wall)
+  const instant = wall - zonedOffsetMs(timeZone, rough)
   if (sameCivil(instant, year, month, day, hour, minute, timeZone)) {
     return { instant, snapped: false }
   }
@@ -599,12 +599,34 @@ export function zonedDateTimeToUtc(
   return { instant, snapped: true }
 }
 
+// `timeZoneOffsetMs` from date-range builds a new Intl.DateTimeFormat on every
+// call. A 30-resource, 200-event board asks for day bounds and offsets thousands
+// of times per render, so the agenda keeps its hot path on the cached
+// `zonedFormatter` and remembers each day's bounds. Same math, same results.
+function zonedOffsetMs(timeZone: string, ts: number) {
+  const p = zonedParts(ts, timeZone)
+  return Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute, p.second) - ts
+}
+
+const dayBoundsCache = new Map<string, { start: number; end: number } | null>()
+const DAY_BOUNDS_CACHE_MAX = 1024
+
 export function zonedDayBounds(iso: string, timeZone: string): { start: number; end: number } | null {
+  const key = `${iso}\u0000${timeZone}`
+  if (dayBoundsCache.has(key)) {
+    const hit = dayBoundsCache.get(key) ?? null
+    return hit ? { ...hit } : null
+  }
   const parts = parseCalendarDate(iso)
-  if (!parts) return null
-  const probe = zonedDateTimeToUtc(parts.year, parts.month, parts.day, 12, 0, timeZone).instant
-  const start = startOfZonedDay(probe, timeZone)
-  return { start, end: addZonedDays(start, 1, timeZone) }
+  let bounds: { start: number; end: number } | null = null
+  if (parts) {
+    const probe = zonedDateTimeToUtc(parts.year, parts.month, parts.day, 12, 0, timeZone).instant
+    const start = startOfZonedDay(probe, timeZone)
+    bounds = { start, end: addZonedDays(start, 1, timeZone) }
+  }
+  if (dayBoundsCache.size >= DAY_BOUNDS_CACHE_MAX) dayBoundsCache.clear()
+  dayBoundsCache.set(key, bounds)
+  return bounds ? { ...bounds } : null
 }
 
 export function isGapHour(iso: string, hour: number, timeZone: string) {
@@ -710,12 +732,16 @@ export function formatTimeZoneShort(ts: number, timeZone: string, locale: string
   return parts.find((part) => part.type === "timeZoneName")?.value ?? timeZone
 }
 
+const clockFormatters = new Map<string, Intl.DateTimeFormat>()
+
 export function formatClock(ts: number, timeZone: string, locale: string) {
-  return new Intl.DateTimeFormat(locale, {
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone,
-  }).format(new Date(ts))
+  const key = `${locale}\u0000${timeZone}`
+  let formatter = clockFormatters.get(key)
+  if (!formatter) {
+    formatter = new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit", timeZone })
+    clockFormatters.set(key, formatter)
+  }
+  return formatter.format(new Date(ts))
 }
 
 export function formatDayHeading(iso: string, locale: string) {

@@ -354,6 +354,34 @@ describe("agenda resources", () => {
     expect(document.querySelector("[data-slot=agenda-capacity]")).toHaveTextContent("1 h over")
   })
 
+  it("builds the same number of date formatters for 20 or 200 events", () => {
+    // Each offset lookup used to build its own Intl.DateTimeFormat, so a
+    // 200-event board built about 4,500 of them and held the main thread for
+    // close to a second in Chromium. Each zone here is used once in this file.
+    const Real = Intl.DateTimeFormat
+    const builtFor = (count: number, zone: string) => {
+      let built = 0
+      Intl.DateTimeFormat = new Proxy(Real, {
+        construct(target, args: ConstructorParameters<typeof Intl.DateTimeFormat>) {
+          built += 1
+          return new target(...args)
+        },
+      })
+      try {
+        const events = Array.from({ length: count }, (_, index) =>
+          event({ id: `f${index}`, resourceId: `r${index % 30}`, startsAt: mx(8, 9), endsAt: mx(8, 10) }),
+        )
+        const thirty = Array.from({ length: 30 }, (_, index) => ({ id: `r${index}`, label: `R ${index}`, capacityHours: 8 }))
+        const { unmount } = render(<DayBoard resources={thirty} events={events} timeZone={zone} />)
+        unmount()
+      } finally {
+        Intl.DateTimeFormat = Real
+      }
+      return built
+    }
+    expect(builtFor(200, "Asia/Kathmandu")).toBe(builtFor(20, "Asia/Kolkata"))
+  })
+
   it("keeps thirty resources and long names in the day axis", async () => {
     const user = userEvent.setup()
     const manyResources: AgendaResource[] = Array.from({ length: 30 }, (_, index) => ({
@@ -383,8 +411,15 @@ describe("agenda resources", () => {
     expect(title).toBeVisible()
     expect(title).toHaveClass("truncate")
     expect(document.querySelector("[data-resource-column-min]")).toHaveAttribute("data-resource-column-min", "22rem")
-    expect(screen.getByRole("button", { name: new RegExp(`Abrir ${manyEvents[0]!.title}`) })).toBeInTheDocument()
-    const more = screen.getByRole("button", { name: "Ver los 30" })
+    // Queries stay scoped (the event's own button, the capacity summary): a
+    // role+name scan over every button of this 5,000-node jsdom tree costs about
+    // 1.3 s per query and checks nothing more.
+    const open = title.closest("button")
+    expect(open).not.toBeNull()
+    expect(open).toHaveAccessibleName(new RegExp(`^Abrir ${manyEvents[0]!.title}`))
+    const capacity = document.querySelector<HTMLElement>("[data-slot=agenda-capacity]")
+    expect(capacity).not.toBeNull()
+    const more = within(capacity!).getByRole("button", { name: "Ver los 30" })
     expect(more).toHaveAttribute("aria-expanded", "false")
     expect(document.querySelectorAll("[data-slot=agenda-capacity-row], [data-slot=agenda-capacity-over]")).toHaveLength(12)
     await user.click(more)
