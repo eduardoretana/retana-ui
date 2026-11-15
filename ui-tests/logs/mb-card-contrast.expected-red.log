@@ -1,0 +1,33 @@
+# head: 91a701fedbacf4fb97d9bbbe792d1cb4d2edb16d (árbol de 91a701fe + __tests__/map-browser-contrast.test.tsx)
+# cmd: pnpm exec vitest run __tests__/map-browser-contrast.test.tsx
+
+ RUN  v5.0.2 /workspace/map-browser/src/retana-ui-cpl
+
+Not implemented: HTMLCanvasElement's getContext() method: without installing the canvas npm package
+ ❯ __tests__/map-browser-contrast.test.tsx (5 tests | 2 failed) 149ms
+   ❯ map-browser card contrast (F-001, RUI-CONTRAST-001) (5)
+     × MB-CARD-CONTRAST: every text on the hover card reaches 4.5:1 in light 55ms
+     × MB-CARD-CONTRAST: every text on the active card reaches 4.5:1 in light 67ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  __tests__/map-browser-contrast.test.tsx > map-browser card contrast (F-001, RUI-CONTRAST-001) > MB-CARD-CONTRAST: every text on the hover card reaches 4.5:1 in light
+ FAIL  __tests__/map-browser-contrast.test.tsx > map-browser card contrast (F-001, RUI-CONTRAST-001) > MB-CARD-CONTRAST: every text on the active card reaches 4.5:1 in light
+AssertionError: Calle Uno 12: muted-foreground on accent = 4.35: expected 4.34923168556426 to be greater than or equal to 4.5
+ ❯ __tests__/map-browser-contrast.test.tsx:104:75
+    102|           const fg = textToken(t, state)
+    103|           const r = ratio(theme[fg], theme[bg])
+    104|           expect(r, `${t.textContent}: ${fg} on ${bg} = ${r.toFixed(2)…
+       |                                                                           ^
+    105|         }
+    106|       })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 3 passed (5)
+   Start at  17:02:30
+   Duration  1.24s (environment 41%, import 23%, transform 15%, tests 13%, setup 7%)
+
+# exit: 1
