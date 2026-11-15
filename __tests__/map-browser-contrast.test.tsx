@@ -82,9 +82,21 @@ beforeEach(() => fake.reset())
 afterEach(() => cleanup())
 
 describe("map-browser card contrast (F-001, RUI-CONTRAST-001)", () => {
-  it("MB-CARD-CONTRAST: helper reproduces the auditor's light measurement (muted-foreground on accent ≈ 4.35:1)", () => {
+  // The auditor measured 4.35:1 with the original light token (oklch(0.556 0 0)). The helper must keep
+  // reproducing that measurement, and that value must keep failing the 4.5:1 threshold (red guard).
+  const AUDITED_MUTED_FOREGROUND = "oklch(0.556 0 0)"
+
+  it("MB-CARD-CONTRAST: helper reproduces the auditor's light measurement (original muted-foreground on accent ≈ 4.35:1, below 4.5)", () => {
     const light = tokens(":root")
-    expect(ratio(light["muted-foreground"], light.accent)).toBeCloseTo(4.35, 1)
+    const audited = ratio(AUDITED_MUTED_FOREGROUND, light.accent)
+    expect(audited).toBeCloseTo(4.35, 1)
+    expect(audited).toBeLessThan(4.5)
+  })
+
+  it("MB-CARD-CONTRAST: the current light muted-foreground on accent reaches 4.5:1", () => {
+    const light = tokens(":root")
+    const r = ratio(light["muted-foreground"], light.accent)
+    expect(r, `muted-foreground ${light["muted-foreground"]} on accent = ${r.toFixed(2)}`).toBeGreaterThanOrEqual(4.5)
   })
 
   for (const mode of [":root", ".dark"] as const) {
