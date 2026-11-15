@@ -9,10 +9,11 @@ export const metadata: Metadata = {
   description: "Chips activos y un menú para añadir un campo y un valor.",
 }
 
-export default function FilterToolbarPage() {
+export default async function FilterToolbarPage({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
+  const { lang } = await searchParams
   return (
     <ExampleFrame title="Barra de filtros" description="El botón crece hasta el menú. Quitar un chip pasa el foco al vecino.">
-      <Demo />
+      <Demo locale={lang === "es" ? "es" : "en"} />
     </ExampleFrame>
   )
 }
