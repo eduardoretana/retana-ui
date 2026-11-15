@@ -1,11 +1,36 @@
 ---
 spec_id: agenda-resources
-version: 0.1.0
+version: 0.1.1
 profile: STANDARD
 spec_changelog:
   - version: 0.1.0
     origin: lead
     note: Eje de recursos, choques y cupo sobre la agenda existente.
+  - version: 0.1.1
+    origin: lead
+    note: "Pedido del UI Lead (DSP-retana-ui-67-r1): Profile, States y tabla de AC en el cuerpo; dirección por referencia. La tabla resume los AC-1…AC-8 que ya estaban en §Aceptación; no hay AC nuevos."
+states: [filled, empty, loading, error, resources, conflicts, over, many]
+data_fixture: ui/direction/fixtures/agenda-resources.yaml
+direction:
+  mode: visual
+  reference_meta: ui/direction/agenda-resources/reference-meta.yaml
+  references:
+    - reference_id: REF-cpl-agenda
+      screen_id: agenda
+      kind: visual
+      path: ui/direction/agenda-resources/ref-cpl-agenda.md
+      sha256: d414fe2198b098f38d9a042ed69e01a6dd362fbd67c01178b0c89ef0b7d110c4
+      chosen_at_spec_version: "0.1.1"
+      valid_for_spec_version: "0.1.1"
+      status: current
+    - reference_id: REF-shadcnstudio-user-schedule-05
+      screen_id: agenda
+      kind: idea
+      path: ui/direction/agenda-resources/ref-shadcnstudio-user-schedule-05.md
+      sha256: f874d56889a1179b5140657ef1e7b50543019f1a4975bfd1945ec017316297dd
+      chosen_at_spec_version: "0.1.1"
+      valid_for_spec_version: "0.1.1"
+      status: current
 ---
 
 # agenda-resources
@@ -62,6 +87,37 @@ Medio. Columnas nuevas en el día. La semana sin `resources` no cambia de contra
 ## Copy
 
 Español por defecto. Inglés en `agendaLabelsEn`. Textos de choque y cupo en `docs/agenda-resources.md`.
+
+## Perfil y estados
+
+- **Profile**: STANDARD
+- **States**: filled, empty, loading, error, resources, conflicts, over, many
+
+Estados tomados de §Estados de esta Spec, con los ids de escena de `app/examples/agenda/scenes.tsx`.
+
+## Criterios de aceptación
+
+Resumen en tabla de los AC-1…AC-8 de §Aceptación (mismo texto de measure y test). No hay AC nuevos.
+
+| ID | Criterio | Medida | Prueba |
+| --- | --- | --- | --- |
+| AC-1 | Retrocompatible | Render sin `resources`. No hay combobox «Recurso», ni botón de choque, ni `[data-slot=agenda-capacity]`. `data-resource-layout` es `off`. | `__tests__/agenda-resources.test.tsx` «keeps the previous agenda when resources are omitted» y la suite `__tests__/agenda.test.tsx` |
+| AC-2 | Eje y filtro | Con `resources`, el día ancho usa columnas (`data-resource-layout=columns`) con un `columnheader` por recurso. El filtro no controlado oculta los otros. El controlado llama `onResourceIdChange` y no cambia solo. | «filters by resource, controlled or not, and lays the day out in columns» |
+| AC-3 | 390px | Con `matchMedia(max-width: 767px)` o ancho medido menor de 560px, el día es lista (`data-resource-layout=list`), con encabezado por recurso y sin columnas. | «uses a list instead of columns at a narrow width» |
+| AC-4 | Choque accesible | Icono con `aria-hidden` y texto «Choque con …» dentro del evento. El nombre accesible lo incluye. El encabezado anuncia «1 choque» y Enter mueve el foco al evento. Fin igual a inicio no cuenta. | «announces a conflict…» y «does not treat a shared endpoint as a conflict» |
+| AC-5 | Bordes de tiempo | Día completo, frontera del día siguiente, hora repetida de otoño y día de 23 h de primavera, según los instantes. | «counts an all-day event…» y «uses absolute instants across a DST fold…» |
+| AC-6 | Cupo | Texto «4 h de 3 h» y «1 h de más» con icono. La suma recorta al día visible, ignora eventos sin recurso y dobla los solapes. Un día de primavera cuenta 23 h. | «shows scheduled hours against capacity…» y los dos casos de `resourceLoads` |
+| AC-7 | Idioma, largo y cantidad | `agendaLabelsEn` dice «Resource», «1 conflict» y «over». 30 recursos producen 31 opciones. Un nombre largo vive en un nodo `truncate`. | «switches the chrome to English» y «keeps thirty resources and long names…». 200 eventos encadenados producen 199 pares |
+| AC-8 | Tema | En `registry/blocks/agenda.tsx`, `registry/ui/agenda-event.tsx` y `registry/lib/agenda.ts` no hay hex, `rgb(`, `oklch(` ni clase de paleta Tailwind. La animación nueva no existe; no se añade `transition`. | `pnpm registry:build` (el validador de color) y revisión del diff |
+
+## Dirección
+
+Por referencia (`direction.mode: visual`). Detalle y sha256 en `ui/direction/agenda-resources/reference-meta.yaml`; mapa de desviaciones en `ui/direction/agenda-resources/direction-map.md`; fixture E14 en `ui/direction/fixtures/agenda-resources.yaml`.
+
+- `REF-cpl-agenda` (visual): `ui/direction/agenda-resources/ref-cpl-agenda.md`
+- `REF-shadcnstudio-user-schedule-05` (idea): `ui/direction/agenda-resources/ref-shadcnstudio-user-schedule-05.md`
+
+La referencia visual es la UI vigente de cada pieza en CPL `33438d12` (Anti-Slop `mode=preserve`). No se generaron variantes: el ciclo cambia una pieza existente sin tablero nuevo (la referencia externa es de pago y no se abre). La elección de la referencia en STANDARD es del UI Lead.
 
 ## Aceptación
 
