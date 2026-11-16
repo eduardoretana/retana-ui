@@ -105,6 +105,7 @@ Español por defecto. Inglés en `agendaLabelsEn`. Textos de choque y cupo en `d
 ## Perfil y estados
 
 - **Profile**: STANDARD
+- **UI intent**: APPLIES
 - **States**: filled, empty, loading, error, resources, conflicts, over, many
 
 Estados tomados de §Estados de esta Spec, con los ids de escena de `app/examples/agenda/scenes.tsx`.

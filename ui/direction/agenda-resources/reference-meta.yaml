@@ -6,7 +6,7 @@ valid_for_spec_version: "0.1.1"
 mode: visual
 chosen_by: null   # STANDARD: la confirma el UI Lead en el sobre
 cpl_control: {dir: /workspace/retana-ui-entregas/pr-sweep/cpl-control-gestos-agenda, manifest_sha256: 6828c0243bd35365eb3f3bf5a5ea4557dbe7cd53b616736e4792ffa754af0ff2, head: 33438d12520bbf9fe18ebc87f29df2a3122d02b6, harness: 21db9481b331}
-spec_sync: {spec: ui/specs/agenda-resources.spec.md, spec_version: "0.1.1", spec_revision: 2, note: "Se actualiza en el mismo commit que la Spec (gate predispatch). Rev. 2 es editorial: §Estados y sha de retana_ui; las referencias no cambian."}
+spec_sync: {spec: ui/specs/agenda-resources.spec.md, spec_version: "0.1.1", spec_revision: 3, note: "Se actualiza en el mismo commit que la Spec (gate predispatch). Rev. 3 solo declara UI intent: APPLIES en el cuerpo de la Spec (contrato del puente UI); sin cambio de AC ni de referencias."}
 references:
   - {reference_id: REF-cpl-agenda, screen_id: agenda, kind: visual, path: ui/direction/agenda-resources/ref-cpl-agenda.md, sha256: d414fe2198b098f38d9a042ed69e01a6dd362fbd67c01178b0c89ef0b7d110c4, status: current, valid_for_spec_version: "0.1.1"}
       # imagen: before/agenda/desktop-light-reduced.png sha256 c679eee7d9875d00b62fe00c1c871b6621666e8cee755abaa5ec15b773c8c4a7
