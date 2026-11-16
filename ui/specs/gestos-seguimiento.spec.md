@@ -61,6 +61,7 @@ El plan está en `docs/plans/2026-11-09-gestos-seguimiento.md`. Los AC están en
 ## Perfil y estados
 
 - **Profile**: STANDARD
+- **UI intent**: APPLIES
 - **States**: filled, empty, loading, error, dragging, dismissed, reduced, keyboard, 390
 
 Estados tomados de AC-4 del plan.
