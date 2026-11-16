@@ -2,14 +2,17 @@
 
 Reglas para escribir o revisar animación en una pieza. Complementan `registry/lib/motion.ts` y las reglas `RUI-ANIM-PERF-001…007` del ui-system. Si una regla de aquí choca con la Spec de un ciclo, manda la Spec.
 
-Adaptado de las skills de Emil Kowalski, `emilkowalski/skills@0f2e23b` (`emil-design-eng`, `review-animations`, `animation-performance`, `choreograph`, `ask-sonner`, `gestures`), licencia MIT, Copyright (c) 2026 Emil Kowalski. El texto está reescrito y mapeado a este repo; el aviso completo está en [NOTICE](../NOTICE).
+Adaptado de las skills de Emil Kowalski, `emilkowalski/skills@0f2e23b` (`emil-design-eng`, `review-animations`, `animation-performance`, `choreograph`, `ask-sonner`, `gestures`); el contrato de stagger viene de `better-ui`, licencia MIT, Copyright (c) 2026 Emil Kowalski. El texto está reescrito y mapeado a este repo; el aviso completo está en [NOTICE](../NOTICE).
 
 ## Duración
 
-- La UI anima en menos de 300 ms.
-- Las excepciones documentadas son modales, drawers, sheets y toasts. Modales y drawers pueden llegar a 500 ms. Los toasts de Sonner usan su propio `transform 400ms ease` (`sonner/dist/styles.css`).
+El tope y sus excepciones vienen de `review-animations/STANDARDS.md` del ui-system (copia de Emil fijada en el Hub). Esa tabla manda.
+
+- La UI anima en menos de 300 ms. Referencias: respuesta de botón 100–160 ms, tooltips y popovers pequeños 125–200 ms, dropdowns y selects 150–250 ms.
+- Excepciones: modales y drawers de 200 a 500 ms; toast de Sonner con su `transform 400ms ease` (`sonner/dist/styles.css`); piezas de marketing o explicativas pueden durar más.
 - `motionPresets.duration.considered` (0.48 s) solo cabe en esas superficies. En cualquier otra pieza, más de 300 ms necesita una razón escrita en la Spec o en el `docs` del item.
 - La salida es más corta que la entrada: 250 ms de entrada y 200 ms de salida, no al revés.
+- `anim_perf_lint.mjs` no comprueba duraciones. El texto de `review-animations` que llama hallazgo a todo lo que pasa de 300 ms es guía para quien construye, no un hallazgo del veredicto del UI Auditor.
 
 ## Curvas
 
@@ -21,12 +24,15 @@ Adaptado de las skills de Emil Kowalski, `emilkowalski/skills@0f2e23b` (`emil-de
 
 ## Escalonado (stagger)
 
-- Entre 30 y 80 ms por elemento, y el grupo termina en unos 300 ms.
+El contrato vigente es el de `better-ui` (Jakub Krehel) en el ui-system: retraso uniforme entre grupos.
+
+- Solo en entradas poco frecuentes donde el orden comunica jerarquía: el hero al cargar, un estado de éxito, un estado vacío.
+- Divide en grupos semánticos (título, descripción, botones) con unos 100 ms entre grupos. Para un título partido en palabras, unos 80 ms.
 - Una sola entrada por contenedor. Si el panel ya entra, sus filas no necesitan otra.
-- Los intervalos no son uniformes: se acortan conforme avanza el grupo (por ejemplo 0, 120, 200 ms), para que se lea como una ola y no como un metrónomo.
-- A partir del quinto elemento, todos usan el retraso del quinto.
 - Nunca bloquea la interacción ni va en superficies de alta frecuencia.
-- `motionPresets.stagger.item` (35 ms) multiplicado por el índice es uniforme y no tiene tope. Las piezas que lo usan así quedan como deuda conocida: se corrigen dentro de un ciclo con Auditor, no en este documento.
+- `motionPresets.stagger` (`char`, `word`, `line`, `item`) multiplicado por el índice es uniforme y cumple el contrato.
+
+Nota opcional, sin regla: `emilkowalski/skills@0f2e23b` propone intervalos que se acortan conforme avanza el grupo y un tope a partir del quinto elemento. No es obligatorio ni tiene rango exigido; queda en el learnings log del ui-system hasta validarlo en lab.
 
 ## Propiedades y compositor
 
@@ -63,4 +69,4 @@ Retana UI no depende de Vaul hoy; `sheet` usa Radix. Si una pieza lo adopta, los
 ## Cómo se revisa
 
 - Corre `anim_perf_lint.mjs` del ui-system sobre los archivos tocados.
-- Para revisar el movimiento completo, la herramienta es `review-animations`. Para elegir qué skill usar, `ask-emil` sirve como mapa del lado del Builder; el veredicto lo da el UI Auditor con sus checks, no ese router.
+- Para revisar el movimiento completo mientras construyes, la guía es `review-animations`. Para elegir qué skill usar, `ask-emil` sirve como mapa solo del lado del Builder (con `disable-model-invocation`). El veredicto lo da el UI Auditor con sus checks, no esas guías ni ese router.
