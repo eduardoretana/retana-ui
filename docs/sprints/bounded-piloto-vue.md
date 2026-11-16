@@ -36,6 +36,35 @@ Manifiesto de dueño del carril para el puente UI del Hub. Una sola pieza o exte
 - **UI consumer impact**: YES
 - **Surface creation/restructure impact**: NO
 
+## Design Specialization Gate
+
+Pasada de diseño real sobre el código y los renders del PR #86. Solo se marca USED lo que se corrió. Se registra lo que salió, sin inventar.
+
+- **Design context source**: design context brief del carril: Spec `ui/specs/piloto-vue.spec.md`, dirección `ui/direction/piloto-vue/`, piezas decision-inbox, lightbox, time-off-stats, renders del head en `/workspace/retana-ui-entregas/pr-sweep/86/renders.yaml`.
+- **Design context checks**: existing surfaces = decision-inbox, lightbox, time-off-stats (piezas de CPL, sin pieza nueva); state inventory = filled, empty, loading, error, zero, pending, answered, folded, 390; tokens/components = retana-ui registry (shadcn/ui primitives, Tailwind v4 tokens, motion/react, registry/lib/motion.ts presets); anti-invention = solo hechos leídos del código, la Spec y los renders.
+- **User objective**: prove the DTCG tokens and three existing pieces (time-off-stats, decision-inbox, lightbox) work as Vue SFCs and a Razor view at parity with React.
+- **Specialized design source**: design skill emil-design-eng (Emil Kowalski, emilkowalski/skills@f1090bec, MIT), cargada con Skill en esta pasada.
+- **Design skill stack trace**: emil-design-eng cargada con Skill y aplicada al diff de código del PR contra CPL 33438d12 (checklist completo: transition-all, scale(0), ease-in, duraciones, hover sin media query, keyframes en UI rápida, animación por teclado, reduced motion, pointer capture, multi-touch, velocidad); ui-ux-pro-max no se pudo cargar (no instalada en este agente); routing core-only.
+- **UI/UX Pro Max classification**: NOT_RUN
+- **UI/UX Pro Max evidence**: query=no se corrió, la skill ui-ux-pro-max no está instalada en este agente (Skill por nombre y Skill query sin resultado; ui-system/skills/README.md del hub la lista como del hub, no vendorizada); domain=no se corrió; applied_decision=no se corrió
+- **Emil Design Engineering classification**: USED
+- **Emil Design Engineering evidence**: interaction=lightbox zoom is button-driven (no direct manipulation); decision-inbox and time-off-stats are click and keyboard only; craft=checked the Emil checklist on the React and Vue files: lightbox animates transform only for 200 ms with motion-reduce:transition-none; skeletons use animate-pulse and AC8 checks animation-name none under reduced motion; motion=one transform transition of 200 ms and a loading pulse; both drop under reduced motion
+- **Design skill applied use**: applied use de emil-design-eng: no change: the emil-design-eng checklist found nothing to fix in the changed code.
+- Polish: not run (impeccable no está instalada en este agente).
+- **Visual evidence**: browser screenshots (renders) del arnés 21db9481b331 sobre `next start` en `/workspace/retana-ui-entregas/pr-sweep/86/renders.yaml`: 176 capturas del head ab39e038, a 390 y escritorio, claro y oscuro, reduced-motion activado y no.
+- **Apple Design classification**: NOT_APPLICABLE
+- **Apple Design reason**: the pilot ports button and keyboard driven pieces; there is no gesture, drag or sheet in scope.
+- **Anti-Slop routing**: core-only
+- **Anti-Slop routing reason**: el ciclo extiende piezas existentes de CPL (decision-inbox, lightbox, time-off-stats); no hay superficie nueva ni rediseño, así que no aplica el especialista de primera pasada.
+- **Anti-Slop Design Read**: surface=decision-inbox, lightbox, time-off-stats; audience=teams on Vue or ASP.NET hosts that consume retana-ui tokens; objective=prove the DTCG tokens and three existing pieces (time-off-stats, decision-inbox, lightbox) work as Vue SFCs and a Razor view at parity with React; language=es-MX por defecto con etiquetas EN existentes; system=retana-ui registry (shadcn/ui primitives, Tailwind v4 tokens, motion/react, registry/lib/motion.ts presets)
+- **Anti-Slop design dials**: DESIGN_VARIANCE=1; MOTION_INTENSITY=2; VISUAL_DENSITY=5; rationale=lectura del revisor sobre el código: variance 1 because the port matches the React pieces; motion 2 because only the lightbox zoom transform and the loading skeleton move; density 5 because the pieces keep their CPL density
+- **Anti-Slop anti-default ledger**: rejected=nuevas variantes visuales, librerías o tokens fuera de CPL; accepted=los tokens, primitivas y presets de motion que ya usa CPL; reason=el ciclo es de interacción sobre piezas existentes y la Spec fija el look de CPL
+- **Anti-Slop consistency locks**: system=retana-ui registry and shadcn primitives already in CPL; theme=light and dark from the existing tokens, no new theme; color=existing semantic tokens only (primary, muted, destructive, border); type=existing scale with tabular-nums on figures; icons=lucide-react as in CPL; shape=existing radii (rounded-xl cards, rounded-full pills); copy=es-MX default with the existing EN label sets
+- **Anti-Slop truth ledger**: assets=sin imágenes nuevas, solo fixtures del ejemplo; data=fixtures ficticios en app/examples; copy=textos de la Spec y de los fixtures es-MX y EN; dependencies=no new runtime dependency in the design pass
+- **Anti-Slop preservation ledger**: mode=preserve; preserve=apariencia, tokens y API pública de decision-inbox, lightbox, time-off-stats en CPL; approved_changes=solo los cambios de interacción que ya fija la Spec; la pasada no agregó cambios
+- **Anti-Slop motion purpose**: purpose=state-transition; experience_quality=APPLIES (evidencia en docs/sprints/bounded-piloto-vue-experience-quality.md)
+- **Anti-Slop proof plan**: viewports=390 y escritorio; states=filled, empty, loading, error, zero, pending, answered, folded, 390; browser=chromium headless del arnés 21db9481b331 sobre next start; visual_diff=capturas after del head en renders.yaml, sin herramienta de diff de píxeles; deviations=la pasada no introdujo desviación del look de CPL
+
 ## Referencias del ciclo
 
 - PR: eduardoretana/retana-ui#86 (borrador, base CPL)
