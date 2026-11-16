@@ -226,6 +226,8 @@ Scroll and motion primitives. They inherit the host tokens and follow [`motion-p
 
 ## Install
 
+**With an agent.** Paste the prompt in [docs/inicio-rapido.md](docs/inicio-rapido.md) (Spanish) into your agent. It asks for the SHA, never runs `shadcn init`, and answers no when the CLI offers to overwrite a host primitive. The manual steps follow.
+
 Register the namespace once in the host `components.json`. Pin `@retana` to a commit. A branch name would float.
 
 ```json
@@ -821,7 +823,7 @@ pnpm test
 pnpm build
 ```
 
-`pnpm registry:build` validates the registry and writes `public/r/*.json`. `pnpm readme:catalog` refreshes the catalog list in this file. New items follow [CONTRIBUTING.md](CONTRIBUTING.md).
+`pnpm registry:build` validates the registry and writes `public/r/*.json`. `pnpm readme:catalog` refreshes the catalog list in this file. New items follow [CONTRIBUTING.md](CONTRIBUTING.md). Motion rules for pieces (durations, curves, stagger, Motion, Sonner) are in [docs/movimiento.md](docs/movimiento.md).
 
 ## Credits
 
