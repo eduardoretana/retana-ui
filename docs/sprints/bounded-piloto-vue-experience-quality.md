@@ -7,12 +7,12 @@ Artefacto del carril `docs/sprints/bounded-piloto-vue.md`. Registra solo evidenc
 
 ## Evidencia existente
 
-Carpeta (fuera del repo): `/workspace/retana-ui-entregas/pr-sweep/86/`. `MANIFEST.sha256` sha256 `5f37a6d97440953faeb37c3a5c44afbd21b6cbc0aeca6135ca872a1b6492dd66`; `sha256sum -c` pasa. La evidencia se generó en `ab39e0384ff77a3c476efdd673ddd35fbf2bd40e`; entre ese commit y el head del PR solo cambian `ui/**` y `docs/sprints/**`. Último log del gate predispatch 1.2.5 (head anterior, mismo árbol de código): `gate-1.2.5-b25079e5.log`.
+Carpeta (fuera del repo): `/workspace/retana-ui-entregas/pr-sweep/86/`. La evidencia se regeneró sobre el commit que trae este archivo, porque ese commit también cambia `vue/src/lightbox/Lightbox.vue` (pasada ui-ux-pro-max). Los conteos exactos, el `MANIFEST.sha256` y el log del gate predispatch 1.2.5 de ese head están en la carpeta; la evidencia anterior quedó en `_obsoleta/`.
 
 - Estados declarados en la Spec (`ui/specs/piloto-vue.spec.md`): filled, empty, loading, error, zero, pending, answered, folded, 390.
-- Renders (`renders.yaml`, arnés 21db9481b331, `next build && next start`): 176 capturas, 22 rutas; viewport 390 = 88, escritorio = 88; claro = 88, oscuro = 88; reduced-motion activado = 88, sin reducir = 88; HTTP distinto de 200 = 0; 0 page errors.
-- Suite (`suite/pnpm-test.log`): 724 pruebas en 240 archivos, 0 fallidas, exit 0. `pnpm typecheck:strict-host` exit 0. `pnpm registry:build` sin diff. `next build` exit 0.
-- Suite Vue aparte: `suite/vue-test.log` (7 pruebas, exit 0) en la evidencia de `ab39e038`; incluye axe serious/critical en claro, oscuro, es-MX, EN y 390 según AC8.
+- Renders (`renders.yaml`, arnés 21db9481b331, `next build && next start`): 390 y escritorio, claro y oscuro, reduced-motion activado y no, sobre las rutas de las tres piezas. El cambio de Vue no toca las rutas de Next.
+- Suite (`suite/pnpm-test.log`), `pnpm typecheck:strict-host`, `pnpm registry:build` y `next build`: regenerados en la carpeta para este head.
+- Suite Vue aparte: `suite/vue-test.log`, 8 pruebas en 3 archivos con la nueva `vue/tests/lightbox-aria.test.ts` (antes 7); incluye axe serious/critical en claro, oscuro, es-MX, EN y 390 según AC8.
 - Accesibilidad: AC de la Spec con medida de a11y (nombre accesible, foco, teclado, axe o roles): AC2, AC3, AC4, AC5, AC6, AC8, AC10. Sus pruebas están en la suite verde de arriba.
 - 390px: AC que lo miden: AC8; además las 88 capturas a 390.
 - Reduced-motion: AC que lo miden: AC8; además las 88 capturas con `prefers-reduced-motion: reduce`.

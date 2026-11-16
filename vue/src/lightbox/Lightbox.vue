@@ -120,7 +120,7 @@ const iconButton = "retana-button rt:inline-flex rt:size-8 rt:items-center rt:ju
     <DialogPortal>
       <DialogOverlay class="rt:fixed rt:inset-0 rt:z-50" :style="{ backgroundColor: 'var(--background)', opacity: 0.8 }" />
       <DialogContent
-        aria-describedby="undefined"
+        :aria-describedby="undefined"
         data-slot="lightbox"
         class="retana rt:fixed rt:inset-0 rt:z-50 rt:flex rt:flex-col rt:outline-none"
         :class="className"
