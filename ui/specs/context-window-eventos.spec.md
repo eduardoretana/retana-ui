@@ -36,6 +36,7 @@ Autoría: el builder escribió esta Spec para el despacho, con los AC que ya mid
 ## Perfil y estados
 
 - **Profile**: STANDARD
+- **UI intent**: APPLIES
 - **States**: filled, empty, loading, error, playback, near-limit, compacting, compacted, over-limit, pinned, cache-heavy, 390
 
 Escenas de `app/examples/context-window/scenes.tsx` en el head (incluye `390`).

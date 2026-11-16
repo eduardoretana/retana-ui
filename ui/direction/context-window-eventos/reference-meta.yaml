@@ -7,6 +7,7 @@ mode: visual
 chosen_by: null   # STANDARD: la confirma el UI Lead en el sobre. No es decisión de Eduardo.
 cpl_control: {dir: /workspace/retana-ui-entregas/pr-sweep/cpl-control-sweep2, manifest_sha256: a6ed2081dd628e9e9af5a8337fa8840c4e61d42030ab84e3e62aa759d26de1fb, head: 33438d12520bbf9fe18ebc87f29df2a3122d02b6, harness: 21db9481b331}
 license_visual: "capturas propias de retana-ui (MIT del repo)"
+spec_sync: {spec: ui/specs/context-window-eventos.spec.md, spec_version: "1.0.0", spec_revision: 2, note: "Se actualiza en el mismo commit que la Spec (gate predispatch). Rev. 2 solo declara UI intent: APPLIES en el cuerpo de la Spec (contrato del puente UI); sin cambio de AC ni de referencias."}
 references:
   - {reference_id: REF-cpl-context-window, screen_id: context-window, kind: visual, path: ui/direction/context-window-eventos/ref-cpl-context-window.md, sha256: f46f12c59a0a2dcd0c3f80337af102ade82217c421f4778967c4da19c658e4f2, status: current, valid_for_spec_version: "1.0.0"}
 code_sources:
