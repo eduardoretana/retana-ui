@@ -186,11 +186,14 @@ export type AdminKitProps = {
   className?: string
   /** Replace the in-memory demo. The kit still starts from `seed` until ports resolve. */
   seed?: AdminSeed
-  /** Mount sonner's toaster. Turn off when the host already renders one. */
+  /**
+   * Mount sonner's `<Toaster />`. Default `false`: the host app mounts one at its
+   * root. Turn it on only when the kit is used standalone and the app has no Toaster.
+   */
   showToaster?: boolean
 }
 
-export function AdminKit({ themeController, className, seed: seedProp, showToaster = true }: AdminKitProps) {
+export function AdminKit({ themeController, className, seed: seedProp, showToaster = false }: AdminKitProps) {
   const seed = React.useMemo(() => seedProp ?? buildDemoSeed(), [seedProp])
   const admin = React.useMemo(() => createMemoryAdmin(seed), [seed])
   const [data, setData] = React.useState(seed)

@@ -103,6 +103,11 @@ export type AdminShellProps = {
   sidebarLabel?: string
   className?: string
   contentClassName?: string
+  /**
+   * Mount sonner's `<Toaster />` inside the shell. Default `false`: the host app
+   * mounts one at its root. Turn it on only when the shell is used standalone and
+   * the app has no Toaster, or every toast shows twice.
+   */
   showToaster?: boolean
   /** pill draws an inverted active item and flips the count chip. */
   navStyle?: "row" | "pill"
@@ -171,7 +176,7 @@ export function AdminShell({
   sidebarLabel = "Toggle sidebar",
   className,
   contentClassName,
-  showToaster = true,
+  showToaster = false,
   navStyle = "row",
   children,
 }: AdminShellProps) {
