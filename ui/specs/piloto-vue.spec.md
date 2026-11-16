@@ -52,6 +52,7 @@ Autoría: el builder escribió esta Spec para el despacho, con los AC que ya mid
 ## Perfil y estados
 
 - **Profile**: STANDARD
+- **UI intent**: APPLIES
 - **States**: filled, empty, loading, error, zero, pending, answered, folded, 390
 
 Estados de AC2 y AC8 del plan (`docs/plans/plan-piloto-vue.md` §6). `zero` y `pending` son de `time-off-stats`; `answered` y `folded`, de `decision-inbox`.
