@@ -61,6 +61,7 @@ El plan está en `docs/plans/2026-11-09-gestos-hold-hits.md`. Los AC están en l
 ## Perfil y estados
 
 - **Profile**: STANDARD
+- **UI intent**: APPLIES
 - **States**: filled, empty, loading, error, dragging, dismissed, reduced, keyboard, 390
 
 Estados tomados de AC-4 del plan (las cuatro escenas obligatorias de PLP son filled, empty, loading y error).
