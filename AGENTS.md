@@ -27,3 +27,13 @@ Registry items do not ship a theme. No CSS variables, no `cssVars`, no colors, f
 5. Do not hand-edit `public/r/*.json` or `lib/generated/preview-map.tsx`.
 
 Full checklist, in Spanish, is in `CONTRIBUTING.md`.
+
+## Consulta del catálogo
+
+Para elegir una pieza, corre desde la raíz:
+
+`node --experimental-strip-types scripts/catalog.ts <list|get|search|manifest|doctor> [--json]`
+
+Lee `registry.json` y el filtro de `lib/catalog.ts`. No instala paquetes, no abre la red y no escribe archivos. `get` de una pieza ausente sale 2. `doctor` sale 1 si `validateRegistryTree` falla y 0 si no. Una búsqueda sin coincidencias sale 0.
+
+La idea es clean-room, inspirada en el CLI de Astryx (`meta/astryx` @ `c86484dc57847e7c4d1127810ff1422bc2174d4d`, licencia MIT, Copyright (c) 2026 Meta Platforms, Inc.). No incluye código, temas ni paquetes de Astryx.
