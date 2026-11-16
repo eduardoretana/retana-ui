@@ -15,7 +15,6 @@ export function AdminKitDemo() {
 
   return (
     <AdminKit
-      showToaster={false}
       themeController={{
         theme: choice(theme),
         setTheme: (next) => setTheme(next),

@@ -25,7 +25,6 @@ export function AdminShellDemo() {
       groups={groups}
       pathname={pathname}
       onNavigate={setPathname}
-      showToaster={false}
       commandLabel="Buscar páginas"
       emptyCommand="Ninguna página"
       themeLabel="Tema"
