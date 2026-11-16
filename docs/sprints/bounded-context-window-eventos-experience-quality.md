@@ -7,11 +7,11 @@ Artefacto del carril `docs/sprints/bounded-context-window-eventos.md`. Registra 
 
 ## Evidencia existente
 
-Carpeta (fuera del repo): `/workspace/retana-ui-entregas/pr-sweep/75/`. `MANIFEST.sha256` sha256 `34435f7e28b5b51aa8a0db61c679e173cb14fdc00d68c03866fdbf67f0094e25`; `sha256sum -c` pasa. La evidencia se generó en `86cef322184204297d527d2ff285715084cf5ec0`; entre ese commit y el head del PR solo cambian `ui/**` y `docs/sprints/**`. Último log del gate predispatch 1.2.5 (head anterior, mismo árbol de código): `gate-1.2.5-e49c6357.log`.
+Carpeta (fuera del repo): `/workspace/retana-ui-entregas/pr-sweep/75/`. `MANIFEST.sha256` sha256 `c0ba581c60c260bf5678a2a02c3e1e784fa1dd6b809b3c4d82991f6cd3872fdb`; `sha256sum -c` pasa. La evidencia se generó en `9ab1d2059192191be7f413a1cf70ba8bf2d29365`; entre ese commit y el head del PR solo cambian `ui/**` y `docs/sprints/**`. Último log del gate predispatch 1.2.5 (head anterior, mismo árbol de código): `gate-1.2.5-9ab1d205.log`.
 
 - Estados declarados en la Spec (`ui/specs/context-window-eventos.spec.md`): filled, empty, loading, error, playback, near-limit, compacting, compacted, over-limit, pinned, cache-heavy, 390.
 - Renders (`renders.yaml`, arnés 21db9481b331, `next build && next start`): 112 capturas, 14 rutas; viewport 390 = 56, escritorio = 56; claro = 56, oscuro = 56; reduced-motion activado = 56, sin reducir = 56; HTTP distinto de 200 = 0; 0 page errors.
-- Suite (`suite/pnpm-test.log`): 714 pruebas en 240 archivos, 0 fallidas, exit 0. `pnpm typecheck:strict-host` exit 0. `pnpm registry:build` sin diff. `next build` exit 0.
+- Suite (`suite/pnpm-test.log`): 716 pruebas en 241 archivos, 0 fallidas, exit 0. `pnpm typecheck:strict-host` exit 0. `pnpm registry:build` sin diff. `next build` exit 0.
 - Accesibilidad: AC de la Spec con medida de a11y (nombre accesible, foco, teclado, axe o roles): AC-9, AC-10, AC-11. Sus pruebas están en la suite verde de arriba.
 - 390px: AC que lo miden: AC-12; además las 56 capturas a 390.
 - Reduced-motion: AC que lo miden: ninguno en la tabla de AC; además las 56 capturas con `prefers-reduced-motion: reduce`.
