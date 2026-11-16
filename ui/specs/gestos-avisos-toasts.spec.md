@@ -69,6 +69,7 @@ El plan con las tareas y los umbrales está en `docs/plans/2026-11-09-gestos-avi
 ## Perfil y estados
 
 - **Profile**: STANDARD
+- **UI intent**: APPLIES
 - **States**: filled, empty, loading, error, dragging, dismissed, reduced, keyboard, 390
 
 Estados tomados de AC-10 del plan.

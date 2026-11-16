@@ -5,6 +5,7 @@ valid_for_spec_version: "0.1.1"
 mode: visual
 chosen_by: null   # STANDARD: la confirma el UI Lead en el sobre
 cpl_control: {dir: /workspace/retana-ui-entregas/pr-sweep/cpl-control-gestos-agenda, manifest_sha256: 6828c0243bd35365eb3f3bf5a5ea4557dbe7cd53b616736e4792ffa754af0ff2, head: 33438d12520bbf9fe18ebc87f29df2a3122d02b6, harness: 21db9481b331}
+spec_sync: {spec: ui/specs/gestos-avisos-toasts.spec.md, spec_version: "0.1.1", spec_revision: 2, note: "Se actualiza en el mismo commit que la Spec (gate predispatch). Rev. 2 solo declara UI intent: APPLIES en el cuerpo de la Spec (contrato del puente UI); sin cambio de AC ni de referencias."}
 references:
   - {reference_id: REF-cpl-notification-stack, screen_id: notification-stack, kind: visual, path: ui/direction/gestos-avisos-toasts/ref-cpl-notification-stack.md, sha256: e1829aa41187a7c3d95d0387421ba0324b7e1ced4fdbf9fa3743562051982368, status: current, valid_for_spec_version: "0.1.1"}
       # imagen: before/notification-stack/desktop-light-reduced.png sha256 c7191dfc72a286b4cb3179a1ae57e2510ea415c35ad391a9166327bd5943f610
