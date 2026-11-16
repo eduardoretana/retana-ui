@@ -92,6 +92,7 @@ Autoría: el builder escribió esta Spec para el despacho, con los AC que ya mid
 ## Perfil y estados
 
 - **Profile**: STANDARD
+- **UI intent**: APPLIES
 - **States**: filled, stress, reduced, touch-tap, touch-scroll, long-press, 390
 
 Las piezas no tienen `scenes.tsx`. `filled` es la página de ejemplo y `stress` la página de estrés. `reduced` se emula con `prefers-reduced-motion: reduce`. `touch-tap`, `touch-scroll` y `long-press` son gestos táctiles sobre calendario, timeline y slide-to-confirm.
