@@ -36,6 +36,7 @@ Autoría: el builder escribió esta Spec para el despacho, con los AC que ya mid
 ## Perfil y estados
 
 - **Profile**: STANDARD
+- **UI intent**: APPLIES
 - **States**: filled, empty, loading, error, progress, complete, plain, extremes, long, oneday, many, editor, 390
 
 Escenas de `app/examples/timeline-gantt/scenes.tsx` en el head, más el viewport 390.
