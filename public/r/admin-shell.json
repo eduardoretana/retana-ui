@@ -76,10 +76,15 @@
         "name": "navStyle=\"pill\"",
         "type": "\"row\" | \"pill\"",
         "description": "Pill navigation and a count on each item. The default row style is unchanged."
+      },
+      {
+        "name": "showToaster",
+        "type": "boolean",
+        "description": "Default false. Turn it on only when the shell is used standalone and the app has no sonner <Toaster />; with both, every toast shows twice."
       }
     ]
   },
-  "docs": "Answer no if the CLI asks to overwrite button, breadcrumb, command, or sidebar. Pass themeController from next-themes so the shell does not fight the host provider.",
+  "docs": "Answer no if the CLI asks to overwrite button, breadcrumb, command, or sidebar. Pass themeController from next-themes so the shell does not fight the host provider. The shell calls sonner toast() but does not mount a <Toaster /> by default: keep the one at your app root, and pass showToaster only if the app has none.",
   "categories": [
     "admin",
     "navigation"

@@ -212,7 +212,7 @@
         "description": "Todo el panel en memoria. Reiniciar recarga la semilla."
       }
     ],
-    "usage": "<AdminKit themeController={theme} showToaster={false} />",
+    "usage": "<AdminKit themeController={theme} />",
     "api": [
       {
         "name": "themeController",
@@ -227,7 +227,7 @@
       {
         "name": "showToaster",
         "type": "boolean",
-        "description": "Default true. Set false when the host already mounts sonner."
+        "description": "Default false. Turn it on only when the kit is used standalone and the app has no sonner <Toaster />; with both, every toast shows twice."
       },
       {
         "name": "createMemoryAdmin",
@@ -236,7 +236,7 @@
       }
     ]
   },
-  "docs": "One install copies the UI, the in-memory adapter, and the Supabase recipe. Answer no if the CLI offers to overwrite primitives you already have. The demo never calls a real database. Attribution for adapted behavior is in NOTICE.",
+  "docs": "One install copies the UI, the in-memory adapter, and the Supabase recipe. Answer no if the CLI offers to overwrite primitives you already have. The demo never calls a real database. The kit shows sonner toasts through the app root <Toaster />; pass showToaster only if the app has none. Attribution for adapted behavior is in NOTICE.",
   "categories": [
     "admin",
     "dashboard",
