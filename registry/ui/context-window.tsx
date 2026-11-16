@@ -13,7 +13,7 @@
  */
 
 import * as React from "react"
-import { AnimatePresence, motion, useReducedMotion } from "motion/react"
+import { motion, useReducedMotion } from "motion/react"
 import { ArrowDown, Pin } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
@@ -270,42 +270,17 @@ function moveFocus(ids: readonly string[], current: string | null, key: string):
   return null
 }
 
-function TokenFigure({ value, locale, reduced }: { value: number; locale: string; reduced: boolean }) {
-  const text = formatTokenCount(value, locale)
-  if (reduced) return <span className="tabular-nums">{text}</span>
-  return (
-    <AnimatePresence mode="wait" initial={false}>
-      <motion.span
-        key={text}
-        className="inline-block tabular-nums"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.18 }}
-      >
-        {text}
-      </motion.span>
-    </AnimatePresence>
-  )
+// emil-design-eng, "Should this animate at all?": the figure and the caption
+// change on every stream event, and a wait-mode crossfade outlasted that
+// cadence (playback fires every 280 ms). Data that updates this often swaps at
+// once; tabular-nums keeps the width steady.
+function TokenFigure({ value, locale }: { value: number; locale: string }) {
+  return <span className="tabular-nums">{formatTokenCount(value, locale)}</span>
 }
 
-function Caption({ text, reduced }: { text: string; reduced: boolean }) {
+function Caption({ text }: { text: string }) {
   if (!text) return null
-  if (reduced) return <p className="min-w-0 text-sm text-pretty text-muted-foreground">{text}</p>
-  return (
-    <AnimatePresence mode="wait" initial={false}>
-      <motion.p
-        key={text}
-        className="min-w-0 text-sm text-pretty text-muted-foreground"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
-      >
-        {text}
-      </motion.p>
-    </AnimatePresence>
-  )
+  return <p className="min-w-0 text-sm text-pretty text-muted-foreground">{text}</p>
 }
 
 export function ContextWindow({
@@ -551,7 +526,7 @@ export function ContextWindow({
               {pressure === "over" ? <Badge variant="destructive">{labels.pressureOver}</Badge> : null}
               {pressure === "near" ? <Badge variant="outline">{labels.pressureNear}</Badge> : null}
               <p className="tabular-nums">
-                <TokenFigure value={used} locale={locale} reduced={reduced} />
+                <TokenFigure value={used} locale={locale} />
                 <span className="text-muted-foreground"> {labels.of} </span>
                 <span className="text-muted-foreground tabular-nums">{formatTokenCount(limit, locale)}</span>
               </p>
@@ -740,7 +715,7 @@ export function ContextWindow({
           )}
         </CardContent>
         <CardFooter className={cn("flex-wrap items-start justify-between gap-2", classNames?.footer)}>
-          <Caption text={caption} reduced={reduced} />
+          <Caption text={caption} />
           {cost ? <p className="shrink-0 text-xs text-muted-foreground tabular-nums">{labels.cost(cost.formatted)}</p> : null}
         </CardFooter>
       </Card>
