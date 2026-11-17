@@ -1,0 +1,24 @@
+# Ficha de referencia (dirección heredada, LITE) · retana-ui-motion-14
+# La PNG vive en el box: las herramientas de push disponibles solo escriben texto, así que la imagen no se versiona.
+reference_id: REF-cpl-cta-section-390
+screen_id: cta-section
+route: "/examples/cta-section"
+kind: visual
+source: control render CPL bf1682d4
+cpl_sha: bf1682d4dfb8696ddb01bf84aedda111f47b086c
+motion_version: 13.5.0
+harness: {id: 21db9481b331, playwright: 1.57.0, script: shoot.mjs, tarball_sha256: 21db9481b33119c3031b9ee7dfe0071fbf5d6c23985878d998af2e3fc10b8ac6}
+viewport: {id: "390", width: 390, height: 844}
+theme: light
+reduced_motion: false
+image: {path: /workspace/pr62-lite/direction-cpl/cta-section/390-light-ok.png, sha256: 5541e6fd343f52639204568c6668a3b68e2a4558e00c37d3c8caab6549f2ba5b, control_copy: /workspace/pr62-lite/control-cpl/cpl/cta-section/390-light-ok.png}
+records: {path: /workspace/pr62-lite/control-cpl/cpl-records.json, http_status: 200, page_errors: 1}
+known_preexisting: [react-418-hydration]
+status: current
+chosen_at_spec_version: "1.0.0"
+valid_for_spec_version: "1.0.0"
+chosen_by: null   # LITE: la confirma el UI Lead en el sobre
+regions:
+  - {id: R1, label: "encabezado del ejemplo y botón de tema"}
+  - {id: R2, label: "tarjeta CTA centrada: título, subtítulo, Reservar/Escribir y avatares"}
+  - {id: R3, label: "inicio de la sección siguiente (lado con el alta del taller)"}

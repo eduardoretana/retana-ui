@@ -1,0 +1,26 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0}
+declaration: "UI_SYSTEM: APPLIES"
+cycle_state: BUILD
+profile: LITE
+spec_id: retana-ui-motion-14
+spec_version: 1.0.0
+spec: docs/sprints/bounded-retana-ui-motion-14.md
+# El blob no puede contener el sha del commit que lo incluye.
+# head = último commit de código del PR (merge de CPL bf1682d4). Los commits posteriores solo tocan docs/sprints/** y ui/**.
+head: 8fcd8e9c81800b88701f9d5b53b8990ea0c2ee91
+head_note: "La evidencia de despacho declara el tip (git rev-parse HEAD) después de este commit."
+build_gate: {state: APPLIES, result: PASS, suite: "pnpm test 707/707, lint, typecheck:strict-host, registry:build sin diff y build en exit 0 sobre el árbol de código de 8fcd8e9c"}
+stop_when: "pnpm typecheck:strict-host, pnpm test y pnpm build en verde; capturas fuera del repo; PR draft contra CPL, sin merge."
+deliverable: "motion ^14.9.0. framer-motion y motion-dom en 14.9.0. Sin cambio de componentes ni de tema."
+retana_ui:
+  sha: 6671cfac72f736739d2d3dd2740cc5f13416acb3
+  registry_source: git-sha
+cpl_integrated: bf1682d4dfb8696ddb01bf84aedda111f47b086c
+direction_mode: inherited
+direction: {mode: inherited, reference_meta: ui/direction/retana-ui-motion-14/reference-meta.yaml, source: "control render CPL bf1682d4", harness: 21db9481b331, images: box, chosen_by: null}
+known_preexisting: [{id: react-418-hydration, routes: ["/", /examples/announcement-bar, /examples/cta-section, /examples/motion-preference, /examples/scroll-linked], control: "CPL bf1682d4 con motion 13.5.0: 28 de 40 capturas con #418, mismo reparto que el head"}]
+auditor: not-this-agent
+notes:
+  - "ui-system 4.0.0. Perfil LITE: subida de dependencia, sin cambio visual previsto."
+  - "Manifiesto del carril y Spec: docs/sprints/bounded-retana-ui-motion-14.md. Enrollment: docs/sprints/bounded-retana-ui-motion-14-ui/enrollment.json."

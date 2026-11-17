@@ -1,0 +1,32 @@
+{
+  "documents": [
+    "docs/sprints/bounded-retana-ui-motion-14-ui/enrollment.json",
+    "docs/sprints/bounded-retana-ui-motion-14.md"
+  ],
+  "evidence": {
+    "receipt": "docs/sprints/bounded-retana-ui-motion-14-ui/checker-receipt.json",
+    "report": "docs/sprints/bounded-retana-ui-motion-14-ui/verdict.json"
+  },
+  "impact": "VISIBLE_MINOR",
+  "inputs": {},
+  "manifest": {
+    "path": "docs/sprints/bounded-retana-ui-motion-14.md",
+    "sha256": "e04da37e058e39e1e132b8b323ac32b7467a585921f4b08dbfc6091c5e6edfad"
+  },
+  "owner": "cursor/motion-14-accel-8aec",
+  "profile": "LITE",
+  "repo": "sha256:1aceb83247f3be9347d53333d783b6aa0a78769c3801b37e557d87f9fc707e6b",
+  "schema_version": "retana.ui-enrollment/v1",
+  "source": {
+    "identity": "https://github.com/eduardoretana/hub-vibecoding.git",
+    "module_version": "4.0.0",
+    "protocol_version": "16",
+    "sha": "0218369e944b02fb63cae5df0ddc95ae72262e97"
+  },
+  "spec": {
+    "path": "docs/sprints/bounded-retana-ui-motion-14.md",
+    "sha256": "e04da37e058e39e1e132b8b323ac32b7467a585921f4b08dbfc6091c5e6edfad"
+  },
+  "stage": "IMPLEMENTATION",
+  "state": "PENDING"
+}
