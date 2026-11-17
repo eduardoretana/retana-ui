@@ -1,5 +1,12 @@
 "use client"
 
+/**
+ * The bar tracks the pointer 1:1 and commits the date on release.
+ * No spring: the bar lands on a date unit, where the finger leaves it.
+ * Gesture track: Emil Kowalski, emilkowalski/skills
+ * @715c1807e08c497cfd1dc4feb450a2a3300ef2a9 skills/gestures (MIT).
+ */
+
 import * as React from "react"
 import { ChevronDown } from "lucide-react"
 
@@ -293,18 +300,26 @@ function TimelineRow({
   const title = recordTitle(record, fields, titleField)
   const range = readRange(record, startField, endField)
   const place = range ? barPlacement(rangeStart, range.start, range.end, zoom, weekStartsOn) : null
-  const drag = React.useRef<{ edge: "move" | "start" | "end"; x: number; start: string; end: string } | null>(null)
+  const drag = React.useRef<{ edge: "move" | "start" | "end"; x: number; start: string; end: string; pointerId: number } | null>(null)
 
   function onPointerDown(event: React.PointerEvent<HTMLButtonElement>, edge: "move" | "start" | "end") {
     if (readOnly || !range) return
     event.currentTarget.setPointerCapture(event.pointerId)
-    drag.current = { edge, x: event.clientX, start: range.start, end: range.end }
+    drag.current = { edge, x: event.clientX, start: range.start, end: range.end, pointerId: event.pointerId }
+  }
+
+  function onPointerMove(event: React.PointerEvent<HTMLButtonElement>) {
+    const session = drag.current
+    if (!session || session.pointerId !== event.pointerId) return
+    const dx = event.clientX - session.x
+    event.currentTarget.style.transform = `translate3d(${dx}px, 0, 0)`
   }
 
   function onPointerUp(event: React.PointerEvent<HTMLButtonElement>) {
     const session = drag.current
     drag.current = null
-    if (!session) return
+    event.currentTarget.style.transform = ""
+    if (!session || session.pointerId !== event.pointerId) return
     const units = Math.round((event.clientX - session.x) / unit)
     if (!units) {
       if (session.edge === "move") onOpen?.(record.id)
@@ -344,7 +359,7 @@ function TimelineRow({
           <button
             type="button"
             className={cn(
-              "absolute top-2 flex h-6 items-center overflow-hidden rounded-md bg-primary/15 px-2 text-xs text-foreground ring-1 ring-primary/30 focus-visible:ring-2 focus-visible:ring-ring",
+              "absolute top-2 flex h-6 touch-pan-y items-center overflow-hidden rounded-md bg-primary/15 px-2 text-xs text-foreground ring-1 ring-primary/30 focus-visible:ring-2 focus-visible:ring-ring",
               reduced && "transition-none",
               barClassName,
             )}
@@ -352,7 +367,9 @@ function TimelineRow({
             aria-label={name}
             onKeyDown={onKeyDown}
             onPointerDown={(event) => onPointerDown(event, edgeFromTarget(event))}
+            onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
           >
             <span className="absolute inset-y-0 left-0 w-1.5 cursor-ew-resize" data-edge="start" />
             <span className="pointer-events-none truncate" dir="auto">

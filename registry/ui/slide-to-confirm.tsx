@@ -26,10 +26,16 @@
  *   handle use host tokens.
  * - Removed the automatic navigator.vibrate tick. Haptics stay opt-in.
  * - Reduced motion snaps the handle with no spring and no label shimmer.
+ *
+ * Gesture track: Emil Kowalski, emilkowalski/skills
+ * @715c1807e08c497cfd1dc4feb450a2a3300ef2a9 skills/gestures (MIT).
+ * While the pointer is down the handle is the finger. smoothness does not
+ * feed a spring during the move. It only softens the release spring.
+ * resistance pushes back past the end of the track, not along it.
  */
 
 import * as React from "react"
-import { animate, motion, useMotionValue, useReducedMotion, useTransform, type AnimationPlaybackControls, type Transition } from "motion/react"
+import { animate, motion, useMotionValue, useReducedMotion, useReducedMotionConfig, useTransform, type AnimationPlaybackControls, type Transition } from "motion/react"
 
 import { cn } from "@/lib/utils"
 
@@ -62,17 +68,23 @@ const SNAP_END: Transition = { type: "spring", stiffness: 700, damping: 40 }
 
 const clamp01 = (value: number) => Math.min(1, Math.max(0, value))
 
-function resist(t: number, resistance: number) {
-  return Math.pow(t, 1 + resistance * 1.5)
+function overshoot(distance: number, resistance: number) {
+  const limit = 28 * (1 - clamp01(resistance)) + 4
+  return (1 - 1 / ((distance * 0.55) / limit + 1)) * limit
 }
 
-function unresist(t: number, resistance: number) {
-  return Math.pow(t, 1 / (1 + resistance * 1.5))
-}
-
-function followSpring(smoothness: number): Transition {
+/** Release spring for this piece. smoothness 0 is stiffer. velocity is px/s. */
+function releaseSpring(smoothness: number, velocity: number): Transition {
   const amount = clamp01(smoothness)
-  return { type: "spring", stiffness: 1400 - amount * 1220, damping: 70 - amount * 46, mass: 0.4 + amount * 0.4 }
+  return { type: "spring", stiffness: 520 + (1 - amount) * 180, damping: 34, mass: 0.7, velocity }
+}
+
+function velocityOf(samples: { t: number; x: number }[], now: number) {
+  const recent = samples.filter((sample) => now - sample.t <= 100)
+  const first = recent[0]
+  const last = recent[recent.length - 1]
+  if (!first || !last || last === first || now - last.t > 60) return 0
+  return ((last.x - first.x) / (last.t - first.t)) * 1000
 }
 
 function ChevronsIcon() {
@@ -107,7 +119,9 @@ export function SlideToConfirm({
   onBlur,
   ...props
 }: SlideToConfirmProps) {
-  const reduceMotion = useReducedMotion()
+  const mediaReduced = useReducedMotion() ?? false
+  const configReduced = useReducedMotionConfig() ?? false
+  const reduceMotion = mediaReduced || configReduced
   const trackRef = React.useRef<HTMLDivElement | null>(null)
   const resetTimeoutRef = React.useRef<number | null>(null)
   const controlsRef = React.useRef<AnimationPlaybackControls | null>(null)
@@ -115,6 +129,7 @@ export function SlideToConfirm({
   const intendedRef = React.useRef(0)
   const armedRef = React.useRef(false)
   const draggingRef = React.useRef(false)
+  const samplesRef = React.useRef<{ t: number; x: number }[]>([])
   const [state, setState] = React.useState<SlideState>("idle")
   const [armed, setArmed] = React.useState(false)
   const [range, setRange] = React.useState(0)
@@ -152,17 +167,6 @@ export function SlideToConfirm({
     [],
   )
 
-  React.useEffect(
-    () =>
-      progress.on("change", (value) => {
-        setPercent((current) => {
-          const next = Math.round(value * 100)
-          return current === next ? current : next
-        })
-      }),
-    [progress],
-  )
-
   const moveTo = (to: number, transition: Transition | null) => {
     controlsRef.current?.stop()
     if (!transition || reduceMotion) {
@@ -178,11 +182,12 @@ export function SlideToConfirm({
     setArmed(next)
   }
 
-  const fire = () => {
+  const fire = (velocity = 0) => {
     intendedRef.current = 1
     setArmedState(false)
     setState("success")
-    moveTo(range, SNAP_END)
+    setPercent(100)
+    moveTo(range, reduceMotion ? null : { ...SNAP_END, velocity })
     onConfirm?.()
     if (resetAfter > 0) {
       resetTimeoutRef.current = window.setTimeout(() => {
@@ -194,12 +199,13 @@ export function SlideToConfirm({
     }
   }
 
-  const release = () => {
-    if (armedRef.current) fire()
+  const release = (velocity: number) => {
+    if (armedRef.current) fire(velocity)
     else {
       intendedRef.current = 0
       setState("idle")
-      moveTo(0, SNAP_BACK)
+      setPercent(0)
+      moveTo(0, reduceMotion ? null : releaseSpring(smoothness, velocity))
     }
   }
 
@@ -208,8 +214,8 @@ export function SlideToConfirm({
     if (locked || range <= 0 || event.defaultPrevented) return
     if (event.pointerType === "mouse" && event.button !== 0) return
     event.currentTarget.setPointerCapture(event.pointerId)
-    const current = clamp01(x.get() / range)
-    originRef.current = event.clientX - unresist(current, resistance) * range
+    originRef.current = event.clientX - x.get()
+    samplesRef.current = [{ t: event.timeStamp, x: x.get() }]
     draggingRef.current = true
     setState("sliding")
   }
@@ -217,16 +223,22 @@ export function SlideToConfirm({
   const handlePointerMove = (event: React.PointerEvent<HTMLButtonElement>) => {
     if (!draggingRef.current || range <= 0) return
     const raw = event.clientX - originRef.current
-    const next = raw < 0 ? -PULL_BACK * (1 - 1 / (1 + -raw / 60)) : resist(clamp01(raw / range), resistance) * range
+    const next = raw < 0 ? -PULL_BACK * (1 - 1 / (1 + -raw / 60)) : raw > range ? range + overshoot(raw - range, resistance) : raw
+    x.set(next)
+    samplesRef.current.push({ t: event.timeStamp, x: next })
+    const first = samplesRef.current[0]
+    while (samplesRef.current.length > 2 && first && event.timeStamp - first.t > 100) samplesRef.current.shift()
     intendedRef.current = clamp01(next / range)
-    moveTo(next, smoothness > 0 ? followSpring(smoothness) : null)
+    const shown = Math.round(intendedRef.current * 100)
+    event.currentTarget.setAttribute("aria-valuenow", String(shown))
+    event.currentTarget.setAttribute("aria-valuetext", `${shown}%`)
     setArmedState(intendedRef.current >= safeThreshold)
   }
 
-  const handlePointerEnd = () => {
+  const handlePointerEnd = (event: React.PointerEvent<HTMLButtonElement>) => {
     if (!draggingRef.current) return
     draggingRef.current = false
-    release()
+    release(reduceMotion ? 0 : velocityOf(samplesRef.current, event.timeStamp))
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -247,7 +259,8 @@ export function SlideToConfirm({
       return
     }
     setState(next > 0 ? "sliding" : "idle")
-    moveTo(next * range, followSpring(smoothness))
+    setPercent(Math.round(next * 100))
+    moveTo(next * range, reduceMotion ? null : releaseSpring(smoothness, 0))
   }
 
   const handleBlur = (event: React.FocusEvent<HTMLButtonElement>) => {
@@ -313,7 +326,7 @@ export function SlideToConfirm({
         onBlur={handleBlur}
         style={{ x }}
         className={cn(
-          "absolute top-1 left-1 z-10 inline-flex size-10 touch-none items-center justify-center rounded-full border border-border bg-background text-foreground shadow-sm outline-none",
+          "absolute top-1 left-1 z-10 inline-flex size-10 touch-pan-y items-center justify-center rounded-full border border-border bg-background text-foreground shadow-sm outline-none",
           "focus-visible:ring-2 focus-visible:ring-ring",
           armed && "bg-primary text-primary-foreground",
           isSuccess && "bg-primary text-primary-foreground",
