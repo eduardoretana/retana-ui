@@ -1,0 +1,18 @@
+# Referencias de Dirección (E3) · agenda-resources
+# Cada referencia tiene una ficha en la rama (ruta + sha256). Las PNG de CPL viven en el box: /workspace/retana-ui-entregas/pr-sweep/cpl-control-gestos-agenda
+schema: retana.reference-meta/v1
+spec_id: agenda-resources
+valid_for_spec_version: "0.1.1"
+mode: visual
+chosen_by: null   # STANDARD: la confirma el UI Lead en el sobre
+cpl_control: {dir: /workspace/retana-ui-entregas/pr-sweep/cpl-control-gestos-agenda, manifest_sha256: 6828c0243bd35365eb3f3bf5a5ea4557dbe7cd53b616736e4792ffa754af0ff2, head: 33438d12520bbf9fe18ebc87f29df2a3122d02b6, harness: 21db9481b331}
+spec_sync: {spec: ui/specs/agenda-resources.spec.md, spec_version: "0.1.1", spec_revision: 3, note: "Se actualiza en el mismo commit que la Spec (gate predispatch). Rev. 3 solo declara UI intent: APPLIES en el cuerpo de la Spec (contrato del puente UI); sin cambio de AC ni de referencias."}
+references:
+  - {reference_id: REF-cpl-agenda, screen_id: agenda, kind: visual, path: ui/direction/agenda-resources/ref-cpl-agenda.md, sha256: d414fe2198b098f38d9a042ed69e01a6dd362fbd67c01178b0c89ef0b7d110c4, status: current, valid_for_spec_version: "0.1.1"}
+      # imagen: before/agenda/desktop-light-reduced.png sha256 c679eee7d9875d00b62fe00c1c871b6621666e8cee755abaa5ec15b773c8c4a7
+      # imagen: before/agenda/desktop-dark-reduced.png sha256 6984fde6e575867c7683d27565430e7312a3fec8260c8b5a6c6af328634bc3ab
+      # imagen: before/agenda/390-light-reduced.png sha256 fc6374f959c7872cc20961888d4dae659fe6726cf617aefe773d664be55e802c
+      # imagen: before/agenda/390-dark-reduced.png sha256 fd91b88b5690ffff82b9313917d393965f37a9e654ea12647c95eaba8d384417
+  - {reference_id: REF-shadcnstudio-user-schedule-05, screen_id: agenda, kind: idea, path: ui/direction/agenda-resources/ref-shadcnstudio-user-schedule-05.md, sha256: f874d56889a1179b5140657ef1e7b50543019f1a4975bfd1945ec017316297dd, status: current, valid_for_spec_version: "0.1.1"}
+      # fuente: shadcnstudio.com/blocks/marketing-ui/user-schedule (sección user-schedule-05; página pública) (no abierta); licencia LicenseRef-shadcnstudio-Pro
+side_by_side: "compare-*.png en el box (evidencia del head final), referencia a la izquierda y build a la derecha"

@@ -1,7 +1,7 @@
 "use client"
 
 import { Agenda } from "@/registry/blocks/agenda"
-import type { AgendaEvent } from "@/registry/lib/agenda"
+import type { AgendaEvent, AgendaResource } from "@/registry/lib/agenda"
 
 import { demoAnchor, demoCategories, demoEvents, demoNow, demoTimeZone, manyAgendaEvents } from "../data"
 
@@ -88,6 +88,51 @@ export default function StressPage() {
         <h2 className="text-sm font-medium">Muchos eventos y solo lectura</h2>
         <div className="h-[36rem] min-w-0">
           <Agenda {...shared} events={manyAgendaEvents(40)} readOnly className="h-full" />
+        </div>
+      </section>
+
+      <section className="grid gap-2">
+        <h2 className="text-sm font-medium">Recursos, choque y cupo en 320px</h2>
+        <div className="h-[36rem] w-full min-w-0 max-w-80">
+          <Agenda
+            {...shared}
+            defaultView="day"
+            resources={[
+              { id: "horno", label: "Horno norte", capacityHours: 3 },
+              { id: "mesa", label: `Mesa${"Larga".repeat(12)}`, capacityHours: 8 },
+            ]}
+            events={[
+              one({ id: "quema", title: token, resourceId: "horno", startsAt: "2026-04-08T16:00:00.000Z", endsAt: "2026-04-08T18:00:00.000Z" }),
+              one({ id: "esmalte", title: "Esmalte húmedo", resourceId: "horno", startsAt: "2026-04-08T17:00:00.000Z", endsAt: "2026-04-08T19:00:00.000Z" }),
+              one({ id: "corte", title: rtlTitle, resourceId: "mesa", startsAt: "2026-04-08T15:00:00.000Z", endsAt: "2026-04-08T16:00:00.000Z" }),
+            ]}
+            className="h-full"
+          />
+        </div>
+      </section>
+
+      <section className="grid gap-2">
+        <h2 className="text-sm font-medium">Treinta recursos y doscientos eventos</h2>
+        <div className="h-[36rem] min-w-0">
+          <Agenda
+            {...shared}
+            defaultView="day"
+            resources={Array.from({ length: 30 }, (_, index) => ({
+              id: `r${index}`,
+              label: index === 3 ? token : `Banco ${index + 1}`,
+              capacityHours: 8,
+            })) satisfies AgendaResource[]}
+            events={Array.from({ length: 200 }, (_, index) =>
+              one({
+                id: `n${index}`,
+                title: index === 0 ? token : `Nota ${index}`,
+                resourceId: `r${index % 30}`,
+                startsAt: "2026-04-08T16:00:00.000Z",
+                endsAt: "2026-04-08T17:00:00.000Z",
+              }),
+            )}
+            className="h-full"
+          />
         </div>
       </section>
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 
 import { ThemeToggle } from "@/components/demo/theme-toggle"
 
-import { AgendaDemo } from "./demo"
+import { Demo } from "./demo"
 
 export const metadata: Metadata = {
   title: "Agenda",
@@ -17,13 +17,13 @@ export default function Page() {
           <p className="text-xs font-medium tracking-[0.14em] text-muted-foreground uppercase">Ejemplo</p>
           <h1 className="text-lg font-semibold tracking-tight">Agenda</h1>
           <p className="max-w-2xl text-sm text-muted-foreground">
-            Estudio Cálamo, un taller inventado. Alt y flechas mueven el evento. El botón de sincronizar no llama a ningún proveedor.
+            Estudio Cálamo, un taller inventado. El día puede partirse por recurso, avisar un choque y comparar las horas con el cupo.
           </p>
         </div>
         <ThemeToggle />
       </header>
       <div className="min-h-0 flex-1 px-3 pb-3">
-        <AgendaDemo />
+        <Demo />
       </div>
     </main>
   )

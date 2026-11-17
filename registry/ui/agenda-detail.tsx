@@ -24,18 +24,18 @@ import {
 
 export type AgendaDetailProps<TMeta = Record<string, unknown>> = {
   event: AgendaEvent<TMeta>
-  category?: AgendaCategory | null
-  locale?: string
-  timeZone?: string
-  labels?: Partial<AgendaLabels>
-  readOnly?: boolean
-  onJoin?: (id: string) => void
-  onOpenSummary?: (id: string) => void
-  onCreateRoom?: (id: string) => void
-  onOpenTask?: (id: string, taskId: string) => void
-  onOpenRecord?: (id: string, recordId: string) => void
-  onClose?: () => void
-  className?: string
+  category?: AgendaCategory | null | undefined
+  locale?: string | undefined
+  timeZone?: string | undefined
+  labels?: Partial<AgendaLabels> | undefined
+  readOnly?: boolean | undefined
+  onJoin?: ((id: string) => void) | undefined
+  onOpenSummary?: ((id: string) => void) | undefined
+  onCreateRoom?: ((id: string) => void) | undefined
+  onOpenTask?: ((id: string, taskId: string) => void) | undefined
+  onOpenRecord?: ((id: string, recordId: string) => void) | undefined
+  onClose?: (() => void) | undefined
+  className?: string | undefined
 }
 
 function statusVariant(status: AgendaParticipantStatus): "default" | "secondary" | "outline" {

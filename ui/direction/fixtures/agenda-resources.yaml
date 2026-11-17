@@ -1,0 +1,23 @@
+# Fixture de comparación (E14) · agenda-resources
+# Transcripción por puntero de los datos de ejemplo en H 9682d29ba97c8f3fd5fabf34318bf7351318f7cc.
+# Los datos viven en los fixtures.ts y scenes.tsx de cada pieza; aquí se fijan por sha256 y se listan las escenas.
+# Datos inventados del catálogo. Sin datos de producción.
+fixture_id: agenda-resources-plp-v1
+spec_id: agenda-resources
+spec_version: "0.1.1"
+generator: {kind: transcripcion, by: retana-ui-design-engineer}
+render:
+  viewports: [390x844, 1280x800]
+  themes: [light, dark]
+  reduced_motion: [reduce, no-preference]
+  network: bloqueada salvo loopback
+pieces:
+  - id: agenda
+    route: "/examples/agenda?scene=<escena>"
+    sources:
+      - {path: app/examples/agenda/data.ts, sha256: 350eb03bf80c3735e9ea6258bd7c5a59e6f95632d94d941e6b3b7df01dbdbba8}
+      - {path: app/examples/agenda/fixtures.ts, sha256: 8c3accb2ad8ea8a32b8752ca9baddbb8465bdc8d626efeb8bfe0439e4bee622e}
+      - {path: app/examples/agenda/scenes.tsx, sha256: 255e7edf0706fb4d0dd664333d3e170da3b5ee4b6d2c604523e926933ce9ef01}
+    scenes: [filled, empty, loading, error, resources, conflicts, over, many]
+comparison_scenes: [filled]
+states: [filled, empty, loading, error, resources, conflicts, over, many]

@@ -836,7 +836,11 @@ zone, and labels are props. Spanish is the default chrome. agendaLabelsEn is
 the English set. The default zone is America/Mexico_City, the week starts on
 Monday, and formats use es-MX. Time zones reuse the existing date-range
 helpers. The catalog demo is Estudio Cálamo, a fictional workshop. The
-people, rooms, and dates are invented. view-calendar remains the date-field
+people, rooms, and dates are invented. An optional resource axis, conflict
+notice, and hours-against-capacity summary take only the idea of shadcn/studio
+User Schedule #5 (shadcnstudio.com/blocks/marketing-ui/user-schedule#user-schedule-05).
+That block is Pro and was not purchased. No source, markup, copy, or assets
+were copied. License note: Pro, idea only. view-calendar remains the date-field
 month inside multi-view. The block reuses the host button, switch, sheet,
 tabs, and scroll area. Answer no if the CLI asks to overwrite a primitive
 the host already has. The items ship no theme.
