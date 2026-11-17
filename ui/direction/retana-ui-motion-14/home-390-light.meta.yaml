@@ -1,0 +1,23 @@
+# Ficha de referencia (dirección heredada, LITE) · retana-ui-motion-14
+# La PNG vive en el box: las herramientas de push disponibles solo escriben texto, así que la imagen no se versiona.
+reference_id: REF-cpl-home-390
+screen_id: home
+route: "/"
+kind: visual
+source: control render CPL bf1682d4
+cpl_sha: bf1682d4dfb8696ddb01bf84aedda111f47b086c
+motion_version: 13.5.0
+harness: {id: 21db9481b331, playwright: 1.57.0, script: shoot.mjs, tarball_sha256: 21db9481b33119c3031b9ee7dfe0071fbf5d6c23985878d998af2e3fc10b8ac6}
+viewport: {id: "390", width: 390, height: 844}
+theme: light
+reduced_motion: false
+image: {path: /workspace/pr62-lite/direction-cpl/home/390-light-ok.png, sha256: b77d420364e99a583e2c7d5ebed1e72920c4a3d832103e01c68adb1479fc063d, control_copy: /workspace/pr62-lite/control-cpl/cpl/home/390-light-ok.png}
+records: {path: /workspace/pr62-lite/control-cpl/cpl-records.json, http_status: 200, page_errors: 1}
+known_preexisting: [react-418-hydration]
+status: current
+chosen_at_spec_version: "1.0.0"
+valid_for_spec_version: "1.0.0"
+chosen_by: null   # LITE: la confirma el UI Lead en el sobre
+regions:
+  - {id: R1, label: "barra superior: marca, Catalog/Docs y botón de tema"}
+  - {id: R2, label: "rejilla de tarjetas del catálogo con previews animados (motion) y su texto"}
