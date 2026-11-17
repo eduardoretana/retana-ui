@@ -1,13 +1,9 @@
 "use client"
 
-import { TimelineGanttDemo } from "./demo"
+import { ScenePreview } from "@/app/catalog/scene-preview"
+
+import { scenes } from "./scenes"
 
 export default function Preview() {
-  return (
-    <div className="h-full overflow-hidden bg-background">
-      <div className="h-[760px] w-[1280px] origin-top-left scale-[0.34]">
-        <TimelineGanttDemo chrome={false} />
-      </div>
-    </div>
-  )
+  return <ScenePreview scenes={scenes} hero="filled" />
 }

@@ -1,0 +1,21 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0}
+declaration: "UI_SYSTEM: APPLIES"
+cycle_state: AUDITORIA
+spec_id: timeline-gantt-avance
+spec: ui/specs/timeline-gantt-avance.spec.md
+spec_version: "1.0.0"
+profile: STANDARD
+# El blob no puede contener el sha del commit que lo incluye.
+# head = tip de código antes del commit de insumos; el sobre declara el tip final (git rev-parse HEAD).
+head: a28a5a7c36b7c0701db6f3e12c4701adf20d9b49
+head_note: "head = tip de código antes del commit de insumos de auditoría. Ese commit solo añade ui/** y rules/rules.yaml."
+retana_ui:
+  sha: 33438d12520bbf9fe18ebc87f29df2a3122d02b6
+  registry_source: git-sha
+ui_system_snapshot: 419ad6481648c693d61f8e5ebfb8b8e80d8d8ab7
+direction_mode: visual
+direction: {mode: visual, reference_meta: ui/direction/timeline-gantt-avance/reference-meta.yaml, references: [REF-cpl-timeline-gantt], chosen_by: null, decision: "STANDARD: la elección de la referencia es del UI Lead"}
+generators_used: []
+auditor: pendiente
+auditor_is_builder: false

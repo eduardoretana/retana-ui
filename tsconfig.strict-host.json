@@ -23,6 +23,8 @@
     "registry/lib/multi-view.ts",
     "registry/lib/csv.ts",
     "registry/lib/motion.ts",
+    "registry/lib/timeline-gantt.ts",
+    "registry/ui/timeline-gantt.tsx",
     "registry/lib/dashboard-format.ts",
     "registry/hooks/use-layered-panel-url-state.ts"
   ]
