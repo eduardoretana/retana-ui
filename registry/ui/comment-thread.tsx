@@ -585,11 +585,11 @@ export const CommentThread = forwardRef<HTMLElement, CommentThreadProps>(functio
                           }}
                           initial={reduced ? { opacity: 0 } : { opacity: 0, x: -6 }}
                           animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, transition: { duration: 0.1 } }}
-                          transition={{ duration: 0.16, ease: enter }}
+                          exit={reduced ? { opacity: 0, transition: { duration: motionPresets.duration.instant } } : { opacity: 0, x: -6, transition: { duration: 0.1, ease: enter } }}
+                          transition={reduced ? { duration: motionPresets.duration.instant } : { duration: 0.16, ease: enter }}
                         >
                           {reactions.map((emoji, index) => (
-                            <motion.button
+                            <button
                               key={emoji}
                               type="button"
                               autoFocus={index === 0}
@@ -597,12 +597,9 @@ export const CommentThread = forwardRef<HTMLElement, CommentThreadProps>(functio
                               aria-pressed={!!comment.reactions?.find((reaction) => reaction.emoji === emoji)?.users.includes(currentUser.id)}
                               className="grid size-8 place-items-center rounded-full text-base aria-pressed:bg-accent"
                               onClick={() => react(comment.id, emoji)}
-                              initial={reduced ? false : { opacity: 0, scale: 0.6 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              transition={{ ...motionPresets.spring.snappy, delay: index * motionPresets.stagger.item }}
                             >
                               {emoji}
-                            </motion.button>
+                            </button>
                           ))}
                           <Button type="button" variant="ghost" size="icon-xs" aria-label="Close reactions" onClick={() => setUi((current) => ({ ...current, picker: null }))}>
                             <X aria-hidden="true" />

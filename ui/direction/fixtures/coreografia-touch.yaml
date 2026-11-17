@@ -1,0 +1,53 @@
+# Fixture de comparación (E14) · coreografia-touch
+# Transcripción por puntero de los datos de ejemplo en H 6cdabab074a6c8b98a1c09b4ea6788ae7d29bfb5.
+# Los datos viven en los archivos de cada pieza; aquí se fijan por prefijo de sha256 (12) y se listan los estados.
+# Prefijos cortos para que fixture_lint no lea los hash como teléfono o tarjeta; el blob completo sale de git en H.
+# Datos inventados del catálogo. Sin datos de producción.
+fixture_id: coreografia-touch-plp-v1
+spec_id: coreografia-touch
+spec_version: "1.0.0"
+generator: {kind: transcripcion, by: retana-ui-design-engineer}
+render:
+  viewports: [390x844, 1280x800]
+  themes: [light, dark]
+  reduced_motion: [reduce, no-preference]
+  network: bloqueada salvo loopback
+pieces:
+  - id: multi-view
+    route: "/examples/multi-view"
+    stress: "/examples/multi-view/stress"
+    sources:
+      - {path: app/examples/multi-view/data.ts, sha256_prefix: f73a0b10873e}
+      - {path: app/examples/multi-view/demo.tsx, sha256_prefix: de4991bf8e37}
+  - id: view-calendar
+    route: "/examples/view-calendar"
+    stress: "/examples/view-calendar/stress"
+    sources:
+      - {path: app/examples/view-calendar/demo.tsx, sha256_prefix: f30fd4a2d950}
+  - id: view-timeline
+    route: "/examples/view-timeline"
+    stress: "/examples/view-timeline/stress"
+    sources:
+      - {path: app/examples/view-timeline/demo.tsx, sha256_prefix: 700418002449}
+  - id: slide-to-confirm
+    route: "/examples/slide-to-confirm"
+    stress: "/examples/slide-to-confirm/stress"
+    sources:
+      - {path: app/examples/slide-to-confirm/demo.tsx, sha256_prefix: 14319a9957be}
+  - id: user-menu
+    route: "/examples/user-menu"
+    stress: "/examples/user-menu/stress"
+    sources:
+      - {path: app/examples/user-menu/demo.tsx, sha256_prefix: 021e0f4c9cb5}
+  - id: dashboard-analitico-ae
+    route: "/examples/dashboard-analitico-ae"
+    stress: "/examples/dashboard-analitico-ae/stress"
+    sources:
+      - {path: app/examples/dashboard-analitico-ae/demo.tsx, sha256_prefix: 2301d491cca2}
+  - id: stagger-reveal
+    route: "/examples/stagger-reveal"
+    stress: "/examples/stagger-reveal/stress"
+    sources:
+      - {path: app/examples/stagger-reveal/demo.tsx, sha256_prefix: 0535efe9b0a8}
+comparison_states: [filled]
+states: [filled, stress, reduced, touch-tap, touch-scroll, long-press, "390"]

@@ -189,6 +189,36 @@ export function ProgressRing({ value, className }: { value: number; className?: 
   )
 }
 
+/** Hold before a touch drag may capture. Inside 300–400 ms. */
+export const TOUCH_HOLD_MS = 360
+
+/** Movement that separates a tap from a scroll or a drag. */
+export const TOUCH_SLOP_PX = 8
+
+export type TouchIntent = "pending" | "tap" | "scroll" | "hold" | "cancel"
+
+/**
+ * A touch tap (release without movement) is never a drag.
+ * Vertical movement yields to scroll. A drag starts only after the hold.
+ */
+export function touchIntent(input: {
+  dx: number
+  dy: number
+  elapsedMs: number
+  released: boolean
+  holdMs?: number
+  slop?: number
+}): TouchIntent {
+  const holdMs = input.holdMs ?? TOUCH_HOLD_MS
+  const slop = input.slop ?? TOUCH_SLOP_PX
+  const distance = Math.hypot(input.dx, input.dy)
+  if (distance > slop && Math.abs(input.dy) >= Math.abs(input.dx)) return "scroll"
+  if (distance > slop) return "cancel"
+  if (!input.released && input.elapsedMs >= holdMs) return "hold"
+  if (input.released) return "tap"
+  return "pending"
+}
+
 export function usePrefersReducedMotion() {
   const [reduced, setReduced] = React.useState(false)
   React.useEffect(() => {

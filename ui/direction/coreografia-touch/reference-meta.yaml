@@ -1,0 +1,26 @@
+# Referencias de Dirección (E3) · coreografia-touch
+# Cada referencia tiene una ficha en la rama (ruta + sha256). Las PNG de CPL viven en el box.
+schema: retana.reference-meta/v1
+spec_id: coreografia-touch
+valid_for_spec_version: "1.0.0"
+mode: visual
+chosen_by: null   # STANDARD: la confirma el UI Lead en el sobre. No es decisión de Eduardo.
+cpl_control: {dir: /workspace/retana-ui-entregas/pr-sweep/cpl-control-sweep2, manifest_sha256: a6ed2081dd628e9e9af5a8337fa8840c4e61d42030ab84e3e62aa759d26de1fb, head: 33438d12520bbf9fe18ebc87f29df2a3122d02b6, harness: 21db9481b331}
+cpl_control_stress: {dir: /workspace/retana-ui-entregas/pr-sweep/cpl-control-stress, manifest_sha256: 4569a159a1cad9875c5e03815b43d74e6c1ebd62ce1cdf8a878f6d58a32076a2, head: 33438d12520bbf9fe18ebc87f29df2a3122d02b6, harness: 21db9481b331, note: "rutas /stress de las 12 piezas; React #418 en multi-view/stress (8) y view-kanban/stress (8), igual que en el head del PR"}
+spec_sync: {spec: ui/specs/coreografia-touch.spec.md, spec_version: "1.0.0", spec_revision: 3, note: "Se actualiza en el mismo commit que la Spec (gate predispatch). Rev. 3 solo declara UI intent: APPLIES en el cuerpo de la Spec (contrato del puente UI); sin cambio de AC ni de referencias."}
+license_visual: "capturas propias de retana-ui (MIT del repo)"
+references:
+  - {reference_id: REF-cpl-multi-view, screen_id: multi-view, kind: visual, path: ui/direction/coreografia-touch/ref-cpl-multi-view.md, sha256: 9514ffea8d5190680dd7f305cef527f572503ae4b79df3c09308da31c72cf91f, status: current, valid_for_spec_version: "1.0.0"}
+  - {reference_id: REF-cpl-view-calendar, screen_id: view-calendar, kind: visual, path: ui/direction/coreografia-touch/ref-cpl-view-calendar.md, sha256: 754da523fd89a1f663c2ae07c9cd5eac742e6993ca2f535264c8d14ad7033eb5, status: current, valid_for_spec_version: "1.0.0"}
+  - {reference_id: REF-cpl-view-timeline, screen_id: view-timeline, kind: visual, path: ui/direction/coreografia-touch/ref-cpl-view-timeline.md, sha256: 570dbe1de50f923e8ede0cfd44e8e3f869f65376f2524af2a643b5acec344ba1, status: current, valid_for_spec_version: "1.0.0"}
+  - {reference_id: REF-cpl-slide-to-confirm, screen_id: slide-to-confirm, kind: visual, path: ui/direction/coreografia-touch/ref-cpl-slide-to-confirm.md, sha256: 80ca99b9ccc9f0e351e81f99fc5b4db105eba9daff6b13e1aa6af1cb066fe26d, status: current, valid_for_spec_version: "1.0.0"}
+  - {reference_id: REF-cpl-user-menu, screen_id: user-menu, kind: visual, path: ui/direction/coreografia-touch/ref-cpl-user-menu.md, sha256: 0bc16d0fd9e6c709796b75e2a0151faea2bd91078a66079dab023949e352bca4, status: current, valid_for_spec_version: "1.0.0"}
+  - {reference_id: REF-cpl-dashboard-analitico-ae, screen_id: dashboard-analitico-ae, kind: visual, path: ui/direction/coreografia-touch/ref-cpl-dashboard-analitico-ae.md, sha256: cb5465f4e7cb28522e15e5acb9f32a4f3ef670f7ecb489bfda70adfb5db780dd, status: current, valid_for_spec_version: "1.0.0"}
+  - {reference_id: REF-cpl-stagger-reveal, screen_id: stagger-reveal, kind: visual, path: ui/direction/coreografia-touch/ref-cpl-stagger-reveal.md, sha256: 4a9e4d7c111271c5e5e2af87362ba78e2c6543f4afa7e0fb25151fa98f7ec7e8, status: current, valid_for_spec_version: "1.0.0"}
+  - {reference_id: REF-emil-choreograph, screen_id: all, kind: code, path: ui/direction/coreografia-touch/ref-emil-choreograph.md, sha256: abaab1811dcf4eea0603477e7c986e4f95992f6ed3056636d515811bbb413094, status: current, valid_for_spec_version: "1.0.0"}
+code_sources:
+  - {reference_id: REF-emil-choreograph, source: "github.com/emilkowalski/skills@c8a79627b59d72d764d6ab6f2c87c09a48169833:skills/choreograph/SKILL.md", source_sha256: 815c7d889230bafc72c03bb0769087aeede310130e8795c7949b3e3a1684e464, license: {spdx: MIT, notice: "Copyright (c) 2026 Emil Kowalski", license_file_sha256: 4ff5bdb7887ec1435c9cab0e8d1a7caee704d894d65c2a008ccc68b1cc2f260b}}
+inspiration:
+  - {name: "Emil Kowalski, post sobre activación táctil", url_in: "docs/learnings/L-EMIL-choreograph-c8a79627.md", used_as_reference: false, license: "el post no se reproduce; la regla se parafrasea y no hay código que copiar (ver `docs/learnings/L-EMIL-touch-activate.md`)."}
+  - {name: "Interaction Lab", url_in: "docs/learnings/L-EMIL-choreograph-c8a79627.md", used_as_reference: false, license: "sin licencia abierta visible; descartado como código."}
+side_by_side: "compare-*.png en el box, en la evidencia del head final; referencia a la izquierda y build a la derecha"

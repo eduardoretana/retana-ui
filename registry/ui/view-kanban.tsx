@@ -433,7 +433,7 @@ function Card({
         />
         <button
           type="button"
-          className="mt-0.5 text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-default"
+          className="mt-0.5 touch-none text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-default"
           aria-label={`Drag ${title}`}
           disabled={readOnly}
           {...(readOnly ? {} : attributes)}

@@ -110,20 +110,14 @@ const panelMotion: Variants = {
       visualDuration: 0.3,
       bounce: 0,
       opacity: { duration: 0.14, ease: enter },
-      delayChildren: 0.03,
-      staggerChildren: 0.016,
     },
   },
-  exit: { opacity: 0, scale: 0.97, transition: { duration: motionPresets.duration.instant, ease: exitEase } },
+  exit: { opacity: 0, scale: 0.94, transition: { duration: motionPresets.duration.exit, ease: exitEase } },
 }
 const stillMotion: Variants = {
   closed: { opacity: 0 },
   open: { opacity: 1, transition: { duration: motionPresets.duration.instant } },
-  exit: { opacity: 0, transition: { duration: 0.1 } },
-}
-const rowMotion: Variants = {
-  closed: { opacity: 0, y: 3 },
-  open: { opacity: 1, y: 0, transition: { duration: motionPresets.duration.standard, ease: enter } },
+  exit: { opacity: 0, transition: { duration: motionPresets.duration.instant } },
 }
 
 /** A presence mark that morphs between statuses: a hole opens for away and a bar slides in for busy. */
@@ -215,18 +209,16 @@ function Segmented<T extends string>({
   value,
   options,
   onChange,
-  variants,
 }: {
   label: string
   icon: React.ReactNode
   value: T
   options: { value: T; label: string; icon: React.ReactNode }[]
   onChange: (value: T) => void
-  variants?: Variants
 }) {
   const index = Math.max(0, options.findIndex((option) => option.value === value))
   return (
-    <motion.div className="relative flex h-11 items-center gap-3 px-3 group-data-[sheet]/menu:h-14" data-stop="group" data-label={label} variants={variants}>
+    <div className="relative flex h-11 items-center gap-3 px-3 group-data-[sheet]/menu:h-14" data-stop="group" data-label={label}>
       <span className="inline-grid w-4 shrink-0 place-items-center text-muted-foreground" aria-hidden="true">
         {icon}
       </span>
@@ -259,7 +251,7 @@ function Segmented<T extends string>({
           </button>
         ))}
       </div>
-    </motion.div>
+    </div>
   )
 }
 
@@ -524,12 +516,11 @@ export function UserMenu({
   }
 
   const glide: Transition = highlight?.glide && !reduced ? motionPresets.spring.snappy : { duration: 0 }
-  const row = reduced ? undefined : rowMotion
   const menuProps = { id: menuId, role: "menu" as const, "aria-labelledby": triggerId, tabIndex: -1 as const, onKeyDown }
 
   const content = (
     <>
-      <motion.div className="flex items-center gap-3 px-2 pt-2 pb-2.5" variants={row}>
+      <div className="flex items-center gap-3 px-2 pt-2 pb-2.5">
         <Face user={user} status={showStatus ? status : undefined} size="md" />
         <div className="grid min-w-0 flex-1 gap-px">
           <div className="flex min-w-0 items-center gap-2">
@@ -540,7 +531,7 @@ export function UserMenu({
             {user.email}
           </span>
         </div>
-      </motion.div>
+      </div>
       <div ref={listRef} className="relative" onFocus={onListFocus} onPointerMove={onListPointerMove} onPointerLeave={onListPointerLeave}>
         <motion.span
           className="pointer-events-none absolute inset-x-0 top-0 rounded-lg bg-accent opacity-0 data-[tone=danger]:bg-destructive/10"
@@ -554,7 +545,7 @@ export function UserMenu({
           <>
             <div className="mx-1 my-1.5 h-px bg-border" role="separator" />
             {items.map((item) => (
-              <motion.button
+              <button
                 key={item.label}
                 type="button"
                 role="menuitem"
@@ -566,7 +557,6 @@ export function UserMenu({
                 )}
                 data-stop="item"
                 data-label={item.label}
-                variants={row}
                 onPointerMove={onItemPointerMove}
                 onClick={() => {
                   close(true)
@@ -578,7 +568,7 @@ export function UserMenu({
                 </span>
                 <span className="min-w-0 flex-1 truncate">{item.label}</span>
                 {item.keys ? <span className="group-data-[sheet]/menu:hidden"><Keys keys={item.keys} /></span> : null}
-              </motion.button>
+              </button>
             ))}
           </>
         ) : null}
@@ -592,7 +582,6 @@ export function UserMenu({
                 value={status}
                 onChange={changeStatus}
                 options={userStatuses.map((option) => ({ ...option, icon: <PresenceDot status={option.value} /> }))}
-                variants={row}
               />
             ) : null}
             {showTheme ? (
@@ -602,13 +591,12 @@ export function UserMenu({
                 value={theme}
                 onChange={changeTheme}
                 options={themes}
-                variants={row}
               />
             ) : null}
           </>
         ) : null}
         <div className="mx-1 my-1.5 h-px bg-border" role="separator" />
-        <motion.button
+        <button
           type="button"
           role="menuitem"
           tabIndex={-1}
@@ -620,7 +608,6 @@ export function UserMenu({
           data-stop="item"
           data-tone="danger"
           data-label="Sign out"
-          variants={row}
           aria-busy={signingOut || undefined}
           onPointerMove={onItemPointerMove}
           onClick={signOut}
@@ -636,7 +623,7 @@ export function UserMenu({
               <Keys keys={signOutKeys} />
             </span>
           ) : null}
-        </motion.button>
+        </button>
       </div>
     </>
   )

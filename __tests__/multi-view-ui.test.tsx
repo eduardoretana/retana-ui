@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react"
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { useState } from "react"
 import { describe, expect, it, vi } from "vitest"
@@ -9,6 +9,7 @@ import { RecordProperties } from "@/registry/ui/record-properties"
 import { ViewCalendar } from "@/registry/ui/view-calendar"
 import { ViewKanban } from "@/registry/ui/view-kanban"
 import { ViewTimeline } from "@/registry/ui/view-timeline"
+import { touchIntent, TOUCH_HOLD_MS } from "@/registry/ui/multi-view-fields"
 
 const fields: FieldDef[] = [
   { id: "name", label: "Name", type: "text", icon: "text", section: "Deal" },
@@ -114,6 +115,15 @@ describe("ViewKanban", () => {
   })
 })
 
+describe("touch intent", () => {
+  it("opens on a still release, scrolls on a vertical move, and holds only after the delay", () => {
+    expect(touchIntent({ dx: 1, dy: 1, elapsedMs: 40, released: true })).toBe("tap")
+    expect(touchIntent({ dx: 2, dy: 30, elapsedMs: 20, released: false })).toBe("scroll")
+    expect(touchIntent({ dx: 0, dy: 0, elapsedMs: TOUCH_HOLD_MS, released: false })).toBe("hold")
+    expect(touchIntent({ dx: 24, dy: 2, elapsedMs: 30, released: false })).toBe("cancel")
+  })
+})
+
 describe("ViewCalendar", () => {
   it("moves between days and reschedules with Alt+Arrow", async () => {
     const user = userEvent.setup()
@@ -155,9 +165,186 @@ describe("ViewCalendar", () => {
     await user.keyboard("{Alt>}{ArrowRight}{/Alt}")
     expect(onMove).not.toHaveBeenCalled()
   })
+
+  it("opens on the first tap, for a mouse click and a touch tap", async () => {
+    const user = userEvent.setup()
+    const onOpen = vi.fn()
+    const onMove = vi.fn(async () => undefined)
+    render(
+      <ViewCalendar
+        records={rows}
+        fields={fields}
+        config={{ id: "cal", kind: "calendar", label: "Calendar", titleField: "name", dateField: "close" }}
+        locale="en-US"
+        today="2026-03-15"
+        onOpen={onOpen}
+        onMove={onMove}
+      />,
+    )
+    const chip = screen.getByRole("button", { name: "Reschedule Bruma" })
+    await user.click(chip)
+    expect(onOpen).toHaveBeenCalledTimes(1)
+    expect(onOpen).toHaveBeenCalledWith("a")
+    fireEvent.pointerDown(chip, { pointerType: "touch", pointerId: 4, clientX: 8, clientY: 8 })
+    fireEvent.pointerUp(chip, { pointerType: "touch", pointerId: 4, clientX: 8, clientY: 8 })
+    fireEvent.click(chip)
+    expect(onOpen).toHaveBeenCalledTimes(2)
+    expect(onMove).not.toHaveBeenCalled()
+    expect(chip.className).toContain("touch-pan-y")
+    expect(chip.className).not.toContain("touch-none")
+  })
+
+  it("lets a vertical touch swipe scroll without moving the event", () => {
+    const onOpen = vi.fn()
+    const onMove = vi.fn(async () => undefined)
+    render(
+      <ViewCalendar
+        records={rows}
+        fields={fields}
+        config={{ id: "cal", kind: "calendar", label: "Calendar", titleField: "name", dateField: "close" }}
+        locale="en-US"
+        today="2026-03-15"
+        onOpen={onOpen}
+        onMove={onMove}
+      />,
+    )
+    const chip = screen.getByRole("button", { name: "Reschedule Bruma" })
+    fireEvent.pointerDown(chip, { pointerType: "touch", pointerId: 5, clientX: 10, clientY: 10 })
+    fireEvent.pointerMove(chip, { pointerType: "touch", pointerId: 5, clientX: 12, clientY: 48 })
+    fireEvent.pointerUp(chip, { pointerType: "touch", pointerId: 5, clientX: 12, clientY: 48 })
+    expect(onOpen).not.toHaveBeenCalled()
+    expect(onMove).not.toHaveBeenCalled()
+    expect(chip).toHaveAttribute("data-gesture", "ready")
+    expect(chip.className).not.toContain("touch-none")
+  })
+
+  it("moves the event after a long-press drag and not before", async () => {
+    vi.useFakeTimers()
+    const onOpen = vi.fn()
+    const onMove = vi.fn(async () => undefined)
+    const rect = vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({
+      width: 40,
+      height: 96,
+      top: 0,
+      left: 0,
+      bottom: 96,
+      right: 40,
+      x: 0,
+      y: 0,
+      toJSON() {
+        return {}
+      },
+    } as DOMRect)
+    render(
+      <ViewCalendar
+        records={rows}
+        fields={fields}
+        config={{ id: "cal", kind: "calendar", label: "Calendar", titleField: "name", dateField: "close" }}
+        locale="en-US"
+        today="2026-03-15"
+        onOpen={onOpen}
+        onMove={onMove}
+      />,
+    )
+    const chip = screen.getByRole("button", { name: "Reschedule Bruma" })
+    fireEvent.pointerDown(chip, { pointerType: "touch", pointerId: 6, clientX: 10, clientY: 10 })
+    fireEvent.pointerMove(chip, { pointerType: "touch", pointerId: 6, clientX: 60, clientY: 10 })
+    fireEvent.pointerUp(chip, { pointerType: "touch", pointerId: 6, clientX: 60, clientY: 10 })
+    expect(onMove).not.toHaveBeenCalled()
+    fireEvent.pointerDown(chip, { pointerType: "touch", pointerId: 6, clientX: 10, clientY: 10 })
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(TOUCH_HOLD_MS)
+    })
+    expect(chip).toHaveAttribute("data-gesture", "holding")
+    expect(chip.className).toContain("touch-none")
+    fireEvent.pointerUp(chip, { pointerType: "touch", pointerId: 6, clientX: 60, clientY: 12 })
+    expect(onMove).toHaveBeenCalledWith("a", { close: "2026-03-16" })
+    expect(onOpen).not.toHaveBeenCalled()
+    rect.mockRestore()
+    vi.useRealTimers()
+  })
 })
 
 describe("ViewTimeline", () => {
+  it("opens a bar on the first touch tap", () => {
+    const onOpen = vi.fn()
+    const onMove = vi.fn(async () => undefined)
+    render(
+      <ViewTimeline
+        records={rows}
+        fields={fields}
+        config={{ id: "time", kind: "timeline", label: "Timeline", titleField: "name", startField: "start", endField: "end" }}
+        locale="en-US"
+        today="2026-04-03"
+        zoom="day"
+        onOpen={onOpen}
+        onMove={onMove}
+      />,
+    )
+    const bar = screen.getByRole("button", { name: "Bruma, Apr 1, 2026 to Apr 10, 2026" })
+    fireEvent.pointerDown(bar, { pointerType: "touch", pointerId: 2, clientX: 4, clientY: 4 })
+    fireEvent.pointerUp(bar, { pointerType: "touch", pointerId: 2, clientX: 5, clientY: 5 })
+    expect(onOpen).toHaveBeenCalledTimes(1)
+    expect(onOpen).toHaveBeenCalledWith("a")
+    expect(onMove).not.toHaveBeenCalled()
+    expect(bar.className).toContain("touch-pan-y")
+  })
+
+  it("lets a vertical touch swipe scroll without moving the bar", () => {
+    const onOpen = vi.fn()
+    const onMove = vi.fn(async () => undefined)
+    render(
+      <ViewTimeline
+        records={rows}
+        fields={fields}
+        config={{ id: "time", kind: "timeline", label: "Timeline", titleField: "name", startField: "start", endField: "end" }}
+        locale="en-US"
+        today="2026-04-03"
+        zoom="day"
+        onOpen={onOpen}
+        onMove={onMove}
+      />,
+    )
+    const bar = screen.getByRole("button", { name: "Bruma, Apr 1, 2026 to Apr 10, 2026" })
+    fireEvent.pointerDown(bar, { pointerType: "touch", pointerId: 3, clientX: 10, clientY: 8 })
+    fireEvent.pointerMove(bar, { pointerType: "touch", pointerId: 3, clientX: 12, clientY: 40 })
+    fireEvent.pointerUp(bar, { pointerType: "touch", pointerId: 3, clientX: 12, clientY: 40 })
+    expect(onOpen).not.toHaveBeenCalled()
+    expect(onMove).not.toHaveBeenCalled()
+    expect(bar.className).not.toContain("touch-none")
+  })
+
+  it("moves a bar only after a long-press drag", async () => {
+    vi.useFakeTimers()
+    const onOpen = vi.fn()
+    const onMove = vi.fn(async () => undefined)
+    render(
+      <ViewTimeline
+        records={rows}
+        fields={fields}
+        config={{ id: "time", kind: "timeline", label: "Timeline", titleField: "name", startField: "start", endField: "end" }}
+        locale="en-US"
+        today="2026-04-03"
+        zoom="day"
+        onOpen={onOpen}
+        onMove={onMove}
+      />,
+    )
+    const bar = screen.getByRole("button", { name: "Bruma, Apr 1, 2026 to Apr 10, 2026" })
+    fireEvent.pointerDown(bar, { pointerType: "touch", pointerId: 8, clientX: 0, clientY: 4 })
+    fireEvent.pointerUp(bar, { pointerType: "touch", pointerId: 8, clientX: 40, clientY: 4 })
+    expect(onMove).not.toHaveBeenCalled()
+    fireEvent.pointerDown(bar, { pointerType: "touch", pointerId: 8, clientX: 0, clientY: 4 })
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(TOUCH_HOLD_MS)
+    })
+    expect(bar).toHaveAttribute("data-gesture", "holding")
+    fireEvent.pointerUp(bar, { pointerType: "touch", pointerId: 8, clientX: 28, clientY: 6 })
+    expect(onMove).toHaveBeenCalledWith("a", { start: "2026-04-02", end: "2026-04-11" })
+    expect(onOpen).not.toHaveBeenCalled()
+    vi.useRealTimers()
+  })
+
   it("moves and resizes a bar from the keyboard", async () => {
     const user = userEvent.setup()
     const onMove = vi.fn(async () => undefined)
