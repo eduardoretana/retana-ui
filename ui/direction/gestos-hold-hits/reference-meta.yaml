@@ -1,0 +1,22 @@
+# Referencias de Dirección (E3) · gestos-hold-hits
+# Cada referencia tiene una ficha en la rama (ruta + sha256). Las PNG de CPL viven en el box: /workspace/retana-ui-entregas/pr-sweep/cpl-control-gestos-agenda
+spec_id: gestos-hold-hits
+valid_for_spec_version: "0.1.1"
+mode: visual
+chosen_by: null   # STANDARD: la confirma el UI Lead en el sobre
+cpl_control: {dir: /workspace/retana-ui-entregas/pr-sweep/cpl-control-gestos-agenda, manifest_sha256: 6828c0243bd35365eb3f3bf5a5ea4557dbe7cd53b616736e4792ffa754af0ff2, head: 33438d12520bbf9fe18ebc87f29df2a3122d02b6, harness: 21db9481b331}
+spec_sync: {spec: ui/specs/gestos-hold-hits.spec.md, spec_version: "0.1.1", spec_revision: 2, note: "Se actualiza en el mismo commit que la Spec (gate predispatch). Rev. 2 solo declara UI intent: APPLIES en el cuerpo de la Spec (contrato del puente UI); sin cambio de AC ni de referencias."}
+references:
+  - {reference_id: REF-cpl-hold-to-confirm, screen_id: hold-to-confirm, kind: visual, path: ui/direction/gestos-hold-hits/ref-cpl-hold-to-confirm.md, sha256: 45b56c0c49deaca194b86e2bfcd30e797d0b1caa64f416d92b7922d9d67d078d, status: current, valid_for_spec_version: "0.1.1"}
+      # imagen: before/hold-to-confirm/desktop-light-reduced.png sha256 18661b92be7b20acadbcc37aa871ecb8f402e047ef2fa13c4f4c68e3c81415e2
+      # imagen: before/hold-to-confirm/desktop-dark-reduced.png sha256 611999d14ba2dc2f44f2504473d096e20e47bb5827c5a65412a3d919a33191b8
+      # imagen: before/hold-to-confirm/390-light-reduced.png sha256 567e550634fa7435819936bda538c041bee31e26c115391bd4a7096758f36c8f
+      # imagen: before/hold-to-confirm/390-dark-reduced.png sha256 1309ee2e7899108798e8337d7a9cf7dcaa7aa13fafed90473f19fd08a0bfe57b
+  - {reference_id: REF-cpl-bottom-sheet, screen_id: bottom-sheet, kind: visual, path: ui/direction/gestos-hold-hits/ref-cpl-bottom-sheet.md, sha256: 52d49641340d4275284edf1875908cebf0b4c67871f1f2aabba0ea8b4050153e, status: current, valid_for_spec_version: "0.1.1"}
+      # imagen: before/bottom-sheet/desktop-light-reduced.png sha256 2bad278fc77668b58b3a344e9441b0f462a8bcde7d55291fb2f0ee078375226f
+      # imagen: before/bottom-sheet/desktop-dark-reduced.png sha256 6cda7d2be8c6395e114e6bc236a739bd8d7adf3c324cbd97328262d33fa1102f
+      # imagen: before/bottom-sheet/390-light-reduced.png sha256 572b2de1eee39f342b7a58b925b951edee2474cd7effd8d38ec311a338788896
+      # imagen: before/bottom-sheet/390-dark-reduced.png sha256 4b0650d82b96ffa5cc9d78a7c572fb9452d218537c81fd547dfb5fa2bddfc4d6
+  - {reference_id: REF-emil-gestures, screen_id: all, kind: code, path: ui/direction/gestos-hold-hits/ref-emil-gestures.md, sha256: 2dbd2982e0c81a6ba19dfc21838f49f315f7681c85170519fdbb3e6922b26466, status: current, valid_for_spec_version: "0.1.1"}
+      # fuente: github.com/emilkowalski/skills@715c1807e08c497cfd1dc4feb450a2a3300ef2a9:skills/gestures/SKILL.md sha256 0835dddc0ce4f4257fdc707ec137d75810f0bdbd8d4eaf69d1de55bfbbf260c2; licencia MIT
+side_by_side: "compare-*.png en el box (evidencia del head final), referencia a la izquierda y build a la derecha"
