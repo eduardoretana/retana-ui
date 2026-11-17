@@ -65,6 +65,138 @@ Pasada de diseño sobre el diff del PR #62 y las superficies que consumen motion
 - **Anti-Slop motion purpose**: purpose=feedback; experience_quality=APPLIES (evidencia en docs/sprints/bounded-retana-ui-motion-14-experience-quality.md)
 - **Anti-Slop proof plan**: viewports=390 y escritorio; states=default de cada demo, claro y oscuro, reduced-motion activado y no; browser=chromium headless del arnés 21db9481b331 sobre next start; visual_diff=capturas after del head, sin herramienta de diff de píxeles; deviations=la subida no introduce desviación del look de CPL
 
+## Direction
+
+Dirección heredada (LITE) con referencia real: control render de CPL `bf1682d4` (motion 13.5.0), arnés `21db9481b331`, tema claro y reduced-motion desactivado, a 390 y escritorio. Índice: `ui/direction/retana-ui-motion-14/reference-meta.yaml`. Cada referencia tiene su ficha `meta.yaml` en la rama; las PNG viven en el box (`/workspace/pr62-lite/direction-cpl/`) porque el push disponible solo escribe texto. Las cinco pantallas son las rutas con el error de hidratación React #418, que queda como `known_preexisting` (mismo conteo en CPL).
+
+```yaml
+spec_version: "1.0.0"
+direction:
+  mode: inherited
+  reference_meta: ui/direction/retana-ui-motion-14/reference-meta.yaml
+  references:
+    - reference_id: REF-cpl-home-390
+      screen_id: home
+      regions: [R1, R2]
+      path: ui/direction/retana-ui-motion-14/home-390-light.meta.yaml
+      sha256: d7fbc600b4ea3750d6409a614d024feef8a166f722f78de38ce76741d261a019
+      image_sha256: b77d420364e99a583e2c7d5ebed1e72920c4a3d832103e01c68adb1479fc063d
+      variant: null
+      chosen_at_spec_version: "1.0.0"
+      valid_for_spec_version: "1.0.0"
+      chosen_by: null
+      decision_id: null
+      status: current
+    - reference_id: REF-cpl-home-desktop
+      screen_id: home
+      regions: [R1, R2]
+      path: ui/direction/retana-ui-motion-14/home-desktop-light.meta.yaml
+      sha256: c0f584c7858073c7e4a579f9bc62050925495603b7e040fc40b4366ec239acab
+      image_sha256: 37f31c1becdfa152920b10c8e49ffb0bd97abb99c140dd877ecdb85bb6fc7b6f
+      variant: null
+      chosen_at_spec_version: "1.0.0"
+      valid_for_spec_version: "1.0.0"
+      chosen_by: null
+      decision_id: null
+      status: current
+    - reference_id: REF-cpl-announcement-bar-390
+      screen_id: announcement-bar
+      regions: [R1, R2, R3]
+      path: ui/direction/retana-ui-motion-14/announcement-bar-390-light.meta.yaml
+      sha256: 7f8dc5375df1e920a4af5d3a8dc5883cbb698fc7f4a8fb9531e056292fcfd219
+      image_sha256: fdb51e281c55879d172ef6fccd1ced07c3a9af09dfa55b1d3b1508bdb037b51c
+      variant: null
+      chosen_at_spec_version: "1.0.0"
+      valid_for_spec_version: "1.0.0"
+      chosen_by: null
+      decision_id: null
+      status: current
+    - reference_id: REF-cpl-announcement-bar-desktop
+      screen_id: announcement-bar
+      regions: [R1, R2, R3]
+      path: ui/direction/retana-ui-motion-14/announcement-bar-desktop-light.meta.yaml
+      sha256: 9973ed8fb893993632e8e857ec003d2719cdfcbe0342a6556c08f9066b537827
+      image_sha256: 7f1d8939b0477b0f2d469c81795d749616090c46c132148052a9a6b63408b215
+      variant: null
+      chosen_at_spec_version: "1.0.0"
+      valid_for_spec_version: "1.0.0"
+      chosen_by: null
+      decision_id: null
+      status: current
+    - reference_id: REF-cpl-cta-section-390
+      screen_id: cta-section
+      regions: [R1, R2, R3]
+      path: ui/direction/retana-ui-motion-14/cta-section-390-light.meta.yaml
+      sha256: 02e299d07489ebaa91f7478a160b94135e89eb7c9ed4eef21ad824428a743e37
+      image_sha256: 5541e6fd343f52639204568c6668a3b68e2a4558e00c37d3c8caab6549f2ba5b
+      variant: null
+      chosen_at_spec_version: "1.0.0"
+      valid_for_spec_version: "1.0.0"
+      chosen_by: null
+      decision_id: null
+      status: current
+    - reference_id: REF-cpl-cta-section-desktop
+      screen_id: cta-section
+      regions: [R1, R2, R3]
+      path: ui/direction/retana-ui-motion-14/cta-section-desktop-light.meta.yaml
+      sha256: cca8fd2e8083be94b36eb20dfac9d1200ddfdc6296bbf1f528201962e83ba98a
+      image_sha256: ca2bf42f47126950caa97861581bafe8df8b737d7a85af88cc3fe05b16a83117
+      variant: null
+      chosen_at_spec_version: "1.0.0"
+      valid_for_spec_version: "1.0.0"
+      chosen_by: null
+      decision_id: null
+      status: current
+    - reference_id: REF-cpl-motion-preference-390
+      screen_id: motion-preference
+      regions: [R1, R2, R3]
+      path: ui/direction/retana-ui-motion-14/motion-preference-390-light.meta.yaml
+      sha256: 124ea9014762b0fd131c9086e82e33c0409b20c6d7e83f5209b002c1080c08d9
+      image_sha256: 87297f64ff84a78f9083545fc28e9e8e01667b19e831d8e2f14aedfb3241906c
+      variant: null
+      chosen_at_spec_version: "1.0.0"
+      valid_for_spec_version: "1.0.0"
+      chosen_by: null
+      decision_id: null
+      status: current
+    - reference_id: REF-cpl-motion-preference-desktop
+      screen_id: motion-preference
+      regions: [R1, R2, R3]
+      path: ui/direction/retana-ui-motion-14/motion-preference-desktop-light.meta.yaml
+      sha256: f0744fdc3a4104071f5ffd350b2680f2ea42bd3e7b574e7c0b860fe399288f2e
+      image_sha256: 4e647baea94d4eedb222188a5113c32c0546dc7b62338c51524142c3c3fdfc03
+      variant: null
+      chosen_at_spec_version: "1.0.0"
+      valid_for_spec_version: "1.0.0"
+      chosen_by: null
+      decision_id: null
+      status: current
+    - reference_id: REF-cpl-scroll-linked-390
+      screen_id: scroll-linked
+      regions: [R1, R2]
+      path: ui/direction/retana-ui-motion-14/scroll-linked-390-light.meta.yaml
+      sha256: fb39918086ea7720406036c452d1f8d68ba6b3e74cf5e89603935d19bd37d54c
+      image_sha256: b140b44fd6913d393536f77c78a6e960325f2c22089c01c92ab5035dcabef106
+      variant: null
+      chosen_at_spec_version: "1.0.0"
+      valid_for_spec_version: "1.0.0"
+      chosen_by: null
+      decision_id: null
+      status: current
+    - reference_id: REF-cpl-scroll-linked-desktop
+      screen_id: scroll-linked
+      regions: [R1, R2]
+      path: ui/direction/retana-ui-motion-14/scroll-linked-desktop-light.meta.yaml
+      sha256: 6dd9f23dd7c435d5b6fc2c6923824d4eec9b93b3d582432182ea439b925a9005
+      image_sha256: 601657e48e03176f0193e3e84ab0cf8b0a6953f9a365c79eaa58caedf978fb83
+      variant: null
+      chosen_at_spec_version: "1.0.0"
+      valid_for_spec_version: "1.0.0"
+      chosen_by: null
+      decision_id: null
+      status: current
+```
+
 ## Referencias del ciclo
 
 - PR: eduardoretana/retana-ui#62 (borrador, base CPL)

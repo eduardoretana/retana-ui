@@ -11,7 +11,7 @@
   "inputs": {},
   "manifest": {
     "path": "docs/sprints/bounded-retana-ui-motion-14.md",
-    "sha256": "29d16b67a2b8ac246b6fd71e25d98d2e826408b0b8e01a17e0793d4719e77dbc"
+    "sha256": "e04da37e058e39e1e132b8b323ac32b7467a585921f4b08dbfc6091c5e6edfad"
   },
   "owner": "cursor/motion-14-accel-8aec",
   "profile": "LITE",
@@ -25,7 +25,7 @@
   },
   "spec": {
     "path": "docs/sprints/bounded-retana-ui-motion-14.md",
-    "sha256": "29d16b67a2b8ac246b6fd71e25d98d2e826408b0b8e01a17e0793d4719e77dbc"
+    "sha256": "e04da37e058e39e1e132b8b323ac32b7467a585921f4b08dbfc6091c5e6edfad"
   },
   "stage": "IMPLEMENTATION",
   "state": "PENDING"
