@@ -1,0 +1,6 @@
+# Reglas E9 de retana-ui. El caso no declara reglas propias.
+# Severidades y catálogo: knowledge/rules.yaml de hub-vibecoding@419ad6481648c693d61f8e5ebfb8b8e80d8d8ab7 (ui-system 4.0.0).
+# AUDITOR.md 1.2.5 §7: una regla ausente del E9 toma la severidad de knowledge/rules.yaml.
+schema: uis.rules/v1
+inherits: {repo: eduardoretana/hub-vibecoding, ref: 419ad6481648c693d61f8e5ebfb8b8e80d8d8ab7, path: ui-system/knowledge/rules.yaml, sha256: 1d59ce2483e8e4e5edd33fb66738d1876f42dbe0d669384a5f4742747e57c75d}
+rules: []

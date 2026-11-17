@@ -6,14 +6,14 @@ import { Demo } from "./demo"
 
 export const metadata: Metadata = {
   title: "Ventana de contexto",
-  description: "Archivos y charla dentro de la ventana de 24 000 tokens.",
+  description: "Fuentes del taller dentro de una ventana de 80 000 tokens.",
 }
 
 export default function Page() {
   return (
     <ExampleFrame
       title="Ventana de contexto"
-      description="Quita un archivo o compacta la charla. En Error, el primer quitar se deshace."
+      description="El recorrido carga fuentes y compacta la charla. Reiniciar lo vuelve a empezar. En Error, el primer quitar se deshace."
       size="wide"
     >
       <Demo />

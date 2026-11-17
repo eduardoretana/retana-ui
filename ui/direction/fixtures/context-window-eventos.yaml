@@ -1,0 +1,24 @@
+# Fixture de comparación (E14) · context-window-eventos
+# Transcripción por puntero de los datos de ejemplo en H db19a518cddc7b1461f2e47c9470a7de4d93088e.
+# Los datos viven en los archivos de cada pieza; aquí se fijan por prefijo de sha256 (12) y se listan los estados.
+# Prefijos cortos para que fixture_lint no lea los hash como teléfono o tarjeta; el blob completo sale de git en H.
+# Datos inventados del catálogo. Sin datos de producción.
+fixture_id: context-window-eventos-plp-v1
+spec_id: context-window-eventos
+spec_version: "1.0.0"
+generator: {kind: transcripcion, by: retana-ui-design-engineer}
+render:
+  viewports: [390x844, 1280x800]
+  themes: [light, dark]
+  reduced_motion: [reduce, no-preference]
+  network: bloqueada salvo loopback
+pieces:
+  - id: context-window
+    route: "/examples/context-window"
+    stress: "/examples/context-window/stress"
+    sources:
+      - {path: app/examples/context-window/demo.tsx, sha256_prefix: 2a0a39dd4817}
+      - {path: app/examples/context-window/fixtures.ts, sha256_prefix: 4261817a38d4}
+      - {path: app/examples/context-window/scenes.tsx, sha256_prefix: f7648ea15c05}
+comparison_states: [filled]
+states: [filled, empty, loading, error, playback, near-limit, compacting, compacted, over-limit, pinned, cache-heavy, "390"]
