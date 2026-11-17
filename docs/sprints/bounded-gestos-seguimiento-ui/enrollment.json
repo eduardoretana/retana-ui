@@ -1,0 +1,33 @@
+{
+  "documents": [
+    "docs/sprints/bounded-gestos-seguimiento-ui/enrollment.json",
+    "docs/sprints/bounded-gestos-seguimiento.md",
+    "ui/specs/gestos-seguimiento.spec.md"
+  ],
+  "evidence": {
+    "receipt": "docs/sprints/bounded-gestos-seguimiento-ui/checker-receipt.json",
+    "report": "docs/sprints/bounded-gestos-seguimiento-ui/verdict.json"
+  },
+  "impact": "INTERACTION_FLOW",
+  "inputs": {},
+  "manifest": {
+    "path": "docs/sprints/bounded-gestos-seguimiento.md",
+    "sha256": "43a7cbe599859d9bbf1da49fd5375098735c0d85f2dcd656aee25a226346dfd0"
+  },
+  "owner": "cursor/gestos-seguimiento-1153",
+  "profile": "STANDARD",
+  "repo": "sha256:1aceb83247f3be9347d53333d783b6aa0a78769c3801b37e557d87f9fc707e6b",
+  "schema_version": "retana.ui-enrollment/v1",
+  "source": {
+    "identity": "https://github.com/eduardoretana/hub-vibecoding.git",
+    "module_version": "4.0.0",
+    "protocol_version": "16",
+    "sha": "0218369e944b02fb63cae5df0ddc95ae72262e97"
+  },
+  "spec": {
+    "path": "ui/specs/gestos-seguimiento.spec.md",
+    "sha256": "9973db0738f31e7b12f2d326d4599f43635c157751e54c6c46e9c3a286f47a72"
+  },
+  "stage": "IMPLEMENTATION",
+  "state": "PENDING"
+}
