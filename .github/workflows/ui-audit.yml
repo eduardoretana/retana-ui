@@ -1,0 +1,637 @@
+# Piloto del auditor ui-system v2-lite en un repo público.
+#
+# Fuente: eduardoretana/hub-vibecoding, ui-system/auditor/v2-lite/retana-ui-workflow.public.yml
+# en la rama cursor/ui-audit-v2-lite-0d03 (PR hub #314).
+#
+# El hub es privado. Se clona con el secreto UI_AUDIT_HUB_TOKEN (PAT fine-grained,
+# solo Contents: Read de hub-vibecoding). Ese valor no vive en git. El juez y el
+# comentario usan el GITHUB_TOKEN de este repo.
+#
+# TODO: cuando se acepte hub-vibecoding#314, cambiar el ref del hub (hay tres
+# checkouts) del nombre de rama al SHA de main. Hasta entonces la rama puede moverse.
+#
+# Seguridad de este archivo:
+# - pull_request_target e issue_comment leen ESTE workflow desde CPL, no el del PR.
+#   pull_request quedaría descartado: en un PR del mismo repo GitHub ejecutaría el
+#   YAML del head y, al etiquetar, le entregaría el secreto.
+# - El código del PR (pnpm install / pnpm test / pnpm lint) solo corre si el autor
+#   es OWNER, MEMBER o COLLABORATOR y el PR no es un fork. Eso ocurre en el job
+#   collect, cuyo GITHUB_TOKEN es contents: read y cuyo paso de pruebas no recibe
+#   UI_AUDIT_HUB_TOKEN.
+# - El job judge no lanza los scripts del host. Su token puede leer el repo y
+#   llamar a Copilot. No puede escribir pull requests ni checks.
+# - El job publish no llama a Copilot ni a pnpm. Publica el comentario
+#   (pull-requests: write) y el check neutral (checks: write). contents sigue
+#   en read: este token no puede hacer push ni merge.
+# - anim_perf_lint no existe en retana-ui. No se pasa comando: el auditor lo deja
+#   en not_measured.
+# - El veredicto no autoriza el merge. El check "ui-audit (shadow)" se publica
+#   como neutral. No marques este workflow como required check.
+
+name: ui-audit
+
+on:
+  pull_request_target:
+    types: [labeled]
+    branches: [CPL]
+  issue_comment:
+    types: [created]
+
+permissions: {}
+
+concurrency:
+  group: ui-audit-${{ github.event.pull_request.number || github.event.issue.number }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  authorize:
+    name: Autorizar el disparo
+    if: >
+      (github.event_name == 'pull_request_target' &&
+       github.event.action == 'labeled' &&
+       github.event.label.name == 'ui-audit') ||
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request &&
+       contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association) &&
+       contains(github.event.comment.body, '/ui-audit'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      authorized: ${{ steps.gate.outputs.authorized }}
+      pr: ${{ steps.gate.outputs.pr }}
+      head: ${{ steps.gate.outputs.head }}
+      base: ${{ steps.gate.outputs.base }}
+      author: ${{ steps.gate.outputs.author }}
+      cross: ${{ steps.gate.outputs.cross }}
+      author_association: ${{ steps.gate.outputs.author_association }}
+      run_host_commands: ${{ steps.gate.outputs.run_host_commands }}
+    steps:
+      - name: Comprobar actor, autor y base
+        id: gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          PR_FROM_PR: ${{ github.event.pull_request.number }}
+          PR_FROM_ISSUE: ${{ github.event.issue.number }}
+          SENDER: ${{ github.event.sender.login }}
+          SENDER_TYPE: ${{ github.event.sender.type }}
+          COMMENT_ASSOCIATION: ${{ github.event.comment.author_association }}
+          COMMENT_USER_TYPE: ${{ github.event.comment.user.type }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+        run: |
+          set -euo pipefail
+
+          authorized=false
+          run_host=false
+          pr=""
+          head=""
+          base=""
+          author=""
+          cross="true"
+          assoc=""
+
+          finish() {
+            {
+              echo "authorized=${authorized}"
+              echo "run_host_commands=${run_host}"
+              echo "pr=${pr}"
+              echo "head=${head}"
+              echo "base=${base}"
+              echo "author=${author}"
+              echo "cross=${cross}"
+              echo "author_association=${assoc}"
+            } >> "$GITHUB_OUTPUT"
+            {
+              echo "## ui-audit"
+              echo
+              echo "- autorizado: ${authorized}"
+              echo "- comandos del host: ${run_host}"
+              echo "- autor: ${author:-desconocido} (${assoc:-sin asociación})"
+              echo "- fork: ${cross}"
+            } >> "$GITHUB_STEP_SUMMARY"
+          }
+
+          if [ "$SENDER_TYPE" != "User" ]; then
+            echo "El actor no es un usuario. No se audita."
+            finish
+            exit 0
+          fi
+
+          pr="${PR_FROM_PR:-}"
+          if [ -z "$pr" ]; then
+            pr="${PR_FROM_ISSUE:-}"
+          fi
+          if ! [[ "$pr" =~ ^[0-9]+$ ]]; then
+            echo "No hay un número de PR válido."
+            exit 1
+          fi
+
+          if [ "$EVENT_NAME" = "issue_comment" ]; then
+            case "$COMMENT_ASSOCIATION" in
+              OWNER|MEMBER|COLLABORATOR) ;;
+              *)
+                echo "El comentario no es de OWNER, MEMBER o COLLABORATOR."
+                finish
+                exit 0
+                ;;
+            esac
+            if [ "$COMMENT_USER_TYPE" != "User" ]; then
+              echo "El comentario no viene de un usuario."
+              finish
+              exit 0
+            fi
+            # Token suelto, no un prefijo tipo /ui-audit-extra.
+            if ! printf '%s\n' "$COMMENT_BODY" | grep -Eq '(^|[[:space:]])/ui-audit([[:space:]]|$)'; then
+              echo "El comentario no es el comando /ui-audit."
+              finish
+              exit 0
+            fi
+          elif [ "$EVENT_NAME" = "pull_request_target" ]; then
+            if ! [[ "$SENDER" =~ ^[A-Za-z0-9][A-Za-z0-9-]*$ ]]; then
+              echo "Login del actor inválido."
+              finish
+              exit 0
+            fi
+            trusted_actor=false
+            if [ "$SENDER" = "$GITHUB_REPOSITORY_OWNER" ]; then
+              trusted_actor=true
+            else
+              perm=$(gh api "repos/${GITHUB_REPOSITORY}/collaborators/${SENDER}/permission" --jq .permission 2>/dev/null || true)
+              case "$perm" in
+                admin|maintain|write|triage) trusted_actor=true ;;
+              esac
+            fi
+            if [ "$trusted_actor" != true ]; then
+              echo "Quien puso la etiqueta no tiene un rol de confianza en el repo."
+              finish
+              exit 0
+            fi
+          else
+            echo "Evento no soportado."
+            exit 1
+          fi
+
+          json=$(gh pr view "$pr" --repo "$GITHUB_REPOSITORY" --json headRefOid,baseRefOid,baseRefName,author,isCrossRepository)
+          head=$(jq -er '.headRefOid' <<<"$json")
+          base=$(jq -er '.baseRefOid' <<<"$json")
+          base_name=$(jq -er '.baseRefName' <<<"$json")
+          author=$(jq -er '.author.login' <<<"$json")
+          cross=$(jq -er '.isCrossRepository' <<<"$json")
+          assoc=$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${pr}" --jq .author_association)
+
+          if ! [[ "$head" =~ ^[0-9a-f]{40}$ && "$base" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "SHA de head o base inválido."
+            exit 1
+          fi
+          if ! [[ "$author" =~ ^[A-Za-z0-9][A-Za-z0-9-]*$ ]]; then
+            echo "Login de autor inválido."
+            exit 1
+          fi
+          if ! [[ "$assoc" =~ ^[A-Z_]+$ ]]; then
+            echo "author_association inesperada."
+            exit 1
+          fi
+          if [ "$base_name" != "CPL" ]; then
+            echo "El PR no apunta a CPL."
+            cross="true"
+            finish
+            exit 0
+          fi
+          if [ "$cross" != "true" ] && [ "$cross" != "false" ]; then
+            echo "isCrossRepository inesperado."
+            exit 1
+          fi
+
+          authorized=true
+          if [ "$cross" = "false" ]; then
+            case "$assoc" in
+              OWNER|MEMBER|COLLABORATOR) run_host=true ;;
+            esac
+          fi
+          finish
+
+  collect:
+    name: Medir el host y recoger evidencia
+    needs: authorize
+    if: needs.authorize.outputs.authorized == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+    steps:
+      - name: Validar los datos del PR
+        env:
+          HEAD: ${{ needs.authorize.outputs.head }}
+          BASE: ${{ needs.authorize.outputs.base }}
+          PR: ${{ needs.authorize.outputs.pr }}
+          AUTHOR: ${{ needs.authorize.outputs.author }}
+          CROSS: ${{ needs.authorize.outputs.cross }}
+          AUTHOR_ASSOCIATION: ${{ needs.authorize.outputs.author_association }}
+          RUN_HOST: ${{ needs.authorize.outputs.run_host_commands }}
+        run: |
+          set -euo pipefail
+          [[ "$HEAD" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$BASE" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$PR" =~ ^[0-9]+$ ]]
+          [[ "$AUTHOR" =~ ^[A-Za-z0-9][A-Za-z0-9-]*$ ]]
+          [[ "$CROSS" == "true" || "$CROSS" == "false" ]]
+          [[ "$AUTHOR_ASSOCIATION" =~ ^[A-Z_]+$ ]]
+          [[ "$RUN_HOST" == "true" || "$RUN_HOST" == "false" ]]
+
+      - name: Checkout del PR
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ needs.authorize.outputs.head }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Checkout del hub
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: eduardoretana/hub-vibecoding
+          # TODO: SHA de main cuando se acepte hub-vibecoding#314.
+          ref: cursor/ui-audit-v2-lite-0d03
+          token: ${{ secrets.UI_AUDIT_HUB_TOKEN }}
+          path: .ui-audit-hub
+          persist-credentials: false
+          sparse-checkout: ui-system/auditor/v2-lite
+
+      - name: Sacar el auditor del árbol del PR
+        run: |
+          set -euo pipefail
+          tool="$RUNNER_TEMP/hub-tool"
+          rm -rf "$tool"
+          rm -rf .ui-audit-hub/.git
+          test -f .ui-audit-hub/ui-system/auditor/v2-lite/collect.mjs
+          mv .ui-audit-hub/ui-system/auditor/v2-lite "$tool"
+          rm -rf .ui-audit-hub
+          test ! -e .ui-audit-hub
+          git config --local --unset-all http.extraheader || true
+          rm -f "$HOME/.git-credentials"
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24
+
+      - name: Instalar el host
+        if: >
+          needs.authorize.outputs.run_host_commands == 'true' &&
+          needs.authorize.outputs.cross == 'false' &&
+          contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), needs.authorize.outputs.author_association)
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
+
+      - name: Instalar dependencias del host
+        if: >
+          needs.authorize.outputs.run_host_commands == 'true' &&
+          needs.authorize.outputs.cross == 'false' &&
+          contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), needs.authorize.outputs.author_association)
+        env:
+          GITHUB_TOKEN: ""
+          GH_TOKEN: ""
+        run: pnpm install --frozen-lockfile
+
+      - name: Recoger evidencia
+        env:
+          BASE: ${{ needs.authorize.outputs.base }}
+          HEAD: ${{ needs.authorize.outputs.head }}
+          AUTHOR: ${{ needs.authorize.outputs.author }}
+          CROSS: ${{ needs.authorize.outputs.cross }}
+          AUTHOR_ASSOCIATION: ${{ needs.authorize.outputs.author_association }}
+          RUN_HOST: ${{ needs.authorize.outputs.run_host_commands }}
+          # El runner inyecta GITHUB_TOKEN en cada paso. Este paso ejecuta el
+          # árbol del PR cuando RUN_HOST=true, así que se anula aquí. El job
+          # igual solo tiene contents: read. UI_AUDIT_HUB_TOKEN no está en el entorno.
+          GITHUB_TOKEN: ""
+          GH_TOKEN: ""
+        run: |
+          set -euo pipefail
+          run_host="$RUN_HOST"
+          if [ "$CROSS" != "false" ]; then
+            run_host=false
+          fi
+          case "$AUTHOR_ASSOCIATION" in
+            OWNER|MEMBER|COLLABORATOR) ;;
+            *) run_host=false ;;
+          esac
+
+          tool="$RUNNER_TEMP/hub-tool"
+          test -f "$tool/collect.mjs"
+          if [ ! -d "$tool/node_modules/typescript" ]; then
+            postcss_integrity=$(npm view postcss@8.5.29 dist.integrity)
+            scss_integrity=$(npm view postcss-scss@4.0.9 dist.integrity)
+            ts_integrity=$(npm view typescript@5.9.3 dist.integrity)
+            test "$postcss_integrity" = "sha512-49cGhUbXj8Qenv0iTMxA1cFBzxXoctpC9Ujd77t1WcbJIr6nF/eI7g/8MgxrYldFRuAXvja7xQRwavoW7kgrxQ=="
+            test "$scss_integrity" = "sha512-AjKOeiwAitL/MXxQW2DliT28EKukvvbEWx3LBmJIRN8KfBGZbRTxNYW0kSqi1COiTZ57nZ9NW06S6ux//N1c9A=="
+            test "$ts_integrity" = "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="
+            npm install --ignore-scripts --no-fund --no-audit --prefix "$tool" \
+              postcss@8.5.29 postcss-scss@4.0.9 typescript@5.9.3
+          fi
+
+          out="$RUNNER_TEMP/ui-audit"
+          mkdir -p "$out"
+          # anim_perf_lint no existe en retana-ui: no se pasa, queda not_measured.
+          test_cmd=""
+          lint_cmd=""
+          if [ "$run_host" = "true" ]; then
+            test_cmd="pnpm test"
+            lint_cmd="pnpm lint"
+          fi
+          args=(--repo "$GITHUB_WORKSPACE" --base "$BASE" --head "$HEAD" --out "$out/evidence.json" --profile STANDARD --builder-id "$AUTHOR")
+          if [ -n "$test_cmd" ]; then args+=(--test-command "$test_cmd"); fi
+          if [ -n "$lint_cmd" ]; then args+=(--lint-command "$lint_cmd"); fi
+          set +e
+          node "$tool/collect.mjs" "${args[@]}"
+          ccode=$?
+          set -e
+          if [ "$ccode" -eq 2 ]; then
+            exit 2
+          fi
+          test -s "$out/evidence.json"
+          # Forma de token real, no el texto del propio workflow.
+          if grep -R -q -E 'github_pat_[A-Za-z0-9_]{20,}|ghp_[A-Za-z0-9]{20,}|gho_[A-Za-z0-9]{20,}|ghs_[A-Za-z0-9]{20,}' "$out"; then
+            echo "La evidencia contiene algo con forma de token. No se sube."
+            exit 2
+          fi
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ui-audit-evidence
+          path: ${{ runner.temp }}/ui-audit
+          if-no-files-found: error
+          retention-days: 7
+
+  judge:
+    name: Juzgar
+    needs: [authorize, collect]
+    if: needs.authorize.outputs.authorized == 'true' && needs.collect.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      copilot-requests: write
+    steps:
+      - name: Validar los datos del PR
+        env:
+          HEAD: ${{ needs.authorize.outputs.head }}
+          BASE: ${{ needs.authorize.outputs.base }}
+          PR: ${{ needs.authorize.outputs.pr }}
+          AUTHOR: ${{ needs.authorize.outputs.author }}
+        run: |
+          set -euo pipefail
+          [[ "$HEAD" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$BASE" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$PR" =~ ^[0-9]+$ ]]
+          [[ "$AUTHOR" =~ ^[A-Za-z0-9][A-Za-z0-9-]*$ ]]
+
+      - name: Checkout del PR
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ needs.authorize.outputs.head }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Checkout del hub
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: eduardoretana/hub-vibecoding
+          # TODO: SHA de main cuando se acepte hub-vibecoding#314.
+          ref: cursor/ui-audit-v2-lite-0d03
+          token: ${{ secrets.UI_AUDIT_HUB_TOKEN }}
+          path: .ui-audit-hub
+          persist-credentials: false
+          sparse-checkout: ui-system/auditor/v2-lite
+
+      - name: Sacar el auditor del árbol del PR
+        run: |
+          set -euo pipefail
+          tool="$RUNNER_TEMP/hub-tool"
+          rm -rf "$tool"
+          rm -rf .ui-audit-hub/.git
+          test -f .ui-audit-hub/ui-system/auditor/v2-lite/judge.mjs
+          mv .ui-audit-hub/ui-system/auditor/v2-lite "$tool"
+          rm -rf .ui-audit-hub
+          test ! -e .ui-audit-hub
+          git config --local --unset-all http.extraheader || true
+          rm -f "$HOME/.git-credentials"
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: ui-audit-evidence
+          path: ${{ runner.temp }}/ui-audit
+
+      - name: Juzgar, validar y comentar
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD: ${{ needs.authorize.outputs.head }}
+          AUTHOR: ${{ needs.authorize.outputs.author }}
+          RUN_HOST: ${{ needs.authorize.outputs.run_host_commands }}
+        run: |
+          set -euo pipefail
+          tool="$RUNNER_TEMP/hub-tool"
+          out="$RUNNER_TEMP/ui-audit"
+          test -s "$out/evidence.json"
+          test -f "$tool/judge.mjs"
+          test -f "$tool/verdict_v2.py"
+          test -f "$tool/RUBRIC.md"
+
+          if [ ! -d "$tool/node_modules/typescript" ]; then
+            postcss_integrity=$(npm view postcss@8.5.29 dist.integrity)
+            scss_integrity=$(npm view postcss-scss@4.0.9 dist.integrity)
+            ts_integrity=$(npm view typescript@5.9.3 dist.integrity)
+            test "$postcss_integrity" = "sha512-49cGhUbXj8Qenv0iTMxA1cFBzxXoctpC9Ujd77t1WcbJIr6nF/eI7g/8MgxrYldFRuAXvja7xQRwavoW7kgrxQ=="
+            test "$scss_integrity" = "sha512-AjKOeiwAitL/MXxQW2DliT28EKukvvbEWx3LBmJIRN8KfBGZbRTxNYW0kSqi1COiTZ57nZ9NW06S6ux//N1c9A=="
+            test "$ts_integrity" = "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="
+            npm install --ignore-scripts --no-fund --no-audit --prefix "$tool" \
+              postcss@8.5.29 postcss-scss@4.0.9 typescript@5.9.3
+          fi
+
+          copilot_integrity=$(npm view @github/copilot@1.0.105 dist.integrity)
+          test "$copilot_integrity" = "sha512-k5JPVZrc0Ms4YdAmYS80OGxDvwjDZNVqDS3dxphIFUVSTFJRwcHkbHh3yUKk7MEyBjKqQYKLKNAKSF+dVmjl7A=="
+          npm install -g --ignore-scripts --no-fund --no-audit @github/copilot@1.0.105
+
+          python3 -m venv "$RUNNER_TEMP/ui-audit-py"
+          wheel_dir="$RUNNER_TEMP/wheels"
+          mkdir -p "$wheel_dir"
+          "$RUNNER_TEMP/ui-audit-py/bin/pip" download jsonschema==4.26.0 --no-deps --only-binary=:all: --dest "$wheel_dir"
+          wheel=$(find "$wheel_dir" -name 'jsonschema-4.26.0-*.whl' -print -quit)
+          test -n "$wheel"
+          actual=$(sha256sum "$wheel" | awk '{print $1}')
+          test "$actual" = "d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce"
+          "$RUNNER_TEMP/ui-audit-py/bin/pip" install --disable-pip-version-check "$wheel"
+          "$RUNNER_TEMP/ui-audit-py/bin/python" -c "import jsonschema"
+
+          set +e
+          node "$tool/judge.mjs" \
+            --evidence "$out/evidence.json" --repo "$GITHUB_WORKSPACE" --out "$out/verdict.json" \
+            --mode copilot --agent-id "ci-judge:${GITHUB_RUN_ID}" \
+            --rubric "$tool/RUBRIC.md" --enforcement shadow \
+            --measured-at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          jcode=$?
+          set -e
+          if [ "$jcode" -eq 2 ]; then
+            exit 2
+          fi
+
+          set +e
+          "$RUNNER_TEMP/ui-audit-py/bin/python" "$tool/verdict_v2.py" \
+            "$out/verdict.json" --evidence "$out/evidence.json" \
+            --rubric "$tool/RUBRIC.md" --head "$HEAD" --builder-id "$AUTHOR"
+          vcode=$?
+          set -e
+          if [ "$vcode" -ne 0 ] && [ "$vcode" -ne 1 ]; then
+            echo "verdict_v2.py salió con código ${vcode}."
+            exit "$vcode"
+          fi
+          printf '%s\n' "$vcode" > "$out/verdict.exit"
+          printf '%s\n' "$RUN_HOST" > "$out/host-commands"
+
+          if grep -R -q -E 'github_pat_[A-Za-z0-9_]{20,}|ghp_[A-Za-z0-9]{20,}|gho_[A-Za-z0-9]{20,}|ghs_[A-Za-z0-9]{20,}' "$out"; then
+            echo "El informe contiene algo con forma de token. No se sube."
+            exit 2
+          fi
+
+          {
+            echo "## ui-audit (shadow)"
+            echo
+            echo "El veredicto quedó en el artefacto. Publicarlo no autoriza el merge."
+            echo
+            echo "- código del veredicto: ${vcode}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ui-audit-report
+          path: ${{ runner.temp }}/ui-audit
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    name: Comentar
+    needs: [authorize, judge]
+    if: needs.authorize.outputs.authorized == 'true' && needs.judge.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+      checks: write
+    steps:
+      - name: Validar los datos del PR
+        env:
+          HEAD: ${{ needs.authorize.outputs.head }}
+          PR: ${{ needs.authorize.outputs.pr }}
+          AUTHOR: ${{ needs.authorize.outputs.author }}
+        run: |
+          set -euo pipefail
+          [[ "$HEAD" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$PR" =~ ^[0-9]+$ ]]
+          [[ "$AUTHOR" =~ ^[A-Za-z0-9][A-Za-z0-9-]*$ ]]
+
+      - name: Checkout del PR
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ needs.authorize.outputs.head }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Checkout del hub
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: eduardoretana/hub-vibecoding
+          # TODO: SHA de main cuando se acepte hub-vibecoding#314.
+          ref: cursor/ui-audit-v2-lite-0d03
+          token: ${{ secrets.UI_AUDIT_HUB_TOKEN }}
+          path: .ui-audit-hub
+          persist-credentials: false
+          sparse-checkout: ui-system/auditor/v2-lite
+
+      - name: Sacar el auditor del árbol del PR
+        run: |
+          set -euo pipefail
+          tool="$RUNNER_TEMP/hub-tool"
+          rm -rf "$tool"
+          rm -rf .ui-audit-hub/.git
+          test -f .ui-audit-hub/ui-system/auditor/v2-lite/publish.mjs
+          mv .ui-audit-hub/ui-system/auditor/v2-lite "$tool"
+          rm -rf .ui-audit-hub
+          test ! -e .ui-audit-hub
+          git config --local --unset-all http.extraheader || true
+          rm -f "$HOME/.git-credentials"
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: ui-audit-report
+          path: ${{ runner.temp }}/ui-audit
+
+      - name: Publicar el comentario y el check neutral
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD: ${{ needs.authorize.outputs.head }}
+          PR: ${{ needs.authorize.outputs.pr }}
+        run: |
+          set -euo pipefail
+          tool="$RUNNER_TEMP/hub-tool"
+          out="$RUNNER_TEMP/ui-audit"
+          test -s "$out/verdict.json"
+          test -s "$out/evidence.json"
+          test -f "$tool/publish.mjs"
+          if [ ! -d "$tool/node_modules/typescript" ]; then
+            postcss_integrity=$(npm view postcss@8.5.29 dist.integrity)
+            scss_integrity=$(npm view postcss-scss@4.0.9 dist.integrity)
+            ts_integrity=$(npm view typescript@5.9.3 dist.integrity)
+            test "$postcss_integrity" = "sha512-49cGhUbXj8Qenv0iTMxA1cFBzxXoctpC9Ujd77t1WcbJIr6nF/eI7g/8MgxrYldFRuAXvja7xQRwavoW7kgrxQ=="
+            test "$scss_integrity" = "sha512-AjKOeiwAitL/MXxQW2DliT28EKukvvbEWx3LBmJIRN8KfBGZbRTxNYW0kSqi1COiTZ57nZ9NW06S6ux//N1c9A=="
+            test "$ts_integrity" = "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="
+            npm install --ignore-scripts --no-fund --no-audit --prefix "$tool" \
+              postcss@8.5.29 postcss-scss@4.0.9 typescript@5.9.3
+          fi
+          vcode=$(tr -d '[:space:]' < "$out/verdict.exit")
+          run_host=$(tr -d '[:space:]' < "$out/host-commands")
+          [[ "$vcode" == "0" || "$vcode" == "1" ]]
+          [[ "$run_host" == "true" || "$run_host" == "false" ]]
+
+          node "$tool/publish.mjs" --verdict "$out/verdict.json" --out "$out/comment.md" \
+            --enforcement shadow --post --repo "$GITHUB_REPOSITORY" --pr "$PR"
+
+          summary="Modo shadow. El job en verde solo dice que el auditor corrió. Un PASS no autoriza el merge. anim_perf_lint queda not_measured porque retana-ui no tiene ese script."
+          if [ "$run_host" = "true" ]; then
+            host_line="pnpm test y pnpm lint"
+          else
+            host_line="no se ejecutaron (fork o autor fuera de OWNER, MEMBER y COLLABORATOR); quedan not_measured"
+          fi
+          {
+            echo "## ui-audit (shadow)"
+            echo
+            echo "$summary"
+            echo
+            echo "- código del veredicto: ${vcode}"
+            echo "- comandos del host: ${host_line}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          jq -n --arg sha "$HEAD" --arg summary "$summary" --arg vcode "$vcode" '{
+            name: "ui-audit (shadow)",
+            head_sha: $sha,
+            status: "completed",
+            conclusion: "neutral",
+            output: {
+              title: "ui-audit en modo shadow",
+              summary: $summary,
+              text: ("Código del veredicto: " + $vcode + ". No es un required check y no autoriza el merge.")
+            }
+          }' > "$RUNNER_TEMP/check.json"
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/check-runs" --input "$RUNNER_TEMP/check.json" > /dev/null
