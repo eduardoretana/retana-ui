@@ -1,0 +1,33 @@
+{
+  "documents": [
+    "docs/sprints/bounded-gestos-avisos-toasts-ui/enrollment.json",
+    "docs/sprints/bounded-gestos-avisos-toasts.md",
+    "ui/specs/gestos-avisos-toasts.spec.md"
+  ],
+  "evidence": {
+    "receipt": "docs/sprints/bounded-gestos-avisos-toasts-ui/checker-receipt.json",
+    "report": "docs/sprints/bounded-gestos-avisos-toasts-ui/verdict.json"
+  },
+  "impact": "INTERACTION_FLOW",
+  "inputs": {},
+  "manifest": {
+    "path": "docs/sprints/bounded-gestos-avisos-toasts.md",
+    "sha256": "e75f0ba496bfec54191a112f74a618480c2e3a0c00f9306a0a77ffa6f05eeebf"
+  },
+  "owner": "cursor/gestos-avisos-toasts-1153",
+  "profile": "STANDARD",
+  "repo": "sha256:1aceb83247f3be9347d53333d783b6aa0a78769c3801b37e557d87f9fc707e6b",
+  "schema_version": "retana.ui-enrollment/v1",
+  "source": {
+    "identity": "https://github.com/eduardoretana/hub-vibecoding.git",
+    "module_version": "4.0.0",
+    "protocol_version": "16",
+    "sha": "0218369e944b02fb63cae5df0ddc95ae72262e97"
+  },
+  "spec": {
+    "path": "ui/specs/gestos-avisos-toasts.spec.md",
+    "sha256": "e6dc7bb74ac99ca50b0f2abaf04e028736eac3e6cf4d5fe3165361fad415f45a"
+  },
+  "stage": "IMPLEMENTATION",
+  "state": "PENDING"
+}

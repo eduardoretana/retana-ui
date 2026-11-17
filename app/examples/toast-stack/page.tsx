@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function ToastStackPage() {
   return (
-    <ExampleFrame title="Pila de avisos" description="No usa Sonner. El aviso sube, se apila y se cierra deslizando a la derecha.">
+      <ExampleFrame title="Pila de avisos" description="No usa Sonner. El aviso sube y se cierra deslizando hacia abajo, por donde entró.">
       <Demo />
     </ExampleFrame>
   )
