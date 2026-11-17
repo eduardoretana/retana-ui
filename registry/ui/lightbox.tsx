@@ -156,10 +156,15 @@ export function Lightbox({
 export function LightboxGallery({
   items,
   className,
+  closeLabel,
+  previousLabel,
+  nextLabel,
+  zoomInLabel,
+  zoomOutLabel,
 }: {
   items: readonly LightboxItem[]
   className?: string
-}) {
+} & Pick<LightboxProps, "closeLabel" | "previousLabel" | "nextLabel" | "zoomInLabel" | "zoomOutLabel">) {
   const [open, setOpen] = React.useState(false)
   const [index, setIndex] = React.useState(0)
 
@@ -182,7 +187,18 @@ export function LightboxGallery({
           </li>
         ))}
       </ul>
-      <Lightbox items={items} open={open} onOpenChange={setOpen} index={index} onIndexChange={setIndex} />
+      <Lightbox
+        closeLabel={closeLabel}
+        previousLabel={previousLabel}
+        nextLabel={nextLabel}
+        zoomInLabel={zoomInLabel}
+        zoomOutLabel={zoomOutLabel}
+        items={items}
+        open={open}
+        onOpenChange={setOpen}
+        index={index}
+        onIndexChange={setIndex}
+      />
     </div>
   )
 }

@@ -1,0 +1,81 @@
+{
+  "labels": {
+    "es": {
+      "title": "Llamadas abiertas",
+      "empty": "Nada espera tu respuesta.",
+      "loading": "Cargando llamadas",
+      "dismiss": "Cerrar",
+      "openOne": "1 sigue abierta",
+      "openOther": "{count} siguen abiertas",
+      "answered": "Respuesta: {choice}",
+      "dismissNamed": "Cerrar “{title}”",
+      "choose": "{choice} para “{title}”",
+      "from": "De {agent}"
+    },
+    "en": {
+      "title": "Open calls",
+      "empty": "Nothing is waiting on you.",
+      "loading": "Loading open calls",
+      "dismiss": "Dismiss",
+      "openOne": "1 still open",
+      "openOther": "{count} still open",
+      "answered": "Answered: {choice}",
+      "dismissNamed": "Dismiss “{title}”",
+      "choose": "{choice} for “{title}”",
+      "from": "From {agent}"
+    }
+  },
+  "banner": {
+    "es": "La respuesta no se guardó. La decisión sigue abierta.",
+    "en": "The answer was not saved. The call is still open."
+  },
+  "items": [
+    {
+      "id": "anticipo",
+      "agent": "Bruma",
+      "es": {
+        "title": "¿Mandamos el anticipo hoy?",
+        "detail": "Son $18,400.00 MXN a Cerámica del Bajío, pedido PED-1048."
+      },
+      "en": {
+        "title": "Do we send the deposit today?",
+        "detail": "$18,400.00 MXN to Cerámica del Bajío, order PED-1048."
+      },
+      "choices": [
+        { "id": "hoy", "es": "Hoy, antes de las 18:00", "en": "Today, before 6:00 p.m." },
+        { "id": "viernes", "es": "Esperar al viernes", "en": "Wait until Friday" }
+      ]
+    },
+    {
+      "id": "muestras",
+      "agent": "Horno",
+      "es": {
+        "title": "¿Quién recibe las muestras?",
+        "detail": "Salen hoy del taller hacia León."
+      },
+      "en": {
+        "title": "Who receives the samples?",
+        "detail": "They leave the workshop for León today."
+      },
+      "choices": [
+        { "id": "mariana", "es": "Mariana Ruiz en León", "en": "Mariana Ruiz in León" },
+        { "id": "taller", "es": "El taller las guarda", "en": "The workshop holds them" }
+      ]
+    }
+  ],
+  "scenes": {
+    "filled": { "items": [{ "id": "anticipo" }, { "id": "muestras" }] },
+    "empty": { "items": [] },
+    "loading": { "items": [{ "id": "anticipo" }, { "id": "muestras" }], "loading": true },
+    "error": { "items": [{ "id": "anticipo" }, { "id": "muestras" }], "error": true },
+    "answered": {
+      "items": [{ "id": "anticipo", "answerId": "viernes" }, { "id": "muestras" }]
+    },
+    "folded": {
+      "items": [
+        { "id": "anticipo", "answerId": "viernes" },
+        { "id": "muestras", "answerId": "mariana" }
+      ]
+    }
+  }
+}
