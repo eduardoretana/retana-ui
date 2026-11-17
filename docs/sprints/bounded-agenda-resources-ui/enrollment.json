@@ -1,0 +1,33 @@
+{
+  "documents": [
+    "docs/sprints/bounded-agenda-resources-ui/enrollment.json",
+    "docs/sprints/bounded-agenda-resources.md",
+    "ui/specs/agenda-resources.spec.md"
+  ],
+  "evidence": {
+    "receipt": "docs/sprints/bounded-agenda-resources-ui/checker-receipt.json",
+    "report": "docs/sprints/bounded-agenda-resources-ui/verdict.json"
+  },
+  "impact": "INTERACTION_FLOW",
+  "inputs": {},
+  "manifest": {
+    "path": "docs/sprints/bounded-agenda-resources.md",
+    "sha256": "ce39d58059714929c94463adb580d3e9c30621de0cfb99b31751d22e75070d13"
+  },
+  "owner": "cursor/agenda-resource-schedule-fca1",
+  "profile": "STANDARD",
+  "repo": "sha256:1aceb83247f3be9347d53333d783b6aa0a78769c3801b37e557d87f9fc707e6b",
+  "schema_version": "retana.ui-enrollment/v1",
+  "source": {
+    "identity": "https://github.com/eduardoretana/hub-vibecoding.git",
+    "module_version": "4.0.0",
+    "protocol_version": "16",
+    "sha": "0218369e944b02fb63cae5df0ddc95ae72262e97"
+  },
+  "spec": {
+    "path": "ui/specs/agenda-resources.spec.md",
+    "sha256": "eca7e5b64e8f66fe45f7424c7130a71030ca140177921cbca0fc66f21ce8c6a3"
+  },
+  "stage": "IMPLEMENTATION",
+  "state": "PENDING"
+}
