@@ -8,7 +8,7 @@ spec_version: "1.0.0"
 profile: STANDARD
 # El blob no puede contener el sha del commit que lo incluye.
 # head = tip de código antes del commit de insumos; el sobre declara el tip final (git rev-parse HEAD).
-head: db19a518cddc7b1461f2e47c9470a7de4d93088e
+head: 9ab1d2059192191be7f413a1cf70ba8bf2d29365
 head_note: "head = tip de código antes del commit de insumos de auditoría. Ese commit solo añade ui/** y rules/rules.yaml."
 retana_ui:
   sha: 33438d12520bbf9fe18ebc87f29df2a3122d02b6

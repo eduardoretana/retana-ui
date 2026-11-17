@@ -1,0 +1,33 @@
+{
+  "documents": [
+    "docs/sprints/bounded-context-window-eventos-ui/enrollment.json",
+    "docs/sprints/bounded-context-window-eventos.md",
+    "ui/specs/context-window-eventos.spec.md"
+  ],
+  "evidence": {
+    "receipt": "docs/sprints/bounded-context-window-eventos-ui/checker-receipt.json",
+    "report": "docs/sprints/bounded-context-window-eventos-ui/verdict.json"
+  },
+  "impact": "INTERACTION_FLOW",
+  "inputs": {},
+  "manifest": {
+    "path": "docs/sprints/bounded-context-window-eventos.md",
+    "sha256": "d46c3888b88c6a4af164cacaf5d9040a2cf139e568b53cf67a2b47fa07181991"
+  },
+  "owner": "cursor/context-window-functional-c9b3",
+  "profile": "STANDARD",
+  "repo": "sha256:1aceb83247f3be9347d53333d783b6aa0a78769c3801b37e557d87f9fc707e6b",
+  "schema_version": "retana.ui-enrollment/v1",
+  "source": {
+    "identity": "https://github.com/eduardoretana/hub-vibecoding.git",
+    "module_version": "4.0.0",
+    "protocol_version": "16",
+    "sha": "0218369e944b02fb63cae5df0ddc95ae72262e97"
+  },
+  "spec": {
+    "path": "ui/specs/context-window-eventos.spec.md",
+    "sha256": "58cfed827ecabcb49d8752ad66555484d7db4e465548184e3492898cd2ffe605"
+  },
+  "stage": "IMPLEMENTATION",
+  "state": "PENDING"
+}
