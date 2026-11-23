@@ -94,3 +94,37 @@
       signatures:
         - "MB-CARD-CONTRAST: every text on the hover card reaches 4.5:1 in light"
         - "MB-CARD-CONTRAST: every text on the active card reaches 4.5:1 in light"
+- schema: uis.expected-red/v1
+  spec_id: color-picker-formatos
+  ui_system: {version: 4.0.0}
+  profile: STANDARD
+  green_forbidden: true
+  recorded_before_build: true
+  note: "Rojo del carril color-picker-formatos. CP-* corre sobre la fuente de color-picker de CPL bf1682d4, antes de tocar la pieza: 18 fallan y CP-EYEDROPPER hide-unsupported pasa porque CPL ya oculta el cuentagotas cuando falta la API (es el comportamiento que el modo hide-unsupported conserva)."
+  red_on:
+    base: bf1682d4dfb8696ddb01bf84aedda111f47b086c
+    source: "registry/ui/color-picker.tsx@bf1682d4"
+  commands:
+    - name: pieza
+      run: DEBUG_PRINT_LIMIT=0 pnpm exec vitest run --reporter=verbose __tests__/color-picker-formats.test.tsx
+      exit: 1
+      failed: 18
+      passed: 1
+      log: ui-tests/logs/color-picker-formatos.expected-red.log
+  log: ui-tests/logs/color-picker-formatos.expected-red.log
+  signatures:
+    - CP-PARSE
+    - CP-FORMAT-SWITCH
+    - CP-FORMAT-VALIDATE
+    - CP-FORMAT-PASTE
+    - CP-FORMAT-ES
+    - CP-COPY
+    - CP-POPOVER
+    - CP-EYEDROPPER
+    - CP-SWATCH-KEYS
+    - CP-SWATCH-BUTTONS
+    - CP-SWATCH-SAVE
+    - CP-COMMIT
+    - CP-PLP
+  passing_in_red:
+    - "CP-EYEDROPPER: hide-unsupported keeps the CPL behavior"
