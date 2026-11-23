@@ -1,0 +1,17 @@
+# Referencias de Dirección (E3) · color-picker-formatos
+# Cada referencia tiene una ficha en la rama (ruta + sha256). Las PNG de CPL viven en el box: /workspace/color-picker-2026-11-23/capturas/antes
+spec_id: color-picker-formatos
+valid_for_spec_version: "0.1.0"
+mode: visual
+chosen_by: null   # STANDARD: la confirma el UI Lead en el sobre
+cpl_control: {dir: /workspace/color-picker-2026-11-23/capturas, head: bf1682d4dfb8696ddb01bf84aedda111f47b086c, harness: 21db9481b331}
+spec_sync: {spec: ui/specs/color-picker-formatos.spec.md, spec_version: "0.1.0", spec_revision: 1}
+references:
+  - {reference_id: REF-cpl-color-picker, screen_id: color-picker, kind: visual, path: ui/direction/color-picker-formatos/ref-cpl-color-picker.md, sha256: 5aab58fcf2f7c0455551b31d224c57d6f735b9cf557d58e6e2e4cd749949ef57, status: current, valid_for_spec_version: "0.1.0"}
+      # imagen: antes/examples-color-picker/desktop-light-reduced.png sha256 78d8b836f18c9bf7d68f6777d3e3eeede9fb5484e3d26d98979094d42f418d78
+      # imagen: antes/examples-color-picker/desktop-dark-reduced.png sha256 8069ec8adc624a19abcb3cf6a31a84d9fe4cd8e77cd33c3892169c92a8edcee7
+      # imagen: antes/examples-color-picker/390-light-reduced.png sha256 cfaea267a05e8c25b6ec2e23ff41d7b42907db368a00eeab48e6c7a7a9e3b6fa
+      # imagen: antes/examples-color-picker/390-dark-reduced.png sha256 7737c2f620b5f824a45699ecc5fb3c328283a0b6adcec1acfe8cf9b071b1a115
+  - {reference_id: REF-shadcnstudio-color-picker, screen_id: all, kind: code, path: ui/direction/color-picker-formatos/ref-shadcnstudio-color-picker.md, sha256: fc4f171ae6160ad8d292adde0c17203a94adfba532a6dd531e245a3ed63380ea, status: current, valid_for_spec_version: "0.1.0"}
+      # fuente: docs públicas de shadcn/studio (color picker) y posts de X 2124140728402276452, 2124140457320182217; licencia MIT + Commons Clause; clean-room, sin copia
+side_by_side: "capturas antes/ y despues/ en el box, mismo arnés y viewports"

@@ -1,0 +1,18 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0, declaration: "UI_SYSTEM: APPLIES"}
+spec_id: color-picker-formatos
+profile: STANDARD
+cycle_state: BUILD
+retana_ui.sha: bf1682d4dfb8696ddb01bf84aedda111f47b086c
+# El blob no puede contener el sha del commit que lo incluye.
+# head = último commit de código; los commits posteriores solo tocan ui/** y docs/sprints/**.
+head: 6f215631b6fcc822e5c6460f899b5f85aabb575e
+red_commit: 8e6ba0a6d02901b1dac48d2ccd137cc2f313dae6
+expected_red: {file: ui-tests/expected-red.yaml, spec_id: color-picker-formatos, log: ui-tests/logs/color-picker-formatos.expected-red.log}
+profile_note: "STANDARD propuesto por el builder: cambio de comportamiento visible y un modo nuevo en una pieza existente. Lo confirma el UI Lead."
+spec_version: 0.1.0
+direction_mode: visual
+direction: {mode: visual, reference_meta: ui/direction/color-picker-formatos/reference-meta.yaml, references: [REF-cpl-color-picker, REF-shadcnstudio-color-picker], chosen_by: null, decision: "STANDARD: la elección de la referencia es del UI Lead"}
+generators_used: []
+clean_room: {source: "shadcn/studio color picker (docs públicas y posts de X)", license: "MIT + Commons Clause", copied: none}
+auditor: not-this-agent
