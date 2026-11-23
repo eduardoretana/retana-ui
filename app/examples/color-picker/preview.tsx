@@ -1,11 +1,9 @@
 "use client"
 
-import { ColorPicker } from "@/registry/ui/color-picker"
+import { ScenePreview } from "@/app/catalog/scene-preview"
 
-export default function ColorPickerPreview() {
-  return (
-    <div className="h-full overflow-hidden bg-background p-3">
-      <ColorPicker hueLabel="Tono" alphaLabel="Alfa" hexLabel="Hex" saturationLabel="Saturación y brillo" className="w-full" />
-    </div>
-  )
+import { scenes } from "./scenes"
+
+export default function Preview() {
+  return <ScenePreview scenes={scenes} hero="filled" />
 }
