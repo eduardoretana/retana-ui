@@ -2242,7 +2242,7 @@
       "name": "color-picker",
       "type": "registry:ui",
       "title": "Color Picker",
-      "description": "Accessible color picker with a saturation and brightness field, hue, alpha, and a hex input.",
+      "description": "Accessible color picker with a saturation and brightness field, hue, alpha, a HEX, RGB or HSL input that validates typing and pasting, copy, saved colors you can reorder without dragging, and an optional popover trigger.",
       "author": "Eduardo Retana",
       "dependencies": [
         "lucide-react"
@@ -2250,7 +2250,8 @@
       "registryDependencies": [
         "input",
         "label",
-        "button"
+        "button",
+        "popover"
       ],
       "categories": [
         "form",
@@ -2258,17 +2259,17 @@
       ],
       "meta": {
         "titleEs": "Selector de color",
-        "descriptionEs": "Selector de color accesible con área de saturación y brillo, tono, alfa y un campo hexadecimal.",
+        "descriptionEs": "Selector de color accesible con área de saturación y brillo, tono, alfa, un campo HEX, RGB o HSL que valida lo que escribes o pegas, copia, colores guardados que se reordenan sin arrastrar y un modo popover.",
         "preview": "app/examples/color-picker/preview.tsx",
         "previewHref": "/examples/color-picker",
         "examples": [
           {
             "title": "Selector de color",
             "href": "/examples/color-picker",
-            "description": "Selector de color accesible con área de saturación y brillo, tono, alfa y un campo hexadecimal."
+            "description": "Selector de color accesible con área de saturación y brillo, tono, alfa, un campo HEX, RGB o HSL que valida lo que escribes o pegas, copia, colores guardados que se reordenan sin arrastrar y un modo popover."
           }
         ],
-        "usage": "<ColorPicker value={color} onValueChange={setColor} />",
+        "usage": "<ColorPicker value={color} onValueChange={setColor} onValueCommit={save} />",
         "api": [
           {
             "name": "value",
@@ -2278,21 +2279,98 @@
           {
             "name": "onValueChange",
             "type": "(color) => void",
-            "description": "Fires for the field, sliders, and hex commit."
+            "description": "Fires on every change, including each pointer move. Unchanged from earlier versions."
+          },
+          {
+            "name": "onValueCommit",
+            "type": "(color) => void",
+            "description": "Fires once when a drag, a key press, a typed or pasted value, a swatch or the eyedropper settles. Use it for saves and other expensive work."
+          },
+          {
+            "name": "format / defaultFormat / onFormatChange",
+            "type": "\"hex\" | \"rgb\" | \"hsl\"",
+            "description": "Format of the text field. Defaults to hex. Typed and pasted text is validated before it is applied, in any of the three formats."
+          },
+          {
+            "name": "formats",
+            "type": "ColorFormat[]",
+            "description": "Formats offered by the switch. Pass one to hide the switch."
           },
           {
             "name": "labels",
-            "type": "string",
-            "description": "hue, alpha, hex, and saturation labels default to English."
+            "type": "Partial<ColorPickerLabels>",
+            "description": "English by default. colorPickerLabelsEs is exported. hueLabel, alphaLabel, hexLabel, saturationLabel and eyedropperLabel still win when set."
           },
           {
-            "name": "swatches / eyedropper",
-            "type": "HsvaColor[] / button",
-            "description": "Optional saved swatches and the EyeDropper API when the browser has it. Adapted from Arc UI (MIT)."
+            "name": "swatches / defaultSwatches / onSwatchesChange",
+            "type": "HsvaColor[]",
+            "description": "Saved colors. onSwatchesChange or defaultSwatches turns on save, remove and reorder, by buttons, Alt+Arrow and Delete, or drag."
+          },
+          {
+            "name": "maxSwatches",
+            "type": "number",
+            "description": "Defaults to 12. At the limit the save button stays visible, aria-disabled, with the reason."
+          },
+          {
+            "name": "onCopy",
+            "type": "(value: string) => void",
+            "description": "Fires after the value is copied. The copy is confirmed in a polite live region."
+          },
+          {
+            "name": "eyedropper",
+            "type": "\"auto\" | \"unsupported\" | \"hide-unsupported\" | \"hidden\"",
+            "description": "auto shows the button and disables it with a reason when the browser has no EyeDropper API. hide-unsupported keeps the earlier behavior."
+          },
+          {
+            "name": "ColorPickerPopover",
+            "type": "component",
+            "description": "The same props plus open, onOpenChange and align. The trigger shows the swatch and the value together."
+          }
+        ],
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "invalid",
+            "label": "Formato inválido",
+            "labelEn": "Invalid format"
+          },
+          {
+            "id": "no-eyedropper",
+            "label": "Sin cuentagotas",
+            "labelEn": "No eyedropper"
+          },
+          {
+            "id": "full",
+            "label": "Guardados llenos",
+            "labelEn": "Saved colors full"
+          },
+          {
+            "id": "popover",
+            "label": "En popover",
+            "labelEn": "Popover"
           }
         ]
       },
-      "docs": "hsvaToCss, hsvaToHex, and hexToHsva are exported. Arrow keys move saturation and brightness. The component does not ship a palette. Answer no if the CLI asks to overwrite a primitive the host already has. The item ships no theme, cssVars, or fixed colors. Adapted behaviors from Arc UI (MIT) are optional and do not change existing props.",
+      "docs": "hsvaToCss, hsvaToHex, hexToHsva, parseColor and formatColor are exported. Arrow keys move saturation and brightness. Typed or pasted text is applied only when it parses; otherwise the field keeps it, sets aria-invalid and explains why, and Escape restores the value. Saved colors move with Alt+Arrow and leave with Delete, and the same actions have buttons, so dragging is never the only way (WCAG 2.5.7). When the EyeDropper API is missing the button stays visible with aria-disabled and its reason; eyedropper=\"hide-unsupported\" restores the earlier hiding. The component does not ship a palette. Answer no if the CLI asks to overwrite a primitive the host already has (input, label, button, popover). The item ships no theme, cssVars, or fixed colors. Adapted behaviors from Arc UI (MIT) are optional and do not change existing props. Format switch, copy, popover mode, the disabled eyedropper and saved-color management are a clean-room build inspired by the shadcn/studio color picker docs (shadcnstudio.com/docs/components/color-picker, free tier under MIT + Commons Clause): idea, layout and interaction only, no code or assets copied.",
       "files": [
         {
           "path": "registry/ui/color-picker.tsx",
