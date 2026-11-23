@@ -259,6 +259,22 @@ icons, assets, or internal strings were copied. The demos continue the same
 Guanajuato workshop scenario. Colors come from the host shadcn tokens.
 approval-card is not a tool receipt; tool calls stay on tool-approval.
 
+shadcn/studio — color picker
+
+The color-picker format switch (HEX, RGB, HSL with validation before a typed
+or pasted value is applied), copy with a short announced confirmation, the
+popover mode with the swatch and the value on the trigger, the eyedropper that
+stays visible but disabled with a reason, and saved colors that can be removed
+and reordered without dragging are inspired by the public docs of the
+shadcn/studio color picker:
+
+  https://shadcnstudio.com/docs/components/color-picker?base=radix
+
+The shadcn/studio free tier is licensed MIT with the Commons Clause. This is a
+clean-room build of the idea, layout, and interaction only. No shadcn/studio
+source, sample data, icons, assets, or strings were copied. Colors come from
+the host shadcn tokens.
+
 agent-graph, agent-cursors, fan-out-grid, parallel-attempts, conflict-radar,
 and decision-tree are a clean-room reading of public behavior descriptions on
 Affect UI (a call network that is not a launch tree, pointers and suggestions
