@@ -1,0 +1,23 @@
+# Fixture de comparación (E14) · color-picker-formatos
+# Transcripción por puntero de los datos de ejemplo en H 6f215631b6fcc822e5c6460f899b5f85aabb575e.
+# Los datos viven en fixtures.ts y scenes.tsx de la pieza; aquí se fijan por sha256 y se listan las escenas.
+# Datos inventados del catálogo (esmaltes del «Taller Ladrillo»). Sin datos de producción.
+fixture_id: color-picker-formatos-plp-v1
+spec_id: color-picker-formatos
+spec_version: "0.1.0"
+generator: {kind: transcripcion, by: retana-ui-design-engineer}
+render:
+  viewports: [390x844, 1280x800]
+  themes: [light, dark]
+  reduced_motion: [reduce, no-preference]
+  network: bloqueada salvo loopback
+pieces:
+  - id: color-picker
+    route: "/examples/color-picker?scene=<escena>"
+    sources:
+      - {path: app/examples/color-picker/fixtures.ts, sha256: 9785b1e219539441d6cbbb48d1f6f91f6e8915fa055727da1d9af1afa5332a52}
+      - {path: app/examples/color-picker/scenes.tsx, sha256: 7593b98801e17495a7d948ad615681a657b098b1986a0da655f7918148f4a38a}
+      - {path: app/examples/color-picker/stress/page.tsx, sha256: 9bc28b89c7d7dc4c44acdc9ce189acca625faeddc87e72d8a5db3dadf5e4c8c1}
+    scenes: [filled, empty, loading, error, invalid, no-eyedropper, full, popover]
+comparison_scenes: [filled]
+states: [filled, empty, loading, error, invalid, no-eyedropper, full, popover, keyboard, reduced, "390"]
