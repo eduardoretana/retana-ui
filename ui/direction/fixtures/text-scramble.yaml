@@ -1,0 +1,23 @@
+# Fixture de comparación (E14) · text-scramble
+# Transcripción por puntero de los datos de ejemplo en H a8ff697636537bef7e24c846821bb66f483b21c2.
+# Los datos viven en fixtures.ts y scenes.tsx de la pieza; aquí se fijan por sha256 y se listan las escenas.
+# Datos inventados del catálogo («Electrónica Cobre», Guadalajara). Sin datos de producción.
+fixture_id: text-scramble-plp-v1
+spec_id: text-scramble
+spec_version: "0.1.0"
+generator: {kind: transcripcion, by: retana-ui-design-engineer}
+render:
+  viewports: [390x844, 1280x800]
+  themes: [light, dark]
+  reduced_motion: [reduce, no-preference]
+  network: bloqueada salvo loopback
+pieces:
+  - id: text-scramble
+    route: "/examples/text-scramble?scene=<escena>"
+    sources:
+      - {path: app/examples/text-scramble/fixtures.ts, sha256: 840101d7ba06aa07cea8534e6f97cbaca15948a8c78d9be74b648bc87c99535a}
+      - {path: app/examples/text-scramble/scenes.tsx, sha256: 43da72266bd3f502c6cd092a364237e4bb9b6a0259b99ba87576f60da8d6c4b2}
+      - {path: app/examples/text-scramble/stress/page.tsx, sha256: 82c4200ef5ddfa5331ae597589a3a7ffc7a301b6bb4b31ee6838685c55c6530b}
+    scenes: [filled, empty, loading, error, terminal, long]
+comparison_scenes: [filled, terminal]
+states: [idle, running, done, reduced, empty, long, loading, error, swap, unmount, visible, "390"]
