@@ -1,0 +1,18 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0, declaration: "UI_SYSTEM: APPLIES"}
+spec_id: text-scramble
+profile: STANDARD
+cycle_state: BUILD
+retana_ui.sha: bf1682d4dfb8696ddb01bf84aedda111f47b086c
+# El blob no puede contener el sha del commit que lo incluye.
+# head = último commit de código; los commits posteriores solo tocan ui/** y docs/sprints/**.
+head: a8ff697636537bef7e24c846821bb66f483b21c2
+red_commit: 328cd4d3857984e02ea39e3065eb7b8260fc2d6c
+expected_red: {file: ui-tests/expected-red.yaml, spec_id: text-scramble, log: ui-tests/logs/text-scramble.expected-red.log}
+profile_note: "STANDARD propuesto por el builder: pieza nueva con movimiento propio y riesgo declarado de RUI-ANIM-PERF-007. Lo confirma el UI Lead."
+spec_version: 0.1.0
+direction_mode: visual
+direction: {mode: visual, reference_meta: ui/direction/text-scramble/reference-meta.yaml, references: [REF-cpl-text-reveal, REF-emil-decoding], chosen_by: null, decision: "STANDARD: la elección de la referencia es del UI Lead"}
+generators_used: []
+clean_room: {source: "post de X «Decoding interfaces» de Emil Kowalski (2124903277036745191)", license: "sin licencia publicada; solo idea", copied: none}
+auditor: not-this-agent

@@ -1,0 +1,17 @@
+# Referencias de Dirección (E3) · text-scramble
+# Cada referencia tiene una ficha en la rama (ruta + sha256). Las PNG de CPL viven en el box: /workspace/emil-decode-2026-11-24/capturas/antes
+spec_id: text-scramble
+valid_for_spec_version: "0.1.0"
+mode: visual
+chosen_by: null   # STANDARD: la confirma el UI Lead en el sobre
+cpl_control: {dir: /workspace/emil-decode-2026-11-24/capturas, head: bf1682d4dfb8696ddb01bf84aedda111f47b086c, harness: 21db9481b331}
+spec_sync: {spec: ui/specs/text-scramble.spec.md, spec_version: "0.1.0", spec_revision: 1}
+references:
+  - {reference_id: REF-cpl-text-reveal, screen_id: text-scramble, kind: visual, path: ui/direction/text-scramble/ref-cpl-text-reveal.md, sha256: c3ef6603199b680665cd62084f87bf54643c03e2a16d6774a3077d15bdf6dfeb, status: current, valid_for_spec_version: "0.1.0"}
+      # imagen: antes/examples-text-reveal/desktop-light-reduced.png sha256 b2589f4b3caca08d588f84929f851c514e9b58ddca4ffa9daf1d8c3911be674e
+      # imagen: antes/examples-text-reveal/390-dark-reduced.png sha256 2b27c510fe8316c2031807eb301bf5d9182c41e37402dd4cb99a8c1114149a3e
+      # imagen: antes/examples-slot-text/desktop-light-reduced.png sha256 cb7f465a076c812c36632854c35d1ee311d6b492f0ba2fad49527554109b8d5c
+      # imagen: antes/examples-slot-text/390-dark-reduced.png sha256 88e3333635c1107a764175b313ce8c8fd82ec15a8bdf85913a91215ed4067835
+  - {reference_id: REF-emil-decoding, screen_id: all, kind: code, path: ui/direction/text-scramble/ref-emil-decoding.md, sha256: 3b7e2722dfdc5077eba9c6f6b2925907d6d6790593dd4d440622b4c9f5ceaa12, status: current, valid_for_spec_version: "0.1.0"}
+      # fuente: post de X 2124903277036745191 (Emil Kowalski, 2026-11-23); sin código ni licencia publicados; clean-room, solo idea
+side_by_side: "capturas antes/ (text-reveal, slot-text) y despues/ (text-scramble) en el box, mismo arnés y viewports"
