@@ -259,6 +259,19 @@ icons, assets, or internal strings were copied. The demos continue the same
 Guanajuato workshop scenario. Colors come from the host shadcn tokens.
 approval-card is not a tool receipt; tool calls stay on tool-approval.
 
+Emil Kowalski — "Decoding interfaces"
+
+text-scramble takes the idea of a one-time decode reveal, where glyphs of noise
+lock into the final text in reading order, from a public demo video posted by
+Emil Kowalski on X on 2026-11-23:
+
+  https://x.com/emilkowalski/status/2124903277036745191
+
+No source code, license, or assets were published with the demo. This is a
+clean-room build of the text idea only; the code is original. No strings,
+product names, images, or colors from the demo were copied. The per-character
+image color shown in the demo is not included.
+
 agent-graph, agent-cursors, fan-out-grid, parallel-attempts, conflict-radar,
 and decision-tree are a clean-room reading of public behavior descriptions on
 Affect UI (a call network that is not a launch tree, pointers and suggestions

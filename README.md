@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`423` items are in `registry.json` on this branch: `333` components, `74` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`424` items are in `registry.json` on this branch: `334` components, `74` blocks, `6` hooks, and `10` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -719,6 +719,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`use-min-width`](registry/hooks/use-min-width.ts) · hook — True when the viewport is at least a given number of CSS pixels wide. The first paint uses the narrow layout. Install: `npx shadcn@latest add @retana/use-min-width`.
 - [`pinned-steps`](registry/ui/pinned-steps.tsx) · ui — A sticky visual column that cross-fades as each step crosses the center of the viewport. Narrow viewports and reduced motion stack the step with its visual. Install: `npx shadcn@latest add @retana/pinned-steps`.
 - [`scroll-linked`](registry/ui/scroll-linked.tsx) · ui — Maps scroll progress to a fade, rise, scale, or rotate. CSS scroll-driven animations run first. Reduced motion shows the finished state. Install: `npx shadcn@latest add @retana/scroll-linked`.
+- [`text-scramble`](registry/ui/text-scramble.tsx) · ui — A hero line or page title that decodes once from noise into its final text. Reduced motion, empty copy and copy over 120 characters show the final text at once. Install: `npx shadcn@latest add @retana/text-scramble`.
 
 ### Admin
 
