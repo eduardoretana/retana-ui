@@ -87,8 +87,8 @@ function ErrorScene({ locale, log }: SceneRenderProps) {
 }
 
 /**
- * Thematic case: a terminal product card. Lead (name) at 0 ms, price at 90 ms, specs at 150 ms.
- * Shrinking gaps, one entrance per text, buttons static and usable from the first frame.
+ * Thematic case: a terminal product card. Two moving parts at most: the name leads at 0 ms and
+ * the price follows at 90 ms. Specs, labels and buttons are static and usable from the first frame.
  */
 function TerminalScene({ locale, log }: SceneRenderProps) {
   return (
@@ -110,9 +110,7 @@ function TerminalScene({ locale, log }: SceneRenderProps) {
         {terminal.specs.map((spec) => (
           <div key={spec.label.en} className="contents">
             <dt className="text-muted-foreground">{pick(spec.label, locale)}</dt>
-            <dd>
-              <TextScramble trigger="mount" delay={150} duration={420} text={pick(spec.value, locale)} />
-            </dd>
+            <dd>{pick(spec.value, locale)}</dd>
           </div>
         ))}
       </dl>
