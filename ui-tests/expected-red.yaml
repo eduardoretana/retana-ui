@@ -94,3 +94,35 @@
       signatures:
         - "MB-CARD-CONTRAST: every text on the hover card reaches 4.5:1 in light"
         - "MB-CARD-CONTRAST: every text on the active card reaches 4.5:1 in light"
+- schema: uis.expected-red/v1
+  spec_id: text-scramble
+  ui_system: {version: 4.0.0}
+  profile: STANDARD
+  green_forbidden: true
+  recorded_before_build: true
+  note: "Rojo del carril text-scramble (pieza nueva). TS-* corre sobre CPL bf1682d4 más un stub de registry/ui/text-scramble.tsx que exporta la forma pública y lanza 'not implemented': 12 fallan, 0 pasan. Idea: post «Decoding interfaces» de Emil Kowalski (X 2124903277036745191, 2026-11-23); sin código publicado, clean-room."
+  red_on:
+    base: bf1682d4dfb8696ddb01bf84aedda111f47b086c
+    source: "registry/ui/text-scramble.tsx (stub del commit rojo)"
+  commands:
+    - name: pieza
+      run: DEBUG_PRINT_LIMIT=0 pnpm exec vitest run --reporter=verbose __tests__/text-scramble.test.tsx
+      exit: 1
+      failed: 12
+      passed: 0
+      log: ui-tests/logs/text-scramble.expected-red.log
+  log: ui-tests/logs/text-scramble.expected-red.log
+  signatures:
+    - TS-FRAME
+    - TS-SCHEDULE
+    - TS-A11Y
+    - TS-NOJS
+    - TS-REDUCED
+    - TS-THROTTLE
+    - TS-ONCE
+    - TS-CANCEL
+    - TS-VISIBLE
+    - TS-LIMITS
+    - TS-TOKENS
+    - TS-PLP
+  passing_in_red: []

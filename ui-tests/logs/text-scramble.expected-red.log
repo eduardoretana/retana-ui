@@ -1,0 +1,188 @@
+# expected-red · text-scramble · base CPL bf1682d4dfb8696ddb01bf84aedda111f47b086c · stub registry/ui/text-scramble.tsx (lanza 'not implemented')
+# run_at 2026-11-24T09:22:58-06:00 · pnpm 10.33.3 · node v24.22.1
+$ DEBUG_PRINT_LIMIT=0 pnpm exec vitest run --reporter=verbose __tests__/text-scramble.test.tsx
+
+ RUN  v5.0.2 /workspace/emil-decode-2026-11-24/repo
+
+ × __tests__/text-scramble.test.tsx > TextScramble > TS-FRAME: progress 0 hides every glyph, progress 1 is the text, and spaces never move 5ms
+   → text-scramble: not implemented
+ × __tests__/text-scramble.test.tsx > TextScramble > TS-SCHEDULE: reading order with uneven gaps, everything locked by the end 1ms
+   → text-scramble: not implemented
+ × __tests__/text-scramble.test.tsx > TextScramble > TS-A11Y: one clean accessible name, noise hidden, no live region 13ms
+   → text-scramble: not implemented
+ × __tests__/text-scramble.test.tsx > TextScramble > TS-NOJS: server HTML already carries the final words; no layout jump when noise runs 3ms
+   → text-scramble: not implemented
+ × __tests__/text-scramble.test.tsx > TextScramble > TS-REDUCED: reduced motion shows the final text at once, schedules no frame, calls onDecoded once 3ms
+   → text-scramble: not implemented
+ × __tests__/text-scramble.test.tsx > TextScramble > TS-THROTTLE: at most one write per tick, no layout reads while running, done on time 4ms
+   → text-scramble: not implemented
+ × __tests__/text-scramble.test.tsx > TextScramble > TS-ONCE: plays once; a new text after it ends appears without noise 2ms
+   → text-scramble: not implemented
+ × __tests__/text-scramble.test.tsx > TextScramble > TS-CANCEL: unmounting mid-run cancels the frame loop 2ms
+   → text-scramble: not implemented
+ × __tests__/text-scramble.test.tsx > TextScramble > TS-VISIBLE: trigger visible waits for the viewport and observes only once 2ms
+   → text-scramble: not implemented
+ × __tests__/text-scramble.test.tsx > TextScramble > TS-LIMITS: long copy and empty copy skip the effect; duration is clamped 1ms
+   → text-scramble: not implemented
+ × __tests__/text-scramble.test.tsx > TextScramble > TS-TOKENS: theme tokens only, named transitions, no state per frame 5ms
+   → expected '"use client"\n\n/** Stub del commit r…' to contain 'text-muted-foreground'
+ × __tests__/text-scramble.test.tsx > TextScramble > TS-PLP: registry item opts into PLP with scenes, preview and credits 8ms
+   → expected undefined to be defined
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 12 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  __tests__/text-scramble.test.tsx > TextScramble > TS-FRAME: progress 0 hides every glyph, progress 1 is the text, and spaces never move
+Error: text-scramble: not implemented
+ ❯ notImplemented registry/ui/text-scramble.tsx:24:9
+     22|
+     23| const notImplemented = (): never => {
+     24|   throw new Error("text-scramble: not implemented")
+       |         ^
+     25| }
+     26|
+ ❯ scrambleSchedule registry/ui/text-scramble.tsx:32:10
+ ❯ __tests__/text-scramble.test.tsx:37:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/12]⎯
+
+ FAIL  __tests__/text-scramble.test.tsx > TextScramble > TS-SCHEDULE: reading order with uneven gaps, everything locked by the end
+Error: text-scramble: not implemented
+ ❯ notImplemented registry/ui/text-scramble.tsx:24:9
+     22|
+     23| const notImplemented = (): never => {
+     24|   throw new Error("text-scramble: not implemented")
+       |         ^
+     25| }
+     26|
+ ❯ scrambleSchedule registry/ui/text-scramble.tsx:32:10
+ ❯ __tests__/text-scramble.test.tsx:57:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/12]⎯
+
+ FAIL  __tests__/text-scramble.test.tsx > TextScramble > TS-A11Y: one clean accessible name, noise hidden, no live region
+ FAIL  __tests__/text-scramble.test.tsx > TextScramble > TS-REDUCED: reduced motion shows the final text at once, schedules no frame, calls onDecoded once
+ FAIL  __tests__/text-scramble.test.tsx > TextScramble > TS-THROTTLE: at most one write per tick, no layout reads while running, done on time
+ FAIL  __tests__/text-scramble.test.tsx > TextScramble > TS-ONCE: plays once; a new text after it ends appears without noise
+ FAIL  __tests__/text-scramble.test.tsx > TextScramble > TS-CANCEL: unmounting mid-run cancels the frame loop
+ FAIL  __tests__/text-scramble.test.tsx > TextScramble > TS-VISIBLE: trigger visible waits for the viewport and observes only once
+ FAIL  __tests__/text-scramble.test.tsx > TextScramble > TS-LIMITS: long copy and empty copy skip the effect; duration is clamped
+Error: text-scramble: not implemented
+ ❯ notImplemented registry/ui/text-scramble.tsx:24:9
+     22|
+     23| const notImplemented = (): never => {
+     24|   throw new Error("text-scramble: not implemented")
+       |         ^
+     25| }
+     26|
+ ❯ TextScramble registry/ui/text-scramble.tsx:40:10
+ ❯ Object.react_stack_bottom_frame ../../color-picker-2026-11-23/cpl/node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom-client.development.js:25904:20
+ ❯ renderWithHooks ../../color-picker-2026-11-23/cpl/node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom-client.development.js:7662:22
+ ❯ updateFunctionComponent ../../color-picker-2026-11-23/cpl/node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom-client.development.js:10166:19
+ ❯ beginWork ../../color-picker-2026-11-23/cpl/node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom-client.development.js:11778:18
+ ❯ runWithFiberInDEV ../../color-picker-2026-11-23/cpl/node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom-client.development.js:874:13
+ ❯ performUnitOfWork ../../color-picker-2026-11-23/cpl/node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom-client.development.js:17641:22
+ ❯ workLoopSync ../../color-picker-2026-11-23/cpl/node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom-client.development.js:17469:41
+ ❯ renderRootSync ../../color-picker-2026-11-23/cpl/node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom-client.development.js:17450:11
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/12]⎯
+
+ FAIL  __tests__/text-scramble.test.tsx > TextScramble > TS-NOJS: server HTML already carries the final words; no layout jump when noise runs
+Error: text-scramble: not implemented
+ ❯ notImplemented registry/ui/text-scramble.tsx:24:9
+     22|
+     23| const notImplemented = (): never => {
+     24|   throw new Error("text-scramble: not implemented")
+       |         ^
+     25| }
+     26|
+ ❯ TextScramble registry/ui/text-scramble.tsx:40:10
+ ❯ Object.react_stack_bottom_frame ../../color-picker-2026-11-23/cpl/node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:9808:18
+ ❯ renderWithHooks ../../color-picker-2026-11-23/cpl/node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:5062:19
+ ❯ renderElement ../../color-picker-2026-11-23/cpl/node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:5497:23
+ ❯ retryNode ../../color-picker-2026-11-23/cpl/node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:6428:21
+ ❯ performWork ../../color-picker-2026-11-23/cpl/node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:7435:17
+ ❯ startWork ../../color-picker-2026-11-23/cpl/node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:8270:7
+ ❯ renderToStringImpl ../../color-picker-2026-11-23/cpl/node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:8380:7
+ ❯ process.env.NODE_ENV.exports.renderToString ../../color-picker-2026-11-23/cpl/node_modules/.pnpm/react-dom@19.2.8_react@19.2.8/node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:9869:14
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/12]⎯
+
+ FAIL  __tests__/text-scramble.test.tsx > TextScramble > TS-TOKENS: theme tokens only, named transitions, no state per frame
+AssertionError: expected '"use client"\n\n/** Stub del commit r…' to contain 'text-muted-foreground'
+
+- Expected
++ Received
+
+- text-muted-foreground
++ "use client"
++
++ /** Stub del commit rojo: exporta la forma pública y falla. La pieza llega en el commit verde. */
++
++ export type TextScrambleTrigger = "mount" | "visible"
++
++ export type TextScrambleProps = {
++   text: string
++   as?: "h1" | "h2" | "h3" | "p" | "span"
++   trigger?: TextScrambleTrigger
++   duration?: number
++   delay?: number
++   charset?: string
++   onDecoded?: () => void
++   className?: string
++   id?: string
++ }
++
++ export const SCRAMBLE_GLYPHS = ""
++ export const SCRAMBLE_TICK_MS = 0
++ export const SCRAMBLE_MAX_CHARS = 0
++
++ const notImplemented = (): never => {
++   throw new Error("text-scramble: not implemented")
++ }
++
++ export function scrambleDuration(_ms?: number): number {
++   return notImplemented()
++ }
++
++ export function scrambleSchedule(_text: string): number[] {
++   return notImplemented()
++ }
++
++ export function scrambleFrame(_text: string, _progress: number, _schedule: readonly number[], _tick: number, _charset?: string): string {
++   return notImplemented()
++ }
++
++ export function TextScramble(_props: TextScrambleProps): never {
++   return notImplemented()
++ }
++
+
+ ❯ __tests__/text-scramble.test.tsx:220:20
+    218|     expect(source).not.toMatch(/#[0-9a-fA-F]{3,8}\b/)
+    219|     expect(source).not.toMatch(/\bdark:/)
+    220|     expect(source).toContain("text-muted-foreground")
+       |                    ^
+    221|     expect(source).toContain("prefers-reduced-motion")
+    222|     const loop = source.slice(source.indexOf("const step ="), source.i…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/12]⎯
+
+ FAIL  __tests__/text-scramble.test.tsx > TextScramble > TS-PLP: registry item opts into PLP with scenes, preview and credits
+AssertionError: expected undefined to be defined
+ ❯ __tests__/text-scramble.test.tsx:232:18
+    230|     }
+    231|     const item = registry.items.find((entry) => entry.name === "text-s…
+    232|     expect(item).toBeDefined()
+       |                  ^
+    233|     const ids = (item?.meta?.scenes ?? []).map((scene) => (typeof scen…
+    234|     for (const id of ["filled", "empty", "loading", "error"]) expect(i…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/12]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  12 failed (12)
+   Start at  09:23:01
+   Duration  1.55s (environment 48%, transform 27%, import 12%, setup 8%, tests 5%)
+
+# exit: 1
