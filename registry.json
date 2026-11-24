@@ -32223,6 +32223,111 @@
           "target": "@lib/motion.ts"
         }
       ]
+    },
+    {
+      "name": "text-scramble",
+      "type": "registry:ui",
+      "title": "Text scramble",
+      "description": "A hero line or page title that decodes once from noise into its final text. Reduced motion, empty copy and copy over 120 characters show the final text at once.",
+      "author": "Eduardo Retana",
+      "dependencies": [],
+      "registryDependencies": [
+        "@retana/motion-preference"
+      ],
+      "categories": [
+        "animation"
+      ],
+      "meta": {
+        "titleEs": "Texto que se descifra",
+        "descriptionEs": "Un título de hero o de página que se descifra una sola vez, de ruido al texto final. Con movimiento reducido, sin texto o con más de 120 caracteres, el texto final aparece de inmediato.",
+        "preview": "app/examples/text-scramble/preview.tsx",
+        "previewHref": "/examples/text-scramble",
+        "scenes": [
+          {
+            "id": "filled",
+            "label": "Lleno",
+            "labelEn": "Filled"
+          },
+          {
+            "id": "empty",
+            "label": "Vacío",
+            "labelEn": "Empty"
+          },
+          {
+            "id": "loading",
+            "label": "Cargando",
+            "labelEn": "Loading"
+          },
+          {
+            "id": "error",
+            "label": "Error",
+            "labelEn": "Error"
+          },
+          {
+            "id": "terminal",
+            "label": "Ficha de terminal",
+            "labelEn": "Terminal card"
+          },
+          {
+            "id": "long",
+            "label": "Texto largo",
+            "labelEn": "Long copy"
+          }
+        ],
+        "examples": [
+          {
+            "title": "Texto que se descifra",
+            "href": "/examples/text-scramble",
+            "description": "Un título que se descifra una sola vez al entrar. Con movimiento reducido, el texto final aparece de inmediato."
+          },
+          {
+            "title": "Estrés",
+            "href": "/examples/text-scramble/stress",
+            "description": "320 px, RTL, emoji, tope de 120 caracteres y veinte títulos a la vez."
+          }
+        ],
+        "usage": "<TextScramble as=\"h1\" trigger=\"mount\" text=\"Copper 84 console, ready to ship\" />",
+        "api": [
+          {
+            "name": "text",
+            "type": "string",
+            "description": "Final copy. Empty or over 120 characters shows at once with no effect."
+          },
+          {
+            "name": "as",
+            "type": "\"h1\" | \"h2\" | \"h3\" | \"p\" | \"span\"",
+            "description": "Element. Default span."
+          },
+          {
+            "name": "trigger",
+            "type": "\"mount\" | \"visible\"",
+            "description": "mount plays after hydration. visible waits for the viewport. Default visible. Plays once either way."
+          },
+          {
+            "name": "duration / delay",
+            "type": "number",
+            "description": "Decode time in ms, clamped to 300–1200 (default 600), and a start delay in ms (default 0)."
+          },
+          {
+            "name": "charset",
+            "type": "string",
+            "description": "Noise glyphs. ASCII letters, digits and a few symbols by default."
+          },
+          {
+            "name": "onDecoded",
+            "type": "() => void",
+            "description": "Called once when the final text is in place, also when the effect is skipped."
+          }
+        ]
+      },
+      "docs": "Idea from Emil Kowalski's \"Decoding interfaces\" demo (x.com/emilkowalski/status/2124903277036745191, 2026-11-23). No source was published, so this is a clean-room build of the text part only. Use it once per visit on a hero or page title, never on lists, tables, buttons, toasts or anything seen many times a day. Each word keeps its final glyphs in the flow and the noise sits on top, so the line never shifts or re-wraps. One requestAnimationFrame loop writes textContent at most every 50 ms, reads no layout and sets no React state. Screen readers get the sentence once from an sr-only span; the visual layer is aria-hidden and there is no live region. Reduced motion, including motion-preference, shows the final text at once. The per-character image color of the demo is left out: sampling pixels into hundreds of colored glyphs repaints a large area on the main thread every tick and can flash over a large area. For image treatments see halftone-image. For numbers that change, use slot-text. Answer no if the CLI asks to overwrite motion-preference. The item ships no theme, cssVars, or fixed colors.",
+      "files": [
+        {
+          "path": "registry/ui/text-scramble.tsx",
+          "type": "registry:component",
+          "target": "@ui/text-scramble.tsx"
+        }
+      ]
     }
   ]
 }

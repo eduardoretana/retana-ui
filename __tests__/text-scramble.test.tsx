@@ -239,3 +239,44 @@ describe("TextScramble", () => {
     expect(readFileSync(join(root, "app/examples/text-scramble/demo.tsx"), "utf8")).toContain("SceneDeck")
   })
 })
+
+describe("TextScramble break-ui", () => {
+  it("TS-BREAK-SWAP: new copy mid-decode stops the noise and shows the new words", () => {
+    useFakeClock()
+    const { container, rerender } = render(<TextScramble trigger="mount" duration={1000} text="Horno abierto" />)
+    act(() => {
+      vi.advanceTimersByTime(200)
+    })
+    rerender(<TextScramble trigger="mount" duration={1000} text="Cierre a las nueve de la noche" />)
+    act(() => {
+      vi.advanceTimersByTime(60)
+    })
+    const node = container.querySelector("[data-slot='text-scramble']")!
+    expect(node).toHaveAttribute("data-state", "done")
+    expect(noiseOf(container).every((noise) => noise.textContent === "")).toBe(true)
+    expect(finalsOf(container).map((n) => n.textContent).join(" ")).toBe("Cierre a las nueve de la noche")
+  })
+
+  it("TS-BREAK-UNICODE: accents, ñ, emoji and RTL keep their length and come back intact", () => {
+    for (const text of ["Año nuevo, señal más clara", "Listo 🚀 ya", "مرحبا بالعالم", "x"]) {
+      const schedule = scrambleSchedule(text)
+      expect(schedule).toHaveLength(Array.from(text).length)
+      expect(Array.from(scrambleFrame(text, 0.5, schedule, 3))).toHaveLength(Array.from(text).length)
+      expect(scrambleFrame(text, 1, schedule, 3)).toBe(text)
+    }
+  })
+
+  it("TS-BREAK-CHARSET: an empty charset falls back to the default glyphs", () => {
+    const frame = scrambleFrame("Horno", 0, scrambleSchedule("Horno"), 1, "")
+    for (const char of frame) expect(SCRAMBLE_GLYPHS).toContain(char)
+  })
+
+  it("TS-BREAK-DELAY: a negative or NaN delay starts right away", () => {
+    useFakeClock()
+    const { container } = render(<TextScramble trigger="mount" duration={300} delay={Number.NaN} text="Horno abierto" />)
+    act(() => {
+      vi.advanceTimersByTime(400)
+    })
+    expect(container.querySelector("[data-slot='text-scramble']")).toHaveAttribute("data-state", "done")
+  })
+})
