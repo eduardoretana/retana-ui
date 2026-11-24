@@ -1,0 +1,33 @@
+{
+  "documents": [
+    "docs/sprints/bounded-text-scramble-ui/enrollment.json",
+    "docs/sprints/bounded-text-scramble.md",
+    "ui/specs/text-scramble.spec.md"
+  ],
+  "evidence": {
+    "receipt": "docs/sprints/bounded-text-scramble-ui/checker-receipt.json",
+    "report": "docs/sprints/bounded-text-scramble-ui/verdict.json"
+  },
+  "impact": "VISIBLE_MINOR",
+  "inputs": {},
+  "manifest": {
+    "path": "docs/sprints/bounded-text-scramble.md",
+    "sha256": "7e79fe87ff34839a6612228d9049688ea585a80175ea1b8f2b4cec1153c8481b"
+  },
+  "owner": "feat/text-scramble",
+  "profile": "STANDARD",
+  "repo": "sha256:1aceb83247f3be9347d53333d783b6aa0a78769c3801b37e557d87f9fc707e6b",
+  "schema_version": "retana.ui-enrollment/v1",
+  "source": {
+    "identity": "https://github.com/eduardoretana/hub-vibecoding.git",
+    "module_version": "4.0.0",
+    "protocol_version": "16",
+    "sha": "0218369e944b02fb63cae5df0ddc95ae72262e97"
+  },
+  "spec": {
+    "path": "ui/specs/text-scramble.spec.md",
+    "sha256": "e7b3563d6895cb43a24fdffc93e1e7ebe0c6959ee46e733475f85f3889c8190a"
+  },
+  "stage": "IMPLEMENTATION",
+  "state": "PENDING"
+}
