@@ -424,6 +424,7 @@ import Preview419 from "@/app/examples/activity-chat/preview"
 import Preview420 from "@/app/examples/inline-approve-button/preview"
 import Preview421 from "@/app/examples/portfolio-desk/preview"
 import Preview422 from "@/app/examples/map-browser/preview"
+import Preview423 from "@/app/examples/text-scramble/preview"
 
 export const previewMap = {
   "layered-panel": Preview0,
@@ -849,4 +850,5 @@ export const previewMap = {
   "inline-approve-button": Preview420,
   "portfolio-desk": Preview421,
   "map-browser": Preview422,
+  "text-scramble": Preview423,
 }
