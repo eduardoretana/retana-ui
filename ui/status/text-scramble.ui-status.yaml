@@ -6,7 +6,7 @@ cycle_state: BUILD
 retana_ui.sha: bf1682d4dfb8696ddb01bf84aedda111f47b086c
 # El blob no puede contener el sha del commit que lo incluye.
 # head = último commit de código; los commits posteriores solo tocan ui/** y docs/sprints/**.
-head: a8ff697636537bef7e24c846821bb66f483b21c2
+head: a686b1c642a7c90694254ce1d9f78796e5b1d79a
 red_commit: 328cd4d3857984e02ea39e3065eb7b8260fc2d6c
 expected_red: {file: ui-tests/expected-red.yaml, spec_id: text-scramble, log: ui-tests/logs/text-scramble.expected-red.log}
 profile_note: "STANDARD propuesto por el builder: pieza nueva con movimiento propio y riesgo declarado de RUI-ANIM-PERF-007. Lo confirma el UI Lead."

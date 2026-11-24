@@ -1,5 +1,5 @@
 # Fixture de comparación (E14) · text-scramble
-# Transcripción por puntero de los datos de ejemplo en H a8ff697636537bef7e24c846821bb66f483b21c2.
+# Transcripción por puntero de los datos de ejemplo en H a686b1c642a7c90694254ce1d9f78796e5b1d79a.
 # Los datos viven en fixtures.ts y scenes.tsx de la pieza; aquí se fijan por sha256 y se listan las escenas.
 # Datos inventados del catálogo («Electrónica Cobre», Guadalajara). Sin datos de producción.
 fixture_id: text-scramble-plp-v1

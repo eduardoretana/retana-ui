@@ -1,9 +1,9 @@
 # direction-map — text-scramble · spec 0.1.0
 
-Base de código: H = `a8ff697636537bef7e24c846821bb66f483b21c2` (los commits de gobierno no cambian código).
+Base de código: H = `a686b1c642a7c90694254ce1d9f78796e5b1d79a` (los commits de gobierno no cambian código).
 Referencias: `REF-cpl-text-reveal`, `REF-emil-decoding`. Fichas y sha256 en `ui/direction/text-scramble/reference-meta.yaml`.
 Vocabulario de citas (AUDITOR.md §7): `AC-n`, `spec:<campo>`, `rule:<ID>`, `wcag:<criterio>`, `catalog-gap:<item>`.
-Los `AC-n` citados son los de `ui/specs/text-scramble.spec.md` (sha256 con prefijo `e7b3563d6895`).
+Los `AC-n` citados son los de `ui/specs/text-scramble.spec.md` (sha256 con prefijo `3e7b0c7a1015`).
 Las `rule:` citadas existen en `ui-system/knowledge/rules.yaml` del hub `0218369e`.
 
 | Región | reference_id | Referencia | Implementación en H | Desviación | Cita |
