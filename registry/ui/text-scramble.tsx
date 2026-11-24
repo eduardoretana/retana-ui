@@ -43,8 +43,12 @@ export type TextScrambleProps = {
   id?: string
 }
 
-/** ASCII only, so any font has them and the noise never falls back to another typeface. */
-export const SCRAMBLE_GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&*+=<>/"
+/**
+ * ASCII only, so any font has them and the noise never falls back to another typeface.
+ * Digits first, then capitals without G, I, O and Q (they read as 6, 1 and 0 at small sizes),
+ * then a few terminal symbols.
+ */
+export const SCRAMBLE_GLYPHS = "0123456789ABCDEFHJKLMNPRSTUVWXYZ@#$%&+=?"
 /** One write every 50 ms: at most 20 glyph changes per second per character. */
 export const SCRAMBLE_TICK_MS = 50
 /** Longer copy is body text. It shows at once. */
