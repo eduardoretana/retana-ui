@@ -1,0 +1,16 @@
+schema: uis.status/v2
+ui_system: {version: 4.0.0, declaration: "UI_SYSTEM: APPLIES"}
+spec_id: capacity-map
+profile: STANDARD
+cycle_state: BUILD
+retana_ui.sha: bf1682d4dfb8696ddb01bf84aedda111f47b086c
+head: f13a3d41ef91578afa4b97580061e51d29fe85f0
+red_commit: 745f26d005df4063af143eba196c43cd39d21250
+expected_red: {file: ui-tests/expected-red.yaml, spec_id: capacity-map, log: ui-tests/logs/capacity-map.expected-red.log}
+profile_note: "STANDARD propuesto por el builder: pieza nueva con patrón espacial, resaltado cruzado y simulación de demanda. Lo confirma el UI Lead."
+spec_version: 0.1.0
+direction_mode: visual
+direction: {mode: visual, reference_meta: ui/direction/capacity-map/reference-meta.yaml, references: [REF-cpl-map-browser, REF-shadcnstudio-datatable-advanced-08], chosen_by: null, decision: "STANDARD: la elección de la referencia es del UI Lead"}
+generators_used: []
+clean_room: {source: "«Parking Sessions» / Datatable Advanced 08 de shadcn/studio, anuncio en X 2126320142137360553 (2026-11-27) y catálogo público", license: "bloque Pro (licencia Pro de shadcn/studio); capa gratis MIT + Commons Clause; ninguna usada; solo comportamiento observado", copied: none}
+auditor: not-this-agent
