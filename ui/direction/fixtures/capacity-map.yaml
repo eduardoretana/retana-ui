@@ -1,0 +1,10 @@
+spec_id: capacity-map
+locale: es-MX
+states:
+  filled: { zones: filledZones }
+  empty: { zones: [] }
+  loading: { loading: true }
+  error: { error: true }
+  simulate: { simulate: true }
+  overflow: { simulate: true, demand: 80 }
+notes: Los cupos y las personas son ficticios (Clínica Alameda). No hay datos de estacionamiento.

@@ -1,0 +1,33 @@
+{
+  "documents": [
+    "docs/sprints/bounded-capacity-map-ui/enrollment.json",
+    "docs/sprints/bounded-capacity-map.md",
+    "ui/specs/capacity-map.spec.md"
+  ],
+  "evidence": {
+    "receipt": "docs/sprints/bounded-capacity-map-ui/checker-receipt.json",
+    "report": "docs/sprints/bounded-capacity-map-ui/verdict.json"
+  },
+  "impact": "INTERACTION_FLOW",
+  "inputs": {},
+  "manifest": {
+    "path": "docs/sprints/bounded-capacity-map.md",
+    "sha256": "6dcb7b0c806d81611be92ea422d785ea3c6d3e75dca6d1555db22f7a1684bcbc"
+  },
+  "owner": "feat/capacity-map",
+  "profile": "STANDARD",
+  "repo": "sha256:1aceb83247f3be9347d53333d783b6aa0a78769c3801b37e557d87f9fc707e6b",
+  "schema_version": "retana.ui-enrollment/v1",
+  "source": {
+    "identity": "https://github.com/eduardoretana/hub-vibecoding.git",
+    "module_version": "4.0.0",
+    "protocol_version": "16",
+    "sha": "0218369e944b02fb63cae5df0ddc95ae72262e97"
+  },
+  "spec": {
+    "path": "ui/specs/capacity-map.spec.md",
+    "sha256": "ba21e1c4c07c5f0409ec0dabc04af3f11b54864a6e57375232f616156d5a25ea"
+  },
+  "stage": "IMPLEMENTATION",
+  "state": "PENDING"
+}
