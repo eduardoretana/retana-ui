@@ -1,0 +1,32 @@
+
+ RUN  v5.0.2 /workspace/shadcnstudio-2026-11-27-capacity-map/repo
+
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  __tests__/capacity-map.test.tsx [ __tests__/capacity-map.test.tsx ]
+Error: Failed to resolve import "@/app/examples/capacity-map/fixtures" from "__tests__/capacity-map.test.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /workspace/shadcnstudio-2026-11-27-capacity-map/repo/__tests__/capacity-map.test.tsx:8:56
+  4  |  import userEvent from "@testing-library/user-event";
+  5  |  import { describe, expect, it } from "vitest";
+  6  |  import { filledZones, longNameZones, stressZones } from "@/app/examples/capacity-map/fixtures";
+     |                                                           ^
+  7  |  import { aisleRows, availableCount, defaultStatuses, resolveStatuses, simulateDemand, slotAccessibleName, zoneStats }...
+  8  |  import { CapacityMap, CapacityMapBoard } from "@/registry/ui/capacity-map";
+ ❯ TransformPluginContext._formatLog ../../shadcnstudio-2026-11-26-pixel-resolve/cpl-base/node_modules/.pnpm/vite@8.3.1_@types+node@20.19.43_jiti@2.7.0/node_modules/vite/dist/node/chunks/node.js:8736:39
+ ❯ TransformPluginContext.error ../../shadcnstudio-2026-11-26-pixel-resolve/cpl-base/node_modules/.pnpm/vite@8.3.1_@types+node@20.19.43_jiti@2.7.0/node_modules/vite/dist/node/chunks/node.js:8733:14
+ ❯ normalizeUrl ../../shadcnstudio-2026-11-26-pixel-resolve/cpl-base/node_modules/.pnpm/vite@8.3.1_@types+node@20.19.43_jiti@2.7.0/node_modules/vite/dist/node/chunks/node.js:26423:18
+ ❯ ../../shadcnstudio-2026-11-26-pixel-resolve/cpl-base/node_modules/.pnpm/vite@8.3.1_@types+node@20.19.43_jiti@2.7.0/node_modules/vite/dist/node/chunks/node.js:26493:30
+ ❯ TransformPluginContext.transform ../../shadcnstudio-2026-11-26-pixel-resolve/cpl-base/node_modules/.pnpm/vite@8.3.1_@types+node@20.19.43_jiti@2.7.0/node_modules/vite/dist/node/chunks/node.js:26459:4
+ ❯ EnvironmentPluginContainer.transform ../../shadcnstudio-2026-11-26-pixel-resolve/cpl-base/node_modules/.pnpm/vite@8.3.1_@types+node@20.19.43_jiti@2.7.0/node_modules/vite/dist/node/chunks/node.js:8515:14
+ ❯ loadAndTransform ../../shadcnstudio-2026-11-26-pixel-resolve/cpl-base/node_modules/.pnpm/vite@8.3.1_@types+node@20.19.43_jiti@2.7.0/node_modules/vite/dist/node/chunks/node.js:19998:26
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  09:50:26
+   Duration  1.80s (environment 82%, setup 16%, transform 2%)
+
