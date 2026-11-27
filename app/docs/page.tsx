@@ -111,6 +111,7 @@ const layouts = [
   ["card-stack", "A triage deck you flick left or right. For a depth stack of notices, use notification-stack."],
   ["radio-cards", "One choice among option cards."],
   ["view-gallery", "Schema records as cards, inside multi-view."],
+  ["capacity-map", "Zones of slots arranged in space, linked to a table. Demand preview discards without saving."],
 ] as const
 
 const verification = [
