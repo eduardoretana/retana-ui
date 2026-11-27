@@ -334,7 +334,7 @@ Props, slots, and the URL hook are in [`registry/ui/layered-panel.tsx`](registry
 
 <!-- CATALOG:START -->
 
-`423` items are in `registry.json` on this branch: `333` components, `74` blocks, `6` hooks, and `10` libraries. A name links to its source file.
+`424` items are in `registry.json` on this branch: `334` components, `74` blocks, `6` hooks, and `10` libraries. A name links to its source file.
 Run `pnpm readme:catalog` to refresh this list.
 
 Install any registered item with `npx shadcn@latest add @retana/<name>`.
@@ -809,6 +809,7 @@ Install any registered item with `npx shadcn@latest add @retana/<name>`.
 - [`organ-explorer`](registry/blocks/organ-explorer.tsx) · block — An organ viewer with an anatomy panel that docks beside it on wide screens and opens as a sheet on phones. Heart model licensed CC BY 4.0. Install: `npx shadcn@latest add @retana/organ-explorer`.
 - [`anatomy-workspace`](registry/blocks/anatomy-workspace.tsx) · block — A full-height anatomy workspace with the tree in a sidebar and a details card to hide or isolate the selected structure. Heart model licensed CC BY 4.0. Install: `npx shadcn@latest add @retana/anatomy-workspace`.
 - [`organ-switcher`](registry/blocks/organ-switcher.tsx) · block — One viewer that switches between several organs from a menu, here the heart, kidneys, stomach and pancreas. Models licensed CC BY 4.0 and CC BY-SA 2.1 JP. Install: `npx shadcn@latest add @retana/organ-switcher`.
+- [`capacity-map`](registry/ui/capacity-map.tsx) · ui — A zone accordion of slots arranged in space, linked to a table: shared highlight, a detail popover, extensible statuses, and a demand preview that discards without saving. Install: `npx shadcn@latest add @retana/capacity-map`.
 
 <!-- CATALOG:END -->
 
