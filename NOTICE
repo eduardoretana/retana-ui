@@ -921,6 +921,21 @@ The items ship no theme.
 
 Map browser
 
+capacity-map is a clean-room reading of the idea of a zone map of slots
+linked to a table, with a demand preview that does not save. The public
+announcement of Shadcn Studio Pro "Parking Sessions" (Datatable Advanced 08)
+was observed only as a video and catalog metadata:
+
+  https://shadcnstudio.com/blocks/datatable/datatable-advanced
+  https://x.com/ShadcnStudio/status/2126320142137360553
+
+The block is distributed under the shadcn/studio Pro license; the free tier is
+MIT with the Commons Clause. Neither license was used: this is a clean-room
+build, and the code is original. No source, strings, sample rows, brand names,
+colors, fonts, icons, images, or assets were copied. The fixtures describe a
+fictional clinic, not a parking lot. The reservation form, payment columns,
+and apply/save action of the reference are not included.
+
 map-browser and its internal geo-map surface. Behavior reference: PropXYZ
 "Map Browser", a Pro component that was not purchased. PropXYZ: referencia
 clean-room, no se copió código ni assets. No source, markup, copy, colors,
